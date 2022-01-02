@@ -13,10 +13,10 @@
     <loc>https://www.commudle.com/builds</loc>
   </url>
   <url>
-    <loc>https://www.commudle.com/builds/my-builds</loc>
+    <loc>https://www.commudle.com/labs/my-labs</loc>
   </url>
   <url>
-    <loc>https://www.commudle.com/labs/my-labs</loc>
+    <loc>https://www.commudle.com/labs</loc>
   </url>
   <url>
     <loc>https://www.commudle.com/features</loc>
@@ -25,19 +25,217 @@
     <loc>https://www.commudle.com/policies/privacy-policy</loc>
   </url>
   <url>
+    <loc>https://www.commudle.com/builds/create</loc>
+  </url>
+  <url>
     <loc>https://www.commudle.com/policies/terms-and-conditions</loc>
   </url>
   <url>
-    <loc>https://www.commudle.com/labs</loc>
+    <loc>https://www.commudle.com/builds/expense-tracker</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/builds/neumorphism-portfolio-website</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/builds/saho-22e734fe-8f1f-4ea3-a42f-43c24721ae45</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/builds/take-a-break-a-productivity-tool</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/builds/thumbnail-clicker-for-videos</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/builds/bookshlf</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/builds/co-winn</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/builds/job-application-tracker</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/builds/background-remover-tool</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/how-to-get-the-current-location-through-the-android-application-in-kotlin</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/builds/breaking-bad-quotes</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/getting-started-with-android-emulator-using-android-studio-commandline-tools</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/how-to-make-a-dice-game-using-javascript</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/how-to-create-a-url-shortener-using-flask</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/virtual-personal-assistant-using-python</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/gui-quiz-application-using-tkinter-and-open-trivia-db</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/currying-in-javascript</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/getting-started-with-next-js</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/writing-your-first-test-case-using-jest</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/users/KamalWalia</loc>
   </url>
   <url>
     <loc>https://www.commudle.com/fill-form/465</loc>
   </url>
   <url>
-    <loc>https://www.commudle.com/users/rajatexplains</loc>
+    <loc>https://www.commudle.com/users/smilegupta</loc>
   </url>
   <url>
-    <loc>https://www.commudle.com/users/sidagarwal</loc>
+    <loc>https://www.commudle.com/labs/how-to-get-the-current-location-through-the-android-application-in-kotlin/steps/152530</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/how-to-get-the-current-location-through-the-android-application-in-kotlin/steps/152532</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/how-to-get-the-current-location-through-the-android-application-in-kotlin/steps/152531</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/getting-started-with-android-emulator-using-android-studio-commandline-tools/steps/151819</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/getting-started-with-android-emulator-using-android-studio-commandline-tools/steps/151820</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/how-to-make-a-dice-game-using-javascript/steps/150408</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/how-to-make-a-dice-game-using-javascript/steps/150407</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/how-to-make-a-dice-game-using-javascript/steps/150409</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/how-to-make-a-dice-game-using-javascript/steps/150834</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/how-to-create-a-url-shortener-using-flask/steps/150797</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/how-to-create-a-url-shortener-using-flask/steps/150798</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/how-to-create-a-url-shortener-using-flask/steps/150799</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/how-to-create-a-url-shortener-using-flask/steps/150800</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/how-to-create-a-url-shortener-using-flask/steps/150801</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/how-to-create-a-url-shortener-using-flask/steps/150802</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/virtual-personal-assistant-using-python/steps/150655</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/virtual-personal-assistant-using-python/steps/150656</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/virtual-personal-assistant-using-python/steps/150657</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/virtual-personal-assistant-using-python/steps/150658</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/virtual-personal-assistant-using-python/steps/150659</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/gui-quiz-application-using-tkinter-and-open-trivia-db/steps/150353</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/virtual-personal-assistant-using-python/steps/150660</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/gui-quiz-application-using-tkinter-and-open-trivia-db/steps/150352</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/gui-quiz-application-using-tkinter-and-open-trivia-db/steps/150354</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/gui-quiz-application-using-tkinter-and-open-trivia-db/steps/150357</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/gui-quiz-application-using-tkinter-and-open-trivia-db/steps/150355</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/gui-quiz-application-using-tkinter-and-open-trivia-db/steps/150356</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/gui-quiz-application-using-tkinter-and-open-trivia-db/steps/150358</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/currying-in-javascript/steps/150136</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/currying-in-javascript/steps/149258</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/currying-in-javascript/steps/150139</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/currying-in-javascript/steps/150137</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/currying-in-javascript/steps/150138</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/getting-started-with-next-js/steps/149297</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/getting-started-with-next-js/steps/149344</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/getting-started-with-next-js/steps/149529</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/getting-started-with-next-js/steps/149326</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/getting-started-with-next-js/steps/149614</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/writing-your-first-test-case-using-jest/steps/149160</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/writing-your-first-test-case-using-jest/steps/149159</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/getting-started-with-next-js/steps/149680</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/writing-your-first-test-case-using-jest/steps/149185</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/labs/writing-your-first-test-case-using-jest/steps/149252</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/users/KamalWalia/following</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/users/KamalWalia/followers</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/users/smilegupta/following</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/users/smilegupta/followers</loc>
   </url>
   <url>
     <loc>https://www.commudle.com/users/ujjawalpoonia</loc>
@@ -46,54 +244,51 @@
     <loc>https://www.commudle.com/users/dswh</loc>
   </url>
   <url>
+    <loc>https://www.commudle.com/users/pranaynanda</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/users/DRVaya</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/users/rajatexplains</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/users/sidagarwal</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/users/ujjawalpoonia/following</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/users/ujjawalpoonia/followers</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/users/dswh/following</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/users/dswh/followers</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/users/pranaynanda/following</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/users/pranaynanda/followers</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/users/DRVaya/following</loc>
+  </url>
+  <url>
+    <loc>https://www.commudle.com/users/DRVaya/followers</loc>
+  </url>
+  <url>
     <loc>https://www.commudle.com/users/rajatexplains/following</loc>
   </url>
   <url>
     <loc>https://www.commudle.com/users/rajatexplains/followers</loc>
   </url>
   <url>
-    <loc>https://www.commudle.com/users/sidagarwal/followers</loc>
-  </url>
-  <url>
     <loc>https://www.commudle.com/users/sidagarwal/following</loc>
   </url>
   <url>
-    <loc>https://www.commudle.com/users/ujjawalpoonia/followers</loc>
-  </url>
-  <url>
-    <loc>https://www.commudle.com/users/ujjawalpoonia/following</loc>
-  </url>
-  <url>
-    <loc>https://www.commudle.com/users/dswh/followers</loc>
-  </url>
-  <url>
-    <loc>https://www.commudle.com/users/dswh/following</loc>
-  </url>
-  <url>
-    <loc>https://www.commudle.com/users/smilegupta</loc>
-  </url>
-  <url>
-    <loc>https://www.commudle.com/users/DRVaya</loc>
-  </url>
-  <url>
-    <loc>https://www.commudle.com/users/pranaynanda</loc>
-  </url>
-  <url>
-    <loc>https://www.commudle.com/users/smilegupta/followers</loc>
-  </url>
-  <url>
-    <loc>https://www.commudle.com/users/smilegupta/following</loc>
-  </url>
-  <url>
-    <loc>https://www.commudle.com/users/DRVaya/followers</loc>
-  </url>
-  <url>
-    <loc>https://www.commudle.com/users/DRVaya/following</loc>
-  </url>
-  <url>
-    <loc>https://www.commudle.com/users/pranaynanda/followers</loc>
-  </url>
-  <url>
-    <loc>https://www.commudle.com/users/pranaynanda/following</loc>
+    <loc>https://www.commudle.com/users/sidagarwal/followers</loc>
   </url>
 </urlset>
