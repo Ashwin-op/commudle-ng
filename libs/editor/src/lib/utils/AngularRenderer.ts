@@ -9,6 +9,7 @@ export class AngularRenderer<C, P> {
 
     this.componentRef = createComponent(ViewComponent, {
       environmentInjector: this.applicationRef.injector,
+      elementInjector: injector,
     });
 
     // set input props to the component
@@ -31,7 +32,13 @@ export class AngularRenderer<C, P> {
 
   updateProps<T extends P>(props: Partial<T>): void {
     Object.entries(props).forEach(([key, value]) => {
-      this.instance[key as keyof C] = value as C[keyof C];
+      this.componentRef.setInput(key, value);
+    });
+  }
+
+  updateAttributes(attributes: Record<string, string>): void {
+    Object.keys(attributes).forEach((key) => {
+      this.dom.setAttribute(key, attributes[key]);
     });
   }
 

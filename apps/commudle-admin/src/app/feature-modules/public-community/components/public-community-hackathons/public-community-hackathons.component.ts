@@ -4,7 +4,7 @@ import { EDbModels, ICommunity } from '@commudle/shared-models';
 import { SeoService } from '@commudle/shared-services';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
-import moment from 'moment';
+import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { environment } from '@commudle/shared-environments';
 

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ICommunityBuild, CBuildTypeDisplay } from '@commudle/shared-models';
-import moment from 'moment';
+import * as moment from 'moment';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 
 @Component({

@@ -15,7 +15,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { DiscountCouponFormComponent } from 'apps/commudle-admin/src/app/feature-modules/events/components/event-registrations/discount-coupons/discount-coupon-form/discount-coupon-form.component';
 import { CustomPageFormComponent } from 'apps/commudle-admin/src/app/app-shared-components/custom-page/custom-page-form/custom-page-form.component';
 import { EPageType, ICustomPage } from 'apps/shared-models/custom-page.model';
-import moment from 'moment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'commudle-discount-coupons',

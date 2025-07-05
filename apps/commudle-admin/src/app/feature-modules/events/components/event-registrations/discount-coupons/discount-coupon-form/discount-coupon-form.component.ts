@@ -7,7 +7,7 @@ import { NbDialogRef } from '@commudle/theme';
 import { EventDataFormEntityGroupsService } from 'apps/commudle-admin/src/app/services/event-data-form-entity-groups.service';
 import { IEventDataFormEntityGroup } from 'apps/shared-models/event_data_form_enity_group.model';
 import { Subscription } from 'rxjs';
-import moment from 'moment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'commudle-discount-coupon-form',

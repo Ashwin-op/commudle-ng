@@ -12,14 +12,14 @@ files.forEach(function (file) {
   if (fs.existsSync(curDestination)) {
     // if directory, delete recursively
     if (fs.lstatSync(curDestination).isDirectory()) {
-      fs.rmdirSync(curDestination, { recursive: true });
+      fs.rmSync(curDestination, { recursive: true });
     } else {
       fs.unlinkSync(curDestination);
     }
   }
   fs.renameSync(curSource, curDestination);
 });
-fs.rmdirSync(source, { recursive: true });
+fs.rmSync(source, { recursive: true });
 
 // zip all files in dist/apps and save to prod-server.zip
 let archiver = require('archiver');

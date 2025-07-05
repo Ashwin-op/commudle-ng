@@ -4,7 +4,8 @@ import {
   Directive,
   ElementRef,
   forwardRef,
-  Input,
+  inject,
+  input,
   OnInit,
   Renderer2,
 } from '@angular/core';
@@ -22,22 +23,15 @@ import { Content, Editor, type EditorEvents } from '@tiptap/core';
   ],
 })
 export class EditorDirective implements OnInit, AfterViewInit, ControlValueAccessor {
-  @Input() editor!: Editor;
-  @Input() outputFormat: 'json' | 'html' = 'html';
+  readonly editor = input.required<Editor>();
+  readonly outputFormat = input<'json' | 'html'>('html');
+  protected elRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  protected renderer = inject(Renderer2);
+  protected changeDetectorRef = inject(ChangeDetectorRef);
 
-  constructor(
-    protected elRef: ElementRef<HTMLElement>,
-    protected renderer: Renderer2,
-    protected changeDetectorRef: ChangeDetectorRef,
-  ) {}
-
-  // This method is called when programmatic changes from model to view are requested.
+  // This methods is called when programmatic changes from model to view are requested.
   writeValue(value: Content): void {
-    if (!this.outputFormat && typeof value === 'string') {
-      this.outputFormat = 'html';
-    }
-
-    this.editor.chain().setContent(value, false).run();
+    this.editor().chain().setContent(value, false).run();
   }
 
   // Registers a callback function that is called when the control's value changes in the UI.
@@ -54,35 +48,38 @@ export class EditorDirective implements OnInit, AfterViewInit, ControlValueAcces
 
   // Called by the forms api to enable or disable the element
   setDisabledState(isDisabled: boolean): void {
-    this.editor.setEditable(!isDisabled);
+    this.editor().setEditable(!isDisabled);
     this.renderer.setProperty(this.elRef.nativeElement, 'disabled', isDisabled);
   }
 
   ngOnInit(): void {
-    if (!this.editor) {
-      throw new Error('Required: Input `editor`');
-    }
+    const editor = this.editor();
 
     // take the inner contents and clear the block
     const { innerHTML } = this.elRef.nativeElement;
     this.elRef.nativeElement.innerHTML = '';
 
     // insert the editor in the dom
-    this.elRef.nativeElement.append(...Array.from(this.editor.options.element.childNodes));
+    this.elRef.nativeElement.append(...Array.from(editor.options.element.childNodes));
 
     // update the options for the editor
-    this.editor.setOptions({ element: this.elRef.nativeElement });
+    editor.setOptions({ element: this.elRef.nativeElement });
 
     // update content to the editor
     if (innerHTML) {
-      this.editor.chain().setContent(innerHTML, false).run();
+      editor.chain().setContent(innerHTML, false).run();
     }
 
     // register blur handler to update `touched` property
-    this.editor.on('blur', () => this.onTouched());
+    editor.on('blur', () => {
+      this.onTouched();
+    });
 
     // register update handler to listen to changes on update
-    this.editor.on('update', this.handleChange);
+    editor.on('update', this.handleChange);
+
+    // Needed for ChangeDetectionStrategy.OnPush to get notified
+    editor.on('selectionUpdate', () => this.changeDetectorRef.markForCheck());
   }
 
   ngAfterViewInit(): void {
@@ -105,7 +102,7 @@ export class EditorDirective implements OnInit, AfterViewInit, ControlValueAcces
     // Needed for ChangeDetectionStrategy.OnPush to get notified about changes
     this.changeDetectorRef.markForCheck();
 
-    if (this.outputFormat === 'html') {
+    if (this.outputFormat() === 'html') {
       this.onChange(editor.getHTML());
       return;
     }

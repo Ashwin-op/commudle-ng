@@ -16,7 +16,7 @@
             ></commudle-user-personal-connect>
           </p>
           <p *ngIf="displayUsername" class="username" title="{{ topBuilder.username }}">
-            @{{ topBuilder.username | truncatetext : 15 }}
+            &#64;{{ topBuilder.username | truncatetext : 15 }}
           </p>
           <div *ngIf="displayDesignation" class="designation" [title]="topBuilder.designation">
             {{ topBuilder.designation || '--' }}

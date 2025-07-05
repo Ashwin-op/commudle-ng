@@ -4,7 +4,7 @@ import { ICampaign, ECampaignStatus } from '@commudle/shared-models';
 import { CampaignService, SeoService } from '@commudle/shared-services';
 import { NbDialogService } from '@commudle/theme';
 import { faEdit, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import moment from 'moment';
+import * as moment from 'moment';
 import { AwsS3Bucket } from 'apps/commudle-admin/src/assets/static-assets';
 @Component({
   selector: 'commudle-campaign-form-order-confirmation',

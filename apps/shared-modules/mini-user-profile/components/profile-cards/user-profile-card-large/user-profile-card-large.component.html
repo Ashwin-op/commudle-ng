@@ -39,7 +39,7 @@
             ></app-badge>
           </div>
         </div>
-        <p class="username" title="{{ user.username }}">@{{ user.username | truncatetext : maxUserNameLength }}</p>
+        <p class="username" title="{{ user.username }}">&#64;{{ user.username | truncatetext : maxUserNameLength }}</p>
         <app-hiring-looking-works-tags
           *ngIf="showHiringLookingTags"
           [user]="user"

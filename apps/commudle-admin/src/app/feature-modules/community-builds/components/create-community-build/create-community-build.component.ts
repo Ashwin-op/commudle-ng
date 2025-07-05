@@ -22,7 +22,7 @@ import { GoogleTagManagerService } from 'apps/commudle-admin/src/app/services/go
 import { EDbModels } from '@commudle/shared-models';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { EntityUpdatesService } from 'apps/commudle-admin/src/app/services/entity-updates.service';
-import moment from 'moment';
+import * as moment from 'moment';
 import { IHackathonUserResponses } from 'apps/shared-models/hackathon-user-responses.model';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';

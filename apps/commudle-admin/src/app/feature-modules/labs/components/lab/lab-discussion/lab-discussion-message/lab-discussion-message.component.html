@@ -14,7 +14,7 @@
               <commudle-user-personal-connect
                 [userConnect]="message.user.distance_from_current_user"
               ></commudle-user-personal-connect>
-              <span class="username">@{{ message.user.username }}</span>
+              <span class="username">&#64;{{ message.user.username }}</span>
               <commudle-user-expert-tick *ngIf="message.user.is_expert"></commudle-user-expert-tick>
             </a>
           </div>

@@ -19,7 +19,7 @@ import { IDiscussion } from 'apps/shared-models/discussion.model';
 import { IHackathonSponsorGroupedByTierName } from 'apps/shared-models/hackathon-sponsor';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
-import moment from 'moment';
+import * as moment from 'moment';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { faPencil, faAward, faSackDollar, faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 @Component({

@@ -9,7 +9,7 @@ import {
 import { CampaignService, NoteService, ToastrService } from '@commudle/shared-services';
 import { faEdit, faReceipt, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { NbDialogService } from '@commudle/theme';
-import moment from 'moment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'commudle-campaign-list',

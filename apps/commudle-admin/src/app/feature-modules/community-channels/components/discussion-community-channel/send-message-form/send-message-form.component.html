@@ -7,7 +7,7 @@
         </div>
         <div *ngIf="!attachment.type.includes('image')" class="file-preview">
           <p class="name">
-            <small> {{ attachment.name | truncatetext: 10 }} </small>
+            <small> {{ attachment.name | truncatetext : 10 }} </small>
           </p>
           <p class="extension">
             <small> {{ attachment.name.split('.').reverse()[0] }} </small>
@@ -27,7 +27,7 @@
       </div>
       <div *ngIf="!file.file.type.includes('image')" class="file-preview">
         <p class="name">
-          <small> {{ file.file.name | truncatetext: 10 }} </small>
+          <small> {{ file.file.name | truncatetext : 10 }} </small>
         </p>
         <p class="extension">
           <small> {{ file.file.name.split('.').reverse()[0] }} </small>
@@ -74,7 +74,7 @@
     </button>
   </form>
   <div *ngIf="this.showHelperText" class="tagging-info">
-    <span>@ users, ! others</span>
+    <span>&#64; users, ! others</span>
   </div>
 </div>
 

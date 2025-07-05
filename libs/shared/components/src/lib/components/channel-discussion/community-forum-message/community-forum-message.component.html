@@ -16,7 +16,7 @@
           <div class="com-flex com-items-baseline com-gap-1.5">
             <div class="com-flex com-flex-col">
               <a [routerLink]="['/users', message.user.username]" class="name">{{ message.user.name }}</a>
-              <span class="user-name">@{{ message.user.username }}</span>
+              <span class="user-name">&#64;{{ message.user.username }}</span>
             </div>
             <commudle-user-expert-tick *ngIf="message.user.is_expert"></commudle-user-expert-tick>
             <commudle-user-personal-connect

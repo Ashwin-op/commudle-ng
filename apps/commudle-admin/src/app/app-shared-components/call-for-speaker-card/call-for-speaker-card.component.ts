@@ -4,7 +4,7 @@ import { faLocationDot, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 import { IEventDataFormEntityGroup } from 'apps/shared-models/event_data_form_enity_group.model';
-import moment from 'moment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'commudle-call-for-speaker-card',

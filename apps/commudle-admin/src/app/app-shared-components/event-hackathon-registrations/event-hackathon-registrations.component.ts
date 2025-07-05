@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { IDataFormEntityResponseGroup } from 'apps/shared-models/data_form_entity_response_group.model';
 import { ERegistrationStatuses } from 'apps/shared-models/enums/registration_statuses.enum';
-import moment from 'moment';
+import * as moment from 'moment';
 import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.service';
 import { EDbModels, EHackathonRegistrationStatus } from '@commudle/shared-models';
 import { generate } from 'lean-qr';

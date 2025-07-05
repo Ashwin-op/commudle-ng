@@ -11,7 +11,7 @@ import {
   faBullhorn,
 } from '@fortawesome/free-solid-svg-icons';
 import { ERegistrationStatuses } from 'apps/shared-models/enums/registration_statuses.enum';
-import moment from 'moment';
+import * as moment from 'moment';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
 import { IDataFormEntityResponseGroup } from 'apps/shared-models/data_form_entity_response_group.model';

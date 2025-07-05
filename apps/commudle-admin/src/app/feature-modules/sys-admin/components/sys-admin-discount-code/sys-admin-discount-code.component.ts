@@ -5,7 +5,7 @@ import { faAdd, faEdit, faTrash, faTicket, faCopy } from '@fortawesome/free-soli
 import { NbDialogService } from '@commudle/theme';
 import { finalize } from 'rxjs/operators';
 import { DiscountCodeFormComponent } from './discount-code-form/discount-code-form.component';
-import moment from 'moment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'commudle-sys-admin-discount-code',

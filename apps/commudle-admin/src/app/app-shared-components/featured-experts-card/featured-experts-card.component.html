@@ -25,7 +25,7 @@
         ></app-user-follow>
       </div>
       <a [routerLink]="['/users', expert.username]">
-        <p class="expert-username">@{{ expert.username }}</p>
+        <p class="expert-username">&#64;{{ expert.username }}</p>
         <p class="expert-designation">{{ expert.designation }}</p>
         <div *ngIf="expert.company_name" class="expert-company">
           <fa-icon class="expert-company-icon" [icon]="faBriefcase"></fa-icon>

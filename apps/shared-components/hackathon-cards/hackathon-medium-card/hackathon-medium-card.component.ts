@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
-import moment from 'moment';
+import * as moment from 'moment';
 import { countries_details } from '@commudle/shared-services';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 @Component({

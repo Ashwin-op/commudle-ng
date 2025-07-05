@@ -15,13 +15,13 @@ export class MentionsNodeComponent extends AngularNodeViewComponent implements O
   ngOnInit(): void {}
 
   redirect(): void {
-    const model: MentionModel = this.node.attrs.model;
+    const model: MentionModel = this.node().attrs.model;
     switch (model) {
       case 'community':
-        this.openInNewTab(`/communities/${this.node.attrs.slug1}`);
+        this.openInNewTab(`/communities/${this.node().attrs.slug1}`);
         break;
       case 'user':
-        this.openInNewTab(`/users/${this.node.attrs.slug1}`);
+        this.openInNewTab(`/users/${this.node().attrs.slug1}`);
         break;
     }
   }

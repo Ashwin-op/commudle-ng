@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ICampaign } from '@commudle/shared-models';
 import { CampaignService, SeoService } from '@commudle/shared-services';
-import moment from 'moment';
+import * as moment from 'moment';
 import { faPlus, faEdit } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'commudle-campaign-dashboard',

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StatsHackathonService } from 'apps/commudle-admin/src/app/services/stats/hackathons.service';
 import { IFixedEmail } from 'apps/shared-models/fixed-email.model';
-import moment from 'moment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'commudle-hackathon-control-panel-email-stats',

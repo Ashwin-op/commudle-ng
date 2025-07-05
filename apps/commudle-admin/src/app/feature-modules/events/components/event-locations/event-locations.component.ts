@@ -29,7 +29,7 @@ import { IEvent } from 'apps/shared-models/event.model';
 import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
 import { GooglePlacesAutocompleteService } from 'apps/commudle-admin/src/app/services/google-places-autocomplete.service';
 import { TrackSlotsService } from 'apps/commudle-admin/src/app/services/track_slots.service';
-import moment from 'moment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-event-locations',

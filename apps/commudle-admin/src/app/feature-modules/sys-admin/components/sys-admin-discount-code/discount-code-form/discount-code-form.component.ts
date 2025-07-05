@@ -4,7 +4,7 @@ import { EDbModels, EDiscountType, IDiscountCode } from '@commudle/shared-models
 import { DiscountCodesService, ToastrService } from '@commudle/shared-services';
 import { NbDialogRef } from '@commudle/theme';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
-import moment from 'moment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'commudle-discount-code-form',

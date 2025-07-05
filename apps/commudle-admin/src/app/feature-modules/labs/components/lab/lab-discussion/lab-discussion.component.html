@@ -37,7 +37,7 @@
         </form>
         <button (click)="login()" *ngIf="!currentUser" fullWidth nbButton status="primary">Post a Message</button>
         <div *ngIf="this.showHelperText" class="tagging-info">
-          <span>@ users, ! others</span>
+          <span>&#64; users, ! others</span>
         </div>
       </div>
       <div #messagesContainer class="messages">

@@ -6,7 +6,7 @@
   "implicitDependencies": ["commudle-admin"],
   "targets": {
     "build": {
-      "executor": "@nrwl/webpack:webpack",
+      "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
         "target": "node",
@@ -20,7 +20,8 @@
           "apps/prerender/src/ecosystem.config.js",
           "apps/prerender/src/.ebextensions"
         ],
-        "generatePackageJson": true
+        "generatePackageJson": true,
+        "webpackConfig": "apps/prerender/webpack.config.js"
       },
       "configurations": {
         "production": {
@@ -31,7 +32,7 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/js:node",
+      "executor": "@nx/js:node",
       "options": {
         "buildTarget": "prerender:build"
       },
@@ -42,14 +43,14 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["apps/prerender/**/*.ts"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "apps/prerender/jest.config.ts",
@@ -58,7 +59,6 @@
     },
     "release": {
       "executor": "nx:run-commands",
-      "outputs": [],
       "options": {
         "command": "node tools/builders/release.js"
       },

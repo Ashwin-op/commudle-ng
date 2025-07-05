@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { IHackathon, EHackathonStatus } from 'apps/shared-models/hackathon.model';
-import moment from 'moment';
+import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { faPlus, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 

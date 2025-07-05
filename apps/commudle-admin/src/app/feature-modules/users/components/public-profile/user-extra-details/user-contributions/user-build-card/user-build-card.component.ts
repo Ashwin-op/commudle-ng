@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 import { ICommunityBuild } from 'apps/shared-models/community-build.model';
-import moment from 'moment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-user-build-card',

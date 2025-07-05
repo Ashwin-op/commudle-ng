@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { EDbModels, IPurchaseOrder } from '@commudle/shared-models';
 import { PurchaseOrderService, SeoService } from '@commudle/shared-services';
-import moment from 'moment';
+import * as moment from 'moment';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
