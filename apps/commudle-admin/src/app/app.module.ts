@@ -1,4 +1,4 @@
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule, Title } from '@angular/platform-browser';
@@ -44,7 +44,7 @@ import {
   NbWindowModule,
 } from '@commudle/theme';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { createErrorHandler, TraceService } from '@sentry/angular-ivy';
+import { createErrorHandler, TraceService } from '@sentry/angular';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { Angular2SmartTableModule } from 'angular2-smart-table';
 import { FeaturedCommunitiesCardComponent } from 'apps/commudle-admin/src/app/app-shared-components/featured-communities-card/featured-communities-card.component';
@@ -66,7 +66,7 @@ import { PageAdsModule } from 'apps/shared-modules/page-ads/page-ads.module';
 import { SharedPipesModule } from 'apps/shared-pipes/pipes.module';
 import { IsBrowserService } from 'apps/shared-services/is-browser.service';
 import { PrismJsHighlightCodeService } from 'apps/shared-services/prismjs-highlight-code.service';
-import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha-2';
 import { CookieService } from 'ngx-cookie-service';
 import { NgxStripeModule } from 'ngx-stripe';
 import { AppRoutingModule } from './app-routing.module';
@@ -181,7 +181,6 @@ export function initApp(appInitService: AppInitService): () => Promise<any> {
       registrationStrategy: 'registerWhenStable:30000',
     }),
     BrowserAnimationsModule,
-    HttpClientModule,
     FontAwesomeModule,
     FormsModule,
     ReactiveFormsModule,
@@ -323,6 +322,7 @@ export function initApp(appInitService: AppInitService): () => Promise<any> {
       deps: [TraceService],
       multi: true,
     },
+    provideHttpClient(withInterceptorsFromDi()),
   ],
 })
 export class AppModule {}

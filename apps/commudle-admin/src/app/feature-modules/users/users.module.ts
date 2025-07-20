@@ -69,7 +69,7 @@ import { RecapComponent } from './components/recap-2024/recap-2024.component';
 import { PublicProfileCampaignComponent } from 'apps/commudle-admin/src/app/feature-modules/users/components/public-profile/public-profile-campaign/public-profile-campaign.component';
 import { SharedComponentsModule as newSharedComponentsModule } from '@commudle/shared-components';
 import { UserExpertTickComponent } from 'apps/commudle-admin/src/app/app-shared-components/user-expert-tick.component';
-import { RecaptchaModule } from 'ng-recaptcha';
+import { RecaptchaModule } from 'ng-recaptcha-2';
 import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-components/help-section/help-section.component';
 import { SkeletonCardsComponent } from 'apps/commudle-admin/src/app/feature-modules/skeleton-screens/components/skeleton-cards/skeleton-cards.component';
 @NgModule({

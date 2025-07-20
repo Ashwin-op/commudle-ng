@@ -1,6 +1,6 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { browserTracingIntegration, init, replayIntegration } from '@sentry/angular-ivy';
+import { browserTracingIntegration, init, replayIntegration } from '@sentry/angular';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 

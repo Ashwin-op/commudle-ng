@@ -132,12 +132,6 @@
           "exportFormat": "json"
         }
       }
-    },
-    "deploy": {
-      "executor": "@nx-extend/firebase-hosting:deploy",
-      "options": {
-        "site": "commudle-eacee"
-      }
     }
   }
 }

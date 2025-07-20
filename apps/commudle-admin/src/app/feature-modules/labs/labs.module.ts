@@ -50,7 +50,7 @@ import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-com
 import { UserPersonalConnectComponent } from 'libs/shared/components/src/lib/components/user-personal-connect/user-personal-connect.component';
 import { ListingPageHeaderComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-header/listing-page-header.component';
 import { UserExpertTickComponent } from 'apps/commudle-admin/src/app/app-shared-components/user-expert-tick.component';
-import { RecaptchaModule } from 'ng-recaptcha';
+import { RecaptchaModule } from 'ng-recaptcha-2';
 
 @NgModule({
   declarations: [

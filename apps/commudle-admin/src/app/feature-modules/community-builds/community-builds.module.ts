@@ -46,7 +46,7 @@ import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-com
 import { ListingPageHeaderComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-header/listing-page-header.component';
 import { FeaturedBuildsComponent } from 'apps/commudle-admin/src/app/app-shared-components/featured-builds/featured-builds.component';
 import { ShowMoreBuildsComponent } from './components/show-more-builds.component';
-import { RecaptchaModule } from 'ng-recaptcha';
+import { RecaptchaModule } from 'ng-recaptcha-2';
 @NgModule({
   declarations: [
     CreateCommunityBuildComponent,
