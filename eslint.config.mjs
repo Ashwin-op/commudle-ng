@@ -7,6 +7,9 @@ import globals from 'globals';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+// TODO: Remove FlatCompat entirely once all plugins support native flat config
+// Currently needed for: compat.extends('plugin:@nx/typescript') and compat.extends('plugin:@nx/javascript')
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
@@ -16,7 +19,9 @@ const compat = new FlatCompat({
 });
 
 export default defineConfig([
-  globalIgnores(['**/*', '**/node_modules']),
+  globalIgnores(['**/node_modules']),
+  // TODO: Scope Angular ESLint plugin to Angular-specific files only
+  // Currently registered globally but should be limited to Angular projects once shared components are migrated
   {
     plugins: {
       '@nx': nx,

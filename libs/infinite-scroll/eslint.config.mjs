@@ -41,7 +41,7 @@ export default defineConfig([
         },
       ],
 
-      '@typescipt-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
   {
