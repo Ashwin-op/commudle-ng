@@ -1,0 +1,15 @@
+# Docker volumes
+influxdb_data/
+grafana_data/
+
+# k6 output files
+results.json
+results.csv
+web-dashboard.html
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
