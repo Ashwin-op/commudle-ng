@@ -3,7 +3,14 @@
     <div class="com-h-full">
       <div *ngFor="let group of groupedMessages">
         <h3 class="grouped-date">{{ moment(group.date).format('MMMM D, YYYY') }}</h3>
-        <div *ngFor="let message of group.messages">
+        <div *ngFor="let message of group.messages" [attr.id]="'message-' + message.id">
+          <!-- Show "You left off here" divider for the first unread message -->
+          <div *ngIf="scrollToMessageId === message.id" class="last-read-divider">
+            <div class="divider-line"></div>
+            <span class="divider-text">You left off here</span>
+            <div class="divider-line"></div>
+          </div>
+
           <app-message
             [message]="message"
             [canReply]="!blocked"

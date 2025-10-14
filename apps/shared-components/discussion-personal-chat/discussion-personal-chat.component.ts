@@ -41,6 +41,7 @@ export class DiscussionPersonalChatComponent implements OnInit, OnDestroy {
   chatChannelSubscription;
   chatMessageForm;
   showEmojiForm = false;
+  scrollToMessageId: number | null = null;
   @ViewChild('inputElement', { static: true }) inputElement: ElementRef;
   @ViewChild('messagesContainer') private messagesContainer: ElementRef;
 
@@ -99,6 +100,15 @@ export class DiscussionPersonalChatComponent implements OnInit, OnDestroy {
     // TODO find a fix to this settimeout for scrolling to bottom on every new message loaded
     setTimeout(() => {
       try {
+        // If there's a scroll target message (first unread), scroll to it
+        if (this.scrollToMessageId) {
+          const messageElement = document.getElementById(`message-${this.scrollToMessageId}`);
+          if (messageElement) {
+            messageElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+          }
+        }
+        // Otherwise, scroll to bottom as usual
         this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight + 300;
       } catch (err) {
         console.log(err);
@@ -131,7 +141,13 @@ export class DiscussionPersonalChatComponent implements OnInit, OnDestroy {
           this.messages.unshift(...data.user_messages.reverse());
           this.groupedMessages = this.groupMessagesByDate(this.messages);
           this.loadingMessages = false;
+
+          // On first load, find the first unread message to scroll to
           if (this.nextPage === 1) {
+            const firstUnreadMessage = this.messages.find((msg) => !msg.read);
+            if (firstUnreadMessage) {
+              this.scrollToMessageId = firstUnreadMessage.id;
+            }
             this.scrollToBottom();
           }
 
