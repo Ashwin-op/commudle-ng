@@ -1,22 +1,23 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import * as moment from 'moment';
-import * as momentTimezone from 'moment-timezone';
+import { IUser } from '@commudle/shared-models';
+import { DiscussionService, removeHtmlTags } from '@commudle/shared-services';
+import { NbMenuService } from '@commudle/theme';
+import { faCalendar, faClockFour, faEllipsisVertical, faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
 import { DiscussionsService } from 'apps/commudle-admin/src/app/services/discussions.service';
 import { EventsService } from 'apps/commudle-admin/src/app/services/events.service';
+import { environment } from 'apps/commudle-admin/src/environments/environment';
 import { ICommunity } from 'apps/shared-models/community.model';
 import { IDiscussion } from 'apps/shared-models/discussion.model';
 import { EEventStatuses } from 'apps/shared-models/enums/event_statuses.enum';
 import { IEvent } from 'apps/shared-models/event.model';
 import { IEventUpdate } from 'apps/shared-models/event_update.model';
 import { SeoService } from 'apps/shared-services/seo.service';
-import { environment } from 'apps/commudle-admin/src/environments/environment';
-import { DiscussionService } from '@commudle/shared-services';
-import { NbMenuService } from '@commudle/theme';
+import * as moment from 'moment';
+import * as momentTimezone from 'moment-timezone';
 import { map } from 'rxjs';
-import { faEllipsisVertical, faCalendar, faClockFour, faGlobe } from '@fortawesome/free-solid-svg-icons';
-import { EEventType, IUser } from '@commudle/shared-models';
+import { EEventType } from '@commudle/shared-models';
 import { EventDataFormEntityGroupsService } from 'apps/commudle-admin/src/app/services/event-data-form-entity-groups.service';
 import { EventUpdatesService } from 'apps/commudle-admin/src/app/services/event-updates.service';
 import { IEventDataFormEntityGroup } from 'apps/shared-models/event_data_form_enity_group.model';
@@ -155,7 +156,7 @@ export class HomeEventComponent implements OnInit, OnDestroy {
 
       this.seoService.setTags(
         `${this.event.name} | ${this.community.name}`,
-        this.event.description.replace(/<[^>]*>/g, '').substring(0, 200),
+        removeHtmlTags(this.event.description).substring(0, 200),
         this.event.header_image_path ? this.event.header_image_path : this.community.logo_image_path.url,
       );
     });

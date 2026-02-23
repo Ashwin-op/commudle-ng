@@ -1,4 +1,4 @@
-import { Router as router } from '@angular/router';
+import { removeHtmlTags } from '@commudle/shared-services';
 import { ISearchResult } from 'apps/shared-models/search.model';
 
 export function groupResults(value: ISearchResult[]): object {
@@ -32,7 +32,6 @@ export function navigate(option: ISearchResult): void {
 }
 
 // function to return route for routerlink in html
-
 export function getRoute(option: ISearchResult): string[] {
   let searchUrl = [''];
   switch (option.type) {
@@ -52,7 +51,7 @@ export function getRoute(option: ISearchResult): string[] {
       searchUrl = ['/communities', option['kommunity_slug'], 'events', option['slug']];
       return searchUrl;
     case 'all':
-      (searchUrl = ['/search']), { queryParams: { q: option['query'] } };
+      searchUrl = ['/search'];
       return searchUrl;
   }
 }
@@ -72,23 +71,17 @@ export function getPicture(option: ISearchResult): string {
   }
 }
 
-function convertHtmlToText(html: string): string {
-  const txt = document.createElement('textarea');
-  txt.innerHTML = html;
-  return txt.value.replace(/<[^>]+>/g, '');
-}
-
 export function getTitle(option: ISearchResult): string {
   switch (option.type) {
     case 'User':
       return 'designation' in option ? option.designation : '';
     case 'Lab':
-      return 'description' in option ? convertHtmlToText(option.description) : '';
+      return 'description' in option ? removeHtmlTags(option.description) : '';
     case 'Community':
-      return 'about' in option ? convertHtmlToText(option.about) : '';
+      return 'about' in option ? removeHtmlTags(option.about) : '';
     case 'Community Build':
-      return 'description' in option ? convertHtmlToText(option.description) : '';
+      return 'description' in option ? removeHtmlTags(option.description) : '';
     case 'Event':
-      return 'description' in option ? convertHtmlToText(option.description) : '';
+      return 'description' in option ? removeHtmlTags(option.description) : '';
   }
 }

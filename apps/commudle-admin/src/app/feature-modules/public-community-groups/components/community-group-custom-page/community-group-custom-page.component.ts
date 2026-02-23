@@ -1,16 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EDbModels } from '@commudle/shared-models';
+import { removeHtmlTags } from '@commudle/shared-services';
 import { CustomPageService } from 'apps/commudle-admin/src/app/services/custom-page.service';
 import { ICustomPage } from 'apps/shared-models/custom-page.model';
 import { SeoService } from 'apps/shared-services/seo.service';
-import { Subscription, combineLatest } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 
 @Component({
-    selector: 'commudle-community-group-custom-page',
-    templateUrl: './community-group-custom-page.component.html',
-    styleUrls: ['./community-group-custom-page.component.scss'],
-    standalone: false
+  selector: 'commudle-community-group-custom-page',
+  templateUrl: './community-group-custom-page.component.html',
+  styleUrls: ['./community-group-custom-page.component.scss'],
+  standalone: false,
 })
 export class CommunityGroupCustomPageComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
@@ -47,7 +48,7 @@ export class CommunityGroupCustomPageComponent implements OnInit, OnDestroy {
   setMeta() {
     this.seoService.setTags(
       this.page.title,
-      this.seoService.removeHtmlTags(this.page.description),
+      removeHtmlTags(this.page.description),
       'https://commudle.com/assets/images/commudle-logo192.png',
     );
   }

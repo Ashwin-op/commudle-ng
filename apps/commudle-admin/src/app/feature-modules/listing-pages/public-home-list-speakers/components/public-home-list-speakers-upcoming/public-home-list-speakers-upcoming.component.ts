@@ -9,6 +9,7 @@ import { IPageInfo } from 'apps/shared-models/page-info.model';
 import { EDbModels, EEventType } from '@commudle/shared-models';
 import { environment } from 'apps/commudle-admin/src/environments/environment';
 import { SeoService } from 'apps/shared-services/seo.service';
+import { removeHtmlTags } from '@commudle/shared-services';
 
 @Component({
   selector: 'commudle-public-home-list-speakers-upcoming',
@@ -93,7 +94,7 @@ export class PublicHomeListSpeakersUpcomingComponent implements OnInit {
         '@context': 'https://schema.org',
         '@type': 'Event',
         name: event.name,
-        description: event.description.replace(/<[^>]*>/g, '').substring(0, 200),
+        description: removeHtmlTags(event.description).substring(0, 200),
         image: event.header_image_path ? event.header_image_path : event.kommunity.logo_image_path.url,
         startDate: event.start_time,
         endDate: event.end_time,

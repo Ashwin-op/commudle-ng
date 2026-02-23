@@ -21,6 +21,7 @@ import { IUserMessage } from 'apps/shared-models/user_message.model';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
 import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
 import { SeoService } from 'apps/shared-services/seo.service';
+import { removeHtmlTags } from '@commudle/shared-services';
 import { environment } from 'apps/commudle-admin/src/environments/environment';
 import * as moment from 'moment';
 import { Subject, Subscription, takeUntil } from 'rxjs';
@@ -235,7 +236,7 @@ export class LabDiscussionComponent implements OnInit, OnDestroy, OnChanges {
 
     const commentsArray = this.messages.map((message: IUserMessage) => ({
       '@type': 'Comment',
-      text: this.seoService.removeHtmlTags(message.content),
+      text: removeHtmlTags(message.content),
       datePublished: message.created_at,
       author: {
         '@type': 'Person',
@@ -274,7 +275,7 @@ export class LabDiscussionComponent implements OnInit, OnDestroy, OnChanges {
       if (userMessage) {
         const transformedMessage = {
           '@type': 'Comment',
-          text: this.seoService.removeHtmlTags(userMessage.content),
+          text: removeHtmlTags(userMessage.content),
           author: {
             '@type': 'Person',
             name: userMessage.user.name ? userMessage.user.name : userMessage.user.username,

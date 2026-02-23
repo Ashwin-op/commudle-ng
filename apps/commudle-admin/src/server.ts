@@ -6,6 +6,7 @@ import { CommonEngine } from '@angular/ssr/node';
 import compression from 'compression';
 import * as express from 'express';
 import * as expressStaticGzip from 'express-static-gzip';
+import { rateLimit } from 'express-rate-limit';
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import AppServerModule from './main.server';
@@ -46,6 +47,21 @@ export function app(): express.Express {
   // Compress dynamic responses (SSR HTML). Static assets are handled separately below.
   server.use(compression());
 
+  // Basic throttling to protect expensive file-system/static and SSR routes.
+  const staticRateLimit = rateLimit({
+    windowMs: 60_000,
+    limit: 300,
+    standardHeaders: 'draft-8',
+    legacyHeaders: false,
+  });
+
+  const ssrRateLimit = rateLimit({
+    windowMs: 60_000,
+    limit: 120,
+    standardHeaders: 'draft-8',
+    legacyHeaders: false,
+  });
+
   // Health check endpoint for load balancers/EB.
   server.get('/health', (_req, res) => {
     res.status(200).send('ok');
@@ -59,10 +75,14 @@ export function app(): express.Express {
   // Example Express Rest API endpoints
   // server.get('/api/**', (req, res) => { });
   // Serve static files from /browser
-  server.get('*.*', expressStaticGzip(distFolder, { enableBrotli: true, serveStatic: { maxAge: '1y' } }));
+  server.get(
+    '*.*',
+    staticRateLimit,
+    expressStaticGzip(distFolder, { enableBrotli: true, serveStatic: { maxAge: '1y' } }),
+  );
 
   // All regular routes use the Angular engine
-  server.get('*', (req, res, next) => {
+  server.get('*', ssrRateLimit, (req, res, next) => {
     // Ensure caches don't mix bot SSR HTML with user CSR HTML.
     res.setHeader('Vary', 'User-Agent');
 

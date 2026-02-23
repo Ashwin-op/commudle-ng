@@ -4,6 +4,7 @@ import { EDbModels } from '@commudle/shared-models';
 import { CustomPageService } from 'apps/commudle-admin/src/app/services/custom-page.service';
 import { ICustomPage } from 'apps/shared-models/custom-page.model';
 import { SeoService } from 'apps/shared-services/seo.service';
+import { removeHtmlTags } from '@commudle/shared-services';
 import { Subscription, combineLatest } from 'rxjs';
 
 @Component({
@@ -42,7 +43,7 @@ export class CustomPageComponent implements OnInit, OnDestroy {
   setMeta() {
     this.seoService.setTags(
       this.page.title,
-      this.seoService.removeHtmlTags(this.page.description),
+      removeHtmlTags(this.page.description),
       'https://commudle.com/assets/images/commudle-logo192.png',
     );
   }

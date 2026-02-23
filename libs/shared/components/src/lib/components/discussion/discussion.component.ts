@@ -14,18 +14,18 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { IEditorValidator } from '@commudle/editor';
 import { InfiniteScrollDirective } from '@commudle/infinite-scroll';
-import { AuthService, SeoService } from '@commudle/shared-services';
-import { DiscussionHandlerService } from '../../services/discussion-handler.service';
 import { environment } from '@commudle/shared-environments';
-import { Subject, takeUntil } from 'rxjs';
 import { ICommunity, IHackathon } from '@commudle/shared-models';
+import { AuthService, removeHtmlTags, SeoService } from '@commudle/shared-services';
+import { Subject, takeUntil } from 'rxjs';
+import { DiscussionHandlerService } from '../../services/discussion-handler.service';
 
 @Component({
-    selector: 'commudle-discussion',
-    templateUrl: './discussion.component.html',
-    styleUrls: ['./discussion.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'commudle-discussion',
+  templateUrl: './discussion.component.html',
+  styleUrls: ['./discussion.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class DiscussionComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() discussionId!: number;
@@ -35,7 +35,6 @@ export class DiscussionComponent implements OnInit, AfterViewInit, OnDestroy {
   hasRequestedFirstTime = true;
   hackathon: IHackathon;
   community: ICommunity;
-  private destroy$ = new Subject<void>();
 
   validators: IEditorValidator = {
     required: true,
@@ -46,6 +45,8 @@ export class DiscussionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild(InfiniteScrollDirective) infiniteScrollDirective;
   @ViewChildren('messagesListRef', { read: ViewContainerRef }) messagesListRefs: QueryList<HTMLDivElement>;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     public discussionHandlerService: DiscussionHandlerService,
@@ -114,7 +115,7 @@ export class DiscussionComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const commentsArray = allMessages.map((message) => ({
       '@type': 'Comment',
-      text: this.seoService.removeHtmlTags(message.content),
+      text: removeHtmlTags(message.content),
       datePublished: message.created_at,
       author: {
         '@type': 'Person',
@@ -160,7 +161,7 @@ export class DiscussionComponent implements OnInit, AfterViewInit, OnDestroy {
         if (userMessage) {
           const transformedMessage = {
             '@type': 'Comment',
-            text: this.seoService.removeHtmlTags(userMessage.content),
+            text: removeHtmlTags(userMessage.content),
             author: {
               '@type': 'Person',
               name: userMessage.user?.name ? userMessage.user.name : userMessage.user.username,

@@ -1,31 +1,17 @@
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
+import { removeHtmlTags } from './html-to-text.util';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AddToCalenderService {
-  private formatDate(date: Date, format = 'YYYYMMDDTHHmmss'): string {
-    return moment(date).format(format);
-  }
-
-  private sanitizeHtml(html: string): string {
-    if (!html) {
-      return '';
-    }
-    return html
-      .replace(/<br\s*\/?>/gi, '\n')
-      .replace(/<\/p>\s*<p>/gi, '\n\n')
-      .replace(/<\/?[^>]+(>|$)/g, '')
-      .trim();
-  }
-
   addToGoogleCalendar(sDate: Date, eDate: Date, title: string, location: string, details: string): string {
     const startDate = this.formatDate(sDate);
     const endDate = this.formatDate(eDate);
     const eventName = encodeURIComponent(title || '');
     const encodedLocation = location ? encodeURIComponent(location) : '';
-    const encodedDetails = encodeURIComponent(this.sanitizeHtml(details));
+    const encodedDetails = encodeURIComponent(removeHtmlTags(details).trim());
 
     return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${eventName}&dates=${startDate}/${endDate}&details=${encodedDetails}&location=${encodedLocation}`;
   }
@@ -37,7 +23,7 @@ export class AddToCalenderService {
   addToOutlookCalendar(sDate: Date, eDate: Date, title: string, location: string, details: string): string {
     const startDate = encodeURIComponent(moment(sDate).toISOString());
     const endDate = encodeURIComponent(moment(eDate).toISOString());
-    const plainDetails = encodeURIComponent(this.sanitizeHtml(details));
+    const plainDetails = encodeURIComponent(removeHtmlTags(details).trim());
     const eventName = encodeURIComponent(title || '');
     const encodedLocation = location ? encodeURIComponent(location) : '';
 
@@ -49,7 +35,7 @@ export class AddToCalenderService {
     const endDate = this.formatDate(eDate, 'YYYY-MM-DDTHH:mm:ss');
     const eventName = encodeURIComponent(title || '');
     const encodedLocation = location ? encodeURIComponent(location) : '';
-    const encodedDetails = encodeURIComponent(this.sanitizeHtml(details));
+    const encodedDetails = encodeURIComponent(removeHtmlTags(details).trim());
 
     return `https://outlook.office.com/calendar/0/deeplink/compose?subject=${eventName}&startdt=${startDate}&enddt=${endDate}&body=${encodedDetails}&location=${encodedLocation}`;
   }
@@ -57,7 +43,9 @@ export class AddToCalenderService {
   downloadIcsFile(sDate: Date, eDate: Date, title: string, location: string, details: string): void {
     const startDate = this.formatDate(sDate, 'YYYY-MM-DDTHH:mm:ss');
     const endDate = this.formatDate(eDate, 'YYYY-MM-DDTHH:mm:ss');
-    const plainDetails = this.sanitizeHtml(details).replace(/\r?\n|\r/g, '\\n');
+    const plainDetails = removeHtmlTags(details)
+      .trim()
+      .replace(/\r?\n|\r/g, '\\n');
     const encodedLocation = location || '';
 
     const icsContent = [
@@ -80,5 +68,9 @@ export class AddToCalenderService {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  private formatDate(date: Date, format = 'YYYYMMDDTHHmmss'): string {
+    return moment(date).format(format);
   }
 }

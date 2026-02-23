@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -10,18 +11,18 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import * as moment from 'moment';
-import { ICurrentUser } from 'apps/shared-models/current_user.model';
-import { IUserMessage } from 'apps/shared-models/user_message.model';
-import { SeoService } from '@commudle/shared-services';
 import { environment } from '@commudle/shared-environments';
 import { IEvent } from '@commudle/shared-models';
+import { SeoService } from '@commudle/shared-services';
+import { ICurrentUser } from 'apps/shared-models/current_user.model';
+import { IUserMessage } from 'apps/shared-models/user_message.model';
+import * as moment from 'moment';
 
 @Component({
-    selector: 'app-messages-list',
-    templateUrl: './messages-list.component.html',
-    styleUrls: ['./messages-list.component.scss'],
-    standalone: false
+  selector: 'app-messages-list',
+  templateUrl: './messages-list.component.html',
+  styleUrls: ['./messages-list.component.scss'],
+  standalone: false,
 })
 export class MessagesListComponent implements OnInit, AfterViewInit {
   @Input() messages: IUserMessage[] = [];
@@ -39,12 +40,11 @@ export class MessagesListComponent implements OnInit, AfterViewInit {
   moment = moment;
   messageContainer: HTMLDivElement;
   isNearBottom: boolean;
-  schemaForMessages = [];
 
   @ViewChild('messagesList') messagesList: ElementRef<HTMLDivElement>;
   @ViewChildren('messageElement') messageElements: QueryList<any>;
 
-  constructor(private seoService: SeoService) {}
+  constructor(private seoService: SeoService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.setSchema();
@@ -52,6 +52,7 @@ export class MessagesListComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.messageContainer = this.messagesList.nativeElement;
+    this.cdr.detectChanges();
     this.messageElements.changes.subscribe((value) => this.onMessageElementsChanged(value));
   }
 

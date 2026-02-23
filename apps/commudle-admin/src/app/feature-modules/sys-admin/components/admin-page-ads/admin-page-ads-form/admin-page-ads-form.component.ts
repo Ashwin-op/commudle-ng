@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SysAdminPageAdsService } from 'apps/commudle-admin/src/app/feature-modules/sys-admin/services/sys-admin-page-ads.service';
 import { IAttachedFile } from 'apps/shared-models/attached-file.model';
@@ -9,16 +9,13 @@ import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'app-admin-pa-slots-form',
-    templateUrl: './admin-page-ads-form.component.html',
-    styleUrls: ['./admin-page-ads-form.component.scss'],
-    standalone: false
+  selector: 'app-admin-pa-slots-form',
+  templateUrl: './admin-page-ads-form.component.html',
+  styleUrls: ['./admin-page-ads-form.component.scss'],
+  standalone: false,
 })
 export class AdminPageAdsFormComponent implements OnInit, OnDestroy {
   pageAd: IPageAd;
-  linkRegex =
-    /^(?:https?|ftp|file):\/\/(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4])|(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*\.[a-z\u00a1-\uffff]{2,}\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
-  iframeRegex = /^<iframe[^>]*(?:\/>|>.*?<\/iframe>)/g;
   pageAdForm: FormGroup;
   uploadedFiles: IAttachedFile[] = [];
 
@@ -37,11 +34,11 @@ export class AdminPageAdsFormComponent implements OnInit, OnDestroy {
       {
         title: ['', Validators.required],
         content: ['', Validators.required],
-        link: ['', [Validators.required, Validators.pattern(this.linkRegex)]],
+        link: ['', [Validators.required, this.externalLinkValidator()]],
         external_link: [true, Validators.required],
         is_default: [false, Validators.required],
         slot: ['', Validators.required],
-        iframe: ['', Validators.pattern(this.iframeRegex)],
+        iframe: ['', this.iframeValidator()],
         start_at: [''],
         end_at: [''],
       },
@@ -211,5 +208,38 @@ export class AdminPageAdsFormComponent implements OnInit, OnDestroy {
     const offset = new Date().getTimezoneOffset();
     const off = Math.abs(offset);
     return (offset < 0 ? '+' : '-') + ('00' + Math.floor(off / 60)).slice(-2) + ':' + ('00' + (off % 60)).slice(-2);
+  }
+
+  private externalLinkValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = (control.value || '').trim();
+      if (!value) {
+        return null;
+      }
+
+      try {
+        const parsed = new URL(value);
+        return ['http:', 'https:', 'ftp:', 'file:'].includes(parsed.protocol) ? null : { invalidExternalLink: true };
+      } catch {
+        return { invalidExternalLink: true };
+      }
+    };
+  }
+
+  private iframeValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = (control.value || '').trim();
+      if (!value) {
+        return null;
+      }
+
+      const template = document.createElement('template');
+      template.innerHTML = value;
+      const firstNode = template.content.firstElementChild;
+      const hasOnlyOneElement = template.content.children.length === 1;
+      const isIframe = firstNode?.tagName.toLowerCase() === 'iframe';
+
+      return hasOnlyOneElement && isIframe ? null : { invalidIframe: true };
+    };
   }
 }

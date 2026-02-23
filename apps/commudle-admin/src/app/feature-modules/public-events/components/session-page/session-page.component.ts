@@ -2,8 +2,8 @@ import { selectIsConnectedToRoom } from '@100mslive/hms-video-store';
 import { isPlatformBrowser, Location } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import * as moment from 'moment';
-import { CookieService } from 'ngx-cookie-service';
+import { EDbModels } from '@commudle/shared-models';
+import { removeHtmlTags } from '@commudle/shared-services';
 import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.service';
 import { DiscussionsService } from 'apps/commudle-admin/src/app/services/discussions.service';
 import { EmbeddedVideoStreamsService } from 'apps/commudle-admin/src/app/services/embedded-video-streams.service';
@@ -21,15 +21,16 @@ import { IUser } from 'apps/shared-models/user.model';
 import { hmsActions, hmsStore } from 'apps/shared-modules/hms-video/stores/hms.store';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
 import { SeoService } from 'apps/shared-services/seo.service';
+import * as moment from 'moment';
+import { CookieService } from 'ngx-cookie-service';
 import { Subject, Subscription, takeUntil } from 'rxjs';
-import { EDbModels } from '@commudle/shared-models';
 
 @Component({
-    selector: 'app-session-page',
-    templateUrl: './session-page.component.html',
-    styleUrls: ['./session-page.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'app-session-page',
+  templateUrl: './session-page.component.html',
+  styleUrls: ['./session-page.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class SessionPageComponent implements OnInit, OnDestroy {
   isBrowser: boolean;
@@ -48,8 +49,6 @@ export class SessionPageComponent implements OnInit, OnDestroy {
   embeddedVideoStream: IEmbeddedVideoStream;
 
   moment = moment;
-
-  userVisitData;
 
   startTime: Date;
   endTime: Date;
@@ -81,7 +80,7 @@ export class SessionPageComponent implements OnInit, OnDestroy {
   setMeta() {
     this.seoService.setTags(
       `${this.event.name} | Live`,
-      this.event.description.replace(/<[^>]*>/g, ''),
+      removeHtmlTags(this.event.description),
       this.event.header_image_path ? this.event.header_image_path : this.community.logo_image_path.url,
     );
   }

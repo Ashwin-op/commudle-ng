@@ -7,7 +7,7 @@ import { IForum, IUserMessage } from '@commudle/shared-models';
 import { faArrowLeft, faComment, faEye, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { NbDialogService } from '@commudle/theme';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
-import { ForumsStore, SeoService } from '@commudle/shared-services';
+import { ForumsStore, removeHtmlTags, SeoService } from '@commudle/shared-services';
 import { environment } from '@commudle/shared-environments';
 import { NewDiscussionFormComponent } from 'apps/commudle-admin/src/app/feature-modules/forums/components/new-discussion-form/new-discussion-form.component';
 
@@ -87,7 +87,7 @@ export class ForumDiscussionComponent implements OnInit, OnDestroy {
 
     const commentsArray = messages.map((message: IUserMessage) => ({
       '@type': 'Comment',
-      text: this.seoService.removeHtmlTags(message.content),
+      text: removeHtmlTags(message.content),
       datePublished: message.created_at,
       author: {
         '@type': 'Person',
@@ -130,7 +130,7 @@ export class ForumDiscussionComponent implements OnInit, OnDestroy {
       if (userMessage && userMessage.user) {
         const transformedMessage = {
           '@type': 'Comment',
-          text: this.seoService.removeHtmlTags(userMessage.content),
+          text: removeHtmlTags(userMessage.content),
           author: {
             '@type': 'Person',
             name: userMessage.user.name ? userMessage.user.name : userMessage.user.username,

@@ -1,32 +1,31 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { environment } from '@commudle/shared-environments';
 import { EHackathonRegistrationStatus, ICommunity, IHackathonTeam } from '@commudle/shared-models';
+import { AuthService, removeHtmlTags, SeoService } from '@commudle/shared-services';
+import { faFacebookF, faGithub, faLinkedinIn, faTwitter } from '@fortawesome/free-brands-svg-icons';
+import {
+  faArrowTrendUp,
+  faAward,
+  faChalkboardTeacher,
+  faCircleQuestion,
+  faGlobe,
+  faHandshake,
+  faHashtag,
+  faInfoCircle,
+  faLaptopCode,
+  faSackDollar,
+  faStar,
+  faUser,
+  faUserTie,
+} from '@fortawesome/free-solid-svg-icons';
+import { HackathonJudgeService } from 'apps/commudle-admin/src/app/services/hackathon-judge.service';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { IContactInfo } from 'apps/shared-models/contact-info.model';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
 import { Subject, Subscription, takeUntil } from 'rxjs';
-import { faLinkedinIn, faTwitter, faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons';
-import {
-  faGlobe,
-  faInfoCircle,
-  faHashtag,
-  faStar,
-  faSackDollar,
-  faCircleQuestion,
-  faAward,
-  faUser,
-  faLaptopCode,
-  faArrowTrendUp,
-  faHandshake,
-  faUserTie,
-  faChalkboardTeacher,
-  faTrophy,
-} from '@fortawesome/free-solid-svg-icons';
-import { SeoService } from '@commudle/shared-services';
-import { AuthService } from '@commudle/shared-services';
-import { HackathonJudgeService } from 'apps/commudle-admin/src/app/services/hackathon-judge.service';
-import { environment } from '@commudle/shared-environments';
+import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'commudle-public-hackathon-homepage',
@@ -168,15 +167,9 @@ export class PublicHackathonHomepageComponent implements OnInit, OnDestroy {
   setSeoService() {
     this.seoService.setTags(
       this.hackathon.name + ' by ' + this.community.name,
-      this.removeHtmlTags(this.hackathon.description),
+      removeHtmlTags(this.hackathon.description),
       'https://commudle.com/assets/images/commudle-logo192.png',
     );
-  }
-
-  removeHtmlTags(content): string {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(content, 'text/html');
-    return doc.body.textContent || '';
   }
 
   setSchema() {
@@ -220,7 +213,7 @@ export class PublicHackathonHomepageComponent implements OnInit, OnDestroy {
         '@context': 'https://schema.org',
         '@type': 'Event',
         name: this.hackathon.name,
-        description: this.hackathon.description?.replace(/<[^>]*>/g, '').substring(0, 200) || '',
+        description: removeHtmlTags(this.hackathon.description).substring(0, 200),
         image: this.hackathon.banner_image?.url || this.community.logo_image_path?.i64,
         startDate: this.hackathon.start_date,
         endDate: this.hackathon.end_date,

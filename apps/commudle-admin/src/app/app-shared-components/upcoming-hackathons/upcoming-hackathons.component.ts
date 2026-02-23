@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '@commudle/shared-environments';
 import { ICommunity, IHackathon } from '@commudle/shared-models';
-import { SeoService } from '@commudle/shared-services';
+import { removeHtmlTags, SeoService } from '@commudle/shared-services';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
@@ -80,7 +80,7 @@ export class UpcomingHackathonsComponent implements OnInit {
           '@context': 'https://schema.org',
           '@type': 'Event',
           name: upcomingHackathon.name,
-          description: upcomingHackathon.description.replace(/<[^>]*>/g, '').substring(0, 200),
+          description: removeHtmlTags(upcomingHackathon.description).substring(0, 200),
           image: upcomingHackathon.banner_image
             ? upcomingHackathon.banner_image.url
             : this.community?.logo_image_path.url,

@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit }
 import { HomeService } from 'apps/commudle-admin/src/app/services/home.service';
 import { ICommunityBuild } from 'apps/shared-models/community-build.model';
 import { IsBrowserService } from 'apps/shared-services/is-browser.service';
+import { removeHtmlTags } from '@commudle/shared-services';
 
 @Component({
     selector: 'app-homepage-builds',
@@ -33,9 +34,6 @@ export class HomepageBuildsComponent implements OnInit {
   }
 
   getDescription(build: ICommunityBuild): string {
-    const txt = this.document.createElement('textarea');
-    txt.innerHTML = build.description;
-    const htmlContent = txt.value;
-    return htmlContent.replace(/<[^>]+>/g, '');
+    return removeHtmlTags(build.description);
   }
 }

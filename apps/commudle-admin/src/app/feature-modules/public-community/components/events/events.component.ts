@@ -6,6 +6,7 @@ import { EventsService } from 'apps/commudle-admin/src/app/services/events.servi
 import { ICommunity } from 'apps/shared-models/community.model';
 import { IEvent } from 'apps/shared-models/event.model';
 import { SeoService } from 'apps/shared-services/seo.service';
+import { removeHtmlTags } from '@commudle/shared-services';
 import { faCalendarCheck, faCalendarDays, faMapPin } from '@fortawesome/free-solid-svg-icons';
 import { environment } from 'apps/commudle-admin/src/environments/environment';
 import { EEventType } from '@commudle/shared-models';
@@ -138,7 +139,7 @@ export class EventsComponent implements OnInit {
           '@type': 'Event',
           name: event.name,
           image: event.header_image_path ? event.header_image_path : this.community.logo_image_path.url,
-          description: event.description.replace(/<[^>]*>/g, '').substring(0, 200),
+          description: removeHtmlTags(event.description).substring(0, 200),
           startDate: event.start_time,
           endDate: event.end_time,
           eventStatus: 'https://schema.org/EventScheduled',

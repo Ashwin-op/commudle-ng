@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from '@commudle/shared-environments';
 import { EDbModels, ICommunity } from '@commudle/shared-models';
-import { SeoService } from '@commudle/shared-services';
+import { removeHtmlTags, SeoService } from '@commudle/shared-services';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
-import { environment } from '@commudle/shared-environments';
 
 @Component({
   selector: 'commudle-public-community-hackathons',
@@ -119,7 +119,7 @@ export class PublicCommunityHackathonsComponent implements OnInit, OnDestroy {
           '@context': 'https://schema.org',
           '@type': 'Event',
           name: hackathon.name,
-          description: hackathon.description.replace(/<[^>]*>/g, '').substring(0, 200),
+          description: removeHtmlTags(hackathon.description).substring(0, 200),
           image: hackathon.banner_image ? hackathon.banner_image.url : this.community?.logo_image_path.url,
           startDate: hackathon.start_date,
           endDate: hackathon.end_date,

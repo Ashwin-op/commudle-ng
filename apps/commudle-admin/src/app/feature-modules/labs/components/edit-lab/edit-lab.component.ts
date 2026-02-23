@@ -9,6 +9,7 @@ import { ILabStep } from 'apps/shared-models/lab-step.model';
 import { EPublishStatus, ILab } from 'apps/shared-models/lab.model';
 import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
 import { SeoService } from 'apps/shared-services/seo.service';
+import { removeHtmlTags } from '@commudle/shared-services';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -159,7 +160,7 @@ export class EditLabComponent implements OnInit, OnDestroy {
 
     this.seoService.setTags(
       `Edit ${this.lab.name} | By ${this.lab.user.name}`,
-      this.lab.description.replace(/<[^>]*>/g, ''),
+      removeHtmlTags(this.lab.description),
       'https://commudle.com/assets/images/commudle-logo192.png',
     );
   }

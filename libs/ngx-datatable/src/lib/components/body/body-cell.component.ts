@@ -409,10 +409,38 @@ export class DataTableBodyCellComponent implements DoCheck, OnDestroy {
   }
 
   stripHtml(html: string): string {
-    if (!html.replace) {
+    if (!html || !html.replace) {
       return html;
     }
-    return html.replace(/<\/?[^>]+(>|$)/g, '');
+
+    if (typeof DOMParser !== 'undefined') {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(String(html), 'text/html');
+      return doc.body.textContent || '';
+    }
+
+    return this.stripTagsWithoutRegex(String(html));
+  }
+
+  private stripTagsWithoutRegex(input: string): string {
+    let out = '';
+    let inTag = false;
+
+    for (const ch of input) {
+      if (ch === '<') {
+        inTag = true;
+        continue;
+      }
+      if (ch === '>') {
+        inTag = false;
+        continue;
+      }
+      if (!inTag) {
+        out += ch;
+      }
+    }
+
+    return out;
   }
 
   onTreeAction() {

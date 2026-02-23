@@ -1,34 +1,24 @@
 import { isPlatformBrowser } from '@angular/common';
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Inject,
-  Input,
-  OnInit,
-  PLATFORM_ID,
-  TemplateRef,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IEditorValidator } from '@commudle/editor';
+import { environment } from '@commudle/shared-environments';
 import { EUserRoles, ICommunityChannel, IUserMessage } from '@commudle/shared-models';
 import {
   AuthService,
   CommunityChannelManagerService,
   CommunityChannelsService,
+  removeHtmlTags,
   SeoService,
   ShareService,
   ToastrService,
 } from '@commudle/shared-services';
-import * as moment from 'moment';
-import { BehaviorSubject } from 'rxjs';
-import { UserMessageReceiptHandlerService } from '../../../services/user-message-receipt-handler.service';
-import { CommunityChannelHandlerService } from '../../../services/community-channel-handler.service';
 import { NbMenuService, NbWindowRef, NbWindowService } from '@commudle/theme';
-import { environment } from '@commudle/shared-environments';
-import { filter } from 'rxjs';
 import { faReply, faShareNodes } from '@fortawesome/free-solid-svg-icons';
-import { ActivatedRoute, Router } from '@angular/router';
+import { CommunityChannelHandlerService } from 'libs/shared/components/src/lib/services/community-channel-handler.service';
+import { UserMessageReceiptHandlerService } from 'libs/shared/components/src/lib/services/user-message-receipt-handler.service';
+import * as moment from 'moment';
+import { BehaviorSubject, filter } from 'rxjs';
 
 @Component({
   selector: 'commudle-community-forum-message',
@@ -202,7 +192,7 @@ export class CommunityForumMessageComponent implements OnInit, AfterViewInit {
       '@type': 'DiscussionForumPosting',
       url: shareLink,
       headline: this.channelOrForum.name,
-      text: this.seoService.removeHtmlTags(this.message.content),
+      text: removeHtmlTags(this.message.content),
       author: {
         '@type': 'Person',
         name: this.message.user.name ? this.message.user.name : this.message.user.username,
@@ -220,7 +210,7 @@ export class CommunityForumMessageComponent implements OnInit, AfterViewInit {
       if (userMessage) {
         const transformedMessage = {
           '@type': 'Comment',
-          text: this.seoService.removeHtmlTags(userMessage.content),
+          text: removeHtmlTags(userMessage.content),
           author: {
             '@type': 'Person',
             name: userMessage.user.name ? userMessage.user.name : userMessage.user.username,

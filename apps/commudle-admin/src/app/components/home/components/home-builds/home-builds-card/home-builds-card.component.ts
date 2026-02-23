@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ICommunityBuild } from 'apps/shared-models/community-build.model';
+import { removeHtmlTags } from '@commudle/shared-services';
 
 @Component({
     selector: 'app-home-builds-card',
@@ -7,19 +8,10 @@ import { ICommunityBuild } from 'apps/shared-models/community-build.model';
     styleUrls: ['./home-builds-card.component.scss'],
     standalone: false
 })
-export class HomeBuildsCardComponent implements OnInit {
+export class HomeBuildsCardComponent {
   @Input() build: ICommunityBuild;
 
-  constructor() {}
-
-  ngOnInit(): void {}
-
   getDescription(): string {
-    // Decode HTML
-    const txt = document.createElement('textarea');
-    txt.innerHTML = this.build.description;
-    const htmlContent = txt.value;
-    // Remove HTML tags
-    return htmlContent.replace(/<[^>]+>/g, '');
+    return removeHtmlTags(this.build.description);
   }
 }

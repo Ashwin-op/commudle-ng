@@ -45,6 +45,9 @@ export class DiscussionChatChannel {
 
   subscribe(discussionId) {
     if (this.cableConnection) {
+      // Run subscription setup outside Angular's zone to prevent ActionCable's internal
+      // WebSocket frames (heartbeats, pings) from triggering unnecessary change detection.
+      // Only re-enter the zone when actual data arrives via ngZone.run().
       this.ngZone.runOutsideAngular(() => {
         this.subscription = this.cableConnection.subscriptions.create(
           {

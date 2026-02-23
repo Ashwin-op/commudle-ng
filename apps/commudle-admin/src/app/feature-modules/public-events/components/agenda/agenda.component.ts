@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
-import * as _ from 'lodash';
-import * as moment from 'moment';
+import { removeHtmlTags } from '@commudle/shared-services';
 import { EventLocationsService } from 'apps/commudle-admin/src/app/services/event-locations.service';
 import { environment } from 'apps/commudle-admin/src/environments/environment';
 import { ICommunity } from 'apps/shared-models/community.model';
@@ -8,6 +7,8 @@ import { IEventDatesLocation, IEventLocation } from 'apps/shared-models/event-lo
 import { IEvent } from 'apps/shared-models/event.model';
 import { ITrackSlot } from 'apps/shared-models/track-slot.model';
 import { SeoService } from 'apps/shared-services/seo.service';
+import * as _ from 'lodash';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-agenda',
@@ -48,13 +49,30 @@ export class AgendaComponent implements OnInit {
     ) {
       this.seoService.setSchema({
         '@context': 'https://schema.org',
-        '@type': 'WebPage',
-        name: `Agenda - ${this.event.name}`,
-        url: `${environment.app_url}/communities/${this.community.slug}/events/${this.event.slug}/agenda`,
-        description: this.event.description.replace(/<[^>]*>/g, '').substring(0, 200),
-
-        isPartOf: {
-          '@type': 'WebPage',
+        '@type': 'Event',
+        name: this.event.name,
+        description: removeHtmlTags(this.event.description).substring(0, 200),
+        image: this.event.header_image_path ? this.event.header_image_path : this.community.logo_image_path.url,
+        startDate: this.event.start_time,
+        endDate: this.event.end_time,
+        eventStatus: 'https://schema.org/EventScheduled',
+        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+        location: {
+          '@type': 'Place',
+          name: this.eventDatesLocation[0].event_locations[0].location.address,
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: this.eventDatesLocation[0].event_locations[0].location.address,
+            addressCountry: 'IN',
+          },
+        },
+        organizer: {
+          '@type': 'Organization',
+          name: this.community.name,
+          url: environment.app_url + '/communities/' + this.community.slug,
+        },
+        offers: {
+          '@type': 'Offer',
           name: this.event.name,
           '@id': `${environment.app_url}/communities/${this.community.slug}/events/${this.event.slug}`,
           url: `${environment.app_url}/communities/${this.community.slug}/events/${this.event.slug}`,

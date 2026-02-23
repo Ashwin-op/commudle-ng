@@ -156,17 +156,4 @@ export class SeoService {
     els.forEach((el) => this.document.head.removeChild(el));
     // }
   }
-
-  removeHtmlTags(content): string {
-    const input = content == null ? '' : String(content);
-
-    // DOMParser is browser-only; for SSR fall back to a simple strip.
-    if (!this.isBrowser || typeof DOMParser === 'undefined') {
-      return input.replace(/<[^>]*>/g, '');
-    }
-
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(input, 'text/html');
-    return doc.body.textContent || '';
-  }
 }

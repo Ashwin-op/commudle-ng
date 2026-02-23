@@ -1,24 +1,24 @@
-import { Inject, Injectable, NgZone, PLATFORM_ID } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { APPLICATION_CABLE_CHANNELS } from 'apps/shared-services/application-cable-channels.constants';
-import { ActionCableConnectionSocket } from 'apps/shared-services/action-cable-connection.socket';
 import { isPlatformBrowser } from '@angular/common';
-import { CookieService } from 'ngx-cookie-service';
+import { Inject, Injectable, NgZone, PLATFORM_ID } from '@angular/core';
 import { environment } from 'apps/commudle-admin/src/environments/environment';
-import { LibAuthwatchService } from '../lib-authwatch.service';
+import { ActionCableConnectionSocket } from 'apps/shared-services/action-cable-connection.socket';
+import { APPLICATION_CABLE_CHANNELS } from 'apps/shared-services/application-cable-channels.constants';
+import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
+import { CookieService } from 'ngx-cookie-service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserVisitsChannel {
-  private isBrowser: boolean = isPlatformBrowser(this.platformId);
-  private isPageVisible = true;
-
   ACTIONS = {
     SET_PERMISSIONS: 'set_permissions',
     VISITORS: 'visitors',
     PING: 'ping',
   };
+
+  private isBrowser: boolean = isPlatformBrowser(this.platformId);
+  private isPageVisible = true;
 
   private cableConnection;
 
@@ -44,7 +44,7 @@ export class UserVisitsChannel {
     );
   }
 
-  subscribe(url) {
+  subscribe(url: string) {
     if (this.cableConnection) {
       this.ngZone.runOutsideAngular(() => {
         this.subscription = this.cableConnection.subscriptions.create(
@@ -103,9 +103,13 @@ export class UserVisitsChannel {
     }
 
     if (this.isBrowser && this.isPageVisible) {
-      this.pingInterval = setInterval(() => {
-        this.sendData(this.ACTIONS.PING, {});
-      }, 30000);
+      // Run outside Angular zone: setInterval inside zone creates a macro-task
+      // that triggers change detection on every tick even with no UI changes.
+      this.ngZone.runOutsideAngular(() => {
+        this.pingInterval = setInterval(() => {
+          this.sendData(this.ACTIONS.PING, {});
+        }, 30000);
+      });
     }
   }
 

@@ -14,20 +14,20 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IEditorValidator } from '@commudle/editor';
+import { EditorComponent, IEditorValidator } from '@commudle/editor';
 import { InfiniteScrollDirective } from '@commudle/infinite-scroll';
-import { EUserRoles, ICommunityChannel, IUserMessage, IPage } from '@commudle/shared-models';
+import { environment } from '@commudle/shared-environments';
+import { EUserRoles, ICommunityChannel, IPage, IUserMessage } from '@commudle/shared-models';
 import {
   AuthService,
-  CommunityChannelsService,
-  ToastrService,
   CommunityChannelManagerService,
+  CommunityChannelsService,
+  removeHtmlTags,
   SeoService,
+  ToastrService,
 } from '@commudle/shared-services';
-import { CommunityChannelHandlerService } from '../../services/community-channel-handler.service';
-import { EditorComponent } from '@commudle/editor';
-import { environment } from '@commudle/shared-environments';
 import { Subject, takeUntil } from 'rxjs';
+import { CommunityChannelHandlerService } from '../../services/community-channel-handler.service';
 
 @Component({
   selector: 'commudle-channel-discussion',
@@ -45,8 +45,6 @@ export class ChannelDiscussionComponent implements OnInit, AfterViewInit, OnDest
   @Input() shareMessageUrl: string;
   pinnedMessages: IUserMessage[] = [];
   EUserRoles = EUserRoles;
-  isCommunityChannelForumAdmin = false;
-  isCommunityChannelForumMember = false;
 
   hasRequestedFirstTime = true;
   channelsRoles = {};
@@ -58,12 +56,13 @@ export class ChannelDiscussionComponent implements OnInit, AfterViewInit, OnDest
     maxLength: 200,
     noWhitespace: true,
   };
-  private readonly destroy$ = new Subject<void>();
   private readonly isBrowser: boolean;
 
   @ViewChild(InfiniteScrollDirective) infiniteScrollDirective;
   @ViewChildren('messagesListRef', { read: ViewContainerRef }) messagesListRefs: QueryList<HTMLDivElement>;
   @ViewChild('editorRef') editorRef: EditorComponent;
+
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     public communityChannelHandlerService: CommunityChannelHandlerService,
@@ -164,7 +163,7 @@ export class ChannelDiscussionComponent implements OnInit, AfterViewInit, OnDest
 
     const commentsArray = allMessages.map((message: IUserMessage) => ({
       '@type': 'Comment',
-      text: this.seoService.removeHtmlTags(message.content),
+      text: removeHtmlTags(message.content),
       datePublished: message.created_at,
       author: {
         '@type': 'Person',
@@ -208,7 +207,7 @@ export class ChannelDiscussionComponent implements OnInit, AfterViewInit, OnDest
       if (userMessage) {
         const transformedMessage = {
           '@type': 'Comment',
-          text: this.seoService.removeHtmlTags(userMessage.content),
+          text: removeHtmlTags(userMessage.content),
           author: {
             '@type': 'Person',
             name: userMessage.user.name ? userMessage.user.name : userMessage.user.username,

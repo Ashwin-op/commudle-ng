@@ -17,6 +17,7 @@ import { ICurrentUser } from 'apps/shared-models/current_user.model';
 import { ILabStep } from 'apps/shared-models/lab-step.model';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
 import { SeoService } from 'apps/shared-services/seo.service';
+import { removeHtmlTags } from '@commudle/shared-services';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 
 @Component({
@@ -68,7 +69,7 @@ export class LabStepComponent implements OnInit, OnDestroy, AfterViewChecked {
 
           this.seoService.setTags(
             `${this.step.name}`,
-            this.step.description.replace(/<[^>]*>/g, '').substring(0, 160),
+            removeHtmlTags(this.step.description).substring(0, 160),
             'https://commudle.com/assets/images/commudle-logo192.png',
           );
 

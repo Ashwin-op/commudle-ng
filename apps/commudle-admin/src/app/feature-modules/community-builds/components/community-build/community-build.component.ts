@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { CommunityBuildsService } from 'apps/commudle-admin/src/app/services/community-builds.service';
 import { ICommunityBuild } from '@commudle/shared-models';
-import { SeoService } from '@commudle/shared-services';
+import { removeHtmlTags, SeoService } from '@commudle/shared-services';
 import { switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
 import { ECommunityBuildPublishStatus } from '@commudle/shared-models';
@@ -40,7 +40,7 @@ export class CommunityBuildComponent implements OnInit, OnDestroy {
 
         this.seoService.setTags(
           `${data.name} | By ${data.user.name}`,
-          data.description.replace(/<[^>]*>/g, '').substring(0, 160) + '...',
+          removeHtmlTags(data.description).substring(0, 160) + '...',
           data.images[0]?.url || 'https://commudle.com/assets/images/commudle-logo192.png',
         );
       });

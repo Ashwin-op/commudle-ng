@@ -23,6 +23,7 @@ import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
 import { NavigatorShareService } from 'apps/shared-services/navigator-share.service';
 import { PrismJsHighlightCodeService } from 'apps/shared-services/prismjs-highlight-code.service';
 import { SeoService } from 'apps/shared-services/seo.service';
+import { removeHtmlTags } from '@commudle/shared-services';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -147,7 +148,7 @@ export class LabComponent implements OnInit, OnDestroy, AfterViewChecked {
   setMeta() {
     this.seoService.setTags(
       `${this.lab.name} | By ${this.lab.user.name}`,
-      this.lab.description.replace(/<[^>]*>/g, '').substring(0, 160),
+      removeHtmlTags(this.lab.description).substring(0, 160),
       this.lab.header_image ? this.lab.header_image.url : 'https://commudle.com/assets/images/commudle-logo192.png',
       'article',
     );

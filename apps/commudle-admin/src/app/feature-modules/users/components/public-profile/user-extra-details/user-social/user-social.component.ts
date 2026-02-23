@@ -16,10 +16,10 @@ import { debounceTime } from 'rxjs/operators';
 import { faFileText } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-    selector: 'app-user-social',
-    templateUrl: './user-social.component.html',
-    styleUrls: ['./user-social.component.scss'],
-    standalone: false
+  selector: 'app-user-social',
+  templateUrl: './user-social.component.html',
+  styleUrls: ['./user-social.component.scss'],
+  standalone: false,
 })
 export class UserSocialComponent implements OnInit, OnChanges, OnDestroy {
   @Input() user: IUser;
@@ -41,9 +41,6 @@ export class UserSocialComponent implements OnInit, OnChanges, OnDestroy {
   linkPreview: ILinkPreview;
   socialResourcesForm;
   tags: string[] = [];
-  urlPattern = new RegExp(
-    '^(http://www.|https://www.|http://|https://)?[a-z0-9]+([-.][a-z0-9]+)*.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?$',
-  );
 
   @ViewChild('addLinkDialog') addLinkDialog: TemplateRef<any>;
   addLinkDialogRef: NbDialogRef<any>;
@@ -81,7 +78,7 @@ export class UserSocialComponent implements OnInit, OnChanges, OnDestroy {
     );
     // Subscribe to search
     this.socialLinkChangedSubscription = this.socialLinkChanged.pipe(debounceTime(1000)).subscribe((value) => {
-      if (this.urlPattern.test(value)) {
+      if (this.isValidUrl(value)) {
         this.invalidUrl = false;
         this.getLinkPreview(value.replace(/\s/g, ''));
       } else {
@@ -229,5 +226,25 @@ export class UserSocialComponent implements OnInit, OnChanges, OnDestroy {
         }
       }),
     );
+  }
+
+  private isValidUrl(rawUrl: string): boolean {
+    if (!rawUrl) {
+      return false;
+    }
+
+    const value = rawUrl.trim();
+    if (!value) {
+      return false;
+    }
+
+    const normalized = /^[a-zA-Z][a-zA-Z\d+\-.]*:\/\//.test(value) ? value : `https://${value}`;
+
+    try {
+      const parsed = new URL(normalized);
+      return ['http:', 'https:'].includes(parsed.protocol);
+    } catch {
+      return false;
+    }
   }
 }
