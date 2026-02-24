@@ -1,6 +1,7 @@
 import 'zone.js/node';
 
 import { APP_BASE_HREF } from '@angular/common';
+import { RESPONSE_INIT } from '@angular/core';
 import { CommonEngine } from '@angular/ssr/node';
 import compression from 'compression';
 import * as express from 'express';
@@ -74,15 +75,23 @@ export function app(): express.Express {
 
     const { protocol, originalUrl, baseUrl, headers } = req;
 
+    // Mutable object shared with the Angular app via DI.
+    // Components (e.g. Error404PageComponent) can set .status during ngOnInit
+    // so that the correct HTTP status is returned to the crawler.
+    const responseInit: ResponseInit = {};
+
     commonEngine
       .render({
         bootstrap: AppServerModule,
         documentFilePath: indexHtml,
         url: `${protocol}://${headers.host}${originalUrl}`,
         publicPath: distFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+        providers: [
+          { provide: APP_BASE_HREF, useValue: baseUrl },
+          { provide: RESPONSE_INIT, useValue: responseInit },
+        ],
       })
-      .then((html) => res.send(html))
+      .then((html) => res.status((responseInit.status as number) ?? 200).send(html))
       .catch((err) => next(err));
   });
 
