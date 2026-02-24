@@ -12,6 +12,10 @@ import { ProfileStatusBarService } from 'apps/commudle-admin/src/app/services/pr
   standalone: false,
 })
 export class Error404PageComponent implements OnInit, OnDestroy {
+  // inject() is only valid in injection context (field initializer / constructor), not in lifecycle hooks.
+  private readonly isServer = isPlatformServer(inject(PLATFORM_ID));
+  private readonly responseInit = inject(RESPONSE_INIT, { optional: true }) as ResponseInit | null;
+
   constructor(
     private profileStatusBarService: ProfileStatusBarService,
     private footerService: FooterService,
@@ -28,11 +32,8 @@ export class Error404PageComponent implements OnInit, OnDestroy {
 
     // During SSR, signal the correct HTTP status back to Express via the
     // shared RESPONSE_INIT object so crawlers receive a real 404/410 response.
-    if (isPlatformServer(inject(PLATFORM_ID))) {
-      const responseInit = inject(RESPONSE_INIT, { optional: true }) as ResponseInit | null;
-      if (responseInit) {
-        responseInit.status = statusCode;
-      }
+    if (this.isServer && this.responseInit) {
+      this.responseInit.status = statusCode;
     }
 
     this.seoService.setTags(
