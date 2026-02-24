@@ -91,7 +91,7 @@ export function app(): express.Express {
           { provide: RESPONSE_INIT, useValue: responseInit },
         ],
       })
-      .then((html) => res.status((responseInit.status as number) ?? 200).send(html))
+      .then((html) => res.status(responseInit.status ?? 200).send(html))
       .catch((err) => next(err));
   });
 
