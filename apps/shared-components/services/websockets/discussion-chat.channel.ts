@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { ActionCableConnectionSocket } from 'apps/shared-services/action-cable-connection.socket';
 import { APPLICATION_CABLE_CHANNELS } from 'apps/shared-services/application-cable-channels.constants';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
@@ -23,6 +23,7 @@ export class DiscussionChatChannel {
   private cableConnection;
 
   private subscription;
+  private retryTimeout: ReturnType<typeof setTimeout> | null = null;
 
   // all the communications received will be observables
   private channelData: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -33,24 +34,32 @@ export class DiscussionChatChannel {
   constructor(
     private actionCableConnection: ActionCableConnectionSocket,
     private authWatchService: LibAuthwatchService,
+    private ngZone: NgZone,
   ) {
-    this.actionCableSubscription = this.actionCableConnection.acSocket$.subscribe((connection) => {
-      this.cableConnection = connection;
-    });
+    this.actionCableSubscription = this.ngZone.runOutsideAngular(() =>
+      this.actionCableConnection.acSocket$.subscribe((connection) => {
+        this.cableConnection = connection;
+      }),
+    );
   }
 
   subscribe(discussionId) {
     if (this.cableConnection) {
-      this.subscription = this.cableConnection.subscriptions.create(
-        {
-          channel: APPLICATION_CABLE_CHANNELS.DISCUSSION_CHAT_CHANNEL,
-          room: discussionId,
-          app_token: this.authWatchService.getAppToken(),
-        },
-        {
-          received: (data) => this.channelData.next(data),
-        },
-      );
+      this.ngZone.runOutsideAngular(() => {
+        this.subscription = this.cableConnection.subscriptions.create(
+          {
+            channel: APPLICATION_CABLE_CHANNELS.DISCUSSION_CHAT_CHANNEL,
+            room: discussionId,
+            app_token: this.authWatchService.getAppToken(),
+          },
+          {
+            received: (data) => this.ngZone.run(() => this.channelData.next(data)),
+            rejected: () => {
+              this.retryTimeout = setTimeout(() => this.subscribe(discussionId), 5000);
+            },
+          },
+        );
+      });
     }
 
     return this.subscription;
@@ -64,9 +73,12 @@ export class DiscussionChatChannel {
   }
 
   unsubscribe() {
+    if (this.retryTimeout) {
+      clearTimeout(this.retryTimeout);
+      this.retryTimeout = null;
+    }
     if (this.subscription) {
       this.subscription.unsubscribe();
-      this.actionCableSubscription.unsubscribe();
       this.channelData.next(null);
     }
   }

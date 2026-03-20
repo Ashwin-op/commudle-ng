@@ -1,61 +1,67 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { APPLICATION_CABLE_CHANNELS } from 'apps/shared-services/application-cable-channels.constants';
 import { ActionCableConnectionSocket } from 'apps/shared-services/action-cable-connection.socket';
 import { ICommunityChannel } from 'apps/shared-models/community-channel.model';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CommunityChannelNotificationsChannel {
   ACTIONS = {
     SET_PERMISSIONS: 'set_permissions',
     LOAD_NOTIFICATIONS: 'load_notifications',
-    NEW_MESSAGE: 'new_message'
+    NEW_MESSAGE: 'new_message',
   };
 
   private cableSubscription;
   private subscription;
+  private retryTimeout: ReturnType<typeof setTimeout> | null = null;
   private subscriberCount = 0;
 
   // all the communications received will be observables
   private notifications: BehaviorSubject<ICommunityChannel[]> = new BehaviorSubject([]);
   public notifications$ = this.notifications.asObservable();
 
+  private cableConnection: any;
 
   private hasNotifications: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public hasNotifications$ = this.hasNotifications.asObservable();
 
-
   constructor(
     private actionCableConnection: ActionCableConnectionSocket,
-    private authWatchService: LibAuthwatchService
+    private authWatchService: LibAuthwatchService,
+    private ngZone: NgZone,
   ) {
-    this.cableSubscription = this.actionCableConnection.acSocket$.subscribe(
-      connection => {
+    this.cableSubscription = this.ngZone.runOutsideAngular(() =>
+      this.actionCableConnection.acSocket$.subscribe((connection) => {
         if (connection) {
-          this.subscribe(connection)
+          this.cableConnection = connection;
+          this.subscribe();
         }
-      }
+      }),
     );
   }
 
-
-  subscribe(connection) {
+  subscribe() {
     //  here, multiple components might get subscribed to the same subscription to receive the same data,
     // hence this subscription was called in the constructor itself
-      this.subscription = connection.subscriptions.create({
-        channel: APPLICATION_CABLE_CHANNELS.USER_COMMUNITY_CHANNEL_DISCUSSION_NOTIFICATIONS,
-        app_token: this.authWatchService.getAppToken()
-      }, {
-        received: (data) => {
-          this.setNotifications(data);
-        }
-      });
-    }
-
+    this.ngZone.runOutsideAngular(() => {
+      this.subscription = this.cableConnection.subscriptions.create(
+        {
+          channel: APPLICATION_CABLE_CHANNELS.USER_COMMUNITY_CHANNEL_DISCUSSION_NOTIFICATIONS,
+          app_token: this.authWatchService.getAppToken(),
+        },
+        {
+          received: (data) => this.ngZone.run(() => this.setNotifications(data)),
+          rejected: () => {
+            this.retryTimeout = setTimeout(() => this.subscribe(), 5000);
+          },
+        },
+      );
+    });
+  }
 
   setNotifications(data) {
     switch (data.action) {
@@ -64,8 +70,8 @@ export class CommunityChannelNotificationsChannel {
         break;
       }
       case this.ACTIONS.NEW_MESSAGE: {
-        let currentValue = this.notifications.value;
-        const existingChannelIndex = currentValue.findIndex(ch => ch.id === data.community_channel.id);
+        const currentValue = this.notifications.value;
+        const existingChannelIndex = currentValue.findIndex((ch) => ch.id === data.community_channel.id);
 
         if (existingChannelIndex === -1) {
           currentValue.push(data.community_channel);
@@ -77,30 +83,29 @@ export class CommunityChannelNotificationsChannel {
     this.setHasNotifications();
   }
 
-
   setHasNotifications() {
-    let value = this.notifications.value.length > 0 ? true : false;
+    const value = this.notifications.value.length > 0 ? true : false;
     this.hasNotifications.next(value);
   }
 
-
   markRead(communityChannelId) {
-    let currentValue = this.notifications.value;
-    const existingChannelIndex = currentValue.findIndex(ch => ch.id == communityChannelId);
+    const currentValue = this.notifications.value;
+    const existingChannelIndex = currentValue.findIndex((ch) => ch.id == communityChannelId);
     if (existingChannelIndex !== -1) {
       currentValue.splice(existingChannelIndex, 1);
       this.notifications.next(currentValue);
     }
   }
 
-
   // unsubscribe only when the subscriber count is zero (that is, no component is listening to the subscriber)
   unsubscribe() {
     this.subscriberCount = Math.max(this.subscriberCount - 1, 0);
     if (this.subscription && this.subscriberCount === 0) {
+      if (this.retryTimeout) {
+        clearTimeout(this.retryTimeout);
+        this.retryTimeout = null;
+      }
       this.subscription.unsubscribe();
-      this.cableSubscription.unsubscribe();
     }
   }
-
 }

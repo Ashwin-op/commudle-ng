@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { APPLICATION_CABLE_CHANNELS } from 'apps/shared-services/application-cable-channels.constants';
 import { ActionCableConnectionSocket } from 'apps/shared-services/action-cable-connection.socket';
@@ -22,6 +22,7 @@ export class DiscussionPersonalChatChannel {
   cableConnection;
 
   private subscriptions = {};
+  private retryTimeouts: Record<string, ReturnType<typeof setTimeout>> = {};
   private discussionBlockedStatuses = {};
   public discussionBlockedStatuses$ = {};
   // all the communications received will be observables
@@ -33,10 +34,13 @@ export class DiscussionPersonalChatChannel {
   constructor(
     private actionCableConnection: ActionCableConnectionSocket,
     private authWatchService: LibAuthwatchService,
+    private ngZone: NgZone,
   ) {
-    this.actionCableConnection.acSocket$.subscribe((connection) => {
-      this.cableConnection = connection;
-    });
+    this.ngZone.runOutsideAngular(() =>
+      this.actionCableConnection.acSocket$.subscribe((connection) => {
+        this.cableConnection = connection;
+      }),
+    );
   }
 
   subscribe(discussionId) {
@@ -48,18 +52,21 @@ export class DiscussionPersonalChatChannel {
       this.discussionBlockedStatuses[discussionId] = new BehaviorSubject(null);
       this.discussionBlockedStatuses$[discussionId] = this.discussionBlockedStatuses[discussionId].asObservable();
 
-      this.subscriptions[discussionId] = this.cableConnection.subscriptions.create(
-        {
-          channel: APPLICATION_CABLE_CHANNELS.DISCUSSION_PERSONAL_CHAT_CHANNEL,
-          room: discussionId,
-          app_token: this.authWatchService.getAppToken(),
-        },
-        {
-          received: (data) => {
-            this.channelData[connectionName].next(data);
+      this.ngZone.runOutsideAngular(() => {
+        this.subscriptions[discussionId] = this.cableConnection.subscriptions.create(
+          {
+            channel: APPLICATION_CABLE_CHANNELS.DISCUSSION_PERSONAL_CHAT_CHANNEL,
+            room: discussionId,
+            app_token: this.authWatchService.getAppToken(),
           },
-        },
-      );
+          {
+            received: (data) => this.ngZone.run(() => this.channelData[connectionName].next(data)),
+            rejected: () => {
+              this.retryTimeouts[discussionId] = setTimeout(() => this.subscribe(discussionId), 5000);
+            },
+          },
+        );
+      });
     }
     return this.subscriptions[connectionName];
   }
@@ -76,6 +83,10 @@ export class DiscussionPersonalChatChannel {
   }
 
   unsubscribe(discussionId) {
+    if (this.retryTimeouts[discussionId]) {
+      clearTimeout(this.retryTimeouts[discussionId]);
+      delete this.retryTimeouts[discussionId];
+    }
     if (this.subscriptions[discussionId]) {
       this.channelData[discussionId].next(null);
       this.subscriptions[discussionId].unsubscribe();

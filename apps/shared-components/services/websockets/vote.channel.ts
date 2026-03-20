@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { ActionCableConnectionSocket } from 'apps/shared-services/action-cable-connection.socket';
 import { APPLICATION_CABLE_CHANNELS } from 'apps/shared-services/application-cable-channels.constants';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
@@ -19,6 +19,7 @@ export class VoteChannel {
   private cableConnection;
 
   private subscriptions = {};
+  private retryTimeouts: Record<string, ReturnType<typeof setTimeout>> = {};
 
   // all the communications received will be observables
   private channelsList: BehaviorSubject<any> = new BehaviorSubject(new Set());
@@ -31,32 +32,38 @@ export class VoteChannel {
     private actionCableConnection: ActionCableConnectionSocket,
     private authWatchService: LibAuthwatchService,
     private pioneerAnalyticsService: PioneerAnalyticsService,
+    private ngZone: NgZone,
   ) {
-    this.actionCableConnection.acSocket$.subscribe((connection) => {
-      this.cableConnection = connection;
-    });
+    this.ngZone.runOutsideAngular(() =>
+      this.actionCableConnection.acSocket$.subscribe((connection) => {
+        this.cableConnection = connection;
+      }),
+    );
   }
 
   subscribe(votableType, votableId, uuid) {
     if (this.cableConnection) {
-      this.channelData[`${votableId}_${votableType}_${uuid}`] = new BehaviorSubject(null);
-      this.channelData$[`${votableId}_${votableType}_${uuid}`] =
-        this.channelData[`${votableId}_${votableType}_${uuid}`].asObservable();
-      this.channelsList.next(this.channelsList.getValue().add(`${votableId}_${votableType}_${uuid}`));
+      const key = `${votableId}_${votableType}_${uuid}`;
+      this.channelData[key] = new BehaviorSubject(null);
+      this.channelData$[key] = this.channelData[key].asObservable();
+      this.channelsList.next(this.channelsList.getValue().add(key));
 
-      this.subscriptions[`${votableId}_${votableType}_${uuid}`] = this.cableConnection.subscriptions.create(
-        {
-          channel: APPLICATION_CABLE_CHANNELS.VOTE_CHANNEL,
-          votable_type: votableType,
-          votable_id: votableId,
-          app_token: this.authWatchService.getAppToken(),
-        },
-        {
-          received: (data) => {
-            this.channelData[`${votableId}_${votableType}_${uuid}`].next(data);
+      this.ngZone.runOutsideAngular(() => {
+        this.subscriptions[key] = this.cableConnection.subscriptions.create(
+          {
+            channel: APPLICATION_CABLE_CHANNELS.VOTE_CHANNEL,
+            votable_type: votableType,
+            votable_id: votableId,
+            app_token: this.authWatchService.getAppToken(),
           },
-        },
-      );
+          {
+            received: (data) => this.ngZone.run(() => this.channelData[key].next(data)),
+            rejected: () => {
+              this.retryTimeouts[key] = setTimeout(() => this.subscribe(votableType, votableId, uuid), 5000);
+            },
+          },
+        );
+      });
     }
 
     return this.subscriptions[`${votableId}_${votableType}_${uuid}`];
@@ -71,8 +78,13 @@ export class VoteChannel {
   }
 
   unsubscribe(votableType, votableId, uuid) {
-    if (this.subscriptions[`${votableId}_${votableType}_${uuid}`]) {
-      this.subscriptions[`${votableId}_${votableType}_${uuid}`].unsubscribe();
+    const key = `${votableId}_${votableType}_${uuid}`;
+    if (this.retryTimeouts[key]) {
+      clearTimeout(this.retryTimeouts[key]);
+      delete this.retryTimeouts[key];
+    }
+    if (this.subscriptions[key]) {
+      this.subscriptions[key].unsubscribe();
     }
   }
 }

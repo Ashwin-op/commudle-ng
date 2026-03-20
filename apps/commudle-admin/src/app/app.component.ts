@@ -65,9 +65,6 @@ export class AppComponent implements OnInit, OnDestroy {
       this.currentUser = currentUser;
 
       if (this.isBrowser) {
-        this.cableService.createCable(
-          environment.anycable_url + '?user_auth_token=' + this.authWatchService.getAuthCookie(),
-        );
         this.actionCableConnectionSocket.connectToServer();
         // this.notificationsService.subscribeToNotifications();
 

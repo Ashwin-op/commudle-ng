@@ -1,29 +1,26 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Cable } from '@anycable/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { LibAuthwatchService } from './lib-authwatch.service';
 
-type ActionCableModule = typeof import('actioncable');
-
+type AnyCableModule = typeof import('@anycable/web');
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ActionCableConnectionSocket {
-
   private baseAcUrl;
-  private actionCable: ActionCableModule | null = null;
+  private anyCable: AnyCableModule | null = null;
   private acSocket: BehaviorSubject<any> = new BehaviorSubject(null);
   public acSocket$: Observable<any> = this.acSocket.asObservable();
+  private acCableSubject: BehaviorSubject<Cable | null> = new BehaviorSubject(null);
+  public acCable$: Observable<Cable | null> = this.acCableSubject.asObservable();
 
-
-  constructor(
-    private authWatchService: LibAuthwatchService,
-    @Inject(PLATFORM_ID) private platformId: Object,
-  ) { }
+  constructor(private authWatchService: LibAuthwatchService, @Inject(PLATFORM_ID) private platformId: object) {}
 
   setBaseUrl(envBase: string): string {
-    return this.baseAcUrl = envBase;
+    return (this.baseAcUrl = envBase);
   }
 
   getBaseUrl(): string {
@@ -35,23 +32,26 @@ export class ActionCableConnectionSocket {
   }
 
   async connectToServer() {
-    // ActionCable is browser-only (it references window/WebSocket).
+    // AnyCable client is browser-only (it references window/WebSocket).
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
 
-    if (!this.actionCable) {
-      this.actionCable = (await import('actioncable')) as unknown as ActionCableModule;
+    if (!this.anyCable) {
+      this.anyCable = await import('@anycable/web');
     }
 
     if (this.acSocket.value != null) {
       this.acSocket.value.disconnect();
       this.acSocket.next(null);
+      this.acCableSubject.next(null);
     }
 
-    this.acSocket.next(
-      this.actionCable.createConsumer(this.baseAcUrl + `?user_auth_token=${this.authWatchService.getAuthCookie()}`),
+    // Pass a fresh URL string on every consumer creation
+    const consumer = this.anyCable.createConsumer(
+      `${this.baseAcUrl}?user_auth_token=${this.authWatchService.getAuthCookie()}`,
     );
+    this.acSocket.next(consumer);
+    this.acCableSubject.next(consumer.cable);
   }
-
 }

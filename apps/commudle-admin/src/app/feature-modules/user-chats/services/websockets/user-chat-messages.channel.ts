@@ -1,14 +1,13 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
-import {ActionCableConnectionSocket} from 'apps/shared-services/action-cable-connection.socket';
-import {LibAuthwatchService} from 'apps/shared-services/lib-authwatch.service';
-import {APPLICATION_CABLE_CHANNELS} from 'apps/shared-services/application-cable-channels.constants';
+import { Injectable, NgZone } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { ActionCableConnectionSocket } from 'apps/shared-services/action-cable-connection.socket';
+import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
+import { APPLICATION_CABLE_CHANNELS } from 'apps/shared-services/application-cable-channels.constants';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserChatMessagesChannel {
-
   actionCableSubscription;
   public channelData$ = {};
   private cableConnection;
@@ -16,18 +15,20 @@ export class UserChatMessagesChannel {
   private channelData = {};
   // Subscriptions
   private subscriptions = {};
+  private retryTimeouts: Record<string, ReturnType<typeof setTimeout>> = {};
   // all the communications received will be observables
   private channelList: BehaviorSubject<any> = new BehaviorSubject(new Set());
   public channelList$ = this.channelList.asObservable();
 
   constructor(
     private actionCableConnection: ActionCableConnectionSocket,
-    private authWatchService: LibAuthwatchService
+    private authWatchService: LibAuthwatchService,
+    private ngZone: NgZone,
   ) {
-    this.actionCableSubscription = this.actionCableConnection.acSocket$.subscribe(
-      connection => {
+    this.actionCableSubscription = this.ngZone.runOutsideAngular(() =>
+      this.actionCableConnection.acSocket$.subscribe((connection) => {
         this.cableConnection = connection;
-      }
+      }),
     );
   }
 
@@ -39,14 +40,20 @@ export class UserChatMessagesChannel {
       this.channelData$[connectionName] = this.channelData[connectionName].asObservable();
       this.channelList.next(this.channelList.getValue().add(connectionName));
 
-      this.subscriptions[connectionName] = this.cableConnection.subscriptions.create({
-        channel: APPLICATION_CABLE_CHANNELS.USER_PERSONAL_DISCUSSION_CHAT_NOTIFICATIONS,
-        discussion_id: discussionId,
-        app_token: this.authWatchService.getAppToken()
-      }, {
-        received: data => {
-          this.channelData[connectionName].next(data);
-        }
+      this.ngZone.runOutsideAngular(() => {
+        this.subscriptions[connectionName] = this.cableConnection.subscriptions.create(
+          {
+            channel: APPLICATION_CABLE_CHANNELS.USER_PERSONAL_DISCUSSION_CHAT_NOTIFICATIONS,
+            discussion_id: discussionId,
+            app_token: this.authWatchService.getAppToken(),
+          },
+          {
+            received: (data) => this.ngZone.run(() => this.channelData[connectionName].next(data)),
+            rejected: () => {
+              this.retryTimeouts[connectionName] = setTimeout(() => this.subscribe(discussionId), 5000);
+            },
+          },
+        );
       });
     }
     return this.subscriptions[connectionName];
@@ -55,11 +62,15 @@ export class UserChatMessagesChannel {
   sendData(discussionId, action, data) {
     this.subscriptions[discussionId].send({
       perform: action,
-      data
+      data,
     });
   }
 
   unsubscribe(discussionId) {
+    if (this.retryTimeouts[discussionId]) {
+      clearTimeout(this.retryTimeouts[discussionId]);
+      delete this.retryTimeouts[discussionId];
+    }
     if (this.subscriptions[discussionId]) {
       this.subscriptions[discussionId].unsubscribe();
       this.channelData[discussionId].next(null);

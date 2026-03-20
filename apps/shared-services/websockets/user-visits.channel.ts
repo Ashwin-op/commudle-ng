@@ -1,4 +1,4 @@
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Inject, Injectable, NgZone, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { APPLICATION_CABLE_CHANNELS } from 'apps/shared-services/application-cable-channels.constants';
 import { ActionCableConnectionSocket } from 'apps/shared-services/action-cable-connection.socket';
@@ -23,6 +23,7 @@ export class UserVisitsChannel {
   private cableConnection;
 
   private subscription;
+  private retryTimeout: ReturnType<typeof setTimeout> | null = null;
   private pingInterval;
 
   // all the communications received will be observables
@@ -33,31 +34,37 @@ export class UserVisitsChannel {
     private actionCableConnection: ActionCableConnectionSocket,
     private cookieService: CookieService,
     private authWatchService: LibAuthwatchService,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
+    private ngZone: NgZone,
   ) {
-    this.actionCableConnection.acSocket$.subscribe((connection) => {
-      this.cableConnection = connection;
-    });
+    this.ngZone.runOutsideAngular(() =>
+      this.actionCableConnection.acSocket$.subscribe((connection) => {
+        this.cableConnection = connection;
+      }),
+    );
   }
 
   subscribe(url) {
     if (this.cableConnection) {
-      this.subscription = this.cableConnection.subscriptions.create(
-        {
-          channel: APPLICATION_CABLE_CHANNELS.USER_VISITS,
-          session_token: this.cookieService.get(environment.session_cookie_name),
-          url: url,
-          app_token: this.authWatchService.getAppToken(),
-        },
-        {
-          connected: () => {
-            this.sendData(this.ACTIONS.VISITORS, {});
+      this.ngZone.runOutsideAngular(() => {
+        this.subscription = this.cableConnection.subscriptions.create(
+          {
+            channel: APPLICATION_CABLE_CHANNELS.USER_VISITS,
+            session_token: this.cookieService.get(environment.session_cookie_name),
+            url: url,
+            app_token: this.authWatchService.getAppToken(),
           },
-          received: (data) => {
-            this.channelData.next(data);
+          {
+            connected: () => {
+              this.sendData(this.ACTIONS.VISITORS, {});
+            },
+            received: (data) => this.ngZone.run(() => this.channelData.next(data)),
+            rejected: () => {
+              this.retryTimeout = setTimeout(() => this.subscribe(url), 5000);
+            },
           },
-        },
-      );
+        );
+      });
 
       this.setupVisibilityHandler();
       this.clientPings();
@@ -73,6 +80,10 @@ export class UserVisitsChannel {
   }
 
   unsubscribe() {
+    if (this.retryTimeout) {
+      clearTimeout(this.retryTimeout);
+      this.retryTimeout = null;
+    }
     if (this.subscription) {
       this.subscription.unsubscribe();
       this.channelData.next(null);

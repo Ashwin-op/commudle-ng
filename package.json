@@ -29,7 +29,7 @@
     "@angular/service-worker": "19.2.9",
     "@angular/ssr": "19.2.9",
     "@angular/youtube-player": "19.2.9",
-    "@anycable/web": "^0.7.3",
+    "@anycable/web": "^1.1.1",
     "@commudle/eva-icons": "15.0.0",
     "@commudle/theme": "15.0.0",
     "@ctrl/ngx-emoji-mart": "^9.2.0",
@@ -62,7 +62,7 @@
     "@zxing/browser": "0.1.5",
     "@zxing/library": "0.21.3",
     "@zxing/ngx-scanner": "19.0.0",
-    "actioncable": "^5.2.8-1",
+
     "angular2-multiselect-dropdown": "^5.0.4",
     "angular2-smart-table": "^3.1.1",
     "autolinker": "^4.0.0",
@@ -129,7 +129,7 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/typography": "^0.5.10",
     "@twittwer/compodoc": "^1.13.0",
-    "@types/actioncable": "~5.2.11",
+
     "@types/archiver": "~6.0.2",
     "@types/canvas-confetti": "~1.6.4",
     "@types/chart.js": "~2.9.41",

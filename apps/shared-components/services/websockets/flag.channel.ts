@@ -1,23 +1,23 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { APPLICATION_CABLE_CHANNELS } from 'apps/shared-services/application-cable-channels.constants';
 import { ActionCableConnectionSocket } from 'apps/shared-services/action-cable-connection.socket';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FlagChannel {
   ACTIONS = {
     SET_PERMISSIONS: 'set_permissions',
     TOGGLE_FLAG: 'toggle_flag',
-    ERROR: 'error'
+    ERROR: 'error',
   };
 
   private cableConnection;
 
   private subscriptions = {};
+  private retryTimeouts: Record<string, ReturnType<typeof setTimeout>> = {};
 
   // all the communications received will be observables
   private channelsList: BehaviorSubject<any> = new BehaviorSubject(new Set());
@@ -28,54 +28,59 @@ export class FlagChannel {
 
   constructor(
     private actionCableConnection: ActionCableConnectionSocket,
-    private authWatchService: LibAuthwatchService
+    private authWatchService: LibAuthwatchService,
+    private ngZone: NgZone,
   ) {
-    this.actionCableConnection.acSocket$.subscribe(
-      connection => {
+    this.ngZone.runOutsideAngular(() =>
+      this.actionCableConnection.acSocket$.subscribe((connection) => {
         this.cableConnection = connection;
-      }
-    )
+      }),
+    );
   }
-
-
 
   subscribe(flaggableType, flaggableId, uuid) {
     if (this.cableConnection) {
-      this.channelData[`${flaggableId}_${flaggableType}_${uuid}`] = new BehaviorSubject(null);
-      this.channelData$[`${flaggableId}_${flaggableType}_${uuid}`] = this.channelData[`${flaggableId}_${flaggableType}_${uuid}`].asObservable();
-      this.channelsList.next(this.channelsList.getValue().add(`${flaggableId}_${flaggableType}_${uuid}`));
+      const key = `${flaggableId}_${flaggableType}_${uuid}`;
+      this.channelData[key] = new BehaviorSubject(null);
+      this.channelData$[key] = this.channelData[key].asObservable();
+      this.channelsList.next(this.channelsList.getValue().add(key));
 
-      this.subscriptions[`${flaggableId}_${flaggableType}_${uuid}`] = this.cableConnection.subscriptions.create({
-        channel: APPLICATION_CABLE_CHANNELS.FLAG_CHANNEL,
-        flaggable_type: flaggableType,
-        flaggable_id: flaggableId,
-        app_token: this.authWatchService.getAppToken()
-
-      }, {
-        received: (data) => {
-          this.channelData[`${flaggableId}_${flaggableType}_${uuid}`].next(data);
-        }
+      this.ngZone.runOutsideAngular(() => {
+        this.subscriptions[key] = this.cableConnection.subscriptions.create(
+          {
+            channel: APPLICATION_CABLE_CHANNELS.FLAG_CHANNEL,
+            flaggable_type: flaggableType,
+            flaggable_id: flaggableId,
+            app_token: this.authWatchService.getAppToken(),
+          },
+          {
+            received: (data) => this.ngZone.run(() => this.channelData[key].next(data)),
+            rejected: () => {
+              this.retryTimeouts[key] = setTimeout(() => this.subscribe(flaggableType, flaggableId, uuid), 5000);
+            },
+          },
+        );
       });
     }
 
     return this.subscriptions[`${flaggableId}_${flaggableType}_${uuid}`];
-
   }
-
 
   sendData(flaggableType, flaggableId, uuid, action, data) {
     this.subscriptions[`${flaggableId}_${flaggableType}_${uuid}`].send({
       perform: action,
-      data
+      data,
     });
   }
 
-
-
   unsubscribe(flaggableType, flaggableId, uuid) {
-    if (this.subscriptions[`${flaggableId}_${flaggableType}_${uuid}`]) {
-      this.subscriptions[`${flaggableId}_${flaggableType}_${uuid}`].unsubscribe();
+    const key = `${flaggableId}_${flaggableType}_${uuid}`;
+    if (this.retryTimeouts[key]) {
+      clearTimeout(this.retryTimeouts[key]);
+      delete this.retryTimeouts[key];
+    }
+    if (this.subscriptions[key]) {
+      this.subscriptions[key].unsubscribe();
     }
   }
-
 }
