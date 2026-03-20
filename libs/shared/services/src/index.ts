@@ -1,4 +1,5 @@
 export * from './lib/api-routes.constant';
+export * from './lib/action-cable-connection.socket';
 export * from './lib/auth.service';
 export * from './lib/base-api.service';
 export * from './lib/cable.service';

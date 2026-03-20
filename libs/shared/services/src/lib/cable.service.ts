@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Cable } from '@anycable/core';
 import { Channel } from '@anycable/web';
-import { ActionCableConnectionSocket } from 'apps/shared-services/action-cable-connection.socket';
+import { ActionCableConnectionSocket } from './action-cable-connection.socket';
 
 // TODO: Migrate all 16 legacy channel services (discussion-chat, discussion-qna, polls,
 // round-mentor-slot-booking, community-channel, user-chat-notifications, user-visits,
