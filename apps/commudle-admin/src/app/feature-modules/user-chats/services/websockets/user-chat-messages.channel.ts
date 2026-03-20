@@ -48,6 +48,12 @@ export class UserChatMessagesChannel {
             app_token: this.authWatchService.getAppToken(),
           },
           {
+            connected: () => {
+              if (this.retryTimeouts[connectionName]) {
+                clearTimeout(this.retryTimeouts[connectionName]);
+                delete this.retryTimeouts[connectionName];
+              }
+            },
             received: (data) => this.ngZone.run(() => this.channelData[connectionName].next(data)),
             rejected: () => {
               this.retryTimeouts[connectionName] = setTimeout(() => this.subscribe(discussionId), 5000);

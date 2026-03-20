@@ -56,6 +56,10 @@ export class UserVisitsChannel {
           },
           {
             connected: () => {
+              if (this.retryTimeout) {
+                clearTimeout(this.retryTimeout);
+                this.retryTimeout = null;
+              }
               this.sendData(this.ACTIONS.VISITORS, {});
             },
             received: (data) => this.ngZone.run(() => this.channelData.next(data)),

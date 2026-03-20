@@ -65,7 +65,14 @@ export class UserObjectVisitChannel {
             app_token: this.authWatchService.getAppToken(),
           },
           {
-            connected: () => this.ngZone.run(() => this.channelConnectionStatus[connectionName].next(true)),
+            connected: () =>
+              this.ngZone.run(() => {
+                if (this.retryTimeouts[connectionName]) {
+                  clearTimeout(this.retryTimeouts[connectionName]);
+                  delete this.retryTimeouts[connectionName];
+                }
+                this.channelConnectionStatus[connectionName].next(true);
+              }),
             received: (data) => this.ngZone.run(() => this.channelData[connectionName].next(data)),
             disconnected: () => this.ngZone.run(() => this.channelConnectionStatus[connectionName].next(false)),
             rejected: () => {

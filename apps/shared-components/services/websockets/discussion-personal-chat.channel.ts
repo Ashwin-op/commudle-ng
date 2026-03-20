@@ -60,6 +60,12 @@ export class DiscussionPersonalChatChannel {
             app_token: this.authWatchService.getAppToken(),
           },
           {
+            connected: () => {
+              if (this.retryTimeouts[discussionId]) {
+                clearTimeout(this.retryTimeouts[discussionId]);
+                delete this.retryTimeouts[discussionId];
+              }
+            },
             received: (data) => this.ngZone.run(() => this.channelData[connectionName].next(data)),
             rejected: () => {
               this.retryTimeouts[discussionId] = setTimeout(() => this.subscribe(discussionId), 5000);

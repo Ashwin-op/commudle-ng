@@ -57,6 +57,12 @@ export class VoteChannel {
             app_token: this.authWatchService.getAppToken(),
           },
           {
+            connected: () => {
+              if (this.retryTimeouts[key]) {
+                clearTimeout(this.retryTimeouts[key]);
+                delete this.retryTimeouts[key];
+              }
+            },
             received: (data) => this.ngZone.run(() => this.channelData[key].next(data)),
             rejected: () => {
               this.retryTimeouts[key] = setTimeout(() => this.subscribe(votableType, votableId, uuid), 5000);

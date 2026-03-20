@@ -53,6 +53,12 @@ export class PollsChannel {
             app_token: this.authWatchService.getAppToken(),
           },
           {
+            connected: () => {
+              if (this.retryTimeout) {
+                clearTimeout(this.retryTimeout);
+                this.retryTimeout = null;
+              }
+            },
             received: (data) => this.ngZone.run(() => this.channelData.next(data)),
             rejected: () => {
               this.retryTimeout = setTimeout(() => this.subscribe(pollableType, pollableId), 5000);

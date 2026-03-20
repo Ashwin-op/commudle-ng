@@ -46,6 +46,12 @@ export class UserChatNotificationsChannel {
             app_token: this.authWatchService.getAppToken(),
           },
           {
+            connected: () => {
+              if (this.retryTimeout) {
+                clearTimeout(this.retryTimeout);
+                this.retryTimeout = null;
+              }
+            },
             received: (data) => this.ngZone.run(() => this.setNotifications(data)),
             rejected: () => {
               this.retryTimeout = setTimeout(() => this.subscribe(), 5000);

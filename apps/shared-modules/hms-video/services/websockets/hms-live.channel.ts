@@ -68,7 +68,14 @@ export class HmsLiveChannel {
             app_token: this.authWatchService.getAppToken(),
           },
           {
-            connected: () => this.ngZone.run(() => this.channelConnectionStatus[key].next(true)),
+            connected: () =>
+              this.ngZone.run(() => {
+                if (this.retryTimeouts[key]) {
+                  clearTimeout(this.retryTimeouts[key]);
+                  delete this.retryTimeouts[key];
+                }
+                this.channelConnectionStatus[key].next(true);
+              }),
             received: (data) => this.ngZone.run(() => this.channelData[key].next(data)),
             disconnected: () => this.ngZone.run(() => this.channelConnectionStatus[key].next(false)),
             rejected: () => {

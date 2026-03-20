@@ -45,6 +45,12 @@ export class RoundMentorSlotBookingChannel {
             app_token: this.authWatchService.getAppToken(),
           },
           {
+            connected: () => {
+              if (this.retryTimeout) {
+                clearTimeout(this.retryTimeout);
+                this.retryTimeout = null;
+              }
+            },
             received: (data) => this.ngZone.run(() => this.channelData.next(data)),
             rejected: () => {
               this.retryTimeout = setTimeout(() => this.subscribe(hackathonId), 5000);
