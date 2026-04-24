@@ -42,7 +42,7 @@ export class ChannelDiscussionComponent implements OnInit, AfterViewInit, OnDest
   @Input() discussionType: string;
   @Input() channelOrForum: ICommunityChannel;
   @Input() shareMessageUrl: string;
-  pinnedMessages: IUserMessage[];
+  pinnedMessages: IUserMessage[] = [];
   EUserRoles = EUserRoles;
   isCommunityChannelForumAdmin = false;
   isCommunityChannelForumMember = false;
@@ -120,11 +120,13 @@ export class ChannelDiscussionComponent implements OnInit, AfterViewInit, OnDest
       });
     });
 
-    setTimeout(() => {
-      if (this.editorRef) {
-        this.editorRef.focus();
-      }
-    }, 0);
+    if (this.isBrowser) {
+      setTimeout(() => {
+        if (this.editorRef) {
+          this.editorRef.focus();
+        }
+      }, 0);
+    }
   }
 
   ngOnDestroy(): void {

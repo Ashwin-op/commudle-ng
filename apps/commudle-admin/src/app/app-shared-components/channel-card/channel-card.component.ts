@@ -1,8 +1,8 @@
 import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
 import { ICommunityChannel } from 'apps/shared-models/community-channel.model';
 import { RouterModule } from '@angular/router';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { NbButtonModule, NbCardModule, NbIconModule } from '@commudle/theme';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
 import { ICommunity } from 'apps/shared-models/community.model';
@@ -22,15 +22,21 @@ export class ChannelCardComponent implements OnInit, OnDestroy {
   private showDescriptioninterval: Subscription;
   showDescription = true;
 
-  constructor(private communitiesService: CommunitiesService) {
-    this.showDescriptioninterval = interval(8000).subscribe(() => {
-      this.showDescription = !this.showDescription;
-    });
-  }
+  constructor(
+    private communitiesService: CommunitiesService,
+    @Inject(PLATFORM_ID) private platformId: object,
+  ) {}
 
   ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.showDescriptioninterval = interval(8000).subscribe(() => {
+        this.showDescription = !this.showDescription;
+      });
+    }
     this.getCommunity();
   }
+
+
 
   ngOnDestroy() {
     if (this.showDescriptioninterval) {

@@ -6,9 +6,12 @@ import {
   forwardRef,
   inject,
   input,
+  Inject,
   OnInit,
+  PLATFORM_ID,
   Renderer2,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Content, Editor, type EditorEvents } from '@tiptap/core';
 
@@ -29,6 +32,11 @@ export class EditorDirective implements OnInit, AfterViewInit, ControlValueAcces
   protected elRef = inject<ElementRef<HTMLElement>>(ElementRef);
   protected renderer = inject(Renderer2);
   protected changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly isBrowser: boolean;
+
+  constructor(@Inject(PLATFORM_ID) platformId: object) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 
   // This methods is called when programmatic changes from model to view are requested.
   writeValue(value: Content): void {
@@ -49,11 +57,14 @@ export class EditorDirective implements OnInit, AfterViewInit, ControlValueAcces
 
   // Called by the forms api to enable or disable the element
   setDisabledState(isDisabled: boolean): void {
+    if (!this.isBrowser) return;
     this.editor().setEditable(!isDisabled);
     this.renderer.setProperty(this.elRef.nativeElement, 'disabled', isDisabled);
   }
 
   ngOnInit(): void {
+    if (!this.isBrowser) return;
+
     const editor = this.editor();
 
     // take the inner contents and clear the block

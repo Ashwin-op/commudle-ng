@@ -1,9 +1,10 @@
 import { isPlatformBrowser } from '@angular/common';
-import { AfterViewInit, Component, Inject, Input, OnInit, PLATFORM_ID } from '@angular/core';
+import { AfterViewInit, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import { FeaturedItemsService } from 'apps/commudle-admin/src/app/services/featured-items.service';
 import { IFeaturedItems } from 'apps/shared-models/featured-items.model';
 import { ActivatedRoute } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'commudle-public-home-list-events-featured-communities',
@@ -11,7 +12,7 @@ import { ActivatedRoute } from '@angular/router';
     styleUrls: ['./public-home-list-events-featured-communities.component.scss'],
     standalone: false
 })
-export class PublicHomeListEventsFeaturedCommunitiesComponent implements OnInit, AfterViewInit {
+export class PublicHomeListEventsFeaturedCommunitiesComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() showCardsHorizontal = false;
   @Input() showIconsOnHeading = false;
   featuredCommunities: IFeaturedItems[] = [];
@@ -19,6 +20,7 @@ export class PublicHomeListEventsFeaturedCommunitiesComponent implements OnInit,
   isMobileView: boolean;
   faUserGroup = faUserGroup;
   private readonly isBrowser: boolean;
+  private readonly destroy$ = new Subject<void>();
 
   constructor(private featuredItemsService: FeaturedItemsService, private activatedRoute: ActivatedRoute, @Inject(PLATFORM_ID) private platformId: object) {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -30,8 +32,9 @@ export class PublicHomeListEventsFeaturedCommunitiesComponent implements OnInit,
   }
 
   ngAfterViewInit() {
+    if (!this.isBrowser) return;
     // TODO optimize this
-    this.activatedRoute.fragment.subscribe((fragment) => {
+    this.activatedRoute.fragment.pipe(takeUntil(this.destroy$)).subscribe((fragment) => {
       if (fragment) {
         setTimeout(() => {
           const element = document.querySelector('#' + fragment);
@@ -43,6 +46,11 @@ export class PublicHomeListEventsFeaturedCommunitiesComponent implements OnInit,
         }, 500);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getFeaturedCommunities(): void {

@@ -68,7 +68,7 @@ export class CommunityChannelHandlerService {
   }
 
   destroy() {
-    this.CommunityChannelChatChannel.disconnect();
+    this.CommunityChannelChatChannel?.disconnect();
     this.messages.next([]);
     this.permittedActions.next([]);
     this.pageInfo.next({

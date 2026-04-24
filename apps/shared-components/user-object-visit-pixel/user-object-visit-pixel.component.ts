@@ -51,7 +51,9 @@ export class UserObjectVisitPixelComponent implements OnInit, OnDestroy, AfterVi
   }
 
   ngOnDestroy() {
-    this.markEndTime();
+    if (this.isBrowser) {
+      this.markEndTime();
+    }
   }
 
   @HostListener('window:scroll', ['$event']) // for window scroll events

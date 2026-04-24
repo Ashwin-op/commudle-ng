@@ -1,4 +1,5 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Inject, Injectable, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { UserMessageReceiptService } from '@commudle/shared-services';
 import { Subscription, interval } from 'rxjs';
 
@@ -11,12 +12,17 @@ export class UserMessageReceiptHandlerService implements OnDestroy {
   private isSendingReceipts = false;
   private subscription: Subscription;
 
-  constructor(private userMessageReceiptService: UserMessageReceiptService) {
-    this.subscription = interval(10000).subscribe(() => this.sendReceipts());
+  constructor(
+    private userMessageReceiptService: UserMessageReceiptService,
+    @Inject(PLATFORM_ID) private platformId: object,
+  ) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.subscription = interval(10000).subscribe(() => this.sendReceipts());
+    }
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscription?.unsubscribe();
     this.sendReceipts();
   }
 
