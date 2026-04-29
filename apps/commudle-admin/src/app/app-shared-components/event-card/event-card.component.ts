@@ -20,6 +20,9 @@ import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 export class EventCardComponent implements OnInit {
   @Input() event: IEvent;
   @Input() horizontalScroll = false;
+  @Input() hideCommunityNameBadge = false;
+  @Input() showCollaborationTag = false;
+  @Input() hostCommunity: ICommunity;
   community: ICommunity;
   staticAssets = staticAssets;
 

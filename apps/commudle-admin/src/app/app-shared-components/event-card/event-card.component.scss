@@ -91,6 +91,10 @@
           }
           .event-title {
             @apply com-text-sm com-font-medium com-text-Yankees-Blue com-m-0 com-mb-2 com-line-clamp-1;
+
+            .collaboration {
+              @apply com-text-xs com-font-normal;
+            }
           }
 
           .community-badge {

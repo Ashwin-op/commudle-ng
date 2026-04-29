@@ -58,10 +58,15 @@
             </div>
             <p class="event-name">
               {{ event.name }}
-              <!-- <span *ngIf="event.kommunity_id !== community.id" class="collaboration">(Collaboration)</span> -->
+              <span
+                *ngIf="showCollaborationTag && hostCommunity && event.kommunity_id !== hostCommunity.id"
+                class="collaboration"
+              >
+                (Collaboration)
+              </span>
             </p>
             <p class="event-timings">{{ moment(event.start_time).format('dddd, MMM Do, YYYY') }}</p>
-            <div *ngIf="community" class="community-badge">
+            <div *ngIf="community && !hideCommunityNameBadge" class="community-badge">
               <app-community-badge [community]="community" [size]="'small'"></app-community-badge>
             </div>
           </div>
@@ -81,8 +86,16 @@
               ></app-badge>
             </div>
           </div>
-          <p class="event-title">{{ event.name }}</p>
-          <div *ngIf="community" class="community-badge">
+          <p class="event-title">
+            {{ event.name }}
+            <span
+              *ngIf="showCollaborationTag && hostCommunity && event.kommunity_id !== hostCommunity.id"
+              class="collaboration"
+            >
+              (Collaboration)
+            </span>
+          </p>
+          <div *ngIf="community && !hideCommunityNameBadge" class="community-badge">
             <app-community-badge [community]="community" [size]="'small'"></app-community-badge>
           </div>
         </div>

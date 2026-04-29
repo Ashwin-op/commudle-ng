@@ -2,7 +2,7 @@
   <div class="container">
     <div class="one-column-layout">
       <div *ngIf="community" class="home-component">
-        <nb-card class="!com-m-0 md:!com-mx-2" [ngClass]="{ miniHeader: showMiniHeader }">
+        <nb-card class="home-component-card" [ngClass]="{ miniHeader: showMiniHeader }">
           <nb-card-body class="!com-p-0 com-overflow-hidden">
             <div class="banner" *ngIf="!showMiniHeader">
               <img
@@ -154,97 +154,103 @@
               </div>
             </div>
           </nb-card-body>
-          <nb-card-footer class="menu-items-footer">
-            <div class="page-menu">
-              <div class="menu-items d-flex">
-                <a
-                  [routerLinkActiveOptions]="{ exact: true }"
-                  [routerLink]="['/communities', community.slug]"
-                  class="d-flex"
-                  routerLinkActive="active"
-                  [ngClass]="{ active: !showMiniHeader }"
-                >
-                  <nb-icon icon="info" status="basic"></nb-icon>
-                  <span class="title">About</span>
-                </a>
-                <a [routerLink]="['events']" class="d-flex com-relative" routerLinkActive="active">
-                  <nb-icon icon="calendar" status="info"></nb-icon>
-                  <span class="title">Events</span>
-                  <span *ngIf="community.upcoming_events_count > 0" class="events-chip">
-                    {{ community.upcoming_events_count }} New
-                  </span>
-                </a>
-                <a
-                  [routerLink]="['hackathons']"
-                  class="d-flex com-relative"
-                  routerLinkActive="active"
-                  *ngIf="community.hackathon_enabled"
-                >
-                  <app-badge
-                    *ngIf="community.upcoming_hackathons_count > 0"
-                    class="-com-mt-4"
-                    text="{{ community.upcoming_hackathons_count }} New"
-                    [fontColor]="'com-text-tWhite'"
-                    [fontSize]="'small'"
-                    [borderRadius]="'round'"
-                    [color]="'com-bg-orange-500'"
-                    [position]="'top right'"
-                  ></app-badge>
-                  <img
-                    [src]="
-                      isHackathonActive
-                        ? environment.base_url + '/icons/hackathon-icon-primary.svg'
-                        : darkMode
-                        ? environment.base_url + '/icons/hackathon-icon-white.svg'
-                        : environment.base_url + '/icons/hackathon-icon-gray.svg'
-                    "
-                    alt="Hackathon Icon"
-                  />
-                  <span class="title">Hackathons</span>
-                </a>
-                <!-- <a [routerLink]="['resources']" routerLinkActive="active">
+        </nb-card>
+        <div
+          class="menu-items-footer"
+          [ngClass]="{
+            'menu-items-footer-sticky': !showMiniHeader,
+            'menu-items-footer-sticky-with-mini-header': showMiniHeader
+          }"
+        >
+          <div class="page-menu">
+            <div class="menu-items d-flex">
+              <a
+                [routerLinkActiveOptions]="{ exact: true }"
+                [routerLink]="['/communities', community.slug]"
+                class="d-flex"
+                routerLinkActive="active"
+                [ngClass]="{ active: !showMiniHeader }"
+              >
+                <nb-icon icon="info" status="basic"></nb-icon>
+                <span class="title">About</span>
+              </a>
+              <a [routerLink]="['events']" class="d-flex com-relative" routerLinkActive="active">
+                <nb-icon icon="calendar" status="info"></nb-icon>
+                <span class="title">Events</span>
+                <span *ngIf="community.upcoming_events_count > 0" class="events-chip">
+                  {{ community.upcoming_events_count }} New
+                </span>
+              </a>
+              <a
+                [routerLink]="['hackathons']"
+                class="d-flex com-relative"
+                routerLinkActive="active"
+                *ngIf="community.hackathon_enabled"
+              >
+                <app-badge
+                  *ngIf="community.upcoming_hackathons_count > 0"
+                  class="-com-mt-4"
+                  text="{{ community.upcoming_hackathons_count }} New"
+                  [fontColor]="'com-text-tWhite'"
+                  [fontSize]="'small'"
+                  [borderRadius]="'round'"
+                  [color]="'com-bg-orange-500'"
+                  [position]="'top right'"
+                ></app-badge>
+                <img
+                  [src]="
+                    isHackathonActive
+                      ? environment.base_url + '/icons/hackathon-icon-primary.svg'
+                      : darkMode
+                      ? environment.base_url + '/icons/hackathon-icon-white.svg'
+                      : environment.base_url + '/icons/hackathon-icon-gray.svg'
+                  "
+                  alt="Hackathon Icon"
+                />
+                <span class="title">Hackathons</span>
+              </a>
+              <!-- <a [routerLink]="['resources']" routerLinkActive="active">
                   <nb-icon icon="award" status="info"></nb-icon>
                   <span>Sessions by Experts</span>
                 </a> -->
-                <!-- <a [routerLink]="['speakers']" class="d-flex" routerLinkActive="active">
+              <!-- <a [routerLink]="['speakers']" class="d-flex" routerLinkActive="active">
                   <nb-icon icon="mic" status="success"></nb-icon>
                   <span class="title">Speakers</span>
                 </a> -->
-                <a [routerLink]="['members']" class="d-flex" routerLinkActive="active">
-                  <nb-icon icon="people" status="success"></nb-icon>
-                  <span class="title">Members</span>
-                </a>
-                <a [routerLink]="['channels']" class="d-flex" routerLinkActive="active">
-                  <nb-icon icon="hash" status="success"></nb-icon>
-                  <span class="title">Channels</span>
-                </a>
-                <a [routerLink]="['forums']" class="d-flex" routerLinkActive="active">
-                  <fa-icon [icon]="faMessage"></fa-icon>
-                  <span class="title">Forums</span>
-                </a>
-                <div *ngIf="isOrganizer" class="com-relative" (click)="gtmService()">
-                  <a [routerLink]="['notifications']" class="d-flex" routerLinkActive="active">
-                    <nb-badge
-                      *ngIf="notificationCount > 0"
-                      [text]="notificationCount.toString()"
-                      status="danger"
-                    ></nb-badge>
-                    <nb-icon icon="bell" status="success"></nb-icon>
-                    <span class="title">Activity</span>
-                  </a>
-                </div>
-                <a *ngIf="showNewslettersTab" [routerLink]="['newsletters']" class="d-flex" routerLinkActive="active">
-                  <fa-icon [icon]="faNewspaper"></fa-icon>
-                  <span class="title">Newsletters</span>
-                </a>
-                <a class="d-flex" [nbContextMenu]="items" nbContextMenuTrigger="hover" *ngIf="items?.length > 0">
-                  <fa-icon [icon]="faCaretDown"></fa-icon>
-                  <span class="title">More</span>
+              <a [routerLink]="['members']" class="d-flex" routerLinkActive="active">
+                <nb-icon icon="people" status="success"></nb-icon>
+                <span class="title">Members</span>
+              </a>
+              <a [routerLink]="['channels']" class="d-flex" routerLinkActive="active">
+                <nb-icon icon="hash" status="success"></nb-icon>
+                <span class="title">Channels</span>
+              </a>
+              <a [routerLink]="['forums']" class="d-flex" routerLinkActive="active">
+                <fa-icon [icon]="faMessage"></fa-icon>
+                <span class="title">Forums</span>
+              </a>
+              <div *ngIf="isOrganizer" class="com-relative" (click)="gtmService()">
+                <a [routerLink]="['notifications']" class="d-flex" routerLinkActive="active">
+                  <nb-badge
+                    *ngIf="notificationCount > 0"
+                    [text]="notificationCount.toString()"
+                    status="danger"
+                  ></nb-badge>
+                  <nb-icon icon="bell" status="success"></nb-icon>
+                  <span class="title">Activity</span>
                 </a>
               </div>
+              <a *ngIf="showNewslettersTab" [routerLink]="['newsletters']" class="d-flex" routerLinkActive="active">
+                <fa-icon [icon]="faNewspaper"></fa-icon>
+                <span class="title">Newsletters</span>
+              </a>
+              <a class="d-flex" [nbContextMenu]="items" nbContextMenuTrigger="hover" *ngIf="items?.length > 0">
+                <fa-icon [icon]="faCaretDown"></fa-icon>
+                <span class="title">More</span>
+              </a>
             </div>
-          </nb-card-footer>
-        </nb-card>
+          </div>
+        </div>
         <div class="router-outlet">
           <router-outlet></router-outlet>
         </div>

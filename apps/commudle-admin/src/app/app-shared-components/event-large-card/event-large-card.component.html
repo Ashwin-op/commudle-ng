@@ -65,16 +65,23 @@
         </div>
       </div>
 
+      <div class="countdown-row" *ngIf="isUpcomingEvent">
+        <span class="countdown-label">Starts in</span>
+        <span class="countdown-time">{{ countdownLabel }}</span>
+      </div>
+
       <div class="interested-members">
         <div *ngIf="event.event_locations && event.event_locations.length > 0" class="location">
           <nb-icon icon="pin-outline"></nb-icon>
           <span>{{ event.event_locations[0].name }}</span>
         </div>
-        <div>
-          <nb-icon icon="people-outline" class="people-outline"></nb-icon>
-          <span>{{ event.interested_members_count }} Interested Members</span>
+        <div class="interested-register-row">
+          <div>
+            <nb-icon icon="people-outline" class="people-outline"></nb-icon>
+            <span>{{ event.interested_members_count }} Interested Members</span>
+          </div>
+          <button nbButton status="primary" shape="semi-round" class="register-button" outline>Register</button>
         </div>
-        <button nbButton status="primary" shape="semi-round" class="register-button" outline>Register</button>
       </div>
     </div>
   </nb-card-body>
