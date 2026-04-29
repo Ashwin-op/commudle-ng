@@ -8,11 +8,10 @@ import { NbDialogService, NbMenuService } from '@commudle/theme';
 import { GoogleTagManagerService } from 'apps/commudle-admin/src/app/services/google-tag-manager.service';
 import { ENotificationSenderTypes } from 'apps/shared-models/enums/notification_sender_types.enum';
 import { CustomPageService } from 'apps/commudle-admin/src/app/services/custom-page.service';
-import { faCaretDown, faMessage, faNewspaper, faBuilding } from '@fortawesome/free-solid-svg-icons';
+import { faBuilding, faCaretDown, faMessage, faNewspaper } from '@fortawesome/free-solid-svg-icons';
 import { NewsletterService } from 'apps/commudle-admin/src/app/services/newsletter.service';
 import { DarkModeService } from 'apps/commudle-admin/src/app/services/dark-mode.service';
 import { EDbModels, ICommunity } from '@commudle/shared-models';
-import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { environment } from '@commudle/shared-environments';
 import { SeoService, ToastrService } from '@commudle/shared-services';
 
@@ -42,7 +41,6 @@ export class HomeCommunityComponent implements OnInit, OnDestroy {
   faCaretDown = faCaretDown;
   faMessage = faMessage;
   faNewspaper = faNewspaper;
-  faInstagram = faInstagram;
   faBuilding = faBuilding;
 
   items = [{ title: 'pages', slug: 'pages' }];

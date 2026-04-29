@@ -9,7 +9,8 @@ import { EventsService } from 'apps/commudle-admin/src/app/services/events.servi
 import { IEvent } from 'apps/shared-models/event.model';
 import { AuthService, CommunityChannelManagerService, CommunityChannelsService } from '@commudle/shared-services';
 import { EDbModels, EEventType, ICommunityChannel } from '@commudle/shared-models';
-import { faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faGlobe, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faFacebook, faGithub, faInstagram, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { environment } from 'apps/commudle-admin/src/environments/environment';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -35,6 +36,12 @@ export class AboutComponent implements OnInit, OnDestroy {
   icons = {
     faUsers,
   };
+  faFacebook = faFacebook;
+  faLinkedin = faLinkedin;
+  faInstagram = faInstagram;
+  faTwitter = faTwitter;
+  faGithub = faGithub;
+  faGlobe = faGlobe;
 
   private destroy$ = new Subject<void>();
 

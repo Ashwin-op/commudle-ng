@@ -1,6 +1,6 @@
 <div class="community-about com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-4">
   <div class="main-column">
-    <nb-card *ngIf="community.upcoming_events_count > 0">
+    <nb-card *ngIf="community.upcoming_events_count > 0" class="upcoming-card">
       <nb-card-body>
         <h2 class="title">Upcoming Events</h2>
         <app-loading-spinner *ngIf="isLoadingEvents"></app-loading-spinner>
@@ -15,6 +15,107 @@
       <nb-card-body>
         <h3 class="heading">Who we are</h3>
         <p [innerHTML]="community.about | linky : { sanitizeHtml: false } | safeHtml" class="content"></p>
+        <div class="community-social-links d-flex align-items-center">
+          <a
+            *ngIf="community.facebook"
+            href="{{ community.facebook | completeurl : 'facebook' }}"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <app-badge
+              [faIcon]="faFacebook"
+              [fontColor]="'com-text-primary-500'"
+              [fontSize]="'small'"
+              [borderRadius]="'round'"
+              [color]="'com-bg-blue-50'"
+            ></app-badge>
+          </a>
+          <a
+            *ngIf="community.linkedin"
+            href="{{ community.linkedin | completeurl : 'linkedin' }}"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <app-badge
+              [faIcon]="faLinkedin"
+              [fontColor]="'com-text-primary-500'"
+              [fontSize]="'small'"
+              [borderRadius]="'round'"
+              [color]="'com-bg-blue-50'"
+            ></app-badge>
+          </a>
+          <a
+            *ngIf="community.instagram"
+            href="{{ community.instagram | completeurl : 'instagram' }}"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <app-badge
+              [faIcon]="faInstagram"
+              [fontColor]="'com-text-primary-500'"
+              [fontSize]="'small'"
+              [borderRadius]="'round'"
+              [color]="'com-bg-blue-50'"
+            ></app-badge>
+          </a>
+          <a
+            *ngIf="community.twitter"
+            href="{{ community.twitter | completeurl : 'twitter' }}"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <app-badge
+              [faIcon]="faTwitter"
+              [fontColor]="'com-text-primary-500'"
+              [fontSize]="'small'"
+              [borderRadius]="'round'"
+              [color]="'com-bg-blue-50'"
+            ></app-badge>
+          </a>
+          <a
+            *ngIf="community.github"
+            href="{{ community.github | completeurl : 'github' }}"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <app-badge
+              [faIcon]="faGithub"
+              [fontColor]="'com-text-primary-500'"
+              [fontSize]="'small'"
+              [borderRadius]="'round'"
+              [color]="'com-bg-blue-50'"
+            ></app-badge>
+          </a>
+          <a *ngIf="community.website" href="{{ community.website | completeurl }}" rel="noreferrer" target="_blank">
+            <app-badge
+              [faIcon]="faGlobe"
+              [fontColor]="'com-text-primary-500'"
+              [fontSize]="'small'"
+              [borderRadius]="'round'"
+              [color]="'com-bg-blue-50'"
+            ></app-badge>
+          </a>
+        </div>
+      </nb-card-body>
+    </nb-card>
+
+    <nb-card *appBreakpoints="'<=md'">
+      <nb-card-body>
+        <h3 class="heading">Community Leaders</h3>
+        <div class="organizers com-grid com-grid-cols-1 com-gap-4">
+          <div *ngIf="isLoading" class="loading-spinner com-my-4 com-text-center">
+            <div class="spinner">
+              <div *ngFor="let _ of [].constructor(5)"></div>
+            </div>
+          </div>
+          <ng-container *ngFor="let organizer of organizers">
+            <app-user-profile-card-large
+              [user]="organizer"
+              [showFollowButton]="true"
+              [alignFollowToRight]="true"
+            ></app-user-profile-card-large>
+          </ng-container>
+        </div>
       </nb-card-body>
     </nb-card>
 
@@ -46,7 +147,7 @@
     </nb-card>
   </div>
 
-  <nb-card class="lg:com-col-span-1">
+  <nb-card class="community-leaders-card" *appBreakpoints="'>md'">
     <nb-card-body>
       <h3 class="heading">Community Leaders</h3>
       <div class="organizers com-grid com-grid-cols-1 com-gap-4">

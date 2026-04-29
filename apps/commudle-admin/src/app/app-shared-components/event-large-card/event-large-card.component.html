@@ -1,5 +1,5 @@
 <nb-card class="upcoming-events">
-  <nb-card-body class="upcoming-events-body">
+  <nb-card-body [ngClass]="{ 'com-p-4': addPaddingBody, 'com-p-0': !addPaddingBody }">
     <div *ngIf="event.header_image_path">
       <commudle-banner-image
         [headerImagePath]="event.header_image_path"

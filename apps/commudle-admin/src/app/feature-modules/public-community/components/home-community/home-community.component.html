@@ -66,56 +66,6 @@
                       <span class="location-text" [title]="community.location">{{ community.location }}</span>
                     </div>
                   </div>
-                  <div class="community-social-links d-flex align-items-center">
-                    <a
-                      *ngIf="community.facebook"
-                      href="{{ community.facebook | completeurl : 'facebook' }}"
-                      rel="noreferrer"
-                      target="_blank"
-                    >
-                      <nb-icon icon="facebook" status="info"></nb-icon>
-                    </a>
-                    <a
-                      *ngIf="community.linkedin"
-                      href="{{ community.linkedin | completeurl : 'linkedin' }}"
-                      rel="noreferrer"
-                      target="_blank"
-                    >
-                      <nb-icon icon="linkedin" status="info"></nb-icon>
-                    </a>
-                    <a
-                      *ngIf="community.instagram"
-                      href="{{ community.instagram | completeurl : 'instagram' }}"
-                      rel="noreferrer"
-                      target="_blank"
-                    >
-                      <fa-icon [icon]="faInstagram"></fa-icon>
-                    </a>
-                    <a
-                      *ngIf="community.twitter"
-                      href="{{ community.twitter | completeurl : 'twitter' }}"
-                      rel="noreferrer"
-                      target="_blank"
-                    >
-                      <nb-icon icon="twitter" status="info"></nb-icon>
-                    </a>
-                    <a
-                      *ngIf="community.github"
-                      href="{{ community.github | completeurl : 'github' }}"
-                      rel="noreferrer"
-                      target="_blank"
-                    >
-                      <nb-icon icon="github" status="info"></nb-icon>
-                    </a>
-                    <a
-                      *ngIf="community.website"
-                      href="{{ community.website | completeurl }}"
-                      rel="noreferrer"
-                      target="_blank"
-                    >
-                      <nb-icon icon="globe" status="info"></nb-icon>
-                    </a>
-                  </div>
                 </div>
               </div>
               <div class="membership-toggle">

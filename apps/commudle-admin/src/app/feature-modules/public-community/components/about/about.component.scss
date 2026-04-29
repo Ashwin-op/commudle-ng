@@ -5,35 +5,54 @@ p {
 .community-about {
   @apply com-mb-8 com-mx-0;
 
+  .title {
+    @apply com-mt-0 com-mb-4 md:com-mb-6 com-text-xl md:com-text-2xl com-font-semibold com-text-Yankees-Blue;
+  }
+
+  .heading {
+    @apply com-m-0 com-mb-4 md:com-mb-6 com-text-xl md:com-text-2xl com-font-semibold com-text-Yankees-Blue;
+  }
+
   nb-card {
-    @apply com-h-max com-mt-4 com-mx-0 com-mb-0;
+    @apply com-h-max com-mx-0 com-mb-0 com-mt-0;
 
     nb-card-body {
       @apply com-p-4 md:com-p-6;
-
-      .heading {
-        @apply com-m-0 com-text-2xl com-font-semibold com-mb-8 com-text-Yankees-Blue;
-      }
     }
+  }
+
+  .upcoming-card {
+    @apply com-m-0 com-mt-4;
   }
 
   .about {
     nb-card-body {
       &::ng-deep {
         .content {
+          @apply com-break-words com-overflow-x-hidden;
+
           p,
           span {
             font-family: inter;
             @apply com-text-gunmetal com-text-base com-leading-5;
           }
+
+          a {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+          }
+        }
+      }
+
+      .community-social-links {
+        @apply com-flex com-gap-4 com-mt-6 com-flex-wrap;
+
+        a {
+          @apply com-no-underline;
         }
       }
     }
   }
-}
-
-.title {
-  @apply com-text-2xl com-font-semibold com-text-Yankees-Blue md:com-mb-6 md:com-mt-0 com-mb-4 com-mt-0;
 }
 
 .event-horizontal-card {
@@ -41,7 +60,7 @@ p {
 }
 
 .main-column {
-  @apply lg:com-col-span-2;
+  @apply lg:com-col-span-2 com-flex com-flex-col com-gap-4;
 }
 
 app-loading-spinner {
@@ -51,11 +70,11 @@ app-loading-spinner {
 .default-channel-container {
   @apply com-border-primary-500 com-overflow-hidden;
   nb-card-header {
-    @apply com-flex com-justify-between com-items-center;
+    @apply com-flex com-justify-between com-items-center com-p-4;
     .name-count {
       @apply com-flex com-items-center com-gap-4;
       .channel-name {
-        @apply com-font-semibold com-text-Auro-Metal-Saurus com-text-base;
+        @apply com-text-xl md:com-text-2xl com-font-semibold com-text-Yankees-Blue;
       }
       .members-count {
         @apply com-bg-Bright-Gray com-rounded-3xl com-px-3 com-py-1;
@@ -74,4 +93,8 @@ app-loading-spinner {
       @apply com-pb-1.5 com-h-500px com-bg-white;
     }
   }
+}
+
+.community-leaders-card {
+  @apply com-m-0 com-mt-4 lg:com-col-span-1 #{!important};
 }

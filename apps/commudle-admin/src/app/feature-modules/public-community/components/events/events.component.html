@@ -1,7 +1,7 @@
-<nb-card>
-  <nb-card-body>
-    <div class="events">
-      <section *ngIf="upcomingEvents.length >= 1" class="upcoming-events-section">
+<div class="community-events">
+  <nb-card *ngIf="upcomingEvents.length >= 1" class="events-section-card com-mt-4">
+    <nb-card-body class="body-container">
+      <section class="upcoming-events-section">
         <h2 class="heading">
           <div class="heading-btn"><fa-icon [icon]="faCalendarDays"></fa-icon></div>
           Upcoming Events
@@ -15,16 +15,24 @@
               'upcoming-single-event': upcomingEvents.length === 1
             }"
           >
-            <div>
-              <commudle-event-large-card [event]="event" [hostCommunity]="community"></commudle-event-large-card>
-            </div>
+            <commudle-event-large-card
+              [event]="event"
+              [hostCommunity]="community"
+              [addPaddingBody]="false"
+            ></commudle-event-large-card>
           </a>
         </div>
       </section>
-      <div *ngIf="isLoading">
-        <app-loading-spinner></app-loading-spinner>
-      </div>
-      <section *ngIf="pastEvents.length >= 1" class="past-events">
+    </nb-card-body>
+  </nb-card>
+
+  <div *ngIf="isLoading">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+
+  <nb-card *ngIf="pastEvents.length >= 1" class="events-section-card">
+    <nb-card-body class="body-container">
+      <section class="past-events">
         <h2 class="heading">
           <div class="heading-btn"><fa-icon [icon]="faCalendarCheck"></fa-icon></div>
           Past Events
@@ -88,6 +96,6 @@
           [total]="total"
         ></app-pagination>
       </section>
-    </div>
-  </nb-card-body>
-</nb-card>
+    </nb-card-body>
+  </nb-card>
+</div>

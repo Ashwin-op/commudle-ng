@@ -29,6 +29,7 @@ import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communi
 export class EventLargeCardComponent implements OnInit {
   @Input() event: IEvent;
   @Input() hostCommunity: ICommunity;
+  @Input() addPaddingBody = true;
   community: ICommunity;
   moment = moment;
   momentTimezone = momentTimezone;

@@ -25,17 +25,17 @@
     @apply md:com-flex-row;
 
     .mobile-share-cta {
-      @apply com-absolute com-right-4 com-top-3 com-z-10;
+      @apply com-absolute com-right-4 com-top-0 com-z-10;
     }
 
     .logo-section {
-      @apply com-h-28 com-w-28  com-rounded-xl -com-mt-14 com-mx-4 com-mr-6 com-bg-white com-shadow-md com-flex com-items-end com-justify-between;
-      @apply md:com-block md:-com-mt-24 md:com-ml-8;
-      @apply lg:com-h-44 lg:com-w-44;
+      @apply com-h-20 com-w-20 com-rounded-xl -com-mt-10 com-mx-4 com-mr-4 com-bg-white com-shadow-md com-flex com-items-center com-justify-center;
+      @apply md:com-block md:-com-mt-24 md:com-ml-8 md:com-mr-6;
+      @apply md:com-h-28 md:com-w-28 lg:com-h-44 lg:com-w-44;
 
       .logo {
-        @apply com-my-0 com-mx-auto com-h-28 com-w-28 com-px-2  com-object-contain com-rounded-xl com-bg-tWhite;
-        @apply md:com-mr-20;
+        @apply com-my-0 com-mx-auto com-h-20 com-w-20 com-px-2 com-object-contain com-rounded-xl com-bg-tWhite;
+        @apply md:com-h-28 md:com-w-28 md:com-mr-20;
         @apply lg:com-h-44 lg:com-w-44;
       }
     }
@@ -62,23 +62,6 @@
             .location-text {
               @apply com-block com-truncate com-whitespace-nowrap com-overflow-hidden com-min-w-0;
             }
-          }
-        }
-
-        .community-social-links {
-          @apply com-flex com-gap-4 com-mt-6;
-
-          nb-icon,
-          fa-icon {
-            @apply com-text-Very-Light-Blue;
-          }
-
-          fa-icon {
-            @apply com-text-xl;
-          }
-
-          a {
-            @apply com-no-underline;
           }
         }
       }
@@ -129,7 +112,8 @@
   .menu-items {
     @apply com-ml-2 com-overflow-y-scroll md:com-overflow-y-hidden com-items-center;
     a {
-      @apply com-text-gunmetal com-text-sm com-leading-4 com-h-fit com-m-0 com-pt-0 com-px-6 com-pb-4 com-cursor-pointer com-no-underline com-mt-4;
+      @apply com-text-gunmetal com-text-sm com-leading-4 com-h-fit com-m-0 com-pt-0 com-px-2 md:com-px-6 com-pb-4 com-cursor-pointer com-no-underline com-mt-4;
+      @apply com-border-0 com-border-b-3 com-border-solid com-border-transparent;
 
       nb-icon,
       fa-icon {
@@ -150,8 +134,14 @@
       @apply com-text-lg com-leading-none;
     }
 
+    nb-icon,
+    fa-icon,
+    img {
+      @apply md:com-inline-flex com-hidden;
+    }
+
     .active {
-      @apply com-border-0 com-border-b-3 com-border-solid com-border-primary-500;
+      @apply com-border-primary-500;
 
       nb-icon,
       .title {
@@ -166,7 +156,7 @@
 }
 
 .menu-items-footer {
-  @apply com-p-0 com-sticky com-top-16 com-z-20;
+  @apply com-p-0 com-sticky com-top-16 com-z-20 com-bg-white;
 }
 
 .banner-image {
