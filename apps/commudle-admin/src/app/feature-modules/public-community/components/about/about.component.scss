@@ -3,7 +3,7 @@ p {
 }
 
 .community-about {
-  @apply com-mb-8 com-mx-0;
+  @apply com-mb-8 com-mx-0 com-mt-6;
 
   .title {
     @apply com-mt-0 com-mb-4 md:com-mb-6 com-text-xl md:com-text-2xl com-font-semibold com-text-Yankees-Blue;
@@ -22,7 +22,7 @@ p {
   }
 
   .upcoming-card {
-    @apply com-m-0 com-mt-4;
+    @apply com-m-0;
   }
 
   .about {
@@ -96,5 +96,5 @@ app-loading-spinner {
 }
 
 .community-leaders-card {
-  @apply com-m-0 com-mt-4 lg:com-col-span-1 #{!important};
+  @apply com-m-0 md:com-mt-0 com-mt-4 lg:com-col-span-1 #{!important};
 }

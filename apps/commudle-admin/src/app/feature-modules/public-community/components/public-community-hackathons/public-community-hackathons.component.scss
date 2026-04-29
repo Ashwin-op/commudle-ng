@@ -1,7 +1,23 @@
+.community-hackathons {
+  @apply com-bg-transparent com-flex com-flex-col com-gap-4 com-mx-0 com-mb-8 com-mt-4;
+
+  .hackathon-section-card {
+    @apply com-h-max com-mx-0 com-mb-0 com-mt-0;
+
+    nb-card-body {
+      @apply com-p-4 md:com-p-6;
+    }
+  }
+
+  .heading {
+    @apply com-m-0 com-mb-4 md:com-mb-6 com-text-xl md:com-text-2xl com-font-semibold com-text-Yankees-Blue;
+  }
+}
+
 .upcoming-hackathon {
-  @apply com-grid com-gap-3;
+  @apply com-grid com-gap-4;
 }
 
 .past-hackathons {
-  @apply com-grid com-gap-3 com-grid-cols-1 md:com-grid-cols-3;
+  @apply com-grid com-gap-4 com-grid-cols-1 md:com-grid-cols-3;
 }

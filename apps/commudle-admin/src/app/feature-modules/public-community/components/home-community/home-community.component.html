@@ -2,7 +2,7 @@
   <div class="container">
     <div class="one-column-layout">
       <div *ngIf="community" class="home-component">
-        <nb-card class="home-component-card" [ngClass]="{ miniHeader: showMiniHeader }">
+        <nb-card class="home-component-card">
           <nb-card-body class="!com-p-0 com-overflow-hidden">
             <div class="banner" *ngIf="!showMiniHeader">
               <img
@@ -155,13 +155,7 @@
             </div>
           </nb-card-body>
         </nb-card>
-        <div
-          class="menu-items-footer"
-          [ngClass]="{
-            'menu-items-footer-sticky': !showMiniHeader,
-            'menu-items-footer-sticky-with-mini-header': showMiniHeader
-          }"
-        >
+        <div class="menu-items-footer menu-items-footer-sticky">
           <div class="page-menu">
             <div class="menu-items d-flex">
               <a
