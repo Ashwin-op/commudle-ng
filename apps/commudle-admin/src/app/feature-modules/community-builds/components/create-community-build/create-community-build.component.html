@@ -1,7 +1,12 @@
 <div class="base-layout community-build">
   <div class="container">
     <div class="one-column-layout">
-      <nb-card *ngIf="!(parentId && parentType) && !editBuildForm" class="page-header">
+      <commudle-section-hero-6
+        *ngIf="isCampaignPage && !(parentId && parentType) && !editBuildForm"
+        class="campaign-hero-section"
+        [config]="campaignHeroConfig"
+      ></commudle-section-hero-6>
+      <nb-card *ngIf="!isCampaignPage && !(parentId && parentType) && !editBuildForm" class="page-header">
         <nb-card-body>
           <div
             class="background-image"

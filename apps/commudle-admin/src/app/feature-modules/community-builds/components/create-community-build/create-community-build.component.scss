@@ -194,6 +194,10 @@
   }
 }
 
+.campaign-hero-section {
+  @apply com-m-0 com-mb-4 com-rounded-t-none md:com-rounded-b-10 com-rounded-b-none;
+}
+
 .entity-update:not(:last-child) {
   @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 }

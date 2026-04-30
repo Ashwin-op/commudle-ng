@@ -100,6 +100,11 @@ export class BuildsComponent implements OnInit {
       } else {
         this.communityBuilds = [];
         this.isAllFilterSelected = true;
+        this.timePeriod = null;
+        this.month = false;
+        this.year = false;
+        this.allTime = false;
+        this.order_by = '';
         this.getCommunityBuilds();
       }
       this.setMeta();
@@ -181,6 +186,7 @@ export class BuildsComponent implements OnInit {
   }
 
   clearCampaignFilters() {
+    this.page_info = null;
     this.queryParams = { ...this.activatedRoute.snapshot.queryParams };
     delete this.queryParams['campaign'];
     delete this.queryParams['month'];

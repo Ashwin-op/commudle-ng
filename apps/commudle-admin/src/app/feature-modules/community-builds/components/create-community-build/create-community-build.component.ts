@@ -57,6 +57,8 @@ export class CreateCommunityBuildComponent implements OnInit, OnDestroy {
   buildTypes = Object.keys(EBuildType);
   linkOrLiveAppLinkValue = false;
   showTagsValidation = false;
+  isCampaignPage = false;
+  campaignName = 'Build Campaign';
 
   paramsTags = [];
   faEdit = faEdit;
@@ -190,6 +192,10 @@ export class CreateCommunityBuildComponent implements OnInit, OnDestroy {
     );
 
     this.paramsTags = this.activatedRoute.snapshot.queryParamMap.getAll('tags[]');
+    const campaignFromQuery = this.activatedRoute.snapshot.queryParamMap.get('campaign');
+    if (campaignFromQuery) {
+      this.paramsTags.push(campaignFromQuery);
+    }
     this.editBuildForm = this.activatedRoute.snapshot.params.community_build_id ? true : false;
     this.getCommunityBuild();
     this.setBuildType();
@@ -207,6 +213,18 @@ export class CreateCommunityBuildComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription: Subscription) => subscription.unsubscribe());
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  get campaignHeroConfig() {
+    return {
+      campaignName: this.campaignName,
+      heading: 'Create Your Build',
+      subtext: 'Share your project for this campaign and get discovered by the community.',
+      cta: {
+        label: 'View Campaign Builds',
+        routerLink: '/builds',
+      },
+    };
   }
 
   validateLink(): ValidatorFn {
@@ -491,6 +509,8 @@ export class CreateCommunityBuildComponent implements OnInit, OnDestroy {
     this.activatedRoute.queryParams.subscribe((data: Params) => {
       this.parentId = data['parent_id'];
       this.parentType = data['parent_type'];
+      this.isCampaignPage = !!data['campaign'];
+      this.campaignName = data['campaign'] ? data['campaign'] : 'Build Campaign';
       if (this.parentType === EDbModels.HACKATHON_TEAM) {
         this.hackathonService.showUserResponsesByTeam(this.parentId).subscribe((data) => {
           this.hackathonUserResponses = data;
