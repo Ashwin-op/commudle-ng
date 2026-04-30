@@ -184,7 +184,16 @@
         }
 
         .team-score-col {
-          @apply com-flex com-items-center com-flex-shrink-0;
+          @apply com-flex com-items-center com-gap-2 com-flex-shrink-0;
+
+          .grand-total-chip {
+            @apply com-inline-flex com-items-center com-gap-1 com-px-2 com-py-0.5 com-rounded-full com-text-10px com-font-semibold;
+            @apply com-bg-primary-100 com-text-primary-700;
+
+            fa-icon {
+              @apply com-text-8px;
+            }
+          }
 
           .score-value {
             @apply com-text-sm com-font-bold com-text-green-600;

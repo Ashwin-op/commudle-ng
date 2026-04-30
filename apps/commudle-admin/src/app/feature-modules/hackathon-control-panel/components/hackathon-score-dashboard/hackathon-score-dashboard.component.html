@@ -93,6 +93,10 @@
           </a>
         </div>
         <div class="team-score-col">
+          <span class="grand-total-chip" *ngIf="selectedRoundId && team.grand_total_score !== undefined">
+            Total:
+            {{ team.grand_total_score }}
+          </span>
           <span class="score-value">{{ team.total_score }}</span>
         </div>
         <div class="team-toggle">
