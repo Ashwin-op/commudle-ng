@@ -1,27 +1,42 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { FooterService } from 'apps/commudle-admin/src/app/services/footer.service';
 import { SeoService } from '@commudle/shared-services';
+import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'commudle-community-builds',
-    templateUrl: './community-builds.component.html',
-    styleUrls: ['./community-builds.component.scss'],
-    standalone: false
+  selector: 'commudle-community-builds',
+  templateUrl: './community-builds.component.html',
+  styleUrls: ['./community-builds.component.scss'],
+  standalone: false,
 })
 export class CommunityBuildsComponent implements OnInit, OnDestroy {
   isMobileView: boolean;
   seoPreviewImage: string;
   seoMetadata;
+  isCampaignPage = false;
+  campaignName = 'Build Campaign';
+  totalSubmissions = 0;
   private readonly isBrowser: boolean;
+  private queryParamsSubscription: Subscription;
 
-  constructor(private footerService: FooterService, private seoService: SeoService, @Inject(PLATFORM_ID) private platformId: object) {
+  constructor(
+    private footerService: FooterService,
+    private seoService: SeoService,
+    private activatedRoute: ActivatedRoute,
+    @Inject(PLATFORM_ID) private platformId: object,
+  ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
   ngOnInit() {
     this.footerService.changeFooterStatus(true);
     this.isMobileView = this.isBrowser ? window.innerWidth <= 640 : false;
+    this.queryParamsSubscription = this.activatedRoute.queryParams.subscribe((params) => {
+      this.isCampaignPage = !!params['campaign'];
+      this.campaignName = params['campaign'] ? params['campaign'] : 'Build Campaign';
+    });
     this.setMeta();
   }
 
@@ -35,7 +50,27 @@ export class CommunityBuildsComponent implements OnInit, OnDestroy {
     this.setMeta();
   }
 
+  onTotalSubmissionsChange(total: number) {
+    this.totalSubmissions = total;
+  }
+
+  get campaignHeroConfig() {
+    return {
+      campaignName: this.campaignName,
+      heading: 'Builds',
+      subtext: 'Explore builds from this campaign and see what the community is shipping.',
+      cta: {
+        label: 'Share your Build',
+        routerLink: '/builds/create',
+      },
+      submissionCount: this.totalSubmissions,
+    };
+  }
+
   ngOnDestroy(): void {
+    if (this.queryParamsSubscription) {
+      this.queryParamsSubscription.unsubscribe();
+    }
     this.footerService.changeFooterStatus(false);
   }
 

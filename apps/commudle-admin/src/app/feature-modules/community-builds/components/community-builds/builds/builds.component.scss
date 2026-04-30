@@ -1,7 +1,7 @@
 .builds {
   @apply md:com-my-10 com-mx-0 com-mt-8 com-mb-0 com-p-0 md:com-px-0 com-px-4;
   .heading-filter {
-    @apply com-flex md:com-flex-row com-flex-col com-justify-between com-m-0 md:com-mb-0 com-mb-2;
+    @apply com-flex md:com-flex-row com-flex-col com-justify-between com-m-0 md:com-mb-0 com-mb-2 md:com-items-center;
 
     .header-text {
       @apply com-flex com-flex-col com-m-0  com-pb-1;
@@ -33,4 +33,8 @@
   .view-more-button {
     @apply com-m-0 md:com-mb-8 com-mb-0;
   }
+}
+
+.clear-campaign-filter {
+  @apply com-border com-border-solid com-border-Yankees-Blue com-rounded-full com-ml-2;
 }

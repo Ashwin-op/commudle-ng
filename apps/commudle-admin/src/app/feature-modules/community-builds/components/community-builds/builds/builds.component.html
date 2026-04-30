@@ -16,6 +16,7 @@
     ></app-tag>
     <div class="filters">
       <button
+        *ngIf="!isCampaignMode"
         nbButton
         [status]="isAllFilterSelected ? 'primary' : 'basic'"
         [ngStyle]="{ color: isAllFilterSelected ? 'white' : 'black' }"
@@ -30,7 +31,6 @@
         placeholder="Most Popular"
         size="small"
         shape="round"
-        status="basic"
         class="most-popular-filter"
         [(ngModel)]="timePeriod"
         (selectedChange)="filter()"
@@ -38,10 +38,23 @@
         [status]="month || year || allTime ? 'primary' : 'basic'"
         [ngStyle]="{ color: isAllFilterSelected ? 'black' : 'white' }"
       >
-        <nb-option value="month"> Highest upvoted this month</nb-option>
-        <nb-option value="year">Highest upvoted this year</nb-option>
+        <nb-option *ngIf="!isCampaignMode" value="month"> Highest upvoted this month</nb-option>
+        <nb-option *ngIf="!isCampaignMode" value="year">Highest upvoted this year</nb-option>
         <nb-option value="all-time">Highest upvoted all time</nb-option>
       </nb-select>
+      <button
+        *ngIf="isCampaignMode"
+        nbButton
+        size="tiny"
+        (click)="clearCampaignFilters()"
+        aria-label="Clear campaign filters"
+        shape="round"
+        [status]="'basic'"
+        class="clear-campaign-filter"
+        title="Clear campaign filters"
+      >
+        <nb-icon icon="close"></nb-icon>
+      </button>
     </div>
   </div>
   <app-skeleton-cards

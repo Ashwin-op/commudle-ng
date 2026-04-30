@@ -8,10 +8,10 @@ import { Output, EventEmitter } from '@angular/core';
 import { SeoService } from '@commudle/shared-services';
 
 @Component({
-    selector: 'commudle-builds',
-    templateUrl: './builds.component.html',
-    styleUrls: ['./builds.component.scss'],
-    standalone: false
+  selector: 'commudle-builds',
+  templateUrl: './builds.component.html',
+  styleUrls: ['./builds.component.scss'],
+  standalone: false,
 })
 export class BuildsComponent implements OnInit {
   communityBuilds: ICommunityBuild[] = [];
@@ -30,9 +30,11 @@ export class BuildsComponent implements OnInit {
   loadingCommunityBuilds = false;
   heading = 'Builds by techies around you';
   selectedTags = [];
+  isCampaignMode = false;
   schemaForBuild = [];
 
   @Output() seoMetadataChange = new EventEmitter<object>();
+  @Output() totalSubmissionsChange = new EventEmitter<number>();
 
   constructor(
     private communityBuildsService: CommunityBuildsService,
@@ -43,7 +45,24 @@ export class BuildsComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params) => {
+      this.isCampaignMode = !!params['campaign'];
+      if (this.isCampaignMode && (params['month'] || params['year'] || !params['all-time'])) {
+        this.queryParams = { ...params };
+        delete this.queryParams['month'];
+        delete this.queryParams['year'];
+        this.queryParams['all-time'] = true;
+        this.router.navigate([], { queryParams: this.queryParams });
+        return;
+      }
       if (Object.keys(params).length > 0) {
+        if (params['campaign']) {
+          this.timePeriod = 'all-time';
+          this.month = false;
+          this.year = false;
+          this.allTime = true;
+          this.isAllFilterSelected = false;
+          this.order_by = 'votes_count';
+        }
         if (params['month']) {
           this.timePeriod = 'month';
           this.month = true;
@@ -68,11 +87,13 @@ export class BuildsComponent implements OnInit {
           this.isAllFilterSelected = false;
           this.order_by = 'votes_count';
         }
-        if (this.selectedTags.length > 0) {
-          this.isAllFilterSelected = false;
+        if (params['tags[]'] && !params['month'] && !params['year'] && !params['all-time'] && !params['campaign']) {
+          this.isAllFilterSelected = true;
           this.month = false;
           this.year = false;
           this.allTime = false;
+          this.timePeriod = null;
+          this.order_by = '';
         }
         this.communityBuilds = [];
         this.getCommunityBuilds();
@@ -104,12 +125,17 @@ export class BuildsComponent implements OnInit {
 
   filter() {
     this.isAllFilterSelected = false;
+    const currentParams = { ...this.activatedRoute.snapshot.queryParams };
+    delete currentParams['month'];
+    delete currentParams['year'];
+    delete currentParams['all-time'];
     if (this.timePeriod === 'month') {
       this.month = true;
       this.year = false;
       this.allTime = false;
       this.order_by = 'votes_count';
       this.queryParams = {
+        ...currentParams,
         month: true,
       };
     }
@@ -119,6 +145,7 @@ export class BuildsComponent implements OnInit {
       this.allTime = false;
       this.order_by = 'votes_count';
       this.queryParams = {
+        ...currentParams,
         year: true,
       };
     }
@@ -128,6 +155,7 @@ export class BuildsComponent implements OnInit {
       this.allTime = true;
       this.order_by = 'votes_count';
       this.queryParams = {
+        ...currentParams,
         'all-time': true,
       };
     }
@@ -144,9 +172,28 @@ export class BuildsComponent implements OnInit {
     this.order_by = '';
     this.timePeriod = null;
     this.communityBuilds = [];
-    this.queryParams = {};
+    this.queryParams = { ...this.activatedRoute.snapshot.queryParams };
+    delete this.queryParams['month'];
+    delete this.queryParams['year'];
+    delete this.queryParams['all-time'];
     this.page_info = null;
     this.router.navigate([], { queryParams: this.queryParams });
+  }
+
+  clearCampaignFilters() {
+    this.queryParams = { ...this.activatedRoute.snapshot.queryParams };
+    delete this.queryParams['campaign'];
+    delete this.queryParams['month'];
+    delete this.queryParams['year'];
+    delete this.queryParams['all-time'];
+    this.router.navigate([], { queryParams: this.queryParams });
+  }
+
+  private toArray(value: string | string[] | null | undefined): string[] {
+    if (!value) {
+      return [];
+    }
+    return Array.isArray(value) ? value : [value];
   }
 
   getCommunityBuilds() {
@@ -158,10 +205,10 @@ export class BuildsComponent implements OnInit {
     if (!this.page_info?.end_cursor) {
       this.communityBuilds = [];
     }
-    this.selectedTags = this.activatedRoute.snapshot.queryParams['tags[]']
-      ? this.activatedRoute.snapshot.queryParams['tags[]']
-      : [];
-    this.selectedTags = Array.isArray(this.selectedTags) ? this.selectedTags : [this.selectedTags];
+    const { queryParams } = this.activatedRoute.snapshot;
+    this.selectedTags = [
+      ...new Set([...this.toArray(queryParams['tags[]']), ...this.toArray(queryParams['campaign'])]),
+    ];
     this.communityBuildsService
       .pGetAll(
         this.page_info?.end_cursor,
@@ -175,6 +222,7 @@ export class BuildsComponent implements OnInit {
       .subscribe((data: IPagination<ICommunityBuild>) => {
         this.communityBuilds = this.communityBuilds.concat(data.page.reduce((acc, value) => [...acc, value.data], []));
         this.total = data.total;
+        this.totalSubmissionsChange.emit(this.total);
         this.page_info = data.page_info;
         this.loadingCommunityBuilds = false;
         this.skeletonLoaderCard = false;

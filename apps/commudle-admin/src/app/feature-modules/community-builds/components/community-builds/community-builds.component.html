@@ -2,9 +2,11 @@
   <commudle-listing-pages-layout>
     <div header class="header">
       <commudle-listing-page-header
+        *ngIf="!isCampaignPage"
         (seoPreviewImageRetrieved)="onSeoPreviewImageRetrieved($event)"
         [parentType]="'builds'"
       ></commudle-listing-page-header>
+      <commudle-section-hero-6 *ngIf="isCampaignPage" [config]="campaignHeroConfig"></commudle-section-hero-6>
     </div>
     <div one-column *ngIf="isMobileView">
       <div class="publish-build-button">
@@ -15,7 +17,10 @@
         <commudle-help-section [helpDictionaryName]="'build-publish'"></commudle-help-section>
       </div>
       <commudle-featured-builds></commudle-featured-builds>
-      <commudle-builds (seoMetadataChange)="onSeoMetadataChange($event)"></commudle-builds>
+      <commudle-builds
+        (seoMetadataChange)="onSeoMetadataChange($event)"
+        (totalSubmissionsChange)="onTotalSubmissionsChange($event)"
+      ></commudle-builds>
       <div class="top-builders">
         <commudle-builds-top-builders
           [heading]="'POPULAR BUILDERS'"
@@ -29,7 +34,10 @@
     </div>
     <div main-column *ngIf="!isMobileView" class="main-column">
       <commudle-featured-builds></commudle-featured-builds>
-      <commudle-builds (seoMetadataChange)="onSeoMetadataChange($event)"></commudle-builds>
+      <commudle-builds
+        (seoMetadataChange)="onSeoMetadataChange($event)"
+        (totalSubmissionsChange)="onTotalSubmissionsChange($event)"
+      ></commudle-builds>
     </div>
     <div right-column class="right-column">
       <div class="publish-build-button">
@@ -40,7 +48,7 @@
         <commudle-help-section [helpDictionaryName]="'build-publish'"></commudle-help-section>
       </div>
       <div>
-        <div class="top-builders">
+        <div class="top-builders" *ngIf="!isCampaignPage">
           <commudle-builds-top-builders
             [backgroundColor]="'#D59B5D'"
             [heading]="'POPULAR BUILDERS'"

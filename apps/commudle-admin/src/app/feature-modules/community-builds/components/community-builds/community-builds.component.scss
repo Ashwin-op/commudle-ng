@@ -19,3 +19,15 @@
 .header {
   @apply com-border com-border-solid com-border-Bright-Gray;
 }
+
+.campaign-hero {
+  @apply com-px-4 com-py-6 md:com-px-8;
+}
+
+.campaign-title {
+  @apply com-text-2xl md:com-text-3xl com-font-semibold;
+}
+
+.campaign-subtitle {
+  @apply com-mt-2 com-text-base;
+}
