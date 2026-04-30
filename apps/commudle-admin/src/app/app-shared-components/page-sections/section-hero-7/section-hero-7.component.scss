@@ -1,0 +1,137 @@
+:host {
+  display: block;
+}
+
+// ── Keyframes ──────────────────────────────────────────────────────────────
+
+// Identical to hero-6 — visual continuity within the campaign.
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+}
+
+@keyframes mesh-drift {
+  to {
+    background-position: 32px 32px;
+  }
+}
+
+@keyframes badge-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+// ── Section shell ──────────────────────────────────────────────────────────
+
+// #0d1117: intentional raw hex — same as hero-6 (no pinned dark token exists).
+.hero-section {
+  position: relative;
+  overflow: hidden;
+  background: #0d1117;
+  .base-layout {
+    min-height: 0;
+  }
+}
+
+// Amber dot-grid — matches hero-6 palette exactly.
+.hero-mesh {
+  position: absolute;
+  inset: -32px;
+  background-image: radial-gradient(circle, rgba(255, 170, 0, 0.22) 1.5px, transparent 1.5px);
+  background-size: 32px 32px;
+  animation: mesh-drift 14s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+// Amber radial glow — #ff8a00 = American-Orange (tailwind.preset.js).
+.hero-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 90vw;
+  max-width: 700px;
+  height: 46vw;
+  max-height: 320px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 138, 0, 0.18) 0%,
+    rgba(255, 138, 0, 0.06) 45%,
+    transparent 72%
+  );
+  animation: glow-pulse 5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+// ── Content — centered, compact ────────────────────────────────────────────
+
+.hero-content {
+  @apply com-relative com-flex com-flex-col com-items-center com-text-center;
+  @apply com-py-10 md:com-py-14 com-gap-4;
+  z-index: 2;
+}
+
+// ── Campaign badge — identical to hero-6 ──────────────────────────────────
+
+.campaign-badge {
+  @apply com-inline-flex com-items-center com-gap-2 com-self-center;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 138, 0, 0.45);
+  background: rgba(255, 138, 0, 0.1);
+  color: #ff8a00;
+
+  &__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ff8a00;
+    animation: badge-blink 1.6s ease-in-out infinite;
+  }
+}
+
+// ── Heading ────────────────────────────────────────────────────────────────
+
+.hero-heading {
+  // Compact scale for a form-page header — doesn't need to be full CTA size.
+  @apply com-text-3xl md:com-text-Page-Heading lg:com-text-5xl;
+  @apply com-font-extrabold com-leading-tight com-m-0 com-text-tWhite;
+  max-width: 680px;
+
+  // Accent word (e.g. "built.") rendered in amber.
+  span {
+    color: #ff8a00;
+  }
+}
+
+// ── Subtext ────────────────────────────────────────────────────────────────
+
+.hero-subtext {
+  @apply com-max-w-xl com-text-center;
+}
+
+// ── Reduced motion ─────────────────────────────────────────────────────────
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-mesh,
+  .hero-glow {
+    animation: none !important;
+  }
+  .campaign-badge__dot {
+    animation: none !important;
+  }
+}

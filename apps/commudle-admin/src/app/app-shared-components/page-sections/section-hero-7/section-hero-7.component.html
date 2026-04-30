@@ -1,0 +1,23 @@
+<section class="hero-section">
+  <!-- Background layers — same visual language as hero-6 -->
+  <div class="hero-mesh" aria-hidden="true"></div>
+  <div class="hero-glow" aria-hidden="true"></div>
+
+  <div class="base-layout container com-px-4 md:com-px-6">
+    <div class="hero-content">
+      <!-- Campaign badge — matches hero-6 badge style -->
+      <div class="campaign-badge">
+        <span class="campaign-badge__dot" aria-hidden="true"></span>
+        <span class="com-text-Caption com-font-semibold">{{ config.campaignName }}</span>
+      </div>
+
+      <!-- Heading -->
+      <h1 class="hero-heading" [innerHTML]="safeHeading"></h1>
+
+      <!-- Subtext -->
+      <p class="hero-subtext com-text-Paragraph-1 com-text-Cadet-Grey">
+        {{ config.subtext }}
+      </p>
+    </div>
+  </div>
+</section>

@@ -6,6 +6,45 @@
   min-height: 0;
 }
 
+.hero-section {
+  @apply com-bg-white com-py-16 com-overflow-x-hidden;
+}
+.hero-container {
+  @apply com-px-4 md:com-px-6;
+}
+.hero-heading {
+  @apply com-text-Page-Heading com-font-bold com-text-Yankees-Blue;
+}
+.hero-subtitle {
+  @apply com-text-Paragraph-1 com-text-Auro-Metal-Saurus com-max-w-lg;
+}
+.hero-cta {
+  @apply com-mt-2;
+}
+.chip__label {
+  @apply com-text-Caption com-font-semibold com-text-tYankees-Blue;
+}
+
+.hero-row {
+  @apply com-flex com-flex-col com-items-center com-gap-12;
+  @screen md {
+    flex-direction: row;
+  }
+}
+
+.hero-col--text {
+  @apply com-flex-1 com-flex com-flex-col com-gap-6;
+}
+.hero-col--visual {
+  @apply com-flex-1 com-flex com-items-center com-justify-center;
+  padding-top: 32px;
+  padding-bottom: 32px;
+  @screen md {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
 @keyframes spin-cw {
   to {
     transform: rotate(360deg);
@@ -110,10 +149,15 @@
   }
 
   // tWhite bg = always #ffffff; tYankees-Blue text required (design-guardrails §9)
+  // Chips hidden on mobile (no room), visible md+ (R4)
   &__chip {
     position: absolute;
     padding: 6px 12px;
     white-space: nowrap;
+    display: none;
+    @screen md {
+      display: block;
+    }
     @apply com-rounded-full com-bg-tWhite com-shadow-Card;
 
     &--events {

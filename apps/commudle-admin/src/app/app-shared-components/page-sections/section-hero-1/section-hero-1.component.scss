@@ -2,9 +2,22 @@
   display: block;
 }
 
-// The global .base-layout class applies min-h-screen (100vh).
-// This component-scoped rule wins via Angular's emulated encapsulation
-// so sections are content-height, not full-viewport-height.
 .base-layout {
   min-height: 0;
+}
+
+.hero-section {
+  @apply com-bg-white com-py-12 com-overflow-x-hidden;
+}
+.hero-container {
+  @apply com-px-4 md:com-px-6;
+}
+.hero-heading {
+  @apply com-text-Page-Heading com-text-Yankees-Blue;
+}
+.hero-subtitle {
+  @apply com-text-Paragraph-1 com-text-Auro-Metal-Saurus com-mt-4;
+}
+.hero-cta {
+  @apply com-mt-6;
 }

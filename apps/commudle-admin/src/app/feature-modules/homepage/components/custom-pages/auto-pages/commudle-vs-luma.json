@@ -54,16 +54,24 @@
         "secondaryCta": { "label": "See how it works", "routerLink": "/features" }
         }
     },
-  {
-   "type": "commudle-section-hero-6",
-   "config": {
-     "campaignName": "Build Challenge 2026",
-     "heading": "Build. Compete. <span>Win.</span>",
-     "subtext": "Submit your best project across AI, Web, Mobile and Design. Top builds win prizes and recognition.",
-     "cta": { "label": "Submit your build", "routerLink": "/builds/new" },
-   "submissionCount": 142
- }
- },
+    {
+    "type": "commudle-section-hero-6",
+    "config": {
+        "campaignName": "Build Challenge 2026",
+        "heading": "Build. Compete. <span>Win.</span>",
+        "subtext": "Submit your best project across AI, Web, Mobile and Design. Top builds win prizes and recognition.",
+        "cta": { "label": "Submit your build", "routerLink": "/builds/new" },
+        "submissionCount": 142
+      }
+    },
+    {
+  "type": "commudle-section-hero-7",
+      "config": {
+        "campaignName": "Build Challenge 2026",
+        "heading": "Tell us what you <span>built.</span>",
+        "subtext": "Fill in the details below and submit your project. The community is waiting to see what you've created."
+      }
+    },
     {
       "type": "commudle-section-feature-grid-1",
       "config": {

@@ -1,15 +1,9 @@
-<div class="com-bg-white com-py-12 com-overflow-x-hidden">
-  <div class="base-layout container com-px-4 md:com-px-6">
-    <h1 class="com-text-Page-Heading com-text-Yankees-Blue">
-      {{ config.title }}
-    </h1>
-
-    <p class="com-text-Paragraph-1 com-text-Auro-Metal-Saurus com-mt-4">
-      {{ config.subtitle }}
-    </p>
-
-    <button *ngIf="config.ctaText" nbButton status="primary" class="com-mt-6">
-      {{ config.ctaText }}
-    </button>
+<div class="hero-section">
+  <div class="base-layout container hero-container">
+    <h1 class="hero-heading">{{ config.title }}</h1>
+    <p class="hero-subtitle">{{ config.subtitle }}</p>
+    <div *ngIf="config.ctaText" class="hero-cta">
+      <button nbButton status="primary">{{ config.ctaText }}</button>
+    </div>
   </div>
 </div>
