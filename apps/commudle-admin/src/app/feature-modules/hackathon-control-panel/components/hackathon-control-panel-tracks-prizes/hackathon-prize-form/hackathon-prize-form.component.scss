@@ -1,18 +1,54 @@
 .prize-form {
-  @apply com-w-[100dvw] com-mx-0 md:com-max-h-[90dvh] md:com-w-500px;
+  @apply com-w-[100dvw] com-mx-0;
+  @apply md:com-w-[560px] md:com-max-h-[90dvh];
+
   nb-card-header {
     @apply com-flex com-justify-between com-items-center;
   }
 
-  select {
-    @apply com-border com-border-solid com-border-[#e4e9f2] com-rounded com-bg-[#f7f9fc] com-px-2 com-py-2.5;
+  nb-card-footer {
+    @apply com-flex com-justify-end com-items-center com-gap-2;
   }
 
-  form {
-    @apply com-flex com-flex-col com-gap-3;
+  .form-fields {
+    @apply com-flex com-flex-col com-gap-4;
   }
 
-  .prize-amount {
+  .form-group {
+    @apply com-flex com-flex-col com-gap-1;
+
+    label {
+      @apply com-text-sm com-font-medium com-text-gray-700;
+
+      .required {
+        @apply com-text-red-500;
+      }
+    }
+
+    select {
+      @apply com-border com-border-solid com-border-gray-300 com-rounded com-bg-gray-50 com-px-3 com-py-2.5 com-text-sm com-w-full;
+      @apply focus:com-outline-none focus:com-ring-2 focus:com-ring-primary-500 focus:com-border-primary-500;
+      @apply com-transition-colors;
+    }
+
+    .placeholder-text {
+      @apply com-text-gray-400;
+    }
+  }
+
+  .form-row {
+    @apply com-grid com-grid-cols-2 com-gap-4;
+  }
+
+  .prize-amount-row {
     @apply com-flex com-gap-2;
+
+    .currency-field {
+      @apply com-w-1/3;
+    }
+
+    .amount-field {
+      @apply com-flex-1;
+    }
   }
 }

@@ -1,36 +1,45 @@
-import { countries_details } from '@commudle/shared-services';
+import { countries_details, ToastrService } from '@commudle/shared-services';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NbDialogService } from '@commudle/theme';
-import { faFileImage, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faFileImage, faPlus, faXmark, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
-import { IHackathonPrize, IHackathonTrack } from '@commudle/shared-models';
+import { IHackathonPrize, IHackathonTeam, IHackathonTrack, IHackathonWinner } from '@commudle/shared-models';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
+import { HackathonWinnerService } from 'apps/commudle-admin/src/app/services/hackathon-winner.service';
+import { IHackathonUserResponses } from 'apps/shared-models/hackathon-user-responses.model';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
-    selector: 'commudle-hackathon-control-panel-prize',
-    templateUrl: './hackathon-control-panel-prize.component.html',
-    styleUrls: ['./hackathon-control-panel-prize.component.scss'],
-    standalone: false
+  selector: 'commudle-hackathon-control-panel-prize',
+  templateUrl: './hackathon-control-panel-prize.component.html',
+  styleUrls: ['./hackathon-control-panel-prize.component.scss'],
+  standalone: false,
 })
 export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
   prizeForm: FormGroup;
   hackathonTracks: IHackathonTrack[];
   hackathon: IHackathon;
-  icons = {
-    faPlus,
-    faFileImage,
-    faXmark,
-  };
+  icons = { faPlus, faFileImage, faXmark, faSearch };
   hackathonPrizes: IHackathonPrize[];
   countryDetails = countries_details;
   isLoading = true;
   currencySuggestions: Array<{ name: string; code: string; phone: number; symbol: string; currency: string }> = [];
   isSelectingCurrency = false;
   subscriptions: Subscription[] = [];
+
+  // Winner management state
+  selectedPrize: IHackathonPrize;
+  selectedPrizeCurrencySymbol: any;
+  hackathonUserResponses: IHackathonUserResponses[];
+  searchForm: FormGroup;
+  isWinnerLoading = false;
+  winnerPage = 1;
+  winnerTotal: number;
+  winnerCount = 10;
+
   tinyMCE = {
     min_height: 200,
     menubar: false,
@@ -71,6 +80,8 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
     private nbDialogService: NbDialogService,
     private fb: FormBuilder,
     private hackathonService: HackathonService,
+    private hackathonWinnerService: HackathonWinnerService,
+    private toastrService: ToastrService,
     private activatedRoute: ActivatedRoute,
   ) {
     this.prizeForm = this.fb.group({
@@ -83,6 +94,7 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
       hackathon_track_id: '',
       hackathon_id: '',
     });
+    this.searchForm = this.fb.group({ search: [''] });
   }
 
   ngOnInit() {
@@ -92,10 +104,16 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
       this.fetchHackathon(params.get('hackathon_id'));
     });
     this.setupCurrencyAutocomplete();
+    this.subscriptions.push(
+      this.searchForm.valueChanges.pipe(debounceTime(500), distinctUntilChanged()).subscribe(() => {
+        this.winnerPage = 1;
+        this.fetchHackathonUserResponses();
+      }),
+    );
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((subscription: Subscription) => subscription.unsubscribe());
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
   fetchHackathon(hackathonId) {
@@ -137,23 +155,15 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
         order: prize.order,
       });
     }
-
-    this.nbDialogService.open(dialog, {
-      context: { index: index, prize: prize },
-    });
-
+    this.nbDialogService.open(dialog, { context: { index, prize } });
     setTimeout(() => {
       const nameInput = document.querySelector('#name') as HTMLInputElement;
-      if (nameInput) {
-        nameInput.focus();
-      }
+      if (nameInput) nameInput.focus();
     }, 0);
   }
 
   confirmDeleteDialogBox(dialog, prizeId, index) {
-    this.nbDialogService.open(dialog, {
-      context: { index: index, prizeId: prizeId },
-    });
+    this.nbDialogService.open(dialog, { context: { index, prizeId } });
   }
 
   createPrize() {
@@ -206,13 +216,86 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
   selectCurrency(selectedValue: string) {
     if (selectedValue) {
       this.isSelectingCurrency = true;
-      this.prizeForm.patchValue({
-        currency_type: selectedValue,
-      });
+      this.prizeForm.patchValue({ currency_type: selectedValue });
       this.currencySuggestions = [];
-      setTimeout(() => {
-        this.isSelectingCurrency = false;
-      }, 100);
+      setTimeout(() => (this.isSelectingCurrency = false), 100);
     }
+  }
+
+  // Winner management methods
+  openWinnersDialog(dialog, prize: IHackathonPrize) {
+    this.selectedPrize = prize;
+    this.selectedPrizeCurrencySymbol = this.countryDetails.find((d) => d.currency === prize.currency_type);
+    if (!this.selectedPrizeCurrencySymbol) {
+      this.selectedPrizeCurrencySymbol = { symbol: prize.currency_type };
+    }
+    this.searchForm.patchValue({ search: '' });
+    this.winnerPage = 1;
+    this.fetchHackathonUserResponses();
+    this.nbDialogService.open(dialog, {});
+  }
+
+  fetchHackathonUserResponses() {
+    if (!this.selectedPrize) return;
+    this.isWinnerLoading = true;
+    this.hackathonService
+      .indexUserResponses(
+        this.selectedPrize.hackathon_id,
+        this.winnerPage,
+        this.winnerCount,
+        this.searchForm.get('search').value,
+      )
+      .subscribe((data) => {
+        if (data) {
+          this.hackathonUserResponses = data.values;
+          this.winnerPage = data.page;
+          this.winnerTotal = data.total;
+          for (const hur of this.hackathonUserResponses) {
+            hur.team.prize_selected = false;
+            for (const hw of hur.team.hackathon_winners) {
+              if (hw.hackathon_prize.id === this.selectedPrize.id) {
+                hur.team.prize_selected = true;
+                break;
+              }
+            }
+          }
+        }
+        this.isWinnerLoading = false;
+      });
+  }
+
+  addWinner(team: IHackathonTeam, index: number) {
+    this.hackathonWinnerService
+      .addHackathonWinner(this.selectedPrize.id, team.id)
+      .subscribe((data: IHackathonWinner) => {
+        this.hackathonUserResponses[index].team.hackathon_winners.push(data);
+        this.hackathonUserResponses[index].team.prize_selected = true;
+        this.selectedPrize.winners_count++;
+        this.toastrService.successDialog('Winner Selected');
+      });
+  }
+
+  removeWinner(winnerId: number, userResponseIndex: number, winnerIndex: number) {
+    this.hackathonWinnerService.removeHackathonWinner(winnerId).subscribe((data) => {
+      if (data) {
+        this.hackathonUserResponses[userResponseIndex].team.prize_selected = false;
+        this.hackathonUserResponses[userResponseIndex].team.hackathon_winners.splice(winnerIndex, 1);
+        this.selectedPrize.winners_count--;
+        this.toastrService.successDialog('Winner Removed');
+      }
+    });
+  }
+
+  openAddWinnerConfirmation(dialog, team: IHackathonTeam, index: number) {
+    this.nbDialogService.open(dialog, { context: { team, index } });
+  }
+
+  openRemoveWinnerConfirmation(dialog, winnerId: number, userResponseIndex: number, winnerIndex: number) {
+    this.nbDialogService.open(dialog, { context: { winnerId, userResponseIndex, winnerIndex } });
+  }
+
+  onWinnerPageChange(page: number) {
+    this.winnerPage = page;
+    this.fetchHackathonUserResponses();
   }
 }

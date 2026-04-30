@@ -1,69 +1,92 @@
 <nb-card class="prize-form">
   <nb-card-header>
-    <span> {{ hackathonPrize ? 'Edit Prize' : 'New Prize' }}</span>
+    <span>{{ hackathonPrize ? 'Edit Prize' : 'New Prize' }}</span>
     <button (click)="closeForm()" ghost nbButton shape="round" size="small">
       <nb-icon icon="close"></nb-icon>
     </button>
   </nb-card-header>
   <nb-card-body>
-    <form [formGroup]="prizeForm">
-      <!-- name -->
-      <div>
-        <label for="name">Name*</label>
-        <input formControlName="name" fullWidth id="name" nbInput placeholder="Name" type="text" />
+    <form [formGroup]="prizeForm" class="form-fields">
+      <div class="form-group">
+        <label for="name">Name <span class="required">*</span></label>
+        <input
+          formControlName="name"
+          fullWidth
+          id="name"
+          nbInput
+          placeholder="e.g. Best Innovation Award"
+          type="text"
+        />
+        <commudle-alert
+          *ngIf="prizeForm.get('name').touched && prizeForm.get('name').hasError('required')"
+          [error]="true"
+          errorMessage="Name is required"
+        ></commudle-alert>
       </div>
 
-      <!-- hackathon_track_id -->
-      <div>
-        <label for="hackathon_track_id">Select Track</label>
-        <br />
+      <div class="form-row">
+        <div class="form-group">
+          <label for="order">Order <span class="required">*</span></label>
+          <select
+            [ngClass]="{ 'placeholder-text': prizeForm.get('order').value === '' }"
+            formControlName="order"
+            id="order"
+          >
+            <option disabled selected value="">Select</option>
+            <option [value]="1">1st</option>
+            <option [value]="2">2nd</option>
+            <option [value]="3">3rd</option>
+          </select>
+          <commudle-alert
+            *ngIf="prizeForm.get('order').touched && prizeForm.get('order').hasError('required')"
+            [error]="true"
+            errorMessage="Order is required"
+          ></commudle-alert>
+        </div>
+
+        <div class="form-group">
+          <label for="no_of_winners">Winners <span class="required">*</span></label>
+          <input
+            formControlName="no_of_winners"
+            fullWidth
+            id="no_of_winners"
+            nbInput
+            placeholder="e.g. 3"
+            type="number"
+            min="1"
+          />
+          <commudle-alert
+            *ngIf="prizeForm.get('no_of_winners').touched && prizeForm.get('no_of_winners').hasError('required')"
+            [error]="true"
+            errorMessage="Number of winners is required"
+          ></commudle-alert>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="hackathon_track_id">Track</label>
         <select
-          [ngClass]="{
-            'com-text-[#8E9BB3]': prizeForm.get('hackathon_track_id').value === null
-          }"
-          class="!com-w-full"
+          [ngClass]="{ 'placeholder-text': prizeForm.get('hackathon_track_id').value === null }"
           formControlName="hackathon_track_id"
           id="hackathon_track_id"
-          name="hackathon_track_id"
         >
           <option [value]="null" disabled selected>Select Track</option>
-          <option value="">No Track</option>
+          <option value="">No Track (Global)</option>
           <option *ngFor="let track of hackathonTracks" [value]="track.id">{{ track.name }}</option>
         </select>
       </div>
 
-      <!-- order -->
-      <div>
-        <label for="order">Order*</label>
-        <br />
-        <select
-          [ngClass]="{
-            'com-text-[#8E9BB3]': prizeForm.get('order').value === ''
-          }"
-          class="!com-w-full"
-          formControlName="order"
-          id="order"
-          name="order"
-        >
-          <option disabled selected value="">Select Order</option>
-          <option [value]="1">1</option>
-          <option [value]="2">2</option>
-          <option [value]="3">3</option>
-        </select>
-      </div>
-
-      <!-- prize_amount -->
-      <div>
-        <label for="prize_amount">Prize Amount</label>
-        <div class="prize-amount">
-          <div>
+      <div class="form-group">
+        <label>Prize Amount</label>
+        <div class="prize-amount-row">
+          <div class="currency-field">
             <input
               type="text"
               id="currency_type"
               nbInput
               fullWidth
               formControlName="currency_type"
-              placeholder="Currency"
+              placeholder="INR"
               [nbAutocomplete]="currencyAutocomplete"
             />
             <nb-autocomplete #currencyAutocomplete (selectedChange)="selectCurrency($event)">
@@ -72,39 +95,32 @@
               </nb-option>
             </nb-autocomplete>
           </div>
-          <input formControlName="prize_amount" fullWidth id="prize_amount" nbInput placeholder="100" type="text" />
+          <div class="amount-field">
+            <input formControlName="prize_amount" fullWidth id="prize_amount" nbInput placeholder="10000" type="text" />
+          </div>
         </div>
       </div>
 
-      <!-- no_of_winners -->
-      <div>
-        <label for="no_of_winners">Number of winners*</label>
-        <input
-          formControlName="no_of_winners"
-          fullWidth
-          id="no_of_winners"
-          nbInput
-          placeholder="No of winners"
-          type="number"
-        />
-      </div>
-
-      <!-- Description -->
-      <div>
-        <label for="description">Description*</label>
+      <div class="form-group">
+        <label for="description">Description <span class="required">*</span></label>
         <editor [init]="tinyMCE" formControlName="description" id="description"></editor>
+        <commudle-alert
+          *ngIf="prizeForm.get('description').touched && prizeForm.get('description').hasError('required')"
+          [error]="true"
+          errorMessage="Description is required"
+        ></commudle-alert>
       </div>
     </form>
   </nb-card-body>
   <nb-card-footer>
+    <button (click)="closeForm()" nbButton ghost status="basic">Cancel</button>
     <button
       (click)="hackathonPrize ? updatePrize(hackathonPrize.id) : createPrize()"
       [disabled]="prizeForm.invalid || !prizeForm.dirty"
-      fullWidth
       nbButton
       status="primary"
     >
-      {{ hackathonPrize ? 'update' : 'save' }}
+      {{ hackathonPrize ? 'Update Prize' : 'Create Prize' }}
     </button>
   </nb-card-footer>
 </nb-card>

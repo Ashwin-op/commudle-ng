@@ -1,8 +1,318 @@
-.hackathon-prize-cards {
-  @apply com-grid com-grid-cols-1 md:com-grid-cols-2 com-gap-x-3;
+.prize-container {
+  @apply com-p-4;
+
+  .prize-header {
+    @apply com-flex com-justify-between com-items-center com-mb-4;
+
+    h3 {
+      @apply com-text-lg com-font-semibold com-text-gray-900 com-m-0;
+    }
+  }
+}
+
+.prize-table-wrapper {
+  @apply com-overflow-x-auto com-border com-border-gray-200 com-rounded-xl;
+}
+
+.prize-table {
+  @apply com-w-full com-text-sm com-text-left com-border-collapse;
+
+  thead {
+    @apply com-bg-gray-50;
+
+    th {
+      @apply com-px-4 com-py-3 com-font-semibold com-text-gray-600 com-text-xs com-uppercase com-tracking-wider com-whitespace-nowrap com-border-b com-border-gray-200;
+
+      &:first-child {
+        @apply com-rounded-tl-xl;
+      }
+
+      &:last-child {
+        @apply com-rounded-tr-xl;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      @apply com-border-b com-border-gray-100 com-transition-colors;
+      @apply hover:com-bg-gray-50;
+
+      &:last-child {
+        @apply com-border-b-0;
+
+        td:first-child {
+          @apply com-rounded-bl-xl;
+        }
+
+        td:last-child {
+          @apply com-rounded-br-xl;
+        }
+      }
+    }
+
+    td {
+      @apply com-px-4 com-py-3 com-align-middle;
+    }
+  }
+
+  .order-badge {
+    @apply com-inline-flex com-items-center com-justify-center com-w-7 com-h-7 com-rounded-full com-bg-primary-100 com-text-primary-700 com-font-semibold com-text-xs;
+  }
+
+  .prize-name {
+    @apply com-font-medium com-text-gray-900;
+  }
+
+  .description-cell {
+    @apply com-text-gray-500 com-text-xs com-line-clamp-2 com-max-w-[250px];
+  }
+
+  .track-badge {
+    @apply com-inline-block com-px-2 com-py-1 com-text-xs com-font-medium com-bg-blue-100 com-text-blue-700 com-rounded;
+  }
+
+  .winners-info {
+    @apply com-font-medium com-text-gray-700;
+  }
+
+  .no-data {
+    @apply com-text-gray-400;
+  }
+
+  .action-buttons {
+    @apply com-flex com-gap-1;
+  }
+}
+
+// Mobile: stack rows as cards
+@media (max-width: 768px) {
+  .prize-table {
+    thead {
+      @apply com-hidden;
+    }
+
+    tbody {
+      tr {
+        @apply com-flex com-flex-col com-gap-1 com-p-4 com-mb-2 com-rounded-lg com-border com-border-gray-200 com-bg-white;
+
+        &:hover {
+          @apply com-bg-gray-50;
+        }
+      }
+
+      td {
+        @apply com-flex com-justify-between com-items-center com-px-0 com-py-1;
+
+        &::before {
+          content: attr(data-label);
+          @apply com-font-semibold com-text-gray-600 com-text-xs com-uppercase;
+        }
+      }
+    }
+
+    .action-buttons {
+      @apply com-justify-end;
+    }
+  }
+}
+
+.no-data-message {
+  @apply com-text-center com-py-12 com-text-gray-600 com-flex com-flex-col com-items-center com-gap-2;
+
+  .empty-icon {
+    @apply com-text-4xl com-text-gray-400 com-mb-2;
+  }
+
+  p {
+    @apply com-text-lg com-mb-0;
+  }
+
+  .sub-text {
+    @apply com-text-sm com-text-gray-500;
+  }
 }
 
 nb-card-header,
 nb-card-footer {
   @apply com-flex com-justify-between com-items-center;
+}
+
+.prize-form-dialog {
+  @apply com-w-[100dvw] com-mx-0;
+  @apply md:com-w-[560px] md:com-max-h-[90dvh];
+
+  nb-card-footer {
+    @apply com-justify-end com-gap-2;
+  }
+
+  .form-fields {
+    @apply com-flex com-flex-col com-gap-4;
+  }
+
+  .form-group {
+    @apply com-flex com-flex-col com-gap-1;
+
+    label {
+      @apply com-text-sm com-font-medium com-text-gray-700;
+
+      .required {
+        @apply com-text-red-500;
+      }
+    }
+
+    select {
+      @apply com-border com-border-solid com-border-gray-300 com-rounded com-bg-gray-50 com-px-3 com-py-2.5 com-text-sm com-w-full;
+      @apply focus:com-outline-none focus:com-ring-2 focus:com-ring-primary-500 focus:com-border-primary-500;
+    }
+
+    .placeholder-text {
+      @apply com-text-gray-400;
+    }
+  }
+
+  .form-row {
+    @apply com-grid com-grid-cols-2 com-gap-4;
+  }
+
+  .prize-amount-row {
+    @apply com-flex com-gap-2;
+
+    .currency-field {
+      @apply com-w-1/3;
+    }
+
+    .amount-field {
+      @apply com-flex-1;
+    }
+  }
+}
+
+.prize-distribution-dialog {
+  @apply com-h-full com-w-[100dvw] com-mx-0;
+  @apply md:com-h-[90dvh] md:com-w-[80dvw];
+
+  nb-card-header {
+    @apply com-border-b com-border-gray-200;
+
+    .header-content {
+      @apply com-flex com-items-center com-justify-between com-w-full;
+
+      .prize-info {
+        @apply com-flex com-flex-col com-gap-1;
+
+        h3 {
+          @apply com-text-xl com-font-semibold com-text-gray-900 com-m-0;
+        }
+
+        .prize-amount {
+          @apply com-text-sm com-font-medium com-text-primary-500;
+        }
+      }
+    }
+  }
+
+  nb-card-body {
+    @apply com-p-0;
+
+    .search-container {
+      @apply com-p-4 com-border-b com-border-gray-200 com-bg-gray-50;
+
+      .search-input-wrapper {
+        @apply com-relative;
+
+        .search-icon {
+          @apply com-absolute com-left-3 com-top-1/2 com-transform com--translate-y-1/2 com-text-gray-400;
+        }
+
+        .search-input {
+          @apply com-pl-10 com-pr-4 com-py-2 com-border com-border-gray-300 com-rounded-lg;
+          @apply focus:com-border-primary-500 focus:com-outline-none;
+        }
+      }
+    }
+
+    .table-container {
+      @apply com-overflow-x-auto;
+
+      .teams-table {
+        @apply com-w-full com-border-collapse;
+
+        thead {
+          @apply com-bg-gray-100 com-sticky com-top-0 com-z-10;
+
+          th {
+            @apply com-px-4 com-py-3 com-text-left com-text-xs com-font-semibold com-text-gray-700 com-uppercase;
+            @apply com-border-b com-border-gray-300;
+          }
+        }
+
+        tbody {
+          tr {
+            @apply com-border-0 com-border-solid com-border-b com-border-gray-200 com-transition-colors;
+            @apply hover:com-bg-gray-50;
+
+            &.winner-row {
+              @apply com-bg-primary-100 com-text-tblack;
+
+              td {
+                @apply com-bg-transparent com-text-tblack;
+
+                span:not(.prize-name) {
+                  @apply com-text-tblack !important;
+                }
+              }
+            }
+
+            td {
+              @apply com-px-4 com-py-3 com-text-sm;
+
+              &.team-name-cell {
+                .team-info {
+                  @apply com-flex com-items-center com-gap-2;
+
+                  .team-name {
+                    @apply com-font-medium com-text-gray-900;
+                  }
+
+                  .trophy {
+                    @apply com-text-base;
+                  }
+                }
+              }
+
+              .round-badge {
+                @apply com-inline-flex com-px-3 com-py-1 com-text-xs com-font-medium com-rounded-full;
+                @apply com-bg-primary-100 com-text-primary-700;
+              }
+
+              &.project-cell {
+                .project-name {
+                  @apply com-text-gray-700;
+                }
+              }
+
+              .no-data {
+                @apply com-text-gray-400;
+              }
+
+              &.action-cell {
+                .prize-tag {
+                  @apply com-flex com-items-center com-gap-2 com-mt-2;
+
+                  .prize-name {
+                    @apply com-text-xs com-font-medium com-text-gray-700 com-bg-gray-100 com-px-2 com-py-1 com-rounded;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  nb-card-footer {
+    @apply com-border-t com-border-gray-200 com-bg-gray-50;
+  }
 }

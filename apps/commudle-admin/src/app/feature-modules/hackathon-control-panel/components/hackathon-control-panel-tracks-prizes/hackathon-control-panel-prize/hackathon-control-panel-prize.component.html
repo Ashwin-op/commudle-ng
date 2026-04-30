@@ -1,93 +1,180 @@
-<br />
-<div class="com-mx-2">
-  <button (click)="openPrizeFormDialogBox(addPrizeDialogBox)" nbButton status="primary">
-    <fa-icon [icon]="icons.faPlus"></fa-icon> &nbsp; Add Prize
-  </button>
-</div>
-<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
-<div class="hackathon-prize-cards" *ngIf="hackathonPrizes && hackathonPrizes.length > 0; else noPrize">
-  <div *ngFor="let hackathonPrize of hackathonPrizes; let i = index">
-    <commudle-hackathon-prize-card
-      (destroyPrizeEvent)="confirmDeleteDialogBox(deletePrizeDilaogBox, $event, i)"
-      (editPrizeEvent)="openPrizeFormDialogBox(addPrizeDialogBox, $event, i)"
-      [hackathonPrize]="hackathonPrize"
-    ></commudle-hackathon-prize-card>
+<div class="prize-container">
+  <div class="prize-header">
+    <h3>Prizes</h3>
+    <button (click)="openPrizeFormDialogBox(addPrizeDialogBox)" nbButton status="primary" size="small">
+      <fa-icon [icon]="icons.faPlus"></fa-icon> &nbsp; Add Prize
+    </button>
+  </div>
+
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+  <div *ngIf="!isLoading && hackathonPrizes?.length > 0" class="prize-table-wrapper">
+    <table class="prize-table">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Track</th>
+          <th>Prize Amount</th>
+          <th>Winners</th>
+          <th>Actions</th>
+          <th>Manage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let prize of hackathonPrizes; let i = index">
+          <td [attr.data-label]="'Order'">
+            <span class="order-badge">{{ prize.order }}</span>
+          </td>
+          <td [attr.data-label]="'Name'">
+            <span class="prize-name">{{ prize.name }}</span>
+          </td>
+          <td [attr.data-label]="'Description'">
+            <div class="description-cell" [innerHTML]="prize.description"></div>
+          </td>
+          <td [attr.data-label]="'Track'">
+            <span *ngIf="prize.hackathon_track" class="track-badge">{{ prize.hackathon_track.name }}</span>
+            <span *ngIf="!prize.hackathon_track" class="no-data">—</span>
+          </td>
+          <td [attr.data-label]="'Prize Amount'">
+            <span *ngIf="prize.prize_amount && prize.prize_amount > 0">
+              {{ prize.currency_type }} {{ prize.prize_amount }}
+            </span>
+            <span *ngIf="!prize.prize_amount || prize.prize_amount === 0" class="no-data">—</span>
+          </td>
+          <td [attr.data-label]="'Winners'">
+            <span class="winners-info">{{ prize.winners_count }}/{{ prize.no_of_winners }}</span>
+          </td>
+          <td [attr.data-label]="'Actions'">
+            <div class="action-buttons">
+              <button
+                nbButton
+                ghost
+                size="tiny"
+                status="primary"
+                (click)="openPrizeFormDialogBox(addPrizeDialogBox, prize, i)"
+              >
+                Edit
+              </button>
+              <button
+                nbButton
+                ghost
+                size="tiny"
+                status="danger"
+                (click)="confirmDeleteDialogBox(deletePrizeDialogBox, prize.id, i)"
+              >
+                Delete
+              </button>
+            </div>
+          </td>
+          <td [attr.data-label]="'Manage'">
+            <button nbButton size="tiny" status="primary" outline (click)="openWinnersDialog(winnersDialogBox, prize)">
+              Add Winners
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!isLoading && (!hackathonPrizes || hackathonPrizes.length === 0)" class="no-data-message">
+    <nb-icon icon="gift-outline" class="empty-icon"></nb-icon>
+    <p>No prizes added yet</p>
+    <p class="sub-text">Add prizes to reward hackathon participants.</p>
   </div>
 </div>
-<ng-template #noPrize>
-  <br />
-  <br />
 
-  <div *ngIf="!isLoading">No Prize Added</div>
-</ng-template>
-<ng-template #NoPrize></ng-template>
+<!-- Prize Form Dialog -->
 <ng-template #addPrizeDialogBox let-data let-ref="dialogRef">
-  <nb-card class="prize-form">
+  <nb-card class="prize-form-dialog">
     <nb-card-header>
-      <span> {{ data.prize ? 'Edit Prize' : 'New Prize' }}</span>
+      <span>{{ data.prize ? 'Edit Prize' : 'New Prize' }}</span>
       <button (click)="ref.close()" ghost nbButton shape="round" size="small">
         <nb-icon icon="close"></nb-icon>
       </button>
     </nb-card-header>
     <nb-card-body>
-      <form [formGroup]="prizeForm">
-        <!-- name -->
-        <div>
-          <label for="name">Name*</label>
-          <input formControlName="name" fullWidth id="name" nbInput placeholder="Name" type="text" />
+      <form [formGroup]="prizeForm" class="form-fields">
+        <div class="form-group">
+          <label for="name">Name <span class="required">*</span></label>
+          <input
+            formControlName="name"
+            fullWidth
+            id="name"
+            nbInput
+            placeholder="e.g. Best Innovation Award"
+            type="text"
+          />
+          <commudle-alert
+            *ngIf="prizeForm.get('name').touched && prizeForm.get('name').hasError('required')"
+            [error]="true"
+            errorMessage="Name is required"
+          ></commudle-alert>
         </div>
 
-        <!-- hackathon_track_id -->
-        <div>
-          <label for="hackathon_track_id">Select Track</label>
-          <br />
+        <div class="form-row">
+          <div class="form-group">
+            <label for="order">Order <span class="required">*</span></label>
+            <select
+              [ngClass]="{ 'placeholder-text': prizeForm.get('order').value === '' }"
+              formControlName="order"
+              id="order"
+            >
+              <option disabled selected value="">Select</option>
+              <option [value]="1">1st</option>
+              <option [value]="2">2nd</option>
+              <option [value]="3">3rd</option>
+            </select>
+            <commudle-alert
+              *ngIf="prizeForm.get('order').touched && prizeForm.get('order').hasError('required')"
+              [error]="true"
+              errorMessage="Order is required"
+            ></commudle-alert>
+          </div>
+          <div class="form-group">
+            <label for="no_of_winners">Winners <span class="required">*</span></label>
+            <input
+              formControlName="no_of_winners"
+              fullWidth
+              id="no_of_winners"
+              nbInput
+              placeholder="e.g. 3"
+              type="number"
+              min="1"
+            />
+            <commudle-alert
+              *ngIf="prizeForm.get('no_of_winners').touched && prizeForm.get('no_of_winners').hasError('required')"
+              [error]="true"
+              errorMessage="Number of winners is required"
+            ></commudle-alert>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="hackathon_track_id">Track</label>
           <select
-            [ngClass]="{
-              'com-text-[#8E9BB3]': prizeForm.get('hackathon_track_id').value === null
-            }"
-            class="!com-w-full"
+            [ngClass]="{ 'placeholder-text': prizeForm.get('hackathon_track_id').value === null }"
             formControlName="hackathon_track_id"
             id="hackathon_track_id"
-            name="hackathon_track_id"
           >
             <option [value]="null" disabled selected>Select Track</option>
-            <option value="">No Track</option>
+            <option value="">No Track (Global)</option>
             <option *ngFor="let track of hackathonTracks" [value]="track.id">{{ track.name }}</option>
           </select>
         </div>
 
-        <!-- order -->
-        <div>
-          <label for="order">Order*</label>
-          <br />
-          <select
-            [ngClass]="{
-              'com-text-[#8E9BB3]': prizeForm.get('order').value === ''
-            }"
-            class="!com-w-full"
-            formControlName="order"
-            id="order"
-            name="order"
-          >
-            <option disabled selected value="">Select Order</option>
-            <option [value]="1">1</option>
-            <option [value]="2">2</option>
-            <option [value]="3">3</option>
-          </select>
-        </div>
-
-        <!-- prize_amount -->
-        <div>
-          <label for="prize_amount">Prize Amount</label>
-          <div class="prize-amount">
-            <div>
+        <div class="form-group">
+          <label>Prize Amount</label>
+          <div class="prize-amount-row">
+            <div class="currency-field">
               <input
                 type="text"
                 id="currency_type"
                 nbInput
                 fullWidth
                 formControlName="currency_type"
-                placeholder="Currency"
+                placeholder="INR"
                 [nbAutocomplete]="currencyAutocomplete"
               />
               <nb-autocomplete #currencyAutocomplete (selectedChange)="selectCurrency($event)">
@@ -96,56 +183,206 @@
                 </nb-option>
               </nb-autocomplete>
             </div>
-            <input formControlName="prize_amount" fullWidth id="prize_amount" nbInput placeholder="100" type="text" />
+            <div class="amount-field">
+              <input
+                formControlName="prize_amount"
+                fullWidth
+                id="prize_amount"
+                nbInput
+                placeholder="10000"
+                type="text"
+              />
+            </div>
           </div>
         </div>
 
-        <!-- no_of_winners -->
-        <div>
-          <label for="no_of_winners">Number of winners*</label>
-          <input
-            formControlName="no_of_winners"
-            fullWidth
-            id="no_of_winners"
-            nbInput
-            placeholder="No of winners"
-            type="number"
-          />
-        </div>
-
-        <!-- Description -->
-        <div>
-          <label for="description">Description*</label>
+        <div class="form-group">
+          <label for="description">Description <span class="required">*</span></label>
           <editor [init]="tinyMCE" formControlName="description" id="description"></editor>
+          <commudle-alert
+            *ngIf="prizeForm.get('description').touched && prizeForm.get('description').hasError('required')"
+            [error]="true"
+            errorMessage="Description is required"
+          ></commudle-alert>
         </div>
       </form>
     </nb-card-body>
     <nb-card-footer>
+      <button (click)="ref.close()" nbButton ghost status="basic">Cancel</button>
       <button
         (click)="data.prize ? updatePrize(data.prize.id, data.index) : createPrize(); ref.close()"
         [disabled]="prizeForm.invalid || !prizeForm.dirty"
-        fullWidth
         nbButton
         status="primary"
       >
-        {{ data.prize ? 'update' : 'save' }}
+        {{ data.prize ? 'Update Prize' : 'Create Prize' }}
       </button>
     </nb-card-footer>
   </nb-card>
 </ng-template>
 
-<ng-template #deletePrizeDilaogBox let-data let-ref="dialogRef">
+<!-- Delete Confirmation Dialog -->
+<ng-template #deletePrizeDialogBox let-data let-ref="dialogRef">
   <nb-card>
     <nb-card-header>
-      <span>Confirm delete Prize</span>
+      <span>Confirm Delete Prize</span>
       <button (click)="ref.close()" ghost nbButton shape="round" size="small">
         <nb-icon icon="close"></nb-icon>
       </button>
     </nb-card-header>
-    <nb-card-body>Are you sure, you want to delete Prize?</nb-card-body>
+    <nb-card-body>Are you sure you want to delete this prize?</nb-card-body>
     <nb-card-footer>
-      <button (click)="deletePrize(data.prizeId, data.index); ref.close()" nbButton status="primary">Delete</button>
-      <button (click)="ref.close()" nbButton outline status="danger">Cancel</button>
+      <button (click)="deletePrize(data.prizeId, data.index); ref.close()" nbButton status="danger">Delete</button>
+      <button (click)="ref.close()" nbButton ghost>Cancel</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<!-- Winners Management Dialog -->
+<ng-template #winnersDialogBox let-ref="dialogRef">
+  <nb-card class="prize-distribution-dialog">
+    <nb-card-header>
+      <div class="header-content">
+        <div class="prize-info">
+          <h3>{{ selectedPrize?.name }}</h3>
+          <span class="prize-amount" *ngIf="selectedPrize?.prize_amount">
+            {{ selectedPrizeCurrencySymbol?.symbol }} {{ selectedPrize?.prize_amount }}
+          </span>
+        </div>
+        <button (click)="ref.close()" ghost nbButton shape="round" size="small">
+          <nb-icon icon="close"></nb-icon>
+        </button>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="search-container">
+        <form [formGroup]="searchForm">
+          <div class="search-input-wrapper">
+            <fa-icon [icon]="icons.faSearch" class="search-icon"></fa-icon>
+            <input
+              formControlName="search"
+              nbInput
+              type="text"
+              fullWidth
+              placeholder="Search by team name, member name or email"
+              class="search-input"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="table-container">
+        <app-loading-spinner *ngIf="isWinnerLoading"></app-loading-spinner>
+        <table *ngIf="!isWinnerLoading" class="teams-table">
+          <thead>
+            <tr>
+              <th>Team Name</th>
+              <th>Round</th>
+              <th>Project</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let userResponse of hackathonUserResponses; let i = index"
+              [class.winner-row]="userResponse.team.hackathon_winners.length > 0"
+            >
+              <td class="team-name-cell">
+                <div class="team-info">
+                  <span class="team-name">{{ userResponse.team.name }}</span>
+                  <span *ngFor="let hw of userResponse.team.hackathon_winners" class="trophy">🏆</span>
+                </div>
+              </td>
+              <td>
+                <span *ngIf="userResponse.team.round" class="round-badge">{{ userResponse.team.round.name }}</span>
+                <span *ngIf="!userResponse.team.round" class="no-data">—</span>
+              </td>
+              <td class="project-cell">
+                <span *ngIf="userResponse.team.community_build" class="project-name">
+                  {{ userResponse.team.community_build.name }}
+                </span>
+                <span *ngIf="!userResponse.team.community_build" class="no-data">—</span>
+              </td>
+              <td class="action-cell">
+                <button
+                  *ngIf="!userResponse.team.prize_selected"
+                  nbButton
+                  status="primary"
+                  size="small"
+                  (click)="openAddWinnerConfirmation(addWinnerDialogBox, userResponse.team, i)"
+                >
+                  Select Winner
+                </button>
+                <div *ngFor="let hw of userResponse.team.hackathon_winners; let wi = index" class="prize-tag">
+                  <span class="prize-name">{{ hw.hackathon_prize.name }}</span>
+                  <button
+                    nbButton
+                    shape="round"
+                    status="danger"
+                    size="tiny"
+                    ghost
+                    (click)="openRemoveWinnerConfirmation(removeWinnerDialogBox, hw.id, i, wi)"
+                  >
+                    <fa-icon [icon]="icons.faXmark"></fa-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <app-pagination
+        *ngIf="winnerTotal > 0"
+        [count]="winnerCount"
+        [current]="winnerPage"
+        [total]="winnerTotal"
+        (goTo)="onWinnerPageChange($event)"
+        (next)="onWinnerPageChange($event)"
+        (previous)="onWinnerPageChange($event)"
+      ></app-pagination>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<!-- Add Winner Confirmation -->
+<ng-template #addWinnerDialogBox let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header>
+      <span>Are you sure</span>
+      <button ghost nbButton size="small" (click)="ref.close()" shape="round">
+        <nb-icon icon="close"></nb-icon>
+      </button>
+    </nb-card-header>
+    <nb-card-body>
+      Select <strong>{{ data.team.name }}</strong> as winner?
+    </nb-card-body>
+    <nb-card-footer>
+      <button (click)="addWinner(data.team, data.index); ref.close()" nbButton status="primary">Yes</button>
+      <button (click)="ref.close()" nbButton ghost>Cancel</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<!-- Remove Winner Confirmation -->
+<ng-template #removeWinnerDialogBox let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header>
+      <span>Are you sure?</span>
+      <button ghost nbButton size="small" (click)="ref.close()" shape="round">
+        <nb-icon icon="close"></nb-icon>
+      </button>
+    </nb-card-header>
+    <nb-card-body>You want to remove winner?</nb-card-body>
+    <nb-card-footer>
+      <button
+        (click)="removeWinner(data.winnerId, data.userResponseIndex, data.winnerIndex); ref.close()"
+        nbButton
+        status="primary"
+      >
+        Yes
+      </button>
+      <button (click)="ref.close()" nbButton ghost>Cancel</button>
     </nb-card-footer>
   </nb-card>
 </ng-template>
