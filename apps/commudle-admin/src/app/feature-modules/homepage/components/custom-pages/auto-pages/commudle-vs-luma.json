@@ -73,6 +73,16 @@
       }
     },
     {
+        "type": "commudle-section-hero-8",
+        "config": {
+        "badge": "🚀 Create Your Vibeathon Challenge",
+        "headingLine1": "Launch your challenge.",
+        "headingLine2": "Inspire <span>builders.</span>",
+        "subtext": "Create a Vibeathon Challenge on Commudle and invite your community to build, share and compete.",
+        "primaryCta": { "label": "Get Started", "routerLink": "/builds/create" }
+        }
+    },
+    {
       "type": "commudle-section-feature-grid-1",
       "config": {
         "heading": "Why Commudle wins",

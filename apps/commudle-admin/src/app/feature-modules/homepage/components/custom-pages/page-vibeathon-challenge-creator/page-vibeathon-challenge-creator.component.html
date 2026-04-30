@@ -1,0 +1,202 @@
+<!-- ── Hero ─────────────────────────────────────────────────────────────────── -->
+<commudle-section-hero-8 [config]="heroConfig"></commudle-section-hero-8>
+
+<!-- ── Page body ─────────────────────────────────────────────────────────────── -->
+<div class="page-body">
+  <div class="page-inner">
+    <!-- ── Steps timeline — connects all step badge circles with a vertical line ── -->
+    <div class="steps-timeline">
+      <!-- Step 1 — Name Your Challenge -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-badge" aria-hidden="true">1</div>
+          <div>
+            <h2 class="step-title">Name Your Challenge</h2>
+            <p class="step-desc">Choose a unique and memorable name for your challenge.</p>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="challengeNameInput" class="field-label">
+            Challenge Name <span class="field-required" aria-label="required">*</span>
+          </label>
+
+          <div class="input-wrapper">
+            <input
+              nbInput
+              id="challengeNameInput"
+              fullWidth
+              type="text"
+              [(ngModel)]="challengeName"
+              (ngModelChange)="onNameChange()"
+              [status]="isNameValid ? 'success' : 'basic'"
+              placeholder="e.g. VibeCheck 2026"
+              maxlength="60"
+              autocomplete="off"
+              aria-describedby="challengeNameHint"
+            />
+            <fa-icon *ngIf="isNameValid" [icon]="icons.faCheck" class="input-valid-icon" aria-hidden="true"></fa-icon>
+          </div>
+
+          <p id="challengeNameHint" class="field-hint">This name will be visible to all participants.</p>
+        </div>
+      </div>
+
+      <!-- Steps 2 & 3 — appear once name is valid; slide up on entry -->
+      <ng-container *ngIf="isNameValid">
+        <!-- Step 2: Share submission link -->
+        <div class="step-card step-card--reveal">
+          <div class="step-header">
+            <div class="step-badge" aria-hidden="true">2</div>
+            <div>
+              <h2 class="step-title">Share Your Challenge</h2>
+              <p class="step-desc">
+                Share the submission link and QR code with your community to start receiving builds.
+              </p>
+            </div>
+          </div>
+
+          <div class="link-cards">
+            <div class="link-row link-row--submit">
+              <div class="link-row__content">
+                <div class="link-card__header">
+                  <div class="link-icon link-icon--submit" aria-hidden="true">
+                    <fa-icon [icon]="icons.faCloudArrowUp"></fa-icon>
+                  </div>
+                  <div>
+                    <h3 class="link-title">Submit Your Project</h3>
+                    <p class="link-desc">Users can submit their projects here.</p>
+                  </div>
+                </div>
+
+                <div class="url-row">
+                  <fa-icon [icon]="icons.faLink" class="url-row__icon" aria-hidden="true"></fa-icon>
+                  <span class="url-row__text">{{ submitDisplayUrl }}</span>
+                  <button
+                    nbButton
+                    ghost
+                    size="small"
+                    type="button"
+                    class="copy-btn"
+                    title="Copy link"
+                    (click)="copySubmitUrl()"
+                    [attr.aria-label]="copiedSubmit ? 'Link copied' : 'Copy link'"
+                  >
+                    <fa-icon [icon]="copiedSubmit ? icons.faCheck : icons.faCopy"></fa-icon>
+                  </button>
+                </div>
+
+                <a class="open-link-anchor" [href]="submitUrl" target="_blank" rel="noopener noreferrer">
+                  <button nbButton status="success" size="medium" shape="semi-round" fullWidth>
+                    Open Link &nbsp;<fa-icon [icon]="icons.faArrowUpRightFromSquare"></fa-icon>
+                  </button>
+                </a>
+              </div>
+
+              <div class="link-row__qr" aria-label="QR code for the submit project URL">
+                <canvas id="vibeathon-qr-submit"></canvas>
+                <button
+                  nbButton
+                  status="basic"
+                  outline
+                  size="small"
+                  shape="semi-round"
+                  type="button"
+                  (click)="downloadQR('submit')"
+                >
+                  <fa-icon [icon]="icons.faDownload"></fa-icon>&nbsp;Download
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: View all projects + voting -->
+        <div class="step-card step-card--reveal step-card--reveal-delayed">
+          <div class="step-header">
+            <div class="step-badge" aria-hidden="true">3</div>
+            <div>
+              <h2 class="step-title">View all projects and start voting for the best ones!</h2>
+              <p class="step-desc">
+                Share this link so your community can explore all submissions and vote for their favourites.
+              </p>
+            </div>
+          </div>
+
+          <div class="link-cards">
+            <div class="link-row">
+              <div class="link-row__content">
+                <div class="link-card__header">
+                  <div class="link-icon link-icon--view" aria-hidden="true">
+                    <fa-icon [icon]="icons.faGlobe"></fa-icon>
+                  </div>
+                  <div>
+                    <h3 class="link-title">View All Projects</h3>
+                    <p class="link-desc">Users can view and vote for all submitted projects.</p>
+                  </div>
+                </div>
+
+                <div class="url-row">
+                  <fa-icon [icon]="icons.faLink" class="url-row__icon" aria-hidden="true"></fa-icon>
+                  <span class="url-row__text">{{ viewAllDisplayUrl }}</span>
+                  <button
+                    nbButton
+                    ghost
+                    size="small"
+                    type="button"
+                    class="copy-btn"
+                    title="Copy link"
+                    (click)="copyViewAllUrl()"
+                    [attr.aria-label]="copiedViewAll ? 'Link copied' : 'Copy link'"
+                  >
+                    <fa-icon [icon]="copiedViewAll ? icons.faCheck : icons.faCopy"></fa-icon>
+                  </button>
+                </div>
+
+                <a class="open-link-anchor" [href]="viewAllUrl" target="_blank" rel="noopener noreferrer">
+                  <button nbButton status="basic" outline size="medium" shape="semi-round" fullWidth>
+                    Open Link &nbsp;<fa-icon [icon]="icons.faArrowUpRightFromSquare"></fa-icon>
+                  </button>
+                </a>
+              </div>
+
+              <div class="link-row__qr" aria-label="QR code for the view-all projects URL">
+                <canvas id="vibeathon-qr-view"></canvas>
+                <button
+                  nbButton
+                  status="basic"
+                  outline
+                  size="small"
+                  shape="semi-round"
+                  type="button"
+                  (click)="downloadQR('view')"
+                >
+                  <fa-icon [icon]="icons.faDownload"></fa-icon>&nbsp;Download
+                </button>
+              </div>
+            </div>
+          </div>
+        </div> </ng-container
+      ><!-- /isNameValid inside timeline -->
+    </div>
+    <!-- /steps-timeline -->
+
+    <!-- Tip & success — outside timeline, still conditional on a valid name -->
+    <ng-container *ngIf="isNameValid">
+      <commudle-alert
+        [info]="true"
+        [border]="true"
+        message="Tip: Share both links with your community. One to view projects, another to submit their builds."
+      ></commudle-alert>
+
+      <div class="success-section">
+        <p class="success-section__message">🎉 You're all set! Start sharing and get ready to see amazing builds.</p>
+        <a [href]="viewAllUrl" target="_blank" rel="noopener noreferrer">
+          <button nbButton status="primary" size="large" shape="semi-round">Go to Challenge Page</button>
+        </a>
+      </div> </ng-container
+    ><!-- /isNameValid -->
+  </div>
+  <!-- /page-inner -->
+</div>
+<!-- /page-body -->

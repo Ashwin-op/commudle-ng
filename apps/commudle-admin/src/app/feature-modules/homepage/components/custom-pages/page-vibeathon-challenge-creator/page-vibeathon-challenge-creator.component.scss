@@ -1,0 +1,308 @@
+:host {
+  @apply com-block;
+}
+
+// ── Page body ─────────────────────────────────────────────────────────────────
+
+.page-body {
+  @apply com-bg-Ghost-White com-overflow-x-hidden;
+  min-height: 40vh;
+}
+
+// Wider container (max-w-4xl = 56 rem) gives the 280 px QR column room alongside
+// the link content without cramping either side.
+.page-inner {
+  @apply com-max-w-4xl com-mx-auto com-px-4 md:com-px-6 com-py-12;
+  @apply com-flex com-flex-col com-gap-6;
+}
+
+// ── Steps timeline (wrapper around all step-cards) ────────────────────────────
+//
+// The ::before pseudo-element draws a 2 px vertical line aligned with step badge
+// centres. Step cards have a white background, so the line is only visible in the
+// 24 px gaps between cards, creating a subtle workflow connector.
+//
+// Badge centre X from timeline left edge:
+//   step-card padding-left (p-6 = 24 px) + half badge width (40 px / 2 = 20 px) = 44 px
+
+.steps-timeline {
+  @apply com-flex com-flex-col com-gap-6;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 43px; // badge centre X (44) − half line width (1)
+    top: 44px; // start at centre of first badge
+    bottom: 44px; // end at centre of last badge
+    width: 2px;
+    @apply com-bg-primary-200;
+    border-radius: 2px;
+    z-index: 0;
+  }
+}
+
+// ── Step cards ────────────────────────────────────────────────────────────────
+
+.step-card {
+  @apply com-bg-white com-rounded-10 com-p-6;
+  @apply com-flex com-flex-col com-gap-6;
+  border: 1px solid;
+  @apply com-border-Bright-Gray;
+  // Ensure card background covers the timeline line within each card
+  position: relative;
+  z-index: 1;
+}
+
+// Slide-up entrance — plays automatically when the element is inserted into the
+// DOM (via *ngIf). Uses opacity + translateY only (performance-safe).
+@keyframes slide-up-fade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.step-card--reveal {
+  animation: slide-up-fade 0.4s ease-out both;
+
+  &.step-card--reveal-delayed {
+    animation-delay: 0.1s;
+  }
+}
+
+// ── Step header (number badge + title + description) ──────────────────────────
+
+.step-header {
+  @apply com-flex com-items-start com-gap-4;
+}
+
+// Purple circle with pinned-white number — tWhite is always #ffffff, safe on primary-600.
+.step-badge {
+  @apply com-w-10 com-h-10 com-rounded-full com-flex-shrink-0;
+  @apply com-bg-primary-600 com-text-tWhite;
+  @apply com-flex com-items-center com-justify-center;
+  @apply com-text-Paragraph-1 com-font-bold;
+}
+
+.step-title {
+  @apply com-text-Card-Subheading com-font-bold com-text-Yankees-Blue com-m-0;
+}
+
+.step-desc {
+  @apply com-text-Paragraph-2 com-text-Auro-Metal-Saurus com-m-0;
+}
+
+// ── Form field ────────────────────────────────────────────────────────────────
+
+.form-field {
+  @apply com-flex com-flex-col com-gap-2;
+}
+
+.field-label {
+  @apply com-text-Paragraph-2 com-font-semibold com-text-Yankees-Blue;
+}
+
+.field-required {
+  @apply com-text-Infra-Red;
+}
+
+// Pulsing glow draws attention to the input before the user starts typing.
+// Uses opacity + transform only — performance-safe per styling guidelines.
+@keyframes input-glow-pulse {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.01);
+  }
+}
+
+// Wrapper positions the green checkmark and the attention glow.
+.input-wrapper {
+  position: relative;
+
+  // Glow ring rendered as a ::before pseudo-element — stops on focus.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 8px;
+    background: rgba(51, 102, 255, 0.14); // primary-500 at low opacity
+    pointer-events: none;
+    z-index: 0;
+    animation: input-glow-pulse 2s ease-in-out infinite;
+  }
+
+  &:focus-within::before {
+    animation: none;
+    opacity: 0;
+  }
+
+  input {
+    padding-right: 40px;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.input-valid-icon {
+  @apply com-text-Caribbean-Green;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.field-hint {
+  @apply com-m-0 com-text-Caption com-text-Auro-Metal-Saurus;
+}
+
+// ── Full-row link cards ───────────────────────────────────────────────────────
+//
+// Each row is a horizontal strip: content (flex-1) on the left,
+// a 280 px QR column on the right.
+// On mobile (<md) the QR drops below the content.
+
+.link-cards {
+  @apply com-flex com-flex-col com-gap-4;
+}
+
+.link-row {
+  @apply com-bg-Ghost-White com-rounded-10 com-border com-border-Bright-Gray;
+  @apply com-p-4 com-flex com-flex-col com-gap-4;
+
+  @screen md {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  &--submit {
+    @apply com-border-Caribbean-Green;
+  }
+}
+
+.link-row__content {
+  @apply com-flex com-flex-col com-gap-4 com-flex-1;
+  min-width: 0; // prevent flex blowout on long URLs
+}
+
+// 280 px QR column — fixed width locks the column so it doesn't shrink.
+// On mobile it centres and fills available width up to 280 px.
+.link-row__qr {
+  @apply com-flex com-flex-col com-items-center com-gap-4 com-flex-shrink-0;
+
+  canvas {
+    // Force a crisp 280×280 display via CSS scaling of the lean-qr buffer.
+    // image-rendering: pixelated keeps QR modules sharp instead of blurry.
+    // background: #ffffff ensures the canvas is never transparent in dark mode
+    // (lean-qr also receives off: '#ffffff' in renderQR for belt-and-braces).
+    width: 280px;
+    height: 280px;
+    display: block;
+    image-rendering: pixelated;
+    background: #ffffff;
+    border-radius: 8px;
+  }
+
+  @screen md {
+    width: 280px;
+  }
+}
+
+// ── Link card inner elements ──────────────────────────────────────────────────
+
+.link-card__header {
+  @apply com-flex com-items-start com-gap-4;
+}
+
+.link-title {
+  @apply com-text-Paragraph-1 com-font-semibold com-text-Yankees-Blue com-m-0;
+}
+
+.link-desc {
+  @apply com-text-Caption com-text-Auro-Metal-Saurus com-m-0;
+}
+
+// Circular icon badge — 40×40, centred icon.
+.link-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+
+  &--view {
+    @apply com-bg-primary-100 com-text-primary-600;
+  }
+
+  &--submit {
+    @apply com-bg-Caribbean-Green com-text-tWhite;
+  }
+}
+
+// ── URL row (chain icon + truncated URL text + copy button) ───────────────────
+
+.url-row {
+  @apply com-flex com-items-center com-gap-2 com-rounded-10 com-p-2;
+  @apply com-bg-white com-border com-border-Bright-Gray;
+  min-width: 0;
+}
+
+.url-row__icon {
+  @apply com-text-Cadet-Grey;
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+.url-row__text {
+  @apply com-flex-1 com-truncate com-text-Caption com-text-Auro-Metal-Saurus;
+  min-width: 0;
+}
+
+.copy-btn {
+  flex-shrink: 0;
+}
+
+// Anchor wrapper for the Open Link button — must be block so fullWidth on the
+// button inside stretches the full row.
+.open-link-anchor {
+  display: block;
+}
+
+// ── Success section ───────────────────────────────────────────────────────────
+
+.success-section {
+  @apply com-py-4 com-text-center;
+  @apply com-flex com-flex-col com-items-center com-gap-4;
+
+  &__message {
+    @apply com-text-Paragraph-1 com-font-semibold com-text-Yankees-Blue com-m-0;
+  }
+}
+
+// ── Reduced motion ────────────────────────────────────────────────────────────
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+  .input-wrapper::before {
+    animation: none !important;
+  }
+  .step-card--reveal {
+    animation: none !important;
+  }
+}

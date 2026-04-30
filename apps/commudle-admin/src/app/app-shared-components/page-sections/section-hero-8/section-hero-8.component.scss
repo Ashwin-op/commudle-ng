@@ -1,0 +1,272 @@
+:host {
+  display: block;
+}
+
+// Prevents base-layout from inflating the section to full viewport height.
+// Angular's emulated encapsulation scopes this to this component only.
+.base-layout {
+  min-height: 0;
+}
+
+// ── Keyframes ────────────────────────────────────────────────────────────────
+
+// Diamond shapes: translateY listed before rotate so translation happens in the
+// parent coordinate system (straight up/down), while the 45 ° rotation stays fixed.
+@keyframes diamond-float-up {
+  0%,
+  100% {
+    transform: translateY(0) rotate(45deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(45deg);
+  }
+}
+
+@keyframes diamond-float-down {
+  0%,
+  100% {
+    transform: translateY(0) rotate(45deg);
+  }
+  50% {
+    transform: translateY(14px) rotate(45deg);
+  }
+}
+
+// Dot shapes: pure vertical float, no rotation needed.
+@keyframes dot-float-up {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes dot-float-down {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+// Dashed orbit ring slowly rotates around the trophy.
+@keyframes orbit-spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+// ── Section shell ─────────────────────────────────────────────────────────────
+
+.hero-section {
+  position: relative;
+}
+
+// ── Two-column layout ─────────────────────────────────────────────────────────
+
+.hero-layout {
+  position: relative;
+
+  @screen md {
+    min-height: 520px;
+  }
+}
+
+// ── Left text column ──────────────────────────────────────────────────────────
+
+.hero-text {
+  @apply com-py-16 md:com-py-20 lg:com-py-24;
+}
+
+// ── Badge ─────────────────────────────────────────────────────────────────────
+
+// primary-100 (#d6e0ff) bg / primary-200 (#adc2ff) border / primary-700 (#1f3d99) text.
+.hero-badge {
+  @apply com-inline-flex com-items-center com-gap-2 com-rounded-full;
+  @apply com-bg-primary-100 com-text-primary-700;
+  border: 1px solid;
+  @apply com-border-primary-200;
+  padding: 6px 16px;
+}
+
+// ── Heading ───────────────────────────────────────────────────────────────────
+
+.hero-heading {
+  @apply com-m-0 com-font-extrabold com-leading-tight;
+  @apply com-text-4xl md:com-text-5xl lg:com-text-Public-Page-CTA-Heading;
+
+  // Line 1: dark primary text — Yankees-Blue adapts white in dark mode.
+  &__line1 {
+    @apply com-text-Yankees-Blue;
+  }
+
+  // Line 2: default to dark; inner <span> carries the primary-600 accent.
+  // This allows "Inspire <span>builders.</span>" to produce a mixed-colour line.
+  &__line2 {
+    @apply com-text-Yankees-Blue;
+
+    span {
+      @apply com-text-primary-600;
+    }
+  }
+}
+
+// ── CTA buttons ───────────────────────────────────────────────────────────────
+
+.cta-buttons {
+  @apply com-flex com-gap-4 com-flex-wrap;
+
+  button {
+    @apply sm:com-w-auto com-w-full;
+  }
+}
+
+// ── Right visual column ───────────────────────────────────────────────────────
+
+.hero-visual {
+  height: 360px;
+
+  @screen md {
+    height: 480px;
+  }
+}
+
+// Wrapper provides the positioning context for all visual layers.
+.trophy-wrapper {
+  position: relative;
+  width: 300px;
+  height: 300px;
+
+  @screen md {
+    width: 380px;
+    height: 380px;
+  }
+}
+
+// ── Trophy layers ─────────────────────────────────────────────────────────────
+
+// Soft background glow — primary-500 (#3366ff) at very low opacity.
+.trophy-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(51, 102, 255, 0.14) 0%, rgba(51, 102, 255, 0.04) 55%, transparent 76%);
+  pointer-events: none;
+}
+
+// Slowly spinning dashed ring that orbits the trophy.
+// border colour = primary-200 (#adc2ff) via @apply.
+.trophy-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  border: 1px dashed;
+  @apply com-border-primary-200;
+  transform: translate(-50%, -50%);
+  animation: orbit-spin 22s linear infinite;
+  pointer-events: none;
+
+  @screen md {
+    width: 330px;
+    height: 330px;
+  }
+}
+
+// Trophy icon wrapper — font-size drives the FA SVG scale.
+.trophy-icon {
+  font-size: 120px;
+
+  @screen md {
+    font-size: 160px;
+  }
+}
+
+// ── Floating shapes ───────────────────────────────────────────────────────────
+
+// All shapes are absolutely positioned inside .trophy-wrapper.
+.shape {
+  position: absolute;
+  pointer-events: none;
+}
+
+// Diamond 1 — top-left, primary-400 (#5c85ff)
+.shape--d1 {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  @apply com-bg-primary-400;
+  top: 8%;
+  left: 8%;
+  animation: diamond-float-up 3.6s ease-in-out infinite;
+}
+
+// Diamond 2 — top-right, primary-300 (#85a3ff)
+.shape--d2 {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  @apply com-bg-primary-300;
+  top: 16%;
+  right: 6%;
+  animation: diamond-float-down 4.2s ease-in-out 0.6s infinite;
+}
+
+// Diamond 3 — bottom-right, primary-500 (#3366ff)
+.shape--d3 {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  @apply com-bg-primary-500;
+  bottom: 16%;
+  right: 10%;
+  animation: diamond-float-up 5s ease-in-out 1.2s infinite;
+}
+
+// Diamond 4 — bottom-left, primary-200 (#adc2ff)
+.shape--d4 {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  @apply com-bg-primary-200;
+  bottom: 10%;
+  left: 6%;
+  animation: diamond-float-down 4.8s ease-in-out 0.4s infinite;
+}
+
+// Dot 1 — mid-right, primary-300 (#85a3ff)
+.shape--dot1 {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  @apply com-bg-primary-300;
+  top: 54%;
+  right: 4%;
+  animation: dot-float-up 3.2s ease-in-out 1s infinite;
+}
+
+// Dot 2 — mid-left, primary-600 (#2952cc)
+.shape--dot2 {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  @apply com-bg-primary-600;
+  top: 68%;
+  left: 4%;
+  animation: dot-float-down 4s ease-in-out 1.8s infinite;
+}
+
+// ── Reduced motion ─────────────────────────────────────────────────────────────
+
+@media (prefers-reduced-motion: reduce) {
+  .trophy-orbit,
+  .shape {
+    animation: none !important;
+  }
+}

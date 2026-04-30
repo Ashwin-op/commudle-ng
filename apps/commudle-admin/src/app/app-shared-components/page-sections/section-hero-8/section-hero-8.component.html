@@ -1,0 +1,69 @@
+<section class="hero-section com-bg-white com-overflow-x-hidden">
+  <div class="base-layout container com-px-4 md:com-px-6">
+    <div class="hero-layout com-grid com-grid-cols-1 md:com-grid-cols-2 com-items-center com-gap-8">
+      <!-- ── Left: Text content ─────────────────────────────────────── -->
+      <div class="hero-text com-flex com-flex-col com-gap-6">
+        <!-- Badge -->
+        <div *ngIf="config.badge" class="hero-badge com-self-start">
+          <span class="com-text-Caption com-font-semibold">{{ config.badge }}</span>
+        </div>
+
+        <!-- Two-line heading -->
+        <h1 class="hero-heading">
+          <span class="hero-heading__line1 com-block" [innerHTML]="safeLine1"></span>
+          <span class="hero-heading__line2 com-block" [innerHTML]="safeLine2"></span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="com-text-Paragraph-1 com-text-Auro-Metal-Saurus com-max-w-lg">
+          {{ config.subtext }}
+        </p>
+
+        <!-- CTA Buttons -->
+        <div *ngIf="config.primaryCta" class="cta-buttons">
+          <button nbButton status="primary" size="large" shape="semi-round" [routerLink]="config.primaryCta.routerLink">
+            {{ config.primaryCta.label }}
+          </button>
+
+          <button
+            *ngIf="config.secondaryCta"
+            nbButton
+            status="basic"
+            outline
+            size="large"
+            shape="semi-round"
+            [routerLink]="config.secondaryCta!.routerLink"
+          >
+            {{ config.secondaryCta!.label }}
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Right: Trophy visual (desktop only) ────────────────────── -->
+      <div class="hero-visual com-hidden md:com-flex com-justify-center com-items-center" aria-hidden="true">
+        <div class="trophy-wrapper">
+          <!-- Soft radial glow behind the trophy -->
+          <div class="trophy-glow"></div>
+
+          <!-- Dashed orbit ring -->
+          <div class="trophy-orbit"></div>
+
+          <!-- Trophy icon (FontAwesome) -->
+          <div class="trophy-icon com-absolute com-inset-0 com-flex com-items-center com-justify-center">
+            <fa-icon [icon]="icons.faTrophy" class="com-text-primary-500"></fa-icon>
+          </div>
+
+          <!-- Floating decorative diamond shapes -->
+          <div class="shape shape--d1"></div>
+          <div class="shape shape--d2"></div>
+          <div class="shape shape--d3"></div>
+          <div class="shape shape--d4"></div>
+
+          <!-- Floating decorative dots -->
+          <div class="shape shape--dot1"></div>
+          <div class="shape shape--dot2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
