@@ -1,9 +1,12 @@
+/* eslint-disable @nx/enforce-module-boundaries */
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { IHackathonTrack, IHackathonProblemStatement, IHackathon } from '@commudle/shared-models';
+
 import { NbDialogService } from '@commudle/theme';
-import { faFileImage, faPlus, faXmark, faMinus, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
+import { IHackathon, IHackathonProblemStatement, IHackathonTrack } from '@commudle/shared-models';
 import { HackathonPrizeFormComponent } from 'apps/commudle-admin/src/app/feature-modules/hackathon-control-panel/components/hackathon-control-panel-tracks-prizes/hackathon-prize-form/hackathon-prize-form.component';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 
@@ -17,17 +20,11 @@ export class HackathonControlPanelTrackComponent implements OnInit {
   trackForm: FormGroup;
   hackathon: IHackathon;
   hackathonTracks: IHackathonTrack[];
-
-  readonly icons = {
-    faPlus,
-    faFileImage,
-    faXmark,
-    faMinus,
-    faEdit,
-  };
   hackathonSlug = '';
   isLoading = true;
   currentTrackIndex: number;
+  icons = { faPlus };
+
   tinyMCE = {
     min_height: 200,
     menubar: false,
@@ -69,22 +66,21 @@ export class HackathonControlPanelTrackComponent implements OnInit {
     return this.trackForm.get('problem_statements') as FormArray;
   }
 
-  createProblemStatementGroup(problemStatement?: IHackathonProblemStatement, trackIndex?: number): FormGroup {
+  createProblemStatementGroup(ps?: IHackathonProblemStatement, trackIndex?: number): FormGroup {
     const psIndex = this.problemStatements.length + 1;
-    const displayId = problemStatement?.display_id || this.generateDisplayId(trackIndex, psIndex);
+    const displayId = ps?.display_id || this.generateDisplayId(trackIndex, psIndex);
 
     return this.fb.group({
-      id: [problemStatement?.id || null],
-      title: [problemStatement?.title || '', [Validators.minLength(60)]],
-      max_teams_limit: [problemStatement?.max_teams_limit || null, [Validators.min(1)]],
+      id: [ps?.id || null],
+      title: [ps?.title || '', [Validators.minLength(60)]],
+      max_teams_limit: [ps?.max_teams_limit || null, [Validators.min(1)]],
       display_id: [{ value: displayId, disabled: true }],
     });
   }
 
   generateDisplayId(trackIndex?: number, psIndex?: number): string {
     const tIndex = trackIndex !== undefined ? trackIndex + 1 : this.hackathonTracks?.length + 1 || 1;
-    const pIndex = psIndex || 1;
-    return `ps${tIndex}${pIndex}`;
+    return `ps${tIndex}${psIndex || 1}`;
   }
 
   addProblemStatement(): void {
@@ -96,7 +92,7 @@ export class HackathonControlPanelTrackComponent implements OnInit {
     this.trackForm.markAsDirty();
   }
 
-  openSponsorDialogBox(dialog, track?: IHackathonTrack, index?) {
+  openTrackDialogBox(dialog, track?: IHackathonTrack, index?) {
     this.trackForm.reset();
     this.problemStatements.clear();
     this.currentTrackIndex = index;
@@ -115,20 +111,13 @@ export class HackathonControlPanelTrackComponent implements OnInit {
     }
 
     this.nbDialogService.open(dialog, {
-      context: { index: index, track: track },
+      context: { index, track },
     });
-
-    setTimeout(() => {
-      const nameInput = document.querySelector('#name') as HTMLInputElement;
-      if (nameInput) {
-        nameInput.focus();
-      }
-    }, 0);
   }
 
   confirmDeleteDialogBox(dialog, trackId, index) {
     this.nbDialogService.open(dialog, {
-      context: { index: index, trackId: trackId },
+      context: { index, trackId },
     });
   }
 
@@ -141,21 +130,7 @@ export class HackathonControlPanelTrackComponent implements OnInit {
 
   createTrack() {
     const formValue = this.trackForm.getRawValue();
-    const filteredProblemStatements = formValue.problem_statements
-      .filter((ps) => ps.title?.trim())
-      .map((ps) => ({
-        ...(ps.id && { id: ps.id }),
-        title: ps.title,
-        ...(ps.max_teams_limit && { max_teams_limit: ps.max_teams_limit }),
-        ...(ps.display_id && { display_id: ps.display_id }),
-      }));
-
-    const payload = {
-      name: formValue.name,
-      description: formValue.description,
-      ...(filteredProblemStatements.length && { problem_statements: filteredProblemStatements }),
-    };
-
+    const payload = this.buildTrackPayload(formValue);
     this.hackathonService.createTrack(payload, this.hackathonSlug).subscribe((data) => {
       if (data) this.hackathonTracks.unshift(data);
       this.trackForm.reset();
@@ -164,21 +139,7 @@ export class HackathonControlPanelTrackComponent implements OnInit {
 
   updateTrack(trackId, index) {
     const formValue = this.trackForm.getRawValue();
-    const filteredProblemStatements = formValue.problem_statements
-      .filter((ps) => ps.title?.trim())
-      .map((ps) => ({
-        ...(ps.id && { id: ps.id }),
-        title: ps.title,
-        ...(ps.max_teams_limit && { max_teams_limit: ps.max_teams_limit }),
-        ...(ps.display_id && { display_id: ps.display_id }),
-      }));
-
-    const payload = {
-      name: formValue.name,
-      description: formValue.description,
-      ...(filteredProblemStatements.length && { problem_statements: filteredProblemStatements }),
-    };
-
+    const payload = this.buildTrackPayload(formValue);
     this.hackathonService.updateTrack(payload, trackId).subscribe((data) => {
       this.hackathonTracks[index] = data;
     });
@@ -194,17 +155,34 @@ export class HackathonControlPanelTrackComponent implements OnInit {
     const dialogRef = this.nbDialogService.open(HackathonPrizeFormComponent, {
       context: {
         hackathonId: this.hackathon.id,
-        selectedTrackId: selectedTrackId,
+        selectedTrackId,
       },
     });
 
     dialogRef.onClose.subscribe((result) => {
       if (result) {
-        const hackathonTrackIndex = this.hackathonTracks.findIndex((track) => track.id === selectedTrackId);
-        if (hackathonTrackIndex > -1 && this.hackathonTracks[hackathonTrackIndex]) {
-          this.hackathonTracks[hackathonTrackIndex].hackathon_prizes.push(result);
+        const trackIndex = this.hackathonTracks.findIndex((t) => t.id === selectedTrackId);
+        if (trackIndex > -1) {
+          this.hackathonTracks[trackIndex].hackathon_prizes.push(result);
         }
       }
     });
+  }
+
+  private buildTrackPayload(formValue) {
+    const filteredPS = formValue.problem_statements
+      .filter((ps) => ps.title?.trim())
+      .map((ps) => ({
+        ...(ps.id && { id: ps.id }),
+        title: ps.title,
+        ...(ps.max_teams_limit && { max_teams_limit: ps.max_teams_limit }),
+        ...(ps.display_id && { display_id: ps.display_id }),
+      }));
+
+    return {
+      name: formValue.name,
+      description: formValue.description,
+      ...(filteredPS.length && { problem_statements: filteredPS }),
+    };
   }
 }

@@ -1,14 +1,15 @@
-<br />
-<button (click)="openSponsorDialogBox(addTracksDialogBox)" nbButton status="primary">
-  <fa-icon [icon]="icons.faPlus"></fa-icon> &nbsp; Add Track
-</button>
-<br />
-<br />
-<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+<div class="track-container">
+  <div class="track-header">
+    <h3>Tracks</h3>
+    <button (click)="openTrackDialogBox(addTracksDialogBox)" nbButton status="primary" size="small">
+      <fa-icon [icon]="icons.faPlus"></fa-icon> &nbsp; Add Track
+    </button>
+  </div>
 
-<nb-card *ngIf="hackathonTracks && hackathonTracks.length > 0; else noTracks">
-  <nb-card-body>
-    <table class="hackathon-tracks-table">
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+  <div *ngIf="!isLoading && hackathonTracks?.length > 0" class="track-table-wrapper">
+    <table class="track-table">
       <thead>
         <tr>
           <th>Track Name</th>
@@ -19,234 +20,197 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let hackathonTrack of hackathonTracks; let i = index">
-          <td>{{ hackathonTrack.name }}</td>
-          <td>
-            <div class="description-scroll custom-scrollbar" [innerHTML]="hackathonTrack.description"></div>
+        <tr *ngFor="let track of hackathonTracks; let i = index">
+          <td [attr.data-label]="'Track Name'">
+            <span class="track-name">{{ track.name }}</span>
           </td>
-          <td>
-            <div *ngIf="hackathonTrack.hackathon_problem_statements?.length; else addProblemStatements">
-              <button (click)="openSponsorDialogBox(addTracksDialogBox, hackathonTrack, i)" class="problem-count-btn">
-                {{ hackathonTrack.hackathon_problem_statements.length }}
-              </button>
-            </div>
-            <ng-template #addProblemStatements>
+          <td [attr.data-label]="'Description'">
+            <div class="description-cell" [innerHTML]="track.description"></div>
+          </td>
+          <td [attr.data-label]="'Problem Statements'">
+            <span
+              *ngIf="track.hackathon_problem_statements?.length"
+              class="count-badge"
+              (click)="openTrackDialogBox(addTracksDialogBox, track, i)"
+            >
+              {{ track.hackathon_problem_statements.length }}
+            </span>
+            <span *ngIf="!track.hackathon_problem_statements?.length" class="no-data">—</span>
+          </td>
+          <td [attr.data-label]="'Prizes'">
+            <span *ngIf="track.hackathon_prizes?.length" class="count-badge prize">
+              {{ track.hackathon_prizes.length }}
+            </span>
+            <span *ngIf="!track.hackathon_prizes?.length" class="no-data">—</span>
+          </td>
+          <td [attr.data-label]="'Actions'">
+            <div class="action-buttons">
               <button
-                (click)="openSponsorDialogBox(addTracksDialogBox, hackathonTrack, i)"
                 nbButton
-                size="tiny"
+                outline
+                size="small"
                 status="primary"
+                (click)="openTrackDialogBox(addTracksDialogBox, track, i)"
               >
-                Add Problem Statements
+                Edit
               </button>
-            </ng-template>
-          </td>
-          <td>
-            <div *ngIf="hackathonTrack.hackathon_prizes?.length; else addPrizes">
-              {{ hackathonTrack.hackathon_prizes.length }} Prize
-            </div>
-            <ng-template #addPrizes>
-              <button (click)="prizeDialogBox(hackathonTrack.id)" nbButton size="tiny" status="primary">
+              <button nbButton outline size="small" status="success" (click)="prizeDialogBox(track.id)">
                 Add Prize
               </button>
-            </ng-template>
-          </td>
-          <td>
-            <button
-              (click)="openSponsorDialogBox(addTracksDialogBox, hackathonTrack, i)"
-              nbButton
-              size="tiny"
-              status="info"
-              class="action-btn"
-              title="Edit Track"
-            >
-              Edit Track
-            </button>
-            <button
-              nbButton
-              size="tiny"
-              status="success"
-              class="action-btn"
-              title="Add Prize"
-              (click)="prizeDialogBox(hackathonTrack.id)"
-            >
-              Add Prize
-            </button>
-            <button
-              (click)="openSponsorDialogBox(addTracksDialogBox, hackathonTrack, i)"
-              nbButton
-              size="tiny"
-              status="warning"
-              class="action-btn"
-              title="Edit Problem Statements"
-            >
-              Edit PS
-            </button>
-            <button
-              (click)="confirmDeleteDialogBox(deleteTrackDilaogBox, hackathonTrack.id, i)"
-              nbButton
-              size="tiny"
-              status="danger"
-              class="action-btn"
-              title="Delete"
-            >
-              Delete
-            </button>
+              <button
+                nbButton
+                outline
+                size="small"
+                status="danger"
+                (click)="confirmDeleteDialogBox(deleteTrackDialogBox, track.id, i)"
+              >
+                Delete
+              </button>
+            </div>
           </td>
         </tr>
       </tbody>
     </table>
-  </nb-card-body>
-</nb-card>
-<ng-template #noTracks>
-  <br />
-  <br />
+  </div>
 
-  <div *ngIf="!isLoading">No Tracks Added</div>
-</ng-template>
+  <div *ngIf="!isLoading && (!hackathonTracks || hackathonTracks.length === 0)" class="no-data-message">
+    <nb-icon icon="layers-outline" class="empty-icon"></nb-icon>
+    <p>No tracks added yet</p>
+    <p class="sub-text">Add tracks to organize your hackathon into categories.</p>
+  </div>
+</div>
 
+<!-- Track Form Dialog -->
 <ng-template #addTracksDialogBox let-data let-ref="dialogRef">
   <nb-card class="track-form">
     <nb-card-header>
-      <span> {{ data.track ? 'Edit Track' : 'New Track' }}</span>
+      <span>{{ data.track ? 'Edit Track' : 'New Track' }}</span>
       <button (click)="ref.close()" ghost nbButton shape="round" size="small">
         <nb-icon icon="close"></nb-icon>
       </button>
     </nb-card-header>
     <nb-card-body>
-      <form [formGroup]="trackForm">
-        <!-- name -->
-        <div>
-          <label for="name">Name *</label>
-          <input formControlName="name" fullWidth id="name" nbInput placeholder="Name" type="text" />
+      <form [formGroup]="trackForm" class="form-fields">
+        <div class="form-group">
+          <label for="name">Name <span class="required">*</span></label>
+          <input formControlName="name" fullWidth id="name" nbInput placeholder="e.g. AI/ML Track" type="text" />
           <commudle-alert
-            *ngIf="
-              trackForm.controls['name'].invalid &&
-              trackForm.controls['name'].touched &&
-              trackForm.controls['name'].hasError('required')
-            "
+            *ngIf="trackForm.get('name').touched && trackForm.get('name').hasError('required')"
             [error]="true"
             errorMessage="Name is required"
           ></commudle-alert>
         </div>
 
-        <!-- Description -->
-        <div>
-          <label for="description">Description *</label>
+        <div class="form-group">
+          <label for="description">Description <span class="required">*</span></label>
           <editor [init]="tinyMCE" formControlName="description" id="description"></editor>
           <commudle-alert
-            *ngIf="
-              trackForm.controls['description'].invalid &&
-              trackForm.controls['description'].touched &&
-              trackForm.controls['description'].hasError('required')
-            "
+            *ngIf="trackForm.get('description').touched && trackForm.get('description').hasError('required')"
             [error]="true"
             errorMessage="Description is required"
           ></commudle-alert>
         </div>
 
         <!-- Problem Statements -->
-        <div>
-          <div class="problem-statements-header">
-            <label>Problem Statements</label>
-            <button (click)="addProblemStatement()" nbButton size="small" status="primary" type="button">
-              <fa-icon [icon]="icons.faPlus"></fa-icon>&nbsp; Add Problem Statement
-            </button>
-          </div>
+        <div class="form-group">
+          <label>Problem Statements</label>
 
           <div formArrayName="problem_statements">
-            <div
-              *ngFor="let problemStatement of problemStatements.controls; let i = index"
-              [formGroupName]="i"
-              class="problem-statement-item"
-            >
-              <div class="problem-statement-fields">
-                <!-- <div class="field-group">
-                  <label [for]="'display_id_' + i">Display ID</label>
-                  <input [id]="'display_id_' + i" formControlName="display_id" fullWidth nbInput readonly type="text" />
-                </div> -->
-
-                <div class="field-group">
-                  <label [for]="'title_' + i"
-                    >({{ problemStatement.get('display_id')?.value }}) Problem Statement</label
-                  >
-                  <editor [init]="tinyMCE" [id]="'title_' + i" formControlName="title"></editor>
+            <div *ngFor="let ps of problemStatements.controls; let i = index" [formGroupName]="i" class="ps-card">
+              <div class="ps-card-header">
+                <span class="ps-number">{{ ps.get('display_id')?.value }}</span>
+                <button
+                  (click)="removeProblemStatement(i)"
+                  nbButton
+                  outline
+                  shape="round"
+                  size="small"
+                  status="danger"
+                  type="button"
+                >
+                  <nb-icon icon="trash-2-outline"></nb-icon>
+                </button>
+              </div>
+              <div class="ps-card-body">
+                <div class="form-group">
+                  <label [for]="'title_' + i">Title</label>
+                  <textarea
+                    [id]="'title_' + i"
+                    formControlName="title"
+                    fullWidth
+                    nbInput
+                    placeholder="Describe the problem statement"
+                    rows="3"
+                  ></textarea>
                   <commudle-alert
-                    *ngIf="
-                      problemStatement.get('title')?.invalid &&
-                      problemStatement.get('title')?.touched &&
-                      problemStatement.get('title')?.hasError('minlength')
-                    "
+                    *ngIf="ps.get('title')?.touched && ps.get('title')?.hasError('minlength')"
                     [error]="true"
-                    errorMessage="Problem Statement must be at least 60 characters long"
+                    errorMessage="Must be at least 60 characters"
                   ></commudle-alert>
                 </div>
-
-                <div class="field-group">
-                  <label [for]="'max_teams_limit_' + i">Max No. of Teams Allow to Choose This Problem Statement</label>
+                <div class="form-group">
+                  <label [for]="'max_teams_limit_' + i">Max Teams Allowed</label>
                   <input
                     [id]="'max_teams_limit_' + i"
                     formControlName="max_teams_limit"
                     fullWidth
                     nbInput
-                    placeholder="Maximum number of teams (optional)"
+                    placeholder="Leave empty for unlimited"
                     type="number"
                     min="1"
                   />
                   <commudle-alert
-                    *ngIf="
-                      problemStatement.get('max_teams_limit')?.invalid &&
-                      problemStatement.get('max_teams_limit')?.touched &&
-                      problemStatement.get('max_teams_limit')?.hasError('min')
-                    "
+                    *ngIf="ps.get('max_teams_limit')?.touched && ps.get('max_teams_limit')?.hasError('min')"
                     [error]="true"
-                    errorMessage="Max teams limit must be at least 1"
+                    errorMessage="Must be at least 1"
                   ></commudle-alert>
                 </div>
               </div>
-
-              <button
-                *ngIf="problemStatements.length > 0"
-                (click)="removeProblemStatement(i)"
-                nbButton
-                size="small"
-                status="danger"
-                type="button"
-                class="remove-button"
-              >
-                <fa-icon [icon]="icons.faMinus"></fa-icon>
-              </button>
             </div>
           </div>
+
+          <button
+            (click)="addProblemStatement()"
+            nbButton
+            outline
+            size="small"
+            status="primary"
+            type="button"
+            fullWidth
+            class="add-ps-button"
+          >
+            <fa-icon [icon]="icons.faPlus"></fa-icon>&nbsp; Add Problem Statement
+          </button>
         </div>
       </form>
     </nb-card-body>
     <nb-card-footer>
+      <button (click)="ref.close()" nbButton ghost status="basic">Cancel</button>
       <button
         (click)="data.track ? updateTrack(data.track.id, data.index) : createTrack(); ref.close()"
         [disabled]="trackForm.invalid || !trackForm.dirty"
-        fullWidth
         nbButton
         status="primary"
       >
-        {{ data.track ? 'Update' : 'Save' }}
+        {{ data.track ? 'Update Track' : 'Create Track' }}
       </button>
     </nb-card-footer>
   </nb-card>
 </ng-template>
 
-<ng-template #deleteTrackDilaogBox let-data let-ref="dialogRef">
+<!-- Delete Confirmation Dialog -->
+<ng-template #deleteTrackDialogBox let-data let-ref="dialogRef">
   <nb-card>
     <nb-card-header>
-      <span>Confirm delete track</span>
+      <span>Confirm Delete Track</span>
       <button (click)="ref.close()" ghost nbButton shape="round" size="small">
         <nb-icon icon="close"></nb-icon>
       </button>
     </nb-card-header>
-    <nb-card-body>Are you sure, you want to delete track?</nb-card-body>
+    <nb-card-body>Are you sure you want to delete this track?</nb-card-body>
     <nb-card-footer>
-      <button (click)="destroyTrack(data.trackId, data.index); ref.close()" nbButton status="primary">Delete</button>
-      <button (click)="ref.close()" nbButton outline status="danger">Cancel</button>
+      <button (click)="destroyTrack(data.trackId, data.index); ref.close()" nbButton status="danger">Delete</button>
+      <button (click)="ref.close()" nbButton ghost>Cancel</button>
     </nb-card-footer>
   </nb-card>
 </ng-template>

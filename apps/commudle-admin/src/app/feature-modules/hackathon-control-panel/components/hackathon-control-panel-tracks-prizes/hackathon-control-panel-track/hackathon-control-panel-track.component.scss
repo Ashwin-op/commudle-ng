@@ -1,40 +1,127 @@
-.hackathon-cards {
-  @apply com-grid com-grid-cols-2 com-gap-4;
+.track-container {
+  @apply com-p-4;
+
+  .track-header {
+    @apply com-flex com-justify-between com-items-center com-mb-4;
+
+    h3 {
+      @apply com-text-lg com-font-semibold com-text-gray-900 com-m-0;
+    }
+  }
 }
 
-.track-form {
-  @apply com-w-[100dvw] md:com-max-h-[90dvh] md:com-w-[50dvw] com-mx-0;
+.track-table-wrapper {
+  @apply com-overflow-x-auto com-border com-border-gray-200 com-rounded-xl;
+}
 
-  form {
-    @apply com-flex com-flex-col com-gap-3;
-  }
+.track-table {
+  @apply com-w-full com-text-sm com-text-left com-border-collapse;
 
-  .problem-statements-header {
-    @apply com-flex com-justify-between com-items-center com-mb-3;
+  thead {
+    @apply com-bg-gray-50;
 
-    label {
-      @apply com-font-medium;
+    th {
+      @apply com-px-4 com-py-3 com-font-semibold com-text-gray-600 com-text-xs com-uppercase com-tracking-wider com-whitespace-nowrap com-border-b com-border-gray-200;
+
+      &:first-child {
+        @apply com-rounded-tl-xl;
+      }
+
+      &:last-child {
+        @apply com-rounded-tr-xl;
+      }
     }
   }
 
-  .problem-statement-item {
-    @apply com-flex com-gap-4 com-rounded-xl com-mb-4;
+  tbody {
+    tr {
+      @apply com-border-b com-border-gray-100 com-transition-colors;
+      @apply hover:com-bg-gray-50;
 
-    .problem-statement-fields {
-      @apply com-flex-1 com-flex com-flex-col com-gap-4;
+      &:last-child {
+        @apply com-border-b-0;
 
-      .field-group {
-        @apply com-flex com-flex-col com-gap-2;
+        td:first-child {
+          @apply com-rounded-bl-xl;
+        }
 
-        label {
-          @apply com-text-sm com-font-semibold com-text-gray-800;
+        td:last-child {
+          @apply com-rounded-br-xl;
         }
       }
     }
 
-    .remove-button {
-      @apply com-flex-shrink-0 com-self-start com-mt-6;
+    td {
+      @apply com-px-4 com-py-3 com-align-middle;
     }
+  }
+
+  .track-name {
+    @apply com-font-medium com-text-gray-900;
+  }
+
+  .description-cell {
+    @apply com-text-gray-500 com-text-xs com-line-clamp-2 com-max-w-[250px];
+  }
+
+  .count-badge {
+    @apply com-inline-flex com-items-center com-justify-center com-w-7 com-h-7 com-rounded-full com-bg-primary-100 com-text-primary-700 com-font-semibold com-text-xs com-cursor-pointer;
+    @apply hover:com-bg-primary-200;
+
+    &.prize {
+      @apply com-bg-green-100 com-text-green-700;
+    }
+  }
+
+  .no-data {
+    @apply com-text-gray-400;
+  }
+
+  .action-buttons {
+    @apply com-flex com-gap-1;
+  }
+}
+
+@media (max-width: 768px) {
+  .track-table {
+    thead {
+      @apply com-hidden;
+    }
+
+    tbody {
+      tr {
+        @apply com-flex com-flex-col com-gap-1 com-p-4 com-mb-2 com-rounded-lg com-border com-border-gray-200 com-bg-white;
+      }
+
+      td {
+        @apply com-flex com-justify-between com-items-center com-px-0 com-py-1;
+
+        &::before {
+          content: attr(data-label);
+          @apply com-font-semibold com-text-gray-600 com-text-xs com-uppercase;
+        }
+      }
+    }
+
+    .action-buttons {
+      @apply com-justify-end;
+    }
+  }
+}
+
+.no-data-message {
+  @apply com-text-center com-py-12 com-text-gray-600 com-flex com-flex-col com-items-center com-gap-2;
+
+  .empty-icon {
+    @apply com-text-4xl com-text-gray-400 com-mb-2;
+  }
+
+  p {
+    @apply com-text-lg com-mb-0;
+  }
+
+  .sub-text {
+    @apply com-text-sm com-text-gray-500;
   }
 }
 
@@ -43,33 +130,47 @@ nb-card-footer {
   @apply com-flex com-justify-between com-items-center;
 }
 
-.hackathon-tracks-table {
-  @apply com-w-full com-border-collapse;
+.track-form {
+  @apply com-w-[100dvw] com-mx-0;
+  @apply md:com-w-[560px] md:com-max-h-[90dvh];
 
-  th {
-    @apply com-bg-gray-100 com-p-3 com-text-left com-font-semibold com-border com-border-gray-300;
+  nb-card-footer {
+    @apply com-justify-end com-gap-2;
   }
 
-  td {
-    @apply com-p-3 com-border com-border-gray-300 com-align-top;
+  .form-fields {
+    @apply com-flex com-flex-col com-gap-4;
   }
 
-  .description-scroll {
-    @apply com-h-20 com-overflow-y-scroll com-text-sm com-leading-tight;
-    max-width: 200px;
-    ::ng-deep {
-      p {
-        @apply com-my-0;
+  .form-group {
+    @apply com-flex com-flex-col com-gap-1;
+
+    label {
+      @apply com-text-sm com-font-medium com-text-gray-700;
+
+      .required {
+        @apply com-text-red-500;
       }
     }
   }
 
-  .action-btn {
-    @apply com-mr-2;
+  .ps-card {
+    @apply com-border com-border-solid com-border-gray-200 com-rounded-lg com-mb-3 com-overflow-hidden;
+
+    .ps-card-header {
+      @apply com-flex com-justify-between com-items-center com-px-3 com-py-2 com-bg-gray-50 com-border-0 com-border-b com-border-solid com-border-gray-200;
+
+      .ps-number {
+        @apply com-text-xs com-font-bold com-text-primary-600 com-uppercase;
+      }
+    }
+
+    .ps-card-body {
+      @apply com-p-3 com-flex com-flex-col com-gap-3;
+    }
   }
 
-  .problem-count-btn {
-    @apply com-bg-blue-500 com-text-white com-px-3 com-py-1 com-rounded com-cursor-pointer com-border-none;
-    @apply hover:com-bg-blue-600;
+  .add-ps-button {
+    @apply com-mt-1;
   }
 }
