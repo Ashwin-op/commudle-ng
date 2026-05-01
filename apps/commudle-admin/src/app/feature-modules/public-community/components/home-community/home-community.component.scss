@@ -43,10 +43,6 @@
     .details {
       @apply com-mx-4 md:com-ml-0 md:com-w-full;
 
-      h1 {
-        @apply com-font-semibold com-mt-0 com-mb-4;
-      }
-
       .membership {
         .member-location {
           @apply com-flex com-items-start com-gap-2 com-flex-row md:com-gap-2 com-min-w-0;
@@ -213,15 +209,11 @@
 }
 
 .details-container {
-  @apply com-flex com-items-start com-min-w-0 com-w-full md:com-mt-5 com-mt-0;
+  @apply com-flex com-items-center com-min-w-0 com-w-full md:com-mt-5 com-mt-0;
 }
 
 .heading-community-name {
-  @apply com-text-Yankees-Blue com-m-0;
-}
-
-app-share-button {
-  @apply com-mt-[10px];
+  @apply com-text-Yankees-Blue com-m-0 com-font-semibold com-mt-0 md:com-mb-0 com-mb-4;
 }
 
 .home-component-card {
