@@ -12,7 +12,7 @@ import { Subject, Subscription, takeUntil } from 'rxjs';
 import { faLinkedinIn, faTwitter, faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { faGlobe, faInfoCircle, faHashtag, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { IContactInfo } from 'apps/shared-models/contact-info.model';
-import { ToastrService } from '@commudle/shared-services';
+import { SeoService, ToastrService } from '@commudle/shared-services';
 import { DataFormEntityResponsesService } from 'apps/commudle-admin/src/app/services/data-form-entity-responses.service';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
@@ -24,10 +24,10 @@ import { UserProfileManagerService } from 'apps/commudle-admin/src/app/feature-m
 import { PublicHackathonFormConfirmationComponent } from 'apps/commudle-admin/src/app/feature-modules/public-hackathon/components/public-hackathon-form/public-hackathon-form-confirmation/public-hackathon-form-confirmation.component';
 
 @Component({
-    selector: 'commudle-public-hackathon-form',
-    templateUrl: './public-hackathon-form.component.html',
-    styleUrls: ['./public-hackathon-form.component.scss'],
-    standalone: false
+  selector: 'commudle-public-hackathon-form',
+  templateUrl: './public-hackathon-form.component.html',
+  styleUrls: ['./public-hackathon-form.component.scss'],
+  standalone: false,
 })
 export class PublicHackathonFormComponent implements OnInit, OnDestroy {
   hackathon: IHackathon;
@@ -78,6 +78,7 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
     private dialogService: NbDialogService,
     private userProfileManagerService: UserProfileManagerService,
     private router: Router,
+    private seoService: SeoService,
   ) {}
 
   ngOnInit() {
@@ -91,6 +92,8 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
       this.activatedRoute.parent.data.subscribe((data) => {
         this.hackathon = data.hackathon;
         this.community = data.community;
+        this.setSeo();
+        this.setStepTitle('Profile');
         this.checkApplicationDates();
         this.getContactInfo();
         if (this.hackathon.participate_types === EParticipateTypes.TEAM) {
@@ -137,6 +140,19 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
     this.router.navigate(['/communities', this.community.slug, 'hackathons', this.hackathon.slug]);
   }
 
+  setSeo() {
+    this.seoService.setTags(
+      `Register for ${this.hackathon.name} | ${this.community.name}`,
+      `Fill the registration form for ${this.hackathon.name} hackathon by ${this.community.name}`,
+      this.hackathon?.banner_image?.url || 'https://commudle.com/assets/images/commudle-logo192.png',
+    );
+    this.seoService.noIndex(true);
+  }
+
+  setStepTitle(step: string) {
+    this.seoService.setTitle(`${step} - ${this.hackathon.name} | ${this.community.name}`);
+  }
+
   getContactInfo() {
     this.subscriptions.push(
       this.hackathonService.showHackathonContactInfo(this.hackathon.id).subscribe((data) => {
@@ -174,6 +190,7 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
   switchTeamIndex(event: any) {
     this.switchTeam(event.value);
     this.stepper.reset();
+    this.setStepTitle('Profile');
   }
 
   updateUserDetails(event) {
@@ -225,6 +242,7 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
         this.router.navigate(['submitted'], { relativeTo: this.activatedRoute });
       } else {
         this.stepper.next();
+        this.setStepTitle('Team Details');
       }
     });
   }
@@ -238,6 +256,7 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
         this.router.navigate(['submitted'], { relativeTo: this.activatedRoute });
       } else {
         this.stepper.next();
+        this.setStepTitle('Team Details');
       }
     });
   }
@@ -249,6 +268,7 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
         if (!(this.hackathonResponseGroup.allow_track_problem_statement_selection ?? true)) {
           if (this.hackathonResponseGroup.data_form_entity_id) {
             this.stepper.next();
+            this.setStepTitle('More Details');
           } else {
             this.toastrService.successDialog('Details has been saved');
             this.hurService.updateHurStatusComplete(this.hackathonUserResponse.id).subscribe();
@@ -257,6 +277,7 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
           }
         } else {
           this.stepper.next();
+          this.setStepTitle('Select Track & Problem Statement');
         }
       }
     });
@@ -267,6 +288,7 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
       if (data) {
         if (this.hackathonResponseGroup.data_form_entity_id) {
           this.stepper.next();
+          this.setStepTitle('More Details');
         } else {
           this.toastrService.successDialog('Details has been saved');
           this.hurService.updateHurStatusComplete(this.hackathonUserResponse.id).subscribe();
@@ -292,6 +314,9 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
 
   previousStepper() {
     this.stepper.previous();
+    const stepLabels = ['Profile', 'Team Details', 'Select Track & Problem Statement', 'More Details'];
+    const currentIndex = this.stepper.selectedIndex;
+    this.setStepTitle(stepLabels[currentIndex] || 'Profile');
   }
 
   openConsentDialogBox(formData) {

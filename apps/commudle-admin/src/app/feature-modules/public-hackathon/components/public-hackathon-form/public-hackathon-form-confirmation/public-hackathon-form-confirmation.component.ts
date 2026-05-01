@@ -9,13 +9,9 @@ import {
 } from '@commudle/shared-models';
 import { ActivatedRoute } from '@angular/router';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
-import { SeoService } from 'apps/shared-services/seo.service';
-import { AuthService } from '@commudle/shared-services';
-import { AppUsersService } from '@commudle/shared-services';
+import { SeoService, AuthService, AppUsersService } from '@commudle/shared-services';
 import { Subject, Subscription, takeUntil } from 'rxjs';
-import { HackathonUserResponsesService } from 'apps/commudle-admin/src/app/services/hackathon-user-responses.service';
 import { IHackathonResponseGroup } from 'apps/shared-models/hackathon-response-group.model';
-import { HackathonResponseGroupService } from 'apps/commudle-admin/src/app/services/hackathon-response-group.service';
 
 @Component({
   standalone: false,
@@ -53,7 +49,6 @@ export class PublicHackathonFormConfirmationComponent implements OnInit, OnDestr
       this.getJudges();
     });
     this.fetchCurrentUserDetails();
-    this.seoService.setTitle('Hackathon Form Confirmation');
     this.seoService.noIndex(true);
   }
 
@@ -68,6 +63,7 @@ export class PublicHackathonFormConfirmationComponent implements OnInit, OnDestr
     this.subscriptions.push(
       this.hackathonService.pShowHackathon(this.hackathonSlug).subscribe((data) => {
         this.hackathon = data;
+        this.seoService.setTitle(`Registration Confirmed | ${this.hackathon.name}`);
         this.isLoading = false;
       }),
     );
