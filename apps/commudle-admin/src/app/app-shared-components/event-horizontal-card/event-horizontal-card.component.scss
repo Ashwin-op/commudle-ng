@@ -58,6 +58,19 @@ nb-card {
           .community-badge {
             @apply com-m-0 com-mb-4;
           }
+
+          .countdown-row {
+            @apply com-mt-auto com-bg-white com-rounded-md com-px-3 com-py-2 com-flex com-items-center com-gap-2 com-border com-border-solid com-border-blue-100;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+
+            .countdown-label {
+              @apply com-text-xs com-font-semibold com-text-gray-700;
+            }
+
+            .countdown-time {
+              @apply com-text-sm com-font-semibold com-text-blue-700;
+            }
+          }
         }
 
         .upcoming-card-details-mobile {

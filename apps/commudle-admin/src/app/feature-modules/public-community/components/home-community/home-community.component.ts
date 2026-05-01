@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, Inject, ViewChild, TemplateRef } from '@angular/core';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { NotificationsStore } from 'apps/commudle-admin/src/app/feature-modules/notifications/store/notifications.store';
 import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
@@ -23,6 +24,15 @@ interface CustomMenuItem {
   selector: 'app-home-community',
   templateUrl: './home-community.component.html',
   styleUrls: ['./home-community.component.scss'],
+  animations: [
+    trigger('headerSection', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-10px)' }),
+        animate('220ms ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
+      ]),
+      transition(':leave', [animate('180ms ease-in', style({ opacity: 0, transform: 'translateY(-8px)' }))]),
+    ]),
+  ],
   standalone: false,
 })
 export class HomeCommunityComponent implements OnInit, OnDestroy {

@@ -43,7 +43,7 @@
             <div class="details">
               <div class="completed" *ngIf="event.event_status.name === 'completed'">
                 Completed
-                <nb-icon icon="checkmark-circle-2" nbTooltip="Completed" status="success" class="com-m-auto"></nb-icon>
+                <nb-icon icon="checkmark-circle-2" nbTooltip="Completed" status="basic" class="com-m-auto"></nb-icon>
               </div>
               <div *ngIf="event.interested_members_count > 0" class="interested-members">
                 <app-badge

@@ -4,107 +4,109 @@
       <div *ngIf="community" class="home-component">
         <nb-card class="home-component-card">
           <nb-card-body class="!com-p-0 com-overflow-hidden">
-            <div class="banner" *ngIf="!showMiniHeader">
-              <img
-                *ngIf="community.banner_image"
-                src="{{ community.banner_image.url }}"
-                alt="{{ community.name }}"
-                class="banner-image"
-              />
-              <div class="banner-image" *ngIf="!community.banner_image"></div>
-              <div class="edit-button" *ngIf="isOrganizer">
-                <button nbButton status="primary" outline size="small" (click)="openUpdateBannerDialogBox()">
-                  <img src="https://json.commudle.com/icons/add-banner-icon.svg" />
-                  <span class="com-hidden md:com-flex"> Edit Banner </span>
-                </button>
-              </div>
-            </div>
-            <div class="page-header d-flex flex-column" *ngIf="!showMiniHeader">
-              <div class="logo-section">
+            <div class="header-transition-wrapper" *ngIf="!showMiniHeader" @headerSection>
+              <div class="banner">
                 <img
+                  *ngIf="community.banner_image"
+                  src="{{ community.banner_image.url }}"
                   alt="{{ community.name }}"
-                  class="logo"
-                  src="{{ community.logo_image_path?.i320 }}"
-                  title="{{ community.name }}"
+                  class="banner-image"
                 />
+                <div class="banner-image" *ngIf="!community.banner_image"></div>
+                <div class="edit-button" *ngIf="isOrganizer">
+                  <button nbButton status="primary" outline size="small" (click)="openUpdateBannerDialogBox()">
+                    <img src="https://json.commudle.com/icons/add-banner-icon.svg" />
+                    <span class="com-hidden md:com-flex"> Edit Banner </span>
+                  </button>
+                </div>
               </div>
-              <div class="mobile-share-cta" *appBreakpoints="'<=md'">
-                <app-share-button
-                  [content]="environment.app_url + '/communities/' + community.slug"
-                  [title]="community.name"
-                  [url]="environment.app_url + '/communities/' + community.slug"
-                  [showText]="true"
-                  [appearance]="'outline'"
-                ></app-share-button>
-              </div>
-              <div class="details">
-                <div
-                  class="com-flex com-justify-between md:com-items-center com-flex-col com-my-2 md:com-flex-row md:com-m-0"
-                >
-                  <div class="details-container">
-                    <h1 class="heading-community-name">{{ community.name }}</h1>
-                    <app-share-button
-                      *appBreakpoints="'>md'"
-                      [content]="environment.app_url + '/communities/' + community.slug"
-                      [title]="community.name"
-                      [url]="environment.app_url + '/communities/' + community.slug"
-                      [showText]="true"
-                      [appearance]="'outline'"
-                    ></app-share-button>
+              <div class="page-header d-flex flex-column">
+                <div class="logo-section">
+                  <img
+                    alt="{{ community.name }}"
+                    class="logo"
+                    src="{{ community.logo_image_path?.i320 }}"
+                    title="{{ community.name }}"
+                  />
+                </div>
+                <div class="mobile-share-cta" *appBreakpoints="'<=md'">
+                  <app-share-button
+                    [content]="environment.app_url + '/communities/' + community.slug"
+                    [title]="community.name"
+                    [url]="environment.app_url + '/communities/' + community.slug"
+                    [showText]="true"
+                    [appearance]="'outline'"
+                  ></app-share-button>
+                </div>
+                <div class="details">
+                  <div
+                    class="com-flex com-justify-between md:com-items-center com-flex-col com-my-2 md:com-flex-row md:com-m-0"
+                  >
+                    <div class="details-container">
+                      <h1 class="heading-community-name">{{ community.name }}</h1>
+                      <app-share-button
+                        *appBreakpoints="'>md'"
+                        [content]="environment.app_url + '/communities/' + community.slug"
+                        [title]="community.name"
+                        [url]="environment.app_url + '/communities/' + community.slug"
+                        [showText]="true"
+                        [appearance]="'outline'"
+                      ></app-share-button>
+                    </div>
+                  </div>
+                  <div class="membership d-flex flex-column">
+                    <div class="member-location">
+                      <p class="member-count">
+                        <a [routerLink]="['members']">
+                          <nb-icon icon="people" status="basic"></nb-icon>
+                          {{ community.members_count }} Members
+                        </a>
+                      </p>
+                      <div *ngIf="community.location" class="location">
+                        <nb-icon icon="pin" status="basic"></nb-icon>
+                        <span class="location-text" [title]="community.location">{{ community.location }}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="membership d-flex flex-column">
-                  <div class="member-location">
-                    <p class="member-count">
-                      <a [routerLink]="['members']">
-                        <nb-icon icon="people" status="basic"></nb-icon>
-                        {{ community.members_count }} Members
+                <div class="membership-toggle">
+                  <div class="membership-actions">
+                    <div *ngIf="isOrganizer">
+                      <a
+                        class="admin-panel-link"
+                        nbButton
+                        status="danger"
+                        [routerLink]="['/admin', 'communities', community.slug]"
+                        target="_blank"
+                        shape="semi-round"
+                        fullWidth
+                      >
+                        Go to Admin Panel
+                        <nb-icon icon="edit-outline"></nb-icon>
                       </a>
-                    </p>
-                    <div *ngIf="community.location" class="location">
-                      <nb-icon icon="pin" status="basic"></nb-icon>
-                      <span class="location-text" [title]="community.location">{{ community.location }}</span>
+                    </div>
+                    <div class="com-flex md:com-justify-end">
+                      <a
+                        *ngIf="community.community_group"
+                        [routerLink]="['/orgs', community.community_group.slug]"
+                        class="organization-details"
+                        [title]="community.community_group.name"
+                      >
+                        <fa-icon [icon]="faBuilding"></fa-icon>
+                        <span>{{ community.community_group.name }} ({{ community.community_group.member_count }})</span>
+                      </a>
+                      <app-membership-toggle
+                        [community]="community"
+                        [shapes]="'semi-round'"
+                        [size]="'medium'"
+                        [status]="'primary'"
+                      ></app-membership-toggle>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="membership-toggle">
-                <div class="membership-actions">
-                  <div *ngIf="isOrganizer">
-                    <a
-                      class="admin-panel-link"
-                      nbButton
-                      status="danger"
-                      [routerLink]="['/admin', 'communities', community.slug]"
-                      target="_blank"
-                      shape="semi-round"
-                      fullWidth
-                    >
-                      Go to Admin Panel
-                      <nb-icon icon="edit-outline"></nb-icon>
-                    </a>
-                  </div>
-                  <div class="com-flex md:com-justify-end">
-                    <a
-                      *ngIf="community.community_group"
-                      [routerLink]="['/orgs', community.community_group.slug]"
-                      class="organization-details"
-                      [title]="community.community_group.name"
-                    >
-                      <fa-icon [icon]="faBuilding"></fa-icon>
-                      <span>{{ community.community_group.name }} ({{ community.community_group.member_count }})</span>
-                    </a>
-                    <app-membership-toggle
-                      [community]="community"
-                      [shapes]="'semi-round'"
-                      [size]="'medium'"
-                      [status]="'primary'"
-                    ></app-membership-toggle>
-                  </div>
-                </div>
-              </div>
             </div>
-            <div class="mini-header" *ngIf="showMiniHeader">
+            <div class="mini-header" *ngIf="showMiniHeader" @headerSection>
               <div class="community-details">
                 <div class="mini-logo-section">
                   <img

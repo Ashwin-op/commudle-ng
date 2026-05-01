@@ -66,6 +66,10 @@
               [maximumTag]="5"
             ></app-tag>
           </div>
+          <div class="countdown-row" *ngIf="isUpcomingEvent && showCounterTimings">
+            <span class="countdown-label">Starts in</span>
+            <span class="countdown-time">{{ countdownLabel }}</span>
+          </div>
         </div>
         <div *appBreakpoints="'<=lg'" class="upcoming-card-details-mobile">
           <div class="time">

@@ -160,7 +160,7 @@
 }
 
 .menu-items-footer-sticky {
-  @apply com-sticky com-top-16 com-z-20;
+  @apply com-sticky com-top-16 com-z-20 com-shadow-lg;
 }
 
 .banner-image {
@@ -225,5 +225,5 @@ app-share-button {
 }
 
 .home-component-card {
-  @apply com-m-0 com-rounded-none;
+  @apply com-m-0 com-rounded-none com-border-0;
 }

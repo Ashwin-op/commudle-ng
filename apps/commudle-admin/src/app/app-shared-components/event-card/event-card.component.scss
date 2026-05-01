@@ -33,9 +33,9 @@
               @apply com-flex com-justify-between com-m-0 com-mb-4 com-h-[24px];
 
               .completed {
-                @apply com-flex com-items-center com-text-xs com-font-medium com-text-green-600 com-my-0 com-mr-4;
+                @apply com-flex com-items-center com-text-xs com-font-medium com-text-gray-600 com-my-0 com-mr-4 com-bg-gray-100 com-rounded-full com-px-2 com-py-1;
                 nb-icon {
-                  @apply com-w-14px com-h-14px com-text-green-600 com-ml-1;
+                  @apply com-w-14px com-h-14px com-text-gray-500 com-ml-1;
                 }
               }
 
@@ -48,7 +48,7 @@
               @apply com-text-Yankees-Blue com-font-medium com-text-sm  com-mt-0 com-mb-1 com-line-clamp-1;
 
               .collaboration {
-                @apply com-text-sm com-font-normal;
+                @apply com-text-xs com-font-normal;
               }
             }
 
@@ -62,7 +62,7 @@
           }
 
           .view-details {
-            @apply com-font-medium com-text-sm com-text-gray-500 com-m-0;
+            @apply com-font-medium com-text-xs com-text-gray-500 com-m-0;
           }
         }
         .details-container-mobile {
@@ -93,7 +93,7 @@
             @apply com-text-sm com-font-medium com-text-Yankees-Blue com-m-0 com-mb-2 com-line-clamp-1;
 
             .collaboration {
-              @apply com-text-xs com-font-normal;
+              @apply com-text-[10px] com-font-normal;
             }
           }
 

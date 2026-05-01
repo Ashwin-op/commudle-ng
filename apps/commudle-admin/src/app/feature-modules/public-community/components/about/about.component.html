@@ -13,7 +13,7 @@
     </nb-card>
     <nb-card [nbSpinner]="community === null" class="about">
       <nb-card-body>
-        <h3 class="heading">Who we are</h3>
+        <h2 class="heading">Who we are</h2>
         <p [innerHTML]="community.about | linky : { sanitizeHtml: false } | safeHtml" class="content"></p>
         <div class="community-social-links d-flex align-items-center">
           <a
@@ -101,7 +101,7 @@
 
     <nb-card *appBreakpoints="'<=md'">
       <nb-card-body>
-        <h3 class="heading">Community Leaders</h3>
+        <h2 class="heading">Community Leaders</h2>
         <div class="organizers com-grid com-grid-cols-1 com-gap-4">
           <div *ngIf="isLoading" class="loading-spinner com-my-4 com-text-center">
             <div class="spinner">
@@ -122,7 +122,7 @@
     <nb-card *ngIf="defaultChannel" class="default-channel-container">
       <nb-card-header>
         <div class="name-count">
-          <span class="channel-name">{{ defaultChannel.name }}</span>
+          <h2 class="channel-name">{{ defaultChannel.name }}</h2>
           <div class="members-count">
             <fa-icon [icon]="icons.faUsers"></fa-icon>
             <span> {{ defaultChannel.members_count }}</span>
@@ -149,7 +149,7 @@
 
   <nb-card class="community-leaders-card" *appBreakpoints="'>md'">
     <nb-card-body>
-      <h3 class="heading">Community Leaders</h3>
+      <h2 class="heading">Community Leaders</h2>
       <div class="organizers com-grid com-grid-cols-1 com-gap-4">
         <div *ngIf="isLoading" class="loading-spinner com-my-4 com-text-center">
           <div class="spinner">

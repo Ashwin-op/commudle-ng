@@ -16,24 +16,21 @@
     button {
       @apply com-mr-4;
     }
+
+    .live-dot {
+      @apply com-inline-block com-h-2.5 com-w-2.5 com-rounded-full com-bg-blue-500 com-mr-2;
+      animation: live-dot-pulse 1.8s ease-in-out infinite;
+    }
   }
 
   .upcoming-events-section {
-    @apply com-my-0;
+    @apply com-my-0 com-bg-[#f5f9ff] com-rounded-lg;
 
     .upcoming-events-container {
-      @apply com-flex com-flex-row com-flex-wrap com-justify-between com-gap-4;
+      @apply com-flex com-flex-row com-flex-wrap com-gap-4 com-p-4;
 
-      a {
-        @apply com-relative com-block com-no-underline;
-
-        &.upcoming-single-event {
-          @apply com-flex-col com-w-full md:com-w-[1220px];
-        }
-
-        &.upcoming-multiple-events {
-          @apply com-flex-row com-w-full md:com-w-[600px];
-        }
+      .upcoming-event-card-wrapper {
+        @apply com-w-full com-p-4 com-bg-white com-rounded-10;
       }
     }
   }
@@ -68,4 +65,16 @@ app-loading-spinner {
 
 fa-icon {
   @apply com-text-2xl com-text-gray-800;
+}
+
+@keyframes live-dot-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
 }

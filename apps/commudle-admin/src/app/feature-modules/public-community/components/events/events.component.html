@@ -4,23 +4,17 @@
       <section class="upcoming-events-section">
         <h2 class="heading">
           <div class="heading-btn"><fa-icon [icon]="faCalendarDays"></fa-icon></div>
+          <span class="live-dot" aria-hidden="true"></span>
           Upcoming Events
         </h2>
         <div class="upcoming-events-container">
-          <a
-            *ngFor="let event of upcomingEvents"
-            [routerLink]="['/communities', event.kommunity_slug, 'events', event.slug]"
-            [ngClass]="{
-              'upcoming-multiple-events': upcomingEvents.length > 1,
-              'upcoming-single-event': upcomingEvents.length === 1
-            }"
-          >
-            <commudle-event-large-card
+          <div *ngFor="let event of upcomingEvents" class="upcoming-event-card-wrapper">
+            <commudle-event-horizontal-card
               [event]="event"
-              [hostCommunity]="community"
-              [addPaddingBody]="false"
-            ></commudle-event-large-card>
-          </a>
+              [headerImageWidth]="'434px'"
+              [showCounterTimings]="true"
+            ></commudle-event-horizontal-card>
+          </div>
         </div>
       </section>
     </nb-card-body>
