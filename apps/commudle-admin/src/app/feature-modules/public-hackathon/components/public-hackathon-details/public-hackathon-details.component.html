@@ -37,7 +37,8 @@
               <div
                 *ngFor="let hackathonSponsor of hackathonSponsorGrouped.value"
                 class="sponsor-card"
-                [nbTooltip]="hackathonSponsor.sponsor.description"
+                [nbTooltip]="hackathonSponsor.sponsor?.description"
+                [nbTooltipDisabled]="!hackathonSponsor.sponsor?.description"
               >
                 <a
                   [href]="hackathonSponsor.sponsor.link"
