@@ -3,7 +3,7 @@
     (click)="isFollowing ? toggleFollow() : onFollowClick()"
     [appearance]="appearance ?? (isFollowing || appearance === 'outline' ? 'outline' : 'filled')"
     [ngClass]="{ 'fixed-width': !showIcon, 'width-full': isMobileWidthFull }"
-    [status]="status === 'basic' ? 'basic' : 'info'"
+    [status]="status || 'info'"
     class="follow-btn"
     nbButton
     [shape]="round ? 'round' : 'semi-round'"

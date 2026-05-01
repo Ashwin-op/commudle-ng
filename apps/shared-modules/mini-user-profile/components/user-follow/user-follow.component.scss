@@ -13,6 +13,11 @@
     &.width-full {
       @apply com-w-full;
     }
+
+    &.appearance-filled.status-custom {
+      @apply com-bg-[#0f1419] com-border-[#0f1419] com-text-white;
+      @apply dark:com-bg-[#eff3f4] dark:com-border-[#eff3f4] dark:com-text-[#0f1419];
+    }
   }
 }
 
