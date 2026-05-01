@@ -1,0 +1,71 @@
+.main-column {
+  nb-card {
+    @apply com-ml-0;
+
+    nb-card-header {
+      .name {
+        @apply com-text-Yankees-Blue com-text-xl com-font-semibold com-my-0;
+      }
+    }
+
+    nb-card-body {
+      .problem-statements {
+        @apply com-mt-3;
+
+        .title {
+          @apply com-text-Yankees-Blue com-text-base com-font-semibold;
+        }
+
+        .problem-statement-item {
+          @apply com-flex com-gap-2 com-items-center com-py-2 com-px-3 com-my-1 com-bg-gray-100 com-rounded;
+
+          .display-id {
+            @apply com-font-bold com-text-primary-500;
+          }
+
+          .teams-info {
+            @apply com-text-sm com-text-gray-500;
+          }
+        }
+      }
+
+      .problem-statement {
+        @apply com-mt-3;
+
+        .title {
+          @apply com-text-Yankees-Blue com-text-base com-font-semibold;
+        }
+      }
+
+      .prizes-section {
+        @apply com-mt-4;
+
+        .prizes-title {
+          @apply com-text-Yankees-Blue com-text-base com-font-semibold;
+        }
+
+        .prize-card {
+          @apply com-mt-2;
+
+          .hackathon-prize {
+            @apply com-flex com-gap-2 com-items-center;
+
+            .prize-name {
+              @apply com-text-Yankees-Blue com-text-lg com-font-bold;
+            }
+
+            .prize-amount {
+              @apply com-text-blue-600 com-text-lg com-font-semibold;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.right-column {
+  nb-card {
+    @apply com-mr-0;
+  }
+}

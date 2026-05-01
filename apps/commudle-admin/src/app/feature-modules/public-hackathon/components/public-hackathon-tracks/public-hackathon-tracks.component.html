@@ -1,0 +1,58 @@
+<div class="two-column-layout medium">
+  <div class="main-column com-mb-20">
+    <div *ngIf="!tracks">
+      <commudle-loading-spinner></commudle-loading-spinner>
+    </div>
+    <div *ngIf="tracks && tracks.length > 0">
+      <div *ngFor="let track of tracks" class="track-card">
+        <nb-card>
+          <nb-card-header>
+            <h3 class="name">{{ track.name }}</h3>
+          </nb-card-header>
+          <nb-card-body>
+            <div [innerHTML]="track.description"></div>
+
+            <div class="problem-statements" *ngIf="track.hackathon_problem_statements?.length > 0">
+              <span class="title">Problem Statements:</span>
+              <div *ngFor="let ps of track.hackathon_problem_statements" class="problem-statement-item">
+                <span class="display-id" *ngIf="ps.display_id">{{ ps.display_id }}.</span>
+                <span [innerHTML]="ps.title"></span>
+              </div>
+            </div>
+
+            <div class="problem-statement" *ngIf="track.problem_statement">
+              <span class="title">Problem Statement:</span>
+              <div class="problem-content" [innerHTML]="track.problem_statement"></div>
+            </div>
+
+            <div *ngIf="track.hackathon_prizes?.length > 0" class="prizes-section">
+              <span class="prizes-title">Prizes:</span>
+              <nb-card *ngFor="let prize of track.hackathon_prizes" class="prize-card">
+                <nb-card-body>
+                  <div class="hackathon-prize">
+                    <div class="prize-name">{{ prize.name }}</div>
+                    <div class="prize-amount" *ngIf="prize.prize_amount">
+                      PRIZE: {{ prize.currency_symbol }} {{ prize.prize_amount }}
+                    </div>
+                  </div>
+                  <div [innerHTML]="prize.description"></div>
+                </nb-card-body>
+              </nb-card>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+  <div class="right-column">
+    <nb-card>
+      <nb-card-body>
+        <commudle-public-hackathon-details-mini-card
+          [hackathon]="hackathon"
+          [hrgId]="hrgId"
+          [community]="community"
+        ></commudle-public-hackathon-details-mini-card>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

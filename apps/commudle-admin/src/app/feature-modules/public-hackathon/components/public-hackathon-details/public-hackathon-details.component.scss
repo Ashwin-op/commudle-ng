@@ -41,34 +41,6 @@
     }
   }
 
-  .track-cards {
-    .track-card {
-      @apply com-py-2 com-my-1;
-      .name {
-        @apply com-text-Yankees-Blue com-text-xl com-font-semibold com-my-0;
-      }
-      .problem-statement {
-        .title {
-          @apply com-text-Yankees-Blue com-text-base com-font-semibold;
-        }
-      }
-      .prize-card {
-        .hackathon-prize {
-          @apply com-flex com-gap-2 com-items-center;
-          .prize-name {
-            @apply com-text-Yankees-Blue com-text-lg com-font-bold;
-          }
-          .prize-amount {
-            @apply com-text-blue-600 com-text-lg com-font-semibold;
-          }
-        }
-      }
-    }
-    .track-card:not(:last-child) {
-      @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
-    }
-  }
-
   commudle-discussion {
     @apply com-h-96;
   }

@@ -65,7 +65,7 @@
           </div>
 
           <div *ngIf="hackathon.tracks_count > 0">
-            <a [routerLink]="'.'" fragment="tracks" [class.active]="activeFragment === 'tracks'">
+            <a [routerLink]="['tracks']" routerLinkActive="active">
               <fa-icon [icon]="icons.faAward"></fa-icon>
               <p class="name">Tracks</p>
             </a>

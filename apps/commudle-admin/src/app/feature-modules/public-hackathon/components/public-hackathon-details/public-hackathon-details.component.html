@@ -22,38 +22,6 @@
       </nb-card>
     </div>
 
-    <div *ngIf="hackathon.tracks_count > 0" id="tracks">
-      <nb-card>
-        <nb-card-header>
-          <fa-icon [icon]="icons.faAward"></fa-icon>
-          <h2>
-            <a [routerLink]="['.']" fragment="tracks"> Tracks </a>
-          </h2>
-        </nb-card-header>
-        <nb-card-body class="track-cards">
-          <div *ngFor="let track of tracks" class="track-card">
-            <h3 class="name">{{ track.name }}</h3>
-            <div [innerHTML]="track.description"></div>
-            <div class="problem-statement">
-              <span class="title">Problem Statement:</span>
-              <div class="problem-content" [innerHTML]="track.problem_statement"></div>
-            </div>
-            <nb-card *ngFor="let prize of track.hackathon_prizes" class="prize-card">
-              <nb-card-body>
-                <div class="hackathon-prize">
-                  <div class="prize-name">{{ prize.name }}</div>
-                  <div class="prize-amount" *ngIf="prize.prize_amount">
-                    PRIZE: {{ prize.currency_symbol }} {{ prize.prize_amount }}
-                  </div>
-                </div>
-                <div [innerHTML]="prize.description"></div>
-              </nb-card-body>
-            </nb-card>
-          </div>
-        </nb-card-body>
-      </nb-card>
-    </div>
-
     <div *ngIf="hackathon.sponsors_count > 0" id="sponsors">
       <nb-card>
         <nb-card-header>

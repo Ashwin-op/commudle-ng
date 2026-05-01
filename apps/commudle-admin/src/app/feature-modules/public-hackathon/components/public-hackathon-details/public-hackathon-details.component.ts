@@ -6,11 +6,10 @@ import {
   EHackathonRegistrationStatus,
   IFaq,
   IHackathonTeam,
-  IHackathonTrack,
   IRound,
   ICommunity,
 } from '@commudle/shared-models';
-import { FaqService, RoundService, SeoService, countries_details } from '@commudle/shared-services';
+import { FaqService, RoundService, SeoService } from '@commudle/shared-services';
 import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
 import { DiscussionsService } from 'apps/commudle-admin/src/app/services/discussions.service';
 import { HackathonResponseGroupService } from 'apps/commudle-admin/src/app/services/hackathon-response-group.service';
@@ -21,12 +20,12 @@ import { IHackathon } from 'apps/shared-models/hackathon.model';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
 import * as moment from 'moment';
 import { Subject, Subscription, takeUntil } from 'rxjs';
-import { faPencil, faAward, faSackDollar, faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
+import { faPencil, faSackDollar, faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 @Component({
-    selector: 'commudle-public-hackathon-details',
-    templateUrl: './public-hackathon-details.component.html',
-    styleUrls: ['./public-hackathon-details.component.scss'],
-    standalone: false
+  selector: 'commudle-public-hackathon-details',
+  templateUrl: './public-hackathon-details.component.html',
+  styleUrls: ['./public-hackathon-details.component.scss'],
+  standalone: false,
 })
 export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
   hackathon: IHackathon;
@@ -34,10 +33,8 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
   EDbModels = EDbModels;
   hackathonSponsorGroupedByTierName: IHackathonSponsorGroupedByTierName;
   faqs: IFaq[];
-  tracks: IHackathonTrack[];
   discussionChat: IDiscussion;
   rounds: IRound[];
-  countryDetails = countries_details;
   moment = moment;
   userTeamDetails: IHackathonTeam[];
   subscriptions: Subscription[] = [];
@@ -47,7 +44,6 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
   hackathonStatus: string;
   icons = {
     faPencil,
-    faAward,
     faSackDollar,
     faCircleQuestion,
   };
@@ -74,19 +70,18 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
         this.calculateHackathonDatesStatus();
         this.getSponsors();
         this.getFaqs();
-        this.getTracks();
         this.getDiscussionChat();
         this.getRounds();
         this.isOrganizerCheck();
       }),
-    ),
-      this.getHackathonResponseGroup();
+    );
+    this.getHackathonResponseGroup();
     this.authWatchService.currentUser$.pipe(takeUntil(this.destroy$)).subscribe((currentUser) => {
       if (currentUser) {
         this.getHackathonCurrentRegistrationDetails();
       }
-    }),
-      this.checkFragment();
+    });
+    this.checkFragment();
   }
 
   ngOnDestroy(): void {
@@ -129,28 +124,6 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
         this.faqs = data;
         if (this.faqs && this.faqs.length > 0) {
           this.setSchema();
-        }
-      }),
-    );
-  }
-
-  getTracks() {
-    this.subscriptions.push(
-      this.hackathonService.pIndexHackathonTracks(this.hackathon.id).subscribe((data) => {
-        this.tracks = data;
-        if (this.tracks) {
-          for (const track of this.tracks) {
-            if (track.hackathon_prizes) {
-              for (const prize of track.hackathon_prizes) {
-                const prizeCurrencySymbol = this.countryDetails.find(
-                  (detail) => detail.currency === prize.currency_type,
-                ) || {
-                  symbol: prize.currency_type,
-                };
-                prize.currency_symbol = prizeCurrencySymbol?.symbol || prize.currency_type;
-              }
-            }
-          }
         }
       }),
     );
