@@ -57,6 +57,27 @@
           <div *ngIf="community" class="community-badge">
             <app-community-badge [community]="community" [size]="'small'"></app-community-badge>
           </div>
+          <div class="countdown-row" *ngIf="isUpcomingEvent && showCounterTimings">
+            <span class="countdown-label">Starts in</span>
+            <span class="countdown-time" *ngIf="countdownParts as parts">
+              <span class="segment day"
+                ><span class="value">{{ parts.days }}</span
+                ><span class="unit">d</span></span
+              >
+              <span class="segment hour"
+                ><span class="value">{{ parts.hours }}</span
+                ><span class="unit">h</span></span
+              >
+              <span class="segment minute"
+                ><span class="value">{{ parts.minutes }}</span
+                ><span class="unit">m</span></span
+              >
+              <span class="segment second"
+                ><span class="value">{{ parts.seconds }}</span
+                ><span class="unit">s</span></span
+              >
+            </span>
+          </div>
           <div *ngIf="event.tags" class="tags">
             <app-tag
               [tags]="getTagNames()"
@@ -65,10 +86,6 @@
               [fontColor]="'com-text-blue-500'"
               [maximumTag]="5"
             ></app-tag>
-          </div>
-          <div class="countdown-row" *ngIf="isUpcomingEvent && showCounterTimings">
-            <span class="countdown-label">Starts in</span>
-            <span class="countdown-time">{{ countdownLabel }}</span>
           </div>
         </div>
         <div *appBreakpoints="'<=lg'" class="upcoming-card-details-mobile">

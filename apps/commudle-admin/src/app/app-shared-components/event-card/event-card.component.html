@@ -70,7 +70,17 @@
               <app-community-badge [community]="community" [size]="'small'"></app-community-badge>
             </div>
           </div>
-          <a class="view-details">View Details</a>
+          <div class="view-actions">
+            <button
+              *ngIf="event?.speaker_resource?.id"
+              type="button"
+              class="view-slides"
+              (click)="goToSpeakerSlides($event)"
+            >
+              View Slides
+            </button>
+            <span class="view-details">View Details</span>
+          </div>
         </div>
         <div *appBreakpoints="'<=lg'" class="details-container-mobile">
           <div class="time-badge">
@@ -97,6 +107,17 @@
           </p>
           <div *ngIf="community && !hideCommunityNameBadge" class="community-badge">
             <app-community-badge [community]="community" [size]="'small'"></app-community-badge>
+          </div>
+          <div class="view-actions">
+            <button
+              *ngIf="event?.speaker_resource?.id"
+              type="button"
+              class="view-slides"
+              (click)="goToSpeakerSlides($event)"
+            >
+              View Slides
+            </button>
+            <span class="view-details">View Details</span>
           </div>
         </div>
       </nb-card-body>

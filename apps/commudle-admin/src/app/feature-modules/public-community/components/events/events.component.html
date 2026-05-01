@@ -1,8 +1,8 @@
 <div class="community-events">
   <nb-card *ngIf="upcomingEvents.length >= 1" class="events-section-card com-mt-4">
-    <nb-card-body class="body-container">
+    <nb-card-body class="body-container com-p-0 md:com-p-6">
       <section class="upcoming-events-section">
-        <h2 class="heading">
+        <h2 class="heading com-text-tYankees-Blue">
           <div class="heading-btn"><fa-icon [icon]="faCalendarDays"></fa-icon></div>
           <span class="live-dot" aria-hidden="true"></span>
           Upcoming Events
@@ -24,11 +24,13 @@
     <app-loading-spinner></app-loading-spinner>
   </div>
 
-  <nb-card *ngIf="pastEvents.length >= 1" class="events-section-card">
-    <nb-card-body class="body-container">
+  <nb-card *ngIf="pastEvents.length >= 1" class="events-section-card px-4">
+    <nb-card-body class="body-container com-p-4 md:com-p-6">
       <section class="past-events">
         <h2 class="heading">
-          <div class="heading-btn"><fa-icon [icon]="faCalendarCheck"></fa-icon></div>
+          <div class="heading-btn com-px-4 com-py-2 com-text-Yankees-Blue">
+            <fa-icon [icon]="faCalendarCheck"></fa-icon>
+          </div>
           Past Events
         </h2>
         <div *ngIf="isLoadingPastEvents">

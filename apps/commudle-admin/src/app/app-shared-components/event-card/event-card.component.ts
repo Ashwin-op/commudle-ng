@@ -1,4 +1,4 @@
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NbCardModule, NbIconModule } from '@commudle/theme';
@@ -27,7 +27,7 @@ export class EventCardComponent implements OnInit {
   staticAssets = staticAssets;
 
   moment = moment;
-  constructor(private communitiesService: CommunitiesService) {}
+  constructor(private communitiesService: CommunitiesService, private router: Router) {}
 
   ngOnInit(): void {
     this.getCommunity();
@@ -38,5 +38,11 @@ export class EventCardComponent implements OnInit {
     this.communitiesService.pGetCommunityDetails(eventCommunityId).subscribe((data) => {
       this.community = data;
     });
+  }
+
+  goToSpeakerSlides(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.router.navigate(['/speaker-resources', this.event.speaker_resource.id]);
   }
 }

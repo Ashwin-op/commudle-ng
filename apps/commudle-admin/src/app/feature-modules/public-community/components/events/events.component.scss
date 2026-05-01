@@ -5,13 +5,13 @@
     @apply com-h-max com-mx-0 com-mb-0 com-mt-0;
 
     .body-container {
-      @apply com-p-4 md:com-p-6 com-overflow-visible;
+      @apply com-overflow-visible;
     }
   }
 
   .heading {
     @apply com-m-0 com-mb-4 md:com-mb-6 com-leading-4 com-no-underline com-flex com-items-center;
-    @apply com-text-xl md:com-text-2xl com-font-semibold com-text-Yankees-Blue;
+    @apply com-text-xl md:com-text-2xl com-font-semibold;
 
     button {
       @apply com-mr-4;
@@ -24,10 +24,10 @@
   }
 
   .upcoming-events-section {
-    @apply com-my-0 com-bg-[#f5f9ff] com-rounded-lg;
+    @apply com-my-0 com-bg-[#f5f9ff] com-rounded-lg com-p-4;
 
     .upcoming-events-container {
-      @apply com-flex com-flex-row com-flex-wrap com-gap-4 com-p-4;
+      @apply com-flex com-flex-row com-flex-wrap com-gap-4;
 
       .upcoming-event-card-wrapper {
         @apply com-w-full com-p-4 com-bg-white com-rounded-10;
@@ -60,7 +60,7 @@ app-loading-spinner {
 }
 
 .heading-btn {
-  @apply com-flex com-justify-center com-items-center com-px-4 com-py-2 com-bg-[#f7f9fc] com-rounded-lg com-mr-4;
+  @apply com-flex com-justify-center com-items-center com-bg-[#f7f9fc] com-rounded-lg com-mr-4;
 }
 
 fa-icon {

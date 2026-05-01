@@ -84,6 +84,19 @@ export class EventHorizontalCardComponent implements OnInit, OnDestroy {
       .padStart(2, '0')}m  ${seconds.toString().padStart(2, '0')}s`;
   }
 
+  get countdownParts() {
+    if (!this.isUpcomingEvent) {
+      return null;
+    }
+    const duration = moment.duration(moment(this.event.start_time).diff(this.now));
+    return {
+      days: Math.max(0, Math.floor(duration.asDays())).toString().padStart(2, '0'),
+      hours: Math.max(0, duration.hours()).toString().padStart(2, '0'),
+      minutes: Math.max(0, duration.minutes()).toString().padStart(2, '0'),
+      seconds: Math.max(0, duration.seconds()).toString().padStart(2, '0'),
+    };
+  }
+
   private startCountdownTimer(): void {
     if (!this.event?.start_time) {
       return;
