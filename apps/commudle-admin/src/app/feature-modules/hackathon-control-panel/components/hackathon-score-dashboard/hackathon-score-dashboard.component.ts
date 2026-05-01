@@ -17,6 +17,7 @@ import {
   faFileLines,
   faArrowUpRightFromSquare,
   faMagnifyingGlass,
+  faChartBar,
 } from '@fortawesome/free-solid-svg-icons';
 
 type IExpandableTeam = IHackathonTeam & {
@@ -57,6 +58,7 @@ export class HackathonScoreDashboardComponent implements OnInit, OnDestroy {
     faCube,
     faFileLines,
     faArrowUpRightFromSquare,
+    faChartBar,
     faSearch: faMagnifyingGlass,
   };
   subscriptions: Subscription[] = [];
