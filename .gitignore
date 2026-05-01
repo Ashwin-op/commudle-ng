@@ -84,3 +84,7 @@ AGENTS.md
 
 
 skills-lock.json
+
+.github/agents
+.github/prompts
+.github/skills
