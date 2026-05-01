@@ -220,10 +220,6 @@ export class CreateCommunityBuildComponent implements OnInit, OnDestroy {
       campaignName: this.campaignName,
       heading: 'Create Your Build',
       subtext: 'Share your project for this campaign and get discovered by the community.',
-      cta: {
-        label: 'View Campaign Builds',
-        routerLink: '/builds',
-      },
     };
   }
 
@@ -489,7 +485,15 @@ export class CreateCommunityBuildComponent implements OnInit, OnDestroy {
           .then(() => this.toastLogService.successDialog('Saved!'));
         this.gtmService();
       } else {
-        this.router.navigate(['/builds/my-builds']).then(() => this.toastLogService.successDialog('Saved!'));
+        if (this.isCampaignPage) {
+          this.router
+            .navigate(['/builds'], {
+              queryParams: { campaign: this.campaignName },
+            })
+            .then(() => this.toastLogService.successDialog('Saved!'));
+        } else {
+          this.router.navigate(['/builds/my-builds']).then(() => this.toastLogService.successDialog('Saved!'));
+        }
         this.gtmService();
       }
     });

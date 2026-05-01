@@ -47,6 +47,7 @@ import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-com
 import { ListingPageHeaderComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-header/listing-page-header.component';
 import { FeaturedBuildsComponent } from 'apps/commudle-admin/src/app/app-shared-components/featured-builds/featured-builds.component';
 import { SectionHero6Component } from 'apps/commudle-admin/src/app/app-shared-components/page-sections/section-hero-6/section-hero-6.component';
+import { SectionHero7Component } from 'apps/commudle-admin/src/app/app-shared-components/page-sections/section-hero-7/section-hero-7.component';
 import { ShowMoreBuildsComponent } from './components/show-more-builds.component';
 import { RecaptchaModule } from 'ng-recaptcha-2';
 @NgModule({
@@ -92,6 +93,7 @@ import { RecaptchaModule } from 'ng-recaptcha-2';
     FeaturedProjectsComponent,
     HelpSectionComponent,
     SectionHero6Component,
+    SectionHero7Component,
     // Nebular
     NbCardModule,
     NbSelectModule,

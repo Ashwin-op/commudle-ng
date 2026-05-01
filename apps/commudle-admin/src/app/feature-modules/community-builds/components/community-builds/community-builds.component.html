@@ -9,7 +9,7 @@
       <commudle-section-hero-6 *ngIf="isCampaignPage" [config]="campaignHeroConfig"></commudle-section-hero-6>
     </div>
     <div one-column *ngIf="isMobileView">
-      <div class="publish-build-button">
+      <div *ngIf="!isCampaignPage" class="publish-build-button">
         <a [routerLink]="['/builds/create']" nbButton size="large" class="button">
           <nb-icon icon="plus"></nb-icon>
           Share your Build
@@ -21,7 +21,7 @@
         (seoMetadataChange)="onSeoMetadataChange($event)"
         (totalSubmissionsChange)="onTotalSubmissionsChange($event)"
       ></commudle-builds>
-      <div class="top-builders">
+      <div *ngIf="!isCampaignPage" class="top-builders">
         <commudle-builds-top-builders
           [heading]="'POPULAR BUILDERS'"
           [subHeading]="'Follow these builders and get inspired'"
@@ -40,7 +40,7 @@
       ></commudle-builds>
     </div>
     <div right-column class="right-column">
-      <div class="publish-build-button">
+      <div *ngIf="!isCampaignPage" class="publish-build-button">
         <a [routerLink]="['/builds/create']" nbButton size="large" class="button">
           <nb-icon icon="plus"></nb-icon>
           Share your Build
@@ -48,7 +48,7 @@
         <commudle-help-section [helpDictionaryName]="'build-publish'"></commudle-help-section>
       </div>
       <div>
-        <div class="top-builders" *ngIf="!isCampaignPage">
+        <div *ngIf="!isCampaignPage" class="top-builders">
           <commudle-builds-top-builders
             [backgroundColor]="'#D59B5D'"
             [heading]="'POPULAR BUILDERS'"

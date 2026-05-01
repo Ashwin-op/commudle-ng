@@ -62,6 +62,7 @@ export class CommunityBuildsComponent implements OnInit, OnDestroy {
       cta: {
         label: 'Share your Build',
         routerLink: '/builds/create',
+        queryParams: { campaign: this.campaignName },
       },
       submissionCount: this.totalSubmissions,
     };

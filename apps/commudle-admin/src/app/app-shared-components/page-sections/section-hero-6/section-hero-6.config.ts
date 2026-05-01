@@ -25,7 +25,7 @@ export interface IHero6Config {
   /** Supporting subtitle — plain text */
   subtext: string;
   /** Primary CTA button */
-  cta: { label: string; routerLink: string };
+  cta: { label: string; routerLink: string; queryParams?: Record<string, string | number | boolean> };
   /** Live submission count shown below the CTA — omit to hide */
   submissionCount?: number;
 }

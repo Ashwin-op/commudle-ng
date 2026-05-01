@@ -23,7 +23,14 @@
 
         <!-- CTA + live submission count -->
         <div class="cta-group">
-          <button nbButton status="primary" size="large" shape="semi-round" [routerLink]="config.cta.routerLink">
+          <button
+            nbButton
+            status="primary"
+            size="large"
+            shape="semi-round"
+            [routerLink]="config.cta.routerLink"
+            [queryParams]="config.cta.queryParams"
+          >
             {{ config.cta.label }}
           </button>
 
