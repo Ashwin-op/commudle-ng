@@ -1,31 +1,52 @@
 <div class="two-column-layout medium">
   <div class="main-column com-mb-20">
-    <div *ngIf="isLoading; else prizesCards">
+    <div *ngIf="isLoading; else prizesCards" class="loading">
       <commudle-loading-spinner></commudle-loading-spinner>
     </div>
     <ng-template #prizesCards>
-      <div *ngFor="let prize of hackathonPrizes">
-        <nb-card>
-          <nb-card-body>
-            <div class="prize-amount" *ngIf="prize.prize_amount !== null">
-              PRIZE: {{ prize.currency_symbol }} {{ prize.prize_amount }}
-            </div>
-            <div class="prize-amount" *ngIf="prize.prize_amount === 0 || prize.prize_amount === null">
-              {{ prize.name }}
-            </div>
-            <div class="track-name">{{ prize.hackathon_track?.name }}</div>
-            <div class="track-description" [innerHTML]="prize.hackathon_track?.description"></div>
-          </nb-card-body>
-        </nb-card>
+      <div class="prizes-list">
+        <div *ngFor="let prize of hackathonPrizes; let i = index">
+          <nb-card>
+            <nb-card-body>
+              <div class="prize-row">
+                <div class="prize-icon">
+                  <fa-icon [icon]="icons.faTrophy"></fa-icon>
+                </div>
+                <div class="prize-details">
+                  <div class="prize-top">
+                    <div class="prize-name">{{ prize.name }}</div>
+                    <div class="prize-amount" *ngIf="prize.prize_amount">
+                      {{ prize.currency_symbol }} {{ prize.prize_amount | number }}
+                    </div>
+                  </div>
+                  <div class="prize-track" *ngIf="prize.hackathon_track?.name">
+                    <fa-icon [icon]="icons.faLayerGroup"></fa-icon>
+                    <span>{{ prize.hackathon_track.name }}</span>
+                  </div>
+                  <div class="prize-description" *ngIf="prize.description" [innerHTML]="prize.description"></div>
+                </div>
+                <div class="prize-meta">
+                  <div class="winners-count" *ngIf="prize.no_of_winners">
+                    <fa-icon [icon]="icons.faUsers"></fa-icon>
+                    <span>{{ prize.no_of_winners }} {{ prize.no_of_winners === 1 ? 'Winner' : 'Winners' }}</span>
+                  </div>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
       </div>
     </ng-template>
   </div>
   <div class="right-column">
     <nb-card>
       <nb-card-body>
-        <commudle-public-hackathon-details-mini-card [hackathon]="hackathon" [hrgId]="hrgId" [community]="community">
-        </commudle-public-hackathon-details-mini-card
-      ></nb-card-body>
+        <commudle-public-hackathon-details-mini-card
+          [hackathon]="hackathon"
+          [hrgId]="hrgId"
+          [community]="community"
+        ></commudle-public-hackathon-details-mini-card>
+      </nb-card-body>
     </nb-card>
   </div>
 </div>

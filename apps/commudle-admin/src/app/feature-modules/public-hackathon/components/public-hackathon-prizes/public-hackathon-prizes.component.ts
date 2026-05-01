@@ -1,26 +1,31 @@
+/* eslint-disable @nx/enforce-module-boundaries */
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+import { faTrophy, faLayerGroup, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { Subject, Subscription, takeUntil } from 'rxjs';
+
+import { ICommunity, IHackathonPrize, IHackathonTeam } from '@commudle/shared-models';
+import { AuthService, countries_details as countryDetails } from '@commudle/shared-services';
 import { HackathonResponseGroupService } from 'apps/commudle-admin/src/app/services/hackathon-response-group.service';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subject, Subscription, takeUntil } from 'rxjs';
-import { AuthService, countries_details as countryDetails } from '@commudle/shared-services';
-import { ICommunity, IHackathonPrize, IHackathonTeam } from '@commudle/shared-models';
 
 @Component({
-    selector: 'commudle-public-hackathon-prizes',
-    templateUrl: './public-hackathon-prizes.component.html',
-    styleUrls: ['./public-hackathon-prizes.component.scss'],
-    standalone: false
+  selector: 'commudle-public-hackathon-prizes',
+  templateUrl: './public-hackathon-prizes.component.html',
+  styleUrls: ['./public-hackathon-prizes.component.scss'],
+  standalone: false,
 })
 export class PublicHackathonPrizesComponent implements OnInit, OnDestroy {
-  subscriptions: Subscription[] = [];
   hackathon: IHackathon;
+  community: ICommunity;
   hackathonPrizes: IHackathonPrize[];
   isLoading = true;
   userTeamDetails: IHackathonTeam[];
   hrgId: number;
-  community: ICommunity;
+  icons = { faTrophy, faLayerGroup, faUsers };
+  subscriptions: Subscription[] = [];
 
   private destroy$ = new Subject<void>();
 
@@ -37,17 +42,18 @@ export class PublicHackathonPrizesComponent implements OnInit, OnDestroy {
         this.hackathon = data.hackathon;
         this.community = data.community;
         this.getPrizes();
-        this.authService.currentUser$.pipe(takeUntil(this.destroy$)).subscribe((currentUser) => {
-          if (currentUser) this.getHackathonCurrentRegistrationDetails();
-        });
       }),
     );
     this.hrgService.pShowHackathonResponseGroup(this.hackathon.id).subscribe((data) => {
       if (data) this.hrgId = data.id;
     });
+    this.authService.currentUser$.pipe(takeUntil(this.destroy$)).subscribe((currentUser) => {
+      if (currentUser) this.getHackathonCurrentRegistrationDetails();
+    });
   }
 
   ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
     this.destroy$.next();
     this.destroy$.complete();
   }

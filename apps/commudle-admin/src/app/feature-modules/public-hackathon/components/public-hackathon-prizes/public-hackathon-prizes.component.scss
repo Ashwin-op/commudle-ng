@@ -1,32 +1,59 @@
 .main-column {
-  nb-card {
-    @apply com-ml-0;
+  .loading {
+    @apply com-min-h-[50vh] com-w-full com-flex com-items-center com-justify-center;
+  }
 
-    .prize-amount {
-      color: var(--blue-600, #2563eb);
-      font-family: Inter, sans-serif;
-      font-size: 18px;
-      font-style: normal;
-      font-weight: 600;
-      line-height: 24px; /* 133.333% */
-    }
+  .prizes-list {
+    @apply com-flex com-flex-col com-gap-3 com-mt-4;
 
-    .track-name {
-      color: #222b45;
-      font-family: Inter, sans-serif;
-      font-size: 18px;
-      font-style: normal;
-      font-weight: 700;
-      line-height: 26px; /* 144.444% */
-    }
+    nb-card {
+      @apply com-m-0 hover:com-shadow-md com-transition-shadow;
 
-    .track-description {
-      color: #000;
-      font-family: Inter, sans-serif;
-      font-size: 16px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 24px; /* 150% */
+      nb-card-body {
+        .prize-row {
+          @apply com-flex com-items-center com-gap-4;
+
+          .prize-icon {
+            @apply com-flex com-items-center com-justify-center com-w-12 com-h-12 com-rounded-full com-flex-shrink-0 com-bg-gray-100 com-text-gray-500 com-text-xl;
+          }
+
+          .prize-details {
+            @apply com-flex-1 com-min-w-0;
+
+            .prize-top {
+              @apply com-flex com-items-baseline com-gap-3 com-flex-wrap;
+
+              .prize-name {
+                @apply com-text-Yankees-Blue com-text-lg com-font-bold;
+              }
+
+              .prize-amount {
+                @apply com-text-primary-600 com-text-lg com-font-bold;
+              }
+            }
+
+            .prize-track {
+              @apply com-flex com-items-center com-gap-2 com-text-sm com-text-Auro-Metal-Saurus com-mt-1;
+
+              fa-icon {
+                @apply com-text-xs;
+              }
+            }
+
+            .prize-description {
+              @apply com-text-sm com-text-Charcoal com-mt-1 com-line-clamp-2;
+            }
+          }
+
+          .prize-meta {
+            @apply com-flex-shrink-0;
+
+            .winners-count {
+              @apply com-flex com-items-center com-gap-2 com-text-sm com-text-Auro-Metal-Saurus com-whitespace-nowrap;
+            }
+          }
+        }
+      }
     }
   }
 }
