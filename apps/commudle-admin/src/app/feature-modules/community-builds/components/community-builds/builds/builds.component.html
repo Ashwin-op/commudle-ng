@@ -42,7 +42,7 @@
         <nb-option value="all-time">Highest upvoted all time</nb-option>
       </nb-select>
       <button
-        *ngIf="isCampaignMode"
+        *ngIf="isCampaignMode && !isAllFilterSelected"
         nbButton
         size="tiny"
         (click)="clearCampaignFilters()"
