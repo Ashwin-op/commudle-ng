@@ -473,11 +473,15 @@
                 [backgroundColor]="'com-bg-tAnti-Flash'"
                 [editable]="true"
                 [fontColor]="'com-text-tYankees-Blue'"
+                [minimumTags]="minimumTagsRequired"
                 [tags]="tags"
               ></app-tag>
 
-              <span *ngIf="showTagsValidation && tags.length < 5">
-                <commudle-alert [errorMessage]="'Minimum 5 tags need to be added'" [error]="true"></commudle-alert>
+              <span *ngIf="showTagsValidation && tags.length < minimumTagsRequired">
+                <commudle-alert
+                  [errorMessage]="'Minimum ' + minimumTagsRequired + ' tags need to be added'"
+                  [error]="true"
+                ></commudle-alert>
               </span>
             </div>
 

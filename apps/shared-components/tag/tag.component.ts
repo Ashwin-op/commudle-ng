@@ -6,17 +6,17 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { debounceTime, distinctUntilChanged, filter, fromEvent, Subscription, switchMap } from 'rxjs';
 
 @Component({
-    selector: 'app-tag',
-    templateUrl: './tag.component.html',
-    styleUrls: ['./tag.component.scss'],
-    standalone: false
+  selector: 'app-tag',
+  templateUrl: './tag.component.html',
+  styleUrls: ['./tag.component.scss'],
+  standalone: false,
 })
 export class TagComponent implements OnInit, OnDestroy {
   @Input() tags: string[];
   @Input() editable: boolean;
   @Input() inputDisabled: boolean;
-  @Input() minimumTags: number = 5;
-  @Input() backgroundColor: string = 'com-bg-[#F7F9FC]';
+  @Input() minimumTags = 5;
+  @Input() backgroundColor = 'com-bg-[#F7F9FC]';
   @Input() fontColor: string;
   @Input() maximumTag;
   @Input() size; //It can be tiny;
@@ -92,6 +92,15 @@ export class TagComponent implements OnInit, OnDestroy {
   }
 
   onKeyDown(event: KeyboardEvent): void {
+    if (event.key === ',') {
+      event.preventDefault();
+
+      const tag = this.searchForm.get('q')?.value?.trim();
+      if (tag) {
+        this.onTagAdd(tag);
+      }
+      return;
+    }
     if (event.key === 'Backspace' && !this.searchForm.get('q')?.value.trim() && this.tags.length) {
       this.onTagRemove(this.tags[this.tags.length - 1]);
     }

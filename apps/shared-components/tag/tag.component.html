@@ -28,7 +28,9 @@
       fullWidth
       formControlName="q"
       [placeholder]="
-        minTagLimit ? 'Type something and press enter to keep adding (At least ' + minimumTags + ' tags)' : label
+        minTagLimit
+          ? 'Type something and press enter or comma to keep adding (At least ' + minimumTags + ' tags)'
+          : label
       "
       type="text"
       [nbAutocomplete]="autoControl"

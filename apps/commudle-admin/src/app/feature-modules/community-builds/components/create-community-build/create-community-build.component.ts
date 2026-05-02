@@ -134,6 +134,7 @@ export class CreateCommunityBuildComponent implements OnInit, OnDestroy {
   recaptchaToken: string | null = null;
   isSubmitting = false;
   staticAssets = staticAssets;
+  minimumTagsRequired = 5;
 
   @ViewChild('captchaRef') captchaRef: RecaptchaComponent;
 
@@ -193,9 +194,11 @@ export class CreateCommunityBuildComponent implements OnInit, OnDestroy {
 
     this.paramsTags = this.activatedRoute.snapshot.queryParamMap.getAll('tags[]');
     const campaignFromQuery = this.activatedRoute.snapshot.queryParamMap.get('campaign');
+    this.isCampaignPage = !!campaignFromQuery;
     if (campaignFromQuery) {
       this.paramsTags.push(campaignFromQuery);
     }
+    this.minimumTagsRequired = this.isCampaignPage ? 1 : 5;
     this.editBuildForm = this.activatedRoute.snapshot.params.community_build_id ? true : false;
     this.getCommunityBuild();
     this.setBuildType();
@@ -375,7 +378,7 @@ export class CreateCommunityBuildComponent implements OnInit, OnDestroy {
   submitForm(publishStatus: EPublishStatus) {
     if (
       this.communityBuildForm.invalid ||
-      this.tags.length < 5 ||
+      this.tags.length < this.minimumTagsRequired ||
       !(this.communityBuildForm.value.link || this.communityBuildForm.value.live_app_link)
     ) {
       this.communityBuildForm.markAllAsTouched();
@@ -515,6 +518,7 @@ export class CreateCommunityBuildComponent implements OnInit, OnDestroy {
       this.parentType = data['parent_type'];
       this.isCampaignPage = !!data['campaign'];
       this.campaignName = data['campaign'] ? data['campaign'] : 'Build Campaign';
+      this.minimumTagsRequired = this.isCampaignPage ? 1 : 5;
       if (this.parentType === EDbModels.HACKATHON_TEAM) {
         this.hackathonService.showUserResponsesByTeam(this.parentId).subscribe((data) => {
           this.hackathonUserResponses = data;

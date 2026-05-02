@@ -6,10 +6,10 @@ com-card {
   @apply com-m-0 com-overflow-hidden com-h-auto md:com-border-0 com-border md:com-w-full com-w-[313px];
 
   com-card-body {
-    @apply md:com-p-0 com-p-3 com-overflow-hidden com-flex-row;
+    @apply md:com-p-0 com-p-3 com-overflow-hidden;
 
     .content {
-      @apply com-flex com-flex-row;
+      @apply com-flex com-flex-row com-w-full;
       .user-profile-image {
         @apply com-w-[60px] com-h-[60px] com-mr-3 md:com-mb-0 com-mb-4 com-flex-shrink-0 com-overflow-hidden com-bg-zinc-100;
         border-radius: 50%;
@@ -20,14 +20,22 @@ com-card {
       }
 
       .text {
-        @apply com-flex com-flex-row com-m-0 com-w-full;
+        @apply com-flex com-flex-row com-m-0 com-w-full com-min-w-0;
 
         a {
-          @apply com-w-full com-mr-2;
+          @apply com-w-full com-mr-2 com-min-w-0;
         }
 
         .name {
-          @apply com-flex com-text-sm com-font-medium com-text-Yankees-Blue com-m-0 com-line-clamp-1 com-items-center;
+          @apply com-flex com-flex-row com-items-center com-min-w-0 com-m-0 com-text-sm com-font-medium com-text-Yankees-Blue;
+
+          .name-text {
+            @apply com-min-w-0 com-truncate;
+          }
+
+          .name-badges {
+            @apply com-inline-flex com-flex-shrink-0 com-items-center;
+          }
         }
 
         .username {

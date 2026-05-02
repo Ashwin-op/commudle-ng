@@ -1,5 +1,5 @@
 <com-card>
-  <com-card-body>
+  <com-card-body [ngClass]="{ 'com-flex-col': showFollowButton }">
     <div class="content">
       <a [routerLink]="['/users', topBuilder.username]">
         <div class="user-profile-image">
@@ -9,11 +9,13 @@
       <div class="text">
         <a [routerLink]="['/users', topBuilder.username]">
           <p class="name">
-            {{ topBuilder.name }}
-            <commudle-user-expert-tick *ngIf="topBuilder.is_expert"></commudle-user-expert-tick>
-            <commudle-user-personal-connect
-              [userConnect]="topBuilder.distance_from_current_user"
-            ></commudle-user-personal-connect>
+            <span class="name-text" [title]="topBuilder.name">{{ topBuilder.name }}</span>
+            <span class="name-badges">
+              <commudle-user-expert-tick *ngIf="topBuilder.is_expert"></commudle-user-expert-tick>
+              <commudle-user-personal-connect
+                [userConnect]="topBuilder.distance_from_current_user"
+              ></commudle-user-personal-connect>
+            </span>
           </p>
           <p *ngIf="displayUsername" class="username" title="{{ topBuilder.username }}">
             &#64;{{ topBuilder.username | truncatetext : 15 }}
