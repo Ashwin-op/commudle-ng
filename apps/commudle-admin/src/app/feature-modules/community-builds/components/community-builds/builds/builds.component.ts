@@ -46,23 +46,7 @@ export class BuildsComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params) => {
       this.isCampaignMode = !!params['campaign'];
-      if (this.isCampaignMode && (params['month'] || params['year'] || !params['all-time'])) {
-        this.queryParams = { ...params };
-        delete this.queryParams['month'];
-        delete this.queryParams['year'];
-        this.queryParams['all-time'] = true;
-        this.router.navigate([], { queryParams: this.queryParams });
-        return;
-      }
       if (Object.keys(params).length > 0) {
-        if (params['campaign']) {
-          this.timePeriod = 'all-time';
-          this.month = false;
-          this.year = false;
-          this.allTime = true;
-          this.isAllFilterSelected = false;
-          this.order_by = 'votes_count';
-        }
         if (params['month']) {
           this.timePeriod = 'month';
           this.month = true;
@@ -87,13 +71,27 @@ export class BuildsComponent implements OnInit {
           this.isAllFilterSelected = false;
           this.order_by = 'votes_count';
         }
-        if (params['tags[]'] && !params['month'] && !params['year'] && !params['all-time'] && !params['campaign']) {
+        if (params['tags[]'] && !params['campaign'] && !params['month'] && !params['year'] && !params['all-time']) {
           this.isAllFilterSelected = true;
           this.month = false;
           this.year = false;
           this.allTime = false;
           this.timePeriod = null;
           this.order_by = '';
+        }
+        if (params['campaign'] && !params['all-time'] && !params['month'] && !params['year']) {
+          this.isAllFilterSelected = true;
+          this.month = false;
+          this.year = false;
+          this.allTime = false;
+          this.timePeriod = null;
+          this.order_by = '';
+        }
+        if (params['campaign'] && params['all-time']) {
+          this.isAllFilterSelected = false;
+          this.month = false;
+          this.year = false;
+          this.allTime = true;
         }
         this.communityBuilds = [];
         this.getCommunityBuilds();
@@ -188,7 +186,6 @@ export class BuildsComponent implements OnInit {
   clearCampaignFilters() {
     this.page_info = null;
     this.queryParams = { ...this.activatedRoute.snapshot.queryParams };
-    delete this.queryParams['campaign'];
     delete this.queryParams['month'];
     delete this.queryParams['year'];
     delete this.queryParams['all-time'];

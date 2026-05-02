@@ -16,7 +16,6 @@
     ></app-tag>
     <div class="filters">
       <button
-        *ngIf="!isCampaignMode"
         nbButton
         [status]="isAllFilterSelected ? 'primary' : 'basic'"
         [ngStyle]="{ color: isAllFilterSelected ? 'white' : 'black' }"
