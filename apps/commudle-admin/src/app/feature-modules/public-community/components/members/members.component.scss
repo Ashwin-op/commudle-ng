@@ -36,14 +36,14 @@ nb-card {
         @apply com-mt-0 com-mx-0 com-mb-4;
 
         .header-text {
-          @apply com-max-w-fit com-m-0 com-mb-6 com-text-2xl com-font-semibold com-text-Yankees-Blue md:com-px-0 com-px-4;
+          @apply com-max-w-fit com-m-0 com-mb-6 com-text-xl md:com-text-2xl com-font-semibold com-text-Yankees-Blue md:com-px-0 com-px-4;
         }
 
         .members-list {
           @apply com-grid com-grid-cols-1 md:com-grid-cols-3 com-gap-0;
 
           .member-card {
-            @apply md:com-px-4 md:com-py-6 com-p-4 com-border-0 md:com-border-r com-border-r-0 com-border-b com-border-solid com-border-Bright-Gray;
+            @apply com-p-4 com-border-0 md:com-border-r com-border-r-0 com-border-b com-border-solid com-border-Bright-Gray;
 
             &:nth-child(3n) {
               @apply md:com-border-r-0;
@@ -99,9 +99,9 @@ nb-card {
   }
 
   .filter-dropdowns {
-    @apply com-flex com-items-center com-gap-3 com-text-xs com-font-medium com-text-Yankees-Blue com-border-0 md:com-border-r com-border-r-0 com-border-Bright-Gray com-border-solid md:com-pr-3 com-pr-0 md:com-mb-0 com-mb-4 com-w-full;
+    @apply com-flex com-items-center com-gap-3 com-text-xs com-font-medium com-text-Yankees-Blue com-border-0 md:com-border-r com-border-r-0 com-border-Bright-Gray com-border-solid md:com-pr-3 com-pr-0 md:com-mb-0 com-mb-0 md:com-w-full com-w-max com-flex-nowrap;
     .filter-select {
-      @apply com-border-0 com-w-full com-cursor-pointer;
+      @apply com-border-0 md:com-w-full com-w-44 com-cursor-pointer;
 
       nb-select {
         @apply com-w-full;
@@ -110,7 +110,11 @@ nb-card {
   }
 
   .active-filter-tags {
-    @apply com-flex com-flex-wrap com-gap-2 md:com-pl-3 com-pl-0 com-w-full;
+    @apply com-flex com-flex-nowrap com-items-center com-gap-2 md:com-pl-3 com-pl-0 md:com-w-full com-w-max;
+
+    nb-tag {
+      @apply com-whitespace-nowrap;
+    }
 
     .clear-filters-btn {
       @apply com-ml-2 com-text-xs com-font-medium com-text-gray-600 com-cursor-pointer;
@@ -119,7 +123,7 @@ nb-card {
 }
 
 .filter-dropdowns-container {
-  @apply com-flex md:com-flex-row com-flex-col com-items-center com-mb-4;
+  @apply com-flex md:com-flex-row com-flex-row com-flex-nowrap com-items-center com-mb-4 com-overflow-x-auto com-overflow-y-hidden com-scrollbar-hide com-gap-2;
 }
 
 .activeTag {

@@ -35,11 +35,13 @@
           <div class="text-details">
             <div class="user-name-header">
               <p class="user-name">
-                {{ speaker.name }}
-                <commudle-user-expert-tick *ngIf="speaker.is_expert"></commudle-user-expert-tick>
-                <commudle-user-personal-connect
-                  [userConnect]="speaker.distance_from_current_user"
-                ></commudle-user-personal-connect>
+                <span class="user-name-text">{{ speaker.name }}</span>
+                <span class="user-name-badges">
+                  <commudle-user-expert-tick *ngIf="speaker.is_expert"></commudle-user-expert-tick>
+                  <commudle-user-personal-connect
+                    [userConnect]="speaker.distance_from_current_user"
+                  ></commudle-user-personal-connect>
+                </span>
               </p>
               <div *ngIf="speaker.hiring || speaker.looking_for_work" class="hiring-looking-works-tags">
                 <app-hiring-looking-works-tags [user]="speaker"></app-hiring-looking-works-tags>

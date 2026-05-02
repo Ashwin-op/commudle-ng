@@ -99,19 +99,19 @@ app-badge {
 }
 
 .user-company {
-  @apply com-flex com-flex-row com-text-gray-500 com-pt-2 com-items-center;
+  @apply com-flex com-flex-row com-text-gray-500 com-pt-1 com-items-center;
 
   .user-company-icon {
     @apply com-w-3 md:com-mr-2 com-mr-1;
   }
 
   .user-company-name {
-    @apply com-text-xs com-font-medium com-m-0 com-text-gray-500;
+    @apply com-text-sm com-font-medium com-m-0 com-text-gray-500;
   }
 }
 
 .mutuals {
-  @apply com-block com-text-xs com-font-medium com-text-gray-500 com-mt-3;
+  @apply com-block com-text-sm com-font-medium com-text-gray-500 com-mt-1;
 
   .mutuals-name {
     @apply hover:com-underline;

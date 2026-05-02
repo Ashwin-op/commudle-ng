@@ -62,11 +62,19 @@ nb-card {
             }
 
             .user-name {
-              @apply com-m-0 com-text-sm com-font-medium com-text-Yankees-Blue com-flex com-items-center com-line-clamp-1 com-h-[34px];
+              @apply com-m-0 com-text-sm com-font-semibold com-text-Yankees-Blue com-flex com-items-center com-gap-1 com-min-w-0;
+
+              .user-name-text {
+                @apply com-min-w-0 com-flex-1 com-truncate;
+              }
+
+              .user-name-badges {
+                @apply com-inline-flex com-items-center com-gap-1 com-flex-shrink-0;
+              }
             }
 
             .username {
-              @apply com-text-xs com-font-normal com-text-gray-500 com-m-0 com-mb-1;
+              @apply com-text-xs com-font-normal com-text-gray-500 com-m-0 com-mb-1 com-w-full com-truncate;
             }
 
             .designation {
@@ -112,5 +120,5 @@ nb-card {
 }
 
 .user-name-header {
-  @apply com-flex com-items-center com-flex-row com-gap-2 com-m-0 com-mb-1;
+  @apply com-flex com-items-start com-flex-row com-gap-2 com-m-0 com-mb-1 com-min-w-0;
 }
