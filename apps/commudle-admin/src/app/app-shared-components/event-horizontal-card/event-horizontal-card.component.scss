@@ -56,7 +56,7 @@ nb-card {
           }
 
           .event-meta-row {
-            @apply com-flex md:com-flex-row com-flex-col com-justify-between com-gap-2 com-mt-2 md:com-w-full;
+            @apply com-flex md:com-flex-row com-flex-col md:com-items-center com-items-start com-justify-between com-gap-2 com-mt-2 md:com-w-full;
           }
 
           .event-location {

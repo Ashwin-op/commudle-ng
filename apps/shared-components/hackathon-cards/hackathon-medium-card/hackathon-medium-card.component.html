@@ -53,12 +53,6 @@
           <a class="view-details">View Details</a>
         </div>
         <div *appBreakpoints="'<=lg'" class="details-container-mobile">
-          <p class="hackathon-title">
-            {{ hackathon.name }}
-            <small *ngIf="hackathon.hackathon_collaboration_communities_count > 0" class="collaboration-text">
-              Collaboration
-            </small>
-          </p>
           <div class="time-badge">
             <div class="date">
               <p class="hackathon-time">{{ moment(hackathon.start_date).format('MMM Do, YYYY') }}</p>
@@ -74,6 +68,12 @@
               ></app-badge>
             </div>
           </div>
+          <p class="hackathon-title">
+            {{ hackathon.name }}
+            <small *ngIf="hackathon.hackathon_collaboration_communities_count > 0" class="collaboration-text">
+              Collaboration
+            </small>
+          </p>
           <div *ngIf="hackathon.community" class="community-badge">
             <app-community-badge [community]="hackathon.community" [size]="'small'"></app-community-badge>
           </div>
