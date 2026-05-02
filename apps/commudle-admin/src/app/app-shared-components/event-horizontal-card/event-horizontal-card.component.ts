@@ -80,10 +80,6 @@ export class EventHorizontalCardComponent implements OnInit, OnDestroy {
     return !!this.event?.start_time && moment(this.event.start_time).isAfter(this.now);
   }
 
-  get hasEndTime(): boolean {
-    return this.event?.end_time != null;
-  }
-
   get isMultiDayEvent(): boolean {
     if (!this.event?.start_time || !this.event?.end_time) {
       return false;

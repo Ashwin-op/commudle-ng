@@ -36,7 +36,7 @@
             />
           </div>
         </div>
-        <div *appBreakpoints="'>lg'" class="upcoming-card-details-desktop">
+        <div class="upcoming-card-details-desktop">
           <div class="time-badge">
             <p class="event-title">
               {{ event.name }}
@@ -57,7 +57,7 @@
           </div>
           <div class="event-meta-row">
             <p class="event-time" *ngIf="event.start_time; else noEventTimeTpl">
-              <ng-container *ngIf="hasEndTime; else timingStartOnlyTpl">
+              <ng-container *ngIf="event?.end_time !== null; else timingStartOnlyTpl">
                 <ng-container *ngTemplateOutlet="timingWithEndTimeTpl"></ng-container>
               </ng-container>
             </p>
@@ -130,104 +130,6 @@
             >
               Register
             </button>
-          </div>
-        </div>
-        <div *appBreakpoints="'<=lg'" class="upcoming-card-details-mobile">
-          <!--
-          <div class="time">
-            <p class="event-month">
-              {{ momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('MMM') }}
-            </p>
-            <p class="event-date">
-              {{ momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('D') }}
-            </p>
-            <p class="event-day">
-              {{ momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('ddd') }}
-            </p>
-          </div>
-          -->
-          <div class="details">
-            <div class="event-title-row">
-              <p class="event-title">
-                {{ event.name }}
-                <span *ngIf="hostCommunity && event?.kommunity_id !== hostCommunity?.id" class="collaboration-text"
-                  >(Collaboration)</span
-                >
-              </p>
-              <div
-                class="interested-members"
-                *ngIf="showInterestedBadgeWithName && event?.interested_members_count > 0"
-              >
-                <app-badge
-                  [text]="event.interested_members_count"
-                  [fontColor]="'com-text-tAuro-Metal-Saurus'"
-                  [nbIcon]="'people-outline'"
-                  [fontSize]="'small'"
-                  [borderRadius]="'round'"
-                  [color]="'com-bg-Bright-Gray-Light'"
-                ></app-badge>
-              </div>
-            </div>
-            <div class="event-meta-column">
-              <div class="time-badge">
-                <p class="event-time" *ngIf="event.start_time; else noEventTimeTpl">
-                  <ng-container *ngIf="hasEndTime; else timingStartOnlyTpl">
-                    <ng-container *ngTemplateOutlet="timingWithEndTimeTpl"></ng-container>
-                  </ng-container>
-                </p>
-                <div *ngIf="community && !hideCommunityBadge" class="community-badge">
-                  <app-community-badge [community]="community" [size]="'small'"></app-community-badge>
-                </div>
-              </div>
-              <div class="event-location" *ngIf="showLocation && event.event_locations?.length > 0">
-                <fa-icon [icon]="faLocationDot" class="event-location-icon"></fa-icon>
-                <span>{{ event.event_locations[0].name }}</span>
-              </div>
-              <button *ngIf="showEventType" nbButton size="tiny" class="event-type-button">
-                <fa-icon [icon]="faMapPin"></fa-icon>
-                {{ event.event_type | titlecase }} Event
-              </button>
-            </div>
-            <div *ngIf="event.tags && !hideTags" class="tags">
-              <app-tag
-                [tags]="getTagNames()"
-                [backgroundColor]="'com-bg-Azure-opacity-10'"
-                [size]="'tiny'"
-                [fontColor]="'com-text-blue-500'"
-                [maximumTag]="5"
-              ></app-tag>
-            </div>
-            <div
-              class="interested-register-row"
-              [ngClass]="{
-                'interested-register-row-stacked': !showInterestedBadgeWithName && event?.interested_members_count > 0
-              }"
-            >
-              <div
-                class="interested-members"
-                *ngIf="!showInterestedBadgeWithName && event?.interested_members_count > 0"
-              >
-                <app-badge
-                  [text]="event.interested_members_count"
-                  [fontColor]="'com-text-tAuro-Metal-Saurus'"
-                  [nbIcon]="'people-outline'"
-                  [fontSize]="'small'"
-                  [borderRadius]="'round'"
-                  [color]="'com-bg-Bright-Gray-Light'"
-                ></app-badge>
-              </div>
-              <button
-                *ngIf="showRegisterButton"
-                nbButton
-                status="primary"
-                shape="semi-round"
-                size="small"
-                outline
-                class="register-button"
-              >
-                Register
-              </button>
-            </div>
           </div>
         </div>
       </a>

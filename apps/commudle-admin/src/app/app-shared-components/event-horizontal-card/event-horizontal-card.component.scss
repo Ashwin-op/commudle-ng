@@ -27,7 +27,7 @@ nb-card {
         }
 
         .upcoming-card-details-desktop {
-          @apply md:com-pl-3 md:com-pr-0 md:com-py-0 com-px-0 com-py-3 com-overflow-hidden com-flex com-flex-col com-w-full;
+          @apply md:com-pl-3 md:com-pr-0 md:com-py-0 com-px-0 com-pt-3 com-overflow-hidden com-flex com-flex-col com-w-full;
 
           .time-badge {
             @apply com-flex com-flex-row com-justify-between com-items-start com-gap-2;
@@ -56,7 +56,7 @@ nb-card {
           }
 
           .event-meta-row {
-            @apply com-flex com-items-center com-justify-between com-gap-3 com-mt-2;
+            @apply com-flex md:com-flex-row com-flex-col com-justify-between com-gap-2 com-mt-2 md:com-w-full;
           }
 
           .event-location {
@@ -68,15 +68,15 @@ nb-card {
           }
 
           .event-title {
-            @apply md:com-text-lg com-text-xl com-font-medium com-text-Yankees-Blue com-m-0 com-mt-0 com-mr-3 com-line-clamp-1;
+            @apply md:com-text-lg com-text-xl com-font-medium com-text-Yankees-Blue com-m-0 com-mt-0 com-line-clamp-1;
 
             .collaboration-text {
-              @apply com-text-xs com-font-normal com-text-gray-500 com-ml-1;
+              @apply com-text-xs com-font-normal com-text-gray-500 com-ml-2;
             }
           }
 
           .event-type-button {
-            @apply com-bg-white com-rounded-lg com-border-Light-Silver com-border com-text-Vampire-Black com-text-sm com-font-normal;
+            @apply com-bg-white com-rounded-lg com-border-Light-Silver com-border com-text-Vampire-Black com-text-sm com-font-normal com-w-max;
 
             fa-icon {
               @apply com-mr-1 com-text-red-500;
@@ -88,7 +88,7 @@ nb-card {
           }
 
           .interested-register-row {
-            @apply com-mt-auto com-flex com-flex-row com-items-center com-justify-between com-gap-3;
+            @apply com-mt-auto com-flex com-flex-row com-items-center com-justify-between com-gap-3 com-w-full;
           }
 
           .register-button {
@@ -96,7 +96,7 @@ nb-card {
           }
 
           .countdown-row {
-            @apply com-mt-2 com-w-max com-bg-[#f7f9ff] com-rounded-full com-p-6px com-flex com-items-center com-gap-2;
+            @apply com-mt-2 com-w-max com-bg-[#eef3ff] com-rounded-full com-p-6px com-flex com-items-center com-gap-2;
 
             .countdown-label {
               @apply com-text-sm com-font-semibold com-text-tgray-500;
