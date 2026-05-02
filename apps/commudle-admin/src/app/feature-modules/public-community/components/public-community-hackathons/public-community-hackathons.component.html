@@ -1,16 +1,16 @@
 <div class="community-hackathons">
   <nb-card *ngIf="upcomingHackathons && upcomingHackathons.length > 0" class="hackathon-section-card">
-    <nb-card-body>
-      <section>
+    <nb-card-body class="body-container">
+      <section class="upcoming-hackathons-section">
         <h2 class="heading">Upcoming Hackathons</h2>
         <div
-          class="upcoming-hackathon"
+          class="upcoming-hackathon-container"
           [ngClass]="{
             'com-grid-cols-1': upcomingHackathons.length === 1,
             'com-grid-cols-2': upcomingHackathons.length >= 2
           }"
         >
-          <div *ngFor="let hackathon of upcomingHackathons">
+          <div *ngFor="let hackathon of upcomingHackathons" class="upcoming-hackathon-card-wrapper">
             <commudle-hackathon-large-card [hackathon]="hackathon"></commudle-hackathon-large-card>
           </div>
         </div>
@@ -19,11 +19,11 @@
   </nb-card>
 
   <nb-card *ngIf="pastHackathons && pastHackathons.length > 0" class="hackathon-section-card">
-    <nb-card-body>
-      <section>
+    <nb-card-body class="body-container">
+      <section class="past-hackathons-section">
         <h2 class="heading">Past Hackathons</h2>
         <div class="past-hackathons">
-          <div *ngFor="let hackathon of pastHackathons">
+          <div *ngFor="let hackathon of pastHackathons" class="past-hackathon-card-wrapper">
             <commudle-hackathon-medium-card [hackathon]="hackathon"></commudle-hackathon-medium-card>
           </div>
         </div>

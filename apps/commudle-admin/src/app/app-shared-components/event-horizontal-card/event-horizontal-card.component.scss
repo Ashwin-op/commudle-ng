@@ -30,10 +30,14 @@ nb-card {
           @apply md:com-pl-3 md:com-pr-0 md:com-py-0 com-px-0 com-py-3 com-overflow-hidden com-flex com-flex-col com-w-full;
 
           .time-badge {
-            @apply com-flex com-flex-row com-justify-between com-items-center com-mb-2;
+            @apply com-flex com-flex-row com-justify-between com-items-start com-gap-2;
+
+            .event-title {
+              @apply com-flex-1 com-min-w-0;
+            }
 
             .interested-members {
-              @apply com-flex-shrink-0 com-pr-2;
+              @apply com-flex-shrink-0 com-pt-0.5;
               button {
                 @apply com-py-1 com-px-2 com-w-max;
                 nb-icon {
@@ -48,22 +52,54 @@ nb-card {
           }
 
           .event-time {
-            @apply com-text-xs com-font-normal com-m-0 com-text-gray-500 com-mb-4;
+            @apply com-text-sm com-font-normal com-m-0 com-text-gray-500;
+          }
+
+          .event-meta-row {
+            @apply com-flex com-items-center com-justify-between com-gap-3 com-mt-2;
+          }
+
+          .event-location {
+            @apply com-mt-2 com-flex com-items-center com-text-sm com-font-normal com-text-gray-500;
+
+            .event-location-icon {
+              @apply com-mr-2 com-text-base com-shrink-0 com-text-inherit;
+            }
           }
 
           .event-title {
-            @apply md:com-text-base com-text-lg com-font-medium com-text-Yankees-Blue com-m-0 com-mt-0 com-mr-3 com-line-clamp-1;
+            @apply md:com-text-lg com-text-xl com-font-medium com-text-Yankees-Blue com-m-0 com-mt-0 com-mr-3 com-line-clamp-1;
+
+            .collaboration-text {
+              @apply com-text-xs com-font-normal com-text-gray-500 com-ml-1;
+            }
+          }
+
+          .event-type-button {
+            @apply com-bg-white com-rounded-lg com-border-Light-Silver com-border com-text-Vampire-Black com-text-sm com-font-normal;
+
+            fa-icon {
+              @apply com-mr-1 com-text-red-500;
+            }
           }
 
           .community-badge {
-            @apply com-m-0;
+            @apply com-m-0 com-mt-2;
+          }
+
+          .interested-register-row {
+            @apply com-mt-auto com-flex com-flex-row com-items-center com-justify-between com-gap-3;
+          }
+
+          .register-button {
+            @apply com-text-sm;
           }
 
           .countdown-row {
             @apply com-mt-2 com-w-max com-bg-[#f7f9ff] com-rounded-full com-p-6px com-flex com-items-center com-gap-2;
 
             .countdown-label {
-              @apply com-text-xs com-font-semibold com-text-tgray-500;
+              @apply com-text-sm com-font-semibold com-text-tgray-500;
             }
 
             .countdown-time {
@@ -73,11 +109,11 @@ nb-card {
                 @apply com-inline-flex com-items-center com-gap-0.5;
 
                 .value {
-                  @apply com-text-sm com-font-semibold com-text-blue-700;
+                  @apply com-text-base com-font-semibold com-text-blue-700;
                 }
 
                 .unit {
-                  @apply com-text-xs com-font-medium com-text-tgray-500;
+                  @apply com-text-sm com-font-medium com-text-tgray-500;
                 }
               }
             }
@@ -106,15 +142,31 @@ nb-card {
           .details {
             @apply com-flex com-flex-col com-items-start com-w-full com-overflow-hidden;
 
+            .event-title-row {
+              @apply com-flex com-w-full com-flex-row com-items-start com-justify-between com-gap-2 com-mb-2;
+
+              .event-title {
+                @apply com-flex-1 com-min-w-0 com-mb-0;
+              }
+
+              .interested-members {
+                @apply com-flex-shrink-0 com-pt-0.5;
+              }
+            }
+
             .event-title {
-              @apply com-text-sm com-font-semibold com-text-Yankees-Blue com-m-0 com-mb-2 com-line-clamp-1;
+              @apply com-text-base com-font-semibold com-text-Yankees-Blue com-m-0 com-line-clamp-1;
+
+              .collaboration-text {
+                @apply com-text-xs com-font-normal com-text-gray-500 com-ml-1;
+              }
             }
 
             .time-badge {
-              @apply com-flex com-flex-row com-justify-between com-items-center com-mb-2 com-w-full;
+              @apply com-flex com-flex-col com-items-start com-gap-2 com-w-full;
 
               .event-time {
-                @apply com-flex com-text-xs com-font-medium com-m-0 com-text-gray-500 com-mr-16 com-flex-shrink-0;
+                @apply com-flex com-text-sm com-font-medium com-m-0 com-text-gray-500 com-mr-0 com-flex-shrink-0 com-w-full;
               }
 
               .community-badge {
@@ -136,16 +188,44 @@ nb-card {
               }
             }
 
+            .interested-register-row {
+              @apply com-mt-[8px] com-w-full com-flex com-flex-row com-items-center com-justify-between com-gap-3;
+            }
+
+            .event-type-button {
+              @apply com-bg-white com-rounded-lg com-border-Light-Silver com-border com-text-Vampire-Black com-text-sm com-font-normal;
+
+              fa-icon {
+                @apply com-mr-1 com-text-red-500;
+              }
+            }
+
             .event-time {
-              @apply com-text-sm com-font-medium com-m-0 com-text-gray-500;
+              @apply com-text-base com-font-medium com-m-0 com-text-gray-500;
+            }
+
+            .event-meta-column {
+              @apply com-flex com-flex-col com-items-start com-gap-2 com-w-full;
+            }
+
+            .event-location {
+              @apply com-flex com-items-start com-text-sm com-font-normal com-text-gray-500 com-w-full;
+
+              .event-location-icon {
+                @apply com-mr-2 com-mt-0.5 com-text-base com-shrink-0 com-text-inherit;
+              }
+            }
+
+            .register-button {
+              @apply com-text-sm;
             }
           }
-        }
-
-        .tags {
-          @apply md:com-mt-auto com-mt-2;
         }
       }
     }
   }
+}
+
+.tags {
+  @apply md:com-mt-auto com-mt-2;
 }

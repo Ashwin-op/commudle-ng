@@ -38,8 +38,13 @@
         </div>
         <div *appBreakpoints="'>lg'" class="upcoming-card-details-desktop">
           <div class="time-badge">
-            <p class="event-title">{{ event.name }}</p>
-            <div class="interested-members" *ngIf="event.interested_members_count > 0">
+            <p class="event-title">
+              {{ event.name }}
+              <span *ngIf="hostCommunity && event?.kommunity_id !== hostCommunity?.id" class="collaboration-text"
+                >(Collaboration)</span
+              >
+            </p>
+            <div class="interested-members" *ngIf="showInterestedBadgeWithName && event?.interested_members_count > 0">
               <app-badge
                 [text]="event.interested_members_count"
                 [fontColor]="'com-text-tAuro-Metal-Saurus'"
@@ -50,11 +55,22 @@
               ></app-badge>
             </div>
           </div>
-          <p class="event-time">
-            {{ momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('dddd, MMM Do, YYYY') }}
-            {{ momentTimezone.tz(event.timezone).format('z') }}
-          </p>
-          <div *ngIf="community" class="community-badge">
+          <div class="event-meta-row">
+            <p class="event-time" *ngIf="event.start_time; else noEventTimeTpl">
+              <ng-container *ngIf="hasEndTime; else timingStartOnlyTpl">
+                <ng-container *ngTemplateOutlet="timingWithEndTimeTpl"></ng-container>
+              </ng-container>
+            </p>
+            <button *ngIf="showEventType" nbButton size="tiny" class="event-type-button">
+              <fa-icon [icon]="faMapPin"></fa-icon>
+              {{ event.event_type | titlecase }} Event
+            </button>
+          </div>
+          <div class="event-location" *ngIf="showLocation && event.event_locations?.length > 0">
+            <fa-icon [icon]="faLocationDot" class="event-location-icon"></fa-icon>
+            <span>{{ event.event_locations[0].name }}</span>
+          </div>
+          <div *ngIf="community && !hideCommunityBadge" class="community-badge">
             <app-community-badge [community]="community" [size]="'small'"></app-community-badge>
           </div>
           <div class="countdown-row" *ngIf="isUpcomingEvent && showCounterTimings">
@@ -78,7 +94,7 @@
               >
             </span>
           </div>
-          <div *ngIf="event.tags" class="tags">
+          <div *ngIf="event.tags && !hideTags" class="tags">
             <app-tag
               [tags]="getTagNames()"
               [backgroundColor]="'com-bg-Azure-opacity-10'"
@@ -87,8 +103,37 @@
               [maximumTag]="5"
             ></app-tag>
           </div>
+          <div
+            class="interested-register-row"
+            [ngClass]="{
+              'interested-register-row-stacked': !showInterestedBadgeWithName && event?.interested_members_count > 0
+            }"
+          >
+            <div class="interested-members" *ngIf="!showInterestedBadgeWithName && event?.interested_members_count > 0">
+              <app-badge
+                [text]="event.interested_members_count"
+                [fontColor]="'com-text-tAuro-Metal-Saurus'"
+                [nbIcon]="'people-outline'"
+                [fontSize]="'small'"
+                [borderRadius]="'round'"
+                [color]="'com-bg-Bright-Gray-Light'"
+              ></app-badge>
+            </div>
+            <button
+              *ngIf="showRegisterButton"
+              nbButton
+              status="primary"
+              shape="semi-round"
+              size="small"
+              outline
+              class="register-button"
+            >
+              Register
+            </button>
+          </div>
         </div>
         <div *appBreakpoints="'<=lg'" class="upcoming-card-details-mobile">
+          <!--
           <div class="time">
             <p class="event-month">
               {{ momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('MMM') }}
@@ -100,31 +145,113 @@
               {{ momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('ddd') }}
             </p>
           </div>
+          -->
           <div class="details">
-            <p class="event-title">{{ event.name }}</p>
-            <div class="time-badge">
-              <p class="event-time">
-                {{ momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('h:mm a') }}
-                {{ momentTimezone.tz(event.timezone).format('z') }}
-                onwards
+            <div class="event-title-row">
+              <p class="event-title">
+                {{ event.name }}
+                <span *ngIf="hostCommunity && event?.kommunity_id !== hostCommunity?.id" class="collaboration-text"
+                  >(Collaboration)</span
+                >
               </p>
-              <div *ngIf="community" class="community-badge">
-                <app-community-badge [community]="community" [size]="'small'"></app-community-badge>
+              <div
+                class="interested-members"
+                *ngIf="showInterestedBadgeWithName && event?.interested_members_count > 0"
+              >
+                <app-badge
+                  [text]="event.interested_members_count"
+                  [fontColor]="'com-text-tAuro-Metal-Saurus'"
+                  [nbIcon]="'people-outline'"
+                  [fontSize]="'small'"
+                  [borderRadius]="'round'"
+                  [color]="'com-bg-Bright-Gray-Light'"
+                ></app-badge>
               </div>
             </div>
-            <div class="interested-members" *ngIf="event.interested_members_count > 0">
-              <app-badge
-                [text]="event.interested_members_count"
-                [fontColor]="'com-text-tAuro-Metal-Saurus'"
-                [nbIcon]="'people-outline'"
-                [fontSize]="'small'"
-                [borderRadius]="'round'"
-                [color]="'com-bg-Bright-Gray-Light'"
-              ></app-badge>
+            <div class="event-meta-column">
+              <div class="time-badge">
+                <p class="event-time" *ngIf="event.start_time; else noEventTimeTpl">
+                  <ng-container *ngIf="hasEndTime; else timingStartOnlyTpl">
+                    <ng-container *ngTemplateOutlet="timingWithEndTimeTpl"></ng-container>
+                  </ng-container>
+                </p>
+                <div *ngIf="community && !hideCommunityBadge" class="community-badge">
+                  <app-community-badge [community]="community" [size]="'small'"></app-community-badge>
+                </div>
+              </div>
+              <div class="event-location" *ngIf="showLocation && event.event_locations?.length > 0">
+                <fa-icon [icon]="faLocationDot" class="event-location-icon"></fa-icon>
+                <span>{{ event.event_locations[0].name }}</span>
+              </div>
+              <button *ngIf="showEventType" nbButton size="tiny" class="event-type-button">
+                <fa-icon [icon]="faMapPin"></fa-icon>
+                {{ event.event_type | titlecase }} Event
+              </button>
+            </div>
+            <div *ngIf="event.tags && !hideTags" class="tags">
+              <app-tag
+                [tags]="getTagNames()"
+                [backgroundColor]="'com-bg-Azure-opacity-10'"
+                [size]="'tiny'"
+                [fontColor]="'com-text-blue-500'"
+                [maximumTag]="5"
+              ></app-tag>
+            </div>
+            <div
+              class="interested-register-row"
+              [ngClass]="{
+                'interested-register-row-stacked': !showInterestedBadgeWithName && event?.interested_members_count > 0
+              }"
+            >
+              <div
+                class="interested-members"
+                *ngIf="!showInterestedBadgeWithName && event?.interested_members_count > 0"
+              >
+                <app-badge
+                  [text]="event.interested_members_count"
+                  [fontColor]="'com-text-tAuro-Metal-Saurus'"
+                  [nbIcon]="'people-outline'"
+                  [fontSize]="'small'"
+                  [borderRadius]="'round'"
+                  [color]="'com-bg-Bright-Gray-Light'"
+                ></app-badge>
+              </div>
+              <button
+                *ngIf="showRegisterButton"
+                nbButton
+                status="primary"
+                shape="semi-round"
+                size="small"
+                outline
+                class="register-button"
+              >
+                Register
+              </button>
             </div>
           </div>
         </div>
       </a>
     </div>
+
+    <ng-template #timingWithEndTimeTpl>
+      {{ momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('dddd, MMM Do, YYYY- h:mm a') }}
+      {{ momentTimezone.tz(event.timezone).format('z') }}
+      <ng-container *ngIf="isMultiDayEvent">
+        to
+        {{ momentTimezone.tz(moment.utc(event.end_time), event.timezone).format('dddd, MMM Do, YYYY- h:mm a') }}
+        {{ momentTimezone.tz(event.timezone).format('z') }}
+      </ng-container>
+      <ng-container *ngIf="!isMultiDayEvent">onwards</ng-container>
+    </ng-template>
+
+    <ng-template #timingStartOnlyTpl>
+      {{ momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('dddd, MMM Do, YYYY- h:mm a') }}
+      {{ momentTimezone.tz(event.timezone).format('z') }}
+      onwards
+    </ng-template>
+
+    <ng-template #noEventTimeTpl>
+      <p class="event-time">Date and time to be announced soon</p>
+    </ng-template>
   </nb-card-body>
 </nb-card>

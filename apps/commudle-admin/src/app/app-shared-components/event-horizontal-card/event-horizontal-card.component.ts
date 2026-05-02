@@ -11,6 +11,7 @@ import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communi
 import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives.module';
 import * as momentTimezone from 'moment-timezone';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
+import { faLocationDot, faMapPin } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'commudle-event-horizontal-card',
@@ -32,11 +33,20 @@ export class EventHorizontalCardComponent implements OnInit, OnDestroy {
   @Input() event: IEvent;
   @Input() headerImageWidth = '388px';
   @Input() showCounterTimings = false;
+  @Input() hostCommunity: ICommunity;
+  @Input() hideCommunityBadge = false;
+  @Input() hideTags = false;
+  @Input() showRegisterButton = false;
+  @Input() showEventType = false;
+  @Input() showInterestedBadgeWithName = true;
+  @Input() showLocation = false;
   community: ICommunity;
   moment = moment;
   tags: string[] = [];
   momentTimezone = momentTimezone;
   staticAssets = staticAssets;
+  faMapPin = faMapPin;
+  faLocationDot = faLocationDot;
   private countdownInterval: ReturnType<typeof setInterval>;
   now = moment();
 
@@ -68,6 +78,17 @@ export class EventHorizontalCardComponent implements OnInit, OnDestroy {
 
   get isUpcomingEvent(): boolean {
     return !!this.event?.start_time && moment(this.event.start_time).isAfter(this.now);
+  }
+
+  get hasEndTime(): boolean {
+    return this.event?.end_time != null;
+  }
+
+  get isMultiDayEvent(): boolean {
+    if (!this.event?.start_time || !this.event?.end_time) {
+      return false;
+    }
+    return moment(this.event.start_time).format('MMM Do, YYYY') !== moment(this.event.end_time).format('MMM Do, YYYY');
   }
 
   get countdownLabel(): string {

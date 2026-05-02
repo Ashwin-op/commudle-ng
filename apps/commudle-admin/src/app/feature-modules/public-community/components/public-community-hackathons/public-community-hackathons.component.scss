@@ -4,20 +4,37 @@
   .hackathon-section-card {
     @apply com-h-max com-mx-0 com-mb-0 com-mt-0;
 
-    nb-card-body {
-      @apply com-p-4 md:com-p-6;
+    .body-container {
+      @apply com-overflow-visible;
     }
   }
 
   .heading {
-    @apply com-m-0 com-mb-4 md:com-mb-6 com-text-xl md:com-text-2xl com-font-semibold com-text-Yankees-Blue;
+    @apply com-m-0 com-mb-4 md:com-mb-6 com-leading-4 com-no-underline;
+    @apply com-text-xl md:com-text-2xl com-font-semibold com-text-Yankees-Blue;
   }
-}
 
-.upcoming-hackathon {
-  @apply com-grid com-gap-4;
-}
+  .upcoming-hackathons-section {
+    @apply com-my-0 com-bg-[#f5f9ff] com-rounded-lg com-p-4;
 
-.past-hackathons {
-  @apply com-grid com-gap-4 com-grid-cols-1 md:com-grid-cols-3;
+    .upcoming-hackathon-container {
+      @apply com-grid com-gap-4;
+
+      .upcoming-hackathon-card-wrapper {
+        @apply com-w-full com-p-4 com-bg-white com-rounded-10;
+      }
+    }
+  }
+
+  .past-hackathons-section {
+    @apply com-flex com-flex-col com-mx-auto com-my-0 com-w-full;
+
+    .past-hackathons {
+      @apply com-grid com-gap-4 com-grid-cols-1 md:com-grid-cols-3;
+
+      .past-hackathon-card-wrapper {
+        @apply com-w-full;
+      }
+    }
+  }
 }
