@@ -13,22 +13,25 @@
 
         <div class="hackathon-details">
           <div class="title-row">
-            <div class="name">
+            <p class="name">
               {{ hackathon.name }}
-            </div>
-            <small *ngIf="hackathon.hackathon_collaboration_communities_count > 0" class="collaboration-text">
-              Collaboration
-            </small>
+              <span *ngIf="hackathon.hackathon_collaboration_communities_count > 0" class="collaboration-text">
+                (Collaboration)
+              </span>
+            </p>
           </div>
 
           <div class="meta-row">
-            <div class="date-chip" *ngIf="hackathon.start_date">
+            <p class="date-chip" *ngIf="hackathon.start_date">
               Starts {{ moment(hackathon.start_date).format('MMM Do, YYYY') }}
-            </div>
-            <div class="location-chip">{{ hackathon.hackathon_location_type | titlecase }}</div>
+            </p>
+            <button nbButton size="tiny" class="event-type-button">
+              <fa-icon [icon]="faMapPin"></fa-icon>
+              {{ hackathon.hackathon_location_type | titlecase }}
+            </button>
           </div>
 
-          <div class="prize-action-row">
+          <div class="interested-register-row">
             <div class="prize">
               <div *ngIf="totalPrizesByCurrency.length > 0 && totalPrizesByCurrency[0].amount > 0">
                 <div class="prize-label">Prize Money</div>
@@ -38,9 +41,9 @@
               </div>
             </div>
 
-            <div class="action-button">
-              <button nbButton status="primary" shape="semi-round" size="small">Register Now</button>
-            </div>
+            <button nbButton status="primary" shape="semi-round" size="small" outline class="register-button">
+              Register
+            </button>
           </div>
         </div>
       </div>

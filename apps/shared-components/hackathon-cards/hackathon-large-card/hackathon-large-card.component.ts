@@ -3,21 +3,21 @@ import { countries_details } from '@commudle/shared-services';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
 import * as moment from 'moment';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
+import { faMapPin } from '@fortawesome/free-solid-svg-icons';
 @Component({
-    selector: 'commudle-hackathon-large-card',
-    templateUrl: './hackathon-large-card.component.html',
-    styleUrls: ['./hackathon-large-card.component.scss'],
-    standalone: false
+  selector: 'commudle-hackathon-large-card',
+  templateUrl: './hackathon-large-card.component.html',
+  styleUrls: ['./hackathon-large-card.component.scss'],
+  standalone: false,
 })
 export class HackathonLargeCardComponent implements OnInit {
   @Input() hackathon: IHackathon;
   moment = moment;
+  faMapPin = faMapPin;
   prizeCurrency;
   totalPrizesByCurrency: { currency: any; amount: number }[];
   countryDetails = countries_details;
   staticAssets = staticAssets;
-
-  constructor() {}
 
   ngOnInit() {
     if (this.hackathon.total_prize_amount) {

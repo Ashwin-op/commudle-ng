@@ -2,7 +2,10 @@
   <nb-card *ngIf="upcomingHackathons && upcomingHackathons.length > 0" class="hackathon-section-card com-mt-4">
     <nb-card-body class="body-container com-p-0 md:com-p-6">
       <section class="upcoming-hackathons-section">
-        <h2 class="heading com-text-tYankees-Blue">Upcoming Hackathons</h2>
+        <h2 class="heading com-text-tYankees-Blue">
+          <span class="live-dot" aria-hidden="true"></span>
+          Upcoming Hackathons
+        </h2>
         <div
           class="upcoming-hackathon-container"
           [ngClass]="{
