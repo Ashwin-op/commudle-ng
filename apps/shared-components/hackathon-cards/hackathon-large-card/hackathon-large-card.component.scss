@@ -15,13 +15,13 @@ a {
         }
 
         .hackathon-details {
-          @apply com-flex com-flex-col com-w-full com-overflow-hidden md:com-pl-4 com-pt-3 md:com-pt-0;
+          @apply com-flex com-flex-col com-w-full com-overflow-hidden md:com-pl-3 md:com-pr-0 md:com-py-0 com-px-0 com-pt-3;
 
           .title-row {
-            @apply com-flex com-items-start com-justify-between com-gap-2;
+            @apply com-flex com-flex-row com-items-start com-justify-between com-gap-2;
 
             .name {
-              @apply com-text-xl md:com-text-lg com-font-medium com-text-Yankees-Blue com-m-0 com-line-clamp-1;
+              @apply com-text-base com-font-medium com-text-Yankees-Blue com-m-0 com-line-clamp-1;
 
               .collaboration-text {
                 @apply com-text-xs com-font-normal com-text-gray-500 com-ml-2;
@@ -30,10 +30,10 @@ a {
           }
 
           .meta-row {
-            @apply com-flex md:com-flex-row com-flex-col md:com-items-center com-items-start com-justify-between com-gap-2 com-mt-2 md:com-w-full;
+            @apply com-flex md:com-flex-row com-flex-col md:com-items-center com-items-start com-justify-between com-gap-2 md:com-mt-1 com-mt-2 md:com-w-full;
 
             .date-chip {
-              @apply com-text-sm com-font-normal com-text-gray-500 com-bg-transparent com-p-0 com-m-0;
+              @apply com-text-sm com-font-medium com-text-gray-500 com-bg-transparent com-p-0 com-m-0;
             }
 
             .event-type-button {
@@ -46,7 +46,7 @@ a {
           }
 
           .interested-register-row {
-            @apply com-mt-auto com-flex com-flex-row com-items-center com-justify-between com-gap-3 com-w-full;
+            @apply md:com-mt-auto com-mt-2 com-flex com-flex-row com-items-center com-justify-between com-gap-3 com-w-full;
 
             .prize {
               @apply com-text-sm com-font-medium com-text-gray-500;

@@ -38,37 +38,27 @@ nb-card {
 
             .interested-members {
               @apply com-flex-shrink-0 com-pt-0.5;
-              button {
-                @apply com-py-1 com-px-2 com-w-max;
-                nb-icon {
-                  @apply com-mr-1 com-text-Dark-Jungle-Green com-h-[14px] com-shrink-0;
-                }
-
-                span {
-                  @apply com-text-xs com-font-medium com-text-gray-500;
-                }
-              }
             }
           }
 
           .event-time {
-            @apply com-text-sm com-font-normal com-m-0 com-text-gray-500;
+            @apply com-text-sm com-font-medium com-m-0 com-text-gray-500;
           }
 
           .event-meta-row {
-            @apply com-flex md:com-flex-row com-flex-col md:com-items-center com-items-start com-justify-between com-gap-2 com-mt-2 md:com-w-full;
+            @apply com-flex md:com-flex-row com-flex-col md:com-items-center com-items-start com-justify-between com-gap-2 md:com-mt-1 com-mt-2 md:com-w-full;
           }
 
           .event-location {
-            @apply com-mt-2 com-flex com-items-center com-text-sm com-font-normal com-text-gray-500;
+            @apply md:com-mt-1 com-mt-2 com-flex com-items-center com-text-sm com-font-normal com-text-gray-500;
 
             .event-location-icon {
-              @apply com-mr-2 com-text-base com-shrink-0 com-text-inherit;
+              @apply com-mr-2 com-text-sm com-shrink-0 com-text-inherit;
             }
           }
 
           .event-title {
-            @apply md:com-text-lg com-text-xl com-font-medium com-text-Yankees-Blue com-m-0 com-mt-0 com-line-clamp-1;
+            @apply com-text-base com-font-medium com-text-Yankees-Blue com-m-0 com-mt-0 com-line-clamp-1;
 
             .collaboration-text {
               @apply com-text-xs com-font-normal com-text-gray-500 com-ml-2;
@@ -88,7 +78,7 @@ nb-card {
           }
 
           .interested-register-row {
-            @apply com-mt-auto com-flex com-flex-row com-items-center com-justify-between com-gap-3 com-w-full;
+            @apply md:com-mt-auto com-mt-2 com-flex com-flex-row com-items-center com-justify-between com-gap-3 com-w-full;
           }
 
           .register-button {
@@ -96,10 +86,10 @@ nb-card {
           }
 
           .countdown-row {
-            @apply com-mt-2 com-w-max com-bg-[#eef3ff] com-rounded-full com-p-6px com-flex com-items-center com-gap-2;
+            @apply com-mt-2 com-w-max com-bg-[#eef3ff] com-rounded-full com-px-6px com-py-1 com-flex com-items-center com-gap-2;
 
             .countdown-label {
-              @apply com-text-sm com-font-semibold com-text-tgray-500;
+              @apply com-text-sm com-font-medium com-text-tgray-500;
             }
 
             .countdown-time {
@@ -109,115 +99,13 @@ nb-card {
                 @apply com-inline-flex com-items-center com-gap-0.5;
 
                 .value {
-                  @apply com-text-base com-font-semibold com-text-blue-700;
+                  @apply com-text-sm com-font-semibold com-text-blue-700;
                 }
 
                 .unit {
                   @apply com-text-sm com-font-medium com-text-tgray-500;
                 }
               }
-            }
-          }
-        }
-
-        .upcoming-card-details-mobile {
-          @apply com-p-0 com-pt-3 com-overflow-hidden com-flex com-flex-row com-w-full;
-
-          .time {
-            @apply com-flex com-w-[50px] com-h-full com-pb-1 com-m-0 com-mr-3 com-flex-col com-items-center com-border com-border-solid com-border-Bright-Gray com-bg-white com-rounded-lg;
-
-            .event-month {
-              @apply com-flex com-items-center com-h-[26px] com-w-full com-rounded-t-lg com-justify-center com-text-xs com-font-semibold com-m-0 com-mb-1 com-text-gray-400 com-bg-gray-100;
-            }
-
-            .event-date {
-              @apply com-flex com-text-lg com-font-bold com-text-Yankees-Blue com-m-0;
-            }
-
-            .event-day {
-              @apply com-flex com-text-xs com-font-bold com-m-0 com-text-gray-400;
-            }
-          }
-
-          .details {
-            @apply com-flex com-flex-col com-items-start com-w-full com-overflow-hidden;
-
-            .event-title-row {
-              @apply com-flex com-w-full com-flex-row com-items-start com-justify-between com-gap-2 com-mb-2;
-
-              .event-title {
-                @apply com-flex-1 com-min-w-0 com-mb-0;
-              }
-
-              .interested-members {
-                @apply com-flex-shrink-0 com-pt-0.5;
-              }
-            }
-
-            .event-title {
-              @apply com-text-base com-font-semibold com-text-Yankees-Blue com-m-0 com-line-clamp-1;
-
-              .collaboration-text {
-                @apply com-text-xs com-font-normal com-text-gray-500 com-ml-1;
-              }
-            }
-
-            .time-badge {
-              @apply com-flex com-flex-col com-items-start com-gap-2 com-w-full;
-
-              .event-time {
-                @apply com-flex com-text-sm com-font-medium com-m-0 com-text-gray-500 com-mr-0 com-flex-shrink-0 com-w-full;
-              }
-
-              .community-badge {
-                @apply com-m-0;
-              }
-            }
-
-            .interested-members {
-              @apply com-flex;
-              button {
-                @apply com-py-1 com-px-2 com-w-max;
-                nb-icon {
-                  @apply com-mr-1 com-text-Dark-Jungle-Green com-h-[14px] com-shrink-0;
-                }
-
-                span {
-                  @apply com-text-xs com-font-medium com-text-gray-500;
-                }
-              }
-            }
-
-            .interested-register-row {
-              @apply com-mt-[8px] com-w-full com-flex com-flex-row com-items-center com-justify-between com-gap-3;
-            }
-
-            .event-type-button {
-              @apply com-bg-white com-rounded-lg com-border-Light-Silver com-border com-text-Vampire-Black com-text-sm com-font-normal;
-
-              fa-icon {
-                @apply com-mr-1 com-text-red-500;
-              }
-            }
-
-            .event-time {
-              @apply com-text-base com-font-medium com-m-0 com-text-gray-500;
-            }
-
-            .event-meta-column {
-              @apply com-flex com-flex-col com-items-start com-gap-2 com-w-full;
-            }
-
-            .event-location {
-              @apply com-flex com-items-start com-text-sm com-font-normal com-text-gray-500 com-w-full;
-
-              .event-location-icon {
-                @apply com-mr-2 com-mt-0.5 com-text-base com-shrink-0 com-text-inherit;
-              }
-            }
-
-            .register-button {
-              @apply com-text-sm;
             }
           }
         }
