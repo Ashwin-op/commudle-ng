@@ -19,10 +19,10 @@ import { CustomPageFormComponent } from 'apps/commudle-admin/src/app/app-shared-
 import { EPageType, ICustomPage } from 'apps/shared-models/custom-page.model';
 import { Router } from '@angular/router';
 @Component({
-    selector: 'commudle-payment-settings',
-    templateUrl: './payment-settings.component.html',
-    styleUrls: ['./payment-settings.component.scss'],
-    standalone: false
+  selector: 'commudle-payment-settings',
+  templateUrl: './payment-settings.component.html',
+  styleUrls: ['./payment-settings.component.scss'],
+  standalone: false,
 })
 export class PaymentSettingsComponent implements OnInit {
   @Input() community: ICommunity;
@@ -69,7 +69,7 @@ export class PaymentSettingsComponent implements OnInit {
         paid_ticket_setting: this.fb.group({
           bank_ac_type: ['', Validators.required],
           bank_ac_id: ['', Validators.required],
-          price: ['', [Validators.required, Validators.min(2)]],
+          price: ['', [Validators.required, Validators.min(10), Validators.max(50000)]],
           currency: ['INR', Validators.required],
           has_taxes: [false],
           tax_name: [''],

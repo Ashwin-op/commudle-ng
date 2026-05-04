@@ -92,7 +92,10 @@
                 <commudle-alert [error]="true" [errorMessage]="'Required Field'"></commudle-alert>
               </span>
               <span *ngIf="paidTicketingForm.controls.paid_ticket_setting.get('price').hasError('min')">
-                <commudle-alert [error]="true" errorMessage="Ticket amount should be greater than 2"></commudle-alert>
+                <commudle-alert [error]="true" errorMessage="Minimum ticket price is ₹10"></commudle-alert>
+              </span>
+              <span *ngIf="paidTicketingForm.controls.paid_ticket_setting.get('price').hasError('max')">
+                <commudle-alert [error]="true" errorMessage="Maximum ticket price is ₹50,000"></commudle-alert>
               </span>
             </label>
           </div>
