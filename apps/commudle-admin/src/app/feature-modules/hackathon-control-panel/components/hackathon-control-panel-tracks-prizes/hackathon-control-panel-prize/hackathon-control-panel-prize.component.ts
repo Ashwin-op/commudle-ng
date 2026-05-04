@@ -1,11 +1,20 @@
-import { countries_details, ToastrService } from '@commudle/shared-services';
+import { countries_details, ToastrService, RoundService } from '@commudle/shared-services';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NbDialogService } from '@commudle/theme';
-import { faFileImage, faPlus, faXmark, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faFileImage, faPlus, faXmark, faSearch, faFilterCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
-import { IHackathonPrize, IHackathonTeam, IHackathonTrack, IHackathonWinner } from '@commudle/shared-models';
+import {
+  IHackathonPrize,
+  IHackathonTeam,
+  IHackathonTrack,
+  IHackathonWinner,
+  IRound,
+  EDbModels,
+  EHackathonRegistrationStatus,
+  IHackathonProblemStatement,
+} from '@commudle/shared-models';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { HackathonWinnerService } from 'apps/commudle-admin/src/app/services/hackathon-winner.service';
 import { IHackathonUserResponses } from 'apps/shared-models/hackathon-user-responses.model';
@@ -22,7 +31,8 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
   prizeForm: FormGroup;
   hackathonTracks: IHackathonTrack[];
   hackathon: IHackathon;
-  icons = { faPlus, faFileImage, faXmark, faSearch };
+  icons = { faPlus, faFileImage, faXmark, faSearch, faFilterCircleXmark };
+  EHackathonRegistrationStatus = EHackathonRegistrationStatus;
   hackathonPrizes: IHackathonPrize[];
   countryDetails = countries_details;
   isLoading = true;
@@ -39,6 +49,19 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
   winnerPage = 1;
   winnerTotal: number;
   winnerCount = 10;
+
+  // Filter data
+  hackathonRounds: IRound[] = [];
+  hackathonProblemStatements: IHackathonProblemStatement[] = [];
+
+  // Filter state
+  selectedRoundId: number;
+  selectedTrackId: number;
+  selectedRegistrationStatus: string;
+  selectedProblemStatementId: number;
+  onlyWinners: boolean;
+  withCommunityBuild: boolean | null = null;
+  withSubmissions: boolean | null = null;
 
   tinyMCE = {
     min_height: 200,
@@ -83,6 +106,7 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
     private hackathonWinnerService: HackathonWinnerService,
     private toastrService: ToastrService,
     private activatedRoute: ActivatedRoute,
+    private roundService: RoundService,
   ) {
     this.prizeForm = this.fb.group({
       name: ['', Validators.required],
@@ -99,9 +123,12 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.activatedRoute.parent.parent.paramMap.subscribe((params) => {
-      this.fetchTracks(params.get('hackathon_id'));
-      this.fetchPrizes(params.get('hackathon_id'));
-      this.fetchHackathon(params.get('hackathon_id'));
+      const hackathonId = params.get('hackathon_id');
+      this.fetchTracks(hackathonId);
+      this.fetchPrizes(hackathonId);
+      this.fetchHackathon(hackathonId);
+      this.fetchRounds(hackathonId);
+      this.fetchProblemStatements(hackathonId);
     });
     this.setupCurrencyAutocomplete();
     this.subscriptions.push(
@@ -132,6 +159,18 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
     this.hackathonService.getPrizesByHackathon(hackathonId).subscribe((data) => {
       this.hackathonPrizes = data;
       this.isLoading = false;
+    });
+  }
+
+  fetchRounds(hackathonId) {
+    this.roundService.indexRounds(hackathonId, EDbModels.HACKATHON).subscribe((data: IRound[]) => {
+      this.hackathonRounds = data;
+    });
+  }
+
+  fetchProblemStatements(hackathonId) {
+    this.hackathonService.indexProblemStatements(hackathonId).subscribe((data: IHackathonProblemStatement[]) => {
+      this.hackathonProblemStatements = data;
     });
   }
 
@@ -244,6 +283,16 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
         this.winnerPage,
         this.winnerCount,
         this.searchForm.get('search').value,
+        this.selectedRoundId,
+        this.selectedRegistrationStatus,
+        this.onlyWinners,
+        this.selectedTrackId,
+        this.selectedProblemStatementId,
+        undefined,
+        undefined,
+        undefined,
+        this.withSubmissions,
+        this.withCommunityBuild,
       )
       .subscribe((data) => {
         if (data) {
@@ -297,5 +346,34 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
   onWinnerPageChange(page: number) {
     this.winnerPage = page;
     this.fetchHackathonUserResponses();
+  }
+
+  onFilterChange() {
+    this.winnerPage = 1;
+    this.fetchHackathonUserResponses();
+  }
+
+  resetFilters() {
+    this.searchForm.patchValue({ search: '' });
+    this.selectedRoundId = undefined;
+    this.selectedTrackId = undefined;
+    this.selectedRegistrationStatus = undefined;
+    this.selectedProblemStatementId = undefined;
+    this.onlyWinners = undefined;
+    this.withCommunityBuild = null;
+    this.withSubmissions = null;
+    this.onFilterChange();
+  }
+
+  get hasActiveFilters(): boolean {
+    return !!(
+      this.selectedRoundId ||
+      this.selectedTrackId ||
+      this.selectedRegistrationStatus ||
+      this.selectedProblemStatementId ||
+      this.onlyWinners ||
+      this.withCommunityBuild !== null ||
+      this.withSubmissions !== null
+    );
   }
 }

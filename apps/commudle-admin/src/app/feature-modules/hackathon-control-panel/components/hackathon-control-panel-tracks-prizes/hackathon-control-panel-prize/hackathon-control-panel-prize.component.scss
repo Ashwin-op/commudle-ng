@@ -216,7 +216,7 @@ nb-card-footer {
     @apply com-p-0;
 
     .search-container {
-      @apply com-p-4 com-border-b com-border-gray-200 com-bg-gray-50;
+      @apply com-p-4 com-border-b com-border-gray-200 com-bg-gray-50 com-flex com-flex-col com-gap-3;
 
       .search-input-wrapper {
         @apply com-relative;
@@ -228,6 +228,19 @@ nb-card-footer {
         .search-input {
           @apply com-pl-10 com-pr-4 com-py-2 com-border com-border-gray-300 com-rounded-lg;
           @apply focus:com-border-primary-500 focus:com-outline-none;
+        }
+      }
+
+      .filter-controls {
+        @apply com-flex com-flex-wrap com-gap-2 com-items-center;
+
+        .filter-select {
+          @apply com-border com-border-solid com-border-gray-300 com-rounded com-bg-white com-px-2 com-py-1.5 com-text-xs com-cursor-pointer;
+          @apply focus:com-outline-none focus:com-ring-1 focus:com-ring-primary-500 focus:com-border-primary-500;
+        }
+
+        .reset-filters-btn {
+          @apply com-text-xs;
         }
       }
     }

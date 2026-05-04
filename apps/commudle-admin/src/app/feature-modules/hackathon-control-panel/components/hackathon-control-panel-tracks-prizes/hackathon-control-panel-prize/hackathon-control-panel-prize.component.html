@@ -269,6 +269,64 @@
             />
           </div>
         </form>
+        <div class="filter-controls">
+          <select class="filter-select" [(ngModel)]="selectedRoundId" (change)="onFilterChange()">
+            <option [ngValue]="undefined">Round: All</option>
+            <option *ngFor="let round of hackathonRounds" [ngValue]="round.id">{{ round.name }}</option>
+          </select>
+
+          <select class="filter-select" [(ngModel)]="selectedTrackId" (change)="onFilterChange()">
+            <option [ngValue]="undefined">Track: All</option>
+            <option *ngFor="let track of hackathonTracks" [ngValue]="track.id">{{ track.name }}</option>
+          </select>
+
+          <select class="filter-select" [(ngModel)]="selectedRegistrationStatus" (change)="onFilterChange()">
+            <option [ngValue]="undefined">Status: All</option>
+            <option *ngFor="let status of EHackathonRegistrationStatus | keyvalue" [ngValue]="status.value">
+              {{ status.value | capitalizeAndRemoveUnderscore }}
+            </option>
+          </select>
+
+          <select
+            class="filter-select"
+            *ngIf="hackathonProblemStatements?.length > 0"
+            [(ngModel)]="selectedProblemStatementId"
+            (change)="onFilterChange()"
+          >
+            <option [ngValue]="undefined">Problem Statement: All</option>
+            <option *ngFor="let ps of hackathonProblemStatements" [ngValue]="ps.id">#{{ ps.display_id }}</option>
+          </select>
+
+          <select class="filter-select" [(ngModel)]="onlyWinners" (change)="onFilterChange()">
+            <option [ngValue]="undefined">Show All</option>
+            <option [ngValue]="true">Winners Only</option>
+          </select>
+
+          <select class="filter-select" [(ngModel)]="withCommunityBuild" (change)="onFilterChange()">
+            <option [ngValue]="null">Project: All</option>
+            <option [ngValue]="true">Project: Submitted</option>
+            <option [ngValue]="false">Project: Not Submitted</option>
+          </select>
+
+          <select class="filter-select" [(ngModel)]="withSubmissions" (change)="onFilterChange()">
+            <option [ngValue]="null">PPT: All</option>
+            <option [ngValue]="true">PPT: Submitted</option>
+            <option [ngValue]="false">PPT: Not Submitted</option>
+          </select>
+
+          <button
+            *ngIf="hasActiveFilters"
+            nbButton
+            ghost
+            size="small"
+            status="danger"
+            (click)="resetFilters()"
+            class="reset-filters-btn"
+          >
+            <fa-icon [icon]="icons.faFilterCircleXmark"></fa-icon>
+            Reset
+          </button>
+        </div>
       </div>
       <div class="table-container">
         <app-loading-spinner *ngIf="isWinnerLoading"></app-loading-spinner>
