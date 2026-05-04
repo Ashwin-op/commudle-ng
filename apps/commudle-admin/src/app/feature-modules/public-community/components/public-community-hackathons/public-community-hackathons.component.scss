@@ -20,7 +20,8 @@
   }
 
   .upcoming-hackathons-section {
-    @apply com-my-0 com-bg-[#eef3ff] com-rounded-lg com-p-4;
+    @apply com-my-0 com-rounded-lg com-p-4 com-overflow-hidden;
+    background: linear-gradient(135deg, #eef3ff 0%, #f8fbff 40%, #e6edff 100%);
 
     .upcoming-hackathon-container {
       @apply com-grid com-gap-4;

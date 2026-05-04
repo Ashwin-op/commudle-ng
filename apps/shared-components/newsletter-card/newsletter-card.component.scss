@@ -1,18 +1,41 @@
 nb-card {
   @apply com-m-0 com-w-full com-h-full hover:com-shadow-sm;
+
   nb-card-body {
-    @apply com-p-0;
+    @apply com-p-0 com-w-full com-overflow-hidden com-flex com-items-stretch md:com-block;
+
+    .image {
+      @apply com-flex-shrink-0 md:com-w-full;
+    }
+
+    .mobile-image {
+      @apply com-w-[100px] com-flex-shrink-0 md:com-w-full;
+    }
+
     .newsletter {
-      @apply com-p-4 com-flex com-flex-col com-justify-between com-h-[calc(100%-9rem)];
+      @apply com-p-3 com-flex com-flex-col com-justify-between com-flex-1 md:com-p-4;
+
       .date {
-        @apply com-text-gray-500 com-text-xs;
+        @apply com-text-gray-700 com-text-xs md:com-text-sm;
       }
+
       .content {
-        @apply com-line-clamp-2 com-text-lg com-h-[56px] com-mb-1;
+        @apply com-line-clamp-2 com-text-base com-text-Yankees-Blue com-font-medium md:com-mb-6 md:com-mt-2 com-mt-1 com-mb-2 md:com-h-[56px];
       }
+
       .action {
+        @apply com-flex com-justify-end;
+
         a {
-          @apply com-no-underline;
+          @apply com-no-underline com-inline-flex com-items-center com-justify-center com-gap-6px com-text-sm com-font-normal com-text-primary-600  com-transition-all com-duration-200;
+
+          &:hover {
+            @apply com-bg-blue-100 com-border-primary-300 com-text-primary-700;
+          }
+
+          .action-icon {
+            @apply com-text-xs;
+          }
         }
       }
     }

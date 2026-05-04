@@ -1,13 +1,13 @@
 nb-card {
   @apply com-mx-0;
   .container {
-    @apply com-pt-0;
+    @apply com-p-4 md:com-p-6;
     h2 {
-      @apply com-text-2xl com-text-Yankees-Blue;
+      @apply com-mt-0 com-mb-4 md:com-mb-6 com-text-xl md:com-text-2xl com-font-semibold com-text-Yankees-Blue;
     }
 
     .newsletters {
-      @apply com-grid md:com-grid-cols-3 com-grid-cols-1 com-gap-8;
+      @apply com-grid md:com-grid-cols-3 com-grid-cols-1 com-gap-4 md:com-gap-8;
     }
   }
 }

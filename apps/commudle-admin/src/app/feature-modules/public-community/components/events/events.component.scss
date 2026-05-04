@@ -24,7 +24,9 @@
   }
 
   .upcoming-events-section {
-    @apply com-my-0 com-bg-[#eef3ff] com-rounded-lg com-p-4;
+    @apply com-my-0 com-rounded-lg com-p-4;
+
+    background: linear-gradient(135deg, #eef3ff 0%, #f8fbff 40%, #e6edff 100%);
 
     .upcoming-events-container {
       @apply com-flex com-flex-row com-flex-wrap com-gap-4;
