@@ -8,21 +8,9 @@ nb-card {
 
         .upcoming-card-image {
           @apply com-border com-border-solid com-border-Bright-Gray com-rounded-xl com-flex com-justify-center com-items-center com-overflow-hidden;
-        }
-
-        .no-image-header-desktop {
-          @apply md:com-w-[389px] md:com-h-[143px] com-w-full com-h-[145px] com-flex com-items-center com-justify-center com-flex-shrink-0;
 
           img {
-            @apply com-h-full com-w-full com-object-contain com-rounded-tl-lg com-rounded-bl-lg;
-          }
-        }
-
-        .no-image-header-mobile {
-          @apply md:com-w-[389px] md:com-h-[143px] com-w-full com-h-[145px] com-flex com-items-center com-justify-center com-flex-shrink-0;
-
-          img {
-            @apply com-w-full com-object-contain com-rounded-lg;
+            @apply com-h-full com-w-full com-object-cover;
           }
         }
 

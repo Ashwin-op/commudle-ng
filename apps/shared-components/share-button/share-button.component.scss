@@ -4,10 +4,10 @@
 }
 
 .shr-btn {
-  @apply com-h-8 com-text-xs;
+  @apply com-h-[34px] com-text-xs;
 
   span {
-    @apply com-ml-1;
+    @apply com-text-sm com-ml-1;
   }
 
   &.custom-share-button {

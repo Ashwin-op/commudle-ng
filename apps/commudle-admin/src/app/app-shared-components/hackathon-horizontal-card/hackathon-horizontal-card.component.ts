@@ -30,14 +30,13 @@ import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 export class HackathonHorizontalCardComponent implements OnInit {
   @Input() hackathon: IHackathon;
   @Input() showHackathonBadge = true;
+  @Input() headerImageWidth = '310px';
   community: ICommunity;
   moment = moment;
   faSackDollar = faSackDollar;
   countryDetails = countries_details;
   totalPrizes: { currency: any; amount: number }[];
   staticAssets = staticAssets;
-
-  constructor() {}
 
   ngOnInit() {
     this.totalPrizes = Object.keys(this.hackathon.total_prize_amount).map((currency) => ({

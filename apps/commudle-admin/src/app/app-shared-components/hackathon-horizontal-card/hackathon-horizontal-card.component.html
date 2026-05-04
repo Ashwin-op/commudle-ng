@@ -1,7 +1,7 @@
 <div class="upcoming-card">
   <a [routerLink]="['/communities', hackathon.community.slug, 'hackathons', hackathon.slug]" class="upcoming-card-link">
     <div>
-      <div *appBreakpoints="'>lg'" class="upcoming-card-image">
+      <div *appBreakpoints="'>lg'" class="upcoming-card-image" [ngStyle]="{ width: headerImageWidth }">
         <commudle-banner-image
           [headerImagePath]="hackathon.banner_image ? hackathon.banner_image.i320 : staticAssets.hackathon_empty_state"
           [name]="hackathon.name"

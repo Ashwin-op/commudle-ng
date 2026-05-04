@@ -21,14 +21,14 @@
           </div>
         </div>
         <div *ngIf="!event.header_image">
-          <div *appBreakpoints="'>md'" class="no-image-header-desktop">
+          <div *appBreakpoints="'>md'" class="upcoming-card-image" [ngStyle]="{ width: headerImageWidth }">
             <img
               alt="{{ event.name }}"
               src="{{ staticAssets.empty_state_desktop_upcoming_events }}"
               title="{{ event.name }}"
             />
           </div>
-          <div *appBreakpoints="'<=md'" class="no-image-header-mobile">
+          <div *appBreakpoints="'<=md'" class="upcoming-card-image com-w-full">
             <img
               alt="{{ event.name }}"
               src="{{ staticAssets.empty_state_mobile_upcoming_events }}"

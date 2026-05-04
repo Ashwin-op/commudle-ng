@@ -31,6 +31,7 @@
                 </div>
                 <div class="mobile-share-cta" *appBreakpoints="'<=md'">
                   <app-share-button
+                    class="share-button"
                     [content]="environment.app_url + '/communities/' + community.slug"
                     [title]="community.name"
                     [url]="environment.app_url + '/communities/' + community.slug"
@@ -46,6 +47,7 @@
                       <h1 class="heading-community-name">{{ community.name }}</h1>
                       <app-share-button
                         *appBreakpoints="'>md'"
+                        class="share-button"
                         [content]="environment.app_url + '/communities/' + community.slug"
                         [title]="community.name"
                         [url]="environment.app_url + '/communities/' + community.slug"
@@ -157,7 +159,8 @@
             </div>
           </nb-card-body>
         </nb-card>
-        <div class="menu-items-footer menu-items-footer-sticky">
+        <div #stickySentinel class="sticky-sentinel"></div>
+        <div class="menu-items-footer menu-items-footer-sticky" [ngClass]="{ 'sticky-active': isMenuSticky }">
           <div class="page-menu">
             <div class="menu-items d-flex">
               <a

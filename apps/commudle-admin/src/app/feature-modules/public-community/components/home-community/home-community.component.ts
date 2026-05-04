@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Inject, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, Inject, ViewChild, TemplateRef, ElementRef, AfterViewInit } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { NotificationsStore } from 'apps/commudle-admin/src/app/feature-modules/notifications/store/notifications.store';
@@ -28,14 +28,16 @@ interface CustomMenuItem {
     trigger('headerSection', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(-10px)' }),
-        animate('220ms ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
+        animate('320ms cubic-bezier(0.22, 1, 0.36, 1)', style({ opacity: 1, transform: 'translateY(0)' })),
       ]),
-      transition(':leave', [animate('180ms ease-in', style({ opacity: 0, transform: 'translateY(-8px)' }))]),
+      transition(':leave', [
+        animate('240ms cubic-bezier(0.4, 0, 0.2, 1)', style({ opacity: 0, transform: 'translateY(-6px)' })),
+      ]),
     ]),
   ],
   standalone: false,
 })
-export class HomeCommunityComponent implements OnInit, OnDestroy {
+export class HomeCommunityComponent implements OnInit, OnDestroy, AfterViewInit {
   community: ICommunity;
   isOrganizer = false;
   showMiniHeader = false;
@@ -56,6 +58,10 @@ export class HomeCommunityComponent implements OnInit, OnDestroy {
   items = [{ title: 'pages', slug: 'pages' }];
 
   @ViewChild('updateBannerDialogBox') updateBannerDialogBox: TemplateRef<any>;
+  @ViewChild('stickySentinel') sentinel!: ElementRef;
+
+  isMenuSticky = false;
+  observer!: IntersectionObserver;
   isHackathonActive = false;
   darkMode: boolean;
 
@@ -118,9 +124,24 @@ export class HomeCommunityComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngAfterViewInit(): void {
+    this.observer = new IntersectionObserver(
+      ([entry]) => {
+        this.isMenuSticky = !entry.isIntersecting;
+      },
+      {
+        root: null,
+        threshold: 0,
+      },
+    );
+
+    this.observer.observe(this.sentinel.nativeElement);
+  }
+
   ngOnDestroy(): void {
     this.seoService.noIndex(false);
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.observer?.disconnect();
   }
 
   getCustomPages() {
