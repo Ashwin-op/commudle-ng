@@ -1,5 +1,5 @@
-<nb-card>
-  <nb-card-body>
+<com-card>
+  <com-card-body>
     <div class="upcoming-card">
       <a [routerLink]="['/communities', event.kommunity_slug, 'events', event.slug]" class="upcoming-card-link">
         <div *ngIf="event.header_image">
@@ -155,5 +155,5 @@
     <ng-template #noEventTimeTpl>
       <p class="event-time">Date and time to be announced soon</p>
     </ng-template>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

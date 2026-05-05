@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NbButtonModule, NbCardModule, NbIconModule } from '@commudle/theme';
+import { NbButtonModule, NbIconModule } from '@commudle/theme';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IEvent } from 'apps/shared-models/event.model';
 import * as moment from 'moment';
@@ -23,7 +24,7 @@ import { faLocationDot, faMapPin } from '@fortawesome/free-solid-svg-icons';
     FontAwesomeModule,
     RouterModule,
     NbButtonModule,
-    NbCardModule,
+    CommudleCardModule,
     NbIconModule,
     SharedComponentsModule,
     SharedDirectivesModule,

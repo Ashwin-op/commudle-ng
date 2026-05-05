@@ -47,10 +47,10 @@
     }
 
     .past-events-container {
-      @apply com-flex com-flex-row com-flex-wrap com-gap-4;
+      @apply com-flex com-flex-row com-flex-wrap md:com-gap-4 com-gap-0;
 
       .past-event-card-wrapper {
-        @apply com-w-full md:com-w-[390px];
+        @apply com-w-full md:com-w-[390px] com-border-0 md:com-border-b-0 com-border-b com-border-solid com-border-Bright-Gray com-py-3 md:com-py-0;
       }
     }
   }

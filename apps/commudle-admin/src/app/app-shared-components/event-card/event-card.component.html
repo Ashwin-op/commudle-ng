@@ -3,8 +3,8 @@
     [routerLink]="['/communities', event.kommunity_slug, 'events', event.slug]"
     [ngClass]="horizontalScroll ? 'com-w-72' : 'com-w-full'"
   >
-    <nb-card>
-      <nb-card-body>
+    <com-card>
+      <com-card-body>
         <div *ngIf="event.header_image || event.header_image">
           <commudle-banner-image
             class="desktop-image"
@@ -120,7 +120,7 @@
             <span class="view-details">View Details</span>
           </div>
         </div>
-      </nb-card-body>
-    </nb-card>
+      </com-card-body>
+    </com-card>
   </a>
 </div>
