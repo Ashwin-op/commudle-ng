@@ -1,7 +1,7 @@
-nb-card {
+com-card {
   @apply com-mt-4 com-p-0 com-mx-0;
 
-  nb-card-body {
+  com-card-body {
     @apply md:com-p-6 com-p-0 com-m-0;
 
     .skeleton-vertical-cards {
@@ -25,7 +25,7 @@ nb-card {
       }
 
       .speakers-list {
-        @apply com-flex com-flex-nowrap com-overflow-x-auto com-scrollbar-hide com-gap-6 md:com-mb-14 com-mb-4 com-items-center com-scroll-smooth;
+        @apply com-flex com-flex-nowrap com-overflow-x-auto com-scrollbar-hide com-gap-6 md:com-mb-10 com-mb-4 com-items-center com-scroll-smooth;
       }
     }
 
