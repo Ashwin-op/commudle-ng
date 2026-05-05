@@ -35,10 +35,11 @@ export interface IHackathon {
   status: EHackathonStatus;
   community: ICommunity;
   community_group: ICommunityGroup;
-  total_prize_amount: {};
+  total_prize_amount: Record<string, number>;
   hackathon_response_group?: IHackathonResponseGroup;
   tags: string[];
   hackathon_collaboration_communities_count: number;
+  winners_count?: number;
 }
 
 export enum EParticipateTypes {

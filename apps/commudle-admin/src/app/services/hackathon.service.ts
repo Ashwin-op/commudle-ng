@@ -20,6 +20,7 @@ import {
   IPagination,
   IPaginationCount,
   IHackathonJudge,
+  IHackathonWinnerByPrize,
 } from '@commudle/shared-models';
 
 @Injectable({
@@ -618,6 +619,16 @@ export class HackathonService {
     const params = new HttpParams().set('hackathon_id', hackathonId);
     return this.http.get<IHackathonSponsorGroupedByTierName>(
       this.apiRoutesService.getRoute(API_ROUTES.HACKATHONS.PUBLIC.INDEX_SPONSORS),
+      {
+        params,
+      },
+    );
+  }
+
+  pIndexWinners(hackathonId): Observable<IHackathonWinnerByPrize[]> {
+    const params = new HttpParams().set('hackathon_id', hackathonId);
+    return this.http.get<IHackathonWinnerByPrize[]>(
+      this.apiRoutesService.getRoute(API_ROUTES.HACKATHONS.PUBLIC.INDEX_WINNERS),
       {
         params,
       },

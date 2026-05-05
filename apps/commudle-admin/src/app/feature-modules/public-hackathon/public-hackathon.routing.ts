@@ -6,6 +6,7 @@ import { PublicHackathonDetailsComponent } from 'apps/commudle-admin/src/app/fea
 import { PublicHackathonScheduleComponent } from 'apps/commudle-admin/src/app/feature-modules/public-hackathon/components/public-hackathon-schedule/public-hackathon-schedule.component';
 import { PublicHackathonJudgesComponent } from 'apps/commudle-admin/src/app/feature-modules/public-hackathon/components/public-hackathon-judges/public-hackathon-judges.component';
 import { PublicHackathonPrizesComponent } from 'apps/commudle-admin/src/app/feature-modules/public-hackathon/components/public-hackathon-prizes/public-hackathon-prizes.component';
+import { PublicHackathonWinnersComponent } from 'apps/commudle-admin/src/app/feature-modules/public-hackathon/components/public-hackathon-winners/public-hackathon-winners.component';
 import { PublicHackathonProjectsComponent } from 'apps/commudle-admin/src/app/feature-modules/public-hackathon/components/public-hackathon-projects/public-hackathon-projects.component';
 import { PublicHackathonChannelsComponent } from 'apps/commudle-admin/src/app/feature-modules/public-hackathon/components/public-hackathon-channels/public-hackathon-channels.component';
 import { PublicHackathonTracksComponent } from 'apps/commudle-admin/src/app/feature-modules/public-hackathon/components/public-hackathon-tracks/public-hackathon-tracks.component';
@@ -46,6 +47,10 @@ const routes: Routes = [
           {
             path: 'prizes',
             component: PublicHackathonPrizesComponent,
+          },
+          {
+            path: 'winners',
+            component: PublicHackathonWinnersComponent,
           },
           {
             path: 'projects',

@@ -21,6 +21,7 @@ import {
   faHandshake,
   faUserTie,
   faChalkboardTeacher,
+  faTrophy,
 } from '@fortawesome/free-solid-svg-icons';
 import { SeoService } from '@commudle/shared-services';
 import { AuthService } from '@commudle/shared-services';
@@ -28,10 +29,10 @@ import { HackathonJudgeService } from 'apps/commudle-admin/src/app/services/hack
 import { environment } from '@commudle/shared-environments';
 
 @Component({
-    selector: 'commudle-public-hackathon-homepage',
-    templateUrl: './public-hackathon-homepage.component.html',
-    styleUrls: ['./public-hackathon-homepage.component.scss'],
-    standalone: false
+  selector: 'commudle-public-hackathon-homepage',
+  templateUrl: './public-hackathon-homepage.component.html',
+  styleUrls: ['./public-hackathon-homepage.component.scss'],
+  standalone: false,
 })
 export class PublicHackathonHomepageComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
@@ -56,6 +57,7 @@ export class PublicHackathonHomepageComponent implements OnInit, OnDestroy {
     faHandshake,
     faUserTie,
     faChalkboardTeacher,
+    faTrophy,
   };
   isLoading = true;
   showBannerImage = false;

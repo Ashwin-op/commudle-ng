@@ -937,6 +937,7 @@ export const API_ROUTES = {
       INDEX_PRIZES: 'api/v2/hackathons/public/index_prizes', //GET
       INDEX_TRACKS: 'api/v2/hackathons/public/index_tracks', //GET
       INDEX_SPONSORS: 'api/v2/hackathons/public/index_sponsors', //GET
+      INDEX_WINNERS: 'api/v2/hackathons/public/index_winners', //GET
       INDEX_PROJECTS: 'api/v2/hackathons/public/index_projects', //GET
       INTERESTED_USERS: 'api/v2/hackathons/public/interested_users', //GET
       IS_MEMBER_OF_PARENT: 'api/v2/hackathons/public/is_member_of_parent', //GET

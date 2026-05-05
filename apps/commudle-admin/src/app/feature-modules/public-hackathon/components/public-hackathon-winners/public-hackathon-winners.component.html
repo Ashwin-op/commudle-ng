@@ -1,0 +1,60 @@
+<div *ngIf="isLoading; else winnersContent" class="loading">
+  <commudle-loading-spinner></commudle-loading-spinner>
+</div>
+<ng-template #winnersContent>
+  <div *ngIf="winnersByPrize.length === 0" class="empty-state">
+    <p>No winners announced yet.</p>
+  </div>
+  <div class="winners-container" *ngIf="winnersByPrize.length > 0">
+    <nb-card
+      *ngFor="let entry of winnersByPrize"
+      class="prize-section"
+      [ngClass]="getPrizeRankClass(entry.prize.order)"
+    >
+      <nb-card-body>
+        <div class="prize-header">
+          <div class="prize-rank-badge">
+            <fa-icon [icon]="icons.faTrophy"></fa-icon>
+          </div>
+          <div class="prize-info">
+            <div class="prize-name-row">
+              <div class="prize-name">{{ entry.prize.name }}</div>
+              <div class="prize-amount" *ngIf="entry.prize.prize_amount">
+                ᐧ {{ entry.prize.currency_symbol }} {{ entry.prize.prize_amount | number }}
+              </div>
+              <div class="prize-track" *ngIf="entry.prize.hackathon_track">
+                <fa-icon [icon]="icons.faLayerGroup"></fa-icon>
+                <span>{{ entry.prize.hackathon_track.name }}</span>
+              </div>
+            </div>
+            <div class="prize-description" *ngIf="entry.prize.description" [innerHTML]="entry.prize.description"></div>
+          </div>
+        </div>
+        <div class="winning-teams">
+          <nb-card *ngFor="let team of entry.winning_teams" class="team-card">
+            <nb-card-body>
+              <div class="team-name">
+                {{ team.name }}
+                <a
+                  *ngIf="team.community_build"
+                  [routerLink]="['/builds', team.community_build.slug]"
+                  target="_blank"
+                  class="build-chip"
+                >
+                  <fa-icon [icon]="icons.faLaptopCode"></fa-icon>
+                  <span>Project</span>
+                </a>
+              </div>
+              <div class="team-members" *ngIf="team.members?.length">
+                <app-user-profile-card-small
+                  *ngFor="let member of team.members"
+                  [user]="member"
+                ></app-user-profile-card-small>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</ng-template>

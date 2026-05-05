@@ -50,7 +50,7 @@
         </nb-card-body>
       </nb-card>
       <nb-card class="tabs" *ngIf="!isLoading">
-        <nb-card-body class="router-links">
+        <nb-card-body class="router-links custom-scrollbar">
           <div>
             <a [routerLink]="['.']" [class.active]="activeFragment === '' && !showBannerImage">
               <fa-icon [icon]="icons.faInfoCircle"></fa-icon>
@@ -115,6 +115,12 @@
             <a [routerLink]="['prizes']" routerLinkActive="active">
               <fa-icon [icon]="icons.faAward"></fa-icon>
               <p class="name">Prizes</p>
+            </a>
+          </div>
+          <div *ngIf="hackathon.winners_count > 0">
+            <a [routerLink]="['winners']" routerLinkActive="active">
+              <fa-icon [icon]="icons.faTrophy"></fa-icon>
+              <p class="name">Winners</p>
             </a>
           </div>
           <div *ngIf="hackathon.projects_count > 0">
