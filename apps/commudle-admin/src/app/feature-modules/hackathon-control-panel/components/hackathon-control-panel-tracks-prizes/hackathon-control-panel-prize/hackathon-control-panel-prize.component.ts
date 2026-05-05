@@ -3,7 +3,16 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NbDialogService } from '@commudle/theme';
-import { faFileImage, faPlus, faXmark, faSearch, faFilterCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import {
+  faFileImage,
+  faPlus,
+  faXmark,
+  faSearch,
+  faFilterCircleXmark,
+  faLaptopCode,
+  faLightbulb,
+  faGamepad,
+} from '@fortawesome/free-solid-svg-icons';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
 import {
   IHackathonPrize,
@@ -31,7 +40,7 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
   prizeForm: FormGroup;
   hackathonTracks: IHackathonTrack[];
   hackathon: IHackathon;
-  icons = { faPlus, faFileImage, faXmark, faSearch, faFilterCircleXmark };
+  icons = { faPlus, faFileImage, faXmark, faSearch, faFilterCircleXmark, faLaptopCode, faLightbulb, faGamepad };
   EHackathonRegistrationStatus = EHackathonRegistrationStatus;
   hackathonPrizes: IHackathonPrize[];
   countryDetails = countries_details;
@@ -375,5 +384,14 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
       this.withCommunityBuild !== null ||
       this.withSubmissions !== null
     );
+  }
+
+  getWinnerIdForCurrentPrize(team: IHackathonTeam): number {
+    const hw = team.hackathon_winners.find((w) => w.hackathon_prize.id === this.selectedPrize.id);
+    return hw ? hw.id : null;
+  }
+
+  getWinnerIndexForCurrentPrize(team: IHackathonTeam): number {
+    return team.hackathon_winners.findIndex((w) => w.hackathon_prize.id === this.selectedPrize.id);
   }
 }

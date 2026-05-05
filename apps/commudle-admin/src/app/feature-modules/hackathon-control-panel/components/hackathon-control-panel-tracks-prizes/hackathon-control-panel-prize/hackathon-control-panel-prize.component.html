@@ -244,10 +244,13 @@
     <nb-card-header>
       <div class="header-content">
         <div class="prize-info">
-          <h3>{{ selectedPrize?.name }}</h3>
+          <span class="prize-title">{{ selectedPrize?.name }}</span>
           <span class="prize-amount" *ngIf="selectedPrize?.prize_amount">
-            {{ selectedPrizeCurrencySymbol?.symbol }} {{ selectedPrize?.prize_amount }}
+            {{ selectedPrizeCurrencySymbol?.symbol }} {{ selectedPrize?.prize_amount | number }}
           </span>
+          <span class="winners-count"
+            >{{ selectedPrize?.winners_count }}/{{ selectedPrize?.no_of_winners }} selected</span
+          >
         </div>
         <button (click)="ref.close()" ghost nbButton shape="round" size="small">
           <nb-icon icon="close"></nb-icon>
@@ -264,7 +267,7 @@
               nbInput
               type="text"
               fullWidth
-              placeholder="Search by team name, member name or email"
+              placeholder="Search team, name or email..."
               class="search-input"
             />
           </div>
@@ -293,25 +296,25 @@
             [(ngModel)]="selectedProblemStatementId"
             (change)="onFilterChange()"
           >
-            <option [ngValue]="undefined">Problem Statement: All</option>
+            <option [ngValue]="undefined">PS: All</option>
             <option *ngFor="let ps of hackathonProblemStatements" [ngValue]="ps.id">#{{ ps.display_id }}</option>
           </select>
 
           <select class="filter-select" [(ngModel)]="onlyWinners" (change)="onFilterChange()">
-            <option [ngValue]="undefined">Show All</option>
+            <option [ngValue]="undefined">All Teams</option>
             <option [ngValue]="true">Winners Only</option>
           </select>
 
           <select class="filter-select" [(ngModel)]="withCommunityBuild" (change)="onFilterChange()">
             <option [ngValue]="null">Project: All</option>
-            <option [ngValue]="true">Project: Submitted</option>
-            <option [ngValue]="false">Project: Not Submitted</option>
+            <option [ngValue]="true">Submitted</option>
+            <option [ngValue]="false">Not Submitted</option>
           </select>
 
           <select class="filter-select" [(ngModel)]="withSubmissions" (change)="onFilterChange()">
             <option [ngValue]="null">PPT: All</option>
-            <option [ngValue]="true">PPT: Submitted</option>
-            <option [ngValue]="false">PPT: Not Submitted</option>
+            <option [ngValue]="true">Submitted</option>
+            <option [ngValue]="false">Not Submitted</option>
           </select>
 
           <button
@@ -328,77 +331,100 @@
           </button>
         </div>
       </div>
-      <div class="table-container">
+      <div class="teams-list">
         <app-loading-spinner *ngIf="isWinnerLoading"></app-loading-spinner>
-        <table *ngIf="!isWinnerLoading" class="teams-table">
-          <thead>
-            <tr>
-              <th>Team Name</th>
-              <th>Round</th>
-              <th>Project</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let userResponse of hackathonUserResponses; let i = index"
-              [class.winner-row]="userResponse.team.hackathon_winners.length > 0"
-            >
-              <td class="team-name-cell">
-                <div class="team-info">
-                  <span class="team-name">{{ userResponse.team.name }}</span>
-                  <span *ngFor="let hw of userResponse.team.hackathon_winners" class="trophy">🏆</span>
-                </div>
-              </td>
-              <td>
-                <span *ngIf="userResponse.team.round" class="round-badge">{{ userResponse.team.round.name }}</span>
-                <span *ngIf="!userResponse.team.round" class="no-data">—</span>
-              </td>
-              <td class="project-cell">
-                <span *ngIf="userResponse.team.community_build" class="project-name">
-                  {{ userResponse.team.community_build.name }}
+        <div *ngIf="!isWinnerLoading && hackathonUserResponses?.length === 0" class="empty-state">No teams found.</div>
+        <div
+          *ngFor="let userResponse of hackathonUserResponses; let i = index"
+          class="team-row"
+          [class.is-current-winner]="userResponse.team.prize_selected"
+        >
+          <div class="team-main">
+            <div class="team-name-line">
+              <span class="team-name">{{ userResponse.team.name }}</span>
+            </div>
+            <div class="team-extra">
+              <span *ngIf="userResponse.team.round" class="round-chip">
+                <fa-icon [icon]="icons.faGamepad"></fa-icon>
+                {{ userResponse.team.round.name }}
+              </span>
+              <a
+                *ngIf="userResponse.team.community_build"
+                class="project-chip"
+                [routerLink]="['/builds', userResponse.team.community_build.slug]"
+                target="_blank"
+              >
+                <fa-icon [icon]="icons.faLaptopCode"></fa-icon>
+                {{ userResponse.team.community_build.name }}
+              </a>
+              <span *ngIf="userResponse.team.problem_statement" class="ps-chip">
+                <fa-icon [icon]="icons.faLightbulb"></fa-icon>
+                #{{ userResponse.team.problem_statement.display_id }}
+              </span>
+              <a
+                *ngFor="let submission of userResponse.team.hackathon_team_round_submissions"
+                class="ppt-chip"
+                [href]="submission.file_attachment?.url"
+                target="_blank"
+              >
+                <fa-icon [icon]="icons.faFileImage"></fa-icon>
+                {{ submission.round?.name || 'PPT' }}
+              </a>
+              <ng-container *ngFor="let hw of userResponse.team.hackathon_winners">
+                <span class="other-prize-chip" *ngIf="hw.hackathon_prize.id !== selectedPrize?.id">
+                  🏆 {{ hw.hackathon_prize.name }}
                 </span>
-                <span *ngIf="!userResponse.team.community_build" class="no-data">—</span>
-              </td>
-              <td class="action-cell">
-                <button
-                  *ngIf="!userResponse.team.prize_selected"
-                  nbButton
-                  status="primary"
-                  size="small"
-                  (click)="openAddWinnerConfirmation(addWinnerDialogBox, userResponse.team, i)"
-                >
-                  Select Winner
-                </button>
-                <div *ngFor="let hw of userResponse.team.hackathon_winners; let wi = index" class="prize-tag">
-                  <span class="prize-name">{{ hw.hackathon_prize.name }}</span>
-                  <button
-                    nbButton
-                    shape="round"
-                    status="danger"
-                    size="tiny"
-                    ghost
-                    (click)="openRemoveWinnerConfirmation(removeWinnerDialogBox, hw.id, i, wi)"
-                  >
-                    <fa-icon [icon]="icons.faXmark"></fa-icon>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              </ng-container>
+            </div>
+          </div>
+          <div class="team-action">
+            <ng-container *ngIf="userResponse.team.prize_selected; else selectBtn">
+              <span class="current-winner-badge"> ✓ Winner for this prize </span>
+              <button
+                nbButton
+                ghost
+                size="tiny"
+                status="danger"
+                (click)="
+                  openRemoveWinnerConfirmation(
+                    removeWinnerDialogBox,
+                    getWinnerIdForCurrentPrize(userResponse.team),
+                    i,
+                    getWinnerIndexForCurrentPrize(userResponse.team)
+                  )
+                "
+              >
+                Remove
+              </button>
+            </ng-container>
+            <ng-template #selectBtn>
+              <button
+                nbButton
+                status="primary"
+                size="small"
+                (click)="openAddWinnerConfirmation(addWinnerDialogBox, userResponse.team, i)"
+              >
+                Select Winner
+              </button>
+            </ng-template>
+          </div>
+        </div>
       </div>
     </nb-card-body>
     <nb-card-footer>
-      <app-pagination
-        *ngIf="winnerTotal > 0"
-        [count]="winnerCount"
-        [current]="winnerPage"
-        [total]="winnerTotal"
-        (goTo)="onWinnerPageChange($event)"
-        (next)="onWinnerPageChange($event)"
-        (previous)="onWinnerPageChange($event)"
-      ></app-pagination>
+      <div class="com-w-full">
+        <app-pagination
+          *ngIf="winnerTotal > 0"
+          [count]="winnerCount"
+          [current]="winnerPage"
+          [total]="winnerTotal"
+          [showJumpTo]="true"
+          [showCount]="true"
+          (goTo)="onWinnerPageChange($event)"
+          (next)="onWinnerPageChange($event)"
+          (previous)="onWinnerPageChange($event)"
+        ></app-pagination>
+      </div>
     </nb-card-footer>
   </nb-card>
 </ng-template>

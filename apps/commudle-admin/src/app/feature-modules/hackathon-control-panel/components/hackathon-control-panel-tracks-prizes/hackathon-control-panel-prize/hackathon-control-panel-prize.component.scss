@@ -190,33 +190,37 @@ nb-card-footer {
 
 .prize-distribution-dialog {
   @apply com-h-full com-w-[100dvw] com-mx-0;
-  @apply md:com-h-[90dvh] md:com-w-[80dvw];
+  @apply md:com-h-[90dvh] md:com-w-[70dvw];
 
   nb-card-header {
-    @apply com-border-b com-border-gray-200;
-
     .header-content {
       @apply com-flex com-items-center com-justify-between com-w-full;
 
       .prize-info {
-        @apply com-flex com-flex-col com-gap-1;
+        @apply com-flex com-items-center com-gap-3 com-flex-wrap;
 
-        h3 {
-          @apply com-text-xl com-font-semibold com-text-gray-900 com-m-0;
+        .prize-title {
+          @apply com-text-lg com-font-bold;
         }
 
         .prize-amount {
-          @apply com-text-sm com-font-medium com-text-primary-500;
+          @apply com-text-primary-600 com-font-bold com-text-lg;
+        }
+
+        .winners-count {
+          @apply com-text-xs com-px-2 com-py-1 com-rounded-full com-bg-primary-100 com-text-primary-700 com-font-medium;
         }
       }
     }
   }
 
   nb-card-body {
-    @apply com-p-0;
+    @apply com-p-0 com-flex com-flex-col;
 
     .search-container {
-      @apply com-p-4 com-border-b com-border-gray-200 com-bg-gray-50 com-flex com-flex-col com-gap-3;
+      @apply com-p-4 com-flex com-flex-col com-gap-3 com-sticky com-top-0 com-z-10;
+      background-color: var(--card-background-color);
+      border-bottom: 1px solid var(--divider-color, rgba(128, 128, 128, 0.2));
 
       .search-input-wrapper {
         @apply com-relative;
@@ -226,8 +230,7 @@ nb-card-footer {
         }
 
         .search-input {
-          @apply com-pl-10 com-pr-4 com-py-2 com-border com-border-gray-300 com-rounded-lg;
-          @apply focus:com-border-primary-500 focus:com-outline-none;
+          @apply com-pl-10;
         }
       }
 
@@ -235,8 +238,14 @@ nb-card-footer {
         @apply com-flex com-flex-wrap com-gap-2 com-items-center;
 
         .filter-select {
-          @apply com-border com-border-solid com-border-gray-300 com-rounded com-bg-white com-px-2 com-py-1.5 com-text-xs com-cursor-pointer;
-          @apply focus:com-outline-none focus:com-ring-1 focus:com-ring-primary-500 focus:com-border-primary-500;
+          @apply com-border com-border-solid com-rounded com-px-2 com-py-1.5 com-text-xs com-cursor-pointer;
+          border-color: var(--divider-color, rgba(128, 128, 128, 0.3));
+          background-color: var(--card-background-color);
+          color: inherit;
+
+          &:focus {
+            @apply com-outline-none com-ring-1 com-ring-primary-500 com-border-primary-500;
+          }
         }
 
         .reset-filters-btn {
@@ -245,80 +254,88 @@ nb-card-footer {
       }
     }
 
-    .table-container {
-      @apply com-overflow-x-auto;
+    .teams-list {
+      @apply com-flex-1 com-overflow-y-auto com-py-2;
 
-      .teams-table {
-        @apply com-w-full com-border-collapse;
+      .empty-state {
+        @apply com-text-center com-py-12 com-text-Auro-Metal-Saurus;
+      }
 
-        thead {
-          @apply com-bg-gray-100 com-sticky com-top-0 com-z-10;
+      .team-row {
+        @apply com-flex com-items-center com-justify-between com-gap-4 com-px-5 com-py-3 com-transition-colors;
+        border-bottom: 1px solid var(--divider-color, rgba(128, 128, 128, 0.08));
 
-          th {
-            @apply com-px-4 com-py-3 com-text-left com-text-xs com-font-semibold com-text-gray-700 com-uppercase;
-            @apply com-border-b com-border-gray-300;
+        &:hover {
+          background-color: var(--option-background-color, rgba(128, 128, 128, 0.05));
+        }
+
+        &.is-current-winner {
+          border-left: 3px solid;
+          @apply com-border-green-500 com-bg-green-50;
+        }
+
+        .team-main {
+          @apply com-flex com-flex-col com-gap-1 com-min-w-0 com-flex-1;
+
+          .team-name-line {
+            @apply com-flex com-items-center com-gap-2 com-flex-wrap;
+
+            .team-name {
+              @apply com-font-semibold com-text-sm;
+            }
+          }
+
+          .team-extra {
+            @apply com-flex com-flex-wrap com-gap-2 com-items-center;
+
+            .round-chip {
+              @apply com-text-xs com-px-2 com-py-0.5 com-rounded com-font-medium com-bg-primary-100 com-text-primary-700 com-flex com-items-center com-gap-1;
+
+              fa-icon {
+                @apply com-text-xs;
+              }
+            }
+
+            .project-chip {
+              @apply com-text-xs com-text-primary-600 com-flex com-items-center com-gap-1 com-no-underline com-px-2 com-py-0.5 com-rounded;
+              @apply hover:com-underline hover:com-bg-primary-100;
+
+              fa-icon {
+                @apply com-text-xs;
+              }
+            }
+
+            .ps-chip {
+              @apply com-text-xs com-px-2 com-py-0.5 com-rounded com-font-medium com-flex com-items-center com-gap-1;
+              @apply com-bg-indigo-100 com-text-indigo-700;
+
+              fa-icon {
+                @apply com-text-xs;
+              }
+            }
+
+            .ppt-chip {
+              @apply com-text-xs com-px-2 com-py-0.5 com-rounded com-font-medium com-flex com-items-center com-gap-1 com-no-underline;
+              @apply com-bg-green-100 com-text-green-700;
+              @apply hover:com-underline hover:com-bg-green-200;
+
+              fa-icon {
+                @apply com-text-xs;
+              }
+            }
+
+            .other-prize-chip {
+              @apply com-text-xs com-px-2 com-py-0.5 com-rounded com-font-medium;
+              @apply com-bg-yellow-100 com-text-yellow-800;
+            }
           }
         }
 
-        tbody {
-          tr {
-            @apply com-border-0 com-border-solid com-border-b com-border-gray-200 com-transition-colors;
-            @apply hover:com-bg-gray-50;
+        .team-action {
+          @apply com-flex com-items-center com-gap-2 com-flex-shrink-0;
 
-            &.winner-row {
-              @apply com-bg-primary-100 com-text-tblack;
-
-              td {
-                @apply com-bg-transparent com-text-tblack;
-
-                span:not(.prize-name) {
-                  @apply com-text-tblack !important;
-                }
-              }
-            }
-
-            td {
-              @apply com-px-4 com-py-3 com-text-sm;
-
-              &.team-name-cell {
-                .team-info {
-                  @apply com-flex com-items-center com-gap-2;
-
-                  .team-name {
-                    @apply com-font-medium com-text-gray-900;
-                  }
-
-                  .trophy {
-                    @apply com-text-base;
-                  }
-                }
-              }
-
-              .round-badge {
-                @apply com-inline-flex com-px-3 com-py-1 com-text-xs com-font-medium com-rounded-full;
-                @apply com-bg-primary-100 com-text-primary-700;
-              }
-
-              &.project-cell {
-                .project-name {
-                  @apply com-text-gray-700;
-                }
-              }
-
-              .no-data {
-                @apply com-text-gray-400;
-              }
-
-              &.action-cell {
-                .prize-tag {
-                  @apply com-flex com-items-center com-gap-2 com-mt-2;
-
-                  .prize-name {
-                    @apply com-text-xs com-font-medium com-text-gray-700 com-bg-gray-100 com-px-2 com-py-1 com-rounded;
-                  }
-                }
-              }
-            }
+          .current-winner-badge {
+            @apply com-text-xs com-font-semibold com-text-green-700 com-bg-green-100 com-px-2 com-py-1 com-rounded;
           }
         }
       }
@@ -326,6 +343,20 @@ nb-card-footer {
   }
 
   nb-card-footer {
-    @apply com-border-t com-border-gray-200 com-bg-gray-50;
+    border-top: 1px solid var(--divider-color, rgba(128, 128, 128, 0.2));
+  }
+
+  @media (max-width: 768px) {
+    nb-card-body {
+      .teams-list {
+        .team-row {
+          @apply com-flex-col com-items-start com-px-3;
+
+          .team-action {
+            @apply com-w-full com-justify-end com-mt-2;
+          }
+        }
+      }
+    }
   }
 }
