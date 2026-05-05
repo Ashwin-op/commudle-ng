@@ -1,9 +1,5 @@
 com-card {
-  @apply com-overflow-hidden com-transition-all com-duration-500 com-cursor-pointer hover:com-shadow-Card com-m-0 com-h-full
-  com-w-[280px];
-  &.fullWidth {
-    @apply com-w-full;
-  }
+  @apply com-overflow-hidden com-transition-all com-duration-500 com-cursor-pointer hover:com-shadow-Card com-m-0 com-h-full;
 
   com-card-body {
     @apply com-p-0 com-m-0 com-overflow-hidden com-h-full;
@@ -24,7 +20,7 @@ com-card {
       }
 
       .banner {
-        @apply com-grid;
+        @apply com-grid com-relative;
 
         div {
           @apply com-col-start-1 com-row-start-1;
@@ -62,7 +58,7 @@ com-card {
             }
 
             .user-name {
-              @apply com-m-0 com-text-sm com-font-semibold com-text-Yankees-Blue com-flex com-items-center com-gap-1 com-min-w-0;
+              @apply com-m-0 com-text-sm com-font-semibold com-text-Yankees-Blue com-flex com-items-center com-gap-1 com-min-w-0 com-line-clamp-1;
 
               .user-name-text {
                 @apply com-min-w-0 com-flex-1 com-truncate;
@@ -102,7 +98,7 @@ com-card {
           }
         }
         .tags {
-          @apply com-overflow-hidden com-h-8 com-gap-3 com-m-0 com-p-0 com-mt-3;
+          @apply com-overflow-hidden com-h-8 com-gap-3 com-m-0 com-p-0 com-mt-3 com-flex com-flex-shrink-0;
 
           ::ng-deep {
             .tag {

@@ -8,7 +8,7 @@
       <div class="speakers-list" (scroll)="checkScrollPosition($event)">
         <ng-container *ngFor="let speaker of speakers" class="speakers-card">
           <div class="speaker-card">
-            <app-speaker-card [speaker]="speaker" [maxUserNameLength]="25"></app-speaker-card>
+            <app-speaker-card [speaker]="speaker" [maxUserNameLength]="25" [customWidth]="'280px'"></app-speaker-card>
           </div>
         </ng-container>
         <div class="load-more">
