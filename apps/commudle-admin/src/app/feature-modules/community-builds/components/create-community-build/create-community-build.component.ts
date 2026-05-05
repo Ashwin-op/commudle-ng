@@ -180,8 +180,16 @@ export class CreateCommunityBuildComponent implements OnInit, OnDestroy {
   private noLinkValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value: string = control.value || '';
-      const urlPattern = /(https?:\/\/|www\.)\S+/i;
-      return urlPattern.test(value) ? { containsLink: true } : null;
+      const trimmedValue = value.trim();
+
+      if (!trimmedValue) {
+        return null;
+      }
+
+      const hasProtocolOrWww = /\b(?:https?:\/\/|www\.)\S+/i.test(trimmedValue);
+      const hasDomainLikeUrl = /\b(?:[a-z0-9-]+\.)+[a-z]{2,}(?:[/?#]\S*)?\b/i.test(trimmedValue);
+
+      return hasProtocolOrWww || hasDomainLikeUrl ? { containsLink: true } : null;
     };
   }
 

@@ -265,6 +265,14 @@
                 size="large"
                 type="url"
               />
+              <br />
+              <commudle-alert
+                [info]="true"
+                [message]="
+                  'Add the complete iframe code here Example: <iframe src=&quot;https://www.commudle.com&quot; width=&quot;600&quot; height=&quot;400&quot;></iframe>'
+                "
+              >
+              </commudle-alert>
               <span *ngIf="communityBuildForm.get('video_iframe').invalid">
                 <commudle-alert [errorMessage]="'Please add correct iframe'" [error]="true"></commudle-alert>
               </span>
