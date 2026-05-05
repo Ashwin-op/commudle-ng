@@ -104,6 +104,7 @@ import { CampaignStatsComponent } from './campaign-stats/campaign-stats.componen
 import { UserExpertTickComponent } from 'apps/commudle-admin/src/app/app-shared-components/user-expert-tick.component';
 import { ProductPriceDetailsComponent } from './product-price-details/product-price-details.component';
 import { BottomSheetComponent } from './bottom-sheet/bottom-sheet.component';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 
 @NgModule({
   declarations: [
@@ -216,6 +217,7 @@ import { BottomSheetComponent } from './bottom-sheet/bottom-sheet.component';
     UserPersonalConnectComponent,
     UserExpertTickComponent,
     LibSharedComponentsModule,
+    CommudleCardModule,
   ],
   exports: [
     WorkInProgressComponent,

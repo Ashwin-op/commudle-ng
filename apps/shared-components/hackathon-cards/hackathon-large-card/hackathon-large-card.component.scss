@@ -4,14 +4,14 @@ a {
   .hackathon-card {
     @apply com-m-0 com-border-0;
 
-    nb-card-body {
+    com-card-body {
       @apply com-p-0;
 
       .hackathon-horizontal-card {
         @apply com-flex com-w-full com-no-underline md:com-flex-row com-flex-col;
 
         .hackathon-image {
-          @apply md:com-w-[434px] com-w-full com-overflow-hidden com-border com-border-solid com-border-Bright-Gray com-rounded-xl com-flex-shrink-0;
+          @apply com-w-full com-overflow-hidden com-border com-border-solid com-border-Bright-Gray com-rounded-xl com-flex-shrink-0;
         }
 
         .hackathon-details {

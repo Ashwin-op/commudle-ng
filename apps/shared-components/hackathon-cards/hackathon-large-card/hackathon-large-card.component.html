@@ -1,14 +1,28 @@
 <a [routerLink]="['/communities', hackathon.community.slug, 'hackathons', hackathon.slug]">
-  <nb-card class="hackathon-card">
-    <nb-card-body>
+  <com-card class="hackathon-card">
+    <com-card-body>
       <div class="hackathon-horizontal-card">
-        <div class="hackathon-image">
-          <commudle-banner-image
-            [headerImagePath]="hackathon.banner_image ? hackathon.banner_image.url : staticAssets.hackathon_empty_state"
-            [name]="hackathon.name"
-            [bottomLeftCurve]="false"
-            [bottomRightCurve]="false"
-          ></commudle-banner-image>
+        <div>
+          <div *appBreakpoints="'>md'" class="hackathon-image" [ngStyle]="{ width: headerImageWidth }">
+            <commudle-banner-image
+              [headerImagePath]="
+                hackathon.banner_image ? hackathon.banner_image.url : staticAssets.hackathon_empty_state
+              "
+              [name]="hackathon.name"
+              [bottomLeftCurve]="false"
+              [bottomRightCurve]="false"
+            ></commudle-banner-image>
+          </div>
+          <div *appBreakpoints="'<=md'" class="hackathon-image com-w-full">
+            <commudle-banner-image
+              [headerImagePath]="
+                hackathon.banner_image ? hackathon.banner_image.url : staticAssets.hackathon_empty_state
+              "
+              [name]="hackathon.name"
+              [bottomLeftCurve]="false"
+              [bottomRightCurve]="false"
+            ></commudle-banner-image>
+          </div>
         </div>
 
         <div class="hackathon-details">
@@ -47,6 +61,6 @@
           </div>
         </div>
       </div>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </a>

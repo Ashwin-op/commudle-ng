@@ -12,6 +12,7 @@ import { faMapPin } from '@fortawesome/free-solid-svg-icons';
 })
 export class HackathonLargeCardComponent implements OnInit {
   @Input() hackathon: IHackathon;
+  @Input() headerImageWidth = '434px';
   moment = moment;
   faMapPin = faMapPin;
   prizeCurrency;

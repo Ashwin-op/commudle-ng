@@ -6,13 +6,7 @@
           <span class="live-dot" aria-hidden="true"></span>
           Upcoming Hackathons
         </h2>
-        <div
-          class="upcoming-hackathon-container"
-          [ngClass]="{
-            'com-grid-cols-1': upcomingHackathons.length === 1,
-            'com-grid-cols-2': upcomingHackathons.length >= 2
-          }"
-        >
+        <div class="upcoming-hackathon-container">
           <div *ngFor="let hackathon of upcomingHackathons" class="upcoming-hackathon-card-wrapper">
             <commudle-hackathon-large-card [hackathon]="hackathon"></commudle-hackathon-large-card>
           </div>
