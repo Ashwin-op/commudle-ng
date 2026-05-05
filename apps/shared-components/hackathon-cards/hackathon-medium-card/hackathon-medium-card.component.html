@@ -1,7 +1,7 @@
 <div *ngIf="hackathon" class="hackathon">
   <a [routerLink]="['/communities', hackathon.community.slug, 'hackathons', hackathon.slug]">
-    <nb-card>
-      <nb-card-body>
+    <com-card>
+      <com-card-body>
         <div>
           <commudle-banner-image
             *appBreakpoints="'>lg'"
@@ -83,7 +83,7 @@
             {{ item.currency.symbol }}{{ item.amount }}
           </div>
           </div> -->
-      </nb-card-body>
-    </nb-card>
+      </com-card-body>
+    </com-card>
   </a>
 </div>

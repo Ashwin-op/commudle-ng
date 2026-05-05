@@ -3,9 +3,9 @@
   a {
     @apply com-relative com-no-underline com-w-full;
 
-    nb-card {
-      @apply com-overflow-hidden com-m-0 md:com-border com-border-0;
-      nb-card-body {
+    com-card {
+      @apply com-overflow-hidden com-m-0 md:com-border com-border-solid com-border-Bright-Gray com-border-0;
+      com-card-body {
         @apply com-p-0 com-flex md:com-flex-col com-flex-row;
 
         .details-container {
