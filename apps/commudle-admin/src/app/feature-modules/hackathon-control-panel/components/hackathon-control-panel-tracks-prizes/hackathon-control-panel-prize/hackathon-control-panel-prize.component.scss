@@ -272,6 +272,9 @@ nb-card-footer {
         &.is-current-winner {
           border-left: 3px solid;
           @apply com-border-green-500 com-bg-green-50;
+          .team-name-line {
+            @apply com-text-tYankees-Blue;
+          }
         }
 
         .team-main {

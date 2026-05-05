@@ -331,6 +331,16 @@
           </button>
         </div>
       </div>
+      <commudle-alert
+        *ngIf="selectedPrize?.winners_count >= selectedPrize?.no_of_winners"
+        [warning]="
+          'All ' +
+          selectedPrize?.no_of_winners +
+          ' winner ' +
+          (selectedPrize?.no_of_winners === 1 ? 'slot' : 'slots') +
+          ' filled. Remove a winner or increase the limit to add more.'
+        "
+      ></commudle-alert>
       <div class="teams-list">
         <app-loading-spinner *ngIf="isWinnerLoading"></app-loading-spinner>
         <div *ngIf="!isWinnerLoading && hackathonUserResponses?.length === 0" class="empty-state">No teams found.</div>
@@ -402,6 +412,7 @@
                 nbButton
                 status="primary"
                 size="small"
+                [disabled]="selectedPrize?.winners_count >= selectedPrize?.no_of_winners"
                 (click)="openAddWinnerConfirmation(addWinnerDialogBox, userResponse.team, i)"
               >
                 Select Winner
