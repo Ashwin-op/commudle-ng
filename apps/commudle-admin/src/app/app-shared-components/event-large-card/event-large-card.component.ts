@@ -1,5 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IEvent } from 'apps/shared-models/event.model';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
@@ -27,31 +26,18 @@ import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communi
   templateUrl: './event-large-card.component.html',
   styleUrl: './event-large-card.component.scss',
 })
-export class EventLargeCardComponent implements OnInit, OnDestroy {
+export class EventLargeCardComponent implements OnInit {
   @Input() event: IEvent;
   @Input() hostCommunity: ICommunity;
-  @Input() addPaddingBody = true;
   community: ICommunity;
   moment = moment;
   momentTimezone = momentTimezone;
   faMapPin = faMapPin;
-  private countdownInterval: ReturnType<typeof setInterval>;
-  private readonly isBrowser: boolean;
-  now = moment();
 
-  constructor(private communitiesService: CommunitiesService, @Inject(PLATFORM_ID) private platformId: object) {
-    this.isBrowser = isPlatformBrowser(this.platformId);
-  }
+  constructor(private communitiesService: CommunitiesService) {}
 
   ngOnInit(): void {
     this.getCommunity();
-    this.startCountdownTimer();
-  }
-
-  ngOnDestroy(): void {
-    if (this.countdownInterval) {
-      clearInterval(this.countdownInterval);
-    }
   }
 
   getCommunity() {
@@ -59,32 +45,5 @@ export class EventLargeCardComponent implements OnInit, OnDestroy {
     this.communitiesService.pGetCommunityDetails(eventCommunityId).subscribe((data) => {
       this.community = data;
     });
-  }
-
-  get isUpcomingEvent(): boolean {
-    return !!this.event?.start_time && moment(this.event.start_time).isAfter(this.now);
-  }
-
-  get countdownLabel(): string {
-    if (!this.isUpcomingEvent) {
-      return '';
-    }
-    const duration = moment.duration(moment(this.event.start_time).diff(this.now));
-    const days = Math.max(0, Math.floor(duration.asDays()));
-    const hours = Math.max(0, duration.hours());
-    const minutes = Math.max(0, duration.minutes());
-    const seconds = Math.max(0, duration.seconds());
-    return `${days.toString().padStart(2, '0')}d  ${hours.toString().padStart(2, '0')}h  ${minutes
-      .toString()
-      .padStart(2, '0')}m  ${seconds.toString().padStart(2, '0')}s`;
-  }
-
-  private startCountdownTimer(): void {
-    if (!this.isBrowser || !this.event?.start_time) {
-      return;
-    }
-    this.countdownInterval = setInterval(() => {
-      this.now = moment();
-    }, 1000);
   }
 }
