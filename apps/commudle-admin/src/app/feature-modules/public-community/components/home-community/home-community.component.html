@@ -2,8 +2,8 @@
   <div class="container">
     <div class="one-column-layout">
       <div *ngIf="community" class="home-component">
-        <nb-card class="home-component-card">
-          <nb-card-body class="!com-p-0 com-overflow-hidden">
+        <com-card class="home-component-card">
+          <com-card-body class="!com-p-0 com-overflow-hidden">
             <div class="header-transition-wrapper" *ngIf="!showMiniHeader" @headerSection>
               <div class="banner">
                 <img
@@ -157,8 +157,8 @@
                 ></app-share-button>
               </div>
             </div>
-          </nb-card-body>
-        </nb-card>
+          </com-card-body>
+        </com-card>
         <div #stickySentinel class="sticky-sentinel"></div>
         <div class="menu-items-footer menu-items-footer-sticky" [ngClass]="{ 'sticky-active': isMenuSticky }">
           <div class="page-menu">
@@ -259,8 +259,8 @@
 </div>
 
 <ng-template #updateBannerDialogBox let-ref="dialogRef">
-  <nb-card>
-    <nb-card-body>
+  <com-card>
+    <com-card-body>
       <div>
         Banner Image*
         <label
@@ -286,12 +286,12 @@
       <div *ngIf="uploadedBanner">
         <img alt="Uploaded Banner Image" src="{{ uploadedBanner }}" title="Uploaded Banner" class="banner-image" />
       </div>
-    </nb-card-body>
-    <nb-card-footer class="d-flex justify-content-space-between">
+    </com-card-body>
+    <com-card-footer class="d-flex justify-content-space-between">
       <button (click)="updateBanner(); ref.close()" nbButton status="success" [disabled]="uploadedBanner">
         Update
       </button>
       <button (click)="ref.close()" ghost nbButton status="danger">Close</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

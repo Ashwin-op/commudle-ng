@@ -97,10 +97,10 @@
 .page-menu {
   @apply com-w-full;
 
-  nb-card {
+  com-card {
     @apply com-m-0;
 
-    nb-card-body {
+    com-card-body {
       @apply com-pt-5 com-px-5 com-pb-0;
     }
   }
