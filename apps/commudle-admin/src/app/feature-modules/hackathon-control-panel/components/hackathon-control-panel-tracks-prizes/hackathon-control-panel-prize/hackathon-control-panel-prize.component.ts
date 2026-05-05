@@ -277,7 +277,7 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
     if (!this.selectedPrizeCurrencySymbol) {
       this.selectedPrizeCurrencySymbol = { symbol: prize.currency_type };
     }
-    this.searchForm.patchValue({ search: '' });
+    this.searchForm.patchValue({ search: '' }, { emitEvent: false });
     this.winnerPage = 1;
     this.fetchHackathonUserResponses();
     this.nbDialogService.open(dialog, {});
@@ -363,7 +363,7 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
   }
 
   resetFilters() {
-    this.searchForm.patchValue({ search: '' });
+    this.searchForm.patchValue({ search: '' }, { emitEvent: false });
     this.selectedRoundId = undefined;
     this.selectedTrackId = undefined;
     this.selectedRegistrationStatus = undefined;
