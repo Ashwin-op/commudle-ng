@@ -1,21 +1,11 @@
-<nb-card>
-  <nb-card-body>
-    <div *appBreakpoints="'>md'" class="image">
+<com-card>
+  <com-card-body>
+    <div class="image">
       <commudle-banner-image
         [name]="newsletter.title"
         [headerImagePath]="newsletter.banner_image ? newsletter.banner_image?.url : staticAssets.newsletter_empty_state"
         [bottomLeftCurve]="false"
         [bottomRightCurve]="false"
-      ></commudle-banner-image>
-    </div>
-    <div *appBreakpoints="'<=md'" class="mobile-image">
-      <commudle-banner-image
-        class="mobile-image"
-        [name]="newsletter.title"
-        [headerImagePath]="newsletter.banner_image ? newsletter.banner_image?.url : staticAssets.newsletter_empty_state"
-        [topRightCurve]="false"
-        [bottomRightCurve]="false"
-        [aspectRatio]="'5/6'"
       ></commudle-banner-image>
     </div>
     <div class="newsletter">
@@ -39,5 +29,5 @@
         ></a>
       </div>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
