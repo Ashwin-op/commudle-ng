@@ -13,10 +13,10 @@ p {
     @apply com-m-0 com-mb-4 md:com-mb-6 com-text-xl md:com-text-2xl com-font-semibold com-text-Yankees-Blue;
   }
 
-  nb-card {
+  com-card {
     @apply com-h-max com-mx-0 com-mb-0 com-mt-0;
 
-    nb-card-body {
+    com-card-body {
       @apply com-p-4 md:com-p-6;
     }
   }
@@ -26,7 +26,7 @@ p {
   }
 
   .about {
-    nb-card-body {
+    com-card-body {
       &::ng-deep {
         .content {
           @apply com-break-words com-overflow-x-hidden;
@@ -69,7 +69,7 @@ app-loading-spinner {
 
 .default-channel-container {
   @apply com-border-primary-500 com-overflow-hidden;
-  nb-card-header {
+  com-card-header {
     @apply com-flex com-justify-between com-items-center com-p-4;
     .name-count {
       @apply com-flex com-items-center com-gap-4;
@@ -81,7 +81,7 @@ app-loading-spinner {
       }
     }
   }
-  nb-card-body {
+  com-card-body {
     @apply com-p-0 #{!important};
     .description-container {
       @apply com-bg-blue-50 com-h-14 com-flex com-items-center com-px-4;

@@ -50,6 +50,7 @@ import { EventCardComponent } from 'apps/commudle-admin/src/app/app-shared-compo
 import { SharedComponentsModule as newSharedComponentModule } from '@commudle/shared-components';
 import { UserPersonalConnectComponent } from 'libs/shared/components/src/lib/components/user-personal-connect/user-personal-connect.component';
 import { UserExpertTickComponent } from 'apps/commudle-admin/src/app/app-shared-components/user-expert-tick.component';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 
 @NgModule({
   declarations: [
@@ -83,6 +84,7 @@ import { UserExpertTickComponent } from 'apps/commudle-admin/src/app/app-shared-
     UserConsentsComponent,
     CommunityChannelsModule,
     newSharedComponentModule,
+    CommudleCardModule,
     // Nebular
     NbCardModule,
     NbListModule,
