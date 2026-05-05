@@ -1,6 +1,6 @@
 <div class="community-hackathons">
-  <nb-card *ngIf="upcomingHackathons && upcomingHackathons.length > 0" class="hackathon-section-card com-mt-4">
-    <nb-card-body class="body-container com-p-0 md:com-p-6">
+  <com-card *ngIf="upcomingHackathons && upcomingHackathons.length > 0" class="hackathon-section-card com-mt-4">
+    <com-card-body class="body-container com-p-0 md:com-p-6">
       <section class="upcoming-hackathons-section">
         <h2 class="heading com-text-tYankees-Blue">
           <span class="live-dot" aria-hidden="true"></span>
@@ -18,11 +18,11 @@
           </div>
         </div>
       </section>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 
-  <nb-card *ngIf="pastHackathons && pastHackathons.length > 0" class="hackathon-section-card px-4">
-    <nb-card-body class="body-container com-p-4 md:com-p-6">
+  <com-card *ngIf="pastHackathons && pastHackathons.length > 0" class="hackathon-section-card px-4">
+    <com-card-body class="body-container com-p-4 md:com-p-6">
       <section class="past-hackathons">
         <h2 class="heading">Past Hackathons</h2>
         <div class="past-hackathons-container">
@@ -31,6 +31,6 @@
           </div>
         </div>
       </section>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </div>

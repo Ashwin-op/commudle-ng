@@ -1,10 +1,10 @@
-<nb-card>
-  <nb-card-body class="container">
+<com-card>
+  <com-card-body class="container">
     <h2>{{ community.name }} Newsletters</h2>
     <div class="newsletters">
       <div *ngFor="let newsletter of newsletters">
         <commudle-newsletter-card [newsletter]="newsletter" [community]="community"></commudle-newsletter-card>
       </div>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
