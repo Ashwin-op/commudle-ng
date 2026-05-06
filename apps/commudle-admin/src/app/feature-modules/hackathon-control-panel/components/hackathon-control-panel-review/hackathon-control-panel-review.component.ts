@@ -124,6 +124,7 @@ export class HackathonControlPanelReviewComponent implements OnInit, OnDestroy {
 
   bulkOperationType = '';
   bulkOperationValue = null;
+  selectedTeamIds: Set<number> = new Set();
 
   dialogReference: NbDialogRef<any>;
   sendEmailDialogRef: NbDialogRef<any>;
@@ -1026,6 +1027,38 @@ export class HackathonControlPanelReviewComponent implements OnInit, OnDestroy {
   fetchProblemStatementDistribution(hackathonId: string): void {
     this.statsHackathonService.problemStatementDistribution(hackathonId).subscribe((data) => {
       this.problemStatementDistribution = data;
+    });
+  }
+
+  toggleTeamSelection(teamId: number) {
+    if (this.selectedTeamIds.has(teamId)) {
+      this.selectedTeamIds.delete(teamId);
+    } else {
+      this.selectedTeamIds.add(teamId);
+    }
+  }
+
+  toggleSelectAll() {
+    if (this.isAllSelected) {
+      this.selectedTeamIds.clear();
+    } else {
+      this.userResponses.forEach((ur) => this.selectedTeamIds.add(ur.team.id));
+    }
+  }
+
+  get isAllSelected(): boolean {
+    return this.userResponses?.length > 0 && this.userResponses.every((ur) => this.selectedTeamIds.has(ur.team.id));
+  }
+
+  sendEmailToSelectedTeams() {
+    const teamIds = Array.from(this.selectedTeamIds);
+    const teams = this.userResponses.filter((ur) => teamIds.includes(ur.team.id)).map((ur) => ur.team);
+
+    this.nbDialogService.open(HackathonIndividualTeamEmailComponent, {
+      context: {
+        hackathonTeams: teams,
+        hackathonId: this.hackathonId,
+      },
     });
   }
 }

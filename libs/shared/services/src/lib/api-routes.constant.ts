@@ -1000,6 +1000,7 @@ export const API_ROUTES = {
     REMOVE_TEAM_MEMBER: 'api/v2/hackathon_user_response/remove_team_member', //PUT
     TEAMMATE_INVITE_REMINDER_EMAIL: 'api/v2/hackathon_user_response/teammate_invite_reminder_email', //POST
     HACKATHON_TEAM_INDIVIDUAL_GENERAL_EMAIL: 'api/v2/hackathon_user_response/hackathon_team_individual_general_email', //POST
+    HACKATHON_BULK_TEAM_GENERAL_EMAIL: 'api/v2/hackathon_user_response/hackathon_bulk_team_general_email', //POST
   },
 
   ENTITY_UPDATES: {

@@ -55,7 +55,7 @@
           </button>
 
           <button nbButton status="primary" (click)="sendTeamDetailsCsv()" size="small">
-            <fa-icon [icon]="icons.faEnvelope"></fa-icon>
+            <fa-icon [icon]="icons.faEnvelope"></fa-icon>&nbsp;
             <span>Export CSV</span>
           </button>
 
@@ -72,6 +72,17 @@
           >
             <button nbButton status="primary" size="small">Select Winner</button>
           </a>
+
+          <button
+            *ngIf="selectedTeamIds.size > 0"
+            nbButton
+            status="warning"
+            size="small"
+            (click)="sendEmailToSelectedTeams()"
+          >
+            <fa-icon [icon]="icons.faEnvelope"></fa-icon> &nbsp;
+            <span>Email {{ selectedTeamIds.size }} Team{{ selectedTeamIds.size > 1 ? 's' : '' }}</span>
+          </button>
         </div>
 
         <!-- Filters and Actions Section -->
@@ -227,7 +238,16 @@
       <ng-template #userResponsesContainer>
         <table *ngIf="userResponses && userResponses.length > 0; else noUserResponse">
           <tr>
-            <th width="18%">Name</th>
+            <th width="18%">
+              <input
+                type="checkbox"
+                [checked]="isAllSelected"
+                (change)="toggleSelectAll()"
+                class="select-all-checkbox"
+                title="Select All"
+              />
+              Name
+            </th>
             <th width="8%">
               <div class="ps-header">
                 <span>PS ID</span>
@@ -282,7 +302,14 @@
             <td class="name">
               <div class="team-details">
                 <div class="team-name">
-                  <span class="com-flex com-gap-2">
+                  <span class="com-flex com-gap-2 com-items-center">
+                    <input
+                      type="checkbox"
+                      [checked]="selectedTeamIds.has(userResponse.team.id)"
+                      (change)="toggleTeamSelection(userResponse.team.id)"
+                      (click)="$event.stopPropagation()"
+                      class="team-checkbox"
+                    />
                     <span
                       ><span class="id"> (#{{ userResponse.team.id }})</span> {{ userResponse.team.name }}</span
                     >

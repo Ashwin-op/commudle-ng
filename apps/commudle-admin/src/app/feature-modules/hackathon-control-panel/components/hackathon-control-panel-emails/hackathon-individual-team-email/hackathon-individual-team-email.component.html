@@ -1,6 +1,7 @@
 <nb-card class="mail-popup">
   <nb-card-header>
-    <span>Send email to {{ hackathonTeam?.name }}</span>
+    <span *ngIf="hackathonTeams.length === 1">Send email to {{ hackathonTeams[0]?.name }}</span>
+    <span *ngIf="hackathonTeams.length > 1">Send email to {{ hackathonTeams.length }} teams</span>
     <button nbButton size="small" shape="round" (click)="closeDialogBox()" ghost>
       <nb-icon icon="close"></nb-icon>
     </button>

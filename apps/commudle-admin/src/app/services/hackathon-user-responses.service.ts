@@ -134,4 +134,16 @@ export class HackathonUserResponsesService {
       },
     );
   }
+
+  bulkTeamEmail(hackathonId: number | string, hackathonTeamIds: number[], emailData): Observable<boolean> {
+    return this.http.post<boolean>(
+      this.apiRoutesService.getRoute(API_ROUTES.HACKATHON_USER_RESPONSE.HACKATHON_BULK_TEAM_GENERAL_EMAIL),
+      {
+        hackathon_id: hackathonId,
+        hackathon_team_ids: hackathonTeamIds,
+        subject: emailData.subject,
+        message: emailData.body,
+      },
+    );
+  }
 }

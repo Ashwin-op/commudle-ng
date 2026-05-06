@@ -8,13 +8,15 @@ import { HackathonStatusFilterGeneralEmailsComponent } from 'apps/commudle-admin
 import { HackathonUserResponsesService } from 'apps/commudle-admin/src/app/services/hackathon-user-responses.service';
 
 @Component({
-    selector: 'commudle-hackathon-individual-team-email',
-    templateUrl: './hackathon-individual-team-email.component.html',
-    styleUrls: ['./hackathon-individual-team-email.component.scss'],
-    standalone: false
+  selector: 'commudle-hackathon-individual-team-email',
+  templateUrl: './hackathon-individual-team-email.component.html',
+  styleUrls: ['./hackathon-individual-team-email.component.scss'],
+  standalone: false,
 })
 export class HackathonIndividualTeamEmailComponent implements OnInit, OnDestroy {
   @Input() hackathonTeam: IHackathonTeam;
+  @Input() hackathonTeams: IHackathonTeam[] = [];
+  @Input() hackathonId: number | string;
   isLoading = false;
   isPreviewLoading = false;
   emailForm: FormGroup;
@@ -70,7 +72,11 @@ export class HackathonIndividualTeamEmailComponent implements OnInit, OnDestroy 
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.hackathonTeam && !this.hackathonTeams.length) {
+      this.hackathonTeams = [this.hackathonTeam];
+    }
+  }
 
   ngOnDestroy() {
     this.closeDialogBox();
@@ -79,7 +85,10 @@ export class HackathonIndividualTeamEmailComponent implements OnInit, OnDestroy 
   previewEmail() {
     this.isPreviewLoading = true;
     this.emailerPreviewService
-      .hackathonTeamIndividualGeneralEmailPreview(this.emailForm.value, this.hackathonTeam.id)
+      .hackathonTeamIndividualGeneralEmailPreview(
+        this.emailForm.value,
+        this.hackathonTeam?.id || this.hackathonTeams[0]?.id,
+      )
       .subscribe((result) => {
         this.previewData = result.preview;
         this.openEmailPreviewTemplate(this.previewData);
@@ -89,13 +98,24 @@ export class HackathonIndividualTeamEmailComponent implements OnInit, OnDestroy 
 
   sendEmailToSpecificTeam() {
     this.isLoading = true;
-    this.hurService.individualTeamEmail(this.hackathonTeam.id, this.emailForm.value).subscribe((data) => {
-      if (data) {
-        this.toastrService.successDialog('Email sent successfully, Will be delivered soon!');
-        this.isLoading = false;
-        this.closeDialogBox();
-      }
-    });
+    if (this.hackathonTeams.length === 1) {
+      this.hurService.individualTeamEmail(this.hackathonTeams[0].id, this.emailForm.value).subscribe((data) => {
+        if (data) {
+          this.toastrService.successDialog('Email sent successfully, Will be delivered soon!');
+          this.isLoading = false;
+          this.closeDialogBox();
+        }
+      });
+    } else {
+      const teamIds = this.hackathonTeams.map((t) => t.id);
+      this.hurService.bulkTeamEmail(this.hackathonId, teamIds, this.emailForm.value).subscribe((data) => {
+        if (data) {
+          this.toastrService.successDialog(`Email queued for ${this.hackathonTeams.length} team(s)`);
+          this.isLoading = false;
+          this.closeDialogBox();
+        }
+      });
+    }
   }
 
   openEmailPreviewTemplate(previewData) {
