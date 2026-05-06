@@ -8,7 +8,10 @@
         </h2>
         <div class="upcoming-hackathon-container">
           <div *ngFor="let hackathon of upcomingHackathons" class="upcoming-hackathon-card-wrapper">
-            <commudle-hackathon-large-card [hackathon]="hackathon"></commudle-hackathon-large-card>
+            <commudle-hackathon-large-card
+              [hackathon]="hackathon"
+              [showGradientEffect]="true"
+            ></commudle-hackathon-large-card>
           </div>
         </div>
       </section>
