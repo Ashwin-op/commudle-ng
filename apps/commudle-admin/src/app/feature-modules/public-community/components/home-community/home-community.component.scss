@@ -1,11 +1,13 @@
 .home-component {
   .banner {
+    @apply com-relative;
+
     .banner-image {
-      @apply com-w-full md:com-min-h-[316px] com-object-contain md:com-w-[1262px] com-bg-tWhite;
+      @apply com-w-full md:com-min-h-[316px] com-object-contain com-bg-tWhite;
     }
 
     .edit-button {
-      @apply com-absolute com-top-3 com-right-3 com-bg-white com-rounded-md;
+      @apply com-absolute com-top-3 com-right-3 com-bg-white com-rounded-md com-z-10;
     }
   }
 
