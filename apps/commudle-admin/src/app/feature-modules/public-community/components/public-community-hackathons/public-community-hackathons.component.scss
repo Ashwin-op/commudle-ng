@@ -20,14 +20,62 @@
   }
 
   .upcoming-hackathons-section {
-    @apply com-my-0 com-rounded-lg com-p-4 com-overflow-hidden;
-    background: linear-gradient(135deg, #eef3ff 0%, #f8fbff 40%, #e6edff 100%);
+    @apply com-my-0 com-rounded-lg com-p-4;
+
+    background: linear-gradient(140deg, #eef1f6 0%, #f4f6fa 45%, #e9edf4 100%);
+    position: relative;
+    overflow: hidden;
+
+    // Ambient orbs for depth — purely decorative
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    &::before {
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(52, 211, 153, 0.28) 0%, rgba(52, 211, 153, 0) 70%);
+      top: -120px;
+      right: -40px;
+      filter: blur(2px);
+    }
+    &::after {
+      width: 190px;
+      height: 190px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, rgba(59, 130, 246, 0) 72%);
+      bottom: -80px;
+      left: -50px;
+      filter: blur(2px);
+    }
 
     .upcoming-hackathon-container {
       @apply com-grid com-gap-4;
 
       .upcoming-hackathon-card-wrapper {
-        @apply com-w-full com-p-4 com-bg-white com-rounded-10;
+        @apply com-w-full com-p-4 com-rounded-10;
+
+        // Frosted glass
+        backdrop-filter: blur(40px) saturate(180%);
+        -webkit-backdrop-filter: blur(36px) saturate(165%);
+        background: linear-gradient(120deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.42) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.72);
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+        position: relative;
+        overflow: hidden;
+
+        // Top edge shimmer line
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.78), transparent);
+        }
       }
     }
   }

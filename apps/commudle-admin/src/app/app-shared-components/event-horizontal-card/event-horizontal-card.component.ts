@@ -33,6 +33,7 @@ import { faLocationDot, faMapPin } from '@fortawesome/free-solid-svg-icons';
 export class EventHorizontalCardComponent implements OnInit, OnDestroy {
   @Input() event: IEvent;
   @Input() headerImageWidth = '388px';
+  @Input() showGradientEffect = false;
   @Input() showCounterTimings = false;
   @Input() hostCommunity: ICommunity;
   @Input() hideCommunityBadge = false;

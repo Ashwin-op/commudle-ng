@@ -27,19 +27,32 @@
 
         <div class="hackathon-details">
           <div class="title-row">
-            <p class="name">
+            <p class="name" [ngClass]="{ 'gradient-effect-title': showGradientEffect }">
               {{ hackathon.name }}
-              <span *ngIf="hackathon.hackathon_collaboration_communities_count > 0" class="collaboration-text">
+              <span
+                *ngIf="hackathon.hackathon_collaboration_communities_count > 0"
+                class="collaboration-text"
+                [ngClass]="{ 'gradient-effect-meta': showGradientEffect }"
+              >
                 (Collaboration)
               </span>
             </p>
           </div>
 
           <div class="meta-row">
-            <p class="date-chip" *ngIf="hackathon.start_date">
+            <p
+              class="date-chip"
+              *ngIf="hackathon.start_date"
+              [ngClass]="{ 'gradient-effect-meta': showGradientEffect }"
+            >
               Starts {{ moment(hackathon.start_date).format('MMM Do, YYYY') }}
             </p>
-            <button nbButton size="tiny" class="event-type-button">
+            <button
+              nbButton
+              size="tiny"
+              class="event-type-button"
+              [ngClass]="{ 'gradient-effect-event-type-button': showGradientEffect }"
+            >
               <fa-icon [icon]="faMapPin"></fa-icon>
               {{ hackathon.hackathon_location_type | titlecase }}
             </button>

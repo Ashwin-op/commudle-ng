@@ -70,14 +70,14 @@
           <p class="user-company-name">{{ user.company_name }}</p>
         </div>
         @if (showMutuals && user.user_mutuals) {
-        <span class="mutuals">
+        <p class="mutuals">
           You both follow @for (mutual of user.user_mutuals.mutual_followees_preview; track mutual.username; let last =
           $last) {
           <a [routerLink]="['/users', mutual.username]" class="mutuals-name">{{ mutual.name }}</a
           >@if (!last) {, } } @if (user.user_mutuals.mutual_followees -
           user.user_mutuals.mutual_followees_preview.length > 0) { and
           {{ user.user_mutuals.mutual_followees - user.user_mutuals.mutual_followees_preview.length }} others }
-        </span>
+        </p>
         }
         <div
           *ngIf="(showSpeakersCount && !alignSpeakerCountToRight) || showLeaderBadgeToSpeakerCount"

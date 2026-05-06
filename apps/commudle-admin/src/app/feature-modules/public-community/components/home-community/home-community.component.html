@@ -186,16 +186,6 @@
                 routerLinkActive="active"
                 *ngIf="community.hackathon_enabled"
               >
-                <app-badge
-                  *ngIf="community.upcoming_hackathons_count > 0"
-                  class="-com-mt-4"
-                  text="{{ community.upcoming_hackathons_count }} New"
-                  [fontColor]="'com-text-tWhite'"
-                  [fontSize]="'small'"
-                  [borderRadius]="'round'"
-                  [color]="'com-bg-orange-500'"
-                  [position]="'top right'"
-                ></app-badge>
                 <img
                   [src]="
                     isHackathonActive
@@ -207,6 +197,9 @@
                   alt="Hackathon Icon"
                 />
                 <span class="title">Hackathons</span>
+                <span *ngIf="community.upcoming_hackathons_count > 0" class="events-chip">
+                  {{ community.upcoming_hackathons_count }} New
+                </span>
               </a>
               <!-- <a [routerLink]="['resources']" routerLinkActive="active">
                   <nb-icon icon="award" status="info"></nb-icon>

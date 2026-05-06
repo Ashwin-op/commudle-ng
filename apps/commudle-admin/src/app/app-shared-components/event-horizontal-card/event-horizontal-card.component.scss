@@ -1,5 +1,10 @@
 com-card {
   @apply com-m-0 com-border-0;
+
+  &.gradient-effect-enabled {
+    @apply com-bg-transparent;
+  }
+
   com-card-body {
     @apply com-p-0;
     .upcoming-card {
@@ -31,6 +36,10 @@ com-card {
 
           .event-time {
             @apply com-text-sm com-font-medium com-m-0 com-text-gray-500;
+
+            &.gradient-effect-meta {
+              @apply com-text-tgray-500;
+            }
           }
 
           .event-meta-row {
@@ -40,6 +49,10 @@ com-card {
           .event-location {
             @apply md:com-mt-1 com-mt-2 com-flex com-items-center com-text-sm com-font-normal com-text-gray-500;
 
+            &.gradient-effect-meta {
+              @apply com-text-tgray-500;
+            }
+
             .event-location-icon {
               @apply com-mr-2 com-text-sm com-shrink-0 com-text-inherit;
             }
@@ -48,13 +61,25 @@ com-card {
           .event-title {
             @apply com-text-base com-font-medium com-text-Yankees-Blue com-m-0 com-mt-0 com-line-clamp-1;
 
+            &.gradient-effect-title {
+              @apply com-text-tYankees-Blue;
+            }
+
             .collaboration-text {
               @apply com-text-xs com-font-normal com-text-gray-500 com-ml-2;
+
+              &.gradient-effect-meta {
+                @apply com-text-tgray-500;
+              }
             }
           }
 
           .event-type-button {
-            @apply com-bg-white com-rounded-lg com-border-Light-Silver com-border com-text-Vampire-Black com-text-sm com-font-normal com-w-max;
+            @apply com-bg-white com-rounded-lg com-border-Light-Silver com-border com-text-Yankees-Blue com-text-sm com-font-normal com-w-max;
+
+            &.gradient-effect-event-type-button {
+              @apply com-bg-tWhite com-text-tYankees-Blue com-border-Light-Silver;
+            }
 
             fa-icon {
               @apply com-mr-1 com-text-red-500;

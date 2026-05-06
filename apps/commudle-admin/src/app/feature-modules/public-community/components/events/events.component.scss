@@ -23,20 +23,6 @@
     }
   }
 
-  .upcoming-events-section {
-    @apply com-my-0 com-rounded-lg com-p-4;
-
-    background: linear-gradient(135deg, #eef3ff 0%, #f8fbff 40%, #e6edff 100%);
-
-    .upcoming-events-container {
-      @apply com-flex com-flex-row com-flex-wrap com-gap-4;
-
-      .upcoming-event-card-wrapper {
-        @apply com-w-full com-p-4 com-bg-white com-rounded-10;
-      }
-    }
-  }
-
   .past-events {
     @apply com-flex com-flex-col com-mx-auto com-my-0;
 
@@ -61,10 +47,13 @@ app-loading-spinner {
   @apply com-p-4;
 }
 
-.heading-btn {
-  @apply com-flex com-justify-center com-items-center com-bg-[#f7f9fc] com-rounded-lg com-mr-4;
+.heading-btn-upcoming {
+  @apply com-flex com-justify-center com-items-center com-rounded-lg com-mr-4;
 }
 
+.heading-btn-past {
+  @apply com-flex com-justify-center com-items-center com-bg-[#f7f9fc] com-rounded-lg com-mr-4;
+}
 fa-icon {
   @apply com-text-2xl com-text-gray-800;
 }
@@ -78,5 +67,64 @@ fa-icon {
   50% {
     opacity: 1;
     transform: scale(1.1);
+  }
+}
+
+.upcoming-events-section {
+  @apply com-my-0 com-rounded-lg com-p-4;
+
+  background: linear-gradient(140deg, #e8eef9 0%, #edf2fb 45%, #e2ebf9 100%);
+  position: relative;
+  overflow: hidden;
+
+  // Ambient orbs for depth — purely decorative
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  &::before {
+    width: 260px;
+    height: 260px;
+    background: radial-gradient(circle, rgba(52, 211, 153, 0.28) 0%, rgba(52, 211, 153, 0) 70%);
+    top: -120px;
+    right: -40px;
+    filter: blur(2px);
+  }
+  &::after {
+    width: 160px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.28) 0%, rgba(59, 130, 246, 0) 72%);
+    bottom: -55px;
+    left: -40px;
+    filter: blur(2px);
+  }
+
+  .upcoming-events-container {
+    @apply com-flex com-flex-row com-flex-wrap com-gap-4;
+    .upcoming-event-card-wrapper {
+      @apply com-w-full com-p-4 com-rounded-10;
+
+      backdrop-filter: blur(40px) saturate(180%);
+      -webkit-backdrop-filter: blur(36px) saturate(165%);
+      background: linear-gradient(120deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.42) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+      position: relative;
+      overflow: hidden;
+
+      // Top edge shimmer line
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.78), transparent);
+      }
+    }
   }
 }

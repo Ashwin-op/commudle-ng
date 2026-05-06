@@ -1,4 +1,4 @@
-<com-card>
+<com-card [ngClass]="{ 'gradient-effect-enabled': showGradientEffect }">
   <com-card-body>
     <div class="upcoming-card">
       <a [routerLink]="['/communities', event.kommunity_slug, 'events', event.slug]" class="upcoming-card-link">
@@ -38,9 +38,12 @@
         </div>
         <div class="upcoming-card-details-desktop">
           <div class="time-badge">
-            <p class="event-title">
+            <p class="event-title" [ngClass]="{ 'gradient-effect-title': showGradientEffect }">
               {{ event.name }}
-              <span *ngIf="hostCommunity && event?.kommunity_id !== hostCommunity?.id" class="collaboration-text"
+              <span
+                *ngIf="hostCommunity && event?.kommunity_id !== hostCommunity?.id"
+                class="collaboration-text"
+                [ngClass]="{ 'gradient-effect-meta': showGradientEffect }"
                 >(Collaboration)</span
               >
             </p>
@@ -56,17 +59,31 @@
             </div>
           </div>
           <div class="event-meta-row">
-            <p class="event-time" *ngIf="event.start_time; else noEventTimeTpl">
+            <p
+              class="event-time"
+              *ngIf="event.start_time; else noEventTimeTpl"
+              [ngClass]="{ 'gradient-effect-meta': showGradientEffect }"
+            >
               <ng-container *ngIf="event?.end_time !== null; else timingStartOnlyTpl">
                 <ng-container *ngTemplateOutlet="timingWithEndTimeTpl"></ng-container>
               </ng-container>
             </p>
-            <button *ngIf="showEventType" nbButton size="tiny" class="event-type-button">
+            <button
+              *ngIf="showEventType"
+              [ngClass]="{ 'gradient-effect-event-type-button': showGradientEffect }"
+              nbButton
+              size="tiny"
+              class="event-type-button"
+            >
               <fa-icon [icon]="faMapPin"></fa-icon>
               {{ event.event_type | titlecase }} Event
             </button>
           </div>
-          <div class="event-location" *ngIf="showLocation && event.event_locations?.length > 0">
+          <div
+            class="event-location"
+            [ngClass]="{ 'gradient-effect-meta': showGradientEffect }"
+            *ngIf="showLocation && event.event_locations?.length > 0"
+          >
             <fa-icon [icon]="faLocationDot" class="event-location-icon"></fa-icon>
             <span>{{ event.event_locations[0].name }}</span>
           </div>
@@ -153,7 +170,9 @@
     </ng-template>
 
     <ng-template #noEventTimeTpl>
-      <p class="event-time">Date and time to be announced soon</p>
+      <p class="event-time" [ngClass]="{ 'gradient-effect-meta': showGradientEffect }">
+        Date and time to be announced soon
+      </p>
     </ng-template>
   </com-card-body>
 </com-card>
