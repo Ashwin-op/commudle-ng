@@ -43,3 +43,14 @@
 nb-sidebar {
   @apply com-bg-white #{!important};
 }
+
+app-chats-container {
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1), opacity 260ms ease;
+  will-change: transform, opacity;
+}
+
+app-chats-container.mobile-navbar-hidden {
+  transform: translateY(120%);
+  opacity: 0;
+  pointer-events: none;
+}
