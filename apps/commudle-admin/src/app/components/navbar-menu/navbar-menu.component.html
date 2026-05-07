@@ -1,4 +1,4 @@
-<nb-actions size="medium">
+<nb-actions>
   <nb-action>
     <a routerLink="communities" routerLinkActive="active">
       <fa-icon [icon]="faUserFriends"></fa-icon>
@@ -6,21 +6,21 @@
     </a>
   </nb-action>
   <nb-action *ngIf="currentUser">
-    <a routerLink="labs" routerLinkActive="active">
-      <fa-icon [icon]="faFlask"></fa-icon>
-      <span>Labs</span>
+    <a routerLink="hackathons" routerLinkActive="active">
+      <fa-icon [icon]="faTrophy"></fa-icon>
+      <span>Hacks</span>
+    </a>
+  </nb-action>
+  <nb-action>
+    <a routerLink="events" routerLinkActive="active">
+      <fa-icon [icon]="faCalendarDays"></fa-icon>
+      <span>Events</span>
     </a>
   </nb-action>
   <nb-action>
     <a routerLink="builds" routerLinkActive="active">
       <fa-icon [icon]="faLightbulb"></fa-icon>
       <span>Builds</span>
-    </a>
-  </nb-action>
-  <nb-action *ngIf="!currentUser">
-    <a routerLink="events" routerLinkActive="active">
-      <fa-icon [icon]="faCalendarDays"></fa-icon>
-      <span>Events</span>
     </a>
   </nb-action>
   <nb-action *ngIf="!currentUser">
@@ -36,7 +36,7 @@
     </a>
   </nb-action>
 
-  <nb-action (click)="this.notificationCount = 0; gtmService()" *ngIf="currentUser">
+  <!-- <nb-action (click)="this.notificationCount = 0; gtmService()" *ngIf="currentUser">
     <a *appBreakpoints="'<=md'" [routerLink]="['/notifications']" routerLinkActive="active">
       <nb-badge *ngIf="notificationCount > 0" [text]="notificationCount.toString()" status="danger"></nb-badge>
       <fa-icon [icon]="faBell"></fa-icon>
@@ -52,7 +52,7 @@
       <fa-icon [icon]="faBell"></fa-icon>
       <span>Notifications</span>
     </a>
-  </nb-action>
+  </nb-action> -->
   <nb-action *ngIf="currentUser">
     <a *appBreakpoints="'<=md'" [routerLink]="['/account-menu']" routerLinkActive="active">
       <img [alt]="currentUser.name" [src]="currentUser.photo.i32" class="user-profile-image-mobile" />

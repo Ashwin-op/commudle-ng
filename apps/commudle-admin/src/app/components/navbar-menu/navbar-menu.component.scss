@@ -9,20 +9,16 @@ a {
 }
 
 nb-actions {
-  @apply com-h-full com-flex md:com-gap-x-11 com-justify-between md:com-ml-24 md:com-mr-0 com-mx-4;
+  @apply com-h-full com-flex md:com-gap-x-11 com-justify-between md:com-ml-24 md:com-mr-0 com-mx-3;
 
   nb-action {
-    @apply com-px-0 com-py-4 md:com-p-0 com-border-none;
+    @apply com-px-0 com-py-2 md:com-p-0 com-border-none com-h-full;
 
     a {
-      @apply com-flex com-flex-col com-items-center com-border-none;
+      @apply com-flex com-flex-col com-items-center com-border-none com-h-full;
 
       fa-icon {
-        @apply com-text-base md:com-text-xl com-text-gray-300;
-      }
-
-      nb-icon {
-        @apply com-text-2xl md:com-text-3xl com-text-gray-300;
+        @apply com-h-6 com-w-6 com-text-xl com-flex com-items-center com-justify-center com-flex-shrink-0 com-text-gray-300;
       }
 
       &.active {
@@ -34,7 +30,7 @@ nb-actions {
       }
 
       span {
-        @apply com-font-normal com-text-gray-500 com-text-xs md:com-text-sm;
+        @apply com-font-normal com-text-gray-500 com-text-[10px];
       }
     }
   }

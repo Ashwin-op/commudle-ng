@@ -10,6 +10,7 @@ import {
   faUser,
   faCalendarDays,
   faBriefcase,
+  faTrophy,
 } from '@fortawesome/free-solid-svg-icons';
 import { NbMenuService, NbPopoverDirective } from '@commudle/theme';
 import { NotificationsStore } from 'apps/commudle-admin/src/app/feature-modules/notifications/store/notifications.store';
@@ -20,10 +21,10 @@ import { ENotificationSenderTypes } from 'apps/shared-models/enums/notification_
 import { GoogleTagManagerService } from 'apps/commudle-admin/src/app/services/google-tag-manager.service';
 
 @Component({
-    selector: 'app-navbar-menu',
-    templateUrl: './navbar-menu.component.html',
-    styleUrls: ['./navbar-menu.component.scss'],
-    standalone: false
+  selector: 'app-navbar-menu',
+  templateUrl: './navbar-menu.component.html',
+  styleUrls: ['./navbar-menu.component.scss'],
+  standalone: false,
 })
 export class NavbarMenuComponent implements OnInit, OnDestroy {
   currentUser: ICurrentUser;
@@ -38,6 +39,7 @@ export class NavbarMenuComponent implements OnInit, OnDestroy {
   faUser = faUser;
   faCalendarDays = faCalendarDays;
   faBriefcase = faBriefcase;
+  faTrophy = faTrophy;
 
   notificationCount = 0;
   ENotificationSenderTypes = ENotificationSenderTypes;
