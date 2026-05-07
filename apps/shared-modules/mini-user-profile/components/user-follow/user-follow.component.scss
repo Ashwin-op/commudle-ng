@@ -18,6 +18,12 @@
       @apply com-bg-[#0f1419] com-border-[#0f1419] com-text-white;
       @apply dark:com-bg-[#eff3f4] dark:com-border-[#eff3f4] dark:com-text-[#0f1419];
     }
+
+    &.is-following {
+      &:hover {
+        @apply com-bg-red-50 com-border-red-300 com-text-red-600;
+      }
+    }
   }
 }
 

@@ -19,11 +19,11 @@ import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service'
 import { Subject, Subscription, takeUntil } from 'rxjs';
 
 @Component({
-    selector: 'app-user-follow',
-    templateUrl: './user-follow.component.html',
-    styleUrls: ['./user-follow.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-user-follow',
+  templateUrl: './user-follow.component.html',
+  styleUrls: ['./user-follow.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class UserFollowComponent implements OnChanges, OnDestroy {
   @Input() username: string;
@@ -34,10 +34,11 @@ export class UserFollowComponent implements OnChanges, OnDestroy {
   @Input() status: NbComponentStatus;
   @Input() isMobileWidthFull = false;
   @Input() disabled = false;
-  @Input() round: boolean = false;
+  @Input() round = false;
   @Output() userFollowed: EventEmitter<any> = new EventEmitter<any>();
   currentUser: ICurrentUser;
   isFollowing = false;
+  isFollowingHovered = false;
   Following = false;
 
   subscriptions: Subscription[] = [];
@@ -107,5 +108,10 @@ export class UserFollowComponent implements OnChanges, OnDestroy {
       }
     });
     this.gtm.dataLayerPushEvent('user-follow-initiate', { com_followee_id: this.userId });
+  }
+
+  onFollowingHover(isHovered: boolean): void {
+    this.isFollowingHovered = isHovered;
+    this.changeDetectorRef.markForCheck();
   }
 }

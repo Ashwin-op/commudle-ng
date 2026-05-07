@@ -1,8 +1,10 @@
 <div *ngIf="currentUser?.id !== userId" class="user-follow">
   <button
     (click)="isFollowing ? toggleFollow() : onFollowClick()"
-    [appearance]="appearance ?? (isFollowing || appearance === 'outline' ? 'outline' : 'filled')"
-    [ngClass]="{ 'fixed-width': !showIcon, 'width-full': isMobileWidthFull }"
+    (mouseenter)="onFollowingHover(true)"
+    (mouseleave)="onFollowingHover(false)"
+    [appearance]="isFollowing || appearance === 'outline' ? 'outline' : 'filled'"
+    [ngClass]="{ 'fixed-width': !showIcon, 'width-full': isMobileWidthFull, 'is-following': isFollowing }"
     [status]="status || 'info'"
     class="follow-btn"
     nbButton
@@ -10,7 +12,10 @@
     size="small"
     [disabled]="disabled"
   >
-    <nb-icon *ngIf="showIcon" [icon]="isFollowing ? 'checkmark' : 'plus'"></nb-icon>
-    {{ isFollowing ? 'Following' : 'Follow' }}
+    <nb-icon
+      *ngIf="showIcon"
+      [icon]="isFollowing ? (isFollowingHovered ? 'close-outline' : 'checkmark') : 'plus'"
+    ></nb-icon>
+    {{ isFollowing ? (isFollowingHovered ? 'Unfollow' : 'Following') : 'Follow' }}
   </button>
 </div>
