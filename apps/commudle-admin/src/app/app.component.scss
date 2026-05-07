@@ -15,14 +15,28 @@
 
   nb-layout-header {
     @apply com-bg-white;
+    transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1), opacity 260ms ease;
+    will-change: transform, opacity;
+
     nav {
       @apply com-shadow-none com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
     }
   }
   nb-layout-column {
+    transition: padding-top 260ms cubic-bezier(0.22, 1, 0.36, 1);
+
     .router-outlet {
       @apply com-bg-Anti-Flash;
     }
+  }
+
+  nb-layout-header[fixed].mobile-navbar-hidden {
+    transform: translateY(-100%);
+    opacity: 0.98;
+  }
+
+  nb-layout-header[fixed].mobile-navbar-hidden ~ nb-layout-column {
+    @apply com-pt-0 #{!important};
   }
 }
 

@@ -11,7 +11,7 @@ import { ApiRoutesService } from 'apps/shared-services/api-routes.service';
 import { IsBrowserService } from 'apps/shared-services/is-browser.service';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
 import { SeoService } from 'apps/shared-services/seo.service';
-import { Subject, takeUntil } from 'rxjs';
+import { fromEvent, map, pairwise, startWith, Subject, takeUntil, throttleTime } from 'rxjs';
 import { CookieConsentService } from './services/cookie-consent.service';
 import { ProfileStatusBarService } from './services/profile-status-bar.service';
 import { LayoutService } from '@commudle/shared-services';
@@ -36,6 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ESidebarWidth = ESidebarWidth;
   sidebarEventName = 'MainSidebar';
   showGlobalChatPopup = true;
+  isMobileNavbarHidden = false;
 
   private destroy$ = new Subject<void>();
 
@@ -95,6 +96,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.removeSchemaOnRouteChange();
     this.themeCheck();
     this.closeSidebarOnRouteChange();
+    this.handleMobileNavbarScroll();
 
     this.helpSidebarService.setSidebarVisibility(this.sidebarEventName, false, true, ESidebarPosition.RIGHT);
     this.helpSidebarService.setSidebarVisibility('helpSection', false, true, ESidebarPosition.RIGHT);
@@ -150,5 +152,35 @@ export class AppComponent implements OnInit, OnDestroy {
     } else {
       this.darkModeService.toggleDarkMode(false);
     }
+  }
+
+  private handleMobileNavbarScroll(): void {
+    if (!this.isBrowser) {
+      return;
+    }
+
+    fromEvent(window, 'scroll')
+      .pipe(
+        throttleTime(50),
+        startWith(null),
+        map(() => window.scrollY || 0),
+        pairwise(),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(([previousY, currentY]) => {
+        const isMobile = window.innerWidth <= 768;
+
+        if (!isMobile) {
+          this.isMobileNavbarHidden = false;
+          return;
+        }
+
+        if (currentY < 20) {
+          this.isMobileNavbarHidden = false;
+          return;
+        }
+
+        this.isMobileNavbarHidden = currentY > previousY;
+      });
   }
 }

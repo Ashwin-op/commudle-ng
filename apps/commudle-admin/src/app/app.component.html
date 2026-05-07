@@ -3,7 +3,7 @@
   [attr.data-theme]="isDarkMode ? 'dark' : 'light'"
 >
   <nb-layout class="home-layout">
-    <nb-layout-header fixed>
+    <nb-layout-header fixed [ngClass]="{ 'mobile-navbar-hidden': isMobileNavbarHidden }">
       <app-navbar></app-navbar>
     </nb-layout-header>
 
