@@ -138,8 +138,8 @@ export class AppUsersService {
     );
   }
 
-  getAttendedEvents(id: number): Observable<IEvents> {
-    const params = new HttpParams().set('user_id', id);
+  getAttendedEvents(id: number, page = 1, count = 10): Observable<IEvents> {
+    const params = new HttpParams().set('user_id', id).set('page', page).set('count', count);
     return this.http.get<IEvents>(this.baseApiService.getRoute(API_ROUTES.USERS.EVENTS_ATTENDED), {
       params,
     });
