@@ -18,8 +18,7 @@ export class HighlightLinksDirective {
   }
 
   highlightText(text: string): string {
-    const safeText = this.escapeHtml(text ?? '');
-    const safeContent = safeText.replace(this.linkTokenRegex, (rawUrl) => {
+    const safeContent = (text ?? '').replace(this.linkTokenRegex, (rawUrl) => {
       const href = this.toSafeExternalUrl(rawUrl);
       if (!href) {
         return rawUrl;
@@ -40,14 +39,5 @@ export class HighlightLinksDirective {
     } catch {
       return null;
     }
-  }
-
-  private escapeHtml(input: string): string {
-    return input
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
   }
 }
