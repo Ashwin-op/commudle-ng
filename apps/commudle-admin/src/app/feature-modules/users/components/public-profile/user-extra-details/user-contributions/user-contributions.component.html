@@ -46,10 +46,10 @@
     <a [routerLink]="'.'" fragment="attended-events"
       ><fa-icon [icon]="faIdBadge" class="com-text-green-600"></fa-icon>
       Attended Events
-      <span *ngIf="attendedEvents.length > 4">({{ attendedEvents.length }})</span></a
+      <span>({{ attendedEventsTotal }})</span></a
     >
   </nb-card-header>
-  <nb-card-body [ngClass]="{ 'view-more-events': viewMoreEventsSection, 'view-less': !viewMoreEventsSection }">
+  <nb-card-body>
     <div class="grid">
       <commudle-event-mini-card
         *ngFor="let attendedEvent of attendedEvents"
@@ -58,18 +58,14 @@
       ></commudle-event-mini-card>
     </div>
   </nb-card-body>
-  <nb-card-footer *appBreakpoints="'>lg'" (click)="viewMoreAttendedEvents()" class="com-cursor-pointer">
-    <div *ngIf="attendedEvents.length > 6">
-      {{ footerEventsCardText }}
-      <nb-icon *ngIf="viewMoreEventsSection" icon="arrow-ios-downward-outline"></nb-icon>
-      <nb-icon *ngIf="!viewMoreEventsSection" icon="arrow-ios-upward-outline"></nb-icon>
-    </div>
-  </nb-card-footer>
-  <nb-card-footer *appBreakpoints="'<=lg'" (click)="viewMoreAttendedEvents()" class="com-cursor-pointer">
-    <div *ngIf="attendedEvents.length > 2">
-      {{ footerEventsCardText }}
-      <nb-icon *ngIf="viewMoreEventsSection" icon="arrow-ios-downward-outline"></nb-icon>
-      <nb-icon *ngIf="!viewMoreEventsSection" icon="arrow-ios-upward-outline"></nb-icon>
+  <nb-card-footer
+    (click)="loadMoreAttendedEvents()"
+    class="com-cursor-pointer"
+    *ngIf="attendedEventsTotal !== attendedEvents.length"
+  >
+    <div>
+      View More ({{ attendedEventsTotal - attendedEvents.length }})
+      <nb-icon icon="arrow-ios-downward-outline"></nb-icon>
     </div>
   </nb-card-footer>
 </nb-card>

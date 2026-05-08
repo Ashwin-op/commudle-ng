@@ -25,13 +25,14 @@ export class UserContributionsComponent implements OnChanges, OnDestroy {
   communitiesPage = 1;
   builds: ICommunityBuild[] = [];
   attendedEvents: IEvent[] = [];
+  attendedEventsPage = 1;
+  attendedEventsCount = 10;
+  attendedEventsTotal = 0;
   pastEvents: IEvent[] = [];
 
   subscriptions: Subscription[] = [];
 
-  viewMoreEventsSection = true;
   footerCommunitiesCardText: string;
-  footerEventsCardText: string;
   faLightbulb = faLightbulb;
   faCalendar = faCalendar;
   faUsers = faUsers;
@@ -56,6 +57,8 @@ export class UserContributionsComponent implements OnChanges, OnDestroy {
       this.attendedEvents = [];
       this.communitiesPage = 1;
       this.communitiesTotal = 0;
+      this.attendedEventsPage = 1;
+      this.attendedEventsTotal = 0;
       this.getPastEvents();
       this.getCommunities();
       this.getLabs();
@@ -118,20 +121,19 @@ export class UserContributionsComponent implements OnChanges, OnDestroy {
 
   getAttendedEvents(): void {
     this.subscriptions.push(
-      this.appUsersService.getAttendedEvents(this.user.id).subscribe((value) => {
-        this.attendedEvents = value.events;
-        this.userProfileMenuService.addMenuItem('attendedEvents', this.attendedEvents.length > 0);
-        this.footerEventsCardText = `View More`;
-      }),
+      this.appUsersService
+        .getAttendedEvents(this.user.id, this.attendedEventsPage, this.attendedEventsCount)
+        .subscribe((value) => {
+          this.attendedEvents = this.attendedEvents.concat(value.events);
+          this.attendedEventsTotal = value.total ?? 0;
+          this.attendedEventsPage = value.page ?? this.attendedEventsPage;
+          this.userProfileMenuService.addMenuItem('attendedEvents', this.attendedEventsTotal > 0);
+        }),
     );
   }
 
-  viewMoreAttendedEvents() {
-    this.viewMoreEventsSection = !this.viewMoreEventsSection;
-    if (!this.viewMoreEventsSection) {
-      this.footerEventsCardText = `View Less`;
-    } else {
-      this.footerEventsCardText = `View More`;
-    }
+  loadMoreAttendedEvents() {
+    this.attendedEventsPage = this.attendedEventsPage + 1;
+    this.getAttendedEvents();
   }
 }
