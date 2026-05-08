@@ -12,18 +12,18 @@ import { FooterService } from 'apps/commudle-admin/src/app/services/footer.servi
 import { IUser } from 'apps/shared-models/user.model';
 import { SeoService } from '@commudle/shared-services';
 import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { debounceTime, filter } from 'rxjs/operators';
 
 @Component({
-    selector: 'app-public-profile',
-    templateUrl: './public-profile.component.html',
-    styleUrls: ['./public-profile.component.scss'],
-    standalone: false
+  selector: 'app-public-profile',
+  templateUrl: './public-profile.component.html',
+  styleUrls: ['./public-profile.component.scss'],
+  standalone: false,
 })
 export class PublicProfileComponent implements OnInit, OnDestroy {
   user: IUser;
   activeMenuItems: UserProfileMenuItems | any;
-  highlight: string;
+  highlight: string | null = null;
 
   subscriptions: Subscription[] = [];
 
@@ -53,7 +53,7 @@ export class PublicProfileComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.userProfileMenuService.activeMenuItems$.subscribe((value) => {
+      this.userProfileMenuService.activeMenuItems$.pipe(debounceTime(0)).subscribe((value) => {
         // remove keys with active: false
         this.activeMenuItems = Object.keys(value).reduce((acc, key) => {
           if (value[key].active) {

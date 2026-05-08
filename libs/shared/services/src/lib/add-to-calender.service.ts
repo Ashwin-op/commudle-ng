@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
-import { removeHtmlTags } from './html-to-text.util';
+import { htmlToPlainText } from './html-to-text.util';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,7 @@ export class AddToCalenderService {
     const endDate = this.formatDate(eDate);
     const eventName = encodeURIComponent(title || '');
     const encodedLocation = location ? encodeURIComponent(location) : '';
-    const encodedDetails = encodeURIComponent(removeHtmlTags(details).trim());
+    const encodedDetails = encodeURIComponent(htmlToPlainText(details).trim());
 
     return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${eventName}&dates=${startDate}/${endDate}&details=${encodedDetails}&location=${encodedLocation}`;
   }
@@ -23,7 +23,7 @@ export class AddToCalenderService {
   addToOutlookCalendar(sDate: Date, eDate: Date, title: string, location: string, details: string): string {
     const startDate = encodeURIComponent(moment(sDate).toISOString());
     const endDate = encodeURIComponent(moment(eDate).toISOString());
-    const plainDetails = encodeURIComponent(removeHtmlTags(details).trim());
+    const plainDetails = encodeURIComponent(htmlToPlainText(details).trim());
     const eventName = encodeURIComponent(title || '');
     const encodedLocation = location ? encodeURIComponent(location) : '';
 
@@ -35,7 +35,7 @@ export class AddToCalenderService {
     const endDate = this.formatDate(eDate, 'YYYY-MM-DDTHH:mm:ss');
     const eventName = encodeURIComponent(title || '');
     const encodedLocation = location ? encodeURIComponent(location) : '';
-    const encodedDetails = encodeURIComponent(removeHtmlTags(details).trim());
+    const encodedDetails = encodeURIComponent(htmlToPlainText(details).trim());
 
     return `https://outlook.office.com/calendar/0/deeplink/compose?subject=${eventName}&startdt=${startDate}&enddt=${endDate}&body=${encodedDetails}&location=${encodedLocation}`;
   }
@@ -43,7 +43,7 @@ export class AddToCalenderService {
   downloadIcsFile(sDate: Date, eDate: Date, title: string, location: string, details: string): void {
     const startDate = this.formatDate(sDate, 'YYYY-MM-DDTHH:mm:ss');
     const endDate = this.formatDate(eDate, 'YYYY-MM-DDTHH:mm:ss');
-    const plainDetails = removeHtmlTags(details)
+    const plainDetails = htmlToPlainText(details)
       .trim()
       .replace(/\r?\n|\r/g, '\\n');
     const encodedLocation = location || '';
