@@ -13,7 +13,7 @@ import { IBadges } from 'apps/shared-models/badges.model';
 import { ICommunityBuilds } from 'apps/shared-models/community-builds.model';
 import { IDataFormEntityResponseGroup } from 'apps/shared-models/data_form_entity_response_group.model';
 import { IEventStatus } from 'apps/shared-models/event_status.model';
-import { IEvents } from 'apps/shared-models/events.model';
+import { IEvent } from 'apps/shared-models/event.model';
 import { ILabs } from 'apps/shared-models/labs.model';
 import { IPost } from 'apps/shared-models/post.model';
 import { IPosts } from 'apps/shared-models/posts.model';
@@ -138,9 +138,9 @@ export class AppUsersService {
     );
   }
 
-  getAttendedEvents(id: number, page = 1, count = 10): Observable<IEvents> {
+  getAttendedEvents(id: number, page = 1, count = 10): Observable<IPaginationCount<IEvent>> {
     const params = new HttpParams().set('user_id', id).set('page', page).set('count', count);
-    return this.http.get<IEvents>(this.baseApiService.getRoute(API_ROUTES.USERS.EVENTS_ATTENDED), {
+    return this.http.get<IPaginationCount<IEvent>>(this.baseApiService.getRoute(API_ROUTES.USERS.EVENTS_ATTENDED), {
       params,
     });
   }

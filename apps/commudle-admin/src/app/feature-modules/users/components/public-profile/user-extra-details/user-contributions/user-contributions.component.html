@@ -46,7 +46,7 @@
     <a [routerLink]="'.'" fragment="attended-events"
       ><fa-icon [icon]="faIdBadge" class="com-text-green-600"></fa-icon>
       Attended Events
-      <span>({{ attendedEventsTotal }})</span></a
+      <span *ngIf="attendedEventsTotal > 0">({{ attendedEventsTotal }})</span></a
     >
   </nb-card-header>
   <nb-card-body>
@@ -61,7 +61,7 @@
   <nb-card-footer
     (click)="loadMoreAttendedEvents()"
     class="com-cursor-pointer"
-    *ngIf="attendedEventsTotal !== attendedEvents.length"
+    *ngIf="attendedEventsTotal > attendedEvents.length"
   >
     <div>
       View More ({{ attendedEventsTotal - attendedEvents.length }})

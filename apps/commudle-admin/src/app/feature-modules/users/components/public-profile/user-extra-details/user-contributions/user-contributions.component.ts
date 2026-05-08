@@ -124,10 +124,10 @@ export class UserContributionsComponent implements OnChanges, OnDestroy {
       this.appUsersService
         .getAttendedEvents(this.user.id, this.attendedEventsPage, this.attendedEventsCount)
         .subscribe((value) => {
-          this.attendedEvents = this.attendedEvents.concat(value.events);
-          this.attendedEventsTotal = value.total ?? 0;
+          this.attendedEvents = this.attendedEvents.concat(value.values);
+          this.attendedEventsTotal = value.total ?? this.attendedEvents.length;
           this.attendedEventsPage = value.page ?? this.attendedEventsPage;
-          this.userProfileMenuService.addMenuItem('attendedEvents', this.attendedEventsTotal > 0);
+          this.userProfileMenuService.addMenuItem('attendedEvents', this.attendedEvents.length > 0);
         }),
     );
   }
