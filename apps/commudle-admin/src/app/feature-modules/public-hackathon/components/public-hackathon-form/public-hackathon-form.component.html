@@ -68,6 +68,7 @@
                 <commudle-user-details-form
                   [userFormDetails]="hackathonResponseGroup.user_details"
                   [hackathonUserResponse]="hackathonUserResponse"
+                  [isSubmitting]="isUserDetailsSubmitting"
                   [submitButtonText]="
                     hackathonResponseGroup.filled_by_only_team_lead && !current_user_is_team_lead ? 'Submit' : 'Next'
                   "

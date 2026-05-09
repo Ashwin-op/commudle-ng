@@ -63,6 +63,7 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
   dialogRef: NbDialogRef<any>;
 
   current_user_is_team_lead = true;
+  isUserDetailsSubmitting = false;
 
   private destroy$ = new Subject<void>();
 
@@ -169,6 +170,8 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
           this.hackathonUserResponsesByTeam = data.filter((hur) => hur.hackathon_team != null);
           if (this.hackathonUserResponsesByTeam.length > 0) {
             this.switchTeam(0); // default to first team
+          } else {
+            this.hackathonUserResponse = data[0].hackathon_user_responses[0];
           }
           this.isLoading = false;
         } else {
@@ -194,6 +197,7 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
   }
 
   updateUserDetails(event) {
+    this.isUserDetailsSubmitting = true;
     this.userProfileManagerService.userProfileForm.patchValue({
       name: event.name ? event.name : this.currentUser.name,
       about_me: event.about_me ? event.about_me : this.currentUser.about_me,
@@ -220,44 +224,53 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
   }
 
   UpdateOrSubmitResponse(formData) {
-    this.hackathonService.pCheckParentMember(this.hackathon.id).subscribe((data) => {
-      if (data) {
-        if (this.hackathonUserResponse) {
-          this.updateUserResponse(formData);
+    this.hackathonService.pCheckParentMember(this.hackathon.id).subscribe({
+      next: (data) => {
+        if (data) {
+          if (this.hackathonUserResponse) {
+            this.updateUserResponse(formData);
+          } else {
+            this.submitUserResponse(formData);
+          }
         } else {
-          this.submitUserResponse(formData);
+          this.openConsentDialogBox(formData);
         }
-      } else {
-        this.openConsentDialogBox(formData);
-      }
+      },
+      error: () => (this.isUserDetailsSubmitting = false),
     });
   }
 
   submitUserResponse(formData) {
-    this.hurService.createHackathonResponseGroup(formData, this.hackathonResponseGroup.id).subscribe((data) => {
-      this.hackathonUserResponse = data;
-      if (this.hackathonResponseGroup.filled_by_only_team_lead && !this.current_user_is_team_lead) {
-        this.toastrService.successDialog('Details has been saved');
-        this.hurService.updateHurStatusComplete(this.hackathonUserResponse.id).subscribe();
-        this.router.navigate(['submitted'], { relativeTo: this.activatedRoute });
-      } else {
-        this.stepper.next();
-        this.setStepTitle('Team Details');
-      }
+    this.hurService.createHackathonResponseGroup(formData, this.hackathonResponseGroup.id).subscribe({
+      next: (data) => {
+        this.hackathonUserResponse = data;
+        if (this.hackathonResponseGroup.filled_by_only_team_lead && !this.current_user_is_team_lead) {
+          this.toastrService.successDialog('Details has been saved');
+          this.hurService.updateHurStatusComplete(this.hackathonUserResponse.id).subscribe();
+          this.router.navigate(['submitted'], { relativeTo: this.activatedRoute });
+        } else {
+          this.stepper.next();
+          this.setStepTitle('Team Details');
+        }
+      },
+      error: () => (this.isUserDetailsSubmitting = false),
     });
   }
 
   updateUserResponse(formData) {
-    this.hurService.updateHackathonResponseGroup(formData, this.hackathonUserResponse.id).subscribe((data) => {
-      this.hackathonUserResponse = data;
-      if (this.hackathonResponseGroup.filled_by_only_team_lead && !this.current_user_is_team_lead) {
-        this.toastrService.successDialog('Details has been saved');
-        this.hurService.updateHurStatusComplete(this.hackathonUserResponse.id).subscribe();
-        this.router.navigate(['submitted'], { relativeTo: this.activatedRoute });
-      } else {
-        this.stepper.next();
-        this.setStepTitle('Team Details');
-      }
+    this.hurService.updateHackathonResponseGroup(formData, this.hackathonUserResponse.id).subscribe({
+      next: (data) => {
+        this.hackathonUserResponse = data;
+        if (this.hackathonResponseGroup.filled_by_only_team_lead && !this.current_user_is_team_lead) {
+          this.toastrService.successDialog('Details has been saved');
+          this.hurService.updateHurStatusComplete(this.hackathonUserResponse.id).subscribe();
+          this.router.navigate(['submitted'], { relativeTo: this.activatedRoute });
+        } else {
+          this.stepper.next();
+          this.setStepTitle('Team Details');
+        }
+      },
+      error: () => (this.isUserDetailsSubmitting = false),
     });
   }
 
@@ -328,6 +341,7 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
     dialogRef.componentRef.instance.consentOutput.subscribe((result) => {
       dialogRef.close();
       if (result === 'rejected') {
+        this.isUserDetailsSubmitting = false;
         return;
       } else {
         if (this.hackathonUserResponse) {

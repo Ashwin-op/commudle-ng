@@ -1,5 +1,5 @@
 import { KeyValue } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EDomain, EExperienceLevel, IHackathonUserResponse, IUser } from '@commudle/shared-models';
 import { faFileImage } from '@fortawesome/free-solid-svg-icons';
@@ -8,16 +8,17 @@ import { AuthService, ToastrService } from '@commudle/shared-services';
 import { GooglePlacesAutocompleteService } from 'apps/commudle-admin/src/app/services/google-places-autocomplete.service';
 import { UserProfileManagerService } from 'apps/commudle-admin/src/app/feature-modules/users/services/user-profile-manager.service';
 @Component({
-    selector: 'commudle-user-details-form',
-    templateUrl: './user-details-form.component.html',
-    styleUrls: ['./user-details-form.component.scss'],
-    standalone: false
+  selector: 'commudle-user-details-form',
+  templateUrl: './user-details-form.component.html',
+  styleUrls: ['./user-details-form.component.scss'],
+  standalone: false,
 })
 export class UserDetailsFormComponent implements OnInit, OnDestroy {
   @Input() userFormDetails;
   @Input() showActionButtons = true;
   @Input() hackathonUserResponse: IHackathonUserResponse;
   @Input() submitButtonText = 'Next';
+  @Input() isSubmitting = false;
   @Output() submitUserDetailsEvent = new EventEmitter<any>();
   @Output() isLoadingEventEmitter = new EventEmitter<boolean>();
 
@@ -70,7 +71,7 @@ export class UserDetailsFormComponent implements OnInit, OnDestroy {
           userValues = userValues / 12;
         }
 
-        let validators = [Validators.required];
+        const validators = [Validators.required];
 
         if (key === 'about_me') {
           validators.push(Validators.minLength(30), Validators.maxLength(2600));
