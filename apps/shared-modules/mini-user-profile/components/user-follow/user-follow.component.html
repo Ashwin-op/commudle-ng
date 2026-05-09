@@ -1,6 +1,6 @@
 <div *ngIf="currentUser?.id !== userId" class="user-follow">
   <button
-    (click)="isFollowing ? toggleFollow() : onFollowClick()"
+    (click)="isFollowing ? toggleFollow() : onFollowClick($event)"
     (mouseenter)="onFollowingHover(true)"
     (mouseleave)="onFollowingHover(false)"
     [appearance]="isFollowing || appearance === 'outline' ? 'outline' : 'filled'"

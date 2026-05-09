@@ -1,9 +1,20 @@
 .user-follow {
   .follow-btn {
     @apply com-text-xs com-h-8 com-p-2;
+    transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 180ms cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+    will-change: transform;
 
     nb-icon {
       @apply com-mr-1;
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
     }
 
     &.fixed-width {

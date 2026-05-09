@@ -85,7 +85,7 @@ com-card {
             }
 
             .location {
-              @apply com-flex com-text-xs com-font-normal com-flex-shrink-0;
+              @apply com-flex com-text-xs com-font-normal com-flex-shrink-0 com-items-center;
 
               nb-icon {
                 @apply com-w-[14px] com-mr-1 com-text-Azure;

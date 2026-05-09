@@ -7,7 +7,6 @@ import {
   OnChanges,
   OnDestroy,
   Output,
-  TemplateRef,
 } from '@angular/core';
 import { NbButtonAppearance, NbComponentStatus, NbDialogService } from '@commudle/theme';
 import { UserConsentsComponent } from 'apps/commudle-admin/src/app/app-shared-components/user-consents/user-consents.component';
@@ -16,6 +15,7 @@ import { GoogleTagManagerService } from 'apps/commudle-admin/src/app/services/go
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
 import { ConsentTypesEnum } from 'apps/shared-models/enums/consent-types.enum';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
+import confetti from 'canvas-confetti';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 
 @Component({
@@ -39,7 +39,7 @@ export class UserFollowComponent implements OnChanges, OnDestroy {
   currentUser: ICurrentUser;
   isFollowing = false;
   isFollowingHovered = false;
-  Following = false;
+  private lastFollowOrigin = { x: 0.5, y: 0.5 };
 
   subscriptions: Subscription[] = [];
 
@@ -92,7 +92,13 @@ export class UserFollowComponent implements OnChanges, OnDestroy {
     );
   }
 
-  onFollowClick() {
+  onFollowClick(event?: MouseEvent) {
+    if (event) {
+      this.lastFollowOrigin = {
+        x: event.clientX / window.innerWidth,
+        y: event.clientY / window.innerHeight,
+      };
+    }
     const dialogRef = this.nbDialogService.open(UserConsentsComponent, {
       context: {
         consentType: ConsentTypesEnum.UserFollow,
@@ -104,6 +110,7 @@ export class UserFollowComponent implements OnChanges, OnDestroy {
       dialogRef.close();
       if (result === 'accepted') {
         this.isFollowing = true;
+        this.triggerFollowConfetti();
         this.toggleFollow();
       }
     });
@@ -113,5 +120,18 @@ export class UserFollowComponent implements OnChanges, OnDestroy {
   onFollowingHover(isHovered: boolean): void {
     this.isFollowingHovered = isHovered;
     this.changeDetectorRef.markForCheck();
+  }
+
+  private triggerFollowConfetti(): void {
+    confetti({
+      particleCount: 26,
+      spread: 50,
+      startVelocity: 24,
+      scalar: 0.65,
+      origin: this.lastFollowOrigin,
+      gravity: 1.2,
+      disableForReducedMotion: true,
+      zIndex: 9999,
+    });
   }
 }
