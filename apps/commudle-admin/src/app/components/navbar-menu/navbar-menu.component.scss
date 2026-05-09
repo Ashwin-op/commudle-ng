@@ -43,3 +43,35 @@ nb-actions {
 .user-profile-image-mobile {
   @apply com-w-6 com-h-6 com-object-cover com-rounded-full com-bg-tWhite;
 }
+
+.explore-bottom-sheet-content {
+  @apply com-flex com-flex-col com-gap-2 com-pb-2;
+}
+
+.explore-action-item {
+  @apply com-flex com-items-center com-justify-between com-no-underline com-rounded-xl com-p-3 hover:com-bg-Anti-Flash;
+}
+
+.explore-action-left {
+  @apply com-flex com-items-center com-gap-3;
+}
+
+.explore-action-icon {
+  @apply com-text-primary-500 com-text-base;
+}
+
+.explore-action-text {
+  @apply com-flex com-flex-col;
+}
+
+.explore-action-title {
+  @apply com-text-sm com-font-semibold com-text-Yankees-Blue;
+}
+
+.explore-action-subtitle {
+  @apply com-text-xs com-text-gray-500;
+}
+
+.explore-action-chevron {
+  @apply com-text-gray-400 com-text-xs;
+}

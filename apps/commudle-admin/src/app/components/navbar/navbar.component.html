@@ -1,4 +1,4 @@
-<div class="com-flex com-justify-between com-items-center com-gap-3 com-container com-max-w-screen-xl com-px-2">
+<div class="com-flex com-justify-between com-items-center com-gap-3 com-container com-max-w-screen-xl">
   <a [routerLink]="['/']">
     <!--
       Render both variants and let CSS decide based on [data-theme].
@@ -41,7 +41,7 @@
 
   <div class="home-navbar">
     <ng-container *ngIf="!currentUser; else searchBox">
-      <div *appBreakpoints="'<=lg'" [routerLink]="['/search']" class="logged-out-search">
+      <div *appBreakpoints="'<=lg'" [routerLink]="['/search']" class="logged-out-search logged-out-search-guest">
         <fa-icon [icon]="faMagnifyingGlass"></fa-icon>
       </div>
       <app-search-box
@@ -51,11 +51,27 @@
       ></app-search-box>
     </ng-container>
     <ng-template #searchBox>
+      <div *appBreakpoints="'<=lg'" [routerLink]="['/search']" class="logged-out-search logged-out-search-user">
+        <fa-icon [icon]="faMagnifyingGlass"></fa-icon>
+      </div>
       <app-search-box
+        *appBreakpoints="'>lg'"
         class="com-col-span-4 md:com-col-span-1 md:com-justify-self-start"
         shape="semi-round"
       ></app-search-box>
     </ng-template>
+    <nb-action (click)="this.notificationCount = 0; gtmService()" *ngIf="currentUser">
+      <a *appBreakpoints="'<=md'" [routerLink]="['/notifications']" routerLinkActive="active">
+        <nb-badge *ngIf="notificationCount > 0" [text]="notificationCount.toString()" status="danger"></nb-badge>
+        <fa-icon [icon]="faBell"></fa-icon>
+        <span>Notifications</span>
+      </a>
+      <a *appBreakpoints="'>md'" [routerLink]="['/notifications']" class="com-cursor-pointer">
+        <nb-badge *ngIf="notificationCount > 0" [text]="notificationCount.toString()" status="danger"></nb-badge>
+        <fa-icon [icon]="faBell"></fa-icon>
+        <span>Notifications</span>
+      </a>
+    </nb-action>
 
     <app-navbar-menu *appBreakpoints="'>md'" class="com-justify-self-center navbar-menu-desktop"></app-navbar-menu>
 
@@ -116,7 +132,7 @@
       size="small"
       status="info"
       shape="semi-round"
-      class="profile"
+      class="profile signup-cta signup-cta-mobile"
     >
       Login
     </button>

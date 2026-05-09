@@ -11,6 +11,8 @@ import {
   faCalendarDays,
   faBriefcase,
   faTrophy,
+  faRocket,
+  faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { NbMenuService, NbPopoverDirective } from '@commudle/theme';
 import { NotificationsStore } from 'apps/commudle-admin/src/app/feature-modules/notifications/store/notifications.store';
@@ -40,11 +42,14 @@ export class NavbarMenuComponent implements OnInit, OnDestroy {
   faCalendarDays = faCalendarDays;
   faBriefcase = faBriefcase;
   faTrophy = faTrophy;
+  faRocket = faRocket;
+  faChevronRight = faChevronRight;
 
   notificationCount = 0;
   ENotificationSenderTypes = ENotificationSenderTypes;
 
   notificationIconHighlight = false;
+  exploreBottomSheetOpen = false;
 
   contextMenuItems = [
     { title: 'Labs', link: '/labs' },
@@ -105,5 +110,13 @@ export class NavbarMenuComponent implements OnInit, OnDestroy {
     this.gtm.dataLayerPushEvent('click-notification-bell-icon', {
       com_notification_type: this.ENotificationSenderTypes.USER,
     });
+  }
+
+  openExploreBottomSheet(): void {
+    this.exploreBottomSheetOpen = true;
+  }
+
+  closeExploreBottomSheet(): void {
+    this.exploreBottomSheetOpen = false;
   }
 }
