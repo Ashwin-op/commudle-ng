@@ -6,15 +6,15 @@
     </a>
   </nb-action>
   <nb-action>
-    <a routerLink="hackathons" routerLinkActive="active">
-      <fa-icon [icon]="faTrophy"></fa-icon>
-      <span>Hacks</span>
-    </a>
-  </nb-action>
-  <nb-action>
     <a routerLink="events" routerLinkActive="active">
       <fa-icon [icon]="faCalendarDays"></fa-icon>
       <span>Events</span>
+    </a>
+  </nb-action>
+  <nb-action>
+    <a routerLink="hackathons" routerLinkActive="active">
+      <fa-icon [icon]="faTrophy"></fa-icon>
+      <span>Hacks</span>
     </a>
   </nb-action>
   <nb-action>
@@ -24,12 +24,7 @@
     </a>
   </nb-action>
 
-  <!-- <nb-action (click)="this.notificationCount = 0; gtmService()" *ngIf="currentUser">
-    <a *appBreakpoints="'<=md'" [routerLink]="['/notifications']" routerLinkActive="active">
-      <nb-badge *ngIf="notificationCount > 0" [text]="notificationCount.toString()" status="danger"></nb-badge>
-      <fa-icon [icon]="faBell"></fa-icon>
-      <span>Notifications</span>
-    </a>
+  <nb-action (click)="this.notificationCount = 0; gtmService()" *ngIf="currentUser">
     <a
       *appBreakpoints="'>md'"
       [routerLink]="['/notifications']"
@@ -40,11 +35,21 @@
       <fa-icon [icon]="faBell"></fa-icon>
       <span>Notifications</span>
     </a>
-  </nb-action> -->
+  </nb-action>
   <nb-action *ngIf="currentUser">
     <a *appBreakpoints="'<=md'" [routerLink]="['/account-menu']" routerLinkActive="active">
       <img [alt]="currentUser.name" [src]="currentUser.photo.i32" class="user-profile-image-mobile" />
       <span>You</span>
+    </a>
+    <a
+      *appBreakpoints="'>md'"
+      class="com-cursor-pointer"
+      [nbPopover]="desktopExplorePopover"
+      nbPopoverPlacement="bottom"
+      nbPopoverTrigger="click"
+    >
+      <fa-icon [icon]="faRocket"></fa-icon>
+      <span>Explore</span>
     </a>
   </nb-action>
   <nb-action *ngIf="!currentUser">
@@ -119,6 +124,54 @@
     </a>
   </div>
 </commudle-bottom-sheet>
+
+<ng-template #desktopExplorePopover>
+  <div class="desktop-explore-popover">
+    <a [routerLink]="['/labs']" class="explore-action-item">
+      <div class="explore-action-left">
+        <fa-icon [icon]="faFlask" class="explore-action-icon"></fa-icon>
+        <div class="explore-action-text">
+          <span class="explore-action-title">Labs</span>
+          <span class="explore-action-subtitle">Hands-on coding labs</span>
+        </div>
+      </div>
+      <fa-icon [icon]="faChevronRight" class="explore-action-chevron"></fa-icon>
+    </a>
+
+    <a [routerLink]="['/account-menu']" class="explore-action-item">
+      <div class="explore-action-left">
+        <fa-icon [icon]="faUser" class="explore-action-icon"></fa-icon>
+        <div class="explore-action-text">
+          <span class="explore-action-title">Developer Profile</span>
+          <span class="explore-action-subtitle">Manage your public profile</span>
+        </div>
+      </div>
+      <fa-icon [icon]="faChevronRight" class="explore-action-chevron"></fa-icon>
+    </a>
+
+    <a [routerLink]="['/experts-program']" class="explore-action-item">
+      <div class="explore-action-left">
+        <fa-icon [icon]="faUserFriends" class="explore-action-icon"></fa-icon>
+        <div class="explore-action-text">
+          <span class="explore-action-title">Experts Program</span>
+          <span class="explore-action-subtitle">Grow as a community expert</span>
+        </div>
+      </div>
+      <fa-icon [icon]="faChevronRight" class="explore-action-chevron"></fa-icon>
+    </a>
+
+    <a [routerLink]="['/features']" class="explore-action-item">
+      <div class="explore-action-left">
+        <fa-icon [icon]="faInfoCircle" class="explore-action-icon"></fa-icon>
+        <div class="explore-action-text">
+          <span class="explore-action-title">Features</span>
+          <span class="explore-action-subtitle">What you can build here</span>
+        </div>
+      </div>
+      <fa-icon [icon]="faChevronRight" class="explore-action-chevron"></fa-icon>
+    </a>
+  </div>
+</ng-template>
 
 <ng-template #notificationPopover>
   <app-notifications-popover (closePopover)="closePopover()"></app-notifications-popover>

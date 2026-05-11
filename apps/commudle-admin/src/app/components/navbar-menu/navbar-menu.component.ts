@@ -14,7 +14,7 @@ import {
   faRocket,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
-import { NbMenuService, NbPopoverDirective } from '@commudle/theme';
+import { NbPopoverDirective } from '@commudle/theme';
 import { NotificationsStore } from 'apps/commudle-admin/src/app/feature-modules/notifications/store/notifications.store';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
@@ -74,7 +74,6 @@ export class NavbarMenuComponent implements OnInit, OnDestroy {
   constructor(
     private authwatchService: LibAuthwatchService,
     private notificationsStore: NotificationsStore,
-    private menuService: NbMenuService,
     private gtm: GoogleTagManagerService,
   ) {}
 

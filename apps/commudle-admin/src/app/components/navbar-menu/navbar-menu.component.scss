@@ -9,7 +9,7 @@ a {
 }
 
 nb-actions {
-  @apply com-h-full com-flex md:com-gap-x-11 com-justify-between md:com-ml-24 md:com-mr-0 com-mx-3;
+  @apply com-h-full com-flex md:com-gap-x-11 com-justify-between md:com-m-0 com-mx-3;
 
   nb-action {
     @apply com-px-0 com-py-2 md:com-p-0 com-border-none com-h-full;
@@ -30,7 +30,7 @@ nb-actions {
       }
 
       span {
-        @apply com-font-normal com-text-gray-500 com-text-[10px];
+        @apply com-font-normal com-text-gray-500 com-text-[10px] md:com-text-sm;
       }
     }
   }
@@ -48,8 +48,12 @@ nb-actions {
   @apply com-flex com-flex-col com-gap-2 com-pb-2;
 }
 
+.desktop-explore-popover {
+  @apply com-grid com-grid-cols-2 com-gap-2 com-p-2 com-min-w-[520px] com-max-w-[640px] com-rounded-2xl com-bg-white;
+}
+
 .explore-action-item {
-  @apply com-flex com-items-center com-justify-between com-no-underline com-rounded-xl com-p-3 hover:com-bg-Anti-Flash;
+  @apply com-flex com-items-center com-justify-between com-no-underline com-rounded-xl com-p-3 hover:com-bg-Anti-Flash com-gap-4;
 }
 
 .explore-action-left {
@@ -58,6 +62,10 @@ nb-actions {
 
 .explore-action-icon {
   @apply com-text-primary-500 com-text-base;
+}
+
+.desktop-explore-popover .explore-action-icon {
+  @apply com-bg-blue-50 dark:com-bg-gray-800 com-rounded-lg com-h-8 com-w-8 com-flex com-items-center com-justify-center com-text-lg;
 }
 
 .explore-action-text {
