@@ -110,6 +110,22 @@
   @apply com-col-span-4;
 }
 
+.notification-link-mobile {
+  @apply com-relative com-flex com-items-center com-justify-center com-cursor-pointer com-no-underline com-text-Yankees-Blue;
+
+  fa-icon {
+    @apply com-flex com-justify-center com-items-center com-text-xl com-w-6;
+  }
+}
+
+.notification-link-desktop {
+  @apply com-inline-flex com-items-center com-gap-2;
+
+  fa-icon {
+    @apply com-text-base;
+  }
+}
+
 .user-login {
   @apply com-flex com-justify-self-end com-gap-4 com-items-center;
 }

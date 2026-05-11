@@ -161,7 +161,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     fromEvent(window, 'scroll')
       .pipe(
-        throttleTime(50),
+        throttleTime(24),
         startWith(null),
         map(() => window.scrollY || 0),
         pairwise(),
@@ -169,6 +169,9 @@ export class AppComponent implements OnInit, OnDestroy {
       )
       .subscribe(([previousY, currentY]) => {
         const isMobile = window.innerWidth <= 768;
+        const scrollDelta = currentY - previousY;
+        const hideDeltaThreshold = 6;
+        const hideStartOffset = 56;
 
         if (!isMobile) {
           this.isMobileNavbarHidden = false;
@@ -180,7 +183,13 @@ export class AppComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.isMobileNavbarHidden = currentY > previousY;
+        if (scrollDelta >= hideDeltaThreshold && currentY > hideStartOffset) {
+          this.isMobileNavbarHidden = true;
+          return;
+        }
+
+        // Keep navbar/chat visible unless user is actively scrolling down.
+        this.isMobileNavbarHidden = false;
       });
   }
 }

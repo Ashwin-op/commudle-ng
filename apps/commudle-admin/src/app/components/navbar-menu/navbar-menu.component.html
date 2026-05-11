@@ -47,7 +47,7 @@
       <span>You</span>
     </a>
   </nb-action>
-  <nb-action>
+  <nb-action *ngIf="!currentUser">
     <a *appBreakpoints="'<=md'" (click)="openExploreBottomSheet()" class="com-cursor-pointer">
       <fa-icon [icon]="faRocket"></fa-icon>
       <span>Explore</span>

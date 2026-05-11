@@ -60,18 +60,22 @@
         shape="semi-round"
       ></app-search-box>
     </ng-template>
-    <nb-action (click)="this.notificationCount = 0; gtmService()" *ngIf="currentUser">
-      <a *appBreakpoints="'<=md'" [routerLink]="['/notifications']" routerLinkActive="active">
+    <div (click)="this.notificationCount = 0; gtmService()" *ngIf="currentUser">
+      <a
+        *appBreakpoints="'<=md'"
+        [routerLink]="['/notifications']"
+        routerLinkActive="active"
+        class="notification-link-mobile"
+      >
+        <nb-badge *ngIf="notificationCount > 0" [text]="notificationCount.toString()" status="danger"></nb-badge>
+        <fa-icon [icon]="faBell"></fa-icon>
+      </a>
+      <a *appBreakpoints="'>md'" [routerLink]="['/notifications']" class="com-cursor-pointer notification-link-desktop">
         <nb-badge *ngIf="notificationCount > 0" [text]="notificationCount.toString()" status="danger"></nb-badge>
         <fa-icon [icon]="faBell"></fa-icon>
         <span>Notifications</span>
       </a>
-      <a *appBreakpoints="'>md'" [routerLink]="['/notifications']" class="com-cursor-pointer">
-        <nb-badge *ngIf="notificationCount > 0" [text]="notificationCount.toString()" status="danger"></nb-badge>
-        <fa-icon [icon]="faBell"></fa-icon>
-        <span>Notifications</span>
-      </a>
-    </nb-action>
+    </div>
 
     <app-navbar-menu *appBreakpoints="'>md'" class="com-justify-self-center navbar-menu-desktop"></app-navbar-menu>
 

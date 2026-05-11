@@ -15,7 +15,7 @@
 
   nb-layout-header {
     @apply com-bg-white;
-    transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1), opacity 260ms ease;
+    transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1), opacity 160ms ease;
     will-change: transform, opacity;
 
     nav {
@@ -23,7 +23,7 @@
     }
   }
   nb-layout-column {
-    transition: padding-top 260ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition: padding-top 160ms cubic-bezier(0.22, 1, 0.36, 1);
 
     .router-outlet {
       @apply com-bg-Anti-Flash;
@@ -45,7 +45,7 @@ nb-sidebar {
 }
 
 app-chats-container {
-  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1), opacity 260ms ease;
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1), opacity 160ms ease;
   will-change: transform, opacity;
 }
 

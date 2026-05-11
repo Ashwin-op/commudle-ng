@@ -26,7 +26,7 @@
       @apply com-hidden;
     }
     .chats-windows {
-      @apply com-relative com-flex com-flex-col com-w-full com-right-0 com-bottom-0 com-overflow-hidden com-h-[calc(100dvh-68px-67px)];
+      @apply com-relative com-flex com-flex-col com-w-full com-right-0 com-bottom-0 com-overflow-hidden com-h-[calc(100dvh-68px-57px)];
 
       app-chats-window {
         @apply com-block com-w-full com-h-full;
