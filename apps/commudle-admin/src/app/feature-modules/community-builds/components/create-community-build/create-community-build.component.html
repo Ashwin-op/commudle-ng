@@ -336,6 +336,15 @@
                 >
                   <commudle-alert [errorMessage]="'Required Field'" [error]="true"></commudle-alert>
                 </span>
+                <commudle-alert
+                  *ngIf="emailList.controls[i].get('value').value"
+                  [info]="true"
+                  [message]="
+                    'Please verify these emails, all teammates will receive an invitation email immediately upon submission.'
+                  "
+                ></commudle-alert>
+
+                <br />
               </div>
               <button (click)="addTeammate()" *ngIf="!(parentId && parentType)" class="add-button" nbButton>
                 <nb-icon icon="plus"></nb-icon>
