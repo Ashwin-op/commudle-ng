@@ -63,6 +63,10 @@ p {
   @apply com-flex com-flex-col com-gap-4;
 }
 
+.hackathon-card-list {
+  @apply com-flex com-flex-col com-gap-4;
+}
+
 .main-column {
   @apply lg:com-col-span-2 com-flex com-flex-col com-gap-4;
 }

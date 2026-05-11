@@ -13,6 +13,8 @@ import { faGlobe, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faFacebook, faGithub, faInstagram, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { environment } from 'apps/commudle-admin/src/environments/environment';
 import { Subject, takeUntil } from 'rxjs';
+import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
+import { IHackathon } from 'apps/shared-models/hackathon.model';
 
 @Component({
   selector: 'app-about',
@@ -26,7 +28,9 @@ export class AboutComponent implements OnInit, OnDestroy {
   organizers: IUser[] = [];
   events: IEvent[] = [];
   upcomingEvents: IEvent[] = [];
+  upcomingHackathons: IHackathon[] = [];
   isLoadingEvents = false;
+  isLoadingHackathons = false;
   isLoading = false;
   defaultChannel: ICommunityChannel;
   currentUser: IUser;
@@ -53,6 +57,7 @@ export class AboutComponent implements OnInit, OnDestroy {
     private communityChannelsService: CommunityChannelsService,
     private communityChannelManagerService: CommunityChannelManagerService,
     private authWatchService: AuthService,
+    private hackathonService: HackathonService,
   ) {}
 
   ngOnInit() {
@@ -60,6 +65,9 @@ export class AboutComponent implements OnInit, OnDestroy {
       this.community = data.community;
       if (this.community.upcoming_events_count > 0) {
         this.getEvents();
+      }
+      if (this.community.upcoming_hackathons_count > 0) {
+        this.getHackathons();
       }
       this.seoService.setTitle(this.community.name);
     });
@@ -103,6 +111,14 @@ export class AboutComponent implements OnInit, OnDestroy {
       this.upcomingEvents = data.values;
       this.isLoadingEvents = false;
       this.setSchema();
+    });
+  }
+
+  getHackathons() {
+    this.isLoadingHackathons = true;
+    this.hackathonService.pIndexHackathons(this.community.id, EDbModels.KOMMUNITY, 'future').subscribe((data) => {
+      this.upcomingHackathons = data.values;
+      this.isLoadingHackathons = false;
     });
   }
 

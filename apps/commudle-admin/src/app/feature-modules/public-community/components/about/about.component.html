@@ -11,6 +11,22 @@
         </div>
       </com-card-body>
     </com-card>
+
+    <com-card *ngIf="community.upcoming_hackathons_count > 0" class="upcoming-card">
+      <com-card-body>
+        <h2 class="title">Upcoming Hackathons</h2>
+        <app-loading-spinner *ngIf="isLoadingHackathons"></app-loading-spinner>
+        <div class="hackathon-card-list">
+          <div *ngFor="let hackathon of upcomingHackathons">
+            <commudle-hackathon-large-card
+              [hackathon]="hackathon"
+              [headerImageWidth]="'388px'"
+            ></commudle-hackathon-large-card>
+          </div>
+        </div>
+      </com-card-body>
+    </com-card>
+
     <com-card [nbSpinner]="community === null" class="about">
       <com-card-body>
         <h2 class="heading">Who we are</h2>
