@@ -159,14 +159,14 @@
 
 .menu-items-footer-sticky {
   @apply com-sticky com-top-16 com-z-20;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.55));
-  @apply com-bg-gradient-to-b com-from-[#FFFFFFBF] com-to-[#FFFFFF8C] dark:com-from-[#121212EB] dark:com-to-[#121212C7];
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
 
 .sticky-active {
   @apply com-shadow-lg;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.55));
+  @apply com-bg-gradient-to-b dark:com-from-[#12121299] dark:com-to-[#12121266];
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .share-button {
