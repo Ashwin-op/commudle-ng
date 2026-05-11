@@ -24,21 +24,17 @@
     </a>
   </nb-action>
 
-  <nb-action (click)="this.notificationCount = 0; gtmService()" *ngIf="currentUser">
+  <ng-container *ngIf="currentUser">
+    <nb-action (click)="this.notificationCount = 0; gtmService()" *appBreakpoints="'>md'">
+      <a [routerLink]="['/notifications']" [ngClass]="{ active: notificationIconHighlight }" class="com-cursor-pointer">
+        <nb-badge *ngIf="notificationCount > 0" [text]="notificationCount.toString()" status="danger"></nb-badge>
+        <fa-icon [icon]="faBell"></fa-icon>
+        <span>Notifications</span>
+      </a>
+    </nb-action>
+  </ng-container>
+  <nb-action *appBreakpoints="'>md'">
     <a
-      *appBreakpoints="'>md'"
-      [routerLink]="['/notifications']"
-      [ngClass]="{ active: notificationIconHighlight }"
-      class="com-cursor-pointer"
-    >
-      <nb-badge *ngIf="notificationCount > 0" [text]="notificationCount.toString()" status="danger"></nb-badge>
-      <fa-icon [icon]="faBell"></fa-icon>
-      <span>Notifications</span>
-    </a>
-  </nb-action>
-  <nb-action>
-    <a
-      *appBreakpoints="'>md'"
       class="com-cursor-pointer"
       [nbPopover]="desktopExplorePopover"
       nbPopoverPlacement="bottom"
