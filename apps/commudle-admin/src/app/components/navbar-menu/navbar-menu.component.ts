@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import {
   faInfoCircle,
   faUserFriends,
@@ -21,6 +21,7 @@ import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service'
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { ENotificationSenderTypes } from 'apps/shared-models/enums/notification_sender_types.enum';
 import { GoogleTagManagerService } from 'apps/commudle-admin/src/app/services/google-tag-manager.service';
+import { NavigationStart, Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar-menu',
@@ -69,12 +70,14 @@ export class NavbarMenuComponent implements OnInit, OnDestroy {
   showContextMenu = false;
 
   @ViewChildren(NbPopoverDirective) popovers: QueryList<NbPopoverDirective>;
+  @ViewChild('desktopExploreTrigger') desktopExploreTrigger: NbPopoverDirective;
   private destroy$ = new Subject<void>();
 
   constructor(
     private authwatchService: LibAuthwatchService,
     private notificationsStore: NotificationsStore,
     private gtm: GoogleTagManagerService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -84,6 +87,12 @@ export class NavbarMenuComponent implements OnInit, OnDestroy {
       if (currentUser) {
         this.getUnreadNotificationsCount();
         this.notificationsStore.updateNotifications();
+      }
+    });
+
+    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        this.closeDesktopExplorePopover();
       }
     });
   }
@@ -117,5 +126,9 @@ export class NavbarMenuComponent implements OnInit, OnDestroy {
 
   closeExploreBottomSheet(): void {
     this.exploreBottomSheetOpen = false;
+  }
+
+  closeDesktopExplorePopover(): void {
+    this.desktopExploreTrigger?.hide();
   }
 }

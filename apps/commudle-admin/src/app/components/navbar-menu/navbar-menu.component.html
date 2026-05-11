@@ -36,20 +36,23 @@
       <span>Notifications</span>
     </a>
   </nb-action>
-  <nb-action *ngIf="currentUser">
-    <a *appBreakpoints="'<=md'" [routerLink]="['/account-menu']" routerLinkActive="active">
-      <img [alt]="currentUser.name" [src]="currentUser.photo.i32" class="user-profile-image-mobile" />
-      <span>You</span>
-    </a>
+  <nb-action>
     <a
       *appBreakpoints="'>md'"
       class="com-cursor-pointer"
       [nbPopover]="desktopExplorePopover"
       nbPopoverPlacement="bottom"
       nbPopoverTrigger="click"
+      #desktopExploreTrigger="nbPopover"
     >
       <fa-icon [icon]="faRocket"></fa-icon>
       <span>Explore</span>
+    </a>
+  </nb-action>
+  <nb-action *ngIf="currentUser">
+    <a *appBreakpoints="'<=md'" [routerLink]="['/account-menu']" routerLinkActive="active">
+      <img [alt]="currentUser.name" [src]="currentUser.photo.i32" class="user-profile-image-mobile" />
+      <span>You</span>
     </a>
   </nb-action>
   <nb-action *ngIf="!currentUser">
@@ -101,7 +104,7 @@
       <fa-icon [icon]="faChevronRight" class="explore-action-chevron"></fa-icon>
     </a>
 
-    <a [routerLink]="['/account-menu']" (click)="closeExploreBottomSheet()" class="explore-action-item">
+    <a [routerLink]="['/my-profile']" (click)="closeExploreBottomSheet()" class="explore-action-item">
       <div class="explore-action-left">
         <fa-icon [icon]="faUser" class="explore-action-icon"></fa-icon>
         <div class="explore-action-text">
@@ -127,7 +130,7 @@
 
 <ng-template #desktopExplorePopover>
   <div class="desktop-explore-popover">
-    <a [routerLink]="['/labs']" class="explore-action-item">
+    <a [routerLink]="['/labs']" (click)="closeDesktopExplorePopover()" class="explore-action-item">
       <div class="explore-action-left">
         <fa-icon [icon]="faFlask" class="explore-action-icon"></fa-icon>
         <div class="explore-action-text">
@@ -138,7 +141,7 @@
       <fa-icon [icon]="faChevronRight" class="explore-action-chevron"></fa-icon>
     </a>
 
-    <a [routerLink]="['/account-menu']" class="explore-action-item">
+    <a [routerLink]="['/my-profile']" (click)="closeDesktopExplorePopover()" class="explore-action-item">
       <div class="explore-action-left">
         <fa-icon [icon]="faUser" class="explore-action-icon"></fa-icon>
         <div class="explore-action-text">
@@ -149,7 +152,7 @@
       <fa-icon [icon]="faChevronRight" class="explore-action-chevron"></fa-icon>
     </a>
 
-    <a [routerLink]="['/experts-program']" class="explore-action-item">
+    <a [routerLink]="['/experts-program']" (click)="closeDesktopExplorePopover()" class="explore-action-item">
       <div class="explore-action-left">
         <fa-icon [icon]="faUserFriends" class="explore-action-icon"></fa-icon>
         <div class="explore-action-text">
@@ -160,7 +163,7 @@
       <fa-icon [icon]="faChevronRight" class="explore-action-chevron"></fa-icon>
     </a>
 
-    <a [routerLink]="['/features']" class="explore-action-item">
+    <a [routerLink]="['/features']" (click)="closeDesktopExplorePopover()" class="explore-action-item">
       <div class="explore-action-left">
         <fa-icon [icon]="faInfoCircle" class="explore-action-icon"></fa-icon>
         <div class="explore-action-text">
