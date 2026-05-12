@@ -323,6 +323,7 @@ export class HackathonService {
     offlineInviteStatus?: string,
     withSubmissions?: boolean | null,
     withCommunityBuild?: boolean | null,
+    teamLeaderStatus?: string,
   ): Observable<IPaginationCount<IHackathonUserResponses>> {
     let params = new HttpParams().set('hackathon_id', hackathonId).set('page', page).set('count', count);
 
@@ -359,6 +360,9 @@ export class HackathonService {
     }
     if (withCommunityBuild !== null && withCommunityBuild !== undefined) {
       params = params.set('with_community_build', withCommunityBuild);
+    }
+    if (teamLeaderStatus) {
+      params = params.set('team_leader_status', teamLeaderStatus);
     }
     return this.http.get<IPaginationCount<IHackathonUserResponses>>(
       this.apiRoutesService.getRoute(API_ROUTES.HACKATHONS.INDEX_USER_RESPONSES),
