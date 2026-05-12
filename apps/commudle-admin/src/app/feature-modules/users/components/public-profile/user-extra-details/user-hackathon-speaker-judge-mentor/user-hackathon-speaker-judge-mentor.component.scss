@@ -1,0 +1,77 @@
+nb-card {
+  @apply com-relative com-m-0 com-mb-4;
+
+  nb-card-header {
+    @apply com-bg-gray-50;
+
+    a {
+      @apply com-flex com-m-0 com-text-lg com-font-medium com-text-Yankees-Blue com-no-underline com-items-center;
+
+      fa-icon {
+        @apply com-h-6 com-w-6 com-flex com-items-center com-justify-center com-mr-1;
+      }
+
+      span {
+        @apply com-ml-1;
+      }
+    }
+  }
+
+  nb-card-body {
+    @apply com-p-6;
+  }
+
+  .grid {
+    @apply com-grid com-grid-cols-1 sm:com-grid-cols-2 lg:com-grid-cols-3 com-gap-4;
+  }
+}
+
+.role-card {
+  @apply com-flex com-flex-col com-rounded-lg com-overflow-hidden com-border com-border-Bright-Gray com-no-underline com-bg-white com-h-full;
+  @apply hover:com-shadow-lg com-transition-shadow;
+
+  .card-banner {
+    @apply com-relative com-h-32 com-overflow-hidden com-bg-gray-100;
+
+    img {
+      @apply com-w-full com-h-full com-object-cover;
+    }
+
+    .card-banner-placeholder {
+      @apply com-flex com-items-center com-justify-center com-h-full com-text-3xl com-text-gray-300;
+    }
+
+    .role-badge {
+      @apply com-absolute com-top-2 com-right-2 com-px-2 com-py-1 com-rounded-full com-text-xs com-font-semibold com-flex com-items-center com-gap-1;
+      @apply com-bg-white com-text-gray-700 com-shadow;
+
+      &[data-role='judge'] {
+        @apply com-bg-blue-100 com-text-blue-700;
+      }
+
+      &[data-role='mentor'] {
+        @apply com-bg-green-100 com-text-green-700;
+      }
+
+      &[data-role='speaker'] {
+        @apply com-bg-purple-100 com-text-purple-700;
+      }
+    }
+  }
+
+  .card-content {
+    @apply com-p-4 com-flex com-flex-col com-gap-2 com-flex-1;
+
+    .card-title {
+      @apply com-text-sm com-font-semibold com-text-Yankees-Blue com-m-0 com-line-clamp-2;
+    }
+
+    .card-meta {
+      @apply com-flex com-flex-wrap com-items-center com-gap-2 com-mt-auto;
+
+      .meta-item {
+        @apply com-text-xs com-text-gray-500 com-flex com-items-center com-gap-1;
+      }
+    }
+  }
+}

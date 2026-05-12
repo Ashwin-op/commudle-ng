@@ -12,6 +12,8 @@ import {
   faClipboard,
   faLightbulb,
   faAward,
+  faCode,
+  faTrophy,
 } from '@fortawesome/free-solid-svg-icons';
 // import { faChromecast } from '@fortawesome/free-brands-svg-icons';
 
@@ -26,7 +28,10 @@ export type MenuItemNames =
   | 'resume'
   | 'workHistory'
   | 'content'
-  | 'attendedEvents';
+  | 'attendedEvents'
+  | 'hackathonsParticipated'
+  | 'hackathonsWon'
+  | 'hackathonsMentored';
 // | 'feed';
 
 export type UserProfileMenuItems = Record<
@@ -115,6 +120,28 @@ export class UserProfileMenuService {
       icon: faBriefcase,
       active_color: 'com-text-primary-500',
       link: 'jobs',
+      active: false,
+    },
+
+    hackathonsParticipated: {
+      name: 'Hackathons',
+      icon: faCode,
+      active_color: 'com-text-primary-500',
+      link: 'hackathons-participated',
+      active: false,
+    },
+    hackathonsWon: {
+      name: 'Hackathons Won',
+      icon: faTrophy,
+      active_color: 'com-text-Chrome-Yellow',
+      link: 'hackathons-won',
+      active: false,
+    },
+    hackathonsMentored: {
+      name: 'Hackathon Mentor/ Judge',
+      icon: faUsers,
+      active_color: 'com-text-Cadet-Grey',
+      link: 'hackathons-mentored',
       active: false,
     },
 

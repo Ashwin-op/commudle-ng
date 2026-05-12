@@ -1003,6 +1003,12 @@ export const API_ROUTES = {
     HACKATHON_BULK_TEAM_GENERAL_EMAIL: 'api/v2/hackathon_user_response/hackathon_bulk_team_general_email', //POST
   },
 
+  USER_HACKATHONS: {
+    PARTICIPATED: 'api/v2/user_hackathons/participated', //GET
+    WON: 'api/v2/user_hackathons/won', //GET
+    SPEAKER_JUDGE_MENTOR: 'api/v2/user_hackathons/speaker_judge_mentor', //GET
+  },
+
   ENTITY_UPDATES: {
     INDEX: 'api/v2/entity_updates',
     CREATE: 'api/v2/entity_updates',

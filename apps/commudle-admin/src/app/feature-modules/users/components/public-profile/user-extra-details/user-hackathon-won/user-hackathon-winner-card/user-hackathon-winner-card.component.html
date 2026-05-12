@@ -1,0 +1,40 @@
+<a class="com-no-underline" [routerLink]="['/communities', hackathon.community?.slug, 'hackathons', hackathon.slug]">
+  <com-card class="winner-card">
+    <!-- Trophy accent bar -->
+    <!-- <div class="winner-accent">
+      <fa-icon [icon]="faTrophy" class="trophy-icon"></fa-icon>
+      <span class="role-label">Winner</span>
+    </div> -->
+
+    <!-- Banner -->
+    <div class="card-banner">
+      <img *ngIf="hackathon.banner_image?.url" [src]="hackathon.banner_image.url" [alt]="hackathon.name" />
+      <div *ngIf="!hackathon.banner_image?.url" class="card-banner-placeholder">
+        <fa-icon [icon]="faTrophy"></fa-icon>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="card-content">
+      <h4 class="card-title">{{ hackathon.name }}</h4>
+
+      <!-- Prize tags -->
+      <div *ngIf="prizes?.length > 0" class="prize-list">
+        <span *ngFor="let prize of prizes" class="prize-tag">
+          <fa-icon [icon]="faStar"></fa-icon>
+          {{ prize }}
+        </span>
+      </div>
+
+      <div class="card-meta">
+        <span *ngIf="hackathon.start_date" class="meta-item">
+          <fa-icon [icon]="faCalendarAlt"></fa-icon>
+          {{ hackathon.start_date | date : 'MMM yyyy' }}
+        </span>
+        <div *ngIf="hackathon.community" class="community-badge">
+          <app-community-badge [community]="hackathon.community" [size]="'small'"></app-community-badge>
+        </div>
+      </div>
+    </div>
+  </com-card>
+</a>

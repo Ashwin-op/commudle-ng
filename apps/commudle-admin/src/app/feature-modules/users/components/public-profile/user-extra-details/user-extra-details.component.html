@@ -1,6 +1,9 @@
 <ng-container *ngIf="user">
   <app-user-basic-social [user]="user"></app-user-basic-social>
   <app-user-social [user]="user"></app-user-social>
+  <app-user-hackathon-participated [user]="user"></app-user-hackathon-participated>
+  <app-user-hackathon-won [user]="user"></app-user-hackathon-won>
+  <app-user-hackathon-speaker-judge-mentor [user]="user"></app-user-hackathon-speaker-judge-mentor>
   <app-user-work-history [user]="user"></app-user-work-history>
   <app-user-resume [user]="user"></app-user-resume>
   <app-user-contributions [user]="user"></app-user-contributions>

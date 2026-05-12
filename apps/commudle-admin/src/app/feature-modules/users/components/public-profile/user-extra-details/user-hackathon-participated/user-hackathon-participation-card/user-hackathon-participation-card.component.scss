@@ -1,0 +1,41 @@
+.participation-card {
+  @apply com-flex com-flex-col com-rounded-lg com-overflow-hidden com-border com-border-Bright-Gray com-no-underline com-bg-white com-h-full;
+  @apply com-transition-all com-duration-200;
+  @apply hover:com-shadow-md hover:com-border-primary-300;
+
+  .card-banner {
+    @apply com-relative com-w-full com-h-[90px] com-overflow-hidden com-bg-primary-100 com-flex-shrink-0;
+
+    img {
+      @apply com-w-full com-h-full com-object-cover;
+    }
+
+    &-placeholder {
+      @apply com-w-full com-h-full com-flex com-items-center com-justify-center com-text-primary-300 com-text-2xl;
+    }
+  }
+
+  .card-content {
+    @apply com-p-3 com-flex com-flex-col com-gap-1.5 com-flex-1;
+
+    .card-title {
+      @apply com-m-0 com-text-sm com-font-semibold com-text-Yankees-Blue com-line-clamp-2 com-leading-snug;
+    }
+
+    .card-meta {
+      @apply com-flex com-flex-col com-gap-0.5 com-mt-auto;
+
+      .meta-item {
+        @apply com-flex com-items-center com-gap-1 com-text-xs com-text-gray-500;
+
+        fa-icon {
+          @apply com-text-gray-400 com-text-xs;
+        }
+
+        &.community {
+          @apply com-text-primary-500 com-font-medium com-truncate;
+        }
+      }
+    }
+  }
+}

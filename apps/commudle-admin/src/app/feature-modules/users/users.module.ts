@@ -37,6 +37,11 @@ import { EmailPreferencesComponent } from './components/public-profile/user-basi
 import { UserBasicDetailsComponent } from './components/public-profile/user-basic-details/user-basic-details.component';
 import { UserBasicSocialComponent } from './components/public-profile/user-basic-social/user-basic-social.component';
 import { UserBadgesComponent } from './components/public-profile/user-extra-details/user-badges/user-badges.component';
+import { UserHackathonParticipationCardComponent } from './components/public-profile/user-extra-details/user-hackathon-participated/user-hackathon-participation-card/user-hackathon-participation-card.component';
+import { UserHackathonWinnerCardComponent } from './components/public-profile/user-extra-details/user-hackathon-won/user-hackathon-winner-card/user-hackathon-winner-card.component';
+import { UserHackathonParticipatedComponent } from './components/public-profile/user-extra-details/user-hackathon-participated/user-hackathon-participated.component';
+import { UserHackathonWonComponent } from './components/public-profile/user-extra-details/user-hackathon-won/user-hackathon-won.component';
+import { UserHackathonSpeakerJudgeMentorComponent } from './components/public-profile/user-extra-details/user-hackathon-speaker-judge-mentor/user-hackathon-speaker-judge-mentor.component';
 import { UserBuildCardComponent } from './components/public-profile/user-extra-details/user-contributions/user-build-card/user-build-card.component';
 import { UserCommunityCardComponent } from './components/public-profile/user-extra-details/user-contributions/user-community-card/user-community-card.component';
 import { UserContributionsComponent } from './components/public-profile/user-extra-details/user-contributions/user-contributions.component';
@@ -72,6 +77,8 @@ import { UserExpertTickComponent } from 'apps/commudle-admin/src/app/app-shared-
 import { RecaptchaModule } from 'ng-recaptcha-2';
 import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-components/help-section/help-section.component';
 import { SkeletonCardsComponent } from 'apps/commudle-admin/src/app/feature-modules/skeleton-screens/components/skeleton-cards/skeleton-cards.component';
+import { CommudleCardModule } from '@commudle/commudle-theme';
+
 @NgModule({
   declarations: [
     PublicProfileComponent,
@@ -93,6 +100,11 @@ import { SkeletonCardsComponent } from 'apps/commudle-admin/src/app/feature-modu
     UserNetworkComponent,
     UserNetworkListComponent,
     UserBadgesComponent,
+    UserHackathonParticipationCardComponent,
+    UserHackathonWinnerCardComponent,
+    UserHackathonParticipatedComponent,
+    UserHackathonWonComponent,
+    UserHackathonSpeakerJudgeMentorComponent,
     UserBasicSocialComponent,
     EditUserProfileComponent,
     EmailPreferencesComponent,
@@ -148,6 +160,8 @@ import { SkeletonCardsComponent } from 'apps/commudle-admin/src/app/feature-modu
     UserExpertTickComponent,
     RecaptchaModule,
     SkeletonCardsComponent,
+
+    CommudleCardModule,
   ],
   exports: [
     BasicUserProfileComponent,
