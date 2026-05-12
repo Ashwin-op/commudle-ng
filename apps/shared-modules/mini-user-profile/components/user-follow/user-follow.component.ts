@@ -8,12 +8,10 @@ import {
   OnDestroy,
   Output,
 } from '@angular/core';
-import { NbButtonAppearance, NbComponentStatus, NbDialogService } from '@commudle/theme';
-import { UserConsentsComponent } from 'apps/commudle-admin/src/app/app-shared-components/user-consents/user-consents.component';
+import { NbButtonAppearance, NbComponentStatus } from '@commudle/theme';
 import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.service';
 import { GoogleTagManagerService } from 'apps/commudle-admin/src/app/services/google-tag-manager.service';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
-import { ConsentTypesEnum } from 'apps/shared-models/enums/consent-types.enum';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
 import confetti from 'canvas-confetti';
 import { Subject, Subscription, takeUntil } from 'rxjs';
@@ -48,7 +46,6 @@ export class UserFollowComponent implements OnChanges, OnDestroy {
   constructor(
     private appUsersService: AppUsersService,
     private authWatchService: LibAuthwatchService,
-    private nbDialogService: NbDialogService,
     private gtm: GoogleTagManagerService,
     private changeDetectorRef: ChangeDetectorRef,
   ) {}
@@ -99,21 +96,9 @@ export class UserFollowComponent implements OnChanges, OnDestroy {
         y: event.clientY / window.innerHeight,
       };
     }
-    const dialogRef = this.nbDialogService.open(UserConsentsComponent, {
-      context: {
-        consentType: ConsentTypesEnum.UserFollow,
-        username: this.name,
-      },
-    });
-
-    dialogRef.componentRef.instance.consentOutput.subscribe((result) => {
-      dialogRef.close();
-      if (result === 'accepted') {
-        this.isFollowing = true;
-        this.triggerFollowConfetti();
-        this.toggleFollow();
-      }
-    });
+    this.isFollowing = true;
+    this.triggerFollowConfetti();
+    this.toggleFollow();
     this.gtm.dataLayerPushEvent('user-follow-initiate', { com_followee_id: this.userId });
   }
 
