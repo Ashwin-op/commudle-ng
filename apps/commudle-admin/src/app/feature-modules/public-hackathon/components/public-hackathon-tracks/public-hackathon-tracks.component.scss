@@ -1,61 +1,117 @@
 .main-column {
-  nb-card {
-    @apply com-ml-0;
+  .empty-state {
+    @apply com-text-center com-py-16;
 
-    nb-card-header {
-      .name {
-        @apply com-text-Yankees-Blue com-text-xl com-font-semibold com-my-0;
-      }
+    nb-icon {
+      @apply com-text-5xl com-text-gray-300 com-mb-4;
     }
 
-    nb-card-body {
-      .problem-statements {
-        @apply com-mt-3;
+    h3 {
+      @apply com-text-lg com-font-semibold com-text-Yankees-Blue com-m-0 com-mb-2;
+    }
 
-        .title {
-          @apply com-text-Yankees-Blue com-text-base com-font-semibold;
-        }
+    p {
+      @apply com-text-sm com-text-gray-500 com-m-0;
+    }
+  }
 
-        .problem-statement-item {
-          @apply com-flex com-gap-2 com-items-center com-py-2 com-px-3 com-my-1 com-bg-gray-100 com-rounded;
+  .tracks-container {
+    @apply com-flex com-flex-col com-gap-3 com-mt-4;
 
-          .display-id {
-            @apply com-font-bold com-text-primary-500;
-          }
+    .track-accordion {
+      @apply com-border com-border-solid com-border-gray-200 com-rounded-xl com-overflow-hidden com-transition-shadow com-bg-white;
 
-          .teams-info {
-            @apply com-text-sm com-text-gray-500;
-          }
-        }
-      }
+      &[open] {
+        @apply com-shadow-lg;
 
-      .problem-statement {
-        @apply com-mt-3;
-
-        .title {
-          @apply com-text-Yankees-Blue com-text-base com-font-semibold;
+        .track-summary {
+          @apply com-border-0 com-border-b com-border-solid com-border-gray-200 com-bg-white;
         }
       }
 
-      .prizes-section {
-        @apply com-mt-4;
+      .track-summary {
+        @apply com-flex com-items-center com-gap-3 com-px-5 com-py-4 com-cursor-pointer com-select-none com-transition-colors com-bg-white;
+        @apply hover:com-bg-gray-50;
+        list-style: none;
 
-        .prizes-title {
-          @apply com-text-Yankees-Blue com-text-base com-font-semibold;
+        &::-webkit-details-marker {
+          display: none;
         }
 
-        .prize-card {
-          @apply com-mt-2;
+        &::marker {
+          display: none;
+          content: '';
+        }
 
-          .hackathon-prize {
-            @apply com-flex com-gap-2 com-items-center;
+        .track-number {
+          @apply com-flex com-items-center com-justify-center com-w-7 com-h-7 com-rounded-full com-bg-primary-500 com-text-white com-font-bold com-text-sm com-flex-shrink-0;
+        }
 
-            .prize-name {
-              @apply com-text-Yankees-Blue com-text-lg com-font-bold;
+        .track-name {
+          @apply com-text-base com-font-semibold com-text-Yankees-Blue com-flex-1;
+        }
+
+        .ps-badge {
+          @apply com-text-xs com-font-medium com-px-2 com-py-0.5 com-rounded-full com-bg-primary-100 com-text-primary-700;
+        }
+      }
+
+      .track-content {
+        @apply com-flex com-flex-col com-gap-5 com-px-5 com-py-5;
+
+        .track-description {
+          @apply com-text-sm com-text-gray-700 com-leading-relaxed;
+        }
+
+        .track-section {
+          .section-label {
+            @apply com-text-xs com-font-semibold com-uppercase com-tracking-wider com-text-gray-400 com-mb-3;
+          }
+
+          .problem-content {
+            @apply com-text-sm com-text-gray-700 com-leading-relaxed com-p-4 com-bg-gray-50 com-rounded-lg;
+          }
+
+          .ps-list {
+            .ps-item {
+              @apply com-flex com-items-start com-gap-3 com-py-3 com-px-4 com-rounded-lg com-transition-colors;
+              @apply hover:com-bg-gray-50;
+
+              .ps-id {
+                @apply com-text-sm com-font-bold com-text-primary-500 com-flex-shrink-0 com-min-w-[40px];
+              }
+
+              .ps-title {
+                @apply com-text-sm com-text-gray-700;
+              }
             }
 
-            .prize-amount {
-              @apply com-text-blue-600 com-text-lg com-font-semibold;
+            .ps-item:not(:last-child) {
+              @apply com-border-0 com-border-b com-border-solid com-border-gray-100;
+            }
+          }
+
+          .prizes-grid {
+            @apply com-grid com-grid-cols-1 sm:com-grid-cols-2 com-gap-3;
+
+            .prize-item {
+              @apply com-p-4 com-rounded-lg com-border com-border-solid com-border-gray-200;
+
+              .prize-header {
+                @apply com-flex com-items-center com-justify-between com-gap-2 com-mb-2;
+
+                .prize-name {
+                  @apply com-text-sm com-font-semibold com-text-Yankees-Blue;
+                }
+
+                .prize-amount {
+                  @apply com-text-sm com-font-bold com-text-green-600 com-whitespace-nowrap;
+                }
+              }
+
+              .prize-description {
+                @apply com-text-xs com-text-gray-500 com-leading-relaxed;
+              }
             }
           }
         }

@@ -2,7 +2,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ICommunity, IHackathonTrack } from '@commudle/shared-models';
-import { countries_details } from '@commudle/shared-services';
+import { countries_details, SeoService } from '@commudle/shared-services';
 import { HackathonResponseGroupService } from 'apps/commudle-admin/src/app/services/hackathon-response-group.service';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
@@ -26,6 +26,7 @@ export class PublicHackathonTracksComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private hackathonService: HackathonService,
     private hrgService: HackathonResponseGroupService,
+    private seoService: SeoService,
   ) {}
 
   ngOnInit() {
@@ -33,6 +34,7 @@ export class PublicHackathonTracksComponent implements OnInit, OnDestroy {
       this.activatedRoute.parent.data.subscribe((data) => {
         this.hackathon = data.hackathon;
         this.community = data.community;
+        this.setSeo();
         this.getTracks();
       }),
     );
@@ -43,6 +45,14 @@ export class PublicHackathonTracksComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
+  setSeo() {
+    this.seoService.setTags(
+      `Tracks | ${this.hackathon.name}`,
+      `Explore tracks and problem statements for ${this.hackathon.name} hackathon`,
+      this.hackathon?.banner_image?.url || 'https://commudle.com/assets/images/commudle-logo192.png',
+    );
   }
 
   getTracks() {

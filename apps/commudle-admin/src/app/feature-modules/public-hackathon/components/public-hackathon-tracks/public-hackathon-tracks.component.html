@@ -1,47 +1,56 @@
 <div class="two-column-layout medium">
-  <div class="main-column com-mb-20">
+  <div class="main-column">
     <div *ngIf="!tracks">
       <commudle-loading-spinner></commudle-loading-spinner>
     </div>
-    <div *ngIf="tracks && tracks.length > 0">
-      <div *ngFor="let track of tracks" class="track-card">
-        <nb-card>
-          <nb-card-header>
-            <h3 class="name">{{ track.name }}</h3>
-          </nb-card-header>
-          <nb-card-body>
-            <div [innerHTML]="track.description"></div>
+    <div *ngIf="tracks && tracks.length === 0" class="empty-state">
+      <nb-icon icon="layers-outline"></nb-icon>
+      <h3>No Tracks Available</h3>
+      <p>Tracks and problem statements will be published soon.</p>
+    </div>
+    <div *ngIf="tracks && tracks.length > 0" class="tracks-container">
+      <details *ngFor="let track of tracks; let i = index" class="track-accordion" [attr.open]="i === 0 ? '' : null">
+        <summary class="track-summary">
+          <span class="track-number">{{ i + 1 }}</span>
+          <span class="track-name">{{ track.name }}</span>
+          <span *ngIf="track.hackathon_problem_statements?.length > 0" class="ps-badge">
+            {{ track.hackathon_problem_statements.length }} PS
+          </span>
+        </summary>
+        <div class="track-content">
+          <div *ngIf="track.description" class="track-description" [innerHTML]="track.description"></div>
 
-            <div class="problem-statements" *ngIf="track.hackathon_problem_statements?.length > 0">
-              <span class="title">Problem Statements:</span>
-              <div *ngFor="let ps of track.hackathon_problem_statements" class="problem-statement-item">
-                <span class="display-id" *ngIf="ps.display_id">{{ ps.display_id }}.</span>
-                <span [innerHTML]="ps.title"></span>
+          <div *ngIf="track.problem_statement" class="track-section">
+            <div class="section-label">Problem Statement</div>
+            <div class="problem-content" [innerHTML]="track.problem_statement"></div>
+          </div>
+
+          <div *ngIf="track.hackathon_problem_statements?.length > 0" class="track-section">
+            <div class="section-label">Problem Statements</div>
+            <div class="ps-list">
+              <div *ngFor="let ps of track.hackathon_problem_statements" class="ps-item">
+                <span class="ps-id">#{{ ps.display_id }}</span>
+                <span class="ps-title" [innerHTML]="ps.title"></span>
               </div>
             </div>
+          </div>
 
-            <div class="problem-statement" *ngIf="track.problem_statement">
-              <span class="title">Problem Statement:</span>
-              <div class="problem-content" [innerHTML]="track.problem_statement"></div>
+          <div *ngIf="track.hackathon_prizes?.length > 0" class="track-section">
+            <div class="section-label">Prizes</div>
+            <div class="prizes-grid">
+              <div *ngFor="let prize of track.hackathon_prizes" class="prize-item">
+                <div class="prize-header">
+                  <span class="prize-name">{{ prize.name }}</span>
+                  <span *ngIf="prize.prize_amount" class="prize-amount">
+                    {{ prize.currency_symbol }} {{ prize.prize_amount | number }}
+                  </span>
+                </div>
+                <div *ngIf="prize.description" class="prize-description" [innerHTML]="prize.description"></div>
+              </div>
             </div>
-
-            <div *ngIf="track.hackathon_prizes?.length > 0" class="prizes-section">
-              <span class="prizes-title">Prizes:</span>
-              <nb-card *ngFor="let prize of track.hackathon_prizes" class="prize-card">
-                <nb-card-body>
-                  <div class="hackathon-prize">
-                    <div class="prize-name">{{ prize.name }}</div>
-                    <div class="prize-amount" *ngIf="prize.prize_amount">
-                      PRIZE: {{ prize.currency_symbol }} {{ prize.prize_amount }}
-                    </div>
-                  </div>
-                  <div [innerHTML]="prize.description"></div>
-                </nb-card-body>
-              </nb-card>
-            </div>
-          </nb-card-body>
-        </nb-card>
-      </div>
+          </div>
+        </div>
+      </details>
     </div>
   </div>
   <div class="right-column">
