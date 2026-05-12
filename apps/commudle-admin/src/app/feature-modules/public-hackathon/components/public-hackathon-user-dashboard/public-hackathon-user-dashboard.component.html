@@ -1,5 +1,24 @@
 <div class="two-column-layout medium">
   <div class="main-column com-mr-2">
+    <!-- Pending Invites Section -->
+    <div *ngIf="pendingInvites.length > 0" class="pending-invites-section">
+      <nb-card status="info">
+        <nb-card-header>PENDING TEAM INVITES</nb-card-header>
+        <nb-card-body>
+          <div *ngFor="let invite of pendingInvites" class="invite-card">
+            <div class="invite-info">
+              <span class="invite-team-name">{{ invite.name }}</span>
+              <span class="invite-members">{{ invite.hackathon_user_responses?.length }} member(s)</span>
+            </div>
+            <div class="invite-actions">
+              <button nbButton status="success" size="small" (click)="acceptInvite(invite)">Accept</button>
+              <button nbButton status="danger" size="small" ghost (click)="rejectInvite(invite)">Reject</button>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+
     <div *ngIf="userTeamDetails && userTeamDetails.length > 1" class="team-selector">
       <label class="team-selector-label">
         Selected Team: <strong>{{ selectedTeam?.name }}</strong>
@@ -11,8 +30,13 @@
           class="team-select-large"
           fullWidth
         >
-          <option *ngFor="let team of userTeamDetails" [ngValue]="team.id">
-            {{ team.name }}
+          <option
+            *ngFor="let team of userTeamDetails"
+            [ngValue]="team.id"
+            [disabled]="team.registration_status !== EHackathonRegistrationStatus.ACCEPTED"
+          >
+            {{ team.name
+            }}{{ team.registration_status !== EHackathonRegistrationStatus.ACCEPTED ? ' (Not Accepted Yet)' : '' }}
           </option>
         </select>
       </div>
@@ -220,5 +244,29 @@
         (createOrUpdateProjectDetails)="submitProjectDetails($event, ref)"
       ></commudle-public-hackathon-project-details-form>
     </nb-card-body>
+  </nb-card>
+</ng-template>
+
+<ng-template #deactivateTeamDialog let-data let-ref="dialogRef">
+  <nb-card class="deactivate-team-dialog">
+    <nb-card-header>
+      <span>Deactivate Your Team?</span>
+      <button ghost nbButton size="small" (click)="ref.close()" shape="round">
+        <nb-icon icon="close"></nb-icon>
+      </button>
+    </nb-card-header>
+    <nb-card-body>
+      <p>
+        You already have your own team <strong>"{{ ownTeams[0]?.name }}"</strong>. To accept the invite to join
+        <strong>"{{ data.inviteTeam.name }}"</strong>, your current team will be deactivated.
+      </p>
+      <p>You can create a new team later if needed.</p>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton status="danger" (click)="deactivateOwnTeamAndAcceptInvite(data.hur, ref)">
+        Deactivate My Team & Accept Invite
+      </button>
+      <button nbButton ghost (click)="ref.close()">Cancel</button>
+    </nb-card-footer>
   </nb-card>
 </ng-template>

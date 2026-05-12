@@ -1000,6 +1000,8 @@ export const API_ROUTES = {
     COMPLETE_HUR_STATUS: 'api/v2/hackathon_user_response/complete_hur_status', //PUT
     GET_DATA_FORM_RESPONSES: 'api/v2/hackathon_user_response/get_data_form_responses', //GET
     REMOVE_TEAM_MEMBER: 'api/v2/hackathon_user_response/remove_team_member', //PUT
+    DEACTIVATE_OWN_TEAM: 'api/v2/hackathon_user_response/deactivate_own_team', //PUT
+    RESPOND_TO_TEAM_INVITE: 'api/v2/hackathon_user_response/respond_to_team_invite', //PUT
     TEAMMATE_INVITE_REMINDER_EMAIL: 'api/v2/hackathon_user_response/teammate_invite_reminder_email', //POST
     HACKATHON_TEAM_INDIVIDUAL_GENERAL_EMAIL: 'api/v2/hackathon_user_response/hackathon_team_individual_general_email', //POST
     HACKATHON_BULK_TEAM_GENERAL_EMAIL: 'api/v2/hackathon_user_response/hackathon_bulk_team_general_email', //POST

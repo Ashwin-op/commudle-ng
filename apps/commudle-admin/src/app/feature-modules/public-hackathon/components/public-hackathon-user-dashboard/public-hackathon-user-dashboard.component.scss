@@ -113,6 +113,42 @@ nb-card {
   }
 }
 
+.pending-invites-section {
+  @apply com-mb-4;
+
+  .invite-card {
+    @apply com-flex com-justify-between com-items-center com-py-3;
+
+    .invite-info {
+      @apply com-flex com-flex-col;
+
+      .invite-team-name {
+        @apply com-text-base com-font-semibold com-text-Yankees-Blue;
+      }
+
+      .invite-members {
+        @apply com-text-sm com-text-gray-500;
+      }
+    }
+
+    .invite-actions {
+      @apply com-flex com-gap-2;
+    }
+  }
+
+  .invite-card:not(:last-child) {
+    @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+  }
+}
+
+.deactivate-team-dialog {
+  @apply md:com-max-w-[30dvw];
+  nb-card-header,
+  nb-card-footer {
+    @apply com-flex com-justify-between com-items-center;
+  }
+}
+
 .track-details {
   @apply com-mb-4;
 

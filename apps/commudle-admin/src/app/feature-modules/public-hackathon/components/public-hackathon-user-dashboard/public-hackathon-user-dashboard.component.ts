@@ -13,12 +13,13 @@ import {
 } from '@commudle/shared-models';
 import { AuthService, CommunityChannelsService, ToastrService, SeoService } from '@commudle/shared-services';
 import { NbDialogService } from '@commudle/theme';
-import { faArrowRight, faUserMinus, faXmark, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faUserMinus, faXmark, faEdit, faEnvelope, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { HackathonResponseGroupService } from 'apps/commudle-admin/src/app/services/hackathon-response-group.service';
 import { HackathonUserResponsesService } from 'apps/commudle-admin/src/app/services/hackathon-user-responses.service';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
 import { IHackathonResponseGroup } from 'apps/shared-models/hackathon-response-group.model';
+import { ICurrentUser } from 'apps/shared-models/current_user.model';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 @Component({
   selector: 'commudle-public-hackathon-user-dashboard',
@@ -32,6 +33,8 @@ export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy 
     faUserMinus,
     faXmark,
     faEdit,
+    faEnvelope,
+    faPlus,
   };
   EHackathonRegistrationStatus = EHackathonRegistrationStatus;
   hackathon: IHackathon;
@@ -47,9 +50,13 @@ export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy 
   isSubmittingProblemStatement = false;
   selectedTeamId: number | null = null;
   selectedTeam: IHackathonTeam | null = null;
+  pendingInvites: IHackathonTeam[] = [];
+  ownTeams: IHackathonTeam[] = [];
+  currentUser: ICurrentUser;
 
   @ViewChild('editTeamMembersDialog') editTeamMembersDialogRef: TemplateRef<any>;
   @ViewChild('problemStatementDialog') problemStatementDialogRef: TemplateRef<any>;
+  @ViewChild('deactivateTeamDialog') deactivateTeamDialogRef: TemplateRef<any>;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -84,6 +91,7 @@ export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy 
           this.syncSelectedTeam();
         });
         this.authService.currentUser$.pipe(takeUntil(this.destroy$)).subscribe((currentUser) => {
+          this.currentUser = currentUser;
           if (currentUser) this.getHackathonCurrentRegistrationDetails();
         });
       }),
@@ -106,10 +114,24 @@ export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy 
         .subscribe((data: IHackathonTeam[]) => {
           if (data) {
             this.userTeamDetails = data;
+            this.categorizeTeams();
             this.syncSelectedTeam();
           }
         }),
     );
+  }
+
+  categorizeTeams() {
+    if (!this.userTeamDetails || !this.currentUser) return;
+    this.ownTeams = this.userTeamDetails.filter((team) => team.user_id === this.currentUser.id);
+    this.pendingInvites = this.userTeamDetails.filter((team) => {
+      const myHur = team.hackathon_user_responses?.find((hur) => hur.user_id === this.currentUser.id);
+      return myHur && myHur.invite_status === EInvitationStatus.INVITED && team.user_id !== this.currentUser.id;
+    });
+  }
+
+  getCurrentUserHur(team: IHackathonTeam): IHackathonUserResponse | undefined {
+    return team.hackathon_user_responses?.find((hur) => hur.user_id === this.currentUser?.id);
   }
 
   syncSelectedTeam() {
@@ -215,5 +237,49 @@ export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy 
           this.isSubmittingProblemStatement = false;
         }
       });
+  }
+
+  acceptInvite(team: IHackathonTeam) {
+    const myHur = team.hackathon_user_responses?.find((hur) => hur.user_id === this.currentUser.id);
+    if (!myHur) return;
+
+    if (this.ownTeams.length > 0) {
+      this.nbDialogService.open(this.deactivateTeamDialogRef, {
+        context: { inviteTeam: team, hur: myHur },
+      });
+    } else {
+      this.hackathonUserResponseService.respondToTeamInvite(myHur.id, 'accepted').subscribe((data) => {
+        if (data) {
+          this.toasterService.successDialog('Invite accepted successfully');
+          this.getHackathonCurrentRegistrationDetails();
+        }
+      });
+    }
+  }
+
+  rejectInvite(team: IHackathonTeam) {
+    const myHur = team.hackathon_user_responses?.find((hur) => hur.user_id === this.currentUser.id);
+    if (!myHur) return;
+
+    this.hackathonUserResponseService.respondToTeamInvite(myHur.id, 'rejected').subscribe((data) => {
+      if (data) {
+        this.toasterService.successDialog('Invite rejected');
+        this.getHackathonCurrentRegistrationDetails();
+      }
+    });
+  }
+
+  deactivateOwnTeamAndAcceptInvite(hur: IHackathonUserResponse, dialogRef: any) {
+    this.hackathonUserResponseService.deactivateOwnTeam(this.hackathon.id).subscribe({
+      next: () => {
+        this.hackathonUserResponseService.respondToTeamInvite(hur.id, 'accepted').subscribe((data) => {
+          if (data) {
+            this.toasterService.successDialog('Your team was deactivated and invite accepted');
+            dialogRef.close();
+            this.getHackathonCurrentRegistrationDetails();
+          }
+        });
+      },
+    });
   }
 }

@@ -193,7 +193,10 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
   switchTeam(index: number) {
     const selectedTeamGroup: IHackathonUserResponsesGroupByTeam = this.hackathonUserResponsesByTeam[index];
     if (selectedTeamGroup?.hackathon_user_responses?.length) {
-      this.hackathonUserResponse = selectedTeamGroup.hackathon_user_responses[0];
+      const currentUserHur = selectedTeamGroup.hackathon_user_responses.find(
+        (hur) => hur.user_id === this.currentUser?.id,
+      );
+      this.hackathonUserResponse = currentUserHur || selectedTeamGroup.hackathon_user_responses[0];
       this.current_user_is_team_lead = this.hackathonUserResponse.current_user_is_team_lead;
       this.selectedTeamIndex = index;
       this.selectedTeam = selectedTeamGroup;
@@ -202,8 +205,7 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
   //Call it from html when user clicks on team change
   switchTeamIndex(event: any) {
     this.switchTeam(event.value);
-    this.stepper.reset();
-    this.setStepTitle('Profile');
+    this.resetStepper();
   }
 
   createNewTeam() {
@@ -211,8 +213,15 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
     this.selectedTeamIndex = -1;
     this.selectedTeam = null;
     this.current_user_is_team_lead = true;
-    this.stepper.reset();
-    this.setStepTitle('Profile');
+    this.resetStepper();
+  }
+
+  private resetStepper() {
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+      this.setStepTitle('Profile');
+    });
   }
 
   getCurrentUserHur(team: IHackathonUserResponsesGroupByTeam): IHackathonUserResponse | undefined {
@@ -271,9 +280,11 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
           this.toastrService.successDialog('Details has been saved');
           this.hurService.updateHurStatusComplete(this.hackathonUserResponse.id).subscribe();
           this.router.navigate(['submitted'], { relativeTo: this.activatedRoute });
+          this.isUserDetailsSubmitting = false;
         } else {
           this.stepper.next();
           this.setStepTitle('Team Details');
+          this.isUserDetailsSubmitting = false;
         }
       },
       error: () => (this.isUserDetailsSubmitting = false),
@@ -288,9 +299,11 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
           this.toastrService.successDialog('Details has been saved');
           this.hurService.updateHurStatusComplete(this.hackathonUserResponse.id).subscribe();
           this.router.navigate(['submitted'], { relativeTo: this.activatedRoute });
+          this.isUserDetailsSubmitting = false;
         } else {
           this.stepper.next();
           this.setStepTitle('Team Details');
+          this.isUserDetailsSubmitting = false;
         }
       },
       error: () => (this.isUserDetailsSubmitting = false),

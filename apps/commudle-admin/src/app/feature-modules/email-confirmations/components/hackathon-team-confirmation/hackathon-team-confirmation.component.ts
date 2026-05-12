@@ -16,16 +16,21 @@ import {
   IUserStat,
 } from '@commudle/shared-models';
 import { Subject, Subscription, takeUntil } from 'rxjs';
-import { faArrowRight, faArrowUpRightFromSquare, faUsers } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowRight,
+  faArrowUpRightFromSquare,
+  faUsers,
+  faExclamationTriangle,
+} from '@fortawesome/free-solid-svg-icons';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { UserRolesUsersService } from 'apps/commudle-admin/src/app/services/user_roles_users.service';
 import { HackathonResponseGroupService } from 'apps/commudle-admin/src/app/services/hackathon-response-group.service';
 
 @Component({
-    selector: 'commudle-hackathon-team-confirmation',
-    templateUrl: './hackathon-team-confirmation.component.html',
-    styleUrls: ['./hackathon-team-confirmation.component.scss'],
-    standalone: false
+  selector: 'commudle-hackathon-team-confirmation',
+  templateUrl: './hackathon-team-confirmation.component.html',
+  styleUrls: ['./hackathon-team-confirmation.component.scss'],
+  standalone: false,
 })
 export class HackathonTeamConfirmationComponent implements OnInit {
   roleName = 'Hackathon Teammate Invitation';
@@ -42,6 +47,7 @@ export class HackathonTeamConfirmationComponent implements OnInit {
   faUsers = faUsers;
   faArrowUpRightFromSquare = faArrowUpRightFromSquare;
   faArrowRight = faArrowRight;
+  faExclamationTriangle = faExclamationTriangle;
   private destroy$ = new Subject<void>();
   subscriptions: Subscription[] = [];
   hackathonJudges = [];
@@ -51,6 +57,10 @@ export class HackathonTeamConfirmationComponent implements OnInit {
   hrgId: number;
   isLoadingCommunityLeaders = true;
   isLoadingJudges = true;
+  hasOwnTeam = false;
+  ownTeamName = '';
+  ownTeamId: number;
+  isDeactivatingTeam = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -156,11 +166,35 @@ export class HackathonTeamConfirmationComponent implements OnInit {
   }
 
   activateRole(token, inviteStatus?: EInvitationStatus) {
-    this.hurService.updateInvitationTokenHur(token, inviteStatus).subscribe((data) => {
-      this.showPageDetails = true;
-      if (data) {
-        this.hur = data;
-      }
+    this.hurService.updateInvitationTokenHur(token, inviteStatus).subscribe({
+      next: (data) => {
+        this.showPageDetails = true;
+        if (data) {
+          this.hur = data;
+        }
+      },
+      error: (err) => {
+        if (err?.error?.data?.has_own_team) {
+          this.hasOwnTeam = true;
+          this.ownTeamName = err.error.data.own_team_name;
+          this.ownTeamId = err.error.data.own_team_id;
+          this.showPageDetails = true;
+        }
+      },
+    });
+  }
+
+  deactivateOwnTeamAndAccept() {
+    this.isDeactivatingTeam = true;
+    this.hurService.deactivateOwnTeam(this.hackathon.id).subscribe({
+      next: () => {
+        this.hasOwnTeam = false;
+        this.activateRole(this.token, EInvitationStatus.ACCEPTED);
+        this.isDeactivatingTeam = false;
+      },
+      error: () => {
+        this.isDeactivatingTeam = false;
+      },
     });
   }
 

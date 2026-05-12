@@ -53,7 +53,10 @@
       </section>
 
       <button
-        *ngIf="hackathonUserResponse.current_user_is_team_lead || team.user_id === hackathonUserResponse.user_id"
+        *ngIf="
+          hackathonUserResponse &&
+          (hackathonUserResponse.current_user_is_team_lead || team?.user_id === hackathonUserResponse?.user_id)
+        "
         type="button"
         nbButton
         ghost

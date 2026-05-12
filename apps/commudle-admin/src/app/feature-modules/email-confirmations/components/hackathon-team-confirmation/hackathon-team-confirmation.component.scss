@@ -109,3 +109,13 @@
     @apply com-ml-3 com-w-5 com-h-5;
   }
 }
+
+.own-team-conflict {
+  .conflict-info {
+    @apply com-text-gray-600 com-text-base com-mb-6;
+  }
+
+  .conflict-actions {
+    @apply com-flex com-gap-4 com-items-center com-flex-wrap;
+  }
+}

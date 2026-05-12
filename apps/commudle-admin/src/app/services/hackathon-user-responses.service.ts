@@ -124,6 +124,25 @@ export class HackathonUserResponsesService {
     );
   }
 
+  deactivateOwnTeam(hackathonId): Observable<boolean> {
+    return this.http.put<boolean>(
+      this.apiRoutesService.getRoute(API_ROUTES.HACKATHON_USER_RESPONSE.DEACTIVATE_OWN_TEAM),
+      {
+        hackathon_id: hackathonId,
+      },
+    );
+  }
+
+  respondToTeamInvite(hackathonUserResponseId, inviteStatus: string): Observable<IHackathonUserResponse> {
+    return this.http.put<IHackathonUserResponse>(
+      this.apiRoutesService.getRoute(API_ROUTES.HACKATHON_USER_RESPONSE.RESPOND_TO_TEAM_INVITE),
+      {
+        hackathon_user_response_id: hackathonUserResponseId,
+        invite_status: inviteStatus,
+      },
+    );
+  }
+
   individualTeamEmail(hackathonTeamId: number, emailData): Observable<boolean> {
     return this.http.post<boolean>(
       this.apiRoutesService.getRoute(API_ROUTES.HACKATHON_USER_RESPONSE.HACKATHON_TEAM_INDIVIDUAL_GENERAL_EMAIL),
