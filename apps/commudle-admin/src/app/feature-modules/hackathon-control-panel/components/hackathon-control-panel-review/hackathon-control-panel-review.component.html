@@ -32,31 +32,128 @@
       </div>
 
       <div class="header-actions">
+        <!-- Filters Row -->
+        <div class="filters-section">
+          <div class="filter-controls">
+            <select
+              class="filter-select"
+              (change)="onRoundChange($event)"
+              [(ngModel)]="selectedRoundIdForFilter"
+              [ngClass]="{ active: selectedRoundIdForFilter !== '' }"
+            >
+              <option value="" selected disabled>Round</option>
+              <option *ngFor="let round of hackathonRounds" [value]="round.id">{{ round.name }}</option>
+            </select>
+
+            <select
+              class="filter-select"
+              (change)="onStatusChange($event)"
+              [(ngModel)]="selectedStatusForFilter"
+              [ngClass]="{ active: selectedStatusForFilter !== '' }"
+            >
+              <option value="" selected disabled>Status</option>
+              <option *ngFor="let status of EHackathonRegistrationStatus | keyvalue" [value]="status.value">
+                {{ status.value | capitalizeAndRemoveUnderscore }}
+              </option>
+            </select>
+
+            <select
+              class="filter-select"
+              (change)="onOfflineInviteStatusChange($event)"
+              [(ngModel)]="selectedOfflineInviteStatusForFilter"
+              [ngClass]="{ active: selectedOfflineInviteStatusForFilter !== '' }"
+            >
+              <option value="" selected disabled>RSVP Status</option>
+              <option [value]="EOfflineInviteStatus.PENDING">Pending</option>
+              <option [value]="EOfflineInviteStatus.SHORTLISTED">Shortlisted</option>
+              <option [value]="EOfflineInviteStatus.CONFIRMED">Confirmed</option>
+              <option [value]="EOfflineInviteStatus.CANCELLED">Cancelled</option>
+            </select>
+
+            <select
+              class="filter-select"
+              (change)="onTrackChange($event)"
+              [(ngModel)]="selectedTrackForFilter"
+              [ngClass]="{ active: selectedTrackForFilter !== '' }"
+            >
+              <option value="" selected disabled>Track</option>
+              <option *ngFor="let track of hackathonTracks" [value]="track.id">{{ track.name }}</option>
+            </select>
+
+            <select
+              class="filter-select"
+              (change)="onProblemStatementChange($event)"
+              [(ngModel)]="selectProblemStatementForFilter"
+              [ngClass]="{ active: selectProblemStatementForFilter !== '' }"
+            >
+              <option value="" selected disabled>Problem Statement</option>
+              <option *ngFor="let problemStatement of hackathonProblemStatements" [value]="problemStatement.id">
+                #{{ problemStatement.display_id }}
+              </option>
+            </select>
+
+            <select
+              class="filter-select"
+              (change)="onSelectWinnerChange($event)"
+              [(ngModel)]="showOnlyWinnerEntry"
+              [ngClass]="{ active: showOnlyWinnerEntry !== null }"
+            >
+              <option [value]="false">All Teams</option>
+              <option [value]="true">Winners Only</option>
+            </select>
+
+            <select
+              class="filter-select"
+              (change)="onWithCommunityBuildChange($event)"
+              [(ngModel)]="withCommunityBuild"
+              [ngClass]="{ active: withCommunityBuild !== null }"
+            >
+              <option [value]="null" selected>Project: All</option>
+              <option [value]="true">Submitted</option>
+              <option [value]="false">Not Submitted</option>
+            </select>
+
+            <select
+              class="filter-select"
+              (change)="onWithSubmissionsChange($event)"
+              [(ngModel)]="withSubmissions"
+              [ngClass]="{ active: withSubmissions !== null }"
+            >
+              <option [value]="null" selected>PPT: All</option>
+              <option [value]="true">Submitted</option>
+              <option [value]="false">Not Submitted</option>
+            </select>
+
+            @if(selectedStatusForFilter || selectedRoundIdForFilter || selectedTrackForFilter ||
+            selectProblemStatementForFilter || selectedOfflineInviteStatusForFilter || withSubmissions !== null ||
+            withCommunityBuild !== null){
+            <button class="clear-button" (click)="clearAllFilter()">Clear</button>
+            }
+            <button *ngIf="sortByTotalScore" class="clear-button" (click)="clearSorting()">Clear Sort</button>
+          </div>
+        </div>
+
+        <!-- Actions Row -->
         <div class="action-buttons" *ngIf="hackathon && userResponses && userResponses.length > 0">
           <button
             nbButton
             status="primary"
-            (click)="openSendApplicationStatusEmailsDialogBox(sendApplicationStatusEmails)"
             size="small"
+            (click)="openSendApplicationStatusEmailsDialogBox(sendApplicationStatusEmails)"
           >
-            Send Application Status Emails
+            Status Emails
           </button>
 
-          <button nbButton status="primary" (click)="openRoundSelectionUpdateEmailDialogBox()" size="small">
-            Send Round Selection Email
+          <button nbButton status="primary" size="small" (click)="openRoundSelectionUpdateEmailDialogBox()">
+            Round Email
           </button>
 
-          <button nbButton status="primary" (click)="openBulkRsvpEmailDialog()" size="small">
-            Send RSVP to All Teams
-          </button>
+          <button nbButton status="primary" size="small" (click)="openBulkRsvpEmailDialog()">RSVP All</button>
 
-          <button nbButton status="primary" (click)="openBulkEntryPassEmailDialog()" size="small">
-            Send Entry Passes to All
-          </button>
+          <button nbButton status="primary" size="small" (click)="openBulkEntryPassEmailDialog()">Entry Passes</button>
 
-          <button nbButton status="primary" (click)="sendTeamDetailsCsv()" size="small">
-            <fa-icon [icon]="icons.faEnvelope"></fa-icon>&nbsp;
-            <span>Export CSV</span>
+          <button nbButton status="primary" size="small" (click)="sendTeamDetailsCsv()">
+            <fa-icon [icon]="icons.faEnvelope"></fa-icon>&nbsp; Export CSV
           </button>
 
           <a
@@ -73,6 +170,15 @@
             <button nbButton status="primary" size="small">Select Winner</button>
           </a>
 
+          <select class="filter-select bulk-operations" (change)="onBulkOperationChange($event, bulkOperationDialog)">
+            <option value="" selected disabled>Bulk Operations</option>
+            <option value="application_status">Change Status</option>
+            <option value="invite_status">Change RSVP</option>
+            <option value="round">Change Round</option>
+            <option value="track">Change Track</option>
+            <option value="problem_statement">Change PS</option>
+          </select>
+
           <button
             *ngIf="selectedTeamIds.size > 0"
             nbButton
@@ -80,145 +186,10 @@
             size="small"
             (click)="sendEmailToSelectedTeams()"
           >
-            <fa-icon [icon]="icons.faEnvelope"></fa-icon> &nbsp;
-            <span>Email {{ selectedTeamIds.size }} Team{{ selectedTeamIds.size > 1 ? 's' : '' }}</span>
+            <fa-icon [icon]="icons.faEnvelope"></fa-icon>&nbsp; Email {{ selectedTeamIds.size }} Team{{
+              selectedTeamIds.size > 1 ? 's' : ''
+            }}
           </button>
-        </div>
-
-        <!-- Filters and Actions Section -->
-        <div class="filters-section">
-          <!-- Filter Dropdowns Container -->
-          <div class="filter-controls">
-            <!-- Round Filter -->
-            <select
-              class="filter-select"
-              (change)="onRoundChange($event)"
-              [(ngModel)]="selectedRoundIdForFilter"
-              [ngClass]="{ active: selectedRoundIdForFilter !== '' }"
-            >
-              <option value="" selected disabled>Filter: Round</option>
-              <option *ngFor="let round of hackathonRounds" [value]="round.id">{{ round.name }}</option>
-            </select>
-
-            <!-- Application Status Filter -->
-            <select
-              class="filter-select"
-              (change)="onStatusChange($event)"
-              [(ngModel)]="selectedStatusForFilter"
-              [ngClass]="{ active: selectedStatusForFilter !== '' }"
-            >
-              <option value="" selected disabled>Filter: Application Status</option>
-              <option *ngFor="let status of EHackathonRegistrationStatus | keyvalue" [value]="status.value">
-                {{ status.value | capitalizeAndRemoveUnderscore }}
-              </option>
-            </select>
-
-            <!-- Offline Invite Status Filter -->
-            <select
-              class="filter-select"
-              (change)="onOfflineInviteStatusChange($event)"
-              [(ngModel)]="selectedOfflineInviteStatusForFilter"
-              [ngClass]="{ active: selectedOfflineInviteStatusForFilter !== '' }"
-            >
-              <option value="" selected disabled>Filter: Offline Invite Status</option>
-              <option [value]="EOfflineInviteStatus.PENDING">
-                {{ EOfflineInviteStatus.PENDING | capitalizeAndRemoveUnderscore }}
-              </option>
-              <option [value]="EOfflineInviteStatus.SHORTLISTED">
-                {{ EOfflineInviteStatus.SHORTLISTED | capitalizeAndRemoveUnderscore }}
-              </option>
-              <option [value]="EOfflineInviteStatus.CONFIRMED">
-                {{ EOfflineInviteStatus.CONFIRMED | capitalizeAndRemoveUnderscore }}
-              </option>
-              <option [value]="EOfflineInviteStatus.CANCELLED">
-                {{ EOfflineInviteStatus.CANCELLED | capitalizeAndRemoveUnderscore }}
-              </option>
-            </select>
-
-            <!-- Track Filter -->
-            <select
-              class="filter-select"
-              (change)="onTrackChange($event)"
-              [(ngModel)]="selectedTrackForFilter"
-              [ngClass]="{ active: selectedTrackForFilter !== '' }"
-            >
-              <option value="" selected disabled>Filter: Track</option>
-              <option *ngFor="let track of hackathonTracks" [value]="track.id">{{ track.name }}</option>
-            </select>
-
-            <!-- Problem Statement Filter -->
-            <select
-              class="filter-select"
-              (change)="onProblemStatementChange($event)"
-              [(ngModel)]="selectProblemStatementForFilter"
-              [ngClass]="{ active: selectProblemStatementForFilter !== '' }"
-            >
-              <option value="" selected disabled>Filter: Problem Statement</option>
-              <option *ngFor="let problemStatement of hackathonProblemStatements" [value]="problemStatement.id">
-                #{{ problemStatement.display_id }}
-              </option>
-            </select>
-
-            <!-- Winners Filter -->
-            <select
-              class="filter-select"
-              (change)="onSelectWinnerChange($event)"
-              [(ngModel)]="showOnlyWinnerEntry"
-              [ngClass]="{ active: showOnlyWinnerEntry !== null }"
-            >
-              <option [value]="false">Show All</option>
-              <option [value]="true">Winners Only</option>
-            </select>
-
-            <!-- Project Submission Filter -->
-            <select
-              class="filter-select"
-              (change)="onWithCommunityBuildChange($event)"
-              [(ngModel)]="withCommunityBuild"
-              [ngClass]="{ active: withCommunityBuild !== null }"
-            >
-              <option [value]="null" selected>Project: All</option>
-              <option [value]="true">Project: Submitted</option>
-              <option [value]="false">Project: Not Submitted</option>
-            </select>
-
-            <!-- PPT Submission Filter -->
-            <select
-              class="filter-select"
-              (change)="onWithSubmissionsChange($event)"
-              [(ngModel)]="withSubmissions"
-              [ngClass]="{ active: withSubmissions !== null }"
-            >
-              <option [value]="null" selected>PPT: All</option>
-              <option [value]="true">PPT: Submitted</option>
-              <option [value]="false">PPT: Not Submitted</option>
-            </select>
-
-            <!-- Bulk Operations Dropdown -->
-            <select
-              class="filter-select bulk-operations"
-              *ngIf="hackathon && userResponses && userResponses.length > 0"
-              (change)="onBulkOperationChange($event, bulkOperationDialog)"
-            >
-              <option value="" selected disabled>Bulk Operations</option>
-              <option value="application_status">Change Application Status</option>
-              <option value="invite_status">Change Offline Invite Status</option>
-              <option value="round">Change Round</option>
-              <option value="track">Change Track</option>
-              <option value="problem_statement">Change Problem Statement</option>
-            </select>
-          </div>
-
-          <!-- Clear Filters and Sorting Buttons -->
-          @if(selectedStatusForFilter || selectedRoundIdForFilter || selectedTrackForFilter ||
-          selectProblemStatementForFilter || selectedOfflineInviteStatusForFilter || withSubmissions !== null ||
-          withCommunityBuild !== null){
-          <div class="filter-actions">
-            <button class="clear-button" (click)="clearAllFilter()">Clear Filters</button>
-
-            <button class="clear-button" (click)="clearSorting()" *ngIf="sortByTotalScore">Clear Sorting</button>
-          </div>
-          }
         </div>
       </div>
     </div>
@@ -239,13 +210,13 @@
         <table *ngIf="userResponses && userResponses.length > 0; else noUserResponse">
           <tr>
             <th width="18%">
-              <input
+              <!-- <input
                 type="checkbox"
                 [checked]="isAllSelected"
                 (change)="toggleSelectAll()"
                 class="select-all-checkbox"
                 title="Select All"
-              />
+              /> -->
               Name
             </th>
             <th width="8%">
@@ -303,13 +274,13 @@
               <div class="team-details">
                 <div class="team-name">
                   <span class="com-flex com-gap-2 com-items-center">
-                    <input
+                    <!-- <input
                       type="checkbox"
                       [checked]="selectedTeamIds.has(userResponse.team.id)"
                       (change)="toggleTeamSelection(userResponse.team.id)"
                       (click)="$event.stopPropagation()"
                       class="team-checkbox"
-                    />
+                    /> -->
                     <span
                       ><span class="id"> (#{{ userResponse.team.id }})</span> {{ userResponse.team.name }}</span
                     >
