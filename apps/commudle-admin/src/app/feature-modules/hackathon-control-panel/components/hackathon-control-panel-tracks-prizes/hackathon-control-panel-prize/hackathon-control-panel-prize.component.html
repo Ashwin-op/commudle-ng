@@ -48,19 +48,12 @@
           </td>
           <td [attr.data-label]="'Actions'">
             <div class="action-buttons">
-              <button
-                nbButton
-                ghost
-                size="tiny"
-                status="primary"
-                (click)="openPrizeFormDialogBox(addPrizeDialogBox, prize, i)"
-              >
+              <button nbButton ghost status="primary" (click)="openPrizeFormDialogBox(addPrizeDialogBox, prize, i)">
                 Edit
               </button>
               <button
                 nbButton
                 ghost
-                size="tiny"
                 status="danger"
                 (click)="confirmDeleteDialogBox(deletePrizeDialogBox, prize.id, i)"
               >
@@ -69,7 +62,7 @@
             </div>
           </td>
           <td [attr.data-label]="'Manage'">
-            <button nbButton size="tiny" status="primary" outline (click)="openWinnersDialog(winnersDialogBox, prize)">
+            <button nbButton status="primary" outline (click)="openWinnersDialog(winnersDialogBox, prize)">
               Add Winners
             </button>
           </td>
@@ -331,95 +324,118 @@
           </button>
         </div>
       </div>
-      <commudle-alert
-        *ngIf="selectedPrize?.winners_count >= selectedPrize?.no_of_winners"
-        [warning]="
-          'All ' +
-          selectedPrize?.no_of_winners +
-          ' winner ' +
-          (selectedPrize?.no_of_winners === 1 ? 'slot' : 'slots') +
-          ' filled. Remove a winner or increase the limit to add more.'
-        "
-      ></commudle-alert>
+      <div class="com-mx-4 com-mt-1">
+        <commudle-alert
+          *ngIf="selectedPrize?.winners_count >= selectedPrize?.no_of_winners"
+          [warning]="
+            'All ' +
+            selectedPrize?.no_of_winners +
+            ' winner ' +
+            (selectedPrize?.no_of_winners === 1 ? 'slot' : 'slots') +
+            ' filled. Remove a winner or increase the limit to add more.'
+          "
+        ></commudle-alert>
+      </div>
       <div class="teams-list">
         <app-loading-spinner *ngIf="isWinnerLoading"></app-loading-spinner>
         <div *ngIf="!isWinnerLoading && hackathonUserResponses?.length === 0" class="empty-state">No teams found.</div>
-        <div
-          *ngFor="let userResponse of hackathonUserResponses; let i = index"
-          class="team-row"
-          [class.is-current-winner]="userResponse.team.prize_selected"
-        >
-          <div class="team-main">
-            <div class="team-name-line">
-              <span class="team-name">{{ userResponse.team.name }}</span>
-            </div>
-            <div class="team-extra">
-              <span *ngIf="userResponse.team.round" class="round-chip">
-                <fa-icon [icon]="icons.faGamepad"></fa-icon>
-                {{ userResponse.team.round.name }}
-              </span>
-              <a
-                *ngIf="userResponse.team.community_build"
-                class="project-chip"
-                [routerLink]="['/builds', userResponse.team.community_build.slug]"
-                target="_blank"
-              >
-                <fa-icon [icon]="icons.faLaptopCode"></fa-icon>
-                {{ userResponse.team.community_build.name }}
-              </a>
-              <span *ngIf="userResponse.team.problem_statement" class="ps-chip">
-                <fa-icon [icon]="icons.faLightbulb"></fa-icon>
-                #{{ userResponse.team.problem_statement.display_id }}
-              </span>
-              <a
-                *ngFor="let submission of userResponse.team.hackathon_team_round_submissions"
-                class="ppt-chip"
-                [href]="submission.file_attachment?.url"
-                target="_blank"
-              >
-                <fa-icon [icon]="icons.faFileImage"></fa-icon>
-                {{ submission.round?.name || 'PPT' }}
-              </a>
-              <ng-container *ngFor="let hw of userResponse.team.hackathon_winners">
-                <span class="other-prize-chip" *ngIf="hw.hackathon_prize.id !== selectedPrize?.id">
-                  🏆 {{ hw.hackathon_prize.name }}
+        <table *ngIf="!isWinnerLoading && hackathonUserResponses?.length > 0" class="winners-table">
+          <thead>
+            <tr>
+              <th>Team</th>
+              <th>Round</th>
+              <th>Track / PS</th>
+              <th>Submissions</th>
+              <th>Prizes</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let userResponse of hackathonUserResponses; let i = index"
+              [class.is-current-winner]="userResponse.team.prize_selected"
+            >
+              <td class="team-name-cell">
+                <span class="team-name">{{ userResponse.team.name }}</span>
+              </td>
+              <td>
+                <span *ngIf="userResponse.team.round" class="round-chip">
+                  {{ userResponse.team.round.name }}
                 </span>
-              </ng-container>
-            </div>
-          </div>
-          <div class="team-action">
-            <ng-container *ngIf="userResponse.team.prize_selected; else selectBtn">
-              <span class="current-winner-badge"> ✓ Winner for this prize </span>
-              <button
-                nbButton
-                ghost
-                size="tiny"
-                status="danger"
-                (click)="
-                  openRemoveWinnerConfirmation(
-                    removeWinnerDialogBox,
-                    getWinnerIdForCurrentPrize(userResponse.team),
-                    i,
-                    getWinnerIndexForCurrentPrize(userResponse.team)
-                  )
-                "
-              >
-                Remove
-              </button>
-            </ng-container>
-            <ng-template #selectBtn>
-              <button
-                nbButton
-                status="primary"
-                size="small"
-                [disabled]="selectedPrize?.winners_count >= selectedPrize?.no_of_winners"
-                (click)="openAddWinnerConfirmation(addWinnerDialogBox, userResponse.team, i)"
-              >
-                Select Winner
-              </button>
-            </ng-template>
-          </div>
-        </div>
+                <span *ngIf="!userResponse.team.round">—</span>
+              </td>
+              <td>
+                <span *ngIf="userResponse.team.problem_statement" class="ps-chip">
+                  #{{ userResponse.team.problem_statement.display_id }}
+                </span>
+                <span *ngIf="!userResponse.team.problem_statement">—</span>
+              </td>
+              <td class="submissions-cell">
+                <a
+                  *ngIf="userResponse.team.community_build"
+                  class="project-chip"
+                  [routerLink]="['/builds', userResponse.team.community_build.slug]"
+                  target="_blank"
+                >
+                  <fa-icon [icon]="icons.faLaptopCode"></fa-icon> Project
+                </a>
+                <a
+                  *ngFor="let submission of userResponse.team.hackathon_team_round_submissions"
+                  class="ppt-chip"
+                  [href]="submission.file_attachment?.url"
+                  target="_blank"
+                >
+                  <fa-icon [icon]="icons.faFileImage"></fa-icon> {{ submission.round?.name || 'PPT' }}
+                </a>
+                <span
+                  *ngIf="
+                    !userResponse.team.community_build && !userResponse.team.hackathon_team_round_submissions?.length
+                  "
+                  >—</span
+                >
+              </td>
+              <td>
+                <ng-container *ngFor="let hw of userResponse.team.hackathon_winners">
+                  <span class="other-prize-chip" *ngIf="hw.hackathon_prize.id !== selectedPrize?.id">
+                    🏆 {{ hw.hackathon_prize.name }}
+                  </span>
+                </ng-container>
+              </td>
+              <td class="action-cell">
+                <ng-container *ngIf="userResponse.team.prize_selected; else selectBtn">
+                  <span class="current-winner-badge">✓ Winner</span>
+                  <button
+                    nbButton
+                    ghost
+                    size="tiny"
+                    status="danger"
+                    (click)="
+                      openRemoveWinnerConfirmation(
+                        removeWinnerDialogBox,
+                        getWinnerIdForCurrentPrize(userResponse.team),
+                        i,
+                        getWinnerIndexForCurrentPrize(userResponse.team)
+                      )
+                    "
+                  >
+                    Remove
+                  </button>
+                </ng-container>
+                <ng-template #selectBtn>
+                  <button
+                    nbButton
+                    status="primary"
+                    size="small"
+                    [disabled]="selectedPrize?.winners_count >= selectedPrize?.no_of_winners"
+                    (click)="openAddWinnerConfirmation(addWinnerDialogBox, userResponse.team, i)"
+                  >
+                    Select
+                  </button>
+                </ng-template>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </nb-card-body>
     <nb-card-footer>

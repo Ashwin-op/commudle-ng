@@ -261,81 +261,75 @@ nb-card-footer {
         @apply com-text-center com-py-12 com-text-Auro-Metal-Saurus;
       }
 
-      .team-row {
-        @apply com-flex com-items-center com-justify-between com-gap-4 com-px-5 com-py-3 com-transition-colors;
-        border-bottom: 1px solid var(--divider-color, rgba(128, 128, 128, 0.08));
+      .winners-table {
+        @apply com-w-full com-border-collapse;
 
-        &:hover {
-          background-color: var(--option-background-color, rgba(128, 128, 128, 0.05));
-        }
+        thead {
+          tr {
+            @apply com-border-0 com-border-b com-border-solid com-border-gray-200;
 
-        &.is-current-winner {
-          border-left: 3px solid;
-          @apply com-border-green-500 com-bg-green-50;
-          .team-name-line {
-            @apply com-text-tYankees-Blue;
-          }
-        }
-
-        .team-main {
-          @apply com-flex com-flex-col com-gap-1 com-min-w-0 com-flex-1;
-
-          .team-name-line {
-            @apply com-flex com-items-center com-gap-2 com-flex-wrap;
-
-            .team-name {
-              @apply com-font-semibold com-text-sm;
-            }
-          }
-
-          .team-extra {
-            @apply com-flex com-flex-wrap com-gap-2 com-items-center;
-
-            .round-chip {
-              @apply com-text-xs com-px-2 com-py-0.5 com-rounded com-font-medium com-bg-primary-100 com-text-primary-700 com-flex com-items-center com-gap-1;
-
-              fa-icon {
-                @apply com-text-xs;
-              }
-            }
-
-            .project-chip {
-              @apply com-text-xs com-text-primary-600 com-flex com-items-center com-gap-1 com-no-underline com-px-2 com-py-0.5 com-rounded;
-              @apply hover:com-underline hover:com-bg-primary-100;
-
-              fa-icon {
-                @apply com-text-xs;
-              }
-            }
-
-            .ps-chip {
-              @apply com-text-xs com-px-2 com-py-0.5 com-rounded com-font-medium com-flex com-items-center com-gap-1;
-              @apply com-bg-indigo-100 com-text-indigo-700;
-
-              fa-icon {
-                @apply com-text-xs;
-              }
-            }
-
-            .ppt-chip {
-              @apply com-text-xs com-px-2 com-py-0.5 com-rounded com-font-medium com-flex com-items-center com-gap-1 com-no-underline;
-              @apply com-bg-green-100 com-text-green-700;
-              @apply hover:com-underline hover:com-bg-green-200;
-
-              fa-icon {
-                @apply com-text-xs;
-              }
-            }
-
-            .other-prize-chip {
-              @apply com-text-xs com-px-2 com-py-0.5 com-rounded com-font-medium;
-              @apply com-bg-yellow-100 com-text-yellow-800;
+            th {
+              @apply com-text-xs com-font-semibold com-text-gray-500 com-uppercase com-text-left com-px-4 com-py-3;
             }
           }
         }
 
-        .team-action {
-          @apply com-flex com-items-center com-gap-2 com-flex-shrink-0;
+        tbody {
+          tr {
+            @apply com-border-0 com-border-b com-border-solid com-border-gray-100 com-transition-colors;
+
+            &:hover {
+              @apply com-bg-gray-50;
+            }
+
+            &.is-current-winner {
+              @apply com-bg-green-50 com-border-0 com-border-l-3 com-border-solid com-border-l-green-500;
+              span {
+                @apply com-text-tYankees-Blue;
+              }
+            }
+
+            td {
+              @apply com-px-4 com-py-3 com-text-sm com-align-middle;
+            }
+          }
+        }
+
+        .team-name-cell {
+          .team-name {
+            @apply com-font-semibold com-text-Yankees-Blue;
+          }
+        }
+
+        .round-chip {
+          @apply com-text-xs com-px-2 com-py-0.5 com-rounded com-font-medium com-bg-primary-100 com-text-primary-700;
+        }
+
+        .ps-chip {
+          @apply com-text-xs com-px-2 com-py-0.5 com-rounded com-font-medium com-bg-indigo-100 com-text-indigo-700;
+        }
+
+        .submissions-cell {
+          @apply com-flex com-flex-wrap com-gap-1 com-items-center;
+        }
+
+        .project-chip {
+          @apply com-text-xs com-text-primary-600 com-flex com-items-center com-gap-1 com-no-underline com-px-2 com-py-0.5 com-rounded;
+          @apply hover:com-underline hover:com-bg-primary-100;
+        }
+
+        .ppt-chip {
+          @apply com-text-xs com-px-2 com-py-0.5 com-rounded com-font-medium com-flex com-items-center com-gap-1 com-no-underline;
+          @apply com-bg-green-100 com-text-green-700;
+          @apply hover:com-underline hover:com-bg-green-200;
+        }
+
+        .other-prize-chip {
+          @apply com-text-xs com-px-2 com-py-0.5 com-rounded com-font-medium com-bg-yellow-100 com-text-yellow-800;
+        }
+
+        .action-cell {
+          @apply com-flex com-items-center com-gap-2;
 
           .current-winner-badge {
             @apply com-text-xs com-font-semibold com-text-green-700 com-bg-green-100 com-px-2 com-py-1 com-rounded;
@@ -352,12 +346,10 @@ nb-card-footer {
   @media (max-width: 768px) {
     nb-card-body {
       .teams-list {
-        .team-row {
-          @apply com-flex-col com-items-start com-px-3;
+        @apply com-overflow-x-auto;
 
-          .team-action {
-            @apply com-w-full com-justify-end com-mt-2;
-          }
+        .winners-table {
+          @apply com-min-w-[700px];
         }
       }
     }
