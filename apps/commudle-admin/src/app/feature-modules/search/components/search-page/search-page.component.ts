@@ -94,6 +94,7 @@ export class SearchPageComponent implements OnInit, OnDestroy {
     this.activatedRoute.params.subscribe((params: Params) => {
       this.searchLoader = true;
       this.query = params.query;
+      console.log(this.query, 'query');
       this.updateSeoTitle();
       this.setSchema();
 
@@ -101,6 +102,11 @@ export class SearchPageComponent implements OnInit, OnDestroy {
       this.selectedFilters = ['All'];
       this.results = [];
       this.total = 0;
+      if (!this.query) {
+        this.clearResults();
+        this.searchLoader = false;
+        return;
+      }
       this.getAllData();
       this.getHeaderData();
     });
@@ -379,6 +385,10 @@ export class SearchPageComponent implements OnInit, OnDestroy {
   }
 
   getAllData() {
+    if (!this.query) {
+      this.searchLoader = false;
+      return;
+    }
     this.searchLoader = true;
     if (this.selectedFilters.includes('All')) {
       this.getUsers();
