@@ -11,7 +11,7 @@ import {
   IHackathonTeam,
   IHackathonUserResponse,
 } from '@commudle/shared-models';
-import { AuthService, CommunityChannelsService, ToastrService } from '@commudle/shared-services';
+import { AuthService, CommunityChannelsService, ToastrService, SeoService } from '@commudle/shared-services';
 import { NbDialogService } from '@commudle/theme';
 import { faArrowRight, faUserMinus, faXmark, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { HackathonResponseGroupService } from 'apps/commudle-admin/src/app/services/hackathon-response-group.service';
@@ -21,10 +21,10 @@ import { IHackathon } from 'apps/shared-models/hackathon.model';
 import { IHackathonResponseGroup } from 'apps/shared-models/hackathon-response-group.model';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 @Component({
-    selector: 'commudle-public-hackathon-user-dashboard',
-    templateUrl: './public-hackathon-user-dashboard.component.html',
-    styleUrls: ['./public-hackathon-user-dashboard.component.scss'],
-    standalone: false
+  selector: 'commudle-public-hackathon-user-dashboard',
+  templateUrl: './public-hackathon-user-dashboard.component.html',
+  styleUrls: ['./public-hackathon-user-dashboard.component.scss'],
+  standalone: false,
 })
 export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy {
   icons = {
@@ -62,6 +62,7 @@ export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy 
     private nbDialogService: NbDialogService,
     private hackathonUserResponseService: HackathonUserResponsesService,
     private toasterService: ToastrService,
+    private seoService: SeoService,
   ) {}
 
   ngOnInit() {
@@ -72,6 +73,12 @@ export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy 
           this.hasTeammateOption = true;
         }
         this.getChannels();
+        this.seoService.setTags(
+          `Team Dashboard | ${this.hackathon.name}`,
+          `Your team dashboard for ${this.hackathon.name} hackathon`,
+          this.hackathon?.banner_image?.url || 'https://commudle.com/assets/images/commudle-logo192.png',
+        );
+        this.seoService.noIndex(true);
         this.activatedRoute.queryParams.subscribe((params) => {
           this.selectedTeamId = params['team_id'] ? Number(params['team_id']) : null;
           this.syncSelectedTeam();

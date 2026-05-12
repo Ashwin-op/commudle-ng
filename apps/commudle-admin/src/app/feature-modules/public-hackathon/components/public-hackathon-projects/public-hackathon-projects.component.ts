@@ -1,15 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ICommunityBuild, IPaginationCount } from '@commudle/shared-models';
+import { SeoService } from '@commudle/shared-services';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'commudle-public-hackathon-projects',
-    templateUrl: './public-hackathon-projects.component.html',
-    styleUrls: ['./public-hackathon-projects.component.scss'],
-    standalone: false
+  selector: 'commudle-public-hackathon-projects',
+  templateUrl: './public-hackathon-projects.component.html',
+  styleUrls: ['./public-hackathon-projects.component.scss'],
+  standalone: false,
 })
 export class PublicHackathonProjectsComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
@@ -19,14 +20,27 @@ export class PublicHackathonProjectsComponent implements OnInit, OnDestroy {
   total = 0;
   count = 10;
   page = 1;
-  constructor(private hackathonService: HackathonService, private activatedRoute: ActivatedRoute) {}
+  constructor(
+    private hackathonService: HackathonService,
+    private activatedRoute: ActivatedRoute,
+    private seoService: SeoService,
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
       this.activatedRoute.parent.data.subscribe((data) => {
         this.hackathon = data.hackathon;
+        this.setSeo();
         this.fetchHackathonProjects();
       }),
+    );
+  }
+
+  setSeo() {
+    this.seoService.setTags(
+      `Projects | ${this.hackathon.name}`,
+      `Browse projects submitted for ${this.hackathon.name} hackathon`,
+      this.hackathon?.banner_image?.url || 'https://commudle.com/assets/images/commudle-logo192.png',
     );
   }
   ngOnDestroy(): void {

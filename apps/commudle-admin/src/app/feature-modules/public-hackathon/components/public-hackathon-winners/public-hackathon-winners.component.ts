@@ -6,7 +6,7 @@ import { faTrophy, faLayerGroup, faLaptopCode } from '@fortawesome/free-solid-sv
 import { Subscription } from 'rxjs';
 
 import { ICommunity, IHackathonWinnerByPrize } from '@commudle/shared-models';
-import { countries_details as countryDetails } from '@commudle/shared-services';
+import { countries_details as countryDetails, SeoService } from '@commudle/shared-services';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
 
@@ -24,13 +24,18 @@ export class PublicHackathonWinnersComponent implements OnInit, OnDestroy {
   icons = { faTrophy, faLayerGroup, faLaptopCode };
   subscriptions: Subscription[] = [];
 
-  constructor(private activatedRoute: ActivatedRoute, private hackathonService: HackathonService) {}
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private hackathonService: HackathonService,
+    private seoService: SeoService,
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
       this.activatedRoute.parent.data.subscribe((data) => {
         this.hackathon = data.hackathon;
         this.community = data.community;
+        this.setSeo();
         this.getWinners();
       }),
     );
@@ -38,6 +43,14 @@ export class PublicHackathonWinnersComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
+  setSeo() {
+    this.seoService.setTags(
+      `Winners | ${this.hackathon.name}`,
+      `Check out the winners of ${this.hackathon.name} hackathon`,
+      this.hackathon?.banner_image?.url || 'https://commudle.com/assets/images/commudle-logo192.png',
+    );
   }
 
   getWinners() {

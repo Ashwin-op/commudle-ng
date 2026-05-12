@@ -6,7 +6,7 @@ import { faTrophy, faLayerGroup, faUsers } from '@fortawesome/free-solid-svg-ico
 import { Subject, Subscription, takeUntil } from 'rxjs';
 
 import { ICommunity, IHackathonPrize, IHackathonTeam } from '@commudle/shared-models';
-import { AuthService, countries_details as countryDetails } from '@commudle/shared-services';
+import { AuthService, countries_details as countryDetails, SeoService } from '@commudle/shared-services';
 import { HackathonResponseGroupService } from 'apps/commudle-admin/src/app/services/hackathon-response-group.service';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
@@ -34,6 +34,7 @@ export class PublicHackathonPrizesComponent implements OnInit, OnDestroy {
     private hackathonService: HackathonService,
     private hrgService: HackathonResponseGroupService,
     private authService: AuthService,
+    private seoService: SeoService,
   ) {}
 
   ngOnInit() {
@@ -41,6 +42,7 @@ export class PublicHackathonPrizesComponent implements OnInit, OnDestroy {
       this.activatedRoute.parent.data.subscribe((data) => {
         this.hackathon = data.hackathon;
         this.community = data.community;
+        this.setSeo();
         this.getPrizes();
       }),
     );
@@ -56,6 +58,14 @@ export class PublicHackathonPrizesComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  setSeo() {
+    this.seoService.setTags(
+      `Prizes | ${this.hackathon.name}`,
+      `Explore prizes for ${this.hackathon.name} hackathon`,
+      this.hackathon?.banner_image?.url || 'https://commudle.com/assets/images/commudle-logo192.png',
+    );
   }
 
   getPrizes() {
