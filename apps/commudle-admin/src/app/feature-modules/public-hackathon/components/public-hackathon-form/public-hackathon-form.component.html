@@ -44,19 +44,59 @@
             </div>
           </nb-card-body>
         </nb-card>
-        <nb-card *ngIf="hackathonUserResponsesByTeam && hackathonUserResponsesByTeam.length > 1">
+        <nb-card *ngIf="hackathonUserResponsesByTeam && hackathonUserResponsesByTeam.length > 0">
           <nb-card-body>
-            <div>
+            <div class="team-selection">
+              @if(hackathonUserResponsesByTeam.length > 1){
               <commudle-alert
                 [info]="true"
-                message=" You seem to be a part of multiple teams, please select the team for which you want to fill the form"
+                message="Select the team for which you want to fill the form"
               ></commudle-alert>
-              <div class="select">
-                <select [value]="selectedTeamIndex" (change)="switchTeamIndex($event.target)">
-                  <option *ngFor="let team of hackathonUserResponsesByTeam; let i = index" [value]="i">
-                    {{ team.hackathon_team.name }}
-                  </option>
-                </select>
+              <br />
+              }
+              <div class="team-cards">
+                <div
+                  *ngFor="let team of hackathonUserResponsesByTeam; let i = index"
+                  class="team-card"
+                  [class.team-card-selected]="selectedTeamIndex === i"
+                  [class.team-card-disabled]="
+                    getCurrentUserHur(team)?.invite_status === EInvitationStatus.INVITED ||
+                    getCurrentUserHur(team)?.invite_status === EInvitationStatus.REJECTED
+                  "
+                  (click)="
+                    getCurrentUserHur(team)?.invite_status !== EInvitationStatus.INVITED &&
+                      getCurrentUserHur(team)?.invite_status !== EInvitationStatus.REJECTED &&
+                      switchTeamIndex({ value: i })
+                  "
+                >
+                  <div class="team-card-header">
+                    <span class="team-card-name">{{ team.hackathon_team.name }}</span>
+                    <span *ngIf="getCurrentUserHur(team)?.current_user_is_team_lead" class="team-card-lead-badge"
+                      >Team Lead</span
+                    >
+                  </div>
+                  <span class="team-card-members">{{ team.hackathon_user_responses.length }} member(s)</span>
+                  <div class="team-card-footer">
+                    <span class="team-card-status">{{
+                      team.hackathon_team.registration_status | capitalizeAndRemoveUnderscore
+                    }}</span>
+                    <ng-container *ngIf="getCurrentUserHur(team) as myHur">
+                      <span
+                        class="team-card-invite-status"
+                        [class.status-invited]="myHur.invite_status === EInvitationStatus.INVITED"
+                        [class.status-rejected]="myHur.invite_status === EInvitationStatus.REJECTED"
+                      >
+                        {{ myHur.invite_status | capitalizeAndRemoveUnderscore }}
+                      </span>
+                    </ng-container>
+                  </div>
+                </div>
+                @if(!hasOwnTeam){
+                <div class="team-card team-card-new" (click)="createNewTeam()">
+                  <nb-icon icon="plus"></nb-icon>
+                  <span class="team-card-name">Create New Team</span>
+                </div>
+                }
               </div>
             </div>
           </nb-card-body>

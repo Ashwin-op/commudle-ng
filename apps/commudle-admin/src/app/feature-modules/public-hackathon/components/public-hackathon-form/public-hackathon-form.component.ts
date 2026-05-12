@@ -1,7 +1,12 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ICommunity, IHackathonUserResponse, IHackathonUserResponsesGroupByTeam } from '@commudle/shared-models';
+import {
+  ICommunity,
+  EInvitationStatus,
+  IHackathonUserResponse,
+  IHackathonUserResponsesGroupByTeam,
+} from '@commudle/shared-models';
 import { NbDialogRef, NbDialogService, NbStepperComponent } from '@commudle/theme';
 import { HackathonResponseGroupService } from 'apps/commudle-admin/src/app/services/hackathon-response-group.service';
 import { HackathonUserResponsesService } from 'apps/commudle-admin/src/app/services/hackathon-user-responses.service';
@@ -61,9 +66,11 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
   currentUser: ICurrentUser;
   userProfileDetails: IUserStat;
   dialogRef: NbDialogRef<any>;
+  EInvitationStatus = EInvitationStatus;
 
   current_user_is_team_lead = true;
   isUserDetailsSubmitting = false;
+  hasOwnTeam = false;
 
   private destroy$ = new Subject<void>();
 
@@ -170,6 +177,9 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
           this.hackathonUserResponsesByTeam = data.filter((hur) => hur.hackathon_team != null);
           if (this.hackathonUserResponsesByTeam.length > 0) {
             this.switchTeam(0); // default to first team
+            this.hasOwnTeam = this.hackathonUserResponsesByTeam.some((hur) =>
+              hur.hackathon_user_responses.some((hur) => hur.current_user_is_team_lead),
+            );
           } else {
             this.hackathonUserResponse = data[0].hackathon_user_responses[0];
           }
@@ -194,6 +204,19 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
     this.switchTeam(event.value);
     this.stepper.reset();
     this.setStepTitle('Profile');
+  }
+
+  createNewTeam() {
+    this.hackathonUserResponse = null;
+    this.selectedTeamIndex = -1;
+    this.selectedTeam = null;
+    this.current_user_is_team_lead = true;
+    this.stepper.reset();
+    this.setStepTitle('Profile');
+  }
+
+  getCurrentUserHur(team: IHackathonUserResponsesGroupByTeam): IHackathonUserResponse | undefined {
+    return team.hackathon_user_responses?.find((hur) => hur.user_id === this.currentUser?.id);
   }
 
   updateUserDetails(event) {

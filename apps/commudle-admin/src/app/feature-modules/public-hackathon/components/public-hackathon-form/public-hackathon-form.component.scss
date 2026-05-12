@@ -52,10 +52,73 @@ nb-stepper {
   }
 }
 
-.select {
-  @apply com-flex com-items-center com-gap-1 com-h-8 com-p-1 com-text-sm com-rounded-[4px] com-cursor-pointer com-bg-[#F6F9FC] hover:com-bg-[#eef2f7]/50  com-border com-border-solid com-border-[#E4E9F2]  com-w-max com-my-4;
-  select {
-    @apply com-bg-[#F6F9FC] hover:com-bg-[#eef2f7]/50 com-cursor-pointer com-border-0 com-w-full;
+.team-selection {
+  @apply com-flex com-flex-col;
+
+  .team-cards {
+    @apply com-grid com-grid-cols-1 sm:com-grid-cols-2 lg:com-grid-cols-3 com-gap-4;
+
+    .team-card {
+      @apply com-flex com-flex-col com-gap-2 com-p-4 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-cursor-pointer com-transition-all;
+      @apply hover:com-border-primary-500 hover:com-shadow;
+
+      .team-card-header {
+        @apply com-flex com-items-center com-justify-between com-gap-2;
+      }
+
+      .team-card-name {
+        @apply com-font-semibold com-text-Yankees-Blue;
+      }
+
+      .team-card-lead-badge {
+        @apply com-text-xs com-font-medium com-px-2 com-py-0.5 com-rounded-full com-bg-primary-100 com-text-primary-700;
+      }
+
+      .team-card-members {
+        @apply com-text-sm com-text-gray-500;
+      }
+
+      .team-card-footer {
+        @apply com-flex com-items-center com-gap-2 com-mt-1;
+      }
+
+      .team-card-status {
+        @apply com-text-xs com-font-medium com-px-2 com-py-0.5 com-rounded-full com-bg-gray-100 com-text-gray-600;
+      }
+
+      .team-card-invite-status {
+        @apply com-text-xs com-font-medium com-px-2 com-py-0.5 com-rounded-full com-bg-green-100 com-text-green-700;
+      }
+
+      .status-invited {
+        @apply com-bg-orange-100 com-text-orange-700;
+      }
+
+      .status-rejected {
+        @apply com-bg-red-100 com-text-red-700;
+      }
+    }
+
+    .team-card-disabled {
+      @apply com-opacity-50 com-cursor-not-allowed com-pointer-events-none;
+      @apply hover:com-border-Bright-Gray hover:com-shadow-none;
+    }
+
+    .team-card-selected {
+      @apply com-border-primary-500 com-bg-primary-100;
+      .team-card-name,
+      .team-card-members {
+        @apply com-text-tYankees-Blue;
+      }
+    }
+
+    .team-card-new {
+      @apply com-items-center com-justify-center com-border-dashed com-text-primary-500;
+
+      nb-icon {
+        @apply com-text-2xl;
+      }
+    }
   }
 }
 
