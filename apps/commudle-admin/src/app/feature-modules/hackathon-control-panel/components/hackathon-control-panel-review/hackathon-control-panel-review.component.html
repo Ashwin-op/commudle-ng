@@ -72,6 +72,19 @@
 
             <select
               class="filter-select"
+              (change)="onTeamLeaderStatusChange($event)"
+              [(ngModel)]="selectedTeamLeaderStatusForFilter"
+              [ngClass]="{ active: selectedTeamLeaderStatusForFilter !== '' }"
+            >
+              <option value="" selected disabled>
+                {{ hackathon?.participate_types === ENUMS.EParticipateTypes.TEAM ? 'Leader Status' : 'Form Status' }}
+              </option>
+              <option [value]="EInvitationStatus.APPLICATION_COMPLETE">Completed</option>
+              <option [value]="EInvitationStatus.INCOMPLETE_APPLICATION">Incomplete</option>
+            </select>
+
+            <select
+              class="filter-select"
               (change)="onTrackChange($event)"
               [(ngModel)]="selectedTrackForFilter"
               [ngClass]="{ active: selectedTrackForFilter !== '' }"
@@ -125,8 +138,8 @@
             </select>
 
             @if(selectedStatusForFilter || selectedRoundIdForFilter || selectedTrackForFilter ||
-            selectProblemStatementForFilter || selectedOfflineInviteStatusForFilter || withSubmissions !== null ||
-            withCommunityBuild !== null){
+            selectProblemStatementForFilter || selectedOfflineInviteStatusForFilter || selectedTeamLeaderStatusForFilter
+            || withSubmissions !== null || withCommunityBuild !== null){
             <button class="clear-button" (click)="clearAllFilter()">Clear</button>
             }
             <button *ngIf="sortByTotalScore" class="clear-button" (click)="clearSorting()">Clear Sort</button>

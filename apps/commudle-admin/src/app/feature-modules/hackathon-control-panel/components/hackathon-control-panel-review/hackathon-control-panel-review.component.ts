@@ -117,6 +117,7 @@ export class HackathonControlPanelReviewComponent implements OnInit, OnDestroy {
   selectedTrackForFilter = '';
   selectProblemStatementForFilter = '';
   selectedOfflineInviteStatusForFilter = '';
+  selectedTeamLeaderStatusForFilter = '';
   showOnlyWinnerEntry = false;
   withSubmissions: boolean | null = null;
   withCommunityBuild: boolean | null = null;
@@ -274,6 +275,7 @@ export class HackathonControlPanelReviewComponent implements OnInit, OnDestroy {
         this.selectedOfflineInviteStatusForFilter,
         this.withSubmissions,
         this.withCommunityBuild,
+        this.selectedTeamLeaderStatusForFilter,
       )
       .subscribe((data) => {
         this.userResponses = data.values;
@@ -490,6 +492,7 @@ export class HackathonControlPanelReviewComponent implements OnInit, OnDestroy {
       this.selectedTrackForFilter ||
       this.selectProblemStatementForFilter ||
       this.selectedOfflineInviteStatusForFilter ||
+      this.selectedTeamLeaderStatusForFilter ||
       this.withSubmissions !== null ||
       this.withCommunityBuild !== null
     ) {
@@ -498,6 +501,7 @@ export class HackathonControlPanelReviewComponent implements OnInit, OnDestroy {
       this.selectedTrackForFilter = '';
       this.selectProblemStatementForFilter = '';
       this.selectedOfflineInviteStatusForFilter = '';
+      this.selectedTeamLeaderStatusForFilter = '';
       this.withSubmissions = null;
       this.withCommunityBuild = null;
       this.indexProblemStatements(this.hackathon.id);
@@ -508,6 +512,12 @@ export class HackathonControlPanelReviewComponent implements OnInit, OnDestroy {
 
   onOfflineInviteStatusChange(event) {
     this.selectedOfflineInviteStatusForFilter = event.target.value;
+    this.page = 1;
+    this.fetchUserResponses();
+  }
+
+  onTeamLeaderStatusChange(event) {
+    this.selectedTeamLeaderStatusForFilter = event.target.value;
     this.page = 1;
     this.fetchUserResponses();
   }
