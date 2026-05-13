@@ -1,11 +1,10 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { IUser } from '@commudle/shared-models';
-import { UserHackathonsService } from '@commudle/shared-services';
 import { IUserHackathon } from '@commudle/shared-models';
 import { faCode, faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 import { UserProfileMenuService } from 'apps/commudle-admin/src/app/feature-modules/users/services/user-profile-menu.service';
-
+import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.service';
 @Component({
   selector: 'commudle-user-hackathons',
   templateUrl: './user-hackathons.component.html',
@@ -21,10 +20,7 @@ export class UserHackathonsComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(
-    private userHackathonsService: UserHackathonsService,
-    private userProfileMenuService: UserProfileMenuService,
-  ) {}
+  constructor(private appUsersService: AppUsersService, private userProfileMenuService: UserProfileMenuService) {}
 
   ngOnInit(): void {
     this.fetchHackathons();
@@ -32,7 +28,7 @@ export class UserHackathonsComponent implements OnInit, OnDestroy {
 
   fetchHackathons(): void {
     this.subscriptions.push(
-      this.userHackathonsService.participatedAndWon(this.user.username).subscribe((data) => {
+      this.appUsersService.participatedAndWon(this.user.username).subscribe((data) => {
         this.hackathonEntries = data.values;
         this.isLoading = false;
         this.userProfileMenuService.addMenuItem('hackathonsParticipated', this.hackathonEntries.length > 0);

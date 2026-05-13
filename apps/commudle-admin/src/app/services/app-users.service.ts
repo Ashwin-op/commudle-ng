@@ -21,7 +21,7 @@ import { ISocialResources } from 'apps/shared-models/social_resources.model';
 import { ISpeakerResources } from 'apps/shared-models/speaker_resources.model';
 import { ITags } from 'apps/shared-models/tags.model';
 import { Observable } from 'rxjs';
-
+import { IHackathonJudge, IUserHackathon } from '@commudle/shared-models';
 @Injectable({
   providedIn: 'root',
 })
@@ -232,5 +232,21 @@ export class AppUsersService {
 
   getMyGoals(): Observable<any> {
     return this.http.get<any>(this.baseApiService.getRoute(API_ROUTES.USERS.VALID_GOALS));
+  }
+
+  speakerJudgeMentor(username: string, page = 1, count = 10): Observable<IPaginationCount<IHackathonJudge>> {
+    const params = new HttpParams().set('username', username).set('page', page).set('count', count);
+    return this.http.get<IPaginationCount<IHackathonJudge>>(
+      this.baseApiService.getRoute(API_ROUTES.USER_HACKATHONS.SPEAKER_JUDGE_MENTOR),
+      { params },
+    );
+  }
+
+  participatedAndWon(username: string, page = 1, count = 10): Observable<IPaginationCount<IUserHackathon>> {
+    const params = new HttpParams().set('username', username).set('page', page).set('count', count);
+    return this.http.get<IPaginationCount<IUserHackathon>>(
+      this.baseApiService.getRoute(API_ROUTES.USER_HACKATHONS.PARTICIPATED_AND_WON),
+      { params },
+    );
   }
 }
