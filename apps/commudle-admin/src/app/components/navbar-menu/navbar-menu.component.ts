@@ -7,12 +7,13 @@ import {
   faBell,
   faEllipsisV,
   faHandHoldingDollar,
-  faUser,
+  faIdCard,
   faCalendarDays,
   faBriefcase,
   faTrophy,
   faRocket,
   faChevronRight,
+  faCircleCheck,
 } from '@fortawesome/free-solid-svg-icons';
 import { NbPopoverDirective } from '@commudle/theme';
 import { NotificationsStore } from 'apps/commudle-admin/src/app/feature-modules/notifications/store/notifications.store';
@@ -39,7 +40,8 @@ export class NavbarMenuComponent implements OnInit, OnDestroy {
   faInfoCircle = faInfoCircle;
   faEllipsisV = faEllipsisV;
   faHandHoldingDollar = faHandHoldingDollar;
-  faUser = faUser;
+  faIdCard = faIdCard;
+  faCircleCheck = faCircleCheck;
   faCalendarDays = faCalendarDays;
   faBriefcase = faBriefcase;
   faTrophy = faTrophy;
