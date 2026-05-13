@@ -77,10 +77,14 @@
               [ngClass]="{ active: selectedTeamLeaderStatusForFilter !== '' }"
             >
               <option value="" selected disabled>
-                {{ hackathon?.participate_types === ENUMS.EParticipateTypes.TEAM ? 'Leader Status' : 'Form Status' }}
+                {{
+                  hackathon?.participate_types === ENUMS.EParticipateTypes.TEAM
+                    ? 'Leader Application Status'
+                    : 'Application Status'
+                }}
               </option>
-              <option [value]="EInvitationStatus.APPLICATION_COMPLETE">Completed</option>
-              <option [value]="EInvitationStatus.INCOMPLETE_APPLICATION">Incomplete</option>
+              <option [value]="EInvitationStatus.APPLICATION_COMPLETE">Application Completed</option>
+              <option [value]="EInvitationStatus.INCOMPLETE_APPLICATION">Application Incomplete</option>
             </select>
 
             <select

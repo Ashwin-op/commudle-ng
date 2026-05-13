@@ -895,6 +895,7 @@ export class HackathonControlPanelReviewComponent implements OnInit, OnDestroy {
           this.selectedOfflineInviteStatusForFilter,
           this.withSubmissions,
           this.withCommunityBuild,
+          this.selectedTeamLeaderStatusForFilter,
         );
         break;
       case 'invite_status':
@@ -910,6 +911,7 @@ export class HackathonControlPanelReviewComponent implements OnInit, OnDestroy {
           this.selectedOfflineInviteStatusForFilter,
           this.withSubmissions,
           this.withCommunityBuild,
+          this.selectedTeamLeaderStatusForFilter,
         );
         break;
       case 'round':
@@ -925,6 +927,7 @@ export class HackathonControlPanelReviewComponent implements OnInit, OnDestroy {
           this.selectedOfflineInviteStatusForFilter,
           this.withSubmissions,
           this.withCommunityBuild,
+          this.selectedTeamLeaderStatusForFilter,
         );
         break;
       case 'track':
@@ -940,6 +943,7 @@ export class HackathonControlPanelReviewComponent implements OnInit, OnDestroy {
           this.selectedOfflineInviteStatusForFilter,
           this.withSubmissions,
           this.withCommunityBuild,
+          this.selectedTeamLeaderStatusForFilter,
         );
         break;
       case 'problem_statement':
@@ -955,6 +959,7 @@ export class HackathonControlPanelReviewComponent implements OnInit, OnDestroy {
           this.selectedOfflineInviteStatusForFilter,
           this.withSubmissions,
           this.withCommunityBuild,
+          this.selectedTeamLeaderStatusForFilter,
         );
         break;
     }

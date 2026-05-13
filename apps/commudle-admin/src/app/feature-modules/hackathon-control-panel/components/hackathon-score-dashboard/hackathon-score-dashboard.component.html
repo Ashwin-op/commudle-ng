@@ -148,9 +148,9 @@
 
                 <!-- Criteria Scores (inline) -->
                 <div class="eval-criteria">
-                  <div *ngFor="let entry of ev.score | keyvalue" class="criteria-tag">
-                    <span class="criteria-key">{{ entry.key }}</span>
-                    <span class="criteria-val">{{ entry.value }}</span>
+                  <div *ngFor="let score of ev.score" class="criteria-tag">
+                    <span class="criteria-key">{{ score.text }}</span>
+                    <span class="criteria-val">{{ score.score }}</span>
                   </div>
                 </div>
 
