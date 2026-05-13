@@ -41,8 +41,8 @@ export class PublicHackathonJudgesComponent implements OnInit {
 
   setSeo() {
     this.seoService.setTags(
-      `Judges/Mentors | ${this.hackathon.name}`,
-      `Meet the judges or mentors for ${this.hackathon.name} hackathon`,
+      `Mentors & Judges | ${this.hackathon.name}`,
+      `Meet the judges & mentors for ${this.hackathon.name} hackathon`,
       this.hackathon?.banner_image?.url || 'https://commudle.com/assets/images/commudle-logo192.png',
     );
   }
