@@ -39,6 +39,7 @@ speed-measure-plugin*.json
 # .amazonq/
 .claude/
 .serena/
+.kiro/specs/
 
 # misc
 .angular
