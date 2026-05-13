@@ -7,7 +7,7 @@
       <app-navbar></app-navbar>
     </nb-layout-header>
 
-    <nb-layout-column>
+    <nb-layout-column [style.--mobile-navbar-offset]="(isMobileNavbarHidden ? 0 : 52) + 'px'">
       <div id="mini-user-profile-container"></div>
       <app-profile-status-bar *ngIf="currentUser && profileBarStatus"></app-profile-status-bar>
       <div class="router-outlet" [ngClass]="{ 'com-min-h-screen': isFullHeightContent }">

@@ -5,37 +5,13 @@
       This prevents SSR/client mismatches caused by theme being resolved only after bootstrap.
     -->
     <div class="navbar-logo logo-light">
-      <img
-        *appBreakpoints="'<=md'"
-        alt="Commudle"
-        class="com-d-block com-w-8 com-h-8 com-object-contain"
-        src="{{ staticAssets.commudle_logo_72 }}"
-        title="Commudle"
-      />
-      <img
-        *appBreakpoints="'>md'"
-        alt="Commudle"
-        class="com-d-block com-w-auto com-h-8 com-object-contain"
-        src="{{ staticAssets.commudle_logo_full }}"
-        title="Commudle"
-      />
+      <img *appBreakpoints="'<=md'" alt="Commudle" src="{{ staticAssets.commudle_logo_72 }}" title="Commudle" />
+      <img *appBreakpoints="'>md'" alt="Commudle" src="{{ staticAssets.commudle_logo_full }}" title="Commudle" />
     </div>
 
     <div class="navbar-logo logo-dark">
-      <img
-        *appBreakpoints="'<=md'"
-        alt="Commudle"
-        class="com-d-block com-w-8 com-h-8 com-object-contain"
-        src="{{ staticAssets.commudle_logo_72 }}"
-        title="Commudle"
-      />
-      <img
-        *appBreakpoints="'>md'"
-        alt="Commudle"
-        class="com-d-block com-w-auto com-h-8 com-object-contain"
-        src="{{ staticAssets.commudle_logo_dark_mode }}"
-        title="Commudle"
-      />
+      <img *appBreakpoints="'<=md'" alt="Commudle" src="{{ staticAssets.commudle_logo_72 }}" title="Commudle" />
+      <img *appBreakpoints="'>md'" alt="Commudle" src="{{ staticAssets.commudle_logo_dark_mode }}" title="Commudle" />
     </div>
   </a>
 

@@ -37,6 +37,9 @@ export class AppComponent implements OnInit, OnDestroy {
   sidebarEventName = 'MainSidebar';
   showGlobalChatPopup = true;
   isMobileNavbarHidden = false;
+  private readonly mobileNavbarHeight = 56;
+  private readonly hideDeltaThreshold = 6;
+  private readonly showDeltaThreshold = 2;
 
   private destroy$ = new Subject<void>();
 
@@ -170,26 +173,26 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe(([previousY, currentY]) => {
         const isMobile = window.innerWidth <= 768;
         const scrollDelta = currentY - previousY;
-        const hideDeltaThreshold = 6;
-        const hideStartOffset = 56;
+        const hideStartOffset = this.mobileNavbarHeight;
 
         if (!isMobile) {
           this.isMobileNavbarHidden = false;
           return;
         }
 
-        if (currentY < 20) {
+        if (currentY <= this.mobileNavbarHeight) {
           this.isMobileNavbarHidden = false;
           return;
         }
 
-        if (scrollDelta >= hideDeltaThreshold && currentY > hideStartOffset) {
+        if (scrollDelta >= this.hideDeltaThreshold && currentY > hideStartOffset) {
           this.isMobileNavbarHidden = true;
           return;
         }
 
-        // Keep navbar/chat visible unless user is actively scrolling down.
-        this.isMobileNavbarHidden = false;
+        if (scrollDelta <= -this.showDeltaThreshold) {
+          this.isMobileNavbarHidden = false;
+        }
       });
   }
 }

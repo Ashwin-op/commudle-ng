@@ -158,7 +158,8 @@
 }
 
 .menu-items-footer-sticky {
-  @apply com-sticky com-top-16 com-z-20;
+  @apply com-sticky com-z-20;
+  top: var(--mobile-navbar-offset, 68px);
 }
 
 .sticky-active {

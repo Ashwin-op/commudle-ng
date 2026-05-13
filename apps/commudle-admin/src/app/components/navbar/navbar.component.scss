@@ -14,6 +14,13 @@
   }
 }
 
+.navbar-logo {
+  @apply com-block com-w-8 com-h-8;
+  img {
+    @apply com-w-full com-h-full com-object-contain;
+  }
+}
+
 .signup-cta {
   @apply com-relative com-overflow-hidden com-rounded-full com-border-none com-text-tWhite com-font-semibold;
   @apply com-bg-primary-500 hover:com-bg-primary-600 focus:com-bg-primary-600;
@@ -90,7 +97,7 @@
 }
 
 .home-sidebar {
-  @apply com-w-11 com-h-12 com-flex com-justify-end com-items-center com-cursor-pointer;
+  @apply com-w-11 com-flex com-justify-end com-items-center com-cursor-pointer;
 
   fa-icon,
   nb-icon {
@@ -168,7 +175,7 @@
   @apply com-flex;
 
   .user-profile-image {
-    @apply com-w-9 com-h-9 lg:com-w-11 lg:com-h-11 com-object-cover com-rounded-full com-self-end com-bg-tWhite com-cursor-pointer;
+    @apply com-w-9 com-h-9 com-object-cover com-rounded-full com-self-end com-bg-tWhite com-cursor-pointer;
   }
 }
 
