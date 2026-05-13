@@ -67,6 +67,7 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
       this.activatedRoute.parent.data.subscribe((data) => {
         this.hackathon = data.hackathon;
         this.community = data.community;
+        this.setSeoService();
         this.calculateHackathonDatesStatus();
         this.getSponsors();
         this.getFaqs();
@@ -92,6 +93,7 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
   checkFragment() {
     this.activatedRoute.fragment.subscribe((fragment) => {
       if (fragment) {
+        this.updateSeoForFragment(fragment);
         const element = document.getElementById(fragment);
         if (element) {
           element.scrollIntoView({
@@ -100,8 +102,54 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
             inline: 'nearest',
           });
         }
+      } else {
+        this.setSeoService();
       }
     });
+  }
+
+  updateSeoForFragment(fragment: string) {
+    const bannerImage = this.hackathon?.banner_image?.url || 'https://commudle.com/assets/images/commudle-logo192.png';
+    switch (fragment) {
+      case 'updates':
+        this.seoService.setTags(
+          `Updates | ${this.hackathon.name}`,
+          `Latest updates for ${this.hackathon.name} hackathon by ${this.community.name}`,
+          bannerImage,
+        );
+        break;
+      case 'sponsors':
+        this.seoService.setTags(
+          `Sponsors | ${this.hackathon.name}`,
+          `Sponsors supporting ${this.hackathon.name} hackathon by ${this.community.name}`,
+          bannerImage,
+        );
+        break;
+      case 'faq':
+        this.seoService.setTags(
+          `FAQ | ${this.hackathon.name}`,
+          `Frequently asked questions about ${this.hackathon.name} hackathon by ${this.community.name}`,
+          bannerImage,
+        );
+        break;
+      case 'collaborations':
+        this.seoService.setTags(
+          `Collaborations | ${this.hackathon.name}`,
+          `Community collaborations for ${this.hackathon.name} hackathon by ${this.community.name}`,
+          bannerImage,
+        );
+        break;
+      case 'comments':
+        this.seoService.setTags(
+          `Comments | ${this.hackathon.name}`,
+          `Discussion and comments for ${this.hackathon.name} hackathon by ${this.community.name}`,
+          bannerImage,
+        );
+        break;
+      default:
+        this.setSeoService();
+        break;
+    }
   }
 
   getHackathonResponseGroup() {
@@ -199,5 +247,13 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
     };
 
     this.seoService.setSchema(faqSchema);
+  }
+
+  setSeoService() {
+    this.seoService.setTags(
+      this.hackathon.name + ' by ' + this.community.name,
+      this.seoService.removeHtmlTags(this.hackathon.description),
+      'https://commudle.com/assets/images/commudle-logo192.png',
+    );
   }
 }
