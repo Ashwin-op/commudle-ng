@@ -181,31 +181,51 @@ export class PublicHackathonHomepageComponent implements OnInit, OnDestroy {
 
   setSchema() {
     if (this.hackathon.start_date) {
-      let location: object, eventStatus: string;
-      if (this.hackathon.hackathon_location_type === 'offline') {
+      let location: any;
+      let eventAttendanceMode: string;
+
+      const baseUrl =
+        environment.app_url + '/communities/' + this.community.slug + '/hackathons/' + this.hackathon.slug;
+
+      if (this.hackathon.hackathon_location_type === 'hybrid') {
+        eventAttendanceMode = 'https://schema.org/MixedEventAttendanceMode';
+
+        location = [
+          {
+            '@type': 'Place',
+            name: this.hackathon.location_name,
+            address: this.hackathon.location_address,
+          },
+          {
+            '@type': 'VirtualLocation',
+            url: baseUrl,
+          },
+        ];
+      } else if (this.hackathon.hackathon_location_type === 'offline') {
+        eventAttendanceMode = 'https://schema.org/OfflineEventAttendanceMode';
         location = {
           '@type': 'Place',
           name: this.hackathon.location_name,
           address: this.hackathon.location_address,
         };
-        eventStatus = 'OfflineEventAttendanceMode';
       } else {
+        eventAttendanceMode = 'https://schema.org/OnlineEventAttendanceMode';
         location = {
           '@type': 'VirtualLocation',
-          url: environment.app_url + '/communities/' + this.community.slug + '/hackathons/' + this.hackathon.slug,
+          url: baseUrl,
         };
-        eventStatus = 'OnlineEventAttendanceMode';
       }
-      this.seoService.setSchema({
+
+      const schema = {
         '@context': 'https://schema.org',
         '@type': 'Event',
         name: this.hackathon.name,
-        description: this.hackathon.description.replace(/<[^>]*>/g, '').substring(0, 200),
-        image: this.hackathon.banner_image ? this.hackathon.banner_image.url : this.community.logo_image_path.i64,
+        description: this.hackathon.description?.replace(/<[^>]*>/g, '').substring(0, 200) || '',
+        image: this.hackathon.banner_image?.url || this.community.logo_image_path?.i64,
         startDate: this.hackathon.start_date,
         endDate: this.hackathon.end_date,
         eventStatus: 'https://schema.org/EventScheduled',
-        eventAttendanceMode: 'https://schema.org/' + eventStatus,
+        eventAttendanceMode: eventAttendanceMode,
         location: location,
         organizer: {
           '@type': 'Organization',
@@ -217,7 +237,9 @@ export class PublicHackathonHomepageComponent implements OnInit, OnDestroy {
           interactionType: 'https://schema.org/RegisterAction',
           userInteractionCount: this.hackathon.number_of_participants || 0,
         },
-      });
+      };
+
+      this.seoService.setSchema(schema);
     }
   }
 
