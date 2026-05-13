@@ -9,7 +9,7 @@
 }
 
 .sidebar {
-  @apply com-sticky com-top-16 com-h-[calc(100vh-70px)];
+  @apply com-sticky com-top-[var(--mobile-navbar-offset,52px)] com-h-[calc(100vh-70px)];
 
   a {
     @apply com-text-inherit com-no-underline;
@@ -70,7 +70,7 @@ a {
 }
 
 .event-dashboard-menu {
-  @apply com-sticky com-top-16 com-z-10;
+  @apply com-sticky com-top-[var(--mobile-navbar-offset,52px)] com-z-10;
   nb-card {
     @apply com-mx-0;
     nb-card-body {

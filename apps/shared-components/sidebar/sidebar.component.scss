@@ -8,7 +8,7 @@
 
 .sidebar {
   transition: 0.3s;
-  @apply com-pt-0 com-z-[100] com-bg-white com-text-black com-overflow-y-auto com-top-[68px];
+  @apply com-pt-0 com-z-[100] com-bg-white com-text-black com-overflow-y-auto com-top-[var(--mobile-navbar-offset,52px)];
 
   &.hideFullSidebar {
     @apply com-w-0;

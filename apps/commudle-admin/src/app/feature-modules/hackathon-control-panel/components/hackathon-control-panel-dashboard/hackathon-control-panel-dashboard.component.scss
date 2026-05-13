@@ -20,7 +20,7 @@
 }
 
 .sidebar {
-  @apply md:com-sticky com-top-16 com-h-[calc(100vh-70px)];
+  @apply md:com-sticky com-top-[var(--mobile-navbar-offset,52px)] com-h-[calc(100vh-70px)];
 
   a {
     @apply com-text-inherit com-no-underline;

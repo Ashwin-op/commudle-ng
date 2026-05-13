@@ -1,5 +1,5 @@
 .user-profile-menu {
-  @apply com-sticky com-top-[68px] com-z-10 com-m-0 com-mb-4 com-rounded-tl-none com-rounded-tr-none;
+  @apply com-sticky com-top-[var(--mobile-navbar-offset,52px)] com-z-10 com-m-0 com-mb-4 com-rounded-tl-none com-rounded-tr-none;
 
   nb-card-body {
     @apply com-px-2;
