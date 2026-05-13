@@ -56,3 +56,9 @@ export enum EHackathonStatus {
   COMPLETED = 'completed',
   CANCELED = 'canceled',
 }
+
+export interface IUserHackathon {
+  hackathon: IHackathon;
+  roles: string[];
+  prizes: string[];
+}

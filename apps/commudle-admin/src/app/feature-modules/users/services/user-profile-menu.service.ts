@@ -13,7 +13,7 @@ import {
   faLightbulb,
   faAward,
   faCode,
-  faTrophy,
+  faGavel,
 } from '@fortawesome/free-solid-svg-icons';
 // import { faChromecast } from '@fortawesome/free-brands-svg-icons';
 
@@ -30,7 +30,6 @@ export type MenuItemNames =
   | 'content'
   | 'attendedEvents'
   | 'hackathonsParticipated'
-  | 'hackathonsWon'
   | 'hackathonsMentored';
 // | 'feed';
 
@@ -127,21 +126,14 @@ export class UserProfileMenuService {
       name: 'Hackathons',
       icon: faCode,
       active_color: 'com-text-primary-500',
-      link: 'hackathons-participated',
-      active: false,
-    },
-    hackathonsWon: {
-      name: 'Hackathons Won',
-      icon: faTrophy,
-      active_color: 'com-text-Chrome-Yellow',
-      link: 'hackathons-won',
+      link: 'hackathons',
       active: false,
     },
     hackathonsMentored: {
-      name: 'Hackathon Mentor/ Judge',
-      icon: faUsers,
-      active_color: 'com-text-Cadet-Grey',
-      link: 'hackathons-mentored',
+      name: 'Hackathon Mentor/Judge',
+      icon: faGavel,
+      active_color: 'com-text-primary-500',
+      link: 'hackathons-mentor-judge',
       active: false,
     },
 

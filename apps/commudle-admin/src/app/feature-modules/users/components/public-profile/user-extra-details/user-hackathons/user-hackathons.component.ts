@@ -1,23 +1,23 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { IUser } from '@commudle/shared-models';
 import { UserHackathonsService } from '@commudle/shared-services';
-import { IHackathon } from 'apps/shared-models/hackathon.model';
-import { faCode } from '@fortawesome/free-solid-svg-icons';
+import { IUserHackathon } from '@commudle/shared-models';
+import { faCode, faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 import { UserProfileMenuService } from 'apps/commudle-admin/src/app/feature-modules/users/services/user-profile-menu.service';
 
 @Component({
-  selector: 'app-user-hackathon-participated',
-  templateUrl: './user-hackathon-participated.component.html',
-  styleUrls: ['./user-hackathon-participated.component.scss'],
+  selector: 'commudle-user-hackathons',
+  templateUrl: './user-hackathons.component.html',
+  styleUrls: ['./user-hackathons.component.scss'],
   standalone: false,
 })
-export class UserHackathonParticipatedComponent implements OnInit, OnDestroy {
+export class UserHackathonsComponent implements OnInit, OnDestroy {
   @Input() user: IUser;
 
-  hackathons: IHackathon[] = [];
+  hackathonEntries: IUserHackathon[] = [];
   isLoading = true;
-  faCode = faCode;
+  icons = { faCode, faTrophy };
 
   private subscriptions: Subscription[] = [];
 
@@ -27,15 +27,15 @@ export class UserHackathonParticipatedComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.fetchParticipated();
+    this.fetchHackathons();
   }
 
-  fetchParticipated(): void {
+  fetchHackathons(): void {
     this.subscriptions.push(
-      this.userHackathonsService.participated(this.user.username).subscribe((data) => {
-        this.hackathons = [...this.hackathons, ...data.values];
+      this.userHackathonsService.participatedAndWon(this.user.username).subscribe((data) => {
+        this.hackathonEntries = data.values;
         this.isLoading = false;
-        this.userProfileMenuService.addMenuItem('hackathonsParticipated', this.hackathons.length > 0);
+        this.userProfileMenuService.addMenuItem('hackathonsParticipated', this.hackathonEntries.length > 0);
       }),
     );
   }

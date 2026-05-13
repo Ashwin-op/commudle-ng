@@ -37,7 +37,6 @@ speed-measure-plugin*.json
 
 # AI
 # .amazonq/
-.kiro/
 .claude/
 .serena/
 

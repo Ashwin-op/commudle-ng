@@ -1,48 +1,20 @@
-<nb-card *ngIf="!isLoading && entries.length > 0" id="hackathons-speaker-judge-mentor">
+<nb-card *ngIf="!isLoading && entries.length > 0" id="hackathons-mentor-judge">
   <nb-card-header>
-    <a [routerLink]="'.'" fragment="hackathons-speaker-judge-mentor">
+    <a [routerLink]="'.'" fragment="hackathons-mentor-judge">
       <fa-icon [icon]="icons.faGavel" class="com-text-Azure"></fa-icon>
-      Speaker / Judge / Mentor
+      Hackathon Mentor/Judge
       <span>({{ entries.length }})</span>
     </a>
   </nb-card-header>
   <nb-card-body>
     <div class="grid">
-      <a
+      <commudle-user-hackathon-role-card
         *ngFor="let entry of entries"
-        class="com-no-underline"
-        [routerLink]="['/communities', entry.hackathon.community?.slug, 'hackathons', entry.hackathon.slug]"
-      >
-        <com-card class="role-card">
-          <div class="card-banner">
-            <img
-              *ngIf="entry.hackathon.banner_image?.url"
-              [src]="entry.hackathon.banner_image.url"
-              [alt]="entry.hackathon.name"
-            />
-            <div *ngIf="!entry.hackathon.banner_image?.url" class="card-banner-placeholder">
-              <fa-icon [icon]="getRoleIcon(entry.judge_type)"></fa-icon>
-            </div>
-            <span class="role-badge" [attr.data-role]="entry.judge_type">
-              <fa-icon [icon]="getRoleIcon(entry.judge_type)"></fa-icon>
-              {{ getRoleLabel(entry.judge_type) }}
-            </span>
-          </div>
-
-          <div class="card-content">
-            <h4 class="card-title">{{ entry.hackathon.name }}</h4>
-            <div class="card-meta">
-              <span *ngIf="entry.hackathon.start_date" class="meta-item">
-                <fa-icon [icon]="icons.faCalendarAlt"></fa-icon>
-                {{ entry.hackathon.start_date | date : 'MMM yyyy' }}
-              </span>
-              <div *ngIf="entry.hackathon.community" class="community-badge">
-                <app-community-badge [community]="entry.hackathon.community" [size]="'small'"></app-community-badge>
-              </div>
-            </div>
-          </div>
-        </com-card>
-      </a>
+        [hackathon]="entry.hackathon"
+        [roleLabel]="getRoleLabel(entry.judge_type)"
+        [roleIcon]="getRoleIcon(entry.judge_type)"
+        [roleKey]="entry.judge_type"
+      ></commudle-user-hackathon-role-card>
     </div>
   </nb-card-body>
 </nb-card>

@@ -37,10 +37,8 @@ import { EmailPreferencesComponent } from './components/public-profile/user-basi
 import { UserBasicDetailsComponent } from './components/public-profile/user-basic-details/user-basic-details.component';
 import { UserBasicSocialComponent } from './components/public-profile/user-basic-social/user-basic-social.component';
 import { UserBadgesComponent } from './components/public-profile/user-extra-details/user-badges/user-badges.component';
-import { UserHackathonParticipationCardComponent } from './components/public-profile/user-extra-details/user-hackathon-participated/user-hackathon-participation-card/user-hackathon-participation-card.component';
-import { UserHackathonWinnerCardComponent } from './components/public-profile/user-extra-details/user-hackathon-won/user-hackathon-winner-card/user-hackathon-winner-card.component';
-import { UserHackathonParticipatedComponent } from './components/public-profile/user-extra-details/user-hackathon-participated/user-hackathon-participated.component';
-import { UserHackathonWonComponent } from './components/public-profile/user-extra-details/user-hackathon-won/user-hackathon-won.component';
+import { UserHackathonsComponent } from './components/public-profile/user-extra-details/user-hackathons/user-hackathons.component';
+import { UserHackathonRoleCardComponent } from './components/public-profile/user-extra-details/user-hackathon-role-card/user-hackathon-role-card.component';
 import { UserHackathonSpeakerJudgeMentorComponent } from './components/public-profile/user-extra-details/user-hackathon-speaker-judge-mentor/user-hackathon-speaker-judge-mentor.component';
 import { UserBuildCardComponent } from './components/public-profile/user-extra-details/user-contributions/user-build-card/user-build-card.component';
 import { UserCommunityCardComponent } from './components/public-profile/user-extra-details/user-contributions/user-community-card/user-community-card.component';
@@ -100,10 +98,8 @@ import { CommudleCardModule } from '@commudle/commudle-theme';
     UserNetworkComponent,
     UserNetworkListComponent,
     UserBadgesComponent,
-    UserHackathonParticipationCardComponent,
-    UserHackathonWinnerCardComponent,
-    UserHackathonParticipatedComponent,
-    UserHackathonWonComponent,
+    UserHackathonsComponent,
+    UserHackathonRoleCardComponent,
     UserHackathonSpeakerJudgeMentorComponent,
     UserBasicSocialComponent,
     EditUserProfileComponent,

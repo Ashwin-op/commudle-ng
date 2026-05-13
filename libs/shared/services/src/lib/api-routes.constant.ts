@@ -1004,9 +1004,8 @@ export const API_ROUTES = {
   },
 
   USER_HACKATHONS: {
-    PARTICIPATED: 'api/v2/user_hackathons/participated', //GET
-    WON: 'api/v2/user_hackathons/won', //GET
     SPEAKER_JUDGE_MENTOR: 'api/v2/user_hackathons/speaker_judge_mentor', //GET
+    PARTICIPATED_AND_WON: 'api/v2/user_hackathons/participated_and_won', //GET
   },
 
   ENTITY_UPDATES: {

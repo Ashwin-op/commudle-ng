@@ -1,5 +1,6 @@
 import { INote } from './note.model';
 import { IAttachedFile } from './attached-file.model';
+import { IHackathon } from './hackathon.model';
 
 export interface IHackathonJudge {
   id: number;
@@ -20,6 +21,7 @@ export interface IHackathonJudge {
   phone: string;
   phone_country_code: string;
   notes: INote[];
+  hackathon?: IHackathon;
 }
 
 export enum EJudgeInvitationStatus {
