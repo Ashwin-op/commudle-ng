@@ -12,7 +12,7 @@ import {
   faClipboard,
   faLightbulb,
   faAward,
-  faCode,
+  faTrophy,
   faGavel,
 } from '@fortawesome/free-solid-svg-icons';
 // import { faChromecast } from '@fortawesome/free-brands-svg-icons';
@@ -124,7 +124,7 @@ export class UserProfileMenuService {
 
     hackathonsParticipated: {
       name: 'Hackathons',
-      icon: faCode,
+      icon: faTrophy,
       active_color: 'com-text-primary-500',
       link: 'hackathons',
       active: false,

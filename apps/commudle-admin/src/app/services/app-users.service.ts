@@ -237,7 +237,7 @@ export class AppUsersService {
   speakerJudgeMentor(username: string, page = 1, count = 10): Observable<IPaginationCount<IHackathonJudge>> {
     const params = new HttpParams().set('username', username).set('page', page).set('count', count);
     return this.http.get<IPaginationCount<IHackathonJudge>>(
-      this.baseApiService.getRoute(API_ROUTES.USER_HACKATHONS.SPEAKER_JUDGE_MENTOR),
+      this.baseApiService.getRoute(API_ROUTES.USERS.SPEAKER_JUDGE_MENTOR),
       { params },
     );
   }
@@ -245,7 +245,7 @@ export class AppUsersService {
   participatedAndWon(username: string, page = 1, count = 10): Observable<IPaginationCount<IUserHackathon>> {
     const params = new HttpParams().set('username', username).set('page', page).set('count', count);
     return this.http.get<IPaginationCount<IUserHackathon>>(
-      this.baseApiService.getRoute(API_ROUTES.USER_HACKATHONS.PARTICIPATED_AND_WON),
+      this.baseApiService.getRoute(API_ROUTES.USERS.PARTICIPATED_AND_WON),
       { params },
     );
   }

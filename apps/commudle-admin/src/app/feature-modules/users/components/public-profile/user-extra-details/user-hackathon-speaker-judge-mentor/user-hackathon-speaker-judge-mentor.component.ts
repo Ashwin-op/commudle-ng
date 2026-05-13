@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { IUser } from '@commudle/shared-models';
 import { IHackathonJudge } from '@commudle/shared-models';
-import { faGavel, faUsers, faMicrophone, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import { faTrophy, faUsers, faMicrophone, faCalendarAlt, faGavel } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 import { UserProfileMenuService } from 'apps/commudle-admin/src/app/feature-modules/users/services/user-profile-menu.service';
 import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.service';
@@ -15,9 +15,9 @@ import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.
 export class UserHackathonSpeakerJudgeMentorComponent implements OnInit, OnDestroy {
   @Input() user: IUser;
 
-  entries: IHackathonJudge[] = [];
+  judges: IHackathonJudge[] = [];
   isLoading = true;
-  icons = { faGavel, faUsers, faMicrophone, faCalendarAlt };
+  icons = { faTrophy, faUsers, faMicrophone, faCalendarAlt, faGavel };
 
   private subscriptions: Subscription[] = [];
 
@@ -26,9 +26,9 @@ export class UserHackathonSpeakerJudgeMentorComponent implements OnInit, OnDestr
   ngOnInit(): void {
     this.subscriptions.push(
       this.appUsersService.speakerJudgeMentor(this.user.username).subscribe((data) => {
-        this.entries = data.values;
+        this.judges = data.values;
         this.isLoading = false;
-        this.userProfileMenuService.addMenuItem('hackathonsMentored', this.entries.length > 0);
+        this.userProfileMenuService.addMenuItem('hackathonsMentored', this.judges.length > 0);
       }),
     );
   }

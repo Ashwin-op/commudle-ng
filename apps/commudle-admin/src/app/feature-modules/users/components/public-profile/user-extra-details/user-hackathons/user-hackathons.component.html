@@ -1,15 +1,15 @@
-<nb-card *ngIf="!isLoading && hackathonEntries.length > 0" id="hackathons">
+<nb-card *ngIf="!isLoading && hackathons.length > 0" id="hackathons">
   <nb-card-header>
     <a [routerLink]="'.'" fragment="hackathons">
-      <fa-icon [icon]="icons.faCode" class="com-text-primary-500"></fa-icon>
+      <fa-icon [icon]="icons.faTrophy" class="com-text-primary-500"></fa-icon>
       Hackathons
-      <span>({{ hackathonEntries.length }})</span>
+      <span>({{ hackathons.length }})</span>
     </a>
   </nb-card-header>
   <nb-card-body>
     <div class="grid">
       <commudle-user-hackathon-role-card
-        *ngFor="let entry of hackathonEntries"
+        *ngFor="let entry of hackathons"
         [hackathon]="entry.hackathon"
         [roleLabel]="entry.roles.includes('winner') ? 'Winner' : 'Participant'"
         [roleIcon]="entry.roles.includes('winner') ? icons.faTrophy : null"

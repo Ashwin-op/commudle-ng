@@ -14,9 +14,9 @@ import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.
 export class UserHackathonsComponent implements OnInit, OnDestroy {
   @Input() user: IUser;
 
-  hackathonEntries: IUserHackathon[] = [];
+  hackathons: IUserHackathon[] = [];
   isLoading = true;
-  icons = { faCode, faTrophy };
+  icons = { faTrophy };
 
   private subscriptions: Subscription[] = [];
 
@@ -29,9 +29,9 @@ export class UserHackathonsComponent implements OnInit, OnDestroy {
   fetchHackathons(): void {
     this.subscriptions.push(
       this.appUsersService.participatedAndWon(this.user.username).subscribe((data) => {
-        this.hackathonEntries = data.values;
+        this.hackathons = data.values;
         this.isLoading = false;
-        this.userProfileMenuService.addMenuItem('hackathonsParticipated', this.hackathonEntries.length > 0);
+        this.userProfileMenuService.addMenuItem('hackathonsParticipated', this.hackathons.length > 0);
       }),
     );
   }

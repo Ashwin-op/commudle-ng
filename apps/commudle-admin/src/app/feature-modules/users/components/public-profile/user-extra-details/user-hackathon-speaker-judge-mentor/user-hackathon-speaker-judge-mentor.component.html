@@ -1,15 +1,15 @@
-<nb-card *ngIf="!isLoading && entries.length > 0" id="hackathons-mentor-judge">
+<nb-card *ngIf="!isLoading && judges.length > 0" id="hackathons-mentor-judge">
   <nb-card-header>
     <a [routerLink]="'.'" fragment="hackathons-mentor-judge">
       <fa-icon [icon]="icons.faGavel" class="com-text-Azure"></fa-icon>
       Hackathon Mentor/Judge
-      <span>({{ entries.length }})</span>
+      <span>({{ judges.length }})</span>
     </a>
   </nb-card-header>
   <nb-card-body>
     <div class="grid">
       <commudle-user-hackathon-role-card
-        *ngFor="let entry of entries"
+        *ngFor="let entry of judges"
         [hackathon]="entry.hackathon"
         [roleLabel]="getRoleLabel(entry.judge_type)"
         [roleIcon]="getRoleIcon(entry.judge_type)"
