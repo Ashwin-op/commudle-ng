@@ -23,16 +23,6 @@
       <span>Builds</span>
     </a>
   </nb-action>
-
-  <ng-container *ngIf="currentUser">
-    <nb-action (click)="this.notificationCount = 0; gtmService()" *appBreakpoints="'>md'">
-      <a [routerLink]="['/notifications']" [ngClass]="{ active: notificationIconHighlight }" class="com-cursor-pointer">
-        <nb-badge *ngIf="notificationCount > 0" [text]="notificationCount.toString()" status="danger"></nb-badge>
-        <fa-icon [icon]="faBell"></fa-icon>
-        <span>Notifications</span>
-      </a>
-    </nb-action>
-  </ng-container>
   <nb-action *appBreakpoints="'>md'">
     <a
       class="com-cursor-pointer"
@@ -46,6 +36,17 @@
     </a>
   </nb-action>
   <nb-action *ngIf="currentUser">
+    <a
+      [routerLink]="['/notifications']"
+      [ngClass]="{ active: notificationIconHighlight }"
+      class="com-cursor-pointer"
+      *appBreakpoints="'>md'"
+      (click)="this.notificationCount = 0; gtmService()"
+    >
+      <nb-badge *ngIf="notificationCount > 0" [text]="notificationCount.toString()" status="danger"></nb-badge>
+      <fa-icon [icon]="faBell"></fa-icon>
+      <span>Notifications</span>
+    </a>
     <a *appBreakpoints="'<=md'" [routerLink]="['/account-menu']" routerLinkActive="active">
       <img [alt]="currentUser.name" [src]="currentUser.photo.i32" class="user-profile-image-mobile" />
       <span>You</span>
