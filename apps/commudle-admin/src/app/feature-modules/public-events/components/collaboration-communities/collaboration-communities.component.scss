@@ -1,36 +1,54 @@
-nb-card {
-  @apply com-mx-0 com-mt-4 com-mb-0 md:com-rounded-[10px] com-rounded-none;
+.collaborations-card {
+  @apply com-m-0;
+  .collaborations-card-body {
+    @apply com-p-4 md:com-p-6;
+  }
+}
 
-  nb-card-header {
-    @apply com-py-4 md:com-px-6 com-px-4;
-    .title {
-      @apply com-flex com-m-0;
-      a {
-        @apply md:com-font-semibold com-font-bold com-no-underline com-text-Yankees-Blue;
-        nb-icon {
-          @apply com-mr-1;
-        }
-      }
-    }
+.collaborations-card-heading {
+  @apply com-m-0 com-inline-flex com-flex-wrap com-items-center com-gap-2 com-font-semibold com-text-Yankees-Blue;
+
+  nb-icon {
+    @apply com-text-xl com-leading-none;
+  }
+}
+
+.collaborations-list {
+  @apply com-m-0 com-list-none com-gap-4 com-p-0;
+}
+
+.collaborations-list-item {
+  @apply com-m-0 com-p-0;
+}
+
+.collaboration-community-card {
+  @apply com-flex com-items-center com-gap-3 com-rounded-2xl com-border com-border-solid com-border-Bright-Gray com-p-4 com-no-underline hover:com-border-primary-400;
+
+  .collaboration-community-logo {
+    @apply com-flex com-h-12 com-w-12 com-flex-shrink-0 com-items-center com-justify-center;
   }
 
-  nb-card-body {
-    @apply com-flex com-flex-col com-gap-4;
-    .community {
-      @apply com-p-4 com-border com-border-solid com-border-Bright-Gray com-rounded-xl;
-      a {
-        @apply com-flex com-items-center com-no-underline;
-        color: #5072ff;
-        .logo {
-          @apply com-flex com-items-center com-m-0 com-mr-3 com-w-6 com-h-6 com-flex-shrink-0 com-overflow-hidden com-object-contain com-bg-tWhite com-rounded-sm;
-          img {
-            @apply com-w-full com-h-auto;
-          }
-        }
-        p {
-          @apply com-m-0 com-font-semibold;
-        }
-      }
-    }
+  .collaboration-community-logo-image {
+    @apply com-h-full com-w-full com-rounded-md com-bg-Anti-Flash-White com-object-contain;
+  }
+
+  .collaboration-community-text {
+    @apply com-flex com-min-w-0 com-flex-1 com-flex-col;
+  }
+
+  .collaboration-community-title {
+    @apply com-m-0 com-text-sm com-font-semibold com-text-Yankees-Blue;
+  }
+
+  .collaboration-community-subtitle {
+    @apply com-m-0 com-line-clamp-2 com-text-xs com-font-normal com-text-gray-500 com-mt-2px;
+  }
+
+  .collaboration-community-members {
+    @apply com-m-0 com-inline-flex com-items-center com-gap-1 com-text-xs com-text-gray-500 com-mt-2px;
+  }
+
+  .collaboration-community-members-icon {
+    @apply com-text-base com-text-gray-500;
   }
 }

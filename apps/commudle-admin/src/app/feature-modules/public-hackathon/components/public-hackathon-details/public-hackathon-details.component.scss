@@ -3,9 +3,6 @@
     @apply com-ml-0;
     nb-card-header {
       @apply com-flex com-gap-4 com-items-center;
-      fa-icon {
-        @apply com-text-xl;
-      }
       h2 {
         @apply com-text-Yankees-Blue com-text-2xl com-font-bold;
         a {
@@ -22,8 +19,8 @@
     @apply com-m-0 com-inline-flex com-flex-wrap com-items-center com-gap-2 com-font-semibold com-text-Yankees-Blue;
   }
 
-  #sponsors nb-card-header .collaborations-card-heading fa-icon {
-    @apply com-flex com-items-center com-justify-center com-h-5 com-w-5 com-text-primary-500;
+  .sponsors-card-heading-icon {
+    @apply com-flex com-items-center com-justify-center com-h-5 com-w-5 com-text-Azure;
   }
 
   .sponsors-cards {

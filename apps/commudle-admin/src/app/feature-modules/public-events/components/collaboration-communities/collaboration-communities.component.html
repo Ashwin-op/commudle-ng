@@ -1,23 +1,37 @@
-<nb-card *ngIf="collaborationCommunities.length > 0" id="collaborations">
+<nb-card *ngIf="collaborationCommunities.length > 0" class="collaborations-card">
   <nb-card-header>
-    <h6 class="title">
-      <a [routerLink]="'.'" fragment="collaborations"
-        ><nb-icon icon="pricetags-outline" status="warning"></nb-icon>Collaborations</a
-      >
+    <h6 class="title collaborations-card-heading section-heading-anchor">
+      <nb-icon icon="pricetags-outline" status="warning"></nb-icon>
+      <span>Collaborations</span>
+      <a [routerLink]="['.']" fragment="collaborations" class="anchor-link" aria-label="Link to collaborations section">
+        <fa-icon [icon]="faLink" class="anchor-icon-small"></fa-icon>
+      </a>
     </h6>
   </nb-card-header>
-  <nb-card-body>
-    <div *ngFor="let cc of collaborationCommunities" class="community">
-      <a [routerLink]="['/communities', cc.community.slug]">
-        <div class="logo">
-          <img
-            alt="{{ cc.community.name }}"
-            src="{{ cc.community.logo_image_path.i64 }}"
-            title="{{ cc.community.name }}"
-          />
-        </div>
-        <p>{{ cc.community.name }}</p>
-      </a>
-    </div>
+  <nb-card-body class="collaborations-card-body">
+    <ul class="collaborations-list">
+      <li *ngFor="let cc of collaborationCommunities" class="collaborations-list-item">
+        <a [routerLink]="['/communities', cc.community.slug]" class="collaboration-community-card">
+          <div class="collaboration-community-logo">
+            <img
+              [alt]="cc.community.name"
+              [src]="cc.community.logo_image_path.i64"
+              [title]="cc.community.name"
+              class="collaboration-community-logo-image"
+              loading="lazy"
+            />
+          </div>
+          <div class="collaboration-community-text">
+            <h2 class="collaboration-community-title">{{ cc.community.name }}</h2>
+            <p class="collaboration-community-subtitle">
+              {{ cc.community.mini_description }}
+            </p>
+            <p *ngIf="cc.community.members_count > 0" class="collaboration-community-members">
+              {{ cc.community.members_count }} members
+            </p>
+          </div>
+        </a>
+      </li>
+    </ul>
   </nb-card-body>
 </nb-card>
