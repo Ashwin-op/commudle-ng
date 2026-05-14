@@ -216,6 +216,10 @@ nb-card {
                   @apply com-flex com-items-center com-gap-2 com-no-underline com-p-1.5 com-rounded com-border com-border-gray-200;
                   @apply hover:com-bg-gray-50 com-transition-colors;
 
+                  &.evaluator-submitted {
+                    @apply com-border-green-200 com-bg-green-50;
+                  }
+
                   .evaluator-avatar-wrapper {
                     @apply com-flex-shrink-0;
 
@@ -239,8 +243,12 @@ nb-card {
                       @apply com-text-xs com-font-medium com-text-gray-900;
                     }
 
-                    .evaluator-designation {
-                      @apply com-text-[10px] com-text-gray-600;
+                    .evaluator-status {
+                      @apply com-text-[10px] com-text-orange-600 com-font-medium;
+
+                      &.status-submitted {
+                        @apply com-text-green-600;
+                      }
                     }
                   }
                 }

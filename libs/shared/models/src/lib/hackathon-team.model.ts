@@ -69,10 +69,14 @@ export enum EOfflineInviteStatus {
   CANCELLED = 'cancelled',
 }
 
+export interface ITeamEvaluator extends IHackathonJudge {
+  has_submitted: boolean;
+}
+
 export interface IHackathonTeamWithScoreAndSubmissions {
   score: IHackathonTeamRoundScore;
   team: IHackathonTeam;
   submission: IHackathonTeamRoundSubmission;
-  evaluators: IHackathonJudge[];
+  evaluators: ITeamEvaluator[];
   can_submit_score: boolean;
 }
