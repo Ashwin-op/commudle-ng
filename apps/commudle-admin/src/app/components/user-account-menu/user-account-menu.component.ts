@@ -7,6 +7,7 @@ import {
   faAudioDescription,
   faChevronRight,
   faFlask,
+  faHouse,
   faLightbulb,
   faLink,
   faSuitcase,
@@ -17,15 +18,16 @@ import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service'
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
-    selector: 'commudle-user-account-menu',
-    templateUrl: './user-account-menu.component.html',
-    styleUrls: ['./user-account-menu.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'commudle-user-account-menu',
+  templateUrl: './user-account-menu.component.html',
+  styleUrls: ['./user-account-menu.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class UserAccountMenuComponent implements OnInit, OnDestroy {
   currentUser: ICurrentUser;
   faChevronRight = faChevronRight;
+  faHouse = faHouse;
   faLightbulb = faLightbulb;
   faFlask = faFlask;
   faSuitcase = faSuitcase;
