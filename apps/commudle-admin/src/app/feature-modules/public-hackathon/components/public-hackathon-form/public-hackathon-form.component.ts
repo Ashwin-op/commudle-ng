@@ -201,7 +201,10 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
         (hur) => hur.user_id === this.currentUser?.id,
       );
       // If current user's invite is rejected, skip to next available team
-      if (currentUserHur?.invite_status === EInvitationStatus.REJECTED) {
+      if (
+        currentUserHur?.invite_status === EInvitationStatus.REJECTED ||
+        currentUserHur?.invite_status === EInvitationStatus.INVITED
+      ) {
         if (index < this.hackathonUserResponsesByTeam.length - 1) {
           this.switchTeam(index + 1);
         } else {

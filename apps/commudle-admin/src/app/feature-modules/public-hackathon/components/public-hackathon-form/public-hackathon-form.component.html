@@ -77,16 +77,21 @@
                   </div>
                   <span class="team-card-members">{{ team.hackathon_user_responses.length }} member(s)</span>
                   <div class="team-card-footer">
+                    <span class="team-card-status-label">Team:</span>
                     <span class="team-card-status">{{
                       team.hackathon_team.registration_status | capitalizeAndRemoveUnderscore
                     }}</span>
                     <ng-container *ngIf="getCurrentUserHur(team) as myHur">
                       <span
+                        *ngIf="
+                          myHur.invite_status === EInvitationStatus.INVITED ||
+                          myHur.invite_status === EInvitationStatus.REJECTED
+                        "
                         class="team-card-invite-status"
                         [class.status-invited]="myHur.invite_status === EInvitationStatus.INVITED"
                         [class.status-rejected]="myHur.invite_status === EInvitationStatus.REJECTED"
                       >
-                        {{ myHur.invite_status | capitalizeAndRemoveUnderscore }}
+                        {{ myHur.invite_status === EInvitationStatus.INVITED ? 'Invite Pending' : 'Invite Declined' }}
                       </span>
                     </ng-container>
                   </div>
