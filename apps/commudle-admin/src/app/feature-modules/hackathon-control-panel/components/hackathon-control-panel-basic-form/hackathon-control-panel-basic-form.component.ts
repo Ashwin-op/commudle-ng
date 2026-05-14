@@ -1,5 +1,5 @@
 import { SeoService, ToastrService } from '@commudle/shared-services';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
@@ -8,14 +8,15 @@ import { faArrowRight, faFileImage, faLink } from '@fortawesome/free-solid-svg-i
 import { ICommunity } from '@commudle/shared-models';
 import { ICommunityGroup } from 'apps/shared-models/community-group.model';
 import { Subscription } from 'rxjs';
+import { GooglePlacesAutocompleteService } from 'apps/commudle-admin/src/app/services/google-places-autocomplete.service';
 
 @Component({
-    selector: 'commudle-hackathon-control-panel-basic-form',
-    templateUrl: './hackathon-control-panel-basic-form.component.html',
-    styleUrls: ['./hackathon-control-panel-basic-form.component.scss'],
-    standalone: false
+  selector: 'commudle-hackathon-control-panel-basic-form',
+  templateUrl: './hackathon-control-panel-basic-form.component.html',
+  styleUrls: ['./hackathon-control-panel-basic-form.component.scss'],
+  standalone: false,
 })
-export class HackathonControlPanelBasicFormComponent implements OnInit, OnDestroy {
+export class HackathonControlPanelBasicFormComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() saveButtonText = 'Save';
   hackathonForm: FormGroup;
   locationForm: FormGroup;
@@ -82,6 +83,7 @@ export class HackathonControlPanelBasicFormComponent implements OnInit, OnDestro
     private router: Router,
     private toastrService: ToastrService,
     private seoService: SeoService,
+    private googlePlacesAutocompleteService: GooglePlacesAutocompleteService,
   ) {
     this.hackathonForm = this.fb.group({
       name: ['', Validators.required],
@@ -123,11 +125,48 @@ export class HackathonControlPanelBasicFormComponent implements OnInit, OnDestro
         }
       }),
     );
+
+    this.subscriptions.push(
+      this.hackathonForm.get('hackathon_location_type').valueChanges.subscribe((value) => {
+        if (value === EHackathonLocationType.OFFLINE || value === EHackathonLocationType.HYBRID) {
+          this.initAutocomplete();
+        }
+      }),
+    );
   }
 
   ngOnDestroy(): void {
     this.seoService.noIndex(false);
     this.subscriptions.forEach((subscription: Subscription) => subscription.unsubscribe());
+  }
+
+  ngAfterViewInit(): void {
+    // Init autocomplete if location type is already set (e.g., editing existing hackathon)
+    const locationType = this.hackathonForm.get('hackathon_location_type').value;
+    if (locationType === EHackathonLocationType.OFFLINE || locationType === EHackathonLocationType.HYBRID) {
+      this.initAutocomplete();
+    }
+  }
+
+  initAutocomplete() {
+    setTimeout(() => {
+      const addressInput = document.getElementById('addressInput') as HTMLInputElement;
+      if (addressInput) {
+        this.googlePlacesAutocompleteService.initAutocomplete(addressInput, 'establishment');
+        this.googlePlacesAutocompleteService.placeChanged.subscribe((place: google.maps.places.PlaceResult) => {
+          this.onLocationPlaceSelected(place);
+        });
+      }
+    });
+  }
+
+  onLocationPlaceSelected(place: google.maps.places.PlaceResult) {
+    if (place.formatted_address) {
+      this.locationForm.get('address').setValue(place.name + ', ' + place.formatted_address);
+    }
+    if (place.url) {
+      this.locationForm.get('map_link').setValue(place.url);
+    }
   }
 
   fetchHackathonDetails() {
@@ -159,6 +198,7 @@ export class HackathonControlPanelBasicFormComponent implements OnInit, OnDestro
           address: this.hackathon.location_address,
           map_link: this.hackathon.location_map_link,
         });
+        this.initAutocomplete();
       }
     });
   }
