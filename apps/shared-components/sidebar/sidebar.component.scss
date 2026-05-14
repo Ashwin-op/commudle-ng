@@ -14,7 +14,7 @@
     @apply com-w-0;
   }
   &.forWindow {
-    @apply com-fixed md:com-h-[calc(100dvh-70px)] com-h-[calc(100dvh-130px)];
+    @apply com-fixed md:com-h-[calc(100dvh-52px)] com-h-[calc(100dvh-56px-var(--mobile-navbar-offset,52px))];
   }
   &.notForWindow {
     @apply com-h-full;
