@@ -25,10 +25,13 @@
     <div *ngIf="hackathon.sponsors_count > 0 && hackathonSponsorGroupedByTierName" id="sponsors">
       <nb-card>
         <nb-card-header>
-          <fa-icon [icon]="icons.faSackDollar"></fa-icon>
-          <h2 class="hackathon-sponsors-card-title">
-            <a [routerLink]="['.']" fragment="sponsors">Sponsors</a>
-          </h2>
+          <h6 class="title collaborations-card-heading section-heading-anchor">
+            <fa-icon [icon]="icons.faSackDollar"></fa-icon>
+            <span>Sponsors</span>
+            <a [routerLink]="'.'" fragment="sponsors" class="anchor-link" aria-label="Link to sponsors section">
+              <fa-icon [icon]="icons.faLink" class="anchor-icon-small"></fa-icon>
+            </a>
+          </h6>
         </nb-card-header>
         <nb-card-body class="sponsors-cards">
           <div
@@ -45,6 +48,7 @@
                 *ngFor="let hackathonSponsor of hackathonSponsorGrouped.value || []"
                 class="sponsor-tier-card"
                 [ngClass]="'sponsor-tier-card--tone-' + (tierIndex % 5)"
+                [title]="hackathonSponsor.sponsor.description || undefined"
               >
                 <a
                   [href]="hackathonSponsor.sponsor.link ? hackathonSponsor.sponsor.link : null"
@@ -57,9 +61,6 @@
                   </div>
                   <div class="sponsor-tier-text-block">
                     <h3 class="sponsor-tier-name">{{ hackathonSponsor.sponsor.name }}</h3>
-                    <p *ngIf="hackathonSponsor.sponsor.description" class="sponsor-tier-role">
-                      {{ hackathonSponsor.sponsor.description }}
-                    </p>
                   </div>
                 </a>
               </div>

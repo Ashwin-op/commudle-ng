@@ -18,16 +18,12 @@
     }
   }
 
-  .hackathon-sponsors-card-title {
-    @apply com-m-0 com-text-2xl com-font-bold com-text-Yankees-Blue;
-
-    a {
-      @apply com-no-underline com-text-inherit;
-    }
+  .collaborations-card-heading {
+    @apply com-m-0 com-inline-flex com-flex-wrap com-items-center com-gap-2 com-font-semibold com-text-Yankees-Blue;
   }
 
-  #sponsors nb-card-header fa-icon {
-    @apply com-text-gray-400;
+  #sponsors nb-card-header .collaborations-card-heading fa-icon {
+    @apply com-flex com-items-center com-justify-center com-h-5 com-w-5 com-text-primary-500;
   }
 
   .sponsors-cards {
@@ -174,10 +170,6 @@
 
   .sponsor-tier-name {
     @apply com-m-0 com-text-center com-text-xs com-font-medium com-text-Yankees-Blue;
-  }
-
-  .sponsor-tier-role {
-    @apply com-m-0 com-line-clamp-2 com-text-center com-text-xs com-text-gray-500;
   }
 
   commudle-discussion {

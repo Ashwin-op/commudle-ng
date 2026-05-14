@@ -1,28 +1,50 @@
-.community {
-  @apply com-flex com-items-center com-mb-4 com-p-3 com-border com-rounded-lg;
-  @apply hover:com-bg-gray-50;
-
-  a {
-    @apply com-flex com-items-center com-no-underline com-text-inherit;
-
-    .logo {
-      @apply com-mr-3 com-flex-shrink-0;
-
-      img {
-        @apply com-w-12 com-h-12 com-rounded-full com-object-cover;
-      }
-    }
-
-    p {
-      @apply com-m-0 com-font-medium com-text-gray-700;
-    }
+.collaborations-card {
+  @apply com-m-0;
+  .collaborations-card-body {
+    @apply com-p-4 md:com-p-6;
   }
 }
 
-.title {
-  @apply com-flex com-items-center com-gap-2;
+.collaborations-card-heading {
+  @apply com-m-0 com-inline-flex com-flex-wrap com-items-center com-gap-2 com-font-semibold com-text-Yankees-Blue;
+}
 
-  a {
-    @apply com-flex com-items-center com-gap-2 com-no-underline com-text-inherit;
+.collaborations-list {
+  @apply com-m-0 com-list-none com-gap-4 com-p-0;
+}
+
+.collaborations-list-item {
+  @apply com-m-0 com-p-0;
+}
+
+.collaboration-community-card {
+  @apply com-flex com-items-center com-gap-3 com-rounded-2xl com-border com-border-solid com-border-Bright-Gray com-p-4 com-no-underline hover:com-border-primary-400;
+
+  .collaboration-community-logo {
+    @apply com-flex com-h-12 com-w-12 com-flex-shrink-0 com-items-center com-justify-center;
+  }
+
+  .collaboration-community-logo-image {
+    @apply com-h-full com-w-full com-rounded-md com-bg-Anti-Flash-White com-object-contain;
+  }
+
+  .collaboration-community-text {
+    @apply com-flex com-min-w-0 com-flex-1 com-flex-col;
+  }
+
+  .collaboration-community-title {
+    @apply com-m-0 com-text-sm com-font-semibold com-text-Yankees-Blue;
+  }
+
+  .collaboration-community-subtitle {
+    @apply com-m-0 com-line-clamp-2 com-text-xs com-font-normal com-text-gray-500 com-mt-2px;
+  }
+
+  .collaboration-community-members {
+    @apply com-m-0 com-inline-flex com-items-center com-gap-1 com-text-xs com-text-gray-500 com-mt-2px;
+  }
+
+  .collaboration-community-members-icon {
+    @apply com-text-base com-text-gray-500;
   }
 }

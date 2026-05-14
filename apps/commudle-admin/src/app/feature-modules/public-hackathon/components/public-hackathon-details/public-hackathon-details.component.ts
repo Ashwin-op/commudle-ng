@@ -20,7 +20,7 @@ import { IHackathon } from 'apps/shared-models/hackathon.model';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
 import * as moment from 'moment';
 import { Subject, Subscription, takeUntil } from 'rxjs';
-import { faPencil, faSackDollar, faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
+import { faPencil, faSackDollar, faCircleQuestion, faLink } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'commudle-public-hackathon-details',
   templateUrl: './public-hackathon-details.component.html',
@@ -46,6 +46,7 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
     faPencil,
     faSackDollar,
     faCircleQuestion,
+    faLink,
   };
 
   private destroy$ = new Subject<void>();

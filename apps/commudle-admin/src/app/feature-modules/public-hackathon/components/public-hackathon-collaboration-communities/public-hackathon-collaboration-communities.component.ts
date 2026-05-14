@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { faLink, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { ICommunity } from '@commudle/shared-models';
 import { IHackathon } from '@commudle/shared-models';
 import { HackathonCollaborationCommunitiesService } from '@commudle/shared-services';
@@ -15,6 +16,8 @@ export class PublicHackathonCollaborationCommunitiesComponent implements OnInit,
   @Input() hackathon: IHackathon;
   @Output() hasCollaborationCommunities = new EventEmitter<boolean>();
 
+  faLink = faLink;
+  faUsers = faUsers;
   collaborationCommunities: IHackathonCollaborationCommunity[] = [];
 
   constructor(private hackathonCollaborationCommunitiesService: HackathonCollaborationCommunitiesService) {}
