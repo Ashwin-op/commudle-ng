@@ -169,11 +169,15 @@ export class HackathonTeamConfirmationComponent implements OnInit {
     this.hurService.updateInvitationTokenHur(token, inviteStatus).subscribe({
       next: (data) => {
         this.showPageDetails = true;
+        this.isLoading = false;
         if (data) {
           this.hur = data;
+        } else {
+          this.hur = { ...this.hur, invite_status: inviteStatus };
         }
       },
       error: (err) => {
+        this.isLoading = false;
         if (err?.error?.data?.has_own_team) {
           this.hasOwnTeam = true;
           this.ownTeamName = err.error.data.own_team_name;

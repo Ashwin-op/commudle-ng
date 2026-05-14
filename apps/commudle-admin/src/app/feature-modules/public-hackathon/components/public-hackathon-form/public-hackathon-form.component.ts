@@ -43,11 +43,13 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
   contactInfo: IContactInfo;
   selectedTeamIndex = 0;
   hackathonUserResponsesByTeam: IHackathonUserResponsesGroupByTeam[];
+  hackathonUserResponsesWithoutTeam: IHackathonUserResponsesGroupByTeam[];
   selectedTeam: IHackathonUserResponsesGroupByTeam;
 
   @ViewChild('stepper') stepper: NbStepperComponent;
   @ViewChild('formConfirmationDialog', { static: true }) formConfirmationDialog: TemplateRef<any>;
   @ViewChild('formClosedDialog', { static: true }) formClosedDialog: TemplateRef<any>;
+  @ViewChild('createTeamConfirmDialog', { static: true }) createTeamConfirmDialog: TemplateRef<any>;
   isLoading = true;
   hasTeammateOption = false;
   isFormClosed = false;
@@ -71,6 +73,7 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
   current_user_is_team_lead = true;
   isUserDetailsSubmitting = false;
   hasOwnTeam = false;
+  pendingInviteTeamNames: string[] = [];
 
   private destroy$ = new Subject<void>();
 
@@ -175,13 +178,14 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
       .subscribe((data: IHackathonUserResponsesGroupByTeam[]) => {
         if (data.length > 0) {
           this.hackathonUserResponsesByTeam = data.filter((hur) => hur.hackathon_team != null);
+          this.hackathonUserResponsesWithoutTeam = data.filter((hur) => hur.hackathon_team == null);
           if (this.hackathonUserResponsesByTeam.length > 0) {
             this.switchTeam(0); // default to first team
             this.hasOwnTeam = this.hackathonUserResponsesByTeam.some((hur) =>
               hur.hackathon_user_responses.some((hur) => hur.current_user_is_team_lead),
             );
-          } else {
-            this.hackathonUserResponse = data[0].hackathon_user_responses[0];
+          } else if (this.hackathonUserResponsesWithoutTeam.length > 0) {
+            this.hackathonUserResponse = this.hackathonUserResponsesWithoutTeam[0].hackathon_user_responses[0];
           }
           this.isLoading = false;
         } else {
@@ -196,6 +200,19 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
       const currentUserHur = selectedTeamGroup.hackathon_user_responses.find(
         (hur) => hur.user_id === this.currentUser?.id,
       );
+      // If current user's invite is rejected, skip to next available team
+      if (currentUserHur?.invite_status === EInvitationStatus.REJECTED) {
+        if (index < this.hackathonUserResponsesByTeam.length - 1) {
+          this.switchTeam(index + 1);
+        } else {
+          // No valid team found, reset selection
+          this.hackathonUserResponse = null;
+          this.selectedTeamIndex = -1;
+          this.selectedTeam = null;
+          this.current_user_is_team_lead = true;
+        }
+        return;
+      }
       this.hackathonUserResponse = currentUserHur || selectedTeamGroup.hackathon_user_responses[0];
       this.current_user_is_team_lead = this.hackathonUserResponse.current_user_is_team_lead;
       this.selectedTeamIndex = index;
@@ -209,7 +226,72 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
   }
 
   createNewTeam() {
-    this.hackathonUserResponse = null;
+    // Check if user has any invites from other teams (not as team lead)
+    const hasInvites = this.hackathonUserResponsesByTeam?.some((team) => {
+      const myHur = this.getCurrentUserHur(team);
+      return myHur && !myHur.current_user_is_team_lead;
+    });
+
+    if (hasInvites) {
+      this.pendingInviteTeamNames = this.hackathonUserResponsesByTeam
+        ?.filter((team) => {
+          const myHur = this.getCurrentUserHur(team);
+          return myHur && !myHur.current_user_is_team_lead;
+        })
+        ?.map((team) => team.hackathon_team.name);
+      this.dialogRef = this.dialogService.open(this.createTeamConfirmDialog, {
+        closeOnBackdropClick: false,
+      });
+    } else {
+      this.proceedCreateNewTeam();
+    }
+  }
+
+  confirmCreateNewTeam() {
+    this.dialogRef?.close();
+    this.rejectAllPendingInvites();
+  }
+
+  cancelCreateNewTeam() {
+    this.dialogRef?.close();
+  }
+
+  private rejectAllPendingInvites() {
+    const pendingInviteHurs = this.hackathonUserResponsesByTeam
+      ?.map((team) => this.getCurrentUserHur(team))
+      ?.filter((hur) => hur && !hur.current_user_is_team_lead);
+
+    if (!pendingInviteHurs?.length) {
+      this.proceedCreateNewTeam();
+      return;
+    }
+
+    let completed = 0;
+    pendingInviteHurs.forEach((hur) => {
+      this.hurService.respondToTeamInvite(hur.id, 'rejected').subscribe({
+        next: () => {
+          completed++;
+          if (completed === pendingInviteHurs.length) {
+            this.proceedCreateNewTeam();
+          }
+        },
+        error: () => {
+          completed++;
+          if (completed === pendingInviteHurs.length) {
+            this.proceedCreateNewTeam();
+          }
+        },
+      });
+    });
+  }
+
+  private proceedCreateNewTeam() {
+    // Reuse existing HUR without a team that belongs to current user
+    const currentUserTeamlessHur = this.hackathonUserResponsesWithoutTeam
+      ?.flatMap((group) => group.hackathon_user_responses)
+      ?.find((hur) => hur.user_id === this.currentUser?.id);
+
+    this.hackathonUserResponse = currentUserTeamlessHur || null;
     this.selectedTeamIndex = -1;
     this.selectedTeam = null;
     this.current_user_is_team_lead = true;

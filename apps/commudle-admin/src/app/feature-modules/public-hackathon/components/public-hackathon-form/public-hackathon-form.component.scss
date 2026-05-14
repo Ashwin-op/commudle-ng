@@ -149,3 +149,43 @@ nb-stepper {
     @apply com-text-center;
   }
 }
+
+.create-team-confirm-dialog {
+  @apply com-m-0 com-w-auto com-max-w-md;
+
+  .dialog-content {
+    @apply com-text-center com-py-2;
+
+    .warning-icon {
+      @apply com-mb-4;
+
+      nb-icon {
+        @apply com-text-6xl;
+      }
+    }
+
+    .dialog-title {
+      @apply com-text-xl com-font-bold com-mb-3 com-text-Yankees-Blue;
+    }
+
+    .dialog-message {
+      @apply com-text-gray-600 com-leading-relaxed com-mb-4;
+    }
+
+    .affected-teams {
+      @apply com-text-left com-bg-gray-50 com-rounded-lg com-p-4 com-mt-4;
+
+      .affected-label {
+        @apply com-text-sm com-font-medium com-text-gray-500 com-mb-2;
+      }
+
+      .team-list {
+        @apply com-flex com-flex-wrap com-gap-2;
+
+        .team-chip {
+          @apply com-text-sm com-font-medium com-px-3 com-py-1 com-rounded-full com-bg-orange-100 com-text-orange-700;
+        }
+      }
+    }
+  }
+}

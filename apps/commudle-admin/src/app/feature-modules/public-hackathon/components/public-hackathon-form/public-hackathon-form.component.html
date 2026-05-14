@@ -224,3 +224,36 @@
     </nb-card-footer>
   </nb-card>
 </ng-template>
+
+<ng-template #createTeamConfirmDialog>
+  <nb-card class="create-team-confirm-dialog">
+    <nb-card-header class="com-flex com-justify-between com-items-center">
+      <span>Create New Team</span>
+      <button ghost nbButton size="small" (click)="cancelCreateNewTeam()" shape="round">
+        <nb-icon icon="close"></nb-icon>
+      </button>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="dialog-content">
+        <p class="icon">
+          <nb-icon icon="alert-triangle-outline" status="warning"></nb-icon>
+        </p>
+        <h3 class="dialog-title">Are you sure?</h3>
+        <p class="dialog-message">
+          By creating your own team, all pending invitations from other teams will be
+          <strong>automatically rejected</strong>. This action cannot be undone.
+        </p>
+        <div class="affected-teams" *ngIf="pendingInviteTeamNames?.length > 0">
+          <p class="affected-label">Invites that will be rejected:</p>
+          <div class="team-list">
+            <span *ngFor="let name of pendingInviteTeamNames" class="team-chip">{{ name }}</span>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer class="com-flex com-justify-end com-gap-3">
+      <button nbButton ghost (click)="cancelCreateNewTeam()">Cancel</button>
+      <button nbButton status="danger" (click)="confirmCreateNewTeam()">Yes, Create My Team</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>

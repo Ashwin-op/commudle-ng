@@ -52,15 +52,7 @@
                 </div>
               </div>
 
-              <div
-                *ngIf="
-                  hackathon &&
-                  hur.invite_status === EInvitationStatus.REJECTED &&
-                  hackathon.start_date &&
-                  hackathon.end_date
-                "
-                class="details-card-container"
-              >
+              <div *ngIf="hackathon && hur.invite_status === EInvitationStatus.REJECTED" class="details-card-container">
                 <p class="create-team-title">Don't want to join other team?</p>
                 <div class="title-team-card">
                   <span class="icon">
