@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IRound, IHackathonTeamRoundSubmission } from '@commudle/shared-models';
 
 import { Subject } from 'rxjs';
-import { faUpload, faFile, faXmark, faExternalLink } from '@fortawesome/free-solid-svg-icons';
+import { faUpload, faFile, faXmark, faExternalLink, faLink } from '@fortawesome/free-solid-svg-icons';
 import { NbDialogRef } from '@commudle/theme';
 import { HackathonTeamRoundSubmissionService, ToastrService } from '@commudle/shared-services';
 import { PdfXssValidationService } from '@commudle/shared-components';
@@ -22,6 +22,7 @@ export class PptUploadDialogComponent implements OnInit {
   uploadForm: FormGroup;
   selectedFile: File | null = null;
   isUploading = false;
+  submissionMode: 'file' | 'link' = 'file';
   private destroy$ = new Subject<void>();
 
   readonly icons = {
@@ -29,6 +30,7 @@ export class PptUploadDialogComponent implements OnInit {
     faFile,
     faXmark,
     faExternalLink,
+    faLink,
   };
 
   constructor(
@@ -40,6 +42,7 @@ export class PptUploadDialogComponent implements OnInit {
   ) {
     this.uploadForm = this.fb.group({
       comments: [''],
+      link: [''],
     });
   }
 
@@ -47,7 +50,21 @@ export class PptUploadDialogComponent implements OnInit {
     if (this.existingSubmission) {
       this.uploadForm.patchValue({
         comments: this.existingSubmission.comments || '',
+        link: this.existingSubmission.link || '',
       });
+
+      if (this.existingSubmission.link) {
+        this.submissionMode = 'link';
+      }
+    }
+  }
+
+  switchMode(mode: 'file' | 'link') {
+    this.submissionMode = mode;
+    if (mode === 'link') {
+      this.selectedFile = null;
+    } else {
+      this.uploadForm.patchValue({ link: '' });
     }
   }
 
@@ -90,14 +107,48 @@ export class PptUploadDialogComponent implements OnInit {
     }
   }
 
+  isSubmitDisabled(): boolean {
+    if (this.isUploading) {
+      return true;
+    }
+
+    if (this.existingSubmission) {
+      return false;
+    }
+
+    if (this.submissionMode === 'file') {
+      return !this.selectedFile;
+    }
+
+    return !this.uploadForm.get('link')?.value?.trim();
+  }
+
   onSubmit() {
+    if (this.submissionMode === 'link') {
+      const linkValue = this.uploadForm.get('link')?.value?.trim();
+      if (!this.existingSubmission && !linkValue) {
+        this.toasterService.warningDialog('Please provide a link.');
+        return;
+      }
+
+      if (linkValue && !this.isValidUrl(linkValue)) {
+        this.toasterService.warningDialog('Please provide a valid URL (starting with http:// or https://).');
+        return;
+      }
+    }
+
     this.isUploading = true;
     const formData = new FormData();
 
-    if (this.selectedFile) {
+    if (this.submissionMode === 'file' && this.selectedFile) {
       formData.append('file', this.selectedFile);
     }
+
     formData.append('hackathon_team_round_submission[comments]', this.uploadForm.get('comments')?.value || '');
+    formData.append(
+      'hackathon_team_round_submission[link]',
+      this.submissionMode === 'link' ? this.uploadForm.get('link')?.value || '' : '',
+    );
 
     const request = this.existingSubmission
       ? this.submissionService.updateSubmission(formData, this.existingSubmission.id)
@@ -109,7 +160,7 @@ export class PptUploadDialogComponent implements OnInit {
         this.dialogRef.close(response);
       },
       error: (error) => {
-        console.error('Error uploading PPT:', error);
+        console.error('Error submitting:', error);
         this.isUploading = false;
       },
     });
@@ -117,5 +168,14 @@ export class PptUploadDialogComponent implements OnInit {
 
   close() {
     this.dialogRef.close();
+  }
+
+  private isValidUrl(url: string): boolean {
+    try {
+      const parsed = new URL(url);
+      return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+    } catch {
+      return false;
+    }
   }
 }

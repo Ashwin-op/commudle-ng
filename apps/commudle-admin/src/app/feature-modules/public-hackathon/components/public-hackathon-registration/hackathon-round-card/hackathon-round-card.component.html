@@ -121,9 +121,13 @@
     >
       View PPT
     </a>
+    } @else if(getRoundSubmission()?.link) {
+    <a class="view-ppt-link" [href]="getRoundSubmission().link" target="_blank" rel="noopener noreferrer">
+      View Link
+    </a>
     }
     <button nbButton status="primary" size="small" (click)="openPPTUploadDialog()" [disabled]="!isLive">
-      {{ getRoundSubmission() ? 'Update PPT' : 'Submit PPT' }}
+      {{ getRoundSubmission() ? 'Update Submission' : 'Submit' }}
     </button>
     } @else if (round.round_type === ERoundType.PROJECT_SUBMISSION || round.round_type === ERoundType.FINAL_JUDGING) {
     <a

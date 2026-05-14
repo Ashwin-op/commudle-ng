@@ -17,6 +17,22 @@
     @apply com-text-Paragraph-2 com-text-gray-500 com-m-0;
   }
 
+  .mode-toggle {
+    @apply com-flex com-gap-2 com-mb-4 com-p-1 com-bg-gray-100 com-rounded-lg;
+
+    .mode-button {
+      @apply com-flex-1 com-flex com-items-center com-justify-center com-gap-2;
+      @apply com-px-4 com-py-2 com-rounded-md com-text-Paragraph-2 com-font-medium;
+      @apply com-border-none com-cursor-pointer com-transition-all com-duration-200;
+      @apply com-bg-transparent com-text-gray-600;
+      @apply hover:com-text-Yankees-Blue;
+
+      &.active {
+        @apply com-bg-white com-text-primary-500 com-shadow-sm;
+      }
+    }
+  }
+
   .existing-file {
     @apply com-flex com-items-center com-justify-between com-p-4 com-bg-Alice-Blue com-rounded-lg com-mb-4;
 
@@ -98,8 +114,20 @@
     }
   }
 
+  .link-section {
+    @apply com-flex com-flex-col com-gap-2;
+
+    .link-label {
+      @apply com-text-Paragraph-2 com-font-medium com-text-Yankees-Blue;
+    }
+
+    .link-hint {
+      @apply com-text-Caption com-text-gray-500 com-m-0;
+    }
+  }
+
   .comments-section {
-    @apply com-flex com-flex-col com-gap-2 com-mt-2;
+    @apply com-flex com-flex-col com-gap-2 com-mt-4;
 
     .comments-label {
       @apply com-text-Paragraph-2 com-font-medium com-text-Yankees-Blue;

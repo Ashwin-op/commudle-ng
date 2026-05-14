@@ -235,6 +235,14 @@
                 </a>
                 <span class="date-time">({{ teamData.submission.created_at | date : 'short' }})</span>
               </div>
+              } @else if(teamData.submission?.link) {
+              <div class="ppt-link">
+                <strong>Submission Link:</strong>
+                <a [href]="teamData.submission.link" target="_blank" rel="noopener noreferrer">
+                  {{ teamData.submission.link }}
+                </a>
+                <span class="date-time">({{ teamData.submission.created_at | date : 'short' }})</span>
+              </div>
               } @if(teamData.team.community_build) {
               <div class="project-link">
                 <strong>Project:</strong>
@@ -276,8 +284,9 @@
                   }
                 </ol>
               </div>
-              } @if(!teamData.submission?.file_attachment && !teamData.team.community_build &&
-              (!teamData.team.entity_updates || teamData.team.entity_updates.length === 0)) {
+              } @if(!teamData.submission?.file_attachment && !teamData.submission?.link &&
+              !teamData.team.community_build && (!teamData.team.entity_updates || teamData.team.entity_updates.length
+              === 0)) {
               <span class="no-submission">No submission</span>
               }
             </div>

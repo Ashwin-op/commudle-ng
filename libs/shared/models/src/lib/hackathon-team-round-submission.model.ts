@@ -10,5 +10,6 @@ export interface IHackathonTeamRoundSubmission {
   created_at: Date;
   updated_at: Date;
   file_attachment: IAttachedFile;
+  link: string;
   round: IRound;
 }

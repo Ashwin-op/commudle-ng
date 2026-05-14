@@ -49,6 +49,7 @@ import {
   faFilePowerpoint,
   faLaptopCode,
   faChartPie,
+  faLink,
 } from '@fortawesome/free-solid-svg-icons';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IHackathon, EHackathonStatus } from 'apps/shared-models/hackathon.model';
@@ -93,6 +94,7 @@ export class HackathonControlPanelReviewComponent implements OnInit, OnDestroy {
     faFilePowerpoint,
     faLaptopCode,
     faChartPie,
+    faLink,
   };
 
   notesForm: FormGroup;
@@ -1020,6 +1022,12 @@ export class HackathonControlPanelReviewComponent implements OnInit, OnDestroy {
     this.nbDialogService.open(this.documentViewerDialog, {
       context: { roundName, teamName, url },
     });
+  }
+
+  openExternalLink(url: string) {
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
   }
 
   toggleUpdateExpansion(updateId: number): void {

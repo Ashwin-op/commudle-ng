@@ -7,10 +7,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-# Development server (http://localhost:4200/)
+# Interactive dev server launcher (handles env switching, git pull, host/port)
+./serve.sh
+
+# Development server directly (http://localhost:4200/)
 npx nx run commudle-admin:serve
 
-# Production SSR build
+# Dev server with SSR
+npx nx run commudle-admin:serve-ssr
+
+# Production SSR build → outputs prod-server.zip for Elastic Beanstalk
 npx nx run commudle-admin:release
 
 # Run tests for a specific project
@@ -32,22 +38,49 @@ npx nx g @nx/angular:interface <interface-name>
 
 This is an **Nx monorepo** for Commudle — a community management platform for tech communities. Built with Angular 19, SSR via Angular Universal, PWA, and a custom Nebular fork (`@commudle/theme`).
 
+The dev server connects directly to **production APIs** by default. To switch environments, edit the last line of `libs/shared/environments/src/lib/environments.ts`: change `environments['local']` to `environments['test']`, `environments['staging']`, or `environments['production']`. The `serve.sh` script handles this interactively.
+
 ### Key directories
 
 - `apps/commudle-admin/` — main Angular app; feature modules live under `src/app/feature-modules/`
-- `apps/shared-*/` — shared code partitioned by type: `shared-components`, `shared-services`, `shared-models`, `shared-pipes`, `shared-directives`, `shared-modules`
-- `libs/` — publishable libraries: `auth`, `editor`, `in-viewport`, `infinite-scroll`, `ngx-datatable`, `shared/`
+- `apps/shared-*/` — **legacy thin re-export wrappers** pointing to `libs/shared/`; do not add new code here
+- `libs/shared/` — actual shared code: `services`, `models`, `components`, `channels`, `validators`, `environments`
+- `libs/` — publishable libraries: `auth`, `editor`, `in-viewport`, `infinite-scroll`, `ngx-datatable`, `commudle-theme`
 - `apps/commudle-admin-e2e/` — Cypress E2E tests
+- `apps/shared-interceptors/` — HTTP interceptors (auth token, API response parser)
+- `apps/shared-resolvers/` — route resolvers
 
 ### Import conventions
 
-Path aliases are configured in `tsconfig.base.json`. Always use barrel imports:
+Path aliases are configured in `tsconfig.base.json`. Always use barrel imports from the `@commudle/*` aliases — never import directly from `apps/shared-*` paths (those are legacy):
 
-- `@commudle/shared-services` for services
-- `@commudle/shared-models` for models
-- `@commudle/theme` for UI components — **never** `@nebular/theme`
+- `@commudle/shared-services` → services, `BaseApiService`, `AuthService`, `SeoService`, `GoogleTagManagerService`
+- `@commudle/shared-models` → model interfaces and enums
+- `@commudle/shared-components` → reusable UI components
+- `@commudle/shared-environments` → environment config
+- `@commudle/theme` → Nebular UI components — **never** `@nebular/theme`
+- `@commudle/auth` → Google/social auth module
 
 Import order: Angular core → third-party → app services → app models → app components.
+
+### API layer
+
+- `BaseApiService` must have `setBaseUrl(environment.base_url)` called at app init before any HTTP calls
+- All API responses are automatically unwrapped by `ApiParserResponseInterceptor` — the `.data` field is extracted, so services receive the payload directly
+- Auth tokens are injected by `LibAuthwatchTokenInterceptor`
+- Real-time features use ActionCable (Rails WebSocket) via `ActionCableConnectionSocket` from `@commudle/shared-services`
+
+### Feature module structure
+
+Each feature under `apps/commudle-admin/src/app/feature-modules/` follows:
+```
+feature-name/
+  feature-name.module.ts       # NgModule declaration + imports
+  feature-name.routing.ts      # lazy-loaded child routes
+  components/                  # all components for this feature
+```
+
+All feature modules are **lazy-loaded** from `app-routing.module.ts`. Route guards: `AuthGuard` (requires login), `RoleGuard` (checks `EUserRoles`).
 
 ## Angular Patterns
 

@@ -83,7 +83,7 @@
           <a
             *ngFor="let sub of team.hackathon_team_round_submissions"
             class="artifact-chip submission-chip"
-            [href]="sub.file_attachment?.url"
+            [href]="sub.file_attachment?.url || sub.link"
             target="_blank"
             (click)="$event.stopPropagation()"
           >

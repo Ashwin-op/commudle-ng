@@ -382,7 +382,7 @@
                 <a
                   *ngFor="let submission of userResponse.team.hackathon_team_round_submissions"
                   class="ppt-chip"
-                  [href]="submission.file_attachment?.url"
+                  [href]="submission.file_attachment?.url || submission.link"
                   target="_blank"
                 >
                   <fa-icon [icon]="icons.faFileImage"></fa-icon> {{ submission.round?.name || 'PPT' }}

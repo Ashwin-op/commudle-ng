@@ -1,7 +1,7 @@
 <nb-card class="upload-dialog">
   <nb-card-header>
     <div class="header-content">
-      <h4 class="dialog-title">{{ existingSubmission ? 'Update' : 'Submit' }} Presentation</h4>
+      <h4 class="dialog-title">{{ existingSubmission ? 'Update' : 'Submit' }} Submission</h4>
       <button nbButton ghost size="small" (click)="close()" class="close-button" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
@@ -11,7 +11,30 @@
 
   <nb-card-body>
     <form [formGroup]="uploadForm">
-      @if(existingSubmission?.file_attachment) {
+      <!-- Mode Toggle -->
+      <div class="mode-toggle">
+        <button
+          type="button"
+          class="mode-button"
+          [class.active]="submissionMode === 'file'"
+          (click)="switchMode('file')"
+        >
+          <fa-icon [icon]="icons.faUpload"></fa-icon>
+          Upload File
+        </button>
+        <button
+          type="button"
+          class="mode-button"
+          [class.active]="submissionMode === 'link'"
+          (click)="switchMode('link')"
+        >
+          <fa-icon [icon]="icons.faLink"></fa-icon>
+          Add Link
+        </button>
+      </div>
+
+      <!-- Existing Submission Info -->
+      @if(existingSubmission?.file_attachment && submissionMode === 'file') {
       <div class="existing-file">
         <div class="existing-file-header">
           <fa-icon [icon]="icons.faFile" class="existing-file-icon"></fa-icon>
@@ -27,8 +50,26 @@
           View
         </a>
       </div>
+      } @if(existingSubmission?.link && submissionMode === 'link') {
+      <div class="existing-file">
+        <div class="existing-file-header">
+          <fa-icon [icon]="icons.faLink" class="existing-file-icon"></fa-icon>
+          <div class="existing-file-info">
+            <p class="existing-label">Current Link:</p>
+            <p class="existing-file-name" [title]="existingSubmission.link">
+              {{ existingSubmission.link }}
+            </p>
+          </div>
+        </div>
+        <a [href]="existingSubmission.link" target="_blank" rel="noopener noreferrer" class="existing-link">
+          <fa-icon [icon]="icons.faExternalLink"></fa-icon>
+          Open
+        </a>
+      </div>
       }
 
+      <!-- File Upload Mode -->
+      @if(submissionMode === 'file') {
       <div class="upload-area" (click)="fileInput.click()" [class.has-file]="selectedFile">
         <input type="file" #fileInput accept=".ppt,.pptx,.pdf" (change)="onFileSelected($event)" class="file-input" />
 
@@ -50,6 +91,16 @@
         </div>
         }
       </div>
+      }
+
+      <!-- Link Mode -->
+      @if(submissionMode === 'link') {
+      <div class="link-section">
+        <label class="link-label">Submission Link</label>
+        <input nbInput fullWidth type="url" placeholder="https://example.com/your-submission" formControlName="link" />
+        <p class="link-hint">Provide a link to your submission (e.g., Google Drive, GitHub, Figma, etc.)</p>
+      </div>
+      }
 
       <div class="comments-section">
         <label class="comments-label">Comments (Optional)</label>
@@ -67,15 +118,10 @@
   <nb-card-footer>
     <div class="dialog-actions">
       <button nbButton ghost (click)="close()">Cancel</button>
-      <button
-        nbButton
-        status="primary"
-        [disabled]="(!selectedFile && !existingSubmission) || isUploading"
-        (click)="onSubmit()"
-      >
+      <button nbButton status="primary" [disabled]="isSubmitDisabled()" (click)="onSubmit()">
         @if(isUploading) {
         <nb-icon icon="loader-outline" class="spinning"></nb-icon>
-        Uploading... } @else { {{ existingSubmission ? 'Update' : 'Submit' }} Presentation }
+        Submitting... } @else { {{ existingSubmission ? 'Update' : 'Submit' }} }
       </button>
     </div>
   </nb-card-footer>
