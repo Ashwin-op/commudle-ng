@@ -18,27 +18,166 @@
     }
   }
 
+  .hackathon-sponsors-card-title {
+    @apply com-m-0 com-text-2xl com-font-bold com-text-Yankees-Blue;
+
+    a {
+      @apply com-no-underline com-text-inherit;
+    }
+  }
+
+  #sponsors nb-card-header fa-icon {
+    @apply com-text-gray-400;
+  }
+
   .sponsors-cards {
-    .sponsor-group-name {
-      @apply com-text-Yankees-Blue com-font-bold com-text-lg;
+    @apply com-p-4 md:com-p-6;
+  }
+
+  .sponsor-tier {
+    @apply com-mb-8 com-min-w-0 last:com-mb-0;
+  }
+
+  .sponsor-tier-header {
+    @apply com-mb-3 com-flex com-w-full com-max-w-full com-flex-wrap com-items-center com-gap-x-2.5 com-gap-y-1.5 md:com-flex-nowrap md:com-gap-x-3;
+  }
+
+  .sponsor-tier-badge {
+    @apply com-inline-flex com-flex-shrink-0 com-items-center com-rounded-full com-bg-Seashell com-px-2.5 com-py-0.5 com-text-[10px] com-font-bold com-text-tChocolate-Traditional md:com-px-3 md:com-py-1 md:com-text-xs;
+  }
+
+  .sponsor-tier-rule {
+    @apply com-h-px com-min-h-px com-min-w-0 com-flex-1 com-bg-Bright-Gray com-basis-full md:com-basis-auto;
+  }
+
+  .sponsor-tier-grid {
+    @apply com-grid com-gap-3 md:com-gap-4;
+
+    &--cols-1 {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
     }
-    .sponsor-card-container {
-      @apply com-flex com-gap-6 com-flex-wrap com-mb-5;
-      .sponsor-card {
-        a {
-          @apply com-flex com-gap-2 com-items-center com-no-underline;
-          img {
-            @apply com-w-11 com-h-11 com-object-contain;
-          }
-          .name {
-            @apply com-font-bold com-text-lg com-text-Yankees-Blue;
-          }
-        }
-      }
+
+    &--cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-    .sponsor-card-container {
-      @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-pb-2;
+
+    &--cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+
+    &--cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    &--cols-5 {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    > .sponsor-tier-card {
+      @apply com-min-w-0;
+    }
+  }
+
+  /* Minimal glass: neutral body; tier tint = small radials top-left + bottom-right only */
+  .sponsor-tier-card {
+    --sponsor-tl: rgb(214 224 255 / 0.42);
+    --sponsor-br: rgb(51 102 255 / 0.15);
+    --sponsor-border: rgb(228 233 242 / 0.98);
+    --sponsor-border-hover: rgb(208 216 232 / 0.98);
+
+    @apply com-relative com-isolate com-overflow-hidden com-rounded-xl com-border com-border-solid com-shadow-none;
+    @apply com-transition-colors com-duration-200;
+
+    border-color: var(--sponsor-border);
+    backdrop-filter: blur(10px) saturate(1.04);
+    -webkit-backdrop-filter: blur(10px) saturate(1.04);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.95);
+
+    &::before,
+    &::after {
+      content: '';
+      @apply com-pointer-events-none com-absolute com-inset-0 com-z-0 com-rounded-xl;
+    }
+
+    &::before {
+      opacity: 0.94;
+      background: radial-gradient(ellipse 52% 42% at 0% 0%, var(--sponsor-tl) 0%, transparent 70%);
+    }
+
+    &::after {
+      opacity: 0.94;
+      background: radial-gradient(ellipse 48% 40% at 100% 100%, var(--sponsor-br) 0%, transparent 72%);
+    }
+
+    &:hover {
+      border-color: var(--sponsor-border-hover);
+
+      background-color: rgb(255 255 255 / 0.93);
+    }
+
+    &:hover::before,
+    &:hover::after {
+      opacity: 1;
+    }
+
+    &--tone-0 {
+      --sponsor-tl: rgb(214 224 255 / 0.55);
+      --sponsor-br: rgb(92 133 255 / 0.22);
+      --sponsor-border: rgb(173 194 255 / 0.72);
+      --sponsor-border-hover: rgb(133 163 255 / 0.88);
+    }
+
+    &--tone-1 {
+      --sponsor-tl: rgb(255 241 187 / 0.58);
+      --sponsor-br: rgb(255 170 0 / 0.2);
+      --sponsor-border: rgb(255 214 150 / 0.75);
+      --sponsor-border-hover: rgb(255 190 105 / 0.88);
+    }
+
+    &--tone-2 {
+      --sponsor-tl: rgb(204 245 228 / 0.55);
+      --sponsor-br: rgb(0 214 143 / 0.18);
+      --sponsor-border: rgb(130 220 195 / 0.65);
+      --sponsor-border-hover: rgb(0 200 145 / 0.55);
+    }
+
+    &--tone-3 {
+      --sponsor-tl: rgb(230 241 255 / 0.6);
+      --sponsor-br: rgb(111 34 223 / 0.15);
+      --sponsor-border: rgb(195 205 240 / 0.78);
+      --sponsor-border-hover: rgb(165 150 225 / 0.88);
+    }
+
+    &--tone-4 {
+      --sponsor-tl: rgb(255 228 220 / 0.56);
+      --sponsor-br: rgb(255 114 94 / 0.18);
+      --sponsor-border: rgb(255 195 180 / 0.78);
+      --sponsor-border-hover: rgb(255 155 135 / 0.88);
+    }
+  }
+
+  .sponsor-tier-card-link {
+    @apply com-relative com-z-10 com-flex com-h-full com-min-w-0 com-flex-col com-items-center com-p-3 com-no-underline;
+  }
+
+  .sponsor-tier-logo-wrap {
+    @apply com-mb-2 com-flex md:com-h-14 com-w-full com-h-full com-flex-shrink-0 com-items-center com-justify-center;
+  }
+
+  .sponsor-tier-logo {
+    @apply com-h-full com-w-full com-object-contain;
+  }
+
+  .sponsor-tier-text-block {
+    @apply com-mb-auto com-w-full com-text-center;
+  }
+
+  .sponsor-tier-name {
+    @apply com-m-0 com-text-center com-text-xs com-font-medium com-text-Yankees-Blue;
+  }
+
+  .sponsor-tier-role {
+    @apply com-m-0 com-line-clamp-2 com-text-center com-text-xs com-text-gray-500;
   }
 
   commudle-discussion {
@@ -62,15 +201,6 @@
   }
   .round-card:not(:last-child) {
     @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
-  }
-
-  .project-details-card {
-    .heading {
-      @apply com-text-green-600 com-text-base com-font-semibold;
-    }
-    .round-details {
-      @apply com-text-orange-400 com-text-base com-font-semibold com-pb-6;
-    }
   }
 
   .status-info {

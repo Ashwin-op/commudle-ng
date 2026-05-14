@@ -22,30 +22,45 @@
       </nb-card>
     </div>
 
-    <div *ngIf="hackathon.sponsors_count > 0" id="sponsors">
+    <div *ngIf="hackathon.sponsors_count > 0 && hackathonSponsorGroupedByTierName" id="sponsors">
       <nb-card>
         <nb-card-header>
           <fa-icon [icon]="icons.faSackDollar"></fa-icon>
-          <h2>
-            <a [routerLink]="['.']" fragment="sponsors"> Sponsors </a>
+          <h2 class="hackathon-sponsors-card-title">
+            <a [routerLink]="['.']" fragment="sponsors">Sponsors</a>
           </h2>
         </nb-card-header>
         <nb-card-body class="sponsors-cards">
-          <div *ngFor="let hackathonSponsorGrouped of hackathonSponsorGroupedByTierName | keyvalue">
-            <span class="sponsor-group-name"> {{ hackathonSponsorGrouped.key }}</span>
-            <div class="sponsor-card-container">
+          <div
+            *ngFor="let hackathonSponsorGrouped of hackathonSponsorGroupedByTierName | keyvalue; let tierIndex = index"
+            class="sponsor-tier"
+          >
+            <header class="sponsor-tier-header">
+              <span class="sponsor-tier-badge"> {{ hackathonSponsorGrouped.key }}</span>
+              <span class="sponsor-tier-rule" aria-hidden="true"></span>
+            </header>
+
+            <div class="sponsor-tier-grid" [ngClass]="'sponsor-tier-grid--cols-' + ((tierIndex % 5) + 1)">
               <div
-                *ngFor="let hackathonSponsor of hackathonSponsorGrouped.value"
-                class="sponsor-card"
-                [nbTooltip]="hackathonSponsor.sponsor?.description"
-                [nbTooltipDisabled]="!hackathonSponsor.sponsor?.description"
+                *ngFor="let hackathonSponsor of hackathonSponsorGrouped.value || []"
+                class="sponsor-tier-card"
+                [ngClass]="'sponsor-tier-card--tone-' + (tierIndex % 5)"
               >
                 <a
-                  [href]="hackathonSponsor.sponsor.link"
+                  [href]="hackathonSponsor.sponsor.link ? hackathonSponsor.sponsor.link : null"
+                  target="_blank"
                   [ngClass]="{ 'com-pointer-events-none': !hackathonSponsor.sponsor.link }"
+                  class="sponsor-tier-card-link"
                 >
-                  <img [src]="hackathonSponsor.sponsor.logo.url" [alt]="hackathonSponsor.sponsor.name" />
-                  <div class="name">{{ hackathonSponsor.sponsor.name }}</div>
+                  <div class="sponsor-tier-logo-wrap">
+                    <img [src]="hackathonSponsor.sponsor.logo.url" alt="" loading="lazy" class="sponsor-tier-logo" />
+                  </div>
+                  <div class="sponsor-tier-text-block">
+                    <h3 class="sponsor-tier-name">{{ hackathonSponsor.sponsor.name }}</h3>
+                    <p *ngIf="hackathonSponsor.sponsor.description" class="sponsor-tier-role">
+                      {{ hackathonSponsor.sponsor.description }}
+                    </p>
+                  </div>
                 </a>
               </div>
             </div>
