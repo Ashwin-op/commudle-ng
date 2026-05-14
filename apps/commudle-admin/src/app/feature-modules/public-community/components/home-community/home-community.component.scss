@@ -108,7 +108,7 @@
   }
 
   .menu-items {
-    @apply com-ml-2 com-overflow-y-scroll md:com-overflow-y-hidden com-items-center;
+    @apply com-ml-2 com-overflow-y-scroll md:com-overflow-y-hidden com-items-center com-scrollbar-hide;
     a {
       @apply com-text-gunmetal com-text-sm com-leading-4 com-h-fit com-m-0 com-px-2 com-cursor-pointer com-no-underline com-font-medium md:com-px-4 com-py-3;
       @apply com-border-0 com-border-b-3 com-border-solid com-border-transparent;
