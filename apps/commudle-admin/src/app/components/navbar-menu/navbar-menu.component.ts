@@ -11,9 +11,9 @@ import {
   faCalendarDays,
   faBriefcase,
   faTrophy,
-  faRocket,
   faChevronRight,
   faCircleCheck,
+  faCompass,
 } from '@fortawesome/free-solid-svg-icons';
 import { NbPopoverDirective } from '@commudle/theme';
 import { NotificationsStore } from 'apps/commudle-admin/src/app/feature-modules/notifications/store/notifications.store';
@@ -45,7 +45,7 @@ export class NavbarMenuComponent implements OnInit, OnDestroy {
   faCalendarDays = faCalendarDays;
   faBriefcase = faBriefcase;
   faTrophy = faTrophy;
-  faRocket = faRocket;
+  faCompass = faCompass;
   faChevronRight = faChevronRight;
 
   notificationCount = 0;

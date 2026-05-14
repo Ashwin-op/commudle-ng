@@ -21,6 +21,14 @@ nb-actions {
         @apply com-h-6 com-w-6 com-text-xl com-flex com-items-center com-justify-center com-flex-shrink-0 com-text-gray-300;
       }
 
+      &.explore-nav-trigger fa-icon {
+        @apply com-origin-center;
+      }
+
+      &.explore-nav-trigger:active fa-icon {
+        animation: explore-compass-spin 1s cubic-bezier(0.33, 0.86, 0.2, 1);
+      }
+
       &.active {
         fa-icon,
         nb-icon,
@@ -82,4 +90,14 @@ nb-actions {
 
 .explore-action-chevron {
   @apply com-text-gray-400 com-text-xs;
+}
+
+@keyframes explore-compass-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(540deg);
+  }
 }

@@ -25,13 +25,13 @@
   </nb-action>
   <nb-action *appBreakpoints="'>lg'">
     <a
-      class="com-cursor-pointer"
+      class="com-cursor-pointer explore-nav-trigger"
       [nbPopover]="desktopExplorePopover"
       nbPopoverPlacement="bottom"
       nbPopoverTrigger="click"
       #desktopExploreTrigger="nbPopover"
     >
-      <fa-icon [icon]="faRocket"></fa-icon>
+      <fa-icon [icon]="faCompass"></fa-icon>
       <span>Explore</span>
     </a>
   </nb-action>
@@ -53,8 +53,8 @@
     </a>
   </nb-action>
   <nb-action *ngIf="!currentUser">
-    <a *appBreakpoints="'<=lg'" (click)="openExploreBottomSheet()" class="com-cursor-pointer">
-      <fa-icon [icon]="faRocket"></fa-icon>
+    <a *appBreakpoints="'<=lg'" (click)="openExploreBottomSheet()" class="com-cursor-pointer explore-nav-trigger">
+      <fa-icon [icon]="faCompass"></fa-icon>
       <span>Explore</span>
     </a>
   </nb-action>
