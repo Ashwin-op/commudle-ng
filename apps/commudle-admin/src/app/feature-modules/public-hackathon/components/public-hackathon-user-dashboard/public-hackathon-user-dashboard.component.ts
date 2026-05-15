@@ -11,7 +11,7 @@ import {
   IHackathonTeam,
   IHackathonUserResponse,
 } from '@commudle/shared-models';
-import { AuthService, CommunityChannelsService, ToastrService, SeoService } from '@commudle/shared-services';
+import { AuthService, ToastrService, SeoService } from '@commudle/shared-services';
 import { NbDialogService } from '@commudle/theme';
 import { faArrowRight, faUserMinus, faXmark, faEdit, faEnvelope, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { HackathonResponseGroupService } from 'apps/commudle-admin/src/app/services/hackathon-response-group.service';
@@ -65,7 +65,6 @@ export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy 
     private hackathonService: HackathonService,
     private hrgService: HackathonResponseGroupService,
     private authService: AuthService,
-    private channelService: CommunityChannelsService,
     private nbDialogService: NbDialogService,
     private hackathonUserResponseService: HackathonUserResponsesService,
     private toasterService: ToastrService,
@@ -108,17 +107,16 @@ export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy 
   }
 
   getHackathonCurrentRegistrationDetails() {
-    this.subscriptions.push(
-      this.hackathonService
-        .getHackathonCurrentRegistrationDetails(this.hackathon.id)
-        .subscribe((data: IHackathonTeam[]) => {
-          if (data) {
-            this.userTeamDetails = data;
-            this.categorizeTeams();
-            this.syncSelectedTeam();
-          }
-        }),
-    );
+    this.hackathonService
+      .getHackathonCurrentRegistrationDetails(this.hackathon.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: IHackathonTeam[]) => {
+        if (data) {
+          this.userTeamDetails = data;
+          this.categorizeTeams();
+          this.syncSelectedTeam();
+        }
+      });
   }
 
   categorizeTeams() {
@@ -206,6 +204,8 @@ export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy 
     this.hackathonUserResponseService.updateTeamDetails(formData, hackathonUserResponseId).subscribe((data) => {
       if (data) {
         this.toasterService.successDialog('Team members updated successfully');
+        // Refresh team data to reflect changes
+        this.getHackathonCurrentRegistrationDetails();
       }
     });
   }

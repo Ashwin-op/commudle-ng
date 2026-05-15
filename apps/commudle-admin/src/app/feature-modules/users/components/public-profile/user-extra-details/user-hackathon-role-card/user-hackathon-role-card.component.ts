@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { IHackathon } from 'apps/shared-models/hackathon.model';
 import { faCalendarAlt, faStar } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { environment } from '@commudle/shared-environments';
+import { IHackathon } from '@commudle/shared-models';
 
 @Component({
   selector: 'commudle-user-hackathon-role-card',
