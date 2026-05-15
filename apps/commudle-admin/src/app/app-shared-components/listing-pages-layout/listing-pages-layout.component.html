@@ -4,10 +4,10 @@
 <div class="com-bg-white">
   <div class="base-layout">
     <div class="container">
-      <div *appBreakpoints="'<=sm'" class="one-column-layout">
+      <div *appBreakpoints="'<=lg'" class="one-column-layout">
         <ng-content select="[one-column]"></ng-content>
       </div>
-      <div *appBreakpoints="'>sm'" class="two-column-layout medium">
+      <div *appBreakpoints="'>lg'" class="two-column-layout medium">
         <div class="main-column">
           <ng-content select="[main-column]"></ng-content>
         </div>

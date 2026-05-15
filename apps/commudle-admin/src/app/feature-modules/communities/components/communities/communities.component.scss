@@ -3,7 +3,8 @@ div {
 }
 
 .publish-community-button {
-  @apply md:com-mx-0 com-mx-4 md:com-my-8 com-mt-8 com-mb-0 md:com-w-[343px];
+  @apply com-mx-4 com-mt-8 com-mb-0 lg:com-mx-0 lg:com-my-8 lg:com-w-[343px];
+
   .button {
     @apply com-w-full com-text-Azure com-border-Azure com-bg-Azure/10 com-rounded-lg;
   }
@@ -14,5 +15,5 @@ div {
 .tech-sessions,
 .speakers-content,
 .hackathons-upcoming {
-  @apply com-m-0 md:com-mt-4 com-mt-10;
+  @apply com-m-0 com-mt-10 lg:com-mt-4;
 }

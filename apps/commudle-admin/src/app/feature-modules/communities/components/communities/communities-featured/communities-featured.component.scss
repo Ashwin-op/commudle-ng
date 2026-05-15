@@ -3,7 +3,7 @@ p {
 }
 
 .communities-featured-container {
-  @apply com-mb-10 com-overflow-hidden com-relative com-p-0 com-pt-8 md:com-mx-0 com-mx-4;
+  @apply com-mb-10 com-overflow-hidden com-relative com-p-0 com-pt-8 com-mx-4 lg:com-mx-0;
 
   .communities-featured-heading {
     a {
@@ -12,7 +12,7 @@ p {
   }
 
   .communities-featured-list {
-    @apply com-grid md:com-grid-cols-3 com-grid-cols-1 md:com-gap-6 com-gap-y-6 com-gap-x-0;
+    @apply com-grid com-grid-cols-1 com-gap-y-6 com-gap-x-0 lg:com-grid-cols-3 lg:com-gap-6;
 
     .featured-community-card {
       @apply com-border com-border-solid com-border-Bright-Gray com-rounded-lg com-h-[296px] com-w-full com-flex-shrink-0 com-overflow-hidden;

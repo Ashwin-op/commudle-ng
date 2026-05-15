@@ -1,12 +1,15 @@
 com-card {
-  @apply com-m-0  md:com-p-4 com-p-0 md:com-block com-border-0 md:com-border;
+  @apply com-m-0 com-p-0 com-border-0 lg:com-block lg:com-p-4 lg:com-border;
+
   com-card-body {
     @apply com-p-0;
+
     .heading {
-      @apply com-m-0 md:com-mb-5 com-mb-4 com-flex md:com-p-0 com-px-4 com-py-3 com-flex-col com-border-0 md:com-border-b-0 com-border-b com-border-solid com-border-Bright-Gray;
+      @apply com-m-0 com-mb-4 com-flex com-px-4 com-py-3 com-flex-col com-border-0 com-border-b com-border-solid com-border-Bright-Gray lg:com-mb-5 lg:com-p-0 lg:com-border-b-0;
 
       .title {
-        @apply com-flex com-m-0 com-text-sm com-font-semibold com-text-Yankees-Blue com-m-0 com-mb-1;
+        @apply com-m-0 com-mb-1 com-inline-flex com-items-center com-leading-[0] com-text-base com-font-semibold com-text-Yankees-Blue lg:com-text-sm;
+
         a {
           @apply com-no-underline;
         }
@@ -17,12 +20,13 @@ com-card {
     }
 
     .user-profile-card-large {
-      @apply com-flex md:com-block com-flex-nowrap md:com-flex-wrap com-overflow-x-auto com-m-0 md:com-mx-0 com-mx-4 com-gap-4 md:com-gap-0 com-items-center;
+      @apply com-flex com-flex-nowrap com-overflow-x-auto com-m-0 com-mx-4 com-gap-4 com-items-center lg:com-block lg:com-flex-wrap lg:com-mx-0 lg:com-gap-0;
+
       .user-profile-card-large-card {
-        @apply md:com-py-3 com-m-0 com-border com-border-solid md:com-border-0 md:com-border-b com-border-Bright-Gray md:com-p-0 com-p-3 com-h-full md:com-h-auto md:com-rounded-none com-rounded-lg;
+        @apply com-m-0 com-h-full com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-p-3 lg:com-h-auto lg:com-rounded-none lg:com-border-0 lg:com-border-b lg:com-p-0 lg:com-py-3;
 
         &:last-child {
-          @apply md:com-border-0 #{!important};
+          @apply lg:com-border-0 #{!important};
         }
       }
     }

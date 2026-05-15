@@ -1,10 +1,10 @@
 com-card {
-  @apply com-mx-0 md:com-border com-border-0 com-m-0;
+  @apply com-mx-0 lg:com-border com-border-0 com-m-0;
 
   com-card-body {
-    @apply com-m-0 md:com-p-4 com-px-4 com-py-0;
+    @apply com-m-0 lg:com-p-4 com-px-4 com-py-0;
     .heading {
-      @apply com-mt-0 md:com-mb-8 com-mb-4 com-mx-0 com-flex com-flex-col md:com-p-0 com-px-4 com-py-3 com-border-0 md:com-border-b-0 com-border-b com-border-solid com-border-Bright-Gray;
+      @apply com-mt-0 lg:com-mb-8 com-mb-4 com-mx-0 com-flex com-flex-col lg:com-p-0 com-px-4 com-py-3 com-border-0 lg:com-border-b-0 com-border-b com-border-solid com-border-Bright-Gray;
 
       .title {
         @apply com-flex com-m-0 com-text-sm com-font-semibold com-text-Yankees-Blue com-mb-1 com-mt-0 com-mx-0;
@@ -18,7 +18,7 @@ com-card {
     }
 
     .tech-sessions {
-      @apply com-flex com-flex-nowrap md:com-flex-wrap com-overflow-x-auto com-mx-4 com-my-0 md:com-m-0 com-gap-4 com-items-center md:com-justify-center;
+      @apply com-flex com-flex-nowrap lg:com-flex-wrap com-overflow-x-auto com-mx-4 com-my-0 lg:com-m-0 com-gap-4 com-items-center lg:com-justify-center;
       .tech-sessions-card {
         @apply com-m-0 com-w-full;
       }

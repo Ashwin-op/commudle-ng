@@ -1,26 +1,27 @@
 com-card {
-  @apply md:com-m-0 com-m-0 com-p-0 md:com-p-4 md:com-border com-border-0;
+  @apply com-m-0 com-p-0 com-border-0 lg:com-p-4 lg:com-border;
 
   com-card-body {
     @apply com-p-0;
   }
 
   .heading {
-    @apply com-mt-0 md:com-mb-8 com-mb-4 com-mx-0 com-flex com-flex-col md:com-p-0 com-px-4 com-py-3 com-border-0 md:com-border-b-0 com-border-b com-border-solid com-border-Bright-Gray;
+    @apply com-mt-0 com-mb-4 com-mx-0 com-flex com-flex-col com-px-4 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray lg:com-mb-8 lg:com-p-0 lg:com-border-b-0;
 
     .title {
       @apply com-m-0 com-leading-[0];
       a {
-        @apply md:com-text-sm com-text-base com-font-semibold com-text-Yankees-Blue com-mb-1 com-mt-0 com-mx-0 com-no-underline;
+        @apply com-text-base com-font-semibold com-text-Yankees-Blue com-mb-1 com-mt-0 com-mx-0 com-no-underline lg:com-text-sm;
       }
     }
     .sub-heading {
-      @apply md:com-text-xs com-text-sm com-font-normal com-text-gray-500 com-m-0;
+      @apply com-text-sm com-font-normal com-text-gray-500 com-m-0 lg:com-text-xs;
     }
   }
 
   .upcoming-events {
-    @apply com-flex com-flex-nowrap md:com-flex-wrap com-overflow-x-auto md:com-m-0 com-gap-4 com-mt-3 md:com-mt-0 com-ml-4 md:com-ml-0 com-p-0;
+    @apply com-flex com-flex-nowrap com-overflow-x-auto com-gap-4 com-mt-3 com-ml-4 com-p-0 lg:com-flex-wrap lg:com-m-0 lg:com-mt-0 lg:com-ml-0;
+
     .upcoming-events-card {
       @apply com-m-0 com-p-0 com-w-full com-rounded-xl;
     }

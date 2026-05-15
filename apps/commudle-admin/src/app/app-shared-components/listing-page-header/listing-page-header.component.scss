@@ -1,5 +1,5 @@
 .header {
-  @apply md:com-h-[470px] com-h-full;
+  @apply lg:com-h-[470px] com-h-full;
 
   .background {
     @apply com-m-0 com-p-0 com-w-full com-h-full;
@@ -7,32 +7,32 @@
     .base-layout {
       @apply com-min-h-full;
       .content {
-        @apply com-flex md:com-flex-row com-flex-col com-h-full com-p-0 com-m-0 md:com-py-10 com-pt-6 com-pb-0;
+        @apply com-flex lg:com-flex-row com-flex-col com-h-full com-p-0 com-m-0 lg:com-py-10 com-pt-6 com-pb-0;
         .header-text {
-          @apply com-flex com-flex-col com-items-center md:com-items-start md:com-text-left com-text-center md:com-px-0 com-px-6 md:com-pt-10 com-pt-0 md:com-w-[620px] com-w-full com-h-full md:com-mr-10 com-mr-0;
+          @apply com-flex com-flex-col com-items-center lg:com-items-start lg:com-text-left com-text-center lg:com-px-0 com-px-6 lg:com-pt-10 com-pt-0 lg:com-w-[620px] com-w-full com-h-full lg:com-mr-10 com-mr-0;
 
           .heading {
-            @apply com-flex com-items-center md:com-text-[42px] md:com-leading-[58px] com-text-2xl com-font-bold com-m-0 com-mb-4 com-text-tYankees-Blue;
+            @apply com-flex com-items-center lg:com-text-[42px] lg:com-leading-[58px] com-text-2xl com-font-bold com-m-0 com-mb-4 com-text-tYankees-Blue;
 
             // .button {
-            //   @apply com-mr-4 md:com-w-[52px] md:com-h-[52px] com-w-11 com-h-11 com-bg-Blanched-Almond com-border-0 com-flex com-items-center com-rounded-md;
+            //   @apply com-mr-4 lg:com-w-[52px] lg:com-h-[52px] com-w-11 com-h-11 com-bg-Blanched-Almond com-border-0 com-flex com-items-center com-rounded-md;
 
             //   .bulb-icon {
-            //     @apply com-text-Metallic-Bronze md:com-h-10 md:com-w-10 com-h-8 com-w-8;
+            //     @apply com-text-Metallic-Bronze lg:com-h-10 lg:com-w-10 com-h-8 com-w-8;
             //   }
             // }
           }
 
           .pre-heading {
-            @apply md:com-text-2xl com-text-lg com-font-medium com-m-0 com-mb-3 com-text-tYankees-Blue;
+            @apply lg:com-text-2xl com-text-lg com-font-medium com-m-0 com-mb-3 com-text-tYankees-Blue;
           }
 
           .sub-heading {
-            @apply md:com-text-lg com-text-base com-font-normal com-m-0 md:com-mb-0 com-mb-3 com-text-tgray-500;
+            @apply lg:com-text-lg com-text-base com-font-normal com-m-0 lg:com-mb-0 com-mb-3 com-text-tgray-500;
           }
 
           .inner-html {
-            @apply com-flex com-flex-col md:com-w-[620px] com-w-full com-p-0 com-m-0 md:com-mb-4 com-mb-3 md:com-mt-4 com-mt-0;
+            @apply com-flex com-flex-col lg:com-w-[620px] com-w-full com-p-0 com-m-0 lg:com-mb-4 com-mb-3 lg:com-mt-4 com-mt-0;
             ::ng-deep {
               p {
                 @apply com-m-0 com-w-full;
@@ -43,10 +43,10 @@
         }
 
         .image-wrapper {
-          @apply md:com-w-[620px] md:com-h-[390px] com-w-full com-h-full;
+          @apply lg:com-w-[620px] lg:com-h-[390px] com-w-full com-h-full;
         }
         .header-image {
-          @apply com-flex com-items-center com-m-0 md:com-w-[620px] md:com-h-[390px] com-w-full com-h-full;
+          @apply com-flex com-items-center com-m-0 lg:com-w-[620px] lg:com-h-[390px] com-w-full com-h-full;
           img {
             @apply com-h-full com-w-full;
           }

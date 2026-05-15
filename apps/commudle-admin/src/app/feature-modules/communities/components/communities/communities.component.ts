@@ -1,32 +1,21 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FooterService } from 'apps/commudle-admin/src/app/services/footer.service';
 import { SeoService } from '@commudle/shared-services';
 
 @Component({
-    selector: 'commudle-communities',
-    templateUrl: './communities.component.html',
-    styleUrls: ['./communities.component.scss'],
-    standalone: false
+  selector: 'commudle-communities',
+  templateUrl: './communities.component.html',
+  styleUrls: ['./communities.component.scss'],
+  standalone: false,
 })
 export class CommunitiesComponent implements OnInit, OnDestroy {
-  isMobileView: boolean;
   seoTitle: string;
   seoPreviewImage: string;
-  private isBrowser: boolean;
 
-  constructor(
-    private footerService: FooterService,
-    private seoService: SeoService,
-    @Inject(PLATFORM_ID) platformId: Object,
-  ) {
-    this.isBrowser = isPlatformBrowser(platformId);
-  }
+  constructor(private footerService: FooterService, private seoService: SeoService) {}
 
   ngOnInit(): void {
     this.footerService.changeFooterStatus(true);
-    // SSR-safe: window is not available on the server.
-    this.isMobileView = this.isBrowser ? window.innerWidth <= 640 : false;
     this.setMeta();
   }
 

@@ -1,26 +1,27 @@
-div {
-  @apply md:com-m-0 com-m-0 md:com-bg-Bright-Gray-opacity-30 com-border-none md:com-rounded-xl com-rounded-none com-p-0 md:com-px-3 md:com-pt-4;
+:host {
+  @apply lg:com-m-0 com-border-none com-rounded-none com-p-0 lg:com-bg-Bright-Gray-opacity-30 lg:com-rounded-xl lg:com-px-3 lg:com-pt-4;
 
   .heading {
-    @apply com-m-0 md:com-mb-4 md:com-p-0 com-p-4 md:com-bg-transparent com-bg-Anti-Flash-White;
+    @apply com-m-0 com-p-4 com-bg-Anti-Flash-White lg:com-mb-4 lg:com-p-0 lg:com-bg-transparent;
 
     .title {
-      @apply com-m-0 com-leading-[0] com-inline-flex com-items-center md:com-text-sm com-text-base com-font-semibold com-text-Dark-Jungle-Green;
+      @apply com-m-0 com-leading-[0] com-inline-flex com-items-center com-text-base com-font-semibold com-text-Dark-Jungle-Green lg:com-text-sm;
     }
     .sub-heading {
-      @apply md:com-text-xs com-text-sm com-font-normal com-text-gunmetal com-m-0;
+      @apply com-text-sm com-font-normal com-text-gunmetal com-m-0 lg:com-text-xs;
     }
   }
 
   .upcoming-hackathons {
-    @apply com-flex com-flex-nowrap md:com-flex-wrap com-overflow-x-auto md:com-m-0 com-gap-4 com-mt-3 md:com-mt-0 com-ml-4 md:com-ml-0 com-p-0 com-bg-transparent;
+    @apply com-flex com-flex-nowrap com-overflow-x-auto com-gap-4 com-mt-3 com-ml-4 com-p-0 com-bg-transparent lg:com-flex-wrap lg:com-m-0 lg:com-mt-0 lg:com-ml-0;
+
     .upcoming-hackathons-card {
       @apply com-m-0 com-p-0 com-rounded-xl com-bg-transparent com-w-full;
     }
   }
 
   .load-more {
-    @apply com-text-center md:com-pb-2 com-mt-4 com-m-0 com-p-0 com-bg-transparent;
+    @apply com-text-center com-mt-4 com-m-0 com-p-0 com-bg-transparent lg:com-pb-2;
 
     app-loading-spinner {
       @apply com-mb-6;

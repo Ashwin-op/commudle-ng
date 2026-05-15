@@ -1,8 +1,8 @@
 .communities-list-container {
-  @apply com-m-0 md:com-p-0 com-px-4;
+  @apply com-m-0 com-px-4 lg:com-p-0;
 
   .communities-list-prefix {
-    @apply com-m-0 md:com-mt-0 com-mt-10;
+    @apply com-m-0 com-mt-10 lg:com-mt-0;
 
     .communities-list-heading {
       @apply com-m-0;
@@ -13,17 +13,17 @@
   }
 
   .communities-list-search {
-    @apply com-flex com-justify-between com-items-center com-mt-6 com-mb-8 com-mx-0 com-gap-y-5 md:com-gap-0;
+    @apply com-flex com-justify-between com-items-center com-mt-6 com-mb-8 com-mx-0 com-gap-y-5 lg:com-gap-0;
 
     .communities-list-search-bar {
-      @apply md:com-w-[481px] com-w-full;
+      @apply com-w-full lg:com-w-[481px];
       nb-form-field {
         nb-icon {
           @apply com-h-4 com-w-4;
         }
 
         .communities-list-search-input {
-          @apply com-rounded-lg com-text-xs com-h-8 com-py-2 com-px-8 md:com-w-[482px] com-w-full;
+          @apply com-rounded-lg com-text-xs com-h-8 com-py-2 com-px-8 com-w-full lg:com-w-[482px];
         }
       }
     }
@@ -42,7 +42,7 @@
   }
 
   .communities-list-cards {
-    @apply com-flex com-flex-wrap md:com-grid md:com-grid-cols-3 com-gap-4;
+    @apply com-flex com-flex-wrap com-gap-4 lg:com-grid lg:com-grid-cols-3;
   }
 
   .loading-spinner {
