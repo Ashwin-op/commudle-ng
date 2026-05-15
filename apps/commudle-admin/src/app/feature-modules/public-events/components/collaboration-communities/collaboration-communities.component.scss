@@ -1,5 +1,6 @@
 .collaborations-card {
-  @apply com-m-0;
+  @apply com-m-0 com-mt-4;
+
   .collaborations-card-body {
     @apply com-p-4 md:com-p-6;
   }
@@ -9,46 +10,55 @@
   @apply com-m-0 com-inline-flex com-flex-wrap com-items-center com-gap-2 com-font-semibold com-text-Yankees-Blue;
 
   nb-icon {
-    @apply com-text-xl com-leading-none;
+    @apply com-text-xl;
   }
+}
+
+.collaborations-summary {
+  @apply com-mb-4 com-rounded-2xl com-bg-Seashell com-px-4 com-py-3;
+}
+
+.collaborations-summary-text {
+  @apply com-m-0 com-text-sm com-font-normal com-text-tYankees-Blue;
+}
+
+.collaborations-summary-dot {
+  @apply com-mx-2 com-text-gray-400;
 }
 
 .collaborations-list {
-  @apply com-m-0 com-list-none com-gap-4 com-p-0;
+  @apply com-m-0 com-list-none com-grid com-grid-cols-1 com-gap-4 com-p-0 md:com-grid-cols-4;
 }
 
 .collaborations-list-item {
-  @apply com-m-0 com-p-0;
+  @apply com-m-0 com-min-w-0 com-p-0;
 }
 
 .collaboration-community-card {
-  @apply com-flex com-items-center com-gap-3 com-rounded-2xl com-border com-border-solid com-border-Bright-Gray com-p-4 com-no-underline hover:com-border-primary-400;
+  @apply com-flex com-h-full com-min-h-0 com-flex-col com-rounded-2xl com-border com-border-solid com-border-Bright-Gray com-bg-white com-p-4 com-no-underline com-shadow-none;
+  @apply com-transition-colors com-duration-200 com-ease-out hover:com-border-primary-400 hover:com-shadow-sm;
+}
 
-  .collaboration-community-logo {
-    @apply com-flex com-h-12 com-w-12 com-flex-shrink-0 com-items-center com-justify-center;
-  }
+.collaboration-community-logo-wrap {
+  @apply com-flex com-h-14 com-w-14 com-flex-shrink-0 com-items-start com-justify-center com-rounded-xl com-p-6px com-mb-2;
+}
 
-  .collaboration-community-logo-image {
-    @apply com-h-full com-w-full com-rounded-md com-bg-Anti-Flash-White com-object-contain;
-  }
+.collaboration-community-logo-image {
+  @apply com-h-full com-w-full com-object-contain;
+}
 
-  .collaboration-community-text {
-    @apply com-flex com-min-w-0 com-flex-1 com-flex-col;
-  }
+.collaboration-community-title {
+  @apply com-m-0 com-text-base com-font-semibold com-text-gray-900 com-mb-1;
+}
 
-  .collaboration-community-title {
-    @apply com-m-0 com-text-sm com-font-semibold com-text-Yankees-Blue;
-  }
+.collaboration-community-subtitle {
+  @apply com-m-0 com-line-clamp-2 com-text-sm com-font-normal com-leading-snug com-text-gray-500;
+}
 
-  .collaboration-community-subtitle {
-    @apply com-m-0 com-line-clamp-2 com-text-xs com-font-normal com-text-gray-500 com-mt-2px;
-  }
+.collaboration-community-divider {
+  @apply com-my-2 com-border-0 com-border-t com-border-dotted com-border-Bright-Gray;
+}
 
-  .collaboration-community-members {
-    @apply com-m-0 com-inline-flex com-items-center com-gap-1 com-text-xs com-text-gray-500 com-mt-2px;
-  }
-
-  .collaboration-community-members-icon {
-    @apply com-text-base com-text-gray-500;
-  }
+.collaboration-community-footer {
+  @apply com-mt-auto com-flex com-items-baseline com-justify-between com-gap-2 com-text-xs com-text-gray-500;
 }

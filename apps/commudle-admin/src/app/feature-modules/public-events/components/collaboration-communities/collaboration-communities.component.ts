@@ -18,6 +18,11 @@ export class CollaborationCommunitiesComponent implements OnInit, OnChanges {
   faLink = faLink;
   collaborationCommunities: IEventCollaborationCommunity[] = [];
 
+  summary = {
+    totalCommunities: 0,
+    combinedMembers: 0,
+  };
+
   constructor(private eventCollaborationCommunitiesService: EventCollaborationCommunitiesService) {}
 
   ngOnInit() {
@@ -34,6 +39,11 @@ export class CollaborationCommunitiesComponent implements OnInit, OnChanges {
   getCollaborations() {
     this.eventCollaborationCommunitiesService.pGet(this.event.id).subscribe((data) => {
       this.collaborationCommunities = data.event_collaboration_communities;
+      this.summary.totalCommunities = this.collaborationCommunities.length;
+      this.summary.combinedMembers = this.collaborationCommunities.reduce(
+        (acc, c) => acc + (c.community.members_count ?? 0),
+        0,
+      );
       if (this.collaborationCommunities.length > 0) {
         this.hasCollaborationCommunities.emit(true);
       }
