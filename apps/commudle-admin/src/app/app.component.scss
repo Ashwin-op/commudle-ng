@@ -49,6 +49,10 @@ app-chats-container {
   will-change: transform, opacity;
 }
 
+app-navbar-menu {
+  @apply com-w-full;
+}
+
 app-chats-container.mobile-navbar-hidden {
   transform: translateY(120%);
   opacity: 0;

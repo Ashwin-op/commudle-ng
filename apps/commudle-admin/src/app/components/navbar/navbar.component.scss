@@ -120,6 +120,10 @@
   fa-icon {
     @apply com-flex com-justify-center com-items-center com-text-xl com-w-6;
   }
+
+  &.active fa-icon {
+    @apply com-text-primary-500;
+  }
 }
 
 .notification-link-desktop {
