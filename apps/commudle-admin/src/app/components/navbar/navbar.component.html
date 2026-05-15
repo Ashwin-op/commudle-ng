@@ -61,7 +61,7 @@
       ></app-search-box>
     </ng-template>
     <ng-container *ngIf="currentUser">
-      <div (click)="this.notificationCount = 0; gtmService()" *appBreakpoints="'<=md'">
+      <div (click)="this.notificationCount = 0; gtmService()" *appBreakpoints="'<=lg'">
         <a [routerLink]="['/notifications']" routerLinkActive="active" class="notification-link-mobile">
           <nb-badge *ngIf="notificationCount > 0" [text]="notificationCount.toString()" status="danger"></nb-badge>
           <fa-icon [icon]="faBell"></fa-icon>
@@ -69,7 +69,7 @@
       </div>
     </ng-container>
 
-    <app-navbar-menu *appBreakpoints="'>md'" class="com-justify-self-center navbar-menu-desktop"></app-navbar-menu>
+    <app-navbar-menu *appBreakpoints="'>lg'" class="com-justify-self-center navbar-menu-desktop"></app-navbar-menu>
 
     <div class="user-login">
       <div class="toggle-dark-mode">
@@ -80,7 +80,7 @@
           <img src="https://json.commudle.com/icons/dark-mode-sun-icon.svg" />
         </button>
       </div>
-      <div class="profile-container" *appBreakpoints="'>md'">
+      <div class="profile-container" *appBreakpoints="'>lg'">
         <img
           *ngIf="currentUser; else guest"
           (click)="toggleDropdown($event)"

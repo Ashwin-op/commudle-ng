@@ -3,7 +3,11 @@
 }
 
 .home-navbar {
-  @apply com-w-full com-grid com-grid-cols-5 md:com-grid-cols-3 com-items-center com-gap-2;
+  @apply com-min-w-0 com-flex-1 com-flex com-w-full com-items-center com-justify-end com-gap-3;
+
+  @screen lg {
+    @apply com-grid com-grid-cols-3 com-gap-2;
+  }
 
   .profile {
     @apply com-p-2 com-h-10;
@@ -79,7 +83,7 @@
 
 // On small screens, the navigation menu is rendered in the bottom bar (nb-layout-footer).
 // Even if SSR outputs the desktop menu, ensure it never shows on mobile.
-@media screen and (max-width: theme('screens.md')) {
+@media screen and (max-width: theme('screens.lg')) {
   :host ::ng-deep app-navbar-menu.navbar-menu-desktop {
     display: none !important;
   }
@@ -160,7 +164,7 @@
   @apply com-flex;
 
   .user-profile-image {
-    @apply com-w-9 com-h-9 md:com-w-11 md:com-h-11 com-object-cover com-rounded-full com-self-end com-bg-tWhite com-cursor-pointer;
+    @apply com-w-9 com-h-9 lg:com-w-11 lg:com-h-11 com-object-cover com-rounded-full com-self-end com-bg-tWhite com-cursor-pointer;
   }
 }
 

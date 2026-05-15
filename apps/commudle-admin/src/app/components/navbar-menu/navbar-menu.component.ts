@@ -49,7 +49,6 @@ export class NavbarMenuComponent implements OnInit, OnDestroy {
   notificationCount = 0;
   ENotificationSenderTypes = ENotificationSenderTypes;
 
-  notificationIconHighlight = false;
   exploreBottomSheetOpen = false;
 
   contextMenuItems = [

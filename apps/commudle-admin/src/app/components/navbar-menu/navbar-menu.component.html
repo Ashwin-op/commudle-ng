@@ -23,7 +23,7 @@
       <span>Builds</span>
     </a>
   </nb-action>
-  <nb-action *appBreakpoints="'>md'">
+  <nb-action *appBreakpoints="'>lg'">
     <a
       class="com-cursor-pointer"
       [nbPopover]="desktopExplorePopover"
@@ -38,22 +38,22 @@
   <nb-action *ngIf="currentUser">
     <a
       [routerLink]="['/notifications']"
-      [ngClass]="{ active: notificationIconHighlight }"
+      routerLinkActive="active"
       class="com-cursor-pointer"
-      *appBreakpoints="'>md'"
+      *appBreakpoints="'>lg'"
       (click)="this.notificationCount = 0; gtmService()"
     >
       <nb-badge *ngIf="notificationCount > 0" [text]="notificationCount.toString()" status="danger"></nb-badge>
       <fa-icon [icon]="faBell"></fa-icon>
       <span>Notifications</span>
     </a>
-    <a *appBreakpoints="'<=md'" [routerLink]="['/account-menu']" routerLinkActive="active">
+    <a *appBreakpoints="'<=lg'" [routerLink]="['/account-menu']" routerLinkActive="active">
       <img [alt]="currentUser.name" [src]="currentUser.photo.i32" class="user-profile-image-mobile" />
       <span>You</span>
     </a>
   </nb-action>
   <nb-action *ngIf="!currentUser">
-    <a *appBreakpoints="'<=md'" (click)="openExploreBottomSheet()" class="com-cursor-pointer">
+    <a *appBreakpoints="'<=lg'" (click)="openExploreBottomSheet()" class="com-cursor-pointer">
       <fa-icon [icon]="faRocket"></fa-icon>
       <span>Explore</span>
     </a>
