@@ -164,6 +164,7 @@ nb-card-footer {
     select {
       @apply com-border com-border-solid com-border-gray-300 com-rounded com-bg-gray-50 com-px-3 com-py-2.5 com-text-sm com-w-full;
       @apply focus:com-outline-none focus:com-ring-2 focus:com-ring-primary-500 focus:com-border-primary-500;
+      color: inherit;
     }
 
     .placeholder-text {
