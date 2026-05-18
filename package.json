@@ -66,6 +66,7 @@
     "autolinker": "^4.0.0",
     "canvas-confetti": "^1.9.2",
     "chart.js": "^2.9.4",
+    "colorthief": "^3.3.1",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "eva-icons": "^1.1.3",

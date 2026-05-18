@@ -35,12 +35,28 @@
 }
 
 .collaboration-community-card {
-  @apply com-flex com-h-full com-min-h-0 com-flex-col com-rounded-2xl com-border com-border-solid com-border-Bright-Gray com-bg-white com-p-4 com-no-underline com-shadow-none;
-  @apply com-transition-colors com-duration-200 com-ease-out hover:com-border-primary-400 hover:com-shadow-sm;
+  @apply com-relative com-isolate com-flex com-h-full com-min-h-0 com-flex-col com-overflow-hidden com-rounded-2xl com-border com-border-solid com-border-Bright-Gray com-bg-white com-p-4 com-no-underline com-shadow-none;
+  @apply com-transition-[border-color,box-shadow] com-duration-200 com-ease-out hover:com-shadow-sm;
+
+  &::before {
+    content: '';
+    @apply com-pointer-events-none com-absolute com-inset-0 com-z-0 com-rounded-2xl;
+    opacity: 0.94;
+    background: radial-gradient(
+      ellipse 72% 62% at 100% 100%,
+      var(--collaboration-logo-gradient, rgb(214 224 255 / 0.22)) 0%,
+      transparent 78%
+    );
+  }
+
+  > * {
+    @apply com-relative com-z-10;
+  }
 }
 
 .collaboration-community-logo-wrap {
-  @apply com-flex com-h-14 com-w-14 com-flex-shrink-0 com-items-start com-justify-center com-rounded-xl com-p-6px com-mb-2;
+  @apply com-flex com-h-14 com-w-14 com-flex-shrink-0 com-items-start com-justify-center com-rounded-xl com-p-2 com-mb-2;
+  background-color: var(--collaboration-logo-wrap-bg, #{theme('colors.Seashell')});
 }
 
 .collaboration-community-logo-image {
@@ -55,10 +71,14 @@
   @apply com-m-0 com-line-clamp-2 com-text-sm com-font-normal com-leading-snug com-text-gray-500;
 }
 
-.collaboration-community-divider {
-  @apply com-my-2 com-border-0 com-border-t com-border-dotted com-border-Bright-Gray;
+.collaboration-community-footer {
+  @apply com-mt-auto;
 }
 
-.collaboration-community-footer {
-  @apply com-mt-auto com-flex com-items-baseline com-justify-between com-gap-2 com-text-xs com-text-gray-500;
+.collaboration-community-footer-meta {
+  @apply com-inline-flex com-flex-col com-items-start com-gap-2 com-text-xs com-text-gray-500 com-w-full;
+}
+
+.collaboration-community-divider {
+  @apply com-w-full com-border-0 com-border-t com-border-dotted com-border-Bright-Gray;
 }
