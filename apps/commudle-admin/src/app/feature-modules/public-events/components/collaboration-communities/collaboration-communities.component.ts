@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { ICommunity, IEvent } from '@commudle/shared-models';
 import { ILogoTint, LogoTintService } from '@commudle/shared-services';
@@ -28,6 +37,7 @@ export class CollaborationCommunitiesComponent implements OnInit, OnChanges {
   constructor(
     private eventCollaborationCommunitiesService: EventCollaborationCommunitiesService,
     private logoTintService: LogoTintService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -67,6 +77,7 @@ export class CollaborationCommunitiesComponent implements OnInit, OnChanges {
       )
       .then((tints) => {
         this.logoTints = tints;
+        this.cdr.detectChanges();
       });
   }
 }

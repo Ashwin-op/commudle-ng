@@ -27,25 +27,27 @@
 }
 
 .collaborations-list {
-  @apply com-m-0 com-list-none com-grid com-grid-cols-1 com-gap-4 com-p-0 md:com-grid-cols-4;
+  @apply com-m-0 com-list-none com-grid com-grid-cols-1 com-items-stretch com-gap-4 com-p-0 md:com-grid-cols-4;
 }
 
 .collaborations-list-item {
-  @apply com-m-0 com-min-w-0 com-p-0;
+  @apply com-m-0 com-flex com-min-h-0 com-min-w-0 com-p-0;
 }
 
 .collaboration-community-card {
-  @apply com-relative com-isolate com-flex com-h-full com-min-h-0 com-flex-col com-overflow-hidden com-rounded-2xl com-border com-border-solid com-border-Bright-Gray com-bg-white com-p-4 com-no-underline com-shadow-none;
-  @apply com-transition-[border-color,box-shadow] com-duration-200 com-ease-out hover:com-shadow-sm;
+  @apply com-relative com-isolate com-flex com-h-full com-min-h-0 com-w-full com-flex-1 com-flex-col com-overflow-hidden com-rounded-xl com-border-0 com-bg-white com-p-3 com-no-underline;
+  @apply com-outline-none focus:com-outline-none focus-visible:com-outline-none;
+  @apply com-shadow-[0_2px_12px_rgb(15_23_42/0.06)];
+  @apply com-transition-[box-shadow] com-duration-200 com-ease-out hover:com-shadow-[0_4px_16px_rgb(15_23_42/0.08)];
 
   &::before {
     content: '';
-    @apply com-pointer-events-none com-absolute com-inset-0 com-z-0 com-rounded-2xl;
-    opacity: 0.94;
-    background: radial-gradient(
-      ellipse 72% 62% at 100% 100%,
-      var(--collaboration-logo-gradient, rgb(214 224 255 / 0.22)) 0%,
-      transparent 78%
+    @apply com-pointer-events-none com-absolute com-inset-0 com-z-0 com-rounded-lg;
+    background: linear-gradient(
+      144deg,
+      transparent 0%,
+      transparent 48%,
+      var(--collaboration-logo-gradient, rgb(214 224 255 / 0.16)) 100%
     );
   }
 
@@ -55,7 +57,7 @@
 }
 
 .collaboration-community-logo-wrap {
-  @apply com-flex com-h-14 com-w-14 com-flex-shrink-0 com-items-start com-justify-center com-rounded-xl com-p-2 com-mb-2;
+  @apply com-flex com-h-14 com-w-14 com-flex-shrink-0 com-items-start com-justify-center com-rounded-xl com-p-6px com-mb-2;
   background-color: var(--collaboration-logo-wrap-bg, #{theme('colors.Seashell')});
 }
 

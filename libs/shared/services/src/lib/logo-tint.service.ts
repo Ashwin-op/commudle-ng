@@ -3,7 +3,7 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { IAttachedFile } from '@commudle/shared-models';
 
 const LOGO_WRAP_OPACITY = 0.25;
-const LOGO_GRADIENT_OPACITY = 0.9;
+const LOGO_GRADIENT_OPACITY = 0.75;
 
 export interface ILogoTint {
   wrap: string;
@@ -14,7 +14,7 @@ type LogoSource = { logo_image?: IAttachedFile; logo_image_path?: IAttachedFile 
 type Rgb = readonly [number, number, number];
 
 function logoUrl(logo: LogoSource): string | undefined {
-  return logo.logo_image?.i64 || logo.logo_image_path?.i64;
+  return logo.logo_image_path?.i64 || logo.logo_image?.i64;
 }
 
 function cacheKey(url: string): string {
