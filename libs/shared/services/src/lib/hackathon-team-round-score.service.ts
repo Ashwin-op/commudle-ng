@@ -113,6 +113,23 @@ export class HackathonTeamRoundScoreService {
     );
   }
 
+  assignAllTeamsToAllMentors(hackathonId: number | string, roundId: number, judgeTypes?: string[]): Observable<any> {
+    let params = new HttpParams();
+    if (judgeTypes?.length) {
+      judgeTypes.forEach((type) => {
+        params = params.append('judge_type[]', type);
+      });
+    }
+    return this.http.post<any>(
+      this.apiRoutesService.getRoute(API_ROUTES.HACKATHON_TEAM_ROUND_SCORES.ASSIGN_ALL_TEAMS_TO_ALL_MENTORS),
+      {
+        hackathon_id: hackathonId,
+        round_id: roundId,
+      },
+      { params },
+    );
+  }
+
   copyTeamsFromPreviousRound(
     hackathonId: number | string,
     previousRoundId: number,

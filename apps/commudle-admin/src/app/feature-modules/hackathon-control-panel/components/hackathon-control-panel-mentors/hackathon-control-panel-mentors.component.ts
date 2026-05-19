@@ -72,6 +72,7 @@ export class HackathonControlPanelMentorsComponent implements OnInit, OnDestroy 
   @ViewChild('mentorHeaderTemplate') mentorHeaderTemplate!: TemplateRef<unknown>;
   @ViewChild('roundHeaderTemplate') roundHeaderTemplate!: TemplateRef<unknown>;
   @ViewChild('distributeTeamsEvenly') distributeTeamsEvenlyTemplate!: TemplateRef<unknown>;
+  @ViewChild('assignAllTeamsToAllMentors') assignAllTeamsToAllMentorsTemplate!: TemplateRef<unknown>;
   @ViewChild('promoteTeams') promoteTeamsTemplate!: TemplateRef<unknown>;
   @ViewChild('fullScreenLoading') fullScreenLoadingTemplate!: TemplateRef<unknown>;
 
@@ -435,6 +436,8 @@ export class HackathonControlPanelMentorsComponent implements OnInit, OnDestroy 
 
     if (action === 'distribute') {
       this.openDistributeTeamsDialog(roundId);
+    } else if (action === 'assignAll') {
+      this.openAssignAllTeamsDialog(roundId);
     } else if (action === 'promote') {
       this.openShiftTeamsDialog(roundId);
     } else if (action === 'sendEmail') {
@@ -450,6 +453,39 @@ export class HackathonControlPanelMentorsComponent implements OnInit, OnDestroy 
     this.dialogService.open(this.distributeTeamsEvenlyTemplate, {
       context: { roundId },
     });
+  }
+
+  openAssignAllTeamsDialog(roundId: number): void {
+    this.dialogService.open(this.assignAllTeamsToAllMentorsTemplate, {
+      context: { roundId },
+    });
+  }
+
+  confirmAssignAllTeams(roundId: number): void {
+    const dialogRef = this.dialogService.open(this.fullScreenLoadingTemplate);
+    let judgeTypes: string[];
+    if (this.mentorFilter === 'all') {
+      judgeTypes = [EHackathonJudgeType.MENTOR, EHackathonJudgeType.JUDGE];
+    } else if (this.mentorFilter === 'judges') {
+      judgeTypes = [EHackathonJudgeType.JUDGE];
+    } else {
+      judgeTypes = [EHackathonJudgeType.MENTOR];
+    }
+    this.hackathonTeamRoundScoreService
+      .assignAllTeamsToAllMentors(this.hackathonId, roundId, judgeTypes)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.toastrService.successDialog('All teams assigned to all mentors successfully');
+          this.loadExistingAssignments();
+          dialogRef.close();
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.toastrService.warningDialog('Failed to assign all teams to all mentors');
+          dialogRef.close();
+        },
+      });
   }
 
   openShiftTeamsDialog(roundId: number): void {

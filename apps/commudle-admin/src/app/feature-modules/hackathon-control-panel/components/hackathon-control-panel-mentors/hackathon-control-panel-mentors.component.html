@@ -80,6 +80,7 @@
         <option value="distribute" [disabled]="areAllTeamsAssignedForRound(column.round.id)">
           Distribute Teams Evenly
         </option>
+        <option value="assignAll">Add All Teams to All Mentors/Judges</option>
         <option value="promote">Copy all the mentor-team allocations to next round</option>
         <option value="sendEmail">Send Team Assignment Email to All Mentors</option>
         <option value="sendMentorMessage">Send Mentor Message to Teams</option>
@@ -162,31 +163,63 @@
 
 <ng-template #distributeTeamsEvenly let-data let-ref="dialogRef">
   <nb-card>
-    <nb-card-header>Distribute Teams Evenly</nb-card-header>
+    <nb-card-header class="dialog-header">
+      <span>Distribute Teams Evenly</span>
+      <button ghost nbButton size="small" (click)="ref.close()" shape="round">
+        <nb-icon icon="close"></nb-icon>
+      </button>
+    </nb-card-header>
     <nb-card-body>
       <p>This will distribute the teams evenly among all mentors for the selected round.</p>
     </nb-card-body>
-    <nb-card-footer>
-      <button nbButton status="primary" (click)="confirmDistributeTeams(data.roundId); ref.close()">Confirm</button>
+    <nb-card-footer class="dialog-footer">
       <button nbButton (click)="ref.close()">Cancel</button>
+      <button nbButton status="primary" (click)="confirmDistributeTeams(data.roundId); ref.close()">Confirm</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<ng-template #assignAllTeamsToAllMentors let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header class="dialog-header">
+      <span>Add All Teams to All Mentors/Judges</span>
+      <button ghost nbButton size="small" (click)="ref.close()" shape="round">
+        <nb-icon icon="close"></nb-icon>
+      </button>
+    </nb-card-header>
+    <nb-card-body>
+      <p>
+        This will assign all teams <strong>participating in this round</strong> to
+        <strong>every mentor/judge</strong> for the selected round.
+      </p>
+      <p class="warning-text">Note: This may take some time if there are many teams and mentors.</p>
+    </nb-card-body>
+    <nb-card-footer class="dialog-footer">
+      <button nbButton (click)="ref.close()">Cancel</button>
+      <button nbButton status="primary" (click)="confirmAssignAllTeams(data.roundId); ref.close()">Confirm</button>
     </nb-card-footer>
   </nb-card>
 </ng-template>
 
 <ng-template #promoteTeams let-data let-ref="dialogRef">
   <nb-card>
-    <nb-card-header>Copy all the mentor-team allocations to next round</nb-card-header>
+    <nb-card-header class="dialog-header">
+      <span>Copy all the mentor-team allocations to next round</span>
+      <button ghost nbButton size="small" (click)="ref.close()" shape="round">
+        <nb-icon icon="close"></nb-icon>
+      </button>
+    </nb-card-header>
     <nb-card-body>
       <p>
         This will promote teams and their evaluator assignments to <strong>{{ data.nextRoundName }}</strong
         >.
       </p>
     </nb-card-body>
-    <nb-card-footer>
+    <nb-card-footer class="dialog-footer">
+      <button nbButton (click)="ref.close()">Cancel</button>
       <button nbButton status="primary" (click)="confirmShiftTeams(data.previousRoundId, data.nextRoundId, ref)">
         Confirm
       </button>
-      <button nbButton (click)="ref.close()">Cancel</button>
     </nb-card-footer>
   </nb-card>
 </ng-template>

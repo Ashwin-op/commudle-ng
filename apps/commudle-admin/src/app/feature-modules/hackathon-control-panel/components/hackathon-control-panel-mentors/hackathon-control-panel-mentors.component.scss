@@ -26,6 +26,14 @@ nb-card-header {
   }
 }
 
+.dialog-header {
+  @apply com-flex com-justify-between com-items-center;
+}
+
+.dialog-footer {
+  @apply com-flex com-justify-end com-gap-3;
+}
+
 .actions-row {
   @apply com-flex com-gap-3 com-mb-4 com-p-4 com-bg-gray-50 com-rounded;
 }
