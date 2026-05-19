@@ -1,24 +1,12 @@
 <footer>
-  <div *ngIf="showFooter$ | async" class="com-bg-white">
-    <div class="com-container com-mx-auto com-py-12 com-px-4">
-      <div class="xl:com-grid xl:com-grid-cols-3 xl:com-gap-8 com-overflow-hidden">
-        <div class="com-space-y-8 xl:com-col-span-1">
-          <a [routerLink]="['/']">
-            <img alt="Commudle" class="com-h-16" src="{{ staticAssets.commudle_logo_128 }}" title="Commudle" />
+  <div *ngIf="showFooter$ | async" class="large-footer">
+    <div class="large-footer-container">
+      <div class="large-footer-grid">
+        <div class="large-footer-brand">
+          <a class="brand-logo-link" [routerLink]="['/']">
+            <img alt="Commudle" class="brand-logo" src="{{ staticAssets.commudle_logo_128 }}" title="Commudle" />
           </a>
-          <div class="com-text-gray-500 com-text-base">Connect with experts and grow with communities.</div>
-          <a
-            href="https://blog.google/intl/en-in/introducing-the-inaugural-class-of-the-google-for-startups-accelerator-india-women-founders/"
-          >
-            <img class="com-h-16" src="{{ staticAssets.google_for_startups_badge }}" alt="Google for Startups 2022" />
-          </a>
-          <a href="https://compliances.commudle.com/">
-            <img class="com-h-16 com-ml-4" src="{{ staticAssets.gdpr_compliance }}" alt="Commudle is gdpr compliant" />
-          </a>
-          <a href="https://compliances.commudle.com/">
-            <img class="com-h-16 com-ml-4" src="{{ staticAssets.iso_27001 }}" alt="Commudle is Iso 27001" />
-          </a>
-          <div class="footer-social-links com-flex com-space-x-6">
+          <div class="footer-social-links">
             <a href="https://twitter.com/commudle" target="_blank">
               <fa-icon [icon]="faXTwitter"></fa-icon>
             </a>
@@ -38,10 +26,28 @@
               <fa-icon [icon]="faInstagram"></fa-icon>
             </a>
           </div>
+          <div class="brand-badges">
+            <a
+              href="https://blog.google/intl/en-in/introducing-the-inaugural-class-of-the-google-for-startups-accelerator-india-women-founders/"
+            >
+              <img
+                class="badge-img"
+                src="{{ staticAssets.google_for_startups_badge }}"
+                alt="Google for Startups 2022"
+              />
+            </a>
+            <a href="https://compliances.commudle.com/">
+              <img class="badge-img" src="{{ staticAssets.gdpr_compliance }}" alt="Commudle is gdpr compliant" />
+            </a>
+            <a href="https://compliances.commudle.com/">
+              <img class="badge-img" src="{{ staticAssets.iso_27001 }}" alt="Commudle is Iso 27001" />
+            </a>
+          </div>
         </div>
         <div class="footer-links">
-          <div class="md:com-grid md:com-grid-cols-2 md:com-gap-8">
+          <div class="footer-links-grid">
             <div>
+              <h3 class="footer-links-heading">Product</h3>
               <ul>
                 <li><a [routerLink]="['/']">Home</a></li>
                 <li><a [routerLink]="['/about']">About</a></li>
@@ -54,7 +60,8 @@
                 <li><a [routerLink]="['/paid-ticketing']">Paid Ticketing</a></li>
               </ul>
             </div>
-            <div class="com-mt-12 md:com-mt-0">
+            <div>
+              <h3 class="footer-links-heading">Explore</h3>
               <ul>
                 <li><a [routerLink]="['/communities']">Communities</a></li>
                 <li><a [routerLink]="['/events']">Events</a></li>
@@ -77,9 +84,8 @@
                 <li><a [routerLink]="['/jobs']">Jobs</a></li>
               </ul>
             </div>
-          </div>
-          <div class="md:com-grid md:com-grid-cols-2 md:com-gap-8">
             <div>
+              <h3 class="footer-links-heading">Programs</h3>
               <ul>
                 <li>
                   <a class="developer-community-blueprint" [routerLink]="['/developer-ecosystem-blueprint']">
@@ -91,7 +97,8 @@
                 <li><a [routerLink]="['/case-studies']">Case Studies</a></li>
               </ul>
             </div>
-            <div class="com-mt-12 md:com-mt-0">
+            <div>
+              <h3 class="footer-links-heading">Credentials</h3>
               <ul>
                 <li><a [routerLink]="['/login']">Login</a></li>
                 <li><a [routerLink]="['/signup']">Create Account</a></li>
@@ -110,25 +117,25 @@
         </div>
       </div>
       <div class="footer-copyright">
-        <div class="com-text-base com-text-gray-400 xl:com-text-center">
-          Made with Angular, Ruby on Rails, Postgres, Redis and Love
-        </div>
+        <h3 class="footer-text">Made with Angular, Ruby on Rails, Postgres, Redis and Love</h3>
       </div>
     </div>
   </div>
 
-  <div *ngIf="(showFooter$ | async) === false && (showMiniFooter$ | async)" class="show-footer">
-    <hr />
-    <div class="links">
-      <ul>
-        <li>
-          <a [routerLink]="['/']"><img alt="Commudle" src="{{ staticAssets.commudle_logo_128 }}" title="Commudle" /></a>
-        </li>
-        <li><a [routerLink]="['/about']">About</a></li>
-        <li><a [routerLink]="['/policies/privacy-policy']">Privacy Policy</a></li>
-        <li><a [routerLink]="['/policies/terms-and-conditions']">Terms & Conditions</a></li>
-        <li><a href="https://documentation.commudle.com/" target="_blank">Documentation</a></li>
-      </ul>
+  <div *ngIf="(showFooter$ | async) === false && (showMiniFooter$ | async)" class="mini-footer">
+    <div class="mini-footer-divider"></div>
+    <div class="mini-footer-container">
+      <div class="mini-footer-content">
+        <a [routerLink]="['/']" class="mini-footer-logo">
+          <img alt="Commudle" src="{{ staticAssets.commudle_logo_128 }}" title="Commudle" />
+        </a>
+        <ul class="mini-footer-links">
+          <li><a [routerLink]="['/about']">About</a></li>
+          <li><a [routerLink]="['/policies/privacy-policy']">Privacy Policy</a></li>
+          <li><a [routerLink]="['/policies/terms-and-conditions']">Terms & Conditions</a></li>
+          <li><a href="https://documentation.commudle.com/" target="_blank">Documentation</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 </footer>
