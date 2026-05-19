@@ -4,17 +4,42 @@ import { IAttachedFile } from '@commudle/shared-models';
 
 const LOGO_WRAP_OPACITY = 0.25;
 const LOGO_GRADIENT_OPACITY = 0.75;
+const LOGO_BORDER_OPACITY = 0.3;
+const NEAR_WHITE_THRESHOLD = 230;
+
+/** Soft blue — default corner gradient (matches component SCSS fallbacks). */
+const DEFAULT_GRADIENT_RGB: Rgb = [214, 224, 255];
+/** Seashell — default logo wrap background. */
+const DEFAULT_WRAP_RGB: Rgb = [255, 246, 235];
+/** Bright-Gray — default card border (#E4E9F2). */
+const DEFAULT_BORDER_RGB: Rgb = [228, 233, 242];
+
+const DEFAULT_LOGO_TINT: Readonly<ILogoTint> = {
+  wrap: `rgba(${DEFAULT_WRAP_RGB[0]}, ${DEFAULT_WRAP_RGB[1]}, ${DEFAULT_WRAP_RGB[2]}, ${LOGO_WRAP_OPACITY})`,
+  gradient: `rgb(${DEFAULT_GRADIENT_RGB[0]} ${DEFAULT_GRADIENT_RGB[1]} ${DEFAULT_GRADIENT_RGB[2]} / 0.16)`,
+  border: `rgba(${DEFAULT_BORDER_RGB[0]}, ${DEFAULT_BORDER_RGB[1]}, ${DEFAULT_BORDER_RGB[2]}, ${LOGO_BORDER_OPACITY})`,
+};
 
 export interface ILogoTint {
   wrap: string;
   gradient: string;
+  border: string;
 }
 
 type LogoSource = { logo_image?: IAttachedFile; logo_image_path?: IAttachedFile };
 type Rgb = readonly [number, number, number];
 
 function logoUrl(logo: LogoSource): string | undefined {
-  return logo.logo_image_path?.i64 || logo.logo_image?.i64;
+  for (const file of [logo.logo_image, logo.logo_image_path]) {
+    if (!file) {
+      continue;
+    }
+    const url = file.i64 || file.url;
+    if (url) {
+      return url;
+    }
+  }
+  return undefined;
 }
 
 function cacheKey(url: string): string {
@@ -27,17 +52,22 @@ function cacheKey(url: string): string {
   }
 }
 
+function isNearWhite(r: number, g: number, b: number): boolean {
+  return r >= NEAR_WHITE_THRESHOLD && g >= NEAR_WHITE_THRESHOLD && b >= NEAR_WHITE_THRESHOLD;
+}
+
 function tintColor(r: number, g: number, b: number, opacity: number, rgba: boolean): string {
-  if (r >= 230 && g >= 230 && b >= 230) {
-    return rgba ? `rgba(255, 255, 255, ${opacity})` : `rgb(255 255 255 / ${opacity})`;
-  }
   return rgba ? `rgba(${r}, ${g}, ${b}, ${opacity})` : `rgb(${r} ${g} ${b} / ${opacity})`;
 }
 
 function toLogoTint([r, g, b]: Rgb): ILogoTint {
+  if (isNearWhite(r, g, b)) {
+    return { ...DEFAULT_LOGO_TINT };
+  }
   return {
     wrap: tintColor(r, g, b, LOGO_WRAP_OPACITY, true),
     gradient: tintColor(r, g, b, LOGO_GRADIENT_OPACITY, false),
+    border: tintColor(r, g, b, LOGO_BORDER_OPACITY, true),
   };
 }
 
@@ -88,15 +118,32 @@ export class LogoTintService {
         el.onerror = () => reject();
         el.src = url;
       });
-      const { getColorSync } = await import('colorthief');
-      const { r, g, b } = getColorSync(img, { ignoreWhite: true, quality: 10, colorSpace: 'rgb' })?.rgb() ?? {
-        r: 255,
-        g: 255,
-        b: 255,
-      };
-      this.tints.set(key, [r, g, b]);
+      const { getColorSync, getPaletteSync } = await import('colorthief');
+      const options = { ignoreWhite: true, quality: 10, colorSpace: 'rgb' as const };
+
+      let rgb: Rgb | undefined;
+      const palette = getPaletteSync(img, { ...options, colorCount: 8 });
+      if (palette?.length) {
+        for (const entry of palette) {
+          const { r, g, b } = entry.rgb();
+          if (!isNearWhite(r, g, b)) {
+            rgb = [r, g, b];
+            break;
+          }
+        }
+      }
+
+      if (!rgb) {
+        const dominant = getColorSync(img, options)?.rgb();
+        if (dominant && !isNearWhite(dominant.r, dominant.g, dominant.b)) {
+          rgb = [dominant.r, dominant.g, dominant.b];
+        }
+      }
+
+      this.tints.set(key, rgb ?? [255, 255, 255]);
     } catch {
       console.warn('[LogoTint] Could not sample logo color', url);
+      this.tints.set(key, [255, 255, 255]);
     }
   }
 }

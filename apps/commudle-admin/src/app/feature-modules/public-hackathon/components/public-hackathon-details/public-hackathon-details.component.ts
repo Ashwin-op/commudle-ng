@@ -9,7 +9,7 @@ import {
   IRound,
   ICommunity,
 } from '@commudle/shared-models';
-import { FaqService, RoundService, SeoService } from '@commudle/shared-services';
+import { FaqService, ILogoTint, LogoTintService, RoundService, SeoService } from '@commudle/shared-services';
 import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
 import { DiscussionsService } from 'apps/commudle-admin/src/app/services/discussions.service';
 import { HackathonResponseGroupService } from 'apps/commudle-admin/src/app/services/hackathon-response-group.service';
@@ -32,6 +32,7 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
   community: ICommunity;
   EDbModels = EDbModels;
   hackathonSponsorGroupedByTierName: IHackathonSponsorGroupedByTierName;
+  sponsorLogoTints: Record<number, ILogoTint> = {};
   faqs: IFaq[];
   discussionChat: IDiscussion;
   rounds: IRound[];
@@ -61,6 +62,7 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
     private hrgService: HackathonResponseGroupService,
     private communitiesService: CommunitiesService,
     private seoService: SeoService,
+    private logoTintService: LogoTintService,
   ) {}
 
   ngOnInit() {
@@ -163,8 +165,27 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.hackathonService.pIndexSponsors(this.hackathon.id).subscribe((data) => {
         this.hackathonSponsorGroupedByTierName = data;
+        this.resolveSponsorLogoTints();
       }),
     );
+  }
+
+  private resolveSponsorLogoTints(): void {
+    const sponsors = Object.values(this.hackathonSponsorGroupedByTierName ?? {}).flat();
+    if (!sponsors.length) {
+      return;
+    }
+
+    this.logoTintService
+      .resolveTints(
+        sponsors.map((hackathonSponsor) => ({
+          id: hackathonSponsor.id,
+          logo: { logo_image: hackathonSponsor.sponsor.logo },
+        })),
+      )
+      .then((tints) => {
+        this.sponsorLogoTints = tints;
+      });
   }
 
   getFaqs() {
