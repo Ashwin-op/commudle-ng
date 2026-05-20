@@ -5,13 +5,13 @@
       This prevents SSR/client mismatches caused by theme being resolved only after bootstrap.
     -->
     <div class="navbar-logo logo-light">
-      <img *appBreakpoints="'<=md'" alt="Commudle" src="{{ staticAssets.commudle_logo_72 }}" title="Commudle" />
-      <img *appBreakpoints="'>md'" alt="Commudle" src="{{ staticAssets.commudle_logo_full }}" title="Commudle" />
+      <img *appBreakpoints="'<=lg'" alt="Commudle" src="{{ staticAssets.commudle_logo_72 }}" title="Commudle" />
+      <img *appBreakpoints="'>lg'" alt="Commudle" src="{{ staticAssets.commudle_logo_full }}" title="Commudle" />
     </div>
 
     <div class="navbar-logo logo-dark">
-      <img *appBreakpoints="'<=md'" alt="Commudle" src="{{ staticAssets.commudle_logo_72 }}" title="Commudle" />
-      <img *appBreakpoints="'>md'" alt="Commudle" src="{{ staticAssets.commudle_logo_dark_mode }}" title="Commudle" />
+      <img *appBreakpoints="'<=lg'" alt="Commudle" src="{{ staticAssets.commudle_logo_72 }}" title="Commudle" />
+      <img *appBreakpoints="'>lg'" alt="Commudle" src="{{ staticAssets.commudle_logo_dark_mode }}" title="Commudle" />
     </div>
   </a>
 
@@ -22,7 +22,7 @@
       </div>
       <app-search-box
         *appBreakpoints="'>lg'"
-        class="md:com-col-span-1 md:com-justify-self-start"
+        class="lg:com-col-span-1 lg:com-justify-self-start"
         shape="semi-round"
       ></app-search-box>
     </ng-container>
@@ -32,7 +32,7 @@
       </div>
       <app-search-box
         *appBreakpoints="'>lg'"
-        class="com-col-span-4 md:com-col-span-1 md:com-justify-self-start"
+        class="com-col-span-4 lg:com-col-span-1 lg:com-justify-self-start"
         shape="semi-round"
       ></app-search-box>
     </ng-template>
