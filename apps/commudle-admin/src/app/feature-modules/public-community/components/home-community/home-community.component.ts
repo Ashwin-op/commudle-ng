@@ -1,10 +1,20 @@
-import { Component, OnDestroy, OnInit, Inject, ViewChild, TemplateRef, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  Inject,
+  ViewChild,
+  TemplateRef,
+  ElementRef,
+  AfterViewInit,
+  PLATFORM_ID,
+} from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { NotificationsStore } from 'apps/commudle-admin/src/app/feature-modules/notifications/store/notifications.store';
 import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
 import { Subscription, map } from 'rxjs';
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { NbDialogService, NbMenuService } from '@commudle/theme';
 import { GoogleTagManagerService } from 'apps/commudle-admin/src/app/services/google-tag-manager.service';
 import { ENotificationSenderTypes } from 'apps/shared-models/enums/notification_sender_types.enum';
@@ -64,6 +74,7 @@ export class HomeCommunityComponent implements OnInit, OnDestroy, AfterViewInit 
   observer!: IntersectionObserver;
   isHackathonActive = false;
   darkMode: boolean;
+  isBrowser: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -72,6 +83,7 @@ export class HomeCommunityComponent implements OnInit, OnDestroy, AfterViewInit 
     private notificationsStore: NotificationsStore,
     private toastLogService: ToastrService,
     @Inject(DOCUMENT) private document: Document,
+    @Inject(PLATFORM_ID) private platformId: object,
     private dialogService: NbDialogService,
     private gtm: GoogleTagManagerService,
     private router: Router,
@@ -79,7 +91,9 @@ export class HomeCommunityComponent implements OnInit, OnDestroy, AfterViewInit 
     private nbMenuService: NbMenuService,
     private newsletterService: NewsletterService,
     private darkModeService: DarkModeService,
-  ) {}
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   ngOnInit(): void {
     this.items = [];
@@ -125,17 +139,19 @@ export class HomeCommunityComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   ngAfterViewInit(): void {
-    this.observer = new IntersectionObserver(
-      ([entry]) => {
-        this.isMenuSticky = !entry.isIntersecting;
-      },
-      {
-        root: null,
-        threshold: 0,
-      },
-    );
+    if (this.isBrowser) {
+      this.observer = new IntersectionObserver(
+        ([entry]) => {
+          this.isMenuSticky = !entry.isIntersecting;
+        },
+        {
+          root: null,
+          threshold: 0,
+        },
+      );
 
-    this.observer.observe(this.sentinel.nativeElement);
+      this.observer.observe(this.sentinel.nativeElement);
+    }
   }
 
   ngOnDestroy(): void {
