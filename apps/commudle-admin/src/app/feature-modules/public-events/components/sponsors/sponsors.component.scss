@@ -1,22 +1,225 @@
 .sponsors {
   @apply com-mx-0 com-mt-4 com-mb-0 md:com-rounded-[10px] com-rounded-none;
-  nb-list-item.sponsor {
-    border-top: none;
-    a {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
 
-      .logo {
-        @apply com-flex com-items-center com-m-0 com-mr-3 com-w-8 com-h-8 com-flex-shrink-0 com-overflow-hidden com-object-contain com-bg-tWhite;
-        img {
-          width: 100%;
-        }
-      }
+  nb-card {
+    @apply com-ml-0;
+  }
 
-      p.name {
-        @apply com-m-0 com-font-semibold;
-      }
+  .collaborations-card-heading {
+    @apply com-m-0 com-inline-flex com-flex-wrap com-items-center com-gap-2 com-font-semibold com-text-Yankees-Blue;
+  }
+
+  .sponsors-card-heading-icon {
+    @apply com-flex com-items-center com-justify-center com-h-5 com-w-5 com-text-Azure;
+  }
+
+  .sponsors-cards {
+    @apply com-p-4 md:com-p-6;
+  }
+
+  .sponsor-tier {
+    @apply com-mb-8 com-min-w-0 last:com-mb-0;
+  }
+
+  .sponsor-tier-header {
+    @apply com-mb-3 com-flex com-w-full com-max-w-full com-flex-wrap com-items-center com-gap-x-2.5 com-gap-y-1.5 md:com-flex-nowrap md:com-gap-x-3;
+  }
+
+  .sponsor-tier-badge {
+    @apply com-inline-flex com-flex-shrink-0 com-items-center com-rounded-full com-bg-Seashell com-px-2.5 com-py-0.5 com-text-[10px] com-font-bold com-text-tChocolate-Traditional md:com-px-3 md:com-py-1 md:com-text-xs;
+  }
+
+  .sponsor-tier-rule {
+    @apply com-h-px com-min-h-px com-min-w-0 com-flex-1 com-bg-Bright-Gray com-basis-full md:com-basis-auto;
+  }
+
+  .sponsor-tier-grid {
+    @apply com-grid com-gap-3 md:com-gap-4;
+
+    &--cols-1 {
+      @apply com-grid-cols-1;
+    }
+
+    &--cols-2 {
+      @apply md:com-grid-cols-2 com-grid-cols-1;
+    }
+
+    &--cols-3 {
+      @apply md:com-grid-cols-3 com-grid-cols-1;
+    }
+
+    &--cols-4 {
+      @apply md:com-grid-cols-4 com-grid-cols-1;
+    }
+
+    &--cols-5 {
+      @apply md:com-grid-cols-5 com-grid-cols-1;
+    }
+
+    > .sponsor-tier-card {
+      @apply com-min-w-0;
+    }
+  }
+
+  .sponsor-tier-card {
+    @apply com-relative com-isolate com-overflow-hidden com-rounded-xl com-border com-border-solid com-bg-white com-shadow-none;
+    @apply com-transition-[box-shadow] com-duration-200 com-ease-out;
+    @apply hover:com-shadow-md;
+    border-color: var(--sponsor-logo-border, #{theme('colors.Bright-Gray')});
+
+    &--tier-1::before {
+      content: '';
+      @apply com-pointer-events-none com-absolute com-inset-0 com-z-0 com-rounded-xl;
+      background: linear-gradient(
+          310deg,
+          transparent 0%,
+          transparent 95%,
+          var(--sponsor-logo-gradient, rgb(255 246 235 / 0.16)) 100%
+        ),
+        linear-gradient(
+          138deg,
+          transparent 0%,
+          transparent 80%,
+          var(--sponsor-logo-gradient, rgb(255 246 235 / 0.16)) 100%
+        );
+    }
+
+    > .sponsor-tier-card-link {
+      @apply com-relative com-z-10;
+    }
+  }
+
+  .sponsor-tier-card-link {
+    @apply com-relative com-z-10 com-flex com-h-full com-min-w-0 com-no-underline;
+
+    &--tier-1 {
+      @apply com-p-4 md:com-p-5;
+    }
+
+    &--column {
+      @apply com-flex com-flex-col com-items-center com-justify-center com-p-3 com-text-center;
+    }
+  }
+
+  .sponsor-tier-card-main {
+    &--tier-1 {
+      @apply com-flex com-min-w-0 com-flex-1 com-flex-row com-items-center com-gap-4;
+    }
+  }
+
+  .sponsor-tier-card-link--column .sponsor-tier-card-main {
+    @apply com-flex com-w-full com-flex-col com-items-center com-justify-center;
+  }
+
+  .sponsor-tier-text-stack {
+    @apply com-flex com-min-w-0 com-flex-1 com-flex-col com-gap-1;
+  }
+
+  .sponsor-tier-logo-wrap {
+    @apply com-flex com-h-14 com-w-14 com-flex-shrink-0 com-items-center com-justify-center com-rounded-xl com-p-6px;
+    background-color: var(--sponsor-logo-wrap-bg, #{theme('colors.Seashell')});
+  }
+
+  .sponsor-tier-card-link--tier-1 .sponsor-tier-logo-wrap {
+    @apply com-mb-0;
+  }
+
+  .sponsor-tier-card-link--column .sponsor-tier-logo-wrap {
+    @apply com-mx-auto com-mb-2;
+  }
+
+  .sponsor-tier-logo {
+    @apply com-h-full com-w-full com-object-contain;
+  }
+
+  .sponsor-tier-card-link--tier-1 .sponsor-tier-text-block {
+    @apply com-min-w-0 com-flex-1 com-text-left;
+  }
+
+  .sponsor-tier-card-link--column .sponsor-tier-text-block {
+    @apply com-flex com-w-full com-flex-col com-items-center com-justify-center com-text-center;
+  }
+
+  .sponsor-tier-name {
+    @apply com-m-0 com-text-Yankees-Blue;
+  }
+
+  .sponsor-tier-description,
+  .sponsor-tier-benefit {
+    @apply com-m-0 com-leading-snug;
+  }
+
+  .sponsor-tier-card-link--tier-1 {
+    .sponsor-tier-text-stack .sponsor-tier-name,
+    .sponsor-tier-text-stack .sponsor-tier-description {
+      @apply com-text-left;
+    }
+  }
+
+  .sponsor-tier-card-link--column {
+    .sponsor-tier-name,
+    .sponsor-tier-benefit {
+      @apply com-w-full com-text-center;
+    }
+  }
+
+  .sponsor-tier-benefit {
+    @apply com-mt-2 com-w-full com-rounded-lg com-px-3 com-py-2 com-text-center com-text-Yankees-Blue;
+    background-color: var(--sponsor-logo-wrap-bg, #{theme('colors.Seashell')});
+  }
+
+  .sponsor-tier-card-link--priority-1 {
+    .sponsor-tier-name {
+      @apply com-text-base com-font-semibold;
+    }
+
+    .sponsor-tier-description,
+    .sponsor-tier-benefit {
+      @apply com-text-sm com-font-normal com-text-gray-700 md:com-text-base;
+    }
+  }
+
+  .sponsor-tier-card-link--priority-2 {
+    .sponsor-tier-name {
+      @apply com-text-sm com-font-semibold;
+    }
+
+    .sponsor-tier-description,
+    .sponsor-tier-benefit {
+      @apply com-text-xs com-font-normal com-text-gray-700 md:com-text-sm;
+    }
+  }
+
+  .sponsor-tier-card-link--priority-3 {
+    .sponsor-tier-name {
+      @apply com-text-xs com-font-medium;
+    }
+
+    .sponsor-tier-description,
+    .sponsor-tier-benefit {
+      @apply com-text-10px com-font-normal com-text-gray-600 com-leading-4;
+    }
+  }
+
+  .sponsor-tier-card-link--priority-4 {
+    .sponsor-tier-name {
+      @apply com-text-10px com-font-medium com-leading-4;
+    }
+
+    .sponsor-tier-description,
+    .sponsor-tier-benefit {
+      @apply com-text-10px com-font-normal com-text-gray-600 com-leading-4;
+    }
+  }
+
+  .sponsor-tier-card-link--priority-5 {
+    .sponsor-tier-name {
+      @apply com-text-10px com-font-medium md:com-text-10px com-leading-4;
+    }
+
+    .sponsor-tier-description,
+    .sponsor-tier-benefit {
+      @apply com-text-8px com-font-normal com-text-gray-500 md:com-text-10px com-leading-4;
     }
   }
 }

@@ -1,20 +1,94 @@
-<nb-card *ngIf="sponsors.length > 0" class="sponsors">
-  <nb-card-header>
-    <h6>
-      <nb-icon icon="briefcase-outline" status="danger"></nb-icon>
-      Sponsors
-    </h6>
-  </nb-card-header>
-  <nb-card-body>
-    <nb-list>
-      <nb-list-item *ngFor="let sp of sponsors" class="sponsor">
-        <a href="{{ sp.sponsor.link }}" target="_blank">
-          <div *ngIf="sp.sponsor.logo" class="logo">
-            <img alt="{{ sp.sponsor.name }}" src="{{ sp.sponsor.logo.url }}" title="{{ sp.sponsor.name }}" />
-          </div>
-          <p class="name">{{ sp.sponsor.name }}</p>
+<div *ngIf="eventSponsorGroupedByTierName" id="sponsors" class="sponsors">
+  <nb-card>
+    <nb-card-header>
+      <h6 class="title collaborations-card-heading section-heading-anchor">
+        <fa-icon [icon]="icons.faSackDollar" class="sponsors-card-heading-icon"></fa-icon>
+        <span>Sponsors</span>
+        <a [routerLink]="['.']" fragment="sponsors" class="anchor-link" aria-label="Link to sponsors section">
+          <fa-icon [icon]="icons.faLink" class="anchor-icon-small"></fa-icon>
         </a>
-      </nb-list-item>
-    </nb-list>
-  </nb-card-body>
-</nb-card>
+      </h6>
+    </nb-card-header>
+    <nb-card-body class="sponsors-cards">
+      <div *ngFor="let eventSponsorGrouped of eventSponsorGroupedByTierName | keyvalue" class="sponsor-tier">
+        <header class="sponsor-tier-header">
+          <span class="sponsor-tier-badge"> {{ eventSponsorGrouped.key }}</span>
+          <span class="sponsor-tier-rule" aria-hidden="true"></span>
+        </header>
+
+        <div
+          class="sponsor-tier-grid"
+          [ngClass]="{
+            'sponsor-tier-grid--cols-1': eventSponsorGrouped.value?.[0]?.tier_priority === 1,
+            'sponsor-tier-grid--cols-2': eventSponsorGrouped.value?.[0]?.tier_priority === 2,
+            'sponsor-tier-grid--cols-3': eventSponsorGrouped.value?.[0]?.tier_priority === 3,
+            'sponsor-tier-grid--cols-4': eventSponsorGrouped.value?.[0]?.tier_priority === 4,
+            'sponsor-tier-grid--cols-5': eventSponsorGrouped.value?.[0]?.tier_priority === 5,
+          }"
+        >
+          <div
+            *ngFor="let eventSponsor of eventSponsorGrouped.value || []"
+            class="sponsor-tier-card"
+            [class.sponsor-tier-card--tier-1]="eventSponsor.tier_priority === 1"
+            [style.--sponsor-logo-gradient]="
+              eventSponsor.tier_priority === 1 ? sponsorLogoTints[eventSponsor.id]?.gradient : null
+            "
+            [style.--sponsor-logo-wrap-bg]="sponsorLogoTints[eventSponsor.id]?.wrap"
+            [style.--sponsor-logo-border]="sponsorLogoTints[eventSponsor.id]?.border"
+          >
+            <a
+              [href]="eventSponsor.sponsor.link ? eventSponsor.sponsor.link : null"
+              target="_blank"
+              [ngClass]="{
+                'com-pointer-events-none': !eventSponsor.sponsor.link,
+                'sponsor-tier-card-link--tier-1': eventSponsor.tier_priority === 1,
+                'sponsor-tier-card-link--column': eventSponsor.tier_priority !== 1,
+                'sponsor-tier-card-link--priority-1': eventSponsor.tier_priority === 1,
+                'sponsor-tier-card-link--priority-2': eventSponsor.tier_priority === 2,
+                'sponsor-tier-card-link--priority-3': eventSponsor.tier_priority === 3,
+                'sponsor-tier-card-link--priority-4': eventSponsor.tier_priority === 4,
+                'sponsor-tier-card-link--priority-5': eventSponsor.tier_priority === 5,
+              }"
+              class="sponsor-tier-card-link"
+            >
+              <div
+                class="sponsor-tier-card-main"
+                [class.sponsor-tier-card-main--tier-1]="eventSponsor.tier_priority === 1"
+              >
+                <div class="sponsor-tier-logo-wrap">
+                  <img
+                    [src]="eventSponsor.sponsor.logo.i64 || eventSponsor.sponsor.logo.url"
+                    [alt]="eventSponsor.sponsor.name"
+                    loading="lazy"
+                    class="sponsor-tier-logo"
+                    crossorigin="anonymous"
+                  />
+                </div>
+                <ng-container *ngIf="eventSponsor.tier_priority === 1; else sponsorColumnText">
+                  <div class="sponsor-tier-text-stack">
+                    <h3 class="sponsor-tier-name">{{ eventSponsor.sponsor.name }}</h3>
+                    <p *ngIf="eventSponsor.sponsor.description" class="sponsor-tier-description">
+                      {{ eventSponsor.sponsor.description }}
+                    </p>
+                  </div>
+                </ng-container>
+                <ng-template #sponsorColumnText>
+                  <div class="sponsor-tier-text-block">
+                    <h3 class="sponsor-tier-name">{{ eventSponsor.sponsor.name }}</h3>
+                  </div>
+                </ng-template>
+              </div>
+
+              <p
+                *ngIf="eventSponsor.tier_priority !== 1 && eventSponsor.sponsor.description"
+                class="sponsor-tier-benefit"
+              >
+                {{ eventSponsor.sponsor.description }}
+              </p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</div>

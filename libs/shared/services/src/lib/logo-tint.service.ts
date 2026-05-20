@@ -7,16 +7,14 @@ const LOGO_GRADIENT_OPACITY = 0.75;
 const LOGO_BORDER_OPACITY = 0.3;
 const NEAR_WHITE_THRESHOLD = 230;
 
-/** Soft blue — default corner gradient (matches component SCSS fallbacks). */
-const DEFAULT_GRADIENT_RGB: Rgb = [214, 224, 255];
-/** Seashell — default logo wrap background. */
-const DEFAULT_WRAP_RGB: Rgb = [255, 246, 235];
+/** Seashell (#FFF6EB) — default wrap + gradient (matches theme + SCSS fallbacks). */
+const DEFAULT_TINT_RGB: Rgb = [255, 246, 235];
 /** Bright-Gray — default card border (#E4E9F2). */
 const DEFAULT_BORDER_RGB: Rgb = [228, 233, 242];
 
 const DEFAULT_LOGO_TINT: Readonly<ILogoTint> = {
-  wrap: `rgba(${DEFAULT_WRAP_RGB[0]}, ${DEFAULT_WRAP_RGB[1]}, ${DEFAULT_WRAP_RGB[2]}, ${LOGO_WRAP_OPACITY})`,
-  gradient: `rgb(${DEFAULT_GRADIENT_RGB[0]} ${DEFAULT_GRADIENT_RGB[1]} ${DEFAULT_GRADIENT_RGB[2]} / 0.16)`,
+  wrap: `rgba(${DEFAULT_TINT_RGB[0]}, ${DEFAULT_TINT_RGB[1]}, ${DEFAULT_TINT_RGB[2]}, ${LOGO_WRAP_OPACITY})`,
+  gradient: `rgb(${DEFAULT_TINT_RGB[0]} ${DEFAULT_TINT_RGB[1]} ${DEFAULT_TINT_RGB[2]} / 0.16)`,
   border: `rgba(${DEFAULT_BORDER_RGB[0]}, ${DEFAULT_BORDER_RGB[1]}, ${DEFAULT_BORDER_RGB[2]}, ${LOGO_BORDER_OPACITY})`,
 };
 

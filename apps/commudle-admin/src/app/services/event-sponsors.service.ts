@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IEventSponsor } from 'apps/shared-models/event_sponsor.model';
+import { IEventSponsor, IEventSponsorGroupedByTierName } from 'apps/shared-models/event_sponsor.model';
 import { ISponsors } from 'apps/shared-models/sponsors.model';
 import { IEventSponsors } from 'apps/shared-models/event_sponsors.model';
 import { API_ROUTES, BaseApiService } from '@commudle/shared-services';
@@ -45,10 +45,13 @@ export class EventSponsorsService {
     });
   }
 
-  pIndex(eventId): Observable<IEventSponsors> {
+  pIndex(eventId): Observable<IEventSponsorGroupedByTierName> {
     const params = new HttpParams().set('event_id', eventId);
-    return this.http.get<IEventSponsors>(this.apiRoutesService.getRoute(API_ROUTES.EVENT_SPONSORS.PUBLIC.INDEX), {
-      params,
-    });
+    return this.http.get<IEventSponsorGroupedByTierName>(
+      this.apiRoutesService.getRoute(API_ROUTES.EVENT_SPONSORS.PUBLIC.INDEX),
+      {
+        params,
+      },
+    );
   }
 }

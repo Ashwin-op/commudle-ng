@@ -81,16 +81,16 @@
       content: '';
       @apply com-pointer-events-none com-absolute com-inset-0 com-z-0 com-rounded-xl;
       background: linear-gradient(
-          314deg,
+          310deg,
           transparent 0%,
-          transparent 88%,
-          var(--sponsor-logo-gradient, rgb(214 224 255 / 0.16)) 100%
+          transparent 95%,
+          var(--sponsor-logo-gradient, rgb(255 246 235 / 0.16)) 100%
         ),
         linear-gradient(
           138deg,
           transparent 0%,
           transparent 80%,
-          var(--sponsor-logo-gradient, rgb(214 224 255 / 0.16)) 100%
+          var(--sponsor-logo-gradient, rgb(255 246 235 / 0.16)) 100%
         );
     }
 
