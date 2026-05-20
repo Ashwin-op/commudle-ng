@@ -57,7 +57,11 @@ footer {
     @apply com-flex-1;
 
     .footer-links-grid {
-      @apply com-grid com-grid-cols-2 com-gap-8 lg:com-grid-cols-4;
+      @apply com-grid com-gap-8 com-grid-cols-2 lg:com-grid-cols-4;
+    }
+
+    .footer-links-grid-bottom {
+      @apply com-grid com-grid-cols-2 com-gap-8 com-mt-8 lg:com-grid-cols-4;
     }
 
     .footer-links-heading {
@@ -66,7 +70,7 @@ footer {
 
     ul {
       li {
-        @apply com-mb-3;
+        @apply com-mb-2;
         a {
           @apply com-text-sm com-text-gray-500 hover:com-text-primary-500;
         }
@@ -78,7 +82,7 @@ footer {
   }
 
   .footer-copyright {
-    @apply com-mt-8 com-border-0 com-border-t com-border-solid com-border-gray-200 com-pt-8 com-pb-10;
+    @apply com-mt-8 com-border-0 com-border-t com-border-solid com-border-gray-200 com-pt-8 lg:com-pb-10 com-pb-16;
 
     .footer-text {
       @apply com-m-0 com-text-sm com-font-normal com-text-gray-400 lg:com-text-center;
@@ -98,7 +102,7 @@ footer {
   }
 
   .mini-footer-content {
-    @apply com-flex com-justify-center com-items-center com-gap-10 com-py-4 com-flex-row;
+    @apply com-flex com-justify-center com-items-center lg:com-gap-10 com-gap-6 lg:com-py-4 com-pt-3 com-pb-16 com-flex-row;
   }
 
   .mini-footer-logo {
@@ -110,7 +114,7 @@ footer {
   }
 
   .mini-footer-links {
-    @apply com-flex com-flex-wrap com-items-center com-justify-center com-gap-6;
+    @apply com-flex com-flex-wrap com-items-center com-justify-center lg:com-gap-6 com-gap-4;
 
     @apply sm:com-justify-start;
 

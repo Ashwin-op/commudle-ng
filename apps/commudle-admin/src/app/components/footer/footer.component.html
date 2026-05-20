@@ -47,49 +47,44 @@
         <div class="footer-links">
           <div class="footer-links-grid">
             <div>
-              <h3 class="footer-links-heading">Product</h3>
+              <h3 class="footer-links-heading">Platform, Account & Company</h3>
               <ul>
                 <li><a [routerLink]="['/']">Home</a></li>
                 <li><a [routerLink]="['/about']">About</a></li>
                 <li><a [routerLink]="['/features']">Features</a></li>
-                <li><a [routerLink]="['/pricing']">Pricing</a></li>
                 <li><a href="https://documentation.commudle.com/" target="_blank">Documentation</a></li>
-                <li><a [routerLink]="['/student-non-profit-community-support']">Student Community Plan</a></li>
-                <li><a [routerLink]="['/student-non-profit-community-support']">Non Profit Community Plan</a></li>
                 <li><a [routerLink]="['/hackathon-management-platform']">Hackathon Management Platform</a></li>
                 <li><a [routerLink]="['/paid-ticketing']">Paid Ticketing</a></li>
+                <li><a [href]="awsS3Bucket.brand_guidelines">Brand Guidelines</a></li>
+                <li><a [routerLink]="['/policies/contact-us']">Contact Us</a></li>
+                <li><a [routerLink]="['/login']">Login</a></li>
+                <li><a [routerLink]="['/signup']">Create Account</a></li>
               </ul>
             </div>
             <div>
-              <h3 class="footer-links-heading">Explore</h3>
+              <h3 class="footer-links-heading">Community & Events</h3>
               <ul>
                 <li><a [routerLink]="['/communities']">Communities</a></li>
                 <li><a [routerLink]="['/events']">Events</a></li>
-                <li>
-                  <a [routerLink]="['/hackathons']" class="hackathons">Hackathons</a>
-                </li>
+                <li><a [routerLink]="['/hackathons']">Hackathons</a></li>
                 <li>
                   <a [routerLink]="['/speakers']">Speakers</a>
                   <ul class="nested-list">
                     <li>
-                      <a [routerLink]="['/speakers/cfp']"> Call for Speakers </a>
+                      <a [routerLink]="['/speakers/cfp']">Call for Speakers</a>
                     </li>
                   </ul>
                 </li>
-                <li><a [routerLink]="['/labs']">Labs</a></li>
-                <li><a [routerLink]="['/builds']">Builds</a></li>
                 <li><a [routerLink]="['/experts']">Experts</a></li>
-                <li><a [routerLink]="['/newsletters']">Newsletters</a></li>
-                <li><a [routerLink]="['/blogs']">Blogs</a></li>
                 <li><a [routerLink]="['/jobs']">Jobs</a></li>
               </ul>
             </div>
             <div>
-              <h3 class="footer-links-heading">Programs</h3>
+              <h3 class="footer-links-heading">For DevRel Teams</h3>
               <ul>
                 <li>
                   <a class="developer-community-blueprint" [routerLink]="['/developer-ecosystem-blueprint']">
-                    The Developer Ecosystem Blueprint
+                    Developer Ecosystem Blueprint
                   </a>
                 </li>
                 <li><a [routerLink]="['/devrel-agencies']">For DevRel Agencies</a></li>
@@ -98,19 +93,32 @@
               </ul>
             </div>
             <div>
-              <h3 class="footer-links-heading">Credentials</h3>
+              <h3 class="footer-links-heading">Learning & Content</h3>
               <ul>
-                <li><a [routerLink]="['/login']">Login</a></li>
-                <li><a [routerLink]="['/signup']">Create Account</a></li>
+                <li><a [routerLink]="['/labs']">Labs</a></li>
+                <li><a [routerLink]="['/builds']">Builds</a></li>
+                <li><a [routerLink]="['/newsletters']">Newsletters</a></li>
+                <li><a [routerLink]="['/blogs']">Blogs</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="footer-links-grid-bottom">
+            <div>
+              <h3 class="footer-links-heading">Pricing & Plans</h3>
+              <ul>
+                <li><a [routerLink]="['/pricing']">Pricing</a></li>
+                <li><a [routerLink]="['/student-non-profit-community-support']">Student Community Plan</a></li>
+                <li><a [routerLink]="['/student-non-profit-community-support']">Non-Profit Community Plan</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="footer-links-heading">Legal, Policies & Trust</h3>
+              <ul>
                 <li><a [routerLink]="['/policies/privacy-policy']">Privacy Policy</a></li>
                 <li><a [routerLink]="['/policies/terms-and-conditions']">Terms and Conditions</a></li>
-                <li><a [routerLink]="['/policies/contact-us']">Contact Us</a></li>
                 <li><a [routerLink]="['/policies/refund-cancellation-policy']">Refund & Cancellation Policy</a></li>
                 <li><a [routerLink]="['/policies/all-policies']">All Policies</a></li>
                 <li><a href="https://compliances.commudle.com/">Compliances</a></li>
-                <li>
-                  <a [href]="awsS3Bucket.brand_guidelines">Brand Guidelines</a>
-                </li>
               </ul>
             </div>
           </div>
@@ -133,7 +141,7 @@
           <li><a [routerLink]="['/about']">About</a></li>
           <li><a [routerLink]="['/policies/privacy-policy']">Privacy Policy</a></li>
           <li><a [routerLink]="['/policies/terms-and-conditions']">Terms & Conditions</a></li>
-          <li><a href="https://documentation.commudle.com/" target="_blank">Documentation</a></li>
+          <li><a [routerLink]="['/policies/contact-us']">Contact Us</a></li>
         </ul>
       </div>
     </div>
