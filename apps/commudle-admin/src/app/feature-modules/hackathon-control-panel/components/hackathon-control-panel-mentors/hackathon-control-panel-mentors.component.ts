@@ -85,6 +85,10 @@ export class HackathonControlPanelMentorsComponent implements OnInit, OnDestroy 
   ESidebarWidth = ESidebarWidth;
   sidebarEventName = 'mentor-team-assignment';
 
+  // Pending removal confirmation state
+  pendingRemoval: { mentorId: number; teamId: number; roundId: number; teamName: string } | null = null;
+  isRemoving = false;
+
   teamAssignmentData: {
     [mentorId: number]: {
       [roundId: number]: {
@@ -285,7 +289,19 @@ export class HackathonControlPanelMentorsComponent implements OnInit, OnDestroy 
       });
   }
 
+  requestRemoveTeam(mentorId: number, teamId: number, roundId: number, teamName: string): void {
+    this.pendingRemoval = { mentorId, teamId, roundId, teamName };
+    this.cdr.markForCheck();
+  }
+
+  cancelRemoval(): void {
+    this.pendingRemoval = null;
+    this.cdr.markForCheck();
+  }
+
   removeTeamFromMentor(mentorId: number, teamId: number, roundId: number): void {
+    this.isRemoving = true;
+    this.cdr.markForCheck();
     this.hackathonTeamRoundScoreService
       .unassignMentor(mentorId, teamId, roundId)
       .pipe(takeUntil(this.destroy$))
@@ -300,10 +316,14 @@ export class HackathonControlPanelMentorsComponent implements OnInit, OnDestroy 
           }
           this.buildTeamAssignmentData();
           this.updateFilteredTeams();
+          this.pendingRemoval = null;
+          this.isRemoving = false;
           this.toastrService.successDialog('Team removed successfully');
           this.cdr.markForCheck();
         },
         error: () => {
+          this.isRemoving = false;
+          this.cdr.markForCheck();
           this.toastrService.warningDialog('Failed to remove team');
         },
       });
@@ -357,6 +377,7 @@ export class HackathonControlPanelMentorsComponent implements OnInit, OnDestroy 
     this.searchQuery = '';
     this.filteredUnassignedTeams = [];
     this.allFilteredTeams = [];
+    this.pendingRemoval = null;
     this.cdr.markForCheck();
   }
 

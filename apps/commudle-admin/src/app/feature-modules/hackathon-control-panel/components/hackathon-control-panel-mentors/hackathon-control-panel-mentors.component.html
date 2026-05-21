@@ -266,12 +266,40 @@
 
     <div class="assigned-teams" *ngIf="selectedMentorId && selectedRoundId">
       <h3>Assigned Teams</h3>
+
+      <!-- Inline removal confirmation banner -->
+      <div *ngIf="pendingRemoval" class="removal-confirmation">
+        <div class="removal-confirmation-message">
+          <nb-icon icon="alert-triangle-outline" class="removal-warning-icon"></nb-icon>
+          <div>
+            <strong>Remove "{{ pendingRemoval.teamName }}"?</strong>
+            <p>
+              If <strong class="com-inline">{{ selectedMentor?.name }}</strong> has already scored this team, that score
+              will also be deleted.
+            </p>
+          </div>
+        </div>
+        <div class="removal-confirmation-actions">
+          <button
+            nbButton
+            size="small"
+            status="danger"
+            [disabled]="isRemoving"
+            (click)="removeTeamFromMentor(pendingRemoval.mentorId, pendingRemoval.teamId, pendingRemoval.roundId)"
+          >
+            <nb-icon *ngIf="isRemoving" icon="loader-outline" class="com-animate-spin"></nb-icon>
+            {{ isRemoving ? 'Removing...' : 'Yes, Remove' }}
+          </button>
+          <button nbButton size="small" ghost [disabled]="isRemoving" (click)="cancelRemoval()">Cancel</button>
+        </div>
+      </div>
+
       <div class="team-tags">
         <nb-tag
           *ngFor="let team of teamAssignmentData[selectedMentorId]?.[selectedRoundId]?.assignedTeams"
           status="success"
           [removable]="true"
-          (remove)="removeTeamFromMentor(selectedMentorId, team.id, selectedRoundId)"
+          (remove)="requestRemoveTeam(selectedMentorId, team.id, selectedRoundId, team.name)"
           [text]="team.name"
         >
         </nb-tag>
