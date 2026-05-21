@@ -181,7 +181,7 @@ const UPSTREAM_EXTENSIONS_TO_IGNORE: string[] = [
   '.webp',
 ];
 
-const PROJECT_BLACKLISTED_UA_SUBSTRINGS = new Set(['ahrefsbot', 'ahrefssiteaudit']);
+const PROJECT_BLACKLISTED_UA_SUBSTRINGS = new Set(['ahrefsbot', 'ahrefssiteaudit', 'bytespider']);
 
 const PROJECT_ADDITIONAL_CRAWLER_UA_SUBSTRINGS: string[] = [
   // These are present upstream in some form, but we keep them explicitly
