@@ -300,6 +300,44 @@ nb-card {
     }
   }
 
+  .assigned-teams {
+    h4 {
+      @apply com-text-lg com-font-semibold com-mb-3;
+    }
+
+    .removal-confirmation {
+      @apply com-mb-3 com-p-3 com-bg-red-50 com-border com-border-red-300 com-rounded-lg com-flex com-flex-col com-gap-3;
+
+      .removal-confirmation-message {
+        @apply com-flex com-items-start com-gap-2;
+
+        .removal-warning-icon {
+          @apply com-text-red-500 com-text-xl com-flex-shrink-0 com-mt-0.5;
+        }
+
+        strong {
+          @apply com-text-sm com-text-red-800 com-block com-mb-1;
+        }
+
+        p {
+          @apply com-text-xs com-text-red-700 com-mb-0;
+        }
+      }
+
+      .removal-confirmation-actions {
+        @apply com-flex com-gap-2 com-justify-end;
+      }
+    }
+
+    .team-tags {
+      @apply com-flex com-flex-wrap com-gap-2;
+
+      .no-teams {
+        @apply com-text-sm com-text-gray-500 com-italic;
+      }
+    }
+  }
+
   .search-section {
     h3 {
       @apply com-text-lg com-font-semibold com-mb-3;

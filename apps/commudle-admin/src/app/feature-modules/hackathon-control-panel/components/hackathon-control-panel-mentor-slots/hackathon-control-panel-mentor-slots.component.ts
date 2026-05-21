@@ -97,11 +97,14 @@ export class HackathonControlPanelMentorSlotsComponent implements OnInit, AfterV
   filteredUnassignedTeams: IHackathonTeam[] = [];
   isSlotRuleFormSubmitting = false;
 
+  // Pending removal confirmation state
+  pendingRemoval: { bookingId: number; teamName: string } | null = null;
+  isRemoving = false;
+
   @ViewChild('mentorCellTemplate', { static: false }) mentorCellTemplate!: TemplateRef<unknown>;
   @ViewChild('mentorHeaderTemplate', { static: false }) mentorHeaderTemplate!: TemplateRef<unknown>;
   @ViewChild('slotCellTemplate', { static: false }) slotCellTemplate!: TemplateRef<unknown>;
   @ViewChild('roundHeaderTemplate', { static: false }) roundHeaderTemplate!: TemplateRef<unknown>;
-  @ViewChild('removeBookingDialog') removeBookingDialog: TemplateRef<any>;
 
   readonly icons = {
     faPlus,
@@ -381,6 +384,7 @@ export class HackathonControlPanelMentorSlotsComponent implements OnInit, AfterV
   closeSidebar(): void {
     this.sidebarService.closeSidebar(this.sidebarEventName);
     this.searchQuery = '';
+    this.pendingRemoval = null;
   }
 
   assignTeam(teamId: number): void {
@@ -399,20 +403,37 @@ export class HackathonControlPanelMentorSlotsComponent implements OnInit, AfterV
       });
   }
 
-  removeTeamBooking(bookingId: number): void {
-    this.dialogService.open(this.removeBookingDialog).onClose.subscribe((confirmed) => {
-      if (confirmed) {
-        this.roundMentorSlotBookingService
-          .destroy(bookingId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe({
-            next: () => {
-              this.toastrService.successDialog('Team removed successfully');
-              this.cdr.markForCheck();
-            },
-          });
-      }
-    });
+  requestRemoveBooking(bookingId: number, teamName: string): void {
+    this.pendingRemoval = { bookingId, teamName };
+    this.cdr.markForCheck();
+  }
+
+  cancelRemoval(): void {
+    this.pendingRemoval = null;
+    this.cdr.markForCheck();
+  }
+
+  confirmRemoveBooking(): void {
+    if (!this.pendingRemoval) return;
+    this.isRemoving = true;
+    this.cdr.markForCheck();
+
+    this.roundMentorSlotBookingService
+      .destroy(this.pendingRemoval.bookingId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.pendingRemoval = null;
+          this.isRemoving = false;
+          this.toastrService.successDialog('Team removed successfully');
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.isRemoving = false;
+          this.toastrService.warningDialog('Failed to remove team');
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   private loadRoundAndMentors(): void {

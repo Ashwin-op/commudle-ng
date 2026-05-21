@@ -380,13 +380,31 @@
     <div class="assigned-teams">
       <h4 class="com-my-1">Assigned Teams</h4>
 
+      <!-- Inline removal confirmation banner -->
+      <div *ngIf="pendingRemoval" class="removal-confirmation">
+        <div class="removal-confirmation-message">
+          <nb-icon icon="alert-triangle-outline" class="removal-warning-icon"></nb-icon>
+          <div>
+            <strong>Remove "{{ pendingRemoval.teamName }}"?</strong>
+            <p>This team will be unassigned from this slot.</p>
+          </div>
+        </div>
+        <div class="removal-confirmation-actions">
+          <button nbButton size="small" status="danger" [disabled]="isRemoving" (click)="confirmRemoveBooking()">
+            <nb-icon *ngIf="isRemoving" icon="loader-outline" class="com-animate-spin"></nb-icon>
+            {{ isRemoving ? 'Removing...' : 'Yes, Remove' }}
+          </button>
+          <button nbButton size="small" ghost [disabled]="isRemoving" (click)="cancelRemoval()">Cancel</button>
+        </div>
+      </div>
+
       <div class="team-tags">
         <nb-tag
           *ngFor="let booking of selectedSlot?.round_mentor_slot_bookings"
           status="success"
           [text]="booking.hackathon_team.name"
           [removable]="true"
-          (remove)="removeTeamBooking(booking.id)"
+          (remove)="requestRemoveBooking(booking.id, booking.hackathon_team.name)"
         >
         </nb-tag>
         <span *ngIf="!selectedSlot?.round_mentor_slot_bookings?.length" class="no-teams"> No teams assigned yet </span>
@@ -439,21 +457,3 @@
     </div>
   </div>
 </commudle-sidebar>
-
-<ng-template #removeBookingDialog let-data let-ref="dialogRef">
-  <nb-card class="dialog-box-card">
-    <nb-card-header>
-      <div>Remove Team</div>
-      <button ghost nbButton size="small" (click)="ref.close(false)" shape="round">
-        <nb-icon icon="close"></nb-icon>
-      </button>
-    </nb-card-header>
-    <nb-card-body>
-      <p>Are you sure you want to remove this team from the slot?</p>
-    </nb-card-body>
-    <nb-card-footer>
-      <button nbButton status="danger" (click)="ref.close(true)">Yes, Remove</button>
-      <button nbButton (click)="ref.close(false)">No</button>
-    </nb-card-footer>
-  </nb-card>
-</ng-template>
