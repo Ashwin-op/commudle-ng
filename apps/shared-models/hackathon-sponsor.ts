@@ -6,6 +6,7 @@ export interface IHackathonSponsor {
   hackathon_id: number;
   tier_name: string;
   tier_priority: number;
+  description?: string;
 }
 
 export interface IHackathonSponsorGroupedByTierName {

@@ -6,6 +6,7 @@ export interface IEventSponsor {
   event_id: number;
   tier_name?: string;
   tier_priority?: number;
+  description?: string;
 }
 
 export interface IEventSponsorGroupedByTierName {

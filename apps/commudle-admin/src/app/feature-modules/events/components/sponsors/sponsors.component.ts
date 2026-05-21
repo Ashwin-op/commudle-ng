@@ -2,16 +2,14 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   Input,
   OnDestroy,
   OnInit,
   TemplateRef,
-  ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NbDialogRef, NbDialogService, NbTabComponent, NbTabsetComponent } from '@commudle/theme';
-import { IEventSponsor } from 'apps/shared-models/event_sponsor.model';
+import { NbDialogRef, NbDialogService } from '@commudle/theme';
+import { IEventSponsor, IEventSponsorGroupedByTierName } from 'apps/shared-models/event_sponsor.model';
 import { ISponsor } from 'apps/shared-models/sponsor.model';
 import { ActivatedRoute } from '@angular/router';
 import { EventSponsorsService } from 'apps/commudle-admin/src/app/services/event-sponsors.service';
@@ -21,31 +19,27 @@ import { SeoService, ToastrService } from '@commudle/shared-services';
 import { faImage } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-    selector: 'commudle-sponsors',
-    templateUrl: './sponsors.component.html',
-    styleUrls: ['./sponsors.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'commudle-sponsors',
+  templateUrl: './sponsors.component.html',
+  styleUrls: ['./sponsors.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SponsorsComponent implements OnInit, OnDestroy {
   @Input() event: IEvent;
 
   community: ICommunity;
   existingSponsors: ISponsor[] = [];
-  sponsors: IEventSponsor[] = [];
+  eventSponsorGroupedByTierName: IEventSponsorGroupedByTierName;
+  sponsors: IEventSponsor[];
   dialogRef: NbDialogRef<any>;
   sponsorForm: FormGroup;
-  uploadedLogoImageFile: File;
-  uploadedLogoImage;
-
-  subscriptions: Subscription[] = [];
+  imagePreview = '';
+  readonly sponsorSelectionNew = 'new';
   loadingExistingSponsors = false;
+  readonly icons = { faImage };
 
-  readonly icons = {
-    faImage,
-  };
-
-  @ViewChild('nameInput') nameInput: ElementRef<HTMLInputElement>;
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -57,9 +51,13 @@ export class SponsorsComponent implements OnInit, OnDestroy {
     private seoService: SeoService,
   ) {
     this.sponsorForm = this.fb.group({
-      logo: ['', Validators.required],
+      sponsor_selection: [null, Validators.required],
+      tier_name: ['', Validators.required],
+      tier_priority: [1, Validators.required],
       name: ['', Validators.required],
-      link: [''],
+      description: [''],
+      logo: [null, Validators.required],
+      link: ['', this.urlValidator],
     });
   }
 
@@ -80,18 +78,21 @@ export class SponsorsComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
+  urlValidator(control: { value: string }) {
+    return control.value && !/^https?:\/\//.test(control.value) ? { invalidUrl: true } : null;
+  }
+
   getAllSponsors() {
-    this.eventSponsorsService.index(this.event.slug).subscribe((data) => {
-      this.sponsors = data.event_sponsors;
+    this.eventSponsorsService.index(this.event.slug).subscribe((data: IEventSponsorGroupedByTierName) => {
+      this.eventSponsorGroupedByTierName = data;
       this.changeDetectorRef.markForCheck();
     });
   }
 
   openForm(dialogRefTemplate: TemplateRef<any>) {
-    this.sponsorForm.reset();
-    this.uploadedLogoImageFile = null;
     this.loadingExistingSponsors = true;
     this.dialogRef = this.dialogService.open(dialogRefTemplate);
+    this.resetSponsorForm();
     this.getPastSponsors();
   }
 
@@ -104,87 +105,150 @@ export class SponsorsComponent implements OnInit, OnDestroy {
     });
   }
 
-  onTabChange(event): void {
-    if (event && event.tabTitle === 'Add New') {
-      setTimeout(() => {
-        this.nameInput.nativeElement.focus();
-      }, 0);
+  onSponsorSelectionChange() {
+    const selection = this.sponsorForm.get('sponsor_selection')?.value;
+    if (!selection) {
+      return;
     }
-  }
 
-  addExistingSponsor(sponsorId) {
-    this.eventSponsorsService.addExistingSponsor(this.event.slug, sponsorId).subscribe((data) => {
-      this.sponsors.push(data);
-      this.dialogRef.close();
-      this.toastLogService.successDialog(`${data.sponsor.name} added`, 3000);
-      this.changeDetectorRef.markForCheck();
-    });
+    if (selection === this.sponsorSelectionNew) {
+      this.imagePreview = '';
+      this.sponsorForm.patchValue({ name: '', description: '', link: '', logo: null });
+    } else {
+      const sponsor = this.existingSponsors.find((s) => s.id === Number(selection));
+      if (!sponsor) {
+        return;
+      }
+
+      this.imagePreview = sponsor.logo?.url ?? '';
+      this.sponsorForm.patchValue({
+        name: sponsor.name,
+        link: sponsor.link ?? '',
+        logo: sponsor.logo?.url ?? null,
+      });
+      this.sponsorForm.markAsUntouched();
+    }
+
+    this.changeDetectorRef.markForCheck();
   }
 
   createSponsor() {
-    const formData: any = new FormData();
+    const selection = this.sponsorForm.get('sponsor_selection')?.value;
 
-    const sponsorFormData = this.sponsorForm.value;
-    Object.keys(sponsorFormData).forEach((key) =>
-      !(sponsorFormData[key] == null) ? formData.append(`sponsor[${key}]`, sponsorFormData[key]) : '',
-    );
+    if (selection === this.sponsorSelectionNew) {
+      const formData = new FormData();
 
-    if (this.uploadedLogoImageFile) {
-      formData.append('sponsor[logo]', this.uploadedLogoImageFile);
+      Object.keys(this.sponsorForm.value).forEach((key) => {
+        if (key === 'sponsor_selection') {
+          return;
+        }
+
+        const value = this.sponsorForm.value[key];
+
+        if (value instanceof File) {
+          formData.append('sponsor[' + key + ']', value, value.name);
+        } else if (key !== 'logo') {
+          formData.append('sponsor[' + key + ']', value);
+        }
+      });
+
+      this.eventSponsorsService.create(this.event.slug, formData).subscribe((data) => {
+        if (data) {
+          const tierName = data.tier_name;
+          if (!this.eventSponsorGroupedByTierName[tierName]) {
+            this.eventSponsorGroupedByTierName[tierName] = [];
+          }
+          this.eventSponsorGroupedByTierName[tierName].unshift(data);
+          this.dialogRef.close();
+          this.resetSponsorForm();
+          this.toastLogService.successDialog('Sponsor added successfully!');
+          this.changeDetectorRef.markForCheck();
+        }
+      });
+      return;
+    } else {
+      const { tier_name, tier_priority, description } = this.sponsorForm.value;
+      this.eventSponsorsService
+        .addExistingSponsor(this.event.slug, Number(selection), tier_name, tier_priority, description ?? '')
+        .subscribe((data) => {
+          if (data) {
+            const tierName = data.tier_name;
+            if (!this.eventSponsorGroupedByTierName[tierName]) {
+              this.eventSponsorGroupedByTierName[tierName] = [];
+            }
+            this.eventSponsorGroupedByTierName[tierName].unshift(data);
+            this.dialogRef.close();
+            this.resetSponsorForm();
+            this.toastLogService.successDialog('Sponsor added successfully!');
+            this.changeDetectorRef.markForCheck();
+          }
+        });
     }
-    this.eventSponsorsService.create(this.event.slug, formData).subscribe((data) => {
-      this.sponsors.push(data);
-      this.dialogRef.close();
-      this.removeLogo();
-      this.sponsorForm.reset();
-      this.toastLogService.successDialog(`${data.sponsor.name} added`, 3000);
+  }
+
+  removeSponsor(sponsor: IEventSponsor, index) {
+    this.eventSponsorsService.destroy(sponsor.id).subscribe((data) => {
+      if (data) {
+        const tierName = sponsor.tier_name;
+
+        if (this.eventSponsorGroupedByTierName[tierName]) {
+          this.eventSponsorGroupedByTierName[tierName].splice(index, 1);
+
+          // Remove the tier if it becomes empty
+          if (this.eventSponsorGroupedByTierName[tierName].length === 0) {
+            delete this.eventSponsorGroupedByTierName[tierName];
+          }
+        }
+
+        this.toastLogService.successDialog('Sponsor removed successfully!');
+      }
       this.changeDetectorRef.markForCheck();
     });
   }
 
-  removeSponsor(eventSponsorId, index) {
-    this.eventSponsorsService.destroy(eventSponsorId).subscribe((data) => {
-      this.sponsors.splice(index, 1);
-      this.changeDetectorRef.markForCheck();
-    });
-  }
-
-  // form functionalities
-  displaySelectedLogo(event: any) {
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      if (file.size > 2425190) {
-        this.toastLogService.warningDialog('Image should be less than 2 Mb', 3000);
-        return;
-      }
-      const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
-
-      if (!allowedTypes.includes(file.type)) {
-        this.toastLogService.warningDialog('Please upload a valid image file (PNG, JPG, JPEG)');
-        return;
-      }
-      this.uploadedLogoImageFile = file;
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.uploadedLogoImage = reader.result;
-      };
-      reader.readAsDataURL(file);
+  onFileChange(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) {
+      return;
     }
+    if (file.size > 2425190) {
+      this.toastLogService.warningDialog('Image should be less than 2 Mb', 3000);
+      return;
+    }
+    if (!['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) {
+      this.toastLogService.warningDialog('Please upload a valid image file (PNG, JPG, JPEG)');
+      return;
+    }
+
+    this.sponsorForm.patchValue({ logo: file });
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result as string;
+      this.changeDetectorRef.markForCheck();
+    };
+    reader.readAsDataURL(file);
   }
 
-  removeLogo() {
-    this.uploadedLogoImage = null;
-    this.uploadedLogoImageFile = null;
-    this.sponsorForm.get('logo').patchValue('');
+  removeBannerImage() {
+    this.imagePreview = '';
+    this.sponsorForm.patchValue({ logo: null });
   }
 
-  openConfirmDeleteDialog(confirmDeleteDialogTemplate, sponsor, index) {
-    this.dialogService.open(confirmDeleteDialogTemplate, {
-      context: {
-        sponsor_id: sponsor.id,
-        index: index,
-      },
+  resetSponsorForm() {
+    this.sponsorForm.reset({
+      sponsor_selection: this.sponsorSelectionNew,
+      tier_name: '',
+      tier_priority: 1,
+      name: '',
+      description: '',
+      logo: null,
+      link: '',
     });
+    this.imagePreview = '';
+  }
+
+  openConfirmDeleteDialog(template: TemplateRef<unknown>, sponsor: IEventSponsor, index: number) {
+    this.dialogService.open(template, { context: { sponsor_id: sponsor.id, index } });
   }
 
   setMeta() {

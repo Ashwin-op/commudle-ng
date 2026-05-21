@@ -12,9 +12,12 @@ import { API_ROUTES, BaseApiService } from '@commudle/shared-services';
 export class EventSponsorsService {
   constructor(private http: HttpClient, private apiRoutesService: BaseApiService) {}
 
-  index(eventId): Observable<IEventSponsors> {
+  index(eventId): Observable<IEventSponsorGroupedByTierName> {
     const params = new HttpParams().set('event_id', eventId);
-    return this.http.get<IEventSponsors>(this.apiRoutesService.getRoute(API_ROUTES.EVENT_SPONSORS.INDEX), { params });
+    return this.http.get<IEventSponsorGroupedByTierName>(
+      this.apiRoutesService.getRoute(API_ROUTES.EVENT_SPONSORS.INDEX),
+      { params },
+    );
   }
 
   create(eventId, formData): Observable<IEventSponsor> {
@@ -24,8 +27,19 @@ export class EventSponsorsService {
     });
   }
 
-  addExistingSponsor(eventId, sponsorId): Observable<IEventSponsor> {
-    const params = new HttpParams().set('event_id', eventId).set('sponsor_id', sponsorId);
+  addExistingSponsor(
+    eventId: string,
+    sponsorId: number,
+    tierName: string,
+    tierPriority: number,
+    description: string,
+  ): Observable<IEventSponsor> {
+    const params = new HttpParams()
+      .set('event_id', eventId)
+      .set('sponsor_id', sponsorId)
+      .set('tier_name', tierName)
+      .set('tier_priority', tierPriority)
+      .set('description', description);
     return this.http.post<IEventSponsor>(
       this.apiRoutesService.getRoute(API_ROUTES.EVENT_SPONSORS.ADD_EXISTING_SPONSOR),
       {},

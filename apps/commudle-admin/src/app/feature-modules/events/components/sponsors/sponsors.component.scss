@@ -4,8 +4,16 @@
     @apply com-m-0 com-flex com-items-center;
   }
 
+  .sponsors-cards-container {
+    @apply com-mt-4;
+
+    h6 {
+      @apply com-mb-2 com-mt-0 com-text-base com-font-semibold;
+    }
+  }
+
   .event-sponsors {
-    @apply com-grid com-grid-cols-1 md:com-grid-cols-2 lg:com-grid-cols-3 xl:com-grid-cols-4 com-gap-3 com-mt-6;
+    @apply com-grid com-grid-cols-1 md:com-grid-cols-2 lg:com-grid-cols-3 xl:com-grid-cols-4 com-gap-3;
     .event-sponsor {
       @apply com-h-48 com-border com-border-solid com-border-Bright-Gray com-rounded-xl com-relative com-overflow-hidden;
       .logo {
@@ -40,6 +48,37 @@
   }
   nb-card-body {
     @apply com-p-0;
+    .sponsor-form-dialog-box {
+      @apply com-flex com-flex-col com-gap-3 com-p-4;
+
+      input:disabled,
+      textarea:disabled {
+        @apply com-opacity-100 com-text-Yankees-Blue com-bg-[#F6F9FC] com-cursor-not-allowed;
+      }
+
+      .sponsor-select {
+        label {
+          @apply com-block com-mb-1;
+        }
+        .dropdown {
+          @apply com-flex com-items-center com-w-full;
+          select {
+            @apply com-appearance-none com-bg-[#F6F9FC] com-border com-border-solid com-border-[#E4E9F2] com-cursor-pointer com-w-full com-rounded-lg com-h-10 com-px-3 com-text-Yankees-Blue;
+          }
+        }
+      }
+      .select {
+        @apply com-flex com-items-center com-gap-1 com-h-8 com-p-1 com-text-sm com-rounded-[4px] com-cursor-pointer com-bg-[#F6F9FC] hover:com-bg-[#eef2f7]/50 com-border com-border-solid com-border-[#E4E9F2] com-w-full;
+        select {
+          @apply com-bg-[#F6F9FC] hover:com-bg-[#eef2f7]/50 com-cursor-pointer com-border-0 com-w-full;
+        }
+      }
+      .image-preview {
+        .delete-image {
+          @apply com-mb-2 com-flex com-justify-end;
+        }
+      }
+    }
     .existing-sponsors {
       @apply com-grid com-grid-cols-2 md:com-grid-cols-3 lg:com-grid-cols-4 com-gap-3;
       .sponsor-card {
@@ -55,54 +94,19 @@
         }
       }
     }
-    .sponsor-form {
-      .logo-image-uploader-container {
-        @apply com-pt-5 com-flex com-items-center com-justify-center com-flex-col;
-        > span {
-          @apply com-flex com-flex-col com-items-center com-justify-center com-space-y-2;
-        }
-        fa-icon {
-          @apply com-text-7xl com-text-Cadet-Grey;
-        }
-        .label-text {
-          @apply com-text-gray-500 com-text-center com-text-sm com-font-medium;
-        }
-        input[type='file'] {
-          @apply com-hidden;
-        }
-      }
-      .logo-image-uploader-container:hover {
-        .label-text {
-          @apply com-text-gray-400;
-        }
-      }
-
-      .uploaded-logo-container {
-        @apply com-w-full com-flex com-items-center com-justify-center;
-        .uploaded-logo {
-          @apply com-mb-4 com-h-28 com-aspect-1 com-flex com-items-center com-justify-center;
-          img {
-            @apply com-w-full;
-          }
-        }
-      }
-      input {
-        @apply com-mt-2;
-      }
-      .delete-logo-button {
-        @apply com-flex com-items-center com-justify-center;
-      }
-      .required {
-        @apply com-text-red-500;
-      }
-      .field {
-        @apply com-my-4;
-        label {
-          @apply com-mb-3;
-        }
-      }
-    }
   }
+}
+
+.name {
+  @apply com-text-base com-font-semibold com-line-clamp-1 com-m-0 com-mb-2;
+}
+
+.description {
+  @apply com-text-sm com-font-normal com-line-clamp-3 com-mb-2;
+}
+
+.actions {
+  @apply com-flex com-justify-between com-gap-3;
 }
 
 .remove-sponsor-confirmation {

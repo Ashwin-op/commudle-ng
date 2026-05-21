@@ -11,10 +11,10 @@ import { IHackathon, ICommunity } from '@commudle/shared-models';
 import { ICommunityGroup } from 'apps/shared-models/community-group.model';
 
 @Component({
-    selector: 'commudle-hackathon-control-panel-sponsor',
-    templateUrl: './hackathon-control-panel-sponsor.component.html',
-    styleUrls: ['./hackathon-control-panel-sponsor.component.scss'],
-    standalone: false
+  selector: 'commudle-hackathon-control-panel-sponsor',
+  templateUrl: './hackathon-control-panel-sponsor.component.html',
+  styleUrls: ['./hackathon-control-panel-sponsor.component.scss'],
+  standalone: false,
 })
 export class HackathonControlPanelSponsorComponent implements OnInit, OnDestroy {
   sponsorForm: FormGroup;
@@ -92,7 +92,7 @@ export class HackathonControlPanelSponsorComponent implements OnInit, OnDestroy 
     if (hackathonSponsor) {
       this.sponsorForm.patchValue({
         name: hackathonSponsor.sponsor.name,
-        description: hackathonSponsor.sponsor.description,
+        description: hackathonSponsor.description,
         logo: [null, Validators.required],
         tier_name: hackathonSponsor.tier_name,
         link: hackathonSponsor.sponsor.link,

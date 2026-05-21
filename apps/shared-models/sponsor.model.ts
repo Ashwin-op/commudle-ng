@@ -5,5 +5,4 @@ export interface ISponsor {
   name: string;
   link: string;
   logo: IAttachedFile;
-  description?: string;
 }
