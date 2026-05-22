@@ -175,7 +175,6 @@
 
   .sponsor-tier-benefit {
     @apply com-mt-2 com-w-full com-rounded-lg com-px-3 com-py-2 com-text-center com-text-Yankees-Blue;
-    background-color: var(--sponsor-logo-wrap-bg, #{theme('colors.Seashell')});
   }
 
   .sponsor-tier-card-link--priority-1 {

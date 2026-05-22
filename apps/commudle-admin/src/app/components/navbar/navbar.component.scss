@@ -15,7 +15,7 @@
 }
 
 .navbar-logo {
-  @apply com-block lg:com-w-full com-w-8 com-h-8;
+  @apply com-block com-shrink-0 com-w-8 com-h-8 lg:com-w-[146px];
   img {
     @apply com-w-full com-h-full com-object-contain;
   }
