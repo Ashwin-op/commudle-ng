@@ -43,11 +43,20 @@
 
   &::before {
     content: '';
-    @apply com-pointer-events-none com-absolute com-inset-0 com-z-0 com-rounded-lg;
+    @apply com-pointer-events-none com-absolute com-inset-0 com-z-0 com-rounded-lg com-duration-200 com-ease-out;
     background: linear-gradient(
       138deg,
       transparent 0%,
-      transparent 66%,
+      transparent 88%,
+      var(--collaboration-logo-gradient, rgb(255 246 235 / 0.16)) 100%
+    );
+  }
+
+  &:hover::before {
+    background: linear-gradient(
+      138deg,
+      transparent 0%,
+      transparent 76%,
       var(--collaboration-logo-gradient, rgb(255 246 235 / 0.16)) 100%
     );
   }
