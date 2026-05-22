@@ -62,7 +62,6 @@
                   hackathonSponsor.tier_priority === 1 ? sponsorLogoTints[hackathonSponsor.id]?.gradient : null
                 "
                 [style.--sponsor-logo-wrap-bg]="sponsorLogoTints[hackathonSponsor.id]?.wrap"
-                [style.--sponsor-logo-border]="sponsorLogoTints[hackathonSponsor.id]?.border"
               >
                 <a
                   [href]="hackathonSponsor.sponsor.link ? hackathonSponsor.sponsor.link : null"
@@ -122,10 +121,6 @@
       </nb-card>
     </div>
 
-    <div *ngIf="hackathon.faqs_count > 0" id="faq">
-      <commudle-public-faqs [faqs]="faqs"></commudle-public-faqs>
-    </div>
-
     <div id="collaborations">
       <commudle-public-hackathon-collaboration-communities
         [community]="community"
@@ -147,6 +142,10 @@
         ></commudle-discussion>
       </nb-card-body>
     </nb-card>
+
+    <div *ngIf="hackathon.faqs_count > 0" id="faq">
+      <commudle-public-faqs [faqs]="faqs"></commudle-public-faqs>
+    </div>
   </div>
 
   <div class="right-column">

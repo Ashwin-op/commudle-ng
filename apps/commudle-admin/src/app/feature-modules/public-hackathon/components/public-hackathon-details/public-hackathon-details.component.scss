@@ -72,24 +72,39 @@
   }
 
   .sponsor-tier-card {
-    @apply com-relative com-isolate com-overflow-hidden com-rounded-xl com-border com-border-solid com-bg-white com-shadow-none;
-    @apply com-transition-[box-shadow] com-duration-200 com-ease-out;
-    @apply hover:com-shadow-md;
-    border-color: var(--sponsor-logo-border, #{theme('colors.Bright-Gray')});
+    @apply com-relative com-isolate com-overflow-hidden com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-bg-white;
+    @apply com-shadow-[0_2px_12px_rgb(15_23_42/0.06)];
+    @apply com-origin-center com-transition-[transform,box-shadow] com-duration-200 com-ease-out;
+    @apply hover:com-scale-x-[1.02] hover:com-shadow-[0_4px_16px_rgb(15_23_42/0.08)];
 
     &--tier-1::before {
       content: '';
-      @apply com-pointer-events-none com-absolute com-inset-0 com-z-0 com-rounded-xl;
+      @apply com-pointer-events-none com-absolute com-inset-0 com-z-0 com-rounded-xl com-duration-200 com-ease-out;
       background: linear-gradient(
           310deg,
           transparent 0%,
-          transparent 95%,
+          transparent 96%,
           var(--sponsor-logo-gradient, rgb(255 246 235 / 0.16)) 100%
         ),
         linear-gradient(
           138deg,
           transparent 0%,
-          transparent 80%,
+          transparent 94%,
+          var(--sponsor-logo-gradient, rgb(255 246 235 / 0.16)) 100%
+        );
+    }
+
+    &--tier-1:hover::before {
+      background: linear-gradient(
+          310deg,
+          transparent 0%,
+          transparent 96%,
+          var(--sponsor-logo-gradient, rgb(255 246 235 / 0.16)) 100%
+        ),
+        linear-gradient(
+          138deg,
+          transparent 0%,
+          transparent 92%,
           var(--sponsor-logo-gradient, rgb(255 246 235 / 0.16)) 100%
         );
     }
@@ -127,7 +142,7 @@
 
   .sponsor-tier-logo-wrap {
     @apply com-flex com-h-14 com-w-14 com-flex-shrink-0 com-items-center com-justify-center com-rounded-xl com-p-6px;
-    background-color: var(--sponsor-logo-wrap-bg, #{theme('colors.Seashell')});
+    background-color: var(--sponsor-logo-wrap-bg, #{theme('colors.Bright-Gray')});
   }
 
   .sponsor-tier-card-link--tier-1 .sponsor-tier-logo-wrap {

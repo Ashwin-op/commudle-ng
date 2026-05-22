@@ -9,6 +9,8 @@ const NEAR_WHITE_THRESHOLD = 230;
 
 /** Seashell (#FFF6EB) — default wrap + gradient (matches theme + SCSS fallbacks). */
 const DEFAULT_TINT_RGB: Rgb = [255, 246, 235];
+/** Bright-Gray (#E4E9F2) — logo wrap when sampled color is near-white. */
+const NEAR_WHITE_WRAP_RGB: Rgb = [228, 233, 242];
 /** Bright-Gray — default card border (#E4E9F2). */
 const DEFAULT_BORDER_RGB: Rgb = [228, 233, 242];
 
@@ -60,7 +62,11 @@ function tintColor(r: number, g: number, b: number, opacity: number, rgba: boole
 
 function toLogoTint([r, g, b]: Rgb): ILogoTint {
   if (isNearWhite(r, g, b)) {
-    return { ...DEFAULT_LOGO_TINT };
+    return {
+      wrap: tintColor(NEAR_WHITE_WRAP_RGB[0], NEAR_WHITE_WRAP_RGB[1], NEAR_WHITE_WRAP_RGB[2], 1, true),
+      gradient: DEFAULT_LOGO_TINT.gradient,
+      border: DEFAULT_LOGO_TINT.border,
+    };
   }
   return {
     wrap: tintColor(r, g, b, LOGO_WRAP_OPACITY, true),

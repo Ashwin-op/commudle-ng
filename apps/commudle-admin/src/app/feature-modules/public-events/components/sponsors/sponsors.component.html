@@ -34,7 +34,6 @@
               eventSponsor.tier_priority === 1 ? sponsorLogoTints[eventSponsor.id]?.gradient : null
             "
             [style.--sponsor-logo-wrap-bg]="sponsorLogoTints[eventSponsor.id]?.wrap"
-            [style.--sponsor-logo-border]="sponsorLogoTints[eventSponsor.id]?.border"
           >
             <a
               [href]="eventSponsor.sponsor.link ? eventSponsor.sponsor.link : null"
