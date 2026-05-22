@@ -2,7 +2,10 @@
   <div [ngStyle]="{ 'background-image': 'url(\'' + headerImagePath + '\')' }" class="background">
     <div class="base-layout">
       <div class="content">
-        <div class="header-text">
+        <div
+          class="header-text"
+          [ngClass]="{ 'md:com-w-[650px]': locationPageHeader, 'com-w-full': !locationPageHeader }"
+        >
           <p class="sub-heading">
             {{
               locationPageHeader

@@ -6,12 +6,12 @@
     .base-layout {
       @apply com-min-h-full;
       .content {
-        @apply com-flex md:com-rounded-lg com-rounded-none md:com-flex-row com-flex-col md:com-justify-between com-items-center md:com-w-[1280px] com-h-full md:com-pt-[104px];
+        @apply com-flex md:com-rounded-lg com-rounded-none md:com-flex-row com-flex-col md:com-justify-between com-items-center com-w-full com-min-w-0 com-h-full md:com-pt-[104px] com-gap-6;
         .header-text {
-          @apply com-flex com-flex-col md:com-p-0 com-px-4 com-pt-10 com-pb-0 md:com-w-[650px] com-w-full com-min-h-full com-h-full md:com-items-start com-items-center;
+          @apply com-flex com-flex-col md:com-p-0 com-px-4 com-pt-10 com-pb-0 com-min-h-full com-h-full md:com-items-start com-items-center;
 
           .heading {
-            @apply com-flex com-items-center com-mt-0 com-mb-4 com-text-tWhite;
+            @apply com-flex com-items-center com-mt-0 com-mb-4 com-text-tWhite com-text-center;
           }
 
           .sub-heading {
@@ -28,20 +28,16 @@
           }
 
           .default-content-rich-text {
-            @apply md:com-flex com-flex-col md:com-text-start com-text-center com-hidden;
+            @apply com-max-w-full md:com-flex com-flex-col md:com-text-start com-text-center com-hidden;
 
             .default-content-list {
-              @apply com-flex com-flex-row com-flex-shrink-0 com-m-0 com-mx-0 md:com-mb-2 com-mb-6 com-text-tWhite md:com-w-[664px] com-w-full;
+              @apply com-m-0 com-mx-0 md:com-mb-2 com-mb-6 com-text-tWhite com-w-full;
 
               .communities-text,
               .events-text,
               .projects-text,
               .labs-text {
-                @apply com-flex com-flex-shrink-0 com-whitespace-nowrap;
-              }
-
-              strong {
-                @apply com-flex com-flex-row com-flex-shrink-0;
+                @apply com-whitespace-nowrap;
               }
             }
           }
