@@ -74,7 +74,7 @@ export class SessionPageVideoComponent implements OnInit, OnChanges, AfterViewIn
 
   ngOnInit(): void {
     this.footerService.changeMiniFooterStatus(false);
-    document.onfullscreenchange = () => (this.isFullScreen = this.document.fullscreenElement);
+    this.document.onfullscreenchange = () => (this.isFullScreen = this.document.fullscreenElement);
   }
 
   ngOnChanges() {

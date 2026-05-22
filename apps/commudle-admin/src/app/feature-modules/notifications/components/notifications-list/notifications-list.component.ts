@@ -1,32 +1,35 @@
+import { isPlatformBrowser } from '@angular/common';
 import {
+  AfterViewInit,
   Component,
+  ElementRef,
   EventEmitter,
+  Inject,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
   Output,
+  PLATFORM_ID,
   SimpleChanges,
-  ElementRef,
   ViewChild,
-  AfterViewInit,
 } from '@angular/core';
-import * as moment from 'moment';
-import { ENotificationStatuses } from 'apps/shared-models/enums/notification_statuses.enum';
-import { INotification } from 'apps/shared-models/notification.model';
-import { Subject, Subscription, takeUntil } from 'rxjs';
-import * as _ from 'lodash';
 import { NotificationsStore } from 'apps/commudle-admin/src/app/feature-modules/notifications/store/notifications.store';
-import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
+import { GoogleTagManagerService } from 'apps/commudle-admin/src/app/services/google-tag-manager.service';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
 import { ENotificationSenderTypes } from 'apps/shared-models/enums/notification_sender_types.enum';
-import { GoogleTagManagerService } from 'apps/commudle-admin/src/app/services/google-tag-manager.service';
+import { ENotificationStatuses } from 'apps/shared-models/enums/notification_statuses.enum';
+import { INotification } from 'apps/shared-models/notification.model';
+import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
+import * as _ from 'lodash';
+import * as moment from 'moment';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 
 @Component({
-    selector: 'app-notifications-list',
-    templateUrl: './notifications-list.component.html',
-    styleUrls: ['./notifications-list.component.scss'],
-    standalone: false
+  selector: 'app-notifications-list',
+  templateUrl: './notifications-list.component.html',
+  styleUrls: ['./notifications-list.component.scss'],
+  standalone: false,
 })
 export class NotificationsListComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
   @Input() markAllAsRead: boolean;
@@ -61,6 +64,7 @@ export class NotificationsListComponent implements OnInit, OnDestroy, OnChanges,
     private notificationsStore: NotificationsStore,
     private authWatchService: LibAuthwatchService,
     private gtm: GoogleTagManagerService,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {}
 
   ngOnInit(): void {
@@ -103,6 +107,7 @@ export class NotificationsListComponent implements OnInit, OnDestroy, OnChanges,
   }
 
   ngAfterViewInit() {
+    if (!isPlatformBrowser(this.platformId)) return;
     const options = {
       root: null,
       threshold: 1,

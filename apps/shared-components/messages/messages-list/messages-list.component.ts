@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { environment } from '@commudle/shared-environments';
 import { IEvent } from '@commudle/shared-models';
-import { SeoService } from '@commudle/shared-services';
+import { removeHtmlTags, SeoService } from '@commudle/shared-services';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
 import { IUserMessage } from 'apps/shared-models/user_message.model';
 import * as moment from 'moment';
@@ -95,7 +95,7 @@ export class MessagesListComponent implements OnInit, AfterViewInit {
   setSchema(): void {
     const commentsArray = this.messages.map((message: IUserMessage) => ({
       '@type': 'Comment',
-      text: this.removeHtmlTags(message.content),
+      text: removeHtmlTags(message.content),
       datePublished: message.created_at,
       author: {
         '@type': 'Person',
@@ -127,19 +127,13 @@ export class MessagesListComponent implements OnInit, AfterViewInit {
     this.seoService.setSchema(discussionSchema);
   }
 
-  removeHtmlTags(content): string {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(content, 'text/html');
-    return doc.body.textContent || '';
-  }
-
   getUserMessages(message) {
     const resultArray = [];
     for (const userMessage of message.user_messages) {
       if (userMessage) {
         const transformedMessage = {
           '@type': 'Comment',
-          text: this.removeHtmlTags(userMessage.content),
+          text: removeHtmlTags(userMessage.content),
           author: {
             '@type': 'Person',
             name: userMessage.user.name ? userMessage.user.name : userMessage.user.username,
