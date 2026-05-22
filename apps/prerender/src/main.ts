@@ -11,7 +11,7 @@ const prerenderUrl = process.env.PRERENDER_URL || 'https://prerender.commudle.co
 const distFolder = path.join(process.cwd(), 'commudle-admin');
 
 app.use(cookieParser());
-const blacklistedUserAgents = ['AhrefsBot', 'AhrefsSiteAudit', 'Bytespider'];
+const blacklistedUserAgents = ['Bytespider'];
 const whitelistedUserAgents = [
   'GPTBot',
   'Claude-User',
