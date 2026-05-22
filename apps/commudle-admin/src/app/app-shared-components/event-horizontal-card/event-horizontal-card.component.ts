@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NbButtonModule, NbIconModule } from '@commudle/theme';
 import { CommudleCardModule } from '@commudle/commudle-theme';
@@ -51,12 +51,17 @@ export class EventHorizontalCardComponent implements OnInit, OnDestroy {
   faLocationDot = faLocationDot;
   private countdownInterval: ReturnType<typeof setInterval>;
   now = moment();
+  private readonly isBrowser: boolean;
 
-  constructor(private communitiesService: CommunitiesService) {}
+  constructor(private communitiesService: CommunitiesService, @Inject(PLATFORM_ID) private platformId: object) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   ngOnInit(): void {
     this.getCommunity();
-    this.startCountdownTimer();
+    if (this.isBrowser) {
+      this.startCountdownTimer();
+    }
   }
 
   ngOnDestroy(): void {
