@@ -153,7 +153,7 @@ nb-card {
   @apply com-mb-4;
 
   nb-card-header {
-    @apply com-text-primary-500;
+    @apply com-text-primary-500 com-flex com-justify-between com-items-center;
   }
 
   nb-card-body {

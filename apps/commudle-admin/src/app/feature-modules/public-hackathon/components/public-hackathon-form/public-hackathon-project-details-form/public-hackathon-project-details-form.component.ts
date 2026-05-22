@@ -5,10 +5,10 @@ import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon
 import { IHackathon } from 'apps/shared-models/hackathon.model';
 
 @Component({
-    selector: 'commudle-public-hackathon-project-details-form',
-    templateUrl: './public-hackathon-project-details-form.component.html',
-    styleUrls: ['./public-hackathon-project-details-form.component.scss'],
-    standalone: false
+  selector: 'commudle-public-hackathon-project-details-form',
+  templateUrl: './public-hackathon-project-details-form.component.html',
+  styleUrls: ['./public-hackathon-project-details-form.component.scss'],
+  standalone: false,
 })
 export class PublicHackathonProjectDetailsFormComponent implements OnInit {
   @Input() hackathon: IHackathon;
@@ -33,10 +33,13 @@ export class PublicHackathonProjectDetailsFormComponent implements OnInit {
 
   ngOnInit() {
     this.fetchHackathonTracks();
-    if (this.team && (this.team.hackathon_team?.track?.id || this.team.hackathon_team?.problem_statement?.id)) {
+    // team can be IHackathonUserResponsesGroupByTeam (has .hackathon_team) or IHackathonTeam (direct)
+    const trackId = (this.team as any)?.hackathon_team?.track?.id ?? (this.team as any)?.track?.id;
+    const psId = (this.team as any)?.hackathon_team?.problem_statement?.id ?? (this.team as any)?.problem_statement?.id;
+    if (this.team && (trackId || psId)) {
       this.hackathonProjectDetailsForm.patchValue({
-        hackathon_track_id: this.team.hackathon_team?.track?.id,
-        hackathon_problem_statement_id: this.team.hackathon_team?.problem_statement?.id,
+        hackathon_track_id: trackId,
+        hackathon_problem_statement_id: psId,
       });
     }
   }

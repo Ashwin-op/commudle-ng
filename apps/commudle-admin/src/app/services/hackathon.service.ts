@@ -53,6 +53,15 @@ export class HackathonService {
     });
   }
 
+  toggleAllowProblemStatementChange(hackathonId: number | string, value: boolean): Observable<IHackathon> {
+    const params = new HttpParams().set('hackathon_id', hackathonId);
+    return this.http.put<IHackathon>(
+      this.apiRoutesService.getRoute(API_ROUTES.HACKATHONS.TOGGLE_ALLOW_PROBLEM_STATEMENT_CHANGE),
+      { allow_problem_statement_change: value },
+      { params },
+    );
+  }
+
   indexHackathons(
     parentId,
     parentType: string,

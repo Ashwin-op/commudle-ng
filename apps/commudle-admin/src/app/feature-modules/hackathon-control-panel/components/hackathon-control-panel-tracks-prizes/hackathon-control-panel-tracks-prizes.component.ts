@@ -6,16 +6,17 @@ import { faArrowRight, faGamepad, faMicrophone, faRectangleList } from '@fortawe
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { Subscription } from 'rxjs';
 import { ICommunityGroup } from 'apps/shared-models/community-group.model';
-import { SeoService } from '@commudle/shared-services';
+import { SeoService, ToastrService } from '@commudle/shared-services';
 
 @Component({
-    selector: 'commudle-hackathon-control-panel-tracks-prizes',
-    templateUrl: './hackathon-control-panel-tracks-prizes.component.html',
-    styleUrls: ['./hackathon-control-panel-tracks-prizes.component.scss'],
-    standalone: false
+  selector: 'commudle-hackathon-control-panel-tracks-prizes',
+  templateUrl: './hackathon-control-panel-tracks-prizes.component.html',
+  styleUrls: ['./hackathon-control-panel-tracks-prizes.component.scss'],
+  standalone: false,
 })
 export class HackathonControlPanelTracksPrizesComponent implements OnInit, OnDestroy {
   hackathon: IHackathon;
+  isTogglingProblemStatement = false;
   tabs: NbRouteTab[] = [
     {
       title: 'Tracks',
@@ -41,6 +42,7 @@ export class HackathonControlPanelTracksPrizesComponent implements OnInit, OnDes
     private activatedRoute: ActivatedRoute,
     private hackathonService: HackathonService,
     private seoService: SeoService,
+    private toastrService: ToastrService,
   ) {}
 
   ngOnInit() {
@@ -68,6 +70,23 @@ export class HackathonControlPanelTracksPrizesComponent implements OnInit, OnDes
         this.setMeta();
       }),
     );
+  }
+
+  toggleProblemStatementChange(value: boolean) {
+    this.isTogglingProblemStatement = true;
+    this.hackathonService.toggleAllowProblemStatementChange(this.hackathon.id, value).subscribe({
+      next: (data) => {
+        this.hackathon = data;
+        this.isTogglingProblemStatement = false;
+        this.toastrService.successDialog(
+          value ? 'Problem statement change enabled' : 'Problem statement change disabled',
+        );
+      },
+      error: () => {
+        this.isTogglingProblemStatement = false;
+        this.toastrService.warningDialog('Failed to update setting');
+      },
+    });
   }
 
   setMeta() {

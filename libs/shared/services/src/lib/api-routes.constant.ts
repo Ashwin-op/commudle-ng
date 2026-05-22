@@ -922,6 +922,7 @@ export const API_ROUTES = {
     CHANGE_TEAM_PROBLEM_STATEMENT_STATUS: 'api/v2/hackathons/change_team_problem_statement_status', //PUT
     GET_HACKATHON_CURRENT_REGISTRATION_DETAILS: 'api/v2/hackathons/get_hackathon_current_registration_details', //GET
     UPDATE_STATUS: 'api/v2/hackathons/update_status', //PUT
+    TOGGLE_ALLOW_PROBLEM_STATEMENT_CHANGE: 'api/v2/hackathons/toggle_allow_problem_statement_change', //PUT
     VERIFY_INVITATION_TOKEN_JUDGE: 'api/v2/hackathons/verify_invitation_token_judge', //GET
     UPDATE_INVITATION_TOKEN_JUDGE: 'api/v2/hackathons/update_invitation_token_judge', //PUT
     INVITE_USER: 'api/v2/hackathons/invite_user', //POST

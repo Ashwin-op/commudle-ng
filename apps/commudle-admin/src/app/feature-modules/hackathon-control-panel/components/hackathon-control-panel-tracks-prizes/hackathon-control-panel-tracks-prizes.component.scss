@@ -13,3 +13,48 @@ nb-card {
     @apply com-flex com-flex-wrap com-gap-3;
   }
 }
+
+.problem-statement-toggle {
+  @apply com-flex com-items-center com-justify-between com-gap-4 com-mb-4 com-p-4 com-bg-gray-50 com-rounded-lg com-border com-border-Bright-Gray;
+
+  .toggle-info {
+    @apply com-flex com-flex-col com-gap-1;
+
+    .toggle-label {
+      @apply com-text-sm com-font-semibold com-text-Yankees-Blue;
+    }
+
+    .toggle-hint {
+      @apply com-text-xs com-text-gray-500;
+    }
+  }
+
+  .toggle-switch {
+    @apply com-relative com-inline-flex com-items-center com-cursor-pointer com-flex-shrink-0;
+
+    input[type='checkbox'] {
+      @apply com-sr-only;
+
+      &:checked + .toggle-slider {
+        @apply com-bg-primary-500;
+
+        &::after {
+          @apply com-translate-x-5;
+        }
+      }
+
+      &:disabled + .toggle-slider {
+        @apply com-opacity-50 com-cursor-not-allowed;
+      }
+    }
+
+    .toggle-slider {
+      @apply com-w-11 com-h-6 com-bg-gray-300 com-rounded-full com-transition-colors com-duration-200 com-ease-in-out com-relative;
+
+      &::after {
+        content: '';
+        @apply com-absolute com-top-0.5 com-left-0.5 com-w-5 com-h-5 com-bg-white com-rounded-full com-shadow com-transition-transform com-duration-200 com-ease-in-out;
+      }
+    }
+  }
+}
