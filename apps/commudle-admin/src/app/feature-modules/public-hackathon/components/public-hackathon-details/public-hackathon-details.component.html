@@ -96,8 +96,8 @@
                     <ng-container *ngIf="hackathonSponsor.tier_priority === 1; else sponsorColumnText">
                       <div class="sponsor-tier-text-stack">
                         <h3 class="sponsor-tier-name">{{ hackathonSponsor.sponsor.name }}</h3>
-                        <p *ngIf="hackathonSponsor.sponsor.description" class="sponsor-tier-description">
-                          {{ hackathonSponsor.sponsor.description }}
+                        <p *ngIf="hackathonSponsor.description" class="sponsor-tier-description">
+                          {{ hackathonSponsor.description }}
                         </p>
                       </div>
                     </ng-container>
@@ -109,10 +109,10 @@
                   </div>
 
                   <p
-                    *ngIf="hackathonSponsor.tier_priority !== 1 && hackathonSponsor.sponsor.description"
+                    *ngIf="hackathonSponsor.tier_priority !== 1 && hackathonSponsor.description"
                     class="sponsor-tier-benefit"
                   >
-                    {{ hackathonSponsor.sponsor.description }}
+                    {{ hackathonSponsor.description }}
                   </p>
                 </a>
               </div>

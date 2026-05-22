@@ -186,11 +186,9 @@ export class SponsorsComponent implements OnInit, OnDestroy {
     }
   }
 
-  removeSponsor(sponsor: IEventSponsor, index) {
+  removeSponsor(sponsor: IEventSponsor, tierName: string, index: number) {
     this.eventSponsorsService.destroy(sponsor.id).subscribe((data) => {
       if (data) {
-        const tierName = sponsor.tier_name;
-
         if (this.eventSponsorGroupedByTierName[tierName]) {
           this.eventSponsorGroupedByTierName[tierName].splice(index, 1);
 
@@ -247,8 +245,8 @@ export class SponsorsComponent implements OnInit, OnDestroy {
     this.imagePreview = '';
   }
 
-  openConfirmDeleteDialog(template: TemplateRef<unknown>, sponsor: IEventSponsor, index: number) {
-    this.dialogService.open(template, { context: { sponsor_id: sponsor.id, index } });
+  openConfirmDeleteDialog(template: TemplateRef<unknown>, sponsor: IEventSponsor, tierName: string, index: number) {
+    this.dialogService.open(template, { context: { sponsor_id: sponsor, tierName, index } });
   }
 
   setMeta() {

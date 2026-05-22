@@ -67,8 +67,8 @@
                 <ng-container *ngIf="eventSponsor.tier_priority === 1; else sponsorColumnText">
                   <div class="sponsor-tier-text-stack">
                     <h3 class="sponsor-tier-name">{{ eventSponsor.sponsor.name }}</h3>
-                    <p *ngIf="eventSponsor.sponsor.description" class="sponsor-tier-description">
-                      {{ eventSponsor.sponsor.description }}
+                    <p *ngIf="eventSponsor.description" class="sponsor-tier-description">
+                      {{ eventSponsor.description }}
                     </p>
                   </div>
                 </ng-container>
@@ -79,11 +79,8 @@
                 </ng-template>
               </div>
 
-              <p
-                *ngIf="eventSponsor.tier_priority !== 1 && eventSponsor.sponsor.description"
-                class="sponsor-tier-benefit"
-              >
-                {{ eventSponsor.sponsor.description }}
+              <p *ngIf="eventSponsor.tier_priority !== 1 && eventSponsor.description" class="sponsor-tier-benefit">
+                {{ eventSponsor.description }}
               </p>
             </a>
           </div>
