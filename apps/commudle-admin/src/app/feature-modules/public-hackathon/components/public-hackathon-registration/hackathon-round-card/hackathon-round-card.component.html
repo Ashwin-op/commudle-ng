@@ -96,68 +96,74 @@
       </a>
     </div>
   </div>
-  <div class="round-status">
-    <div *ngIf="isLive" class="status-live">Live</div>
-    <div *ngIf="this.userTeamDetails?.round?.id === round.id" class="status-current">👉 You are here</div>
-    <div *ngIf="isCompleted" class="status-completed">✓</div>
-    <div
-      *ngIf="!isLive && this.userTeamDetails?.round?.id !== round.id && !isCompleted && isUpcoming"
-      class="status-upcoming"
-    >
-      Upcoming
+  <div class="actions">
+    <div class="round-status">
+      <div *ngIf="isLive" class="status-live">Live</div>
+      <div *ngIf="this.userTeamDetails?.round?.id === round.id" class="status-current">👉 You are here</div>
+      <div *ngIf="isCompleted" class="status-completed">✓</div>
+      <div
+        *ngIf="!isLive && this.userTeamDetails?.round?.id !== round.id && !isCompleted && isUpcoming"
+        class="status-upcoming"
+      >
+        Upcoming
+      </div>
     </div>
-  </div>
-  @if(userTeamDetails?.round?.id === round.id && userTeamDetails.registration_status ===
-  EHackathonRegistrationStatus.ACCEPTED && (round.round_type === ERoundType.PPT_SUBMISSION || round.round_type ===
-  ERoundType.PROJECT_SUBMISSION || round.round_type === ERoundType.PROJECT_UPDATE_SUBMISSION || round.round_type ===
-  ERoundType.FINAL_JUDGING)) {
-  <div class="round-action">
-    @if(round.round_type === ERoundType.PPT_SUBMISSION){ @if(getRoundSubmission()?.file_attachment) {
-    <a
-      class="view-ppt-link"
-      [href]="getRoundSubmission().file_attachment.url"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      View PPT
-    </a>
-    } @else if(getRoundSubmission()?.link) {
-    <a class="view-ppt-link" [href]="getRoundSubmission().link" target="_blank" rel="noopener noreferrer">
-      View Link
-    </a>
+    @if(userTeamDetails?.round?.id === round.id && userTeamDetails.registration_status ===
+    EHackathonRegistrationStatus.ACCEPTED && (round.round_type === ERoundType.PPT_SUBMISSION || round.round_type ===
+    ERoundType.PROJECT_SUBMISSION || round.round_type === ERoundType.PROJECT_UPDATE_SUBMISSION || round.round_type ===
+    ERoundType.FINAL_JUDGING)) {
+    <div class="round-action">
+      @if(round.round_type === ERoundType.PPT_SUBMISSION){ @if(getRoundSubmission()?.file_attachment) {
+      <a
+        class="view-ppt-link"
+        [href]="getRoundSubmission().file_attachment.url"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        View PPT
+      </a>
+      } @else if(getRoundSubmission()?.link) {
+      <a class="view-ppt-link" [href]="getRoundSubmission().link" target="_blank" rel="noopener noreferrer">
+        View Link
+      </a>
+      }
+      <button nbButton status="primary" size="small" (click)="openPPTUploadDialog()" [disabled]="!isLive">
+        {{ getRoundSubmission() ? 'Update Submission' : 'Submit' }}
+      </button>
+      } @else if (round.round_type === ERoundType.PROJECT_SUBMISSION || round.round_type === ERoundType.FINAL_JUDGING) {
+      <a
+        nbButton
+        status="primary"
+        size="small"
+        [routerLink]="
+          userTeamDetails.community_build
+            ? ['/builds', userTeamDetails.community_build.slug, 'edit']
+            : ['/builds/create']
+        "
+        [queryParams]="{ parent_type: 'HackathonTeam', parent_id: userTeamDetails.id }"
+        [class.disabled]="!isLive"
+      >
+        Submit Project
+      </a>
+      } @else if (round.round_type === ERoundType.PROJECT_UPDATE_SUBMISSION) {
+      <a
+        nbButton
+        status="primary"
+        size="small"
+        [routerLink]="
+          userTeamDetails.community_build
+            ? ['/builds', userTeamDetails.community_build.slug, 'edit']
+            : ['/builds/create']
+        "
+        [queryParams]="{ parent_type: 'HackathonTeam', parent_id: userTeamDetails.id }"
+        [class.disabled]="!isLive"
+      >
+        Submit Update
+      </a>
+      }
+    </div>
     }
-    <button nbButton status="primary" size="small" (click)="openPPTUploadDialog()" [disabled]="!isLive">
-      {{ getRoundSubmission() ? 'Update Submission' : 'Submit' }}
-    </button>
-    } @else if (round.round_type === ERoundType.PROJECT_SUBMISSION || round.round_type === ERoundType.FINAL_JUDGING) {
-    <a
-      nbButton
-      status="primary"
-      size="small"
-      [routerLink]="
-        userTeamDetails.community_build ? ['/builds', userTeamDetails.community_build.slug, 'edit'] : ['/builds/create']
-      "
-      [queryParams]="{ parent_type: 'HackathonTeam', parent_id: userTeamDetails.id }"
-      [class.disabled]="!isLive"
-    >
-      Submit Project
-    </a>
-    } @else if (round.round_type === ERoundType.PROJECT_UPDATE_SUBMISSION) {
-    <a
-      nbButton
-      status="primary"
-      size="small"
-      [routerLink]="
-        userTeamDetails.community_build ? ['/builds', userTeamDetails.community_build.slug, 'edit'] : ['/builds/create']
-      "
-      [queryParams]="{ parent_type: 'HackathonTeam', parent_id: userTeamDetails.id }"
-      [class.disabled]="!isLive"
-    >
-      Submit Update
-    </a>
-    }
   </div>
-  }
 </div>
 
 <ng-template #bookSlotDialog let-ref="dialogRef">

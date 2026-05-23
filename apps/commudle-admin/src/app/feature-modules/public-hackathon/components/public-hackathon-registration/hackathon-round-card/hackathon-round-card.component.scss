@@ -1,5 +1,5 @@
 .round-item {
-  @apply com-flex com-items-center com-p-4 com-rounded-lg com-border com-transition-all com-duration-200;
+  @apply com-flex com-items-start com-p-4 com-rounded-lg com-border com-transition-all com-duration-200 com-overflow-hidden;
 
   &.round-completed {
     @apply com-bg-green-50 com-border-green-200 com-cursor-not-allowed;
@@ -67,7 +67,7 @@
   }
 
   .round-indicator {
-    @apply com-flex-shrink-0 com-mr-4;
+    @apply com-flex-shrink-0 com-mr-4 com-mt-1;
 
     .round-number {
       @apply com-w-10 com-h-10 com-rounded-full com-flex com-items-center com-justify-center com-text-sm com-font-bold com-transition-all com-duration-200;
@@ -75,14 +75,14 @@
   }
 
   .round-content {
-    @apply com-flex-1;
+    @apply com-flex-1 com-min-w-0 com-overflow-hidden;
 
     .round-name {
       @apply com-font-semibold com-text-Yankees-Blue com-mb-1;
     }
 
     .round-date {
-      @apply com-text-sm com-text-gray-600 com-mb-1;
+      @apply com-text-sm com-text-gray-600 com-mb-1 com-break-words;
     }
 
     .round-description {
@@ -105,10 +105,10 @@
     }
 
     .round-evaluators {
-      @apply com-mt-3;
+      @apply com-mt-3 com-overflow-hidden;
 
       .evaluator-card {
-        @apply com-flex com-items-center com-gap-2 com-px-3 com-py-2 com-border com-border-Bright-Gray com-rounded-lg com-no-underline com-text-tYankees-Blue;
+        @apply com-flex com-items-center com-gap-2 com-px-3 com-py-2 com-border com-border-Bright-Gray com-rounded-lg com-no-underline com-text-tYankees-Blue com-flex-wrap;
 
         .evaluator-avatar {
           @apply com-w-8 com-h-8 com-rounded-full com-object-cover;
@@ -129,31 +129,35 @@
     }
   }
 
+  .actions {
+    @apply com-flex-shrink-0 com-ml-4 com-flex com-flex-col com-items-end com-gap-2;
+  }
+
   .round-status {
-    @apply com-flex-shrink-0 com-ml-4 com-flex com-gap-2;
+    @apply com-flex com-gap-2 com-items-center;
 
     .status-completed {
       @apply com-w-6 com-h-6 com-bg-green-500 com-text-white com-rounded-full com-flex com-items-center com-justify-center com-text-sm com-font-bold;
     }
 
     .status-current {
-      @apply com-px-2 com-py-1 com-bg-primary-500 com-text-white com-rounded-full com-text-xs com-font-medium;
+      @apply com-px-2 com-py-1 com-bg-primary-500 com-text-white com-rounded-full com-text-xs com-font-medium com-whitespace-nowrap;
     }
 
     .status-upcoming {
-      @apply com-px-2 com-py-1 com-bg-gray-300 com-text-gray-600 com-rounded-full com-text-xs com-font-medium;
+      @apply com-px-2 com-py-1 com-bg-gray-300 com-text-gray-600 com-rounded-full com-text-xs com-font-medium com-whitespace-nowrap;
     }
 
     .status-live {
-      @apply com-px-2 com-py-1 com-bg-yellow-500 com-text-white com-rounded-full com-text-xs com-font-medium;
+      @apply com-px-2 com-py-1 com-bg-yellow-500 com-text-white com-rounded-full com-text-xs com-font-medium com-whitespace-nowrap;
     }
   }
 
   .round-action {
-    @apply com-flex-shrink-0 com-ml-2 com-flex com-gap-2 com-items-center;
+    @apply com-flex com-gap-2 com-items-center com-flex-wrap com-justify-end;
 
     .view-ppt-link {
-      @apply com-text-primary-500 com-underline hover:com-text-primary-600 com-text-sm com-font-medium;
+      @apply com-text-primary-500 com-underline hover:com-text-primary-600 com-text-sm com-font-medium com-whitespace-nowrap;
     }
 
     a.disabled {
