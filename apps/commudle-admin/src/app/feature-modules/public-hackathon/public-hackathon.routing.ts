@@ -15,6 +15,7 @@ import { PublicHackathonFormConfirmationComponent } from 'apps/commudle-admin/sr
 import { PublicHackathonUserDashboardComponent } from 'apps/commudle-admin/src/app/feature-modules/public-hackathon/components/public-hackathon-user-dashboard/public-hackathon-user-dashboard.component';
 import { PublicHackathonMentorDashboardComponent } from 'apps/commudle-admin/src/app/feature-modules/public-hackathon/components/public-hackathon-mentor-dashboard/public-hackathon-mentor-dashboard.component';
 import { AuthGuard } from 'apps/shared-services/lib-authwatch.guard';
+import { HackathonRegistrationGuard } from 'apps/commudle-admin/src/app/feature-modules/public-hackathon/guards/hackathon-registration.guard';
 
 const routes: Routes = [
   {
@@ -75,6 +76,7 @@ const routes: Routes = [
           {
             path: 'user-dashboard',
             component: PublicHackathonUserDashboardComponent,
+            canActivate: [AuthGuard, HackathonRegistrationGuard],
           },
           {
             path: 'mentor-dashboard',
