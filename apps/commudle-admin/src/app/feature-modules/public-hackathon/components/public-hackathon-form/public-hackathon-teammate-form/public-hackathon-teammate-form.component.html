@@ -55,7 +55,7 @@
       <button
         *ngIf="
           hackathonUserResponse &&
-          (hackathonUserResponse.current_user_is_team_lead || team?.user_id === hackathonUserResponse?.user_id)
+          (hackathonUserResponse.current_user_is_team_lead || team?.user_id === currentUser?.id)
         "
         type="button"
         nbButton

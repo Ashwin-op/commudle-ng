@@ -23,10 +23,10 @@ import { IHackathonTeam, IHackathonUserResponse } from '@commudle/shared-models'
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
-    selector: 'commudle-public-hackathon-teammate-form',
-    templateUrl: './public-hackathon-teammate-form.component.html',
-    styleUrls: ['./public-hackathon-teammate-form.component.scss'],
-    standalone: false
+  selector: 'commudle-public-hackathon-teammate-form',
+  templateUrl: './public-hackathon-teammate-form.component.html',
+  styleUrls: ['./public-hackathon-teammate-form.component.scss'],
+  standalone: false,
 })
 export class PublicHackathonTeammateFormComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() hackathonUserResponse: IHackathonUserResponse;
@@ -152,11 +152,15 @@ export class PublicHackathonTeammateFormComponent implements OnInit, AfterViewIn
   }
 
   submitTeammateDetails() {
-    const duplicateEmails = this.checkForDuplicateEmails(this.teammateForm.value.teammates);
+    const formValue = {
+      ...this.teammateForm.value,
+      teammates: this.teammateForm.value.teammates.map((t) => ({ ...t, email: t.email.toLowerCase() })),
+    };
+    const duplicateEmails = this.checkForDuplicateEmails(formValue.teammates);
     if (duplicateEmails) {
       this.toastrService.warningDialog('All teammates’ emails should be unique');
     } else {
-      this.submitTeammateDetailsEvent.emit(this.teammateForm.value);
+      this.submitTeammateDetailsEvent.emit(formValue);
     }
   }
 
