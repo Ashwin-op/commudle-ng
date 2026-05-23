@@ -38,83 +38,56 @@
             *ngFor="let hackathonSponsorGrouped of hackathonSponsorGroupedByTierName | keyvalue"
             class="sponsor-tier"
           >
-            <header class="sponsor-tier-header">
-              <span class="sponsor-tier-badge"> {{ hackathonSponsorGrouped.key }}</span>
-              <span class="sponsor-tier-rule" aria-hidden="true"></span>
+            <header
+              class="sponsor-tier-header"
+              [ngClass]="'sponsor-tier-header--priority-' + (hackathonSponsorGrouped.value?.[0]?.tier_priority || 1)"
+            >
+              <span class="sponsor-tier-dot" aria-hidden="true"></span>
+              <span class="sponsor-tier-heading">{{ hackathonSponsorGrouped.key }}</span>
+              <span class="sponsor-tier-count">
+                {{ (hackathonSponsorGrouped.value || []).length }}
+                {{ (hackathonSponsorGrouped.value || []).length === 1 ? 'partner' : 'partners' }}
+              </span>
             </header>
 
             <div
-              class="sponsor-tier-grid"
+              class="sponsor-tier-strips"
               [ngClass]="{
-                'sponsor-tier-grid--cols-1': hackathonSponsorGrouped.value?.[0]?.tier_priority === 1,
-                'sponsor-tier-grid--cols-2': hackathonSponsorGrouped.value?.[0]?.tier_priority === 2,
-                'sponsor-tier-grid--cols-3': hackathonSponsorGrouped.value?.[0]?.tier_priority === 3,
-                'sponsor-tier-grid--cols-4': hackathonSponsorGrouped.value?.[0]?.tier_priority === 4,
-                'sponsor-tier-grid--cols-5':
-                  hackathonSponsorGrouped.value?.[0]?.tier_priority === 5,
+                'sponsor-tier-strips--cols-1': hackathonSponsorGrouped.value?.[0]?.tier_priority <= 2,
+                'sponsor-tier-strips--cols-2': hackathonSponsorGrouped.value?.[0]?.tier_priority >= 3
               }"
             >
-              <div
+              <a
                 *ngFor="let hackathonSponsor of hackathonSponsorGrouped.value || []"
-                class="sponsor-tier-card"
-                [class.sponsor-tier-card--tier-1]="hackathonSponsor.tier_priority === 1"
-                [style.--sponsor-logo-gradient]="
-                  hackathonSponsor.tier_priority === 1 ? sponsorLogoTints[hackathonSponsor.id]?.gradient : null
-                "
-                [style.--sponsor-logo-wrap-bg]="sponsorLogoTints[hackathonSponsor.id]?.wrap"
+                [href]="hackathonSponsor.sponsor.link ? hackathonSponsor.sponsor.link : null"
+                target="_blank"
+                class="sponsor-strip"
+                [class.sponsor-strip--tier-1]="hackathonSponsor.tier_priority === 1"
+                [class.sponsor-strip--tier-2]="hackathonSponsor.tier_priority === 2"
+                [ngClass]="{ 'sponsor-strip--no-link': !hackathonSponsor.sponsor.link }"
+                [style.--sponsor-logo-gradient]="sponsorLogoTints[hackathonSponsor.id]?.gradient"
+                (mouseenter)="onSponsorStripGradientEnter($event)"
+                (mousemove)="onSponsorStripGradientMove($event)"
+                (mouseleave)="onSponsorStripGradientLeave($event)"
+                (click)="!hackathonSponsor.sponsor.link && $event.preventDefault()"
               >
-                <a
-                  [href]="hackathonSponsor.sponsor.link ? hackathonSponsor.sponsor.link : null"
-                  target="_blank"
-                  [ngClass]="{
-                    'com-pointer-events-none': !hackathonSponsor.sponsor.link,
-                    'sponsor-tier-card-link--tier-1': hackathonSponsor.tier_priority === 1,
-                    'sponsor-tier-card-link--column': hackathonSponsor.tier_priority !== 1,
-                    'sponsor-tier-card-link--priority-1': hackathonSponsor.tier_priority === 1,
-                    'sponsor-tier-card-link--priority-2': hackathonSponsor.tier_priority === 2,
-                    'sponsor-tier-card-link--priority-3': hackathonSponsor.tier_priority === 3,
-                    'sponsor-tier-card-link--priority-4': hackathonSponsor.tier_priority === 4,
-                    'sponsor-tier-card-link--priority-5':
-                      hackathonSponsor.tier_priority === 5,
-                  }"
-                  class="sponsor-tier-card-link"
-                >
-                  <div
-                    class="sponsor-tier-card-main"
-                    [class.sponsor-tier-card-main--tier-1]="hackathonSponsor.tier_priority === 1"
-                  >
-                    <div class="sponsor-tier-logo-wrap">
-                      <img
-                        [src]="hackathonSponsor.sponsor.logo.i64 || hackathonSponsor.sponsor.logo.url"
-                        [alt]="hackathonSponsor.sponsor.name"
-                        loading="lazy"
-                        class="sponsor-tier-logo"
-                        crossorigin="anonymous"
-                      />
-                    </div>
-                    <ng-container *ngIf="hackathonSponsor.tier_priority === 1; else sponsorColumnText">
-                      <div class="sponsor-tier-text-stack">
-                        <h3 class="sponsor-tier-name">{{ hackathonSponsor.sponsor.name }}</h3>
-                        <p *ngIf="hackathonSponsor.description" class="sponsor-tier-description">
-                          {{ hackathonSponsor.description }}
-                        </p>
-                      </div>
-                    </ng-container>
-                    <ng-template #sponsorColumnText>
-                      <div class="sponsor-tier-text-block">
-                        <h3 class="sponsor-tier-name">{{ hackathonSponsor.sponsor.name }}</h3>
-                      </div>
-                    </ng-template>
-                  </div>
-
-                  <p
-                    *ngIf="hackathonSponsor.tier_priority !== 1 && hackathonSponsor.description"
-                    class="sponsor-tier-benefit"
-                  >
+                <span class="sponsor-strip-mouse-gradient" aria-hidden="true"></span>
+                <div class="sponsor-strip-logo-wrap">
+                  <img
+                    [src]="hackathonSponsor.sponsor.logo.i320 || hackathonSponsor.sponsor.logo.url"
+                    [alt]="hackathonSponsor.sponsor.name"
+                    loading="lazy"
+                    class="sponsor-strip-logo"
+                    crossorigin="anonymous"
+                  />
+                </div>
+                <div class="sponsor-strip-text">
+                  <h3 class="sponsor-strip-name">{{ hackathonSponsor.sponsor.name }}</h3>
+                  <p *ngIf="hackathonSponsor.description" class="sponsor-strip-description">
                     {{ hackathonSponsor.description }}
                   </p>
-                </a>
-              </div>
+                </div>
+              </a>
             </div>
           </div>
         </nb-card-body>

@@ -2,7 +2,13 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IEvent } from 'apps/shared-models/event.model';
 import { IEventSponsorGroupedByTierName } from 'apps/shared-models/event_sponsor.model';
 import { EventSponsorsService } from 'apps/commudle-admin/src/app/services/event-sponsors.service';
-import { ILogoTint, LogoTintService } from '@commudle/shared-services';
+import {
+  ILogoTint,
+  LogoTintService,
+  onSponsorStripGradientEnter,
+  onSponsorStripGradientLeave,
+  onSponsorStripGradientMove,
+} from '@commudle/shared-services';
 import { faLink, faSackDollar } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -22,6 +28,10 @@ export class SponsorsComponent implements OnInit {
     faSackDollar,
     faLink,
   };
+
+  onSponsorStripGradientEnter = onSponsorStripGradientEnter;
+  onSponsorStripGradientMove = onSponsorStripGradientMove;
+  onSponsorStripGradientLeave = onSponsorStripGradientLeave;
 
   constructor(private eventSponsorsService: EventSponsorsService, private logoTintService: LogoTintService) {}
 

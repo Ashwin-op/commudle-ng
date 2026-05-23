@@ -9,7 +9,16 @@ import {
   IRound,
   ICommunity,
 } from '@commudle/shared-models';
-import { FaqService, ILogoTint, LogoTintService, RoundService, SeoService } from '@commudle/shared-services';
+import {
+  FaqService,
+  ILogoTint,
+  LogoTintService,
+  onSponsorStripGradientEnter,
+  onSponsorStripGradientLeave,
+  onSponsorStripGradientMove,
+  RoundService,
+  SeoService,
+} from '@commudle/shared-services';
 import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
 import { DiscussionsService } from 'apps/commudle-admin/src/app/services/discussions.service';
 import { HackathonResponseGroupService } from 'apps/commudle-admin/src/app/services/hackathon-response-group.service';
@@ -49,6 +58,10 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
     faCircleQuestion,
     faLink,
   };
+
+  onSponsorStripGradientEnter = onSponsorStripGradientEnter;
+  onSponsorStripGradientMove = onSponsorStripGradientMove;
+  onSponsorStripGradientLeave = onSponsorStripGradientLeave;
 
   private destroy$ = new Subject<void>();
 
