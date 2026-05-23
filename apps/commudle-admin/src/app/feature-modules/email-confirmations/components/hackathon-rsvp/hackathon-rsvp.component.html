@@ -29,10 +29,17 @@
               <br />
               <button
                 *ngIf="
+                  hackathon &&
                   team.registration_status === EHackathonRegistrationStatus.ACCEPTED &&
                   team.offline_invite_status === EOfflineInviteStatus.CONFIRMED
                 "
-                [routerLink]="['/communities', hackathon?.community?.slug, 'hackathons', hackathon?.slug, 'dashboard']"
+                [routerLink]="[
+                  '/communities',
+                  hackathon.community.slug,
+                  'hackathons',
+                  hackathon.slug,
+                  'user-dashboard'
+                ]"
                 nbButton
                 outline
                 status="primary"

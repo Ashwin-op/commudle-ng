@@ -23,12 +23,8 @@ export class HackathonRegistrationGuard implements CanActivate {
     return this.authService.currentUser$.pipe(
       filter((user) => user !== undefined),
       take(1),
-      switchMap((user) => {
-        if (!user) {
-          this.errorHandler.handleError(404, 'Page not found');
-          return of(false);
-        }
-        return this.hackathonService.getHackathonCurrentRegistrationDetails(hackathonId).pipe(
+      switchMap(() =>
+        this.hackathonService.getHackathonCurrentRegistrationDetails(hackathonId).pipe(
           map((data: IHackathonTeam[]) => {
             if (
               data &&
@@ -44,8 +40,8 @@ export class HackathonRegistrationGuard implements CanActivate {
             this.errorHandler.handleError(404, 'Page not found');
             return of(false);
           }),
-        );
-      }),
+        ),
+      ),
     );
   }
 }
