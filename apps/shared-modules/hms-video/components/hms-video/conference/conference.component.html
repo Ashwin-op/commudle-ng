@@ -1,65 +1,68 @@
 <div *ngIf="isConnectedToRoom" class="conference-container">
-  <!-- Viewer: interactive mode is live -->
-  <app-conference-user-videos
-    *ngIf="
-      serverClient.role === EHmsRoles.VIEWER_NEAR_REALTIME &&
-      currentRoleAsPerLocalPeer === EHmsRoles.VIEWER_NEAR_REALTIME &&
-      isLive &&
-      !isHlsRunning
-    "
-  ></app-conference-user-videos>
+  <!-- Wait for role to resolve before rendering any video view -->
+  <ng-container *ngIf="isRoleResolved">
+    <!-- Viewer: interactive mode is live -->
+    <app-conference-user-videos
+      *ngIf="
+        serverClient.role === EHmsRoles.VIEWER_NEAR_REALTIME &&
+        currentRoleAsPerLocalPeer === EHmsRoles.VIEWER_NEAR_REALTIME &&
+        isLive &&
+        !isHlsRunning
+      "
+    ></app-conference-user-videos>
 
-  <!-- Viewer: HLS streaming is on -->
-  <div
-    *ngIf="
-      serverClient.role === EHmsRoles.VIEWER_NEAR_REALTIME &&
-      currentRoleAsPerLocalPeer === EHmsRoles.VIEWER_NEAR_REALTIME &&
-      isHlsRunning
-    "
-    class="hls-player-container"
-  >
-    <ng-container *ngIf="hlsPlaybackUrl; else hlsNotAvailable">
-      <video #hlsVideoPlayer autoplay playsinline class="hls-video-player"></video>
-    </ng-container>
-    <ng-template #hlsNotAvailable>
-      <p class="hls-loading-text">Loading stream, please wait...</p>
-    </ng-template>
-  </div>
-
-  <!-- Viewer: nothing is live -->
-  <div
-    *ngIf="
-      serverClient.role === EHmsRoles.VIEWER_NEAR_REALTIME &&
-      currentRoleAsPerLocalPeer === EHmsRoles.VIEWER_NEAR_REALTIME &&
-      !isLive &&
-      !isHlsRunning
-    "
-    class="waiting-container"
-  >
-    <div class="waiting-banner" *ngIf="eventBannerUrl">
-      <img [src]="eventBannerUrl" [alt]="eventName" class="waiting-banner-img" />
+    <!-- Viewer: HLS streaming is on -->
+    <div
+      *ngIf="
+        serverClient.role === EHmsRoles.VIEWER_NEAR_REALTIME &&
+        currentRoleAsPerLocalPeer === EHmsRoles.VIEWER_NEAR_REALTIME &&
+        isHlsRunning
+      "
+      class="hls-player-container"
+    >
+      <ng-container *ngIf="hlsPlaybackUrl; else hlsNotAvailable">
+        <video #hlsVideoPlayer autoplay playsinline class="hls-video-player"></video>
+      </ng-container>
+      <ng-template #hlsNotAvailable>
+        <p class="hls-loading-text">Loading stream, please wait...</p>
+      </ng-template>
     </div>
-    <div class="waiting-content">
-      <h2 *ngIf="eventName" class="waiting-event-name">{{ eventName }}</h2>
-      <p class="waiting-text">
-        Hi <strong>{{ currentUser?.name }}</strong
-        >! The stream will start soon, excited to have you join us 🎉
-      </p>
-      <div class="waiting-dots">
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
+
+    <!-- Viewer: nothing is live -->
+    <div
+      *ngIf="
+        serverClient.role === EHmsRoles.VIEWER_NEAR_REALTIME &&
+        currentRoleAsPerLocalPeer === EHmsRoles.VIEWER_NEAR_REALTIME &&
+        !isLive &&
+        !isHlsRunning
+      "
+      class="waiting-container"
+    >
+      <div class="waiting-banner" *ngIf="eventBannerUrl">
+        <img [src]="eventBannerUrl" [alt]="eventName" class="waiting-banner-img" />
+      </div>
+      <div class="waiting-content">
+        <h2 *ngIf="eventName" class="waiting-event-name">{{ eventName }}</h2>
+        <p class="waiting-text">
+          Hi <strong>{{ currentUser?.name }}</strong
+          >! The stream will start soon, excited to have you join us 🎉
+        </p>
+        <div class="waiting-dots">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Regular conference view for hosts/guests -->
-  <app-conference-user-videos
-    *ngIf="
-      serverClient.role !== EHmsRoles.VIEWER_NEAR_REALTIME ||
-      currentRoleAsPerLocalPeer !== EHmsRoles.VIEWER_NEAR_REALTIME
-    "
-  ></app-conference-user-videos>
+    <!-- Regular conference view for hosts/guests -->
+    <app-conference-user-videos
+      *ngIf="
+        serverClient.role !== EHmsRoles.VIEWER_NEAR_REALTIME ||
+        currentRoleAsPerLocalPeer !== EHmsRoles.VIEWER_NEAR_REALTIME
+      "
+    ></app-conference-user-videos>
+  </ng-container>
 
   <div *ngIf="localPeer" class="controls-bar">
     <!-- Mic + device selector -->

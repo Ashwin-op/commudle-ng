@@ -97,6 +97,7 @@ export class ConferenceComponent implements OnInit, OnChanges, OnDestroy {
   EHmsRoles = EHmsRoles;
   EHmsRoomMode = EHmsRoomMode;
   currentMode: EHmsRoomMode = EHmsRoomMode.INTERACTIVE;
+  isRoleResolved = false;
 
   audioInputDevices: MediaDeviceInfo[] = [];
   videoInputDevices: MediaDeviceInfo[] = [];
@@ -188,6 +189,9 @@ export class ConferenceComponent implements OnInit, OnChanges, OnDestroy {
     hmsStore.subscribe(this.subscribeToListeners, selectIsConnectedToRoom);
     hmsStore.subscribe((role: any) => {
       this.currentRoleAsPerLocalPeer = role?.name;
+      if (role?.name) {
+        this.isRoleResolved = true;
+      }
     }, selectLocalPeerRole);
 
     this.hmsStageService.stageStatus$.subscribe((userId: number) => this.inviteToStage(userId));
@@ -278,12 +282,13 @@ export class ConferenceComponent implements OnInit, OnChanges, OnDestroy {
 
       hmsStore.subscribe((hlsState: HMSHLS) => {
         if (hlsState) {
+          const wasRunning = this.isHlsRunning;
           this.isHlsRunning = hlsState.running;
           if (hlsState.running && hlsState.variants?.length) {
             this.pendingHlsAction = false;
             this.hlsPlaybackUrl = hlsState.variants[0].url;
             this.hlsStatus.emit(true);
-            if (this.serverClient.role === EHmsRoles.VIEWER_NEAR_REALTIME) {
+            if (this.serverClient.role === EHmsRoles.VIEWER_NEAR_REALTIME && !wasRunning) {
               setTimeout(() => this.attachHlsStream(this.hlsPlaybackUrl), 5000);
             }
           } else if (!hlsState.running && !this.pendingHlsAction) {
