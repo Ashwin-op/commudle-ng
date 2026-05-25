@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NbCardModule, NbButtonModule, NbIconModule } from '@commudle/theme';
+import { NbCardModule, NbIconModule } from '@commudle/theme';
 import { PublicHomeListEventsRoutingModule } from './public-home-list-events-routing.module';
 import { PublicHomeListEventsComponent } from './components/public-home-list-events/public-home-list-events.component';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
@@ -22,7 +22,7 @@ import { ListingPagesLayoutComponent } from 'apps/commudle-admin/src/app/app-sha
 import { EventsVolunteerListComponent } from './components/events-volunteer-list/events-volunteer-list.component';
 import { ListingPageHeaderComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-header/listing-page-header.component';
 import { AppSharedComponentsModule } from 'apps/commudle-admin/src/app/app-shared-components/app-shared-components.module';
-import { CommudleCardModule } from '@commudle/commudle-theme';
+import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-theme';
 @NgModule({
   declarations: [
     PublicHomeListEventsComponent,
@@ -38,7 +38,7 @@ import { CommudleCardModule } from '@commudle/commudle-theme';
     PublicHomeListEventsRoutingModule,
     NbCardModule,
     CommudleCardModule,
-    NbButtonModule,
+    CommudleButtonModule,
     SharedComponentsModule,
     SharedPipesModule,
     NbIconModule,

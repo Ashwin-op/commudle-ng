@@ -42,7 +42,7 @@
       </div>
       <div class="load-more">
         <a *ngIf="parentType === 'communities'" [routerLink]="['/speakers']">
-          <button *ngIf="pageInfo?.has_next_page" nbButton outline size="tiny" status="basic">View All</button>
+          <button *ngIf="pageInfo?.has_next_page" comButton outline size="tiny" status="basic">View All</button>
         </a>
         <div *ngIf="parentType === 'events'">
           <div *ngIf="this.isLoadingSpeakers">
@@ -53,7 +53,7 @@
             (click)="getEventsSpeakersList()"
             fullWidth
             ghost
-            nbButton
+            comButton
             size="small"
             status="basic"
             shape="semi-round"

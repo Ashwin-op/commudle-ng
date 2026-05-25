@@ -5,3 +5,6 @@ export * from './lib/components/commudle-card/card/card.component';
 export * from './lib/components/commudle-card/card-header/card-header.component';
 export * from './lib/components/commudle-card/card-body/card-body.component';
 export * from './lib/components/commudle-card/card-footer/card-footer.component';
+export * from './lib/components/commudle-button/commudle-button.module';
+export * from './lib/components/commudle-button/com-button.component';
+export * from './lib/components/commudle-button/models/com-button.types';

@@ -1,0 +1,185 @@
+:host {
+  @apply com-appearance-none com-inline-flex com-items-center com-justify-center com-border com-border-solid com-text-center com-no-underline com-whitespace-nowrap com-align-middle;
+  @apply com-select-none com-font-normal;
+  @apply com-cursor-pointer;
+
+  &:hover,
+  &:focus {
+    @apply com-no-underline;
+  }
+
+  &:focus-visible {
+    @apply com-outline-none com-ring-2 com-ring-primary-200 com-ring-offset-1;
+  }
+
+  &.full-width {
+    @apply com-w-full;
+  }
+
+  &.btn-disabled,
+  &:disabled {
+    @apply com-cursor-not-allowed com-opacity-60 com-pointer-events-none;
+  }
+
+  /* Sizes */
+  &.size-tiny {
+    @apply com-text-[10px] com-font-medium com-px-[10px] com-py-6px com-gap-1;
+  }
+
+  &.size-small {
+    @apply com-text-sm com-leading-snug com-px-3 com-py-1.5 com-gap-1.5;
+  }
+
+  &.size-medium {
+    @apply com-text-sm com-leading-normal com-px-4 com-py-2 com-gap-2;
+  }
+
+  &.size-large {
+    @apply com-text-base com-leading-normal com-px-5 com-py-2.5 com-gap-2;
+  }
+
+  &.size-giant {
+    @apply com-text-lg com-leading-6 com-font-medium com-px-6 com-py-4 com-gap-2.5;
+  }
+
+  /* Shapes */
+  &.shape-rectangle {
+    @apply com-rounded;
+  }
+
+  &.shape-semi-round {
+    @apply com-rounded-[10px];
+  }
+
+  &.shape-round {
+    @apply com-rounded-full;
+  }
+
+  /* Filled */
+  &.appearance-filled {
+    &.status-basic {
+      @apply com-border-Bright-Gray com-bg-[#edf1f7] com-text-Yankees-Blue;
+    }
+
+    &.status-primary {
+      @apply com-border-primary-500 com-bg-primary-500 com-text-white;
+    }
+
+    &.status-success {
+      @apply com-border-Caribbean-Green com-bg-Caribbean-Green com-text-white;
+    }
+
+    &.status-info {
+      @apply com-border-Brilliant-Azure com-bg-Brilliant-Azure com-text-white;
+    }
+
+    &.status-warning {
+      @apply com-border-Chrome-Yellow com-bg-Chrome-Yellow com-text-Yankees-Blue;
+    }
+
+    &.status-danger {
+      @apply com-border-Infra-Red com-bg-Infra-Red com-text-white;
+    }
+
+    &.status-control {
+      @apply com-border-white com-bg-white com-text-primary-500;
+    }
+  }
+
+  /* Outline */
+  &.appearance-outline {
+    &.status-basic {
+      @apply com-border-Cadet-Grey com-text-Cadet-Grey com-bg-[rgba(143,155,179,0.08)];
+    }
+
+    &.status-primary {
+      @apply com-border-primary-500 com-text-primary-500 com-bg-[rgba(51,102,255,0.08)];
+    }
+
+    &.status-success {
+      @apply com-border-Caribbean-Green com-text-Caribbean-Green com-bg-[rgba(0,214,143,0.08)];
+    }
+
+    &.status-info {
+      @apply com-border-Azure com-text-Azure com-bg-Azure-opacity-10;
+    }
+
+    &.status-warning {
+      @apply com-border-Chrome-Yellow com-text-Chrome-Yellow com-bg-[rgba(255,170,0,0.08)];
+    }
+
+    &.status-danger {
+      @apply com-border-Infra-Red com-text-Infra-Red com-bg-[rgba(255,61,113,0.08)];
+    }
+
+    &.status-control {
+      @apply com-border-white com-text-white com-bg-[rgba(255,255,255,0.08)];
+    }
+  }
+
+  /* Ghost */
+  &.appearance-ghost {
+    @apply com-border-transparent com-bg-transparent;
+
+    &.status-basic {
+      @apply com-text-Yankees-Blue;
+    }
+
+    &.status-primary {
+      @apply com-text-primary-500;
+    }
+
+    &.status-success {
+      @apply com-text-Caribbean-Green;
+    }
+
+    &.status-info {
+      @apply com-text-Brilliant-Azure;
+    }
+
+    &.status-warning {
+      @apply com-text-Tigers-Eye;
+    }
+
+    &.status-danger {
+      @apply com-text-Infra-Red;
+    }
+
+    &.status-control {
+      @apply com-text-white;
+    }
+  }
+
+  /* Hero (simplified primary emphasis) */
+  &.appearance-hero {
+    @apply com-border-transparent com-text-white com-shadow-md;
+
+    &.status-basic {
+      @apply com-bg-gradient-to-r com-from-gray-500 com-to-gray-600;
+    }
+
+    &.status-primary {
+      @apply com-bg-gradient-to-r com-from-primary-500 com-to-primary-600;
+    }
+
+    &.status-success {
+      @apply com-bg-gradient-to-r com-from-Caribbean-Green com-to-Crayola-Green;
+    }
+
+    &.status-info {
+      @apply com-bg-gradient-to-r com-from-Brilliant-Azure com-to-Azure;
+    }
+
+    &.status-warning {
+      @apply com-bg-gradient-to-r com-from-Chrome-Yellow com-to-Tigers-Eye com-text-Yankees-Blue;
+    }
+
+    &.status-danger {
+      @apply com-bg-gradient-to-r com-from-Infra-Red com-to-Deep-Carmine-Pink;
+    }
+
+    &.status-control {
+      @apply com-bg-white com-text-primary-500;
+    }
+  }
+}

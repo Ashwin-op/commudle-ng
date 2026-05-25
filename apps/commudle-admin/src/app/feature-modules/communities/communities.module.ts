@@ -2,7 +2,8 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InfiniteScrollModule } from '@commudle/infinite-scroll';
-import { NbButtonModule, NbFormFieldModule, NbIconModule, NbInputModule, NbTagModule } from '@commudle/theme';
+import { NbFormFieldModule, NbIconModule, NbInputModule, NbTagModule } from '@commudle/theme';
+import { CommudleButtonModule } from '@commudle/commudle-theme';
 import { AppSharedComponentsModule } from 'apps/commudle-admin/src/app/app-shared-components/app-shared-components.module';
 import { CommunitiesCardComponent } from 'apps/commudle-admin/src/app/app-shared-components/communities-card/communities-card.component';
 import { ListingPageHeaderComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-header/listing-page-header.component';
@@ -30,7 +31,7 @@ import { CommunitiesComponent } from './components/communities/communities.compo
     PublicHomeListEventsModule,
     PublicHomeListSpeakersModule,
     SharedComponentsModule,
-    NbButtonModule,
+    CommudleButtonModule,
     CommunitiesCardComponent,
     SharedDirectivesModule,
     InfiniteScrollModule,
