@@ -27,7 +27,7 @@
   }
 
   &.size-small {
-    @apply com-text-sm com-leading-snug com-px-3 com-py-1.5 com-gap-1.5;
+    @apply com-text-xs com-font-medium com-px-3 com-py-2 com-gap-6px;
   }
 
   &.size-medium {
