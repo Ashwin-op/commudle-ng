@@ -22,6 +22,8 @@ import {
 } from '@angular/core';
 import { NbTrigger } from '@commudle/theme';
 import { EHmsRoles } from 'apps/shared-modules/hms-video/enums/hms-roles.enum';
+import { HmsStageService } from 'apps/shared-modules/hms-video/services/hms-stage.service';
+import { HmsLiveChannel } from 'apps/shared-modules/hms-video/services/websockets/hms-live.channel';
 import { hmsActions, hmsStore } from 'apps/shared-modules/hms-video/stores/hms.store';
 import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
 
@@ -54,7 +56,11 @@ export class ConferenceUserVideoComponent implements OnInit, OnChanges, AfterVie
 
   @ViewChild('videoElement') videoElement: ElementRef<HTMLVideoElement>;
 
-  constructor(private toastLogService: LibToastLogService) {}
+  constructor(
+    private toastLogService: LibToastLogService,
+    private hmsStageService: HmsStageService,
+    private hmsLiveChannel: HmsLiveChannel,
+  ) {}
 
   ngOnInit(): void {
     hmsStore.subscribe((peer: HMSPeer) => (this.localPeer = peer), selectLocalPeer);
@@ -130,9 +136,16 @@ export class ConferenceUserVideoComponent implements OnInit, OnChanges, AfterVie
         this.toastLogService.warningDialog(`Cannot remove ${metaData.name} from stage`);
         break;
       }
-      case EHmsRoles.GUEST:
+      case EHmsRoles.GUEST: {
+        const metaData = JSON.parse(this.peer.metadata || '{}');
         hmsActions.changeRole(this.peer.id, EHmsRoles.VIEWER_NEAR_REALTIME, true);
+        this.hmsStageService.lowerHand({ id: metaData.id, name: metaData.name });
+        this.hmsLiveChannel.sendData(this.hmsLiveChannel.ACTIONS.HAND_LOWERED, metaData.id, {
+          id: metaData.id,
+          name: metaData.name,
+        });
         break;
+      }
     }
   }
 

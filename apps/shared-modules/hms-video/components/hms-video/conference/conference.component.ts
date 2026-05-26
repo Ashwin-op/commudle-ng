@@ -291,14 +291,13 @@ export class ConferenceComponent implements OnInit, OnChanges, OnDestroy {
             if (this.serverClient.role === EHmsRoles.VIEWER_NEAR_REALTIME && !wasRunning) {
               setTimeout(() => this.attachHlsStream(this.hlsPlaybackUrl), 5000);
             }
-          } else if (!hlsState.running && !this.pendingHlsAction) {
+          } else if (!hlsState.running) {
+            this.pendingHlsAction = false;
             this.hlsPlaybackUrl = '';
             this.destroyHlsInstance();
             this.hlsStatus.emit(false);
           }
-          if (!this.pendingHlsAction) {
-            this.pushStateToSettings();
-          }
+          this.pushStateToSettings();
         }
       }, selectHLSState);
 
@@ -415,6 +414,7 @@ export class ConferenceComponent implements OnInit, OnChanges, OnDestroy {
             break;
           case EHmsRoles.VIEWER_NEAR_REALTIME:
             peers.forEach((peer: HMSPeer) => hmsActions.changeRole(peer.id, EHmsRoles.GUEST));
+            this.hmsLiveChannel.sendData(this.hmsLiveChannel.ACTIONS.HAND_LOWERED, userId, { id: userId, name });
             this.toastLogService.successDialog(`Invited ${name} to the stage, they will now see a popup`);
             break;
           case EHmsRoles.GUEST:
@@ -881,6 +881,16 @@ export class ConferenceComponent implements OnInit, OnChanges, OnDestroy {
         return;
       }
       switch (notification.type) {
+        case HMSNotificationTypes.ROLE_UPDATED: {
+          const updatedPeer: HMSPeer = notification.data;
+          if (updatedPeer?.isLocal && updatedPeer.roleName === EHmsRoles.VIEWER_NEAR_REALTIME) {
+            this.currentRoleAsPerLocalPeer = EHmsRoles.VIEWER_NEAR_REALTIME;
+            this.serverClient = { ...this.serverClient, role: EHmsRoles.VIEWER_NEAR_REALTIME };
+            this.isOnStage = false;
+            this.loadHlsStream();
+          }
+          break;
+        }
         case HMSNotificationTypes.NEW_MESSAGE: {
           const msg = notification.data;
           if (msg.type === 'EMOJI_REACTION') {
