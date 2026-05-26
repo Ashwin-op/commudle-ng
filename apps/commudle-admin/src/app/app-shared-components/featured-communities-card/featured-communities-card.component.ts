@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NbButtonModule, NbIconModule } from '@commudle/theme';
-import { faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { Component, Input } from '@angular/core';
+import { NbButtonModule } from '@commudle/theme';
+import { faCheck, faLink, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -17,19 +17,16 @@ import { ICommunity } from 'apps/shared-models/community.model';
     NbButtonModule,
     SharedComponentsModule,
     PublicCommunityModule,
-    NbIconModule,
   ],
   templateUrl: './featured-communities-card.component.html',
   styleUrls: ['./featured-communities-card.component.scss'],
 })
-export class FeaturedCommunitiesCardComponent implements OnInit {
+export class FeaturedCommunitiesCardComponent {
   @Input() featuredCommunity: ICommunity;
   @Input() communityFeaturedReason: string;
   @Input() horizontalScroll = false;
   @Input() showJoinBtnBottom = false;
   faCheck = faCheck;
+  faLink = faLink;
   faPlus = faPlus;
-  constructor() {}
-
-  ngOnInit(): void {}
 }

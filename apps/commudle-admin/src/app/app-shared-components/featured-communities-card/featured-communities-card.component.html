@@ -17,7 +17,7 @@
           />
         </div>
         <div *ngIf="!featuredCommunity.logo_image?.url && !featuredCommunity.logo_image_path" class="no-image-header">
-          <nb-icon icon="link" status="primary"></nb-icon>
+          <fa-icon [icon]="faLink" class="placeholder-icon"></fa-icon>
         </div>
       </div>
       <div class="featured-communities-details">

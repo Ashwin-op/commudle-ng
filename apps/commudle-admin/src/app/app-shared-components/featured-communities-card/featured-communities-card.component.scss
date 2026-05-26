@@ -23,7 +23,7 @@ a {
     .no-image-header {
       @apply com-h-12 com-w-12 com-flex com-rounded-lg com-items-center com-justify-center com-mr-3;
 
-      nb-icon {
+      .placeholder-icon {
         @apply com-text-xl;
       }
     }

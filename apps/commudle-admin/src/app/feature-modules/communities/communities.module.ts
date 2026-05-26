@@ -18,6 +18,7 @@ import { CommunitiesRoutingModule } from './communities-routing.module';
 import { CommunitiesFeaturedComponent } from './components/communities/communities-featured/communities-featured.component';
 import { CommunitiesListComponent } from './components/communities/communities-list/communities-list.component';
 import { CommunitiesComponent } from './components/communities/communities.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [CommunitiesComponent, CommunitiesFeaturedComponent, CommunitiesListComponent],
@@ -41,6 +42,7 @@ import { CommunitiesComponent } from './components/communities/communities.compo
     NbFormFieldModule,
     NbInputModule,
     PublicCommunityModule,
+    FontAwesomeModule,
   ],
 })
 export class CommunitiesModule {}

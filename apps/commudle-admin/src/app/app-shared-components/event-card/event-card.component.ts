@@ -1,7 +1,8 @@
 import { Router, RouterModule } from '@angular/router';
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NbIconModule } from '@commudle/theme';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faCircleCheck, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { CommudleCardModule } from '@commudle/commudle-theme';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
 import * as moment from 'moment';
@@ -20,7 +21,7 @@ import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
     RouterModule,
     CommudleCardModule,
     SharedComponentsModule,
-    NbIconModule,
+    FontAwesomeModule,
     SharedDirectivesModule,
   ],
   styleUrls: ['./event-card.component.scss'],
@@ -33,6 +34,8 @@ export class EventCardComponent implements OnInit {
   @Input() hostCommunity: ICommunity;
   community: ICommunity;
   staticAssets = staticAssets;
+  faCircleCheck = faCircleCheck;
+  faUsers = faUsers;
 
   moment = moment;
   constructor(private communitiesService: CommunitiesService, private router: Router) {}

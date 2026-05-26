@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NbCardModule, NbIconModule } from '@commudle/theme';
+import { NbCardModule } from '@commudle/theme';
 import { PublicHomeListEventsRoutingModule } from './public-home-list-events-routing.module';
 import { PublicHomeListEventsComponent } from './components/public-home-list-events/public-home-list-events.component';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
@@ -41,7 +41,6 @@ import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-the
     CommudleButtonModule,
     SharedComponentsModule,
     SharedPipesModule,
-    NbIconModule,
     FontAwesomeModule,
     MiniUserProfileModule,
     EventCardComponent,
