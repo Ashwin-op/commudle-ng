@@ -18,6 +18,7 @@ import {
   onSponsorStripGradientMove,
   RoundService,
   SeoService,
+  removeHtmlTags,
 } from '@commudle/shared-services';
 import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
 import { DiscussionsService } from 'apps/commudle-admin/src/app/services/discussions.service';
@@ -287,7 +288,7 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
   setSeoService() {
     this.seoService.setTags(
       this.hackathon.name + ' by ' + this.community.name,
-      this.seoService.removeHtmlTags(this.hackathon.description),
+      removeHtmlTags(this.hackathon.description),
       'https://commudle.com/assets/images/commudle-logo192.png',
     );
   }

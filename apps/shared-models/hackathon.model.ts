@@ -40,6 +40,7 @@ export interface IHackathon {
   tags: string[];
   hackathon_collaboration_communities_count: number;
   winners_count?: number;
+  problem_statement_changeable: boolean;
 }
 
 export enum EParticipateTypes {
