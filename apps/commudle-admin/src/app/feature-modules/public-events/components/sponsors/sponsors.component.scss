@@ -108,16 +108,23 @@
 
     .sponsor-strip-mouse-gradient {
       @apply com-pointer-events-none com-absolute com-inset-0 com-z-[1] com-opacity-0;
-      @apply com-transition-opacity com-duration-200 com-ease-out;
+      @apply com-transition-opacity com-duration-300 com-ease-out;
       background: radial-gradient(
-        80px circle at var(--sponsor-gradient-x, 50%) var(--sponsor-gradient-y, 50%),
-        var(--sponsor-logo-gradient, rgb(51 102 255 / 0.05)) 0%,
-        transparent 60%
+        ellipse 140px 100px at var(--sponsor-gradient-x, 50%) var(--sponsor-gradient-y, 50%),
+        var(--sponsor-logo-gradient, rgb(51 102 255 / 0.01)) 0%,
+        transparent 80%
       );
+      filter: blur(30px);
     }
 
     &.sponsor-strip--gradient-active .sponsor-strip-mouse-gradient {
-      opacity: 0.45;
+      opacity: 0.6;
+      filter: blur(30px);
+      background: radial-gradient(
+        ellipse 160px 110px at var(--sponsor-gradient-x, 50%) var(--sponsor-gradient-y, 50%),
+        var(--sponsor-logo-gradient, rgb(51 102 255 / 0.015)) 0%,
+        transparent 65%
+      );
     }
 
     &--no-link {
@@ -184,7 +191,13 @@
   }
 
   .sponsor-strip-name {
-    @apply com-m-0 com-text-sm com-font-semibold com-text-Yankees-Blue;
+    @apply com-m-0 com-text-sm com-font-semibold com-text-Yankees-Blue com-w-max;
+    @apply com-transition-all com-duration-300 com-ease-out;
+
+    &:hover {
+      @apply com-text-primary-600 com-font-bold;
+      text-shadow: 0 0 8px rgba(51, 102, 255, 0.3);
+    }
   }
 
   .sponsor-strip--tier-1 .sponsor-strip-name {
