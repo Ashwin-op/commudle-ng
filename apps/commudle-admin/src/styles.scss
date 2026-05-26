@@ -110,7 +110,7 @@ input {
 
       @at-root {
         .home-layout .layout-container .content .columns {
-          // padding-bottom: nb-theme('header-height');
+          padding-bottom: nb-theme('navbar-footer-padding');
 
           @screen md {
             padding-bottom: 0;
