@@ -56,6 +56,7 @@ import { PublicHomeListSpeakersModule } from 'apps/commudle-admin/src/app/featur
 import { EventsAgendaComponent } from './components/events-agenda/events-agenda.component';
 import { EditorModule } from '@commudle/editor';
 import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-components/help-section/help-section.component';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 
 @NgModule({
   declarations: [
@@ -124,6 +125,7 @@ import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-com
     NbContextMenuModule,
 
     EditorModule,
+    CommudleCardModule,
   ],
 })
 export class PublicEventsModule {}

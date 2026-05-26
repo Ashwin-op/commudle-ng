@@ -8,14 +8,11 @@
     <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
 
     <div class="volunteers">
-      <div *ngFor="let user of volunteers">
-        <fieldset>
-          <legend *ngIf="user.user_roles_users">
-            {{ user.user_roles_users.role_designation }}
-          </legend>
-          <app-user-profile-card-large [user]="user"></app-user-profile-card-large>
-        </fieldset>
-      </div>
+      <com-card *ngFor="let user of volunteers" class="volunteer-card">
+        <com-card-body>
+          <app-user-profile-card-large [user]="user" [showRoleDesignation]="true"></app-user-profile-card-large>
+        </com-card-body>
+      </com-card>
     </div>
   </nb-card-body>
   <nb-card-footer *ngIf="pageInfo && pageInfo.has_next_page" (click)="getVolunteers()" class="com-cursor-pointer">

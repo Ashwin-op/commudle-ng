@@ -38,6 +38,12 @@
               Leader
             </button>
           </div>
+          <span
+            *ngIf="showRoleDesignation && user.user_roles_users?.role_designation"
+            class="volunteer-card-role-badge"
+          >
+            {{ user.user_roles_users.role_designation }}
+          </span>
           <div *ngIf="showSpeakersCount && alignSpeakerCountToRight" class="speaker-count">
             <app-badge
               *ngIf="user.speaker_events_count > 0"

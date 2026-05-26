@@ -1,55 +1,24 @@
 <div class="community-team">
-  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
-  <div *ngIf="organizers.length > 0">
-    <h6 class="heading">Community Organizers</h6>
-    <div class="organizers" *ngIf="!isLoading">
-      <div class="user-profile" *ngFor="let org of organizers; let i = index">
-        <div class="user-details">
-          <app-user-profile-horizontal
-            [user]="org.user"
-            [socialMediaLinks]="true"
-            [aboutMe]="false"
-          ></app-user-profile-horizontal>
-        </div>
-        <div class="actions">
-          <a class="clickable" *ngIf="org.status === EUserRolesUserStatus.INVITED" (click)="resendInvitationMail(org)">
-            <small>Resend Invite</small>
-          </a>
-          <br />
-          <a class="clickable" (click)="openDeleteConfirmation(removeUserDialog, org, 'organizers', i)">
-            <small>Remove</small>
-          </a>
-        </div>
-      </div>
+  <div class="team-header">
+    <div class="team-header-text">
+      <h4 class="team-title">Manage Team</h4>
+      <p class="team-subtitle">Add organizers, manage roles and permissions</p>
+    </div>
+    <div class="team-header-actions">
+      <button comButton status="primary" size="small" (click)="showAddForm = !showAddForm">
+        <nb-icon icon="plus-outline"></nb-icon>
+        Add Organizer
+      </button>
     </div>
   </div>
 
-  <div *ngIf="eventOrganizers.length > 0">
-    <h6>Event Managers</h6>
-    <div class="event_organizers">
-      <div class="user-profile" *ngFor="let org of eventOrganizers; let i = index">
-        <div class="user-details">
-          <app-user-profile-horizontal [user]="org.user" [socialMediaLinks]="true"></app-user-profile-horizontal>
-        </div>
-        <div class="actions">
-          <a *ngIf="org.status === EUserRolesUserStatus.INVITED" (click)="resendInvitationMail(org)">
-            <small> Resend Invitation </small>
-          </a>
-          <a (click)="remove(org, 'eventOrganizers', i)">
-            <small>Remove</small>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div>
-    <h6>Add an organizer</h6>
-    <form class="user-roles-user-form" [formGroup]="userRolesUserForm" (ngSubmit)="createUserRolesUser()">
-      <div>
-        <label fullWidth>
-          Email*
+  <div *ngIf="showAddForm" class="add-organizer-form">
+    <form [formGroup]="userRolesUserForm" (ngSubmit)="createUserRolesUser()">
+      <div class="email-input-container">
+        <label class="email-label" for="community-team-invite-email">Email<span class="required-field">*</span></label>
+        <div class="email-input-row">
           <input
+            id="community-team-invite-email"
             type="email"
             nbInput
             fullWidth
@@ -57,33 +26,111 @@
             placeholder="Google/Gmail Email"
             fieldSize="small"
           />
-        </label>
-        <span
-          *ngIf="
-            userRolesUserForm['controls'].email.touched &&
-            userRolesUserForm['controls'].email.invalid &&
-            userRolesUserForm['controls'].email.errors.required
-          "
-          class="validation-error-text"
-        >
-          Required Field
+          <button [disabled]="!userRolesUserForm.valid" type="submit" nbButton status="primary" size="small" outline>
+            Send Invite
+          </button>
+        </div>
+        <span class="validation-error-text">
+          <commudle-alert
+            *ngIf="
+              userRolesUserForm['controls'].email.touched &&
+              userRolesUserForm['controls'].email.invalid &&
+              userRolesUserForm['controls'].email.errors.required
+            "
+            [error]="true"
+            [errorMessage]="'Required Field'"
+          ></commudle-alert>
         </span>
       </div>
-
-      <div class="save-button-bottom">
-        <button
-          [disabled]="!userRolesUserForm.valid"
-          type="submit"
-          nbButton
-          fullWidth
-          outline
-          status="link"
-          size="small"
-        >
-          Save
-        </button>
-      </div>
     </form>
+  </div>
+
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+  <div *ngIf="organizers.length > 0" class="team-section">
+    <div class="team-section-header">
+      <h6 class="team-section-title">Community Organizers</h6>
+      <span class="team-section-count">{{ organizers.length }} Members</span>
+    </div>
+
+    <div class="team-table">
+      <div class="team-table-header">
+        <span class="team-table-col-member">MEMBER</span>
+        <span class="team-table-col-role">ROLE</span>
+        <span class="team-table-col-actions">ACTIONS</span>
+      </div>
+
+      <div *ngFor="let org of organizers; let i = index" class="team-table-row">
+        <div class="team-table-col-member">
+          <app-user-profile-horizontal
+            [user]="org.user"
+            [socialMediaLinks]="false"
+            [aboutMe]="false"
+          ></app-user-profile-horizontal>
+        </div>
+        <div class="team-table-col-role">
+          <span class="role-badge">{{ org.user_role?.name }}</span>
+        </div>
+        <div class="team-table-col-actions">
+          <a
+            *ngIf="org.status === EUserRolesUserStatus.INVITED"
+            class="action-link"
+            (click)="resendInvitationMail(org)"
+          >
+            Resend
+          </a>
+          <a
+            class="action-link action-link--danger"
+            (click)="openDeleteConfirmation(removeUserDialog, org, 'organizers', i)"
+          >
+            Remove
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="eventOrganizers.length > 0" class="team-section">
+    <div class="team-section-header">
+      <h6 class="team-section-title">Event Managers</h6>
+      <span class="team-section-count">{{ eventOrganizers.length }} Members</span>
+    </div>
+
+    <div class="team-table">
+      <div class="team-table-header">
+        <span class="team-table-col-member">MEMBER</span>
+        <span class="team-table-col-role">ROLE</span>
+        <span class="team-table-col-actions">ACTIONS</span>
+      </div>
+
+      <div *ngFor="let org of eventOrganizers; let i = index" class="team-table-row">
+        <div class="team-table-col-member">
+          <app-user-profile-horizontal
+            [user]="org.user"
+            [socialMediaLinks]="false"
+            [aboutMe]="false"
+          ></app-user-profile-horizontal>
+        </div>
+        <div class="team-table-col-role">
+          <span class="role-badge">{{ org.user_role?.name }}</span>
+        </div>
+        <div class="team-table-col-actions">
+          <a
+            *ngIf="org.status === EUserRolesUserStatus.INVITED"
+            class="action-link"
+            (click)="resendInvitationMail(org)"
+          >
+            Resend
+          </a>
+          <a
+            class="action-link action-link--danger"
+            (click)="openDeleteConfirmation(removeUserDialog, org, 'eventOrganizers', i)"
+          >
+            Remove
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -100,7 +147,8 @@
     </nb-card-header>
     <nb-card-body class="com-max-w-[350px]">
       <p>
-        Are you sure you want to <strong>remove</strong>&nbsp;<em>{{ data.user?.name }}</em> from the community?
+        Are you sure you want to <strong>remove</strong>&nbsp;<em>{{ data.userRolesUser?.user?.name }}</em> from the
+        community?
       </p>
       <!-- <p>(Select the roles you want to remove them from)</p> -->
       <!-- <div class="com-flex com-flex-col com-items-start com-gap-3 com-space-x-3">

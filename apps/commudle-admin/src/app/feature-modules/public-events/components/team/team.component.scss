@@ -17,15 +17,20 @@ nb-card {
   nb-card-body {
     @apply md:com-px-6 com-px-4;
     .volunteers {
-      @apply com-grid com-grid-cols-1 com-gap-x-[22px] com-gap-y-4 md:com-grid-cols-2;
-      fieldset {
-        @apply com-border com-border-solid com-border-gray-300 com-rounded-md com-h-full;
-
-        legend {
-          @apply com-ml-auto com-text-base com-font-medium;
-        }
-      }
+      @apply com-grid com-grid-cols-1 com-gap-x-5 com-gap-y-4 md:com-grid-cols-2;
     }
+  }
+
+  .volunteer-card {
+    @apply com-relative com-transition-all com-duration-300 com-ease-in-out;
+
+    &:hover {
+      @apply com-shadow-lg com-scale-[1.01];
+    }
+  }
+
+  .volunteer-card-role-badge {
+    @apply com-absolute com-top-2 com-right-2 com-inline-flex com-mt-[6px] com-px-2 com-py-2px com-rounded-full com-text-xs com-font-semibold com-uppercase com-bg-green-50 com-text-green-700 com-border com-border-solid com-border-green-200 com-ml-[60px] com-w-max;
   }
 
   .view-more {

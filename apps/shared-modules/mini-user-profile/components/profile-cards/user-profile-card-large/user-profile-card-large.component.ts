@@ -11,6 +11,7 @@ import { faBriefcase } from '@fortawesome/free-solid-svg-icons';
 })
 export class UserProfileCardLargeComponent {
   @Input() user: IUser;
+  @Input() showRoleDesignation = false;
   @Input() maxNameLength = 50;
   @Input() maxUserNameLength = 20;
   @Input() truncateDesignation = true;

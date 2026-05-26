@@ -60,6 +60,7 @@ import { SidebarComponent } from 'apps/shared-components/sidebar/sidebar.compone
 import { ReusableComponentsModule } from 'apps/commudle-admin/src/app/feature-modules/reusable-components/reusable-components.module';
 import { CommunityMailsSentStatsComponent } from './components/community-mails-sent-stats/community-mails-sent-stats.component';
 import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-components/help-section/help-section.component';
+import { CommudleButtonModule } from '@commudle/commudle-theme';
 
 @NgModule({
   declarations: [
@@ -105,6 +106,7 @@ import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-com
     CommunityChannelsModule,
     ReusableComponentsModule,
     HelpSectionComponent,
+    CommudleButtonModule,
 
     //standalone
     SidebarComponent,

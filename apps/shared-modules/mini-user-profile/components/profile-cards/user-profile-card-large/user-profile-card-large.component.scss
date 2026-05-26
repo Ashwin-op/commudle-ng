@@ -117,3 +117,7 @@ app-badge {
     @apply hover:com-underline;
   }
 }
+
+.volunteer-card-role-badge {
+  @apply com-inline-flex com-ml-auto com-px-2 com-py-2px com-rounded-full com-text-xs com-font-semibold com-uppercase com-bg-green-50 com-text-green-700 com-border com-border-solid com-border-green-200 com-w-max com-flex-shrink-0;
+}
