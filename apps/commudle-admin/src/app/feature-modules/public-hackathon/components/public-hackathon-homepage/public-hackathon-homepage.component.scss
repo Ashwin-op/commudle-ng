@@ -47,3 +47,40 @@
 .router {
   @apply com-px-2;
 }
+
+.dashboard-btn-wrapper {
+  @apply com-relative;
+
+  .dashboard-btn {
+    @apply com-relative com-overflow-hidden;
+    animation: dashboard-pulse 2.5s ease-in-out infinite;
+
+    &::after {
+      content: '';
+      @apply com-absolute com-top-0 com-left-0 com-w-full com-h-full com-pointer-events-none;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
+      transform: translateX(-100%);
+      animation: dashboard-shimmer 3s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes dashboard-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--primary-500-rgb, 51, 102, 255), 0.4);
+  }
+  50% {
+    box-shadow: 0 0 12px 4px rgba(var(--primary-500-rgb, 51, 102, 255), 0.15);
+  }
+}
+
+@keyframes dashboard-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  60%,
+  100% {
+    transform: translateX(100%);
+  }
+}
