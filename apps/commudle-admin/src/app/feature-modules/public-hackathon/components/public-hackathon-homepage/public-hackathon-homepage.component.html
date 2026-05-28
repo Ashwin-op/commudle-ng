@@ -51,6 +51,29 @@
       </nb-card>
       <nb-card class="tabs" *ngIf="!isLoading">
         <nb-card-body class="router-links custom-scrollbar">
+          <ng-container *appBreakpoints="'<=md'">
+            <div *ngIf="hasDashboardAndChannelAccess" class="dashboard-btn-wrapper">
+              <a [routerLink]="['user-dashboard']">
+                <button comButton status="primary" size="tiny" shape="semi-round" class="dashboard-btn">
+                  <fa-icon [icon]="icons.faArrowTrendUp"></fa-icon> &nbsp; Participant Team Dashboard
+                </button>
+              </a>
+            </div>
+            <div *ngIf="userRoles.is_mentor" class="dashboard-btn-wrapper">
+              <a [routerLink]="['mentor-dashboard']">
+                <button comButton status="info" size="tiny" shape="semi-round" class="dashboard-btn">
+                  <fa-icon [icon]="icons.faGavel"></fa-icon> &nbsp; Mentor Dashboard
+                </button>
+              </a>
+            </div>
+            <div *ngIf="userRoles.is_judge" class="dashboard-btn-wrapper">
+              <a [routerLink]="['judge-dashboard']">
+                <button comButton status="warning" size="tiny" shape="semi-round" class="dashboard-btn">
+                  <fa-icon [icon]="icons.faGavel"></fa-icon> &nbsp; Judge Dashboard
+                </button>
+              </a>
+            </div>
+          </ng-container>
           <div>
             <a [routerLink]="['.']" [class.active]="activeFragment === '' && !showBannerImage">
               <fa-icon [icon]="icons.faInfoCircle"></fa-icon>
@@ -129,27 +152,29 @@
               <p class="name">Projects</p>
             </a>
           </div>
-          <div *ngIf="hasDashboardAndChannelAccess" class="dashboard-btn-wrapper">
-            <a [routerLink]="['user-dashboard']">
-              <button comButton status="primary" size="tiny" shape="semi-round" class="dashboard-btn">
-                <fa-icon [icon]="icons.faArrowTrendUp"></fa-icon> &nbsp; Participant Team Dashboard
-              </button>
-            </a>
-          </div>
-          <div *ngIf="userRoles.is_mentor">
-            <a [routerLink]="['mentor-dashboard']">
-              <button nbButton status="primary" size="tiny" shape="semi-round">
-                <fa-icon [icon]="icons.faChalkboardTeacher"></fa-icon> &nbsp; Mentor Dashboard
-              </button>
-            </a>
-          </div>
-          <div *ngIf="userRoles.is_judge">
-            <a [routerLink]="['judge-dashboard']">
-              <button nbButton status="primary" size="tiny" shape="semi-round">
-                <fa-icon [icon]="icons.faChalkboardTeacher"></fa-icon> &nbsp; Judge Dashboard
-              </button>
-            </a>
-          </div>
+          <ng-container *appBreakpoints="'>md'">
+            <div *ngIf="hasDashboardAndChannelAccess" class="dashboard-btn-wrapper">
+              <a [routerLink]="['user-dashboard']">
+                <button comButton status="primary" size="tiny" shape="semi-round" class="dashboard-btn">
+                  <fa-icon [icon]="icons.faArrowTrendUp"></fa-icon> &nbsp; Participant Team Dashboard
+                </button>
+              </a>
+            </div>
+            <div *ngIf="userRoles.is_mentor" class="dashboard-btn-wrapper">
+              <a [routerLink]="['mentor-dashboard']">
+                <button comButton status="info" size="tiny" shape="semi-round" class="dashboard-btn">
+                  <fa-icon [icon]="icons.faGavel"></fa-icon> &nbsp; Mentor Dashboard
+                </button>
+              </a>
+            </div>
+            <div *ngIf="userRoles.is_judge" class="dashboard-btn-wrapper">
+              <a [routerLink]="['judge-dashboard']">
+                <button comButton status="warning" size="tiny" shape="semi-round" class="dashboard-btn">
+                  <fa-icon [icon]="icons.faGavel"></fa-icon> &nbsp; Judge Dashboard
+                </button>
+              </a>
+            </div>
+          </ng-container>
         </nb-card-body>
       </nb-card>
       <div class="router" *ngIf="!isLoading">

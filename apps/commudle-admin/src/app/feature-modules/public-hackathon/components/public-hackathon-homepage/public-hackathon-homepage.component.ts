@@ -19,6 +19,7 @@ import {
   faStar,
   faUser,
   faUserTie,
+  faGavel,
 } from '@fortawesome/free-solid-svg-icons';
 import { HackathonJudgeService } from 'apps/commudle-admin/src/app/services/hackathon-judge.service';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
@@ -57,6 +58,7 @@ export class PublicHackathonHomepageComponent implements OnInit, OnDestroy {
     faUserTie,
     faChalkboardTeacher,
     faTrophy,
+    faGavel,
   };
   isLoading = true;
   showBannerImage = false;

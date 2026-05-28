@@ -28,7 +28,7 @@
 .tabs {
   @apply com-my-0 com-sticky com-top-[var(--mobile-navbar-offset,52px)] com-z-30;
   .router-links {
-    @apply com-flex com-gap-5 com-py-0 com-px-2;
+    @apply com-flex com-gap-4 com-py-0 com-px-2;
     a {
       @apply com-flex com-gap-2 com-items-center com-text-Black-Coral com-no-underline com-py-3 com-px-1;
       .name {

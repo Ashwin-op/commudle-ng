@@ -44,11 +44,11 @@
 
   /* Shapes */
   &.shape-rectangle {
-    @apply com-rounded;
+    @apply com-rounded-sm;
   }
 
   &.shape-semi-round {
-    @apply com-rounded-[10px];
+    @apply com-rounded-xl;
   }
 
   &.shape-round {
@@ -58,27 +58,129 @@
   /* Filled */
   &.appearance-filled {
     &.status-basic {
-      @apply com-border-Bright-Gray com-bg-[#edf1f7] com-text-Yankees-Blue;
+      @apply com-border-tAnti-Flash com-bg-tAnti-Flash com-text-tYankees-Blue;
+
+      &:hover {
+        @apply com-bg-[#f7f9fc] com-border-[#f7f9fc];
+      }
+
+      &:focus {
+        @apply com-bg-Bright-Gray com-border-[#c5cee0];
+      }
+
+      &:active {
+        @apply com-bg-Bright-Gray com-border-Bright-Gray;
+      }
+
+      &.btn-disabled,
+      &:disabled {
+        @apply com-bg-[rgba(143,155,179,0.24)] com-border-[rgba(143,155,179,0.24)] com-text-Cadet-Grey;
+      }
     }
 
     &.status-primary {
-      @apply com-border-primary-500 com-bg-primary-500 com-text-white;
+      @apply com-border-primary-500 com-bg-primary-500 com-text-tWhite;
+
+      &:hover {
+        @apply com-bg-[#598bff] com-border-[#598bff];
+      }
+
+      &:focus {
+        @apply com-bg-[#274bdb] com-border-[#1a34b8];
+      }
+
+      &:active {
+        @apply com-bg-[#274bdb] com-border-[#274bdb];
+      }
+
+      &.btn-disabled,
+      &:disabled {
+        @apply com-bg-[rgba(143,155,179,0.24)] com-border-[rgba(143,155,179,0.24)] com-text-Cadet-Grey;
+      }
     }
 
     &.status-success {
-      @apply com-border-Caribbean-Green com-bg-Caribbean-Green com-text-white;
+      @apply com-border-Caribbean-Green com-bg-Caribbean-Green com-text-tWhite;
+
+      &:hover {
+        @apply com-bg-[#2ce69b] com-border-[#2ce69b];
+      }
+
+      &:focus {
+        @apply com-bg-[#00b887] com-border-[#00997a];
+      }
+
+      &:active {
+        @apply com-bg-[#00b887] com-border-[#00b887];
+      }
+
+      &.btn-disabled,
+      &:disabled {
+        @apply com-bg-[rgba(143,155,179,0.24)] com-border-[rgba(143,155,179,0.24)] com-text-Cadet-Grey;
+      }
     }
 
     &.status-info {
-      @apply com-border-Brilliant-Azure com-bg-Brilliant-Azure com-text-white;
+      @apply com-border-Azure com-bg-Azure com-text-tWhite;
+
+      &:hover {
+        @apply com-bg-[#42aaff] com-border-[#42aaff];
+      }
+
+      &:focus {
+        @apply com-bg-[#006fd6] com-border-[#0057c2];
+      }
+
+      &:active {
+        @apply com-bg-[#006fd6] com-border-[#006fd6];
+      }
+
+      &.btn-disabled,
+      &:disabled {
+        @apply com-bg-[rgba(143,155,179,0.24)] com-border-[rgba(143,155,179,0.24)] com-text-Cadet-Grey;
+      }
     }
 
     &.status-warning {
-      @apply com-border-Chrome-Yellow com-bg-Chrome-Yellow com-text-Yankees-Blue;
+      @apply com-border-Chrome-Yellow com-bg-Chrome-Yellow com-text-tWhite;
+
+      &:hover {
+        @apply com-bg-[#ffc94d] com-border-[#ffc94d];
+      }
+
+      &:focus {
+        @apply com-bg-[#db8b00] com-border-[#b86e00];
+      }
+
+      &:active {
+        @apply com-bg-[#db8b00] com-border-[#db8b00];
+      }
+
+      &.btn-disabled,
+      &:disabled {
+        @apply com-bg-[rgba(143,155,179,0.24)] com-border-[rgba(143,155,179,0.24)] com-text-Cadet-Grey;
+      }
     }
 
     &.status-danger {
-      @apply com-border-Infra-Red com-bg-Infra-Red com-text-white;
+      @apply com-border-Infra-Red com-bg-Infra-Red com-text-tWhite;
+
+      &:hover {
+        @apply com-bg-[#ff708d] com-border-[#ff708d];
+      }
+
+      &:focus {
+        @apply com-bg-[#db2c66] com-border-[#b81d5b];
+      }
+
+      &:active {
+        @apply com-bg-[#db2c66] com-border-[#db2c66];
+      }
+
+      &.btn-disabled,
+      &:disabled {
+        @apply com-bg-[rgba(143,155,179,0.24)] com-border-[rgba(143,155,179,0.24)] com-text-Cadet-Grey;
+      }
     }
 
     &.status-control {
@@ -152,7 +254,7 @@
 
   /* Hero (simplified primary emphasis) */
   &.appearance-hero {
-    @apply com-border-transparent com-text-white com-shadow-md;
+    @apply com-border-transparent com-text-tWhite com-shadow-md;
 
     &.status-basic {
       @apply com-bg-gradient-to-r com-from-gray-500 com-to-gray-600;
