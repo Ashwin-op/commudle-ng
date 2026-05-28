@@ -35,7 +35,9 @@
         </nb-card-header>
         <nb-card-body class="sponsors-cards">
           <div
-            *ngFor="let hackathonSponsorGrouped of hackathonSponsorGroupedByTierName | keyvalue"
+            *ngFor="
+              let hackathonSponsorGrouped of hackathonSponsorGroupedByTierName | keyvalue : tierPriorityComparator
+            "
             class="sponsor-tier"
           >
             <header

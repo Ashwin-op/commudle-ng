@@ -64,6 +64,12 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
   onSponsorStripGradientMove = onSponsorStripGradientMove;
   onSponsorStripGradientLeave = onSponsorStripGradientLeave;
 
+  tierPriorityComparator = (a: { value: any[] }, b: { value: any[] }): number => {
+    const priorityA = a.value?.[0]?.tier_priority;
+    const priorityB = b.value?.[0]?.tier_priority;
+    return priorityA - priorityB;
+  };
+
   private destroy$ = new Subject<void>();
 
   constructor(
