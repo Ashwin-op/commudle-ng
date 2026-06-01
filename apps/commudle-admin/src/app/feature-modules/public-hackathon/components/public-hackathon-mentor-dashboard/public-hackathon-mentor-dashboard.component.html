@@ -63,6 +63,9 @@
               <th *ngFor="let slot of roundMentorSlots; let i = index">
                 <div class="slot-header">
                   <div class="slot-number">Slot {{ i + 1 }}</div>
+                  <div class="slot-number">
+                    {{ moment(slot.starts_at).format('DD MMM') }}
+                  </div>
                   <div class="slot-time">
                     {{ moment(slot.starts_at).format('h:mm A') }} - {{ moment(slot.ends_at).format('h:mm A') }}
                   </div>

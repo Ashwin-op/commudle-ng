@@ -194,7 +194,8 @@ export class PublicHackathonMentorDashboardComponent implements OnInit, OnDestro
   openCancelSlotDialog(slot: IRoundMentorSlot, index: number): void {
     this.selectedSlot = slot;
     this.selectedSlotIndex = index;
-    this.dialogService.open(this.cancelSlotDialog);
+    // this.dialogService.open(this.cancelSlotDialog);
+    this.cancelSlot();
   }
 
   cancelSlot(): void {
@@ -212,7 +213,8 @@ export class PublicHackathonMentorDashboardComponent implements OnInit, OnDestro
   openActivateSlotDialog(slot: IRoundMentorSlot, index: number): void {
     this.selectedSlot = slot;
     this.selectedSlotIndex = index;
-    this.dialogService.open(this.activateSlotDialog);
+    // this.dialogService.open(this.activateSlotDialog);
+    this.activateSlot();
   }
 
   activateSlot(): void {
