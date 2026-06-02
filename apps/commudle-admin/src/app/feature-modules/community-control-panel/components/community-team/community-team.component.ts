@@ -11,10 +11,10 @@ import { ICommunity } from '@commudle/shared-models';
 import { SeoService } from '@commudle/shared-services';
 
 @Component({
-    selector: 'app-community-team',
-    templateUrl: './community-team.component.html',
-    styleUrls: ['./community-team.component.scss'],
-    standalone: false
+  selector: 'app-community-team',
+  templateUrl: './community-team.component.html',
+  styleUrls: ['./community-team.component.scss'],
+  standalone: false,
 })
 export class CommunityTeamComponent implements OnInit, OnDestroy {
   EUserRolesUserStatus = EUserRolesUserStatus;
@@ -28,6 +28,7 @@ export class CommunityTeamComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   community: ICommunity;
   isLoading = true;
+  showAddForm = false;
 
   constructor(
     private userRolesUsersService: UserRolesUsersService,
@@ -105,6 +106,7 @@ export class CommunityTeamComponent implements OnInit, OnDestroy {
         this.organizers.push(data);
 
         this.userRolesUserForm.reset({ user_role_name: EUserRoles.ORGANIZER });
+        this.showAddForm = false;
         this.toastLogService.successDialog('Invitation Sent!');
       });
   }
