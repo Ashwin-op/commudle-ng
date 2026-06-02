@@ -1,6 +1,16 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { isPlatformBrowser } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  OnInit,
+  PLATFORM_ID,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IEditorValidator } from '@commudle/editor';
 import { environment } from '@commudle/shared-environments';
@@ -16,12 +26,8 @@ import {
 } from '@commudle/shared-services';
 import { NbDialogRef, NbDialogService, NbMenuService } from '@commudle/theme';
 import { faThumbtack } from '@fortawesome/free-solid-svg-icons';
-import {
-  CommunityChannelHandlerService
-} from 'libs/shared/components/src/lib/services/community-channel-handler.service';
-import {
-  UserMessageReceiptHandlerService
-} from 'libs/shared/components/src/lib/services/user-message-receipt-handler.service';
+import { CommunityChannelHandlerService } from 'libs/shared/components/src/lib/services/community-channel-handler.service';
+import { UserMessageReceiptHandlerService } from 'libs/shared/components/src/lib/services/user-message-receipt-handler.service';
 import * as moment from 'moment';
 import { BehaviorSubject, filter } from 'rxjs';
 
@@ -87,7 +93,7 @@ export class CommunityChannelMessageComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     // this.seoSchema();
-    this.channelOrForumId = this.activatedRoute.snapshot.params.community_channel_id;
+    this.channelOrForumId = this.activatedRoute.snapshot.params.community_channel_id || this.channelOrForum.id;
     this.communityChannelManagerService.allChannelRoles$.subscribe((data) => {
       this.channelsRoles = data;
     });
