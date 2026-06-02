@@ -6,6 +6,7 @@ import {
   ERoundType,
   IHackathonJudge,
   IRoundMentorSlot,
+  ERoundMentorSlotStatus,
 } from '@commudle/shared-models';
 import { RoundMentorSlotService, RoundMentorSlotBookingService, ToastrService } from '@commudle/shared-services';
 import { NbDialogService } from '@commudle/theme';
@@ -137,7 +138,10 @@ export class HackathonRoundCardComponent implements OnInit, AfterViewInit {
 
   openBookSlotDialog(mentorId: number) {
     this.selectedMentorId = mentorId;
-    this.selectedMentorSlots = this.mentorSlotsByMentor.get(mentorId) || [];
+    this.selectedMentorSlots = (this.mentorSlotsByMentor.get(mentorId) || []).filter(
+      (slot) => slot.status === ERoundMentorSlotStatus.OPEN,
+    );
+
     this.dialogService.open(this.bookSlotDialog);
   }
 
