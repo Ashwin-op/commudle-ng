@@ -1,5 +1,5 @@
-import { KeyValue } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { isPlatformBrowser, KeyValue } from '@angular/common';
+import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { UpdateProfileService } from 'apps/commudle-admin/src/app/feature-modules/users/services/update-profile.service';
 import { UserProfileManagerService } from 'apps/commudle-admin/src/app/feature-modules/users/services/user-profile-manager.service';
@@ -20,10 +20,14 @@ import { debounceTime, filter } from 'rxjs/operators';
   styleUrls: ['./public-profile.component.scss'],
   standalone: false,
 })
-export class PublicProfileComponent implements OnInit, OnDestroy {
+export class PublicProfileComponent implements OnInit, OnDestroy, AfterViewInit {
   user: IUser;
   activeMenuItems: UserProfileMenuItems | any;
   highlight: string | null = null;
+  isMenuSticky = false;
+
+  @ViewChild('stickySentinel') sentinel: ElementRef;
+  private observer: IntersectionObserver;
 
   subscriptions: Subscription[] = [];
 
@@ -36,6 +40,7 @@ export class PublicProfileComponent implements OnInit, OnDestroy {
     private userProfileManagerService: UserProfileManagerService,
     private footerService: FooterService,
     private router: Router,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {}
 
   ngOnInit(): void {
@@ -79,6 +84,24 @@ export class PublicProfileComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
     this.seoService.noIndex(false);
     this.footerService.changeFooterStatus(false);
+    this.observer?.disconnect();
+  }
+
+  private setupStickyObserver(element: HTMLElement): void {
+    this.observer?.disconnect();
+    this.observer = new IntersectionObserver(
+      ([entry]) => {
+        this.isMenuSticky = !entry.isIntersecting;
+      },
+      { root: null, threshold: 0 },
+    );
+    this.observer.observe(element);
+  }
+
+  ngAfterViewInit(): void {
+    if (this.sentinel && isPlatformBrowser(this.platformId)) {
+      this.setupStickyObserver(this.sentinel.nativeElement);
+    }
   }
 
   checkFragment() {
@@ -101,6 +124,11 @@ export class PublicProfileComponent implements OnInit, OnDestroy {
           this.seoService.noIndex(false);
         }
         this.setMeta();
+        setTimeout(() => {
+          if (this.sentinel && isPlatformBrowser(this.platformId)) {
+            this.setupStickyObserver(this.sentinel.nativeElement);
+          }
+        });
       }),
     );
   }

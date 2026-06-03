@@ -1,10 +1,10 @@
-<nb-card *ngIf="socialResources?.length > 0 || currentUser?.id === user.id" class="user-social" id="content">
-  <nb-card-header>
+<com-card *ngIf="socialResources?.length > 0 || currentUser?.id === user.id" class="user-social" id="content">
+  <com-card-header>
     <a [routerLink]="'.'" fragment="content"><fa-icon [icon]="faFileText" class="com-text-Azure"></fa-icon> Content</a>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <ng-container *ngIf="currentUser?.id === user.id">
-      <div class="user-social-add d-flex">
+      <div class="user-social-add">
         <button (click)="onOpenDialog()" ghost nbButton status="info">
           <nb-icon icon="plus-circle"></nb-icon>
           Share your content from anywhere on the web!
@@ -44,18 +44,18 @@
         ></app-user-social-card>
       </nb-list-item>
     </nb-list>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
 <ng-template #addLinkDialog>
-  <nb-card class="user-social-popup max-full-height-dialog-card">
-    <nb-card-header class="d-flex justify-content-space-between">
+  <com-card class="user-social-popup max-full-height-dialog-card">
+    <com-card-header class="com-flex com-justify-between com-items-center">
       <p class="com-text-Yankees-Blue">Share your content from the Web</p>
-      <button (click)="onCloseDialog()" nbButton size="small">
+      <button (click)="onCloseDialog()" ghost nbButton size="small" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body [nbSpinner]="isLoading">
+    </com-card-header>
+    <com-card-body [nbSpinner]="isLoading">
       <nb-form-field>
         <nb-icon icon="link" nbPrefix></nb-icon>
         <input
@@ -73,7 +73,7 @@
       <form
         *ngIf="showLinkPreview"
         [formGroup]="socialResourcesForm"
-        class="user-social-popup-details d-flex flex-column"
+        class="user-social-popup-details com-flex com-flex-col"
       >
         <p class="user-social-popup-heading">Source</p>
         <img
@@ -93,8 +93,8 @@
         <p class="user-social-popup-heading">Tags*</p>
         <app-tag (tagAdd)="addTag($event)" (tagDelete)="removeTag($event)" [editable]="true" [tags]="tags"></app-tag>
       </form>
-    </nb-card-body>
-    <nb-card-footer *ngIf="showLinkPreview" class="d-flex justify-content-space-between">
+    </com-card-body>
+    <com-card-footer *ngIf="showLinkPreview" class="com-flex com-justify-between">
       <button (click)="onCloseDialog()" ghost nbButton size="small" status="danger">Cancel</button>
       <button
         (click)="addSocialResource()"
@@ -104,6 +104,6 @@
       >
         Submit
       </button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

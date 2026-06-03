@@ -1,17 +1,15 @@
-<nb-card class="user-basic-social-container" id="about">
-  <nb-card-header>
+<com-card class="user-basic-social-container" id="about">
+  <com-card-header>
     <a [routerLink]="'.'" fragment="about"
       ><fa-icon [icon]="faExclamationCircle" class="com-text-primary-500"></fa-icon>About</a
     >
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <div *ngIf="user.about_me" class="about">
-      <span *ngIf="showFullAbout; else showLess">{{ user.about_me }}</span>
-      <ng-template #showLess>
-        <span>{{ user.about_me | truncatetext : 350 }}</span>
-      </ng-template>
-      &nbsp;
-      <a (click)="showFullAbout = !showFullAbout" *ngIf="user.about_me.length > 350" class="clickable">
+      <span class="about-text">
+        {{ showFullAbout ? user.about_me : (user.about_me | truncatetext : 350) }}
+      </span>
+      <a (click)="showFullAbout = !showFullAbout" *ngIf="user.about_me.length > 350" class="read-more-link">
         {{ showFullAbout ? 'Read less' : 'Read more' }}
       </a>
     </div>
@@ -50,5 +48,5 @@
         <fa-icon [icon]="faInstagram"></fa-icon>
       </a>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

@@ -1,105 +1,108 @@
-@import './apps/commudle-admin/src/assets/styles/variables';
-
-p {
-  margin: 0;
-}
-
 .user-social {
   @apply com-m-0 com-mb-4;
-  nb-card-header {
-    @apply com-bg-gray-50;
+
+  com-card-header {
+    @apply com-px-4 com-py-3 com-border-0 com-text-tYankees-Blue;
+    background: linear-gradient(135deg, #e8edff 0%, #f2f5ff 40%, #f2f5ff 60%, #e8edff 100%);
+
     a {
-      @apply com-flex com-m-0 com-text-lg com-font-medium com-text-Yankees-Blue com-no-underline com-items-center;
+      @apply com-flex com-m-0 com-text-base com-font-semibold com-text-tYankees-Blue com-no-underline com-items-center com-gap-2;
+
       fa-icon {
-        @apply com-h-6 com-w-6 com-flex com-items-center com-justify-center com-mr-1;
+        @apply com-text-lg;
       }
     }
   }
 
-  .user-social-add {
-    button {
-      flex: 1;
-      font-weight: $fw-400;
-      text-transform: capitalize;
+  com-card-body {
+    @apply com-p-4;
+
+    .user-social-add {
+      @apply com-flex com-gap-2 com-mb-4;
+
+      button {
+        @apply com-flex-1 com-font-normal com-capitalize;
+      }
     }
-  }
 
-  .user-social-alert {
-    font-weight: $fw-500;
-    height: 0;
-    margin: 0;
-    opacity: 0;
-    padding: 0;
-    transition: all 0.4s ease-in-out;
-
-    &.active {
-      height: 56px;
-      margin: $space-16 0;
-      opacity: 1;
-      padding: $space-16;
-    }
-  }
-
-  .user-social-cards {
-    @apply com-flex com-gap-4;
-    nb-list-item {
-      border: none;
-      padding: 0;
+    .user-social-alert {
+      @apply com-overflow-hidden com-m-0 com-p-0 com-opacity-0 com-h-0;
+      @apply com-transition-all com-duration-300;
 
       &.active {
-        cursor: move;
+        @apply com-opacity-100 com-p-4 com-my-4;
+        height: 56px;
       }
+    }
 
-      app-user-social-card {
-        width: 100%;
+    .user-social-cards {
+      @apply com-flex com-flex-col com-gap-4;
+
+      nb-list-item {
+        @apply com-border-0 com-p-0;
+
+        &.active {
+          @apply com-cursor-move;
+        }
+
+        app-user-social-card {
+          @apply com-w-full;
+        }
       }
     }
   }
 }
 
 .user-social-popup {
-  min-width: 300px;
-  width: 30vw;
+  @apply com-min-w-[300px] com-w-[30vw];
 
-  .user-social-popup-details {
-    .user-social-popup-heading {
-      margin-top: $space-8;
+  com-card-header {
+    @apply com-flex com-justify-between com-items-center;
+  }
+
+  com-card-body {
+    .user-social-popup-details {
+      .user-social-popup-heading {
+        @apply com-mt-2 com-text-sm com-font-medium com-text-Yankees-Blue;
+      }
+
+      .user-social-popup-favicon {
+        @apply com-max-w-[16px];
+      }
+
+      .user-social-popup-image {
+        @apply com-max-h-[150px] com-max-w-[300px] com-overflow-hidden;
+
+        img {
+          @apply com-w-full;
+        }
+      }
     }
+  }
 
-    .user-social-popup-favicon {
-      max-width: 16px;
-    }
+  com-card-footer {
+    @apply com-flex com-justify-between;
+  }
+}
 
-    .user-social-popup-image {
-      max-height: 150px;
-      max-width: 300px;
-      overflow: hidden;
-
-      img {
-        width: 100%;
+@media all and (max-width: 768px) {
+  .user-social {
+    com-card-body {
+      .user-social-add {
+        @apply com-flex-col;
       }
     }
   }
 }
 
-@media all and (max-width: $tab-width) {
-  .user-social {
-    .user-social-add {
-      flex-direction: column;
-    }
-  }
-}
-
 // Drag and drop animations
-
 .cdk-drag-preview {
-  border-radius: $border-10;
+  @apply com-rounded-lg;
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
-  box-sizing: border-box;
 }
 
 .cdk-drag-placeholder {
-  opacity: 0;
+  @apply com-opacity-0;
 }
 
 .cdk-drag-animating {
@@ -107,13 +110,9 @@ p {
 }
 
 nb-list-item:last-child {
-  border: none;
+  @apply com-border-0;
 }
 
 nb-list.cdk-drop-list-dragging nb-list-item:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-nb-card-body {
-  @apply com-p-6;
 }

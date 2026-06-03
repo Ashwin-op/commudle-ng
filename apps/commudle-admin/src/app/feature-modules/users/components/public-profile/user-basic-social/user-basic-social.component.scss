@@ -1,36 +1,47 @@
-@import './apps/commudle-admin/src/assets/styles/variables';
-
 .user-basic-social-container {
   @apply com-m-0 com-mb-4;
-  nb-card-header {
-    @apply com-bg-gray-50;
+
+  com-card-header {
+    @apply com-px-4 com-py-3 com-rounded-t-lg;
+    background: linear-gradient(135deg, #e8edff 0%, #f2f5ff 40%, #f2f5ff 60%, #e8edff 100%);
+
     a {
-      @apply com-flex com-m-0 com-text-lg com-font-medium com-text-Yankees-Blue com-no-underline com-items-center;
+      @apply com-flex com-m-0 com-text-base com-font-semibold com-text-tYankees-Blue com-no-underline com-items-center com-gap-2;
+
       fa-icon {
-        @apply com-h-6 com-w-6 com-flex com-items-center com-justify-center com-mr-1;
+        @apply com-text-lg;
       }
     }
   }
 
-  nb-card-body {
-    @apply com-p-6;
+  com-card-body {
+    @apply com-p-4;
+
     .about {
-      @apply com-mb-6 com-text-base;
+      @apply com-mb-5;
     }
 
-    span {
-      @apply com-text-Yankees-Blue;
+    .about-text {
+      @apply com-text-sm com-leading-relaxed com-text-gray-700 com-whitespace-pre-line;
+      @apply com-transition-all com-duration-500 com-ease-[cubic-bezier(0.16,1,0.3,1)];
+    }
+
+    .read-more-link {
+      @apply com-inline-block com-text-sm com-font-medium com-text-primary-500 com-cursor-pointer com-no-underline;
+      @apply com-transition-colors com-duration-200 hover:com-text-primary-600;
     }
 
     .user-social {
-      @apply com-flex com-flex-wrap com-gap-5;
+      @apply com-flex com-flex-wrap com-gap-3;
 
       a {
-        @apply com-items-center com-bg-blue-50 com-rounded-full com-flex com-h-8 com-w-8 com-no-underline com-p-6px com-justify-center;
+        @apply com-flex com-items-center com-justify-center com-h-9 com-w-9 com-rounded-full com-no-underline;
+        @apply com-bg-blue-50 com-text-primary-100 com-transition-all com-duration-300 com-ease-out;
+        @apply hover:com-border-primary-100 hover:com-scale-110;
 
         nb-icon,
         fa-icon {
-          @apply com-text-Azure;
+          @apply com-text-base com-text-primary-500;
         }
       }
     }

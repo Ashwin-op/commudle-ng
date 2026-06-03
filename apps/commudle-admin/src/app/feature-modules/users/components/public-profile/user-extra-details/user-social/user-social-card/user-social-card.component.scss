@@ -1,7 +1,5 @@
-@import './apps/commudle-admin/src/assets/styles/variables';
-
 p {
-  margin: 0;
+  @apply com-m-0;
 }
 
 a {
@@ -10,12 +8,14 @@ a {
 
 .user-social-card {
   @apply com-m-0 com-border com-border-solid com-border-Bright-Gray com-rounded-lg;
+  @apply com-transition-all com-duration-300 com-ease-out;
+  @apply hover:com-shadow-md hover:com-border-primary-100;
 
-  nb-card-body {
-    @apply com-flex com-flex-row com-p-4 com-w-full;
+  .card-body {
+    @apply com-flex com-flex-row com-p-3 com-w-full com-items-center;
 
     .user-social-card-image {
-      @apply md:com-w-[196px] md:com-h-[124px] com-h-[142px] com-w-full com-flex com-justify-center com-items-center;
+      @apply md:com-w-[168px] md:com-h-[112px] com-h-[120px] com-w-full com-flex com-justify-center com-items-center com-rounded-md com-overflow-hidden com-flex-shrink-0;
 
       img {
         @apply com-w-full;
@@ -23,61 +23,59 @@ a {
     }
 
     .user-social-card-details {
-      @apply com-flex com-flex-col com-ml-4 com-no-underline com-w-full;
+      @apply com-flex com-flex-col com-ml-3 com-no-underline com-w-full;
+
+      .tags-favicon {
+        @apply com-flex com-justify-between com-items-center;
+      }
 
       .user-social-card-tags {
         @apply com-flex com-flex-wrap com-gap-1;
 
         .user-social-card-tag {
-          @apply com-bg-blue-50 com-rounded-3xl com-text-Azure com-text-xs com-font-medium com-px-3 com-py-1;
+          @apply com-bg-blue-50 com-rounded-full com-text-primary-500 com-text-xs com-px-2 com-py-1;
+          @apply com-transition-colors com-duration-200;
         }
-      }
-
-      .tags-favicon {
-        @apply com-flex com-justify-between com-mb-4;
-      }
-
-      .user-social-card-title {
-        @apply com-text-Yankees-Blue com-text-base com-font-medium com-mb-2;
-      }
-
-      .user-social-card-description {
-        @apply com-text-sm com-font-normal com-text-gray-500;
       }
 
       .user-social-card-favicon {
         @apply com-bg-tWhite com-ml-5 com-rounded-full com-max-w-5 com-max-h-5 com-flex-shrink-0;
       }
-    }
 
-    .content {
-      @apply com-flex com-flex-col;
-    }
+      .content-button {
+        @apply com-flex com-flex-row com-items-start com-justify-between;
+      }
 
-    .content-button {
-      @apply com-flex com-flex-row;
-    }
+      .content {
+        @apply com-flex com-flex-col;
+      }
 
-    .user-social-card-delete {
-      float: right;
-      font-weight: $fw-400;
-      position: relative;
-      text-transform: capitalize;
+      .user-social-card-title {
+        @apply com-text-Yankees-Blue com-text-base com-font-medium com-mb-1;
+      }
+
+      .user-social-card-description {
+        @apply com-text-sm com-font-normal com-text-gray-600 com-mb-2;
+      }
+
+      .user-social-card-delete {
+        @apply com-font-normal com-capitalize com-flex-shrink-0 com-ml-2;
+      }
     }
   }
 }
 
-@media all and (max-width: $tab-width) {
+@media all and (max-width: 768px) {
   .user-social-card {
-    nb-card-body {
-      flex-direction: column;
+    .card-body {
+      @apply com-flex-col;
 
       .user-social-card-image {
-        margin-bottom: $space-16;
+        @apply com-mb-4;
       }
 
       .user-social-card-details {
-        margin-left: 0;
+        @apply com-ml-0;
       }
     }
   }

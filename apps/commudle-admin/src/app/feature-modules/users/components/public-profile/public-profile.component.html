@@ -6,7 +6,12 @@
           (updateProfile)="getUser()"
           [noMenuItems]="(activeMenuItems | numkeys) === 0"
         ></app-user-basic-details>
-        <nb-card *ngIf="(activeMenuItems | numkeys) > 0" class="user-profile-menu">
+        <div #stickySentinel class="sticky-sentinel"></div>
+        <nb-card
+          *ngIf="(activeMenuItems | numkeys) > 0"
+          class="user-profile-menu"
+          [ngClass]="{ 'sticky-active': isMenuSticky }"
+        >
           <nb-card-body class="com-scrollbar-hide">
             <nb-actions>
               <nb-action *ngFor="let item of activeMenuItems | keyvalue : originalOrder" class="com-flex-col">
