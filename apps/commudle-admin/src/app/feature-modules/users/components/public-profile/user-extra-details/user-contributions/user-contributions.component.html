@@ -1,55 +1,57 @@
-<nb-card *ngIf="builds?.length > 0" id="builds">
-  <nb-card-header>
-    <a [routerLink]="'.'" fragment="builds"
-      ><fa-icon [icon]="faLightbulb" class="com-text-Caribbean-Green"></fa-icon>Builds
-      <span *ngIf="builds.length > 4">({{ builds.length }})</span></a
-    >
-  </nb-card-header>
-  <nb-card-body>
+<com-card *ngIf="builds?.length > 0" class="contribution-card" id="builds">
+  <com-card-header>
+    <a [routerLink]="'.'" fragment="builds">
+      <fa-icon [icon]="faLightbulb" class="com-text-Caribbean-Green"></fa-icon>
+      Builds
+      <span *ngIf="builds.length > 4">({{ builds.length }})</span>
+    </a>
+  </com-card-header>
+  <com-card-body>
     <div class="grid">
-      <app-user-build-card *ngFor="let build of builds" [build]="build"></app-user-build-card>
+      <app-user-build-card *ngFor="let build of builds" [build]="build" [showBuildAuthor]="false"></app-user-build-card>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
-<nb-card *ngIf="labs?.length > 0" id="labs">
-  <nb-card-header>
-    <a [routerLink]="'.'" fragment="labs"
-      ><fa-icon [icon]="faBookOpen" class="com-text-Infra-Red"></fa-icon>
+<com-card *ngIf="labs?.length > 0" class="contribution-card" id="labs">
+  <com-card-header>
+    <a [routerLink]="'.'" fragment="labs">
+      <fa-icon [icon]="faBookOpen" class="com-text-primary-500"></fa-icon>
       Labs
-      <span *ngIf="labs.length > 4">({{ labs.length }})</span></a
-    >
-  </nb-card-header>
-  <nb-card-body>
+      <span *ngIf="labs.length > 4">({{ labs.length }})</span>
+    </a>
+  </com-card-header>
+  <com-card-body>
     <div class="grid">
       <app-user-lab-card *ngFor="let lab of labs" [lab]="lab"></app-user-lab-card>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
-<nb-card *ngIf="pastEvents?.length > 0" id="talks-at-events">
-  <nb-card-header>
-    <a [routerLink]="'.'" fragment="talks-at-events"
-      ><fa-icon [icon]="faCalendar" class="com-text-Azure"></fa-icon>Talks at Events
-      <span *ngIf="pastEvents.length > 4">({{ pastEvents.length }})</span></a
-    >
-  </nb-card-header>
-  <nb-card-body>
+<com-card *ngIf="pastEvents?.length > 0" class="contribution-card" id="talks-at-events">
+  <com-card-header>
+    <a [routerLink]="'.'" fragment="talks-at-events">
+      <fa-icon [icon]="faCalendar" class="com-text-primary-500"></fa-icon>
+      Talks at Events
+      <span *ngIf="pastEvents.length > 4">({{ pastEvents.length }})</span>
+    </a>
+  </com-card-header>
+  <com-card-body>
     <div class="grid">
       <app-user-past-event-card *ngFor="let pastEvent of pastEvents" [pastEvent]="pastEvent"></app-user-past-event-card>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
-<nb-card *ngIf="attendedEvents?.length > 0" id="attended-events">
-  <nb-card-header>
-    <a [routerLink]="'.'" fragment="attended-events"
-      ><fa-icon [icon]="faIdBadge" class="com-text-green-600"></fa-icon>
+<com-card *ngIf="attendedEvents?.length > 0" class="contribution-card" id="attended-events">
+  <com-card-header>
+    <a [routerLink]="'.'" fragment="attended-events">
+      <fa-icon [icon]="faIdBadge" class="com-text-primary-500"></fa-icon>
       Attended Events
-      <span *ngIf="attendedEventsTotal > 0">({{ attendedEventsTotal }})</span></a
-    >
-  </nb-card-header>
-  <nb-card-body>
+      <span *ngIf="attendedEventsTotal > 0">({{ attendedEventsTotal }})</span>
+    </a>
+  </com-card-header>
+  <com-card-body>
     <div class="grid">
       <commudle-event-mini-card
         *ngFor="let attendedEvent of attendedEvents"
@@ -57,43 +59,43 @@
         [cardType]="'attendedEventCard'"
       ></commudle-event-mini-card>
     </div>
-  </nb-card-body>
-  <nb-card-footer
+  </com-card-body>
+  <com-card-footer
     (click)="loadMoreAttendedEvents()"
-    class="com-cursor-pointer"
+    class="view-more-footer"
     *ngIf="attendedEventsTotal > attendedEvents.length"
   >
     <div>
       View More ({{ attendedEventsTotal - attendedEvents.length }})
       <nb-icon icon="arrow-ios-downward-outline"></nb-icon>
     </div>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>
 
-<nb-card *ngIf="communities?.length > 0" id="communities">
-  <nb-card-header>
-    <a [routerLink]="'.'" fragment="communities"
-      ><fa-icon [icon]="faUsers" class="com-text-Chrome-Yellow"></fa-icon>
+<com-card *ngIf="communities?.length > 0" class="contribution-card" id="communities">
+  <com-card-header>
+    <a [routerLink]="'.'" fragment="communities">
+      <fa-icon [icon]="faUsers" class="com-text-primary-500"></fa-icon>
       Communities
-      <span>({{ communitiesTotal }})</span></a
-    >
-  </nb-card-header>
-  <nb-card-body>
+      <span>({{ communitiesTotal }})</span>
+    </a>
+  </com-card-header>
+  <com-card-body>
     <div class="grid">
       <app-user-community-card
         *ngFor="let community of communities | sortBy : ['user_role.id'] : ['desc']"
         [community]="community"
       ></app-user-community-card>
     </div>
-  </nb-card-body>
-  <nb-card-footer
+  </com-card-body>
+  <com-card-footer
     (click)="viewMoreCommunities()"
-    class="com-cursor-pointer"
+    class="view-more-footer"
     *ngIf="communitiesTotal !== communities.length"
   >
     <div>
       {{ footerCommunitiesCardText }}
       <nb-icon icon="arrow-ios-downward-outline"></nb-icon>
     </div>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

@@ -1,26 +1,30 @@
 p {
-  margin: 0;
+  @apply com-m-0;
 }
 
-nb-card {
+.contribution-card {
   @apply com-relative com-m-0 com-mb-4;
 
-  nb-card-header {
-    @apply com-bg-gray-50;
+  com-card-header {
+    @apply com-px-4 com-py-3 com-border-0;
+    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 50%, #dbeafe 100%);
+    border-bottom: 1px solid #bfdbfe;
+
     a {
-      @apply com-flex com-m-0 com-text-lg com-font-medium com-text-Yankees-Blue com-no-underline  com-items-center;
+      @apply com-flex com-m-0 com-text-base com-font-semibold com-text-tYankees-Blue com-no-underline com-items-center com-gap-2;
+
       fa-icon {
-        @apply com-h-6 com-w-6 com-flex com-items-center com-justify-center com-mr-1;
+        @apply com-text-lg;
       }
 
       span {
-        @apply com-ml-1;
+        @apply com-text-sm com-font-normal com-text-tgray-500;
       }
     }
   }
 
-  nb-card-body {
-    @apply com-p-6;
+  com-card-body {
+    @apply com-p-4;
   }
 
   .grid {
@@ -34,8 +38,4 @@ nb-card {
 
 .view-less {
   @apply com-max-h-max;
-}
-
-nb-card-footer {
-  @apply com-text-Yankees-Blue;
 }

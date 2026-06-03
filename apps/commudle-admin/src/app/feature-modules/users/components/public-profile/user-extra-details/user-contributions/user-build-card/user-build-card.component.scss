@@ -9,8 +9,10 @@ a {
 
 .user-build {
   @apply com-m-0 com-h-full com-overflow-hidden com-cursor-pointer;
+  @apply com-transition-all com-duration-300 com-ease-out;
+  @apply hover:com-shadow-md;
 
-  nb-card-body {
+  com-card-body {
     @apply com-p-0 com-flex com-flex-col;
 
     .build-card-image {
@@ -22,7 +24,7 @@ a {
     }
 
     .user-build-name {
-      @apply md:com-text-sm com-text-base md:com-font-semibold com-font-medium com-text-Yankees-Blue com-line-clamp-1 com-mb-1;
+      @apply com-text-sm com-font-semibold com-text-Yankees-Blue com-line-clamp-1 com-mb-1;
     }
 
     .time {
@@ -30,7 +32,7 @@ a {
     }
 
     .content {
-      @apply com-flex com-flex-row com-justify-between com-p-4 md:com-p-3;
+      @apply com-flex com-flex-row com-justify-between com-p-3;
     }
 
     .votes {
@@ -38,85 +40,3 @@ a {
     }
   }
 }
-
-//.user-build-card {
-//  border: 1px solid $platinum;
-//  border-radius: $border-5;
-//  padding: $space-24 $space-16;
-//
-//  .user-build-card-prefix {
-//    .user-build-card-tags {
-//      gap: $space-4;
-//
-//      .user-build-card-tag {
-//        background-color: $lavender;
-//        border-radius: $border-20;
-//        color: $neon-blue;
-//        font-size: $fs-h6;
-//        padding: 0 $space-8;
-//      }
-//    }
-//  }
-//
-//  .user-build-card-content {
-//    margin: $space-8 0;
-//
-//    .user-build-card-name {
-//      color: $gunmetal;
-//      font-size: $fs-h5;
-//      font-weight: $fw-600;
-//      line-height: 16px;
-//    }
-//
-//    .user-build-card-description {
-//      color: rgba($spanish-gray, 0.7);
-//      font-size: $fs-h7;
-//      font-style: italic;
-//      line-height: 12px;
-//      margin-top: $space-4;
-//    }
-//  }
-//
-//  .user-build-card-suffix {
-//    .user-build-card-interactions {
-//      color: $gunmetal;
-//      font-size: $fs-h6;
-//
-//      nb-icon {
-//        color: $silver-sand;
-//        font-size: $fs-h4;
-//      }
-//    }
-//
-//    .user-build-card-author {
-//      height: 16px;
-//
-//      .user-build-card-author-name {
-//        color: $gunmetal;
-//        display: none;
-//        font-size: $fs-h7;
-//        line-height: 12px;
-//        padding-right: $space-4;
-//      }
-//
-//      img {
-//        border-radius: 50%;
-//        height: 100%;
-//      }
-//    }
-//  }
-//
-//  &:hover {
-//    .user-build-card-suffix {
-//      .user-build-card-author {
-//        background-color: $lavender;
-//        border-radius: $border-8;
-//        padding-left: $space-8;
-//
-//        .user-build-card-author-name {
-//          display: block;
-//        }
-//      }
-//    }
-//  }
-//}

@@ -12,6 +12,7 @@ import * as moment from 'moment';
 })
 export class UserBuildCardComponent implements OnChanges {
   @Input() build: ICommunityBuild;
+  @Input() showBuildAuthor = true;
   moment = moment;
   staticAssets = staticAssets;
 

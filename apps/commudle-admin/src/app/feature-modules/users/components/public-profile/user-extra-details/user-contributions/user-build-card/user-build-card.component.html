@@ -1,5 +1,5 @@
-<nb-card class="user-build">
-  <nb-card-body>
+<com-card class="user-build">
+  <com-card-body>
     <a [routerLink]="['/builds', build.slug]">
       <div class="build-card-image">
         <commudle-banner-image
@@ -22,7 +22,7 @@
         <div class="details">
           <h4 class="user-build-name">{{ build.name }}</h4>
           <p class="time">{{ moment(build.created_at).format('MMM Do, YYYY') }}</p>
-          <app-user-profile-card-small [user]="build.user"></app-user-profile-card-small>
+          <app-user-profile-card-small *ngIf="showBuildAuthor" [user]="build.user"></app-user-profile-card-small>
         </div>
       </a>
       <div class="votes">
@@ -35,5 +35,5 @@
         ></app-votes-display>
       </div>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
