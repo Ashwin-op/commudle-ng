@@ -1,14 +1,15 @@
-<nb-card
+<com-card
   *ngIf="userWorkHistories.length > 0 || currentUser?.id === user.id"
   class="user-work-history"
   id="work-history"
 >
-  <nb-card-header>
-    <a [routerLink]="'.'" fragment="work-history"
-      ><fa-icon [icon]="faBuilding" class="com-text-[#00D68F]"></fa-icon> Work History</a
-    >
-  </nb-card-header>
-  <nb-card-body>
+  <com-card-header>
+    <a [routerLink]="'.'" fragment="work-history">
+      <fa-icon [icon]="faBuilding" class="com-text-primary-500"></fa-icon>
+      Work History
+    </a>
+  </com-card-header>
+  <com-card-body>
     <button
       *ngIf="currentUser?.id === user?.id"
       (click)="onOpenDialog(userWorkHistoryDialog)"
@@ -28,18 +29,20 @@
         [user]="user"
       ></app-user-work-history-card>
     </ng-container>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
 <ng-template #userWorkHistoryDialog let-data>
-  <nb-card class="!com-m-0 com-max-h-[100dvh]" style="width: clamp(20rem, 36rem, 100vw)">
-    <nb-card-header class="com-flex com-justify-between com-items-center com-text-Yankees-Blue">
-      {{ isEditing ? 'Edit Work History' : 'Add Work History' }}
+  <com-card class="dialog-card">
+    <com-card-header class="com-flex com-justify-between com-items-center">
+      <span class="com-text-base com-font-semibold com-text-Yankees-Blue">
+        {{ isEditing ? 'Edit Work History' : 'Add Work History' }}
+      </span>
       <button (click)="onCloseDialog()" ghost nbButton shape="round" size="small">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <form [formGroup]="userWorkHistoryForm" class="com-flex com-flex-col com-space-y-3">
         <label class="title">
           Job Title*
@@ -67,8 +70,8 @@
           <textarea formControlName="description" fullWidth nbInput rows="5" type="text"></textarea>
         </label>
       </form>
-    </nb-card-body>
-    <nb-card-footer class="com-flex com-justify-between">
+    </com-card-body>
+    <com-card-footer class="com-flex com-justify-between">
       <button (click)="onCloseDialog()" ghost nbButton size="small" status="danger">Cancel</button>
       <button
         (click)="isEditing ? updateWorkHistory(data.id) : createWorkHistory()"
@@ -78,6 +81,6 @@
       >
         {{ isEditing ? 'Update' : 'Create' }}
       </button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
