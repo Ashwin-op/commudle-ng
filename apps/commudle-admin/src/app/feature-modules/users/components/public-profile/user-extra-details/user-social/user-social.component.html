@@ -1,6 +1,9 @@
 <com-card *ngIf="socialResources?.length > 0 || currentUser?.id === user.id" class="user-social" id="content">
   <com-card-header>
-    <a [routerLink]="'.'" fragment="content"><fa-icon [icon]="faFileText" class="com-text-Azure"></fa-icon> Content</a>
+    <a [routerLink]="'.'" fragment="content">
+      <fa-icon [icon]="faFileText" class="com-text-Azure"></fa-icon>
+      Content
+    </a>
   </com-card-header>
   <com-card-body>
     <ng-container *ngIf="currentUser?.id === user.id">

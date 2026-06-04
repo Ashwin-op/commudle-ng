@@ -3,7 +3,6 @@
     <a [routerLink]="'.'" fragment="builds">
       <fa-icon [icon]="faLightbulb" class="com-text-Caribbean-Green"></fa-icon>
       Builds
-      <span *ngIf="builds.length > 4">({{ builds.length }})</span>
     </a>
   </com-card-header>
   <com-card-body>
@@ -18,7 +17,6 @@
     <a [routerLink]="'.'" fragment="labs">
       <fa-icon [icon]="faBookOpen" class="com-text-Infra-Red"></fa-icon>
       Labs
-      <span *ngIf="labs.length > 4">({{ labs.length }})</span>
     </a>
   </com-card-header>
   <com-card-body>
@@ -33,7 +31,6 @@
     <a [routerLink]="'.'" fragment="talks-at-events">
       <fa-icon [icon]="faCalendar" class="com-text-Azure"></fa-icon>
       Talks at Events
-      <span *ngIf="pastEvents.length > 4">({{ pastEvents.length }})</span>
     </a>
   </com-card-header>
   <com-card-body>
@@ -48,7 +45,6 @@
     <a [routerLink]="'.'" fragment="attended-events">
       <fa-icon [icon]="faIdBadge" class="com-text-Caribbean-Green"></fa-icon>
       Attended Events
-      <span *ngIf="attendedEventsTotal > 0">({{ attendedEventsTotal }})</span>
     </a>
   </com-card-header>
   <com-card-body>
@@ -77,7 +73,6 @@
     <a [routerLink]="'.'" fragment="communities">
       <fa-icon [icon]="faUsers" class="com-text-Chrome-Yellow"></fa-icon>
       Communities
-      <span>({{ communitiesTotal }})</span>
     </a>
   </com-card-header>
   <com-card-body>

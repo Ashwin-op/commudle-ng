@@ -1,25 +1,45 @@
-.tittle {
-  @apply com-flex com-items-center;
-  p,
-  nb-icon {
-    @apply com-m-0 com-mr-1;
-  }
-}
-
 .user-job {
   @apply com-m-0 com-mb-4;
-  nb-card-header {
-    @apply com-bg-gray-50 com-flex com-items-center;
+
+  com-card-header {
+    @apply com-px-4 com-py-3 com-border-0 com-flex com-flex-row com-items-center com-gap-2;
+    justify-content: flex-start;
+    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 50%, #dbeafe 100%);
+    border-bottom: 1px solid #bfdbfe;
+
     a {
-      @apply com-flex com-m-0 com-text-lg com-font-medium com-text-Yankees-Blue com-no-underline com-items-center;
+      @apply com-flex com-m-0 com-text-base com-font-semibold com-text-Yankees-Blue com-no-underline com-items-center com-gap-2;
+
       fa-icon {
-        @apply com-h-6 com-w-6 com-flex com-items-center com-justify-center com-mr-1;
+        @apply com-text-lg;
       }
     }
   }
 
-  nb-card-body {
-    @apply com-space-y-2 com-text-Yankees-Blue;
+  com-card-body {
+    @apply com-p-4 com-space-y-2 com-text-Yankees-Blue;
+  }
+}
+
+.dialog-card {
+  @apply com-m-0 com-max-h-[100vh];
+
+  com-card-header {
+    @apply com-px-4 com-py-3 com-flex com-items-center;
+    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 50%, #dbeafe 100%);
+    border-bottom: 1px solid #bfdbfe;
+  }
+
+  .dialog-title {
+    @apply com-flex com-items-center com-gap-2 com-text-base com-font-semibold com-text-Yankees-Blue;
+
+    nb-icon {
+      @apply com-text-primary-500;
+    }
+  }
+
+  com-card-body {
+    @apply com-p-4;
   }
 }
 
