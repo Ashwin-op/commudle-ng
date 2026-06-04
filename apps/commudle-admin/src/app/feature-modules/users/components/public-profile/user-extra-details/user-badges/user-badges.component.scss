@@ -1,15 +1,32 @@
 .user-badges {
-  @apply com-mx-0;
-  nb-card-header {
-    @apply com-bg-gray-50;
+  @apply com-m-0 com-mb-4;
+
+  com-card-header {
+    @apply com-px-4 com-py-3 com-border-0;
+    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 50%, #dbeafe 100%);
+    border-bottom: 1px solid #bfdbfe;
+
     a {
-      @apply com-flex com-m-0 com-text-lg com-font-medium com-text-Yankees-Blue com-no-underline com-items-center;
+      @apply com-flex com-m-0 com-text-base com-font-semibold com-text-tYankees-Blue com-no-underline com-items-center com-gap-2;
+
       fa-icon {
-        @apply com-h-6 com-w-6 com-flex com-items-center com-justify-center com-mr-1;
+        @apply com-text-lg;
       }
     }
   }
-  img {
-    @apply com-max-h-[148px] com-max-w-[100px] com-h-full com-w-full;
+
+  com-card-body {
+    @apply com-p-4 com-flex com-flex-wrap com-gap-4;
+
+    img {
+      @apply com-max-h-[148px] com-max-w-[100px] com-h-full com-w-full;
+      @apply com-transition-all com-duration-300 com-ease-out com-rounded-lg;
+      @apply hover:com-scale-110 hover:com-drop-shadow-lg;
+      filter: brightness(1);
+
+      &:hover {
+        filter: brightness(1.08);
+      }
+    }
   }
 }

@@ -1,9 +1,9 @@
-<nb-card
+<com-card
   [routerLink]="['/communities', community.community.slug]"
   class="user-communities-card"
   [ngClass]="{ organizer: community.user_role.name === 'organizer' }"
 >
-  <nb-card-body>
+  <com-card-body>
     <img
       [alt]="community.community.name"
       [src]="community.community.logo_image_path?.i64"
@@ -24,5 +24,5 @@
         [nbTooltip]="'Community Leader'"
       />
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

@@ -1,15 +1,18 @@
 p,
 h4 {
-  margin: 0;
+  @apply com-m-0;
 }
 
 .user-past-event-card {
-  @apply com-h-full com-m-0 com-overflow-hidden com-cursor-pointer;
+  @apply com-h-full com-m-0 com-overflow-hidden com-cursor-pointer com-border com-border-solid com-border-Bright-Gray com-rounded-lg;
+  @apply com-transition-all com-duration-300 com-ease-out;
+  @apply hover:com-shadow-md;
 
   a {
     @apply com-no-underline;
-    nb-card-body {
-      @apply com-p-0 com-flex com-overflow-hidden;
+
+    com-card-body {
+      @apply com-p-0 com-flex com-flex-row com-overflow-hidden;
 
       .event {
         @apply com-flex com-w-[54px] com-h-full com-m-0 com-flex-col com-items-center com-border-0 com-border-r com-border-solid com-border-Bright-Gray com-bg-white com-rounded-none com-flex-shrink-0;
@@ -32,10 +35,10 @@ h4 {
       }
 
       .content {
-        @apply com-px-3 com-py-10px;
+        @apply com-p-3;
 
         .title {
-          @apply com-text-sm com-font-medium com-mb-14px com-line-clamp-1 com-text-Yankees-Blue;
+          @apply com-text-sm com-font-medium com-mb-2 com-line-clamp-1 com-text-Yankees-Blue;
         }
       }
     }

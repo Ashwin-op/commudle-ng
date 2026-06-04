@@ -4,13 +4,15 @@ h4 {
 }
 
 .user-communities-card {
-  @apply com-m-0 com-cursor-pointer;
+  @apply com-m-0 com-cursor-pointer com-border com-border-solid com-border-Bright-Gray com-rounded-lg;
+  @apply com-transition-all com-duration-300 com-ease-out;
+  @apply hover:com-shadow-md;
 
-  nb-card-body {
-    @apply com-p-3 com-flex com-items-center com-gap-3;
+  com-card-body {
+    @apply com-p-3 com-flex com-flex-row com-items-center com-gap-3;
 
     .user-communities-logo {
-      @apply com-h-12 com-w-12 com-rounded-full com-object-contain com-object-center com-bg-tWhite;
+      @apply com-h-12 com-w-12 com-rounded-full com-object-contain com-object-center com-bg-tWhite com-flex-shrink-0;
     }
 
     .user-communities-name {
@@ -18,7 +20,7 @@ h4 {
     }
 
     .user-communities-members {
-      @apply com-mt-1 com-text-xs com-font-normal com-text-blue-500;
+      @apply com-mt-1 com-text-xs com-font-normal com-text-gray-500;
     }
   }
 }

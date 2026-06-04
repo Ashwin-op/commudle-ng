@@ -16,7 +16,7 @@
 <com-card *ngIf="labs?.length > 0" class="contribution-card" id="labs">
   <com-card-header>
     <a [routerLink]="'.'" fragment="labs">
-      <fa-icon [icon]="faBookOpen" class="com-text-primary-500"></fa-icon>
+      <fa-icon [icon]="faBookOpen" class="com-text-Infra-Red"></fa-icon>
       Labs
       <span *ngIf="labs.length > 4">({{ labs.length }})</span>
     </a>
@@ -31,7 +31,7 @@
 <com-card *ngIf="pastEvents?.length > 0" class="contribution-card" id="talks-at-events">
   <com-card-header>
     <a [routerLink]="'.'" fragment="talks-at-events">
-      <fa-icon [icon]="faCalendar" class="com-text-primary-500"></fa-icon>
+      <fa-icon [icon]="faCalendar" class="com-text-Azure"></fa-icon>
       Talks at Events
       <span *ngIf="pastEvents.length > 4">({{ pastEvents.length }})</span>
     </a>
@@ -46,7 +46,7 @@
 <com-card *ngIf="attendedEvents?.length > 0" class="contribution-card" id="attended-events">
   <com-card-header>
     <a [routerLink]="'.'" fragment="attended-events">
-      <fa-icon [icon]="faIdBadge" class="com-text-primary-500"></fa-icon>
+      <fa-icon [icon]="faIdBadge" class="com-text-Caribbean-Green"></fa-icon>
       Attended Events
       <span *ngIf="attendedEventsTotal > 0">({{ attendedEventsTotal }})</span>
     </a>
@@ -75,7 +75,7 @@
 <com-card *ngIf="communities?.length > 0" class="contribution-card" id="communities">
   <com-card-header>
     <a [routerLink]="'.'" fragment="communities">
-      <fa-icon [icon]="faUsers" class="com-text-primary-500"></fa-icon>
+      <fa-icon [icon]="faUsers" class="com-text-Chrome-Yellow"></fa-icon>
       Communities
       <span>({{ communitiesTotal }})</span>
     </a>

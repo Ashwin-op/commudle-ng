@@ -1,4 +1,4 @@
-<nb-card class="user-past-event-card">
+<com-card class="user-past-event-card">
   <a
     [routerLink]="
       pastEvent.speaker_resource
@@ -6,7 +6,7 @@
         : ['/communities', pastEvent.kommunity_id, 'events', pastEvent.slug]
     "
   >
-    <nb-card-body>
+    <com-card-body>
       <div class="event">
         <span class="event-month">{{ pastEvent.start_time | date : 'MMM' }}</span>
         <div class="date-day">
@@ -20,6 +20,6 @@
           <app-community-badge [community]="community" [size]="'small'"></app-community-badge>
         </div>
       </div>
-    </nb-card-body>
+    </com-card-body>
   </a>
-</nb-card>
+</com-card>

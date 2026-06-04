@@ -1,10 +1,11 @@
-<nb-card *ngIf="badges.length > 0" class="user-badges" id="badges">
-  <nb-card-header>
-    <a [routerLink]="'.'" fragment="badges"
-      ><fa-icon [icon]="faAward" class="com-text-Chrome-Yellow"></fa-icon>Badges</a
-    >
-  </nb-card-header>
-  <nb-card-body class="com-space-x-4">
+<com-card *ngIf="badges.length > 0" class="user-badges" id="badges">
+  <com-card-header>
+    <a [routerLink]="'.'" fragment="badges">
+      <fa-icon [icon]="faAward" class="com-text-Chrome-Yellow"></fa-icon>
+      Badges
+    </a>
+  </com-card-header>
+  <com-card-body>
     <img
       *ngFor="let badge of badges"
       [alt]="badge.name"
@@ -12,5 +13,5 @@
       [src]="badge.image?.url"
       [title]="badge.name"
     />
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

@@ -9,7 +9,7 @@ a {
 .user-social-card {
   @apply com-m-0 com-border com-border-solid com-border-Bright-Gray com-rounded-lg;
   @apply com-transition-all com-duration-300 com-ease-out;
-  @apply hover:com-shadow-md hover:com-border-primary-100;
+  @apply hover:com-shadow-md;
 
   .card-body {
     @apply com-flex com-flex-row com-p-3 com-w-full com-items-center;

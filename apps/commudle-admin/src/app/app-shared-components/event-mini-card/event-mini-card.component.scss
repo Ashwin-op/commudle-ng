@@ -3,7 +3,9 @@ h4 {
   margin: 0;
 }
 .user-attended-event-card {
-  @apply com-h-full com-m-0 com-overflow-hidden com-cursor-pointer;
+  @apply com-h-full com-m-0 com-overflow-hidden com-cursor-pointer com-border com-border-solid com-border-Bright-Gray com-rounded-lg;
+  @apply com-transition-all com-duration-300 com-ease-out;
+  @apply hover:com-shadow-md;
 
   com-card-body {
     @apply com-p-0;
@@ -27,7 +29,7 @@ h4 {
         }
 
         .event-month {
-          @apply com-flex com-items-center com-h-7 com-w-full com-rounded-t-lg com-justify-center com-text-xs com-font-medium com-m-0 com-mb-1 com-text-gray-400;
+          @apply com-flex com-text-xs com-font-medium com-m-0 com-text-gray-400;
         }
 
         .event-month {
@@ -39,7 +41,7 @@ h4 {
         }
 
         .event-day {
-          @apply com-flex com-text-xs com-font-bold com-m-0 com-text-gray-400;
+          @apply com-flex com-text-xs com-font-medium com-m-0 com-text-gray-400;
         }
 
         .date-month {
@@ -48,10 +50,10 @@ h4 {
       }
 
       .content {
-        @apply com-m-0 com-py-10px com-px-3 com-overflow-x-hidden;
+        @apply com-m-0 com-p-3 com-overflow-x-hidden;
 
         .title {
-          @apply com-text-sm com-font-medium com-mb-14px com-line-clamp-1 com-text-Yankees-Blue;
+          @apply com-text-sm com-font-medium com-mb-2 com-line-clamp-1 com-text-Yankees-Blue;
         }
       }
     }
