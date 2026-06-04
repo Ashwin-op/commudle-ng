@@ -2,9 +2,8 @@
   @apply com-m-0 com-mb-4;
 
   com-card-header {
-    @apply com-px-4 com-py-3 com-border-0;
-    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 50%, #dbeafe 100%);
-    border-bottom: 1px solid #bfdbfe;
+    @apply com-px-4 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
 
     a {
       @apply com-flex com-m-0 com-text-base com-font-semibold com-text-tYankees-Blue com-no-underline com-items-center com-gap-2;

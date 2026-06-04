@@ -23,9 +23,8 @@ p {
     @apply com-flex com-flex-col com-items-center com-flex-shrink-0;
 
     .icon-circle {
-      @apply com-flex com-items-center com-justify-center com-h-8 com-w-8 com-rounded-full com-flex-shrink-0;
-      background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
-      border: 1px solid #bfdbfe;
+      @apply com-flex com-items-center com-justify-center com-h-8 com-w-8 com-rounded-full com-flex-shrink-0 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+      background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 100%);
 
       nb-icon {
         @apply com-text-primary-500 com-text-lg;
@@ -76,9 +75,8 @@ p {
 
 .delete-dialog {
   com-card-header {
-    @apply com-px-4 com-py-3;
-    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 50%, #dbeafe 100%);
-    border-bottom: 1px solid #bfdbfe;
+    @apply com-px-4 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
   }
 
   com-card-body {
@@ -87,6 +85,5 @@ p {
 
   com-card-footer {
     @apply com-px-4 com-py-3;
-    border-top: 1px solid #bfdbfe;
   }
 }
