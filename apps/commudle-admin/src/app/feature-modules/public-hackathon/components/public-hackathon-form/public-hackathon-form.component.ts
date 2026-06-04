@@ -1,5 +1,6 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   ICommunity,
@@ -75,6 +76,7 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
   hasOwnTeam = false;
   pendingInviteTeamNames: string[] = [];
 
+  private isBrowser: boolean;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -90,7 +92,10 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
     private userProfileManagerService: UserProfileManagerService,
     private router: Router,
     private seoService: SeoService,
-  ) {}
+    @Inject(PLATFORM_ID) private platformId: object,
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   ngOnInit() {
     this.subscriptions.push(
@@ -140,6 +145,7 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
   }
 
   showFormClosedDialog() {
+    if (!this.isBrowser) return;
     this.dialogRef = this.dialogService.open(this.formClosedDialog, {
       closeOnBackdropClick: false,
       closeOnEsc: false,
