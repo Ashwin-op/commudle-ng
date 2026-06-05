@@ -32,6 +32,7 @@ import { JobsRoutingModule } from './jobs-routing.module';
 import { EmployeesListComponent } from './components/employees-list/employees-list.component';
 import { EmployersListComponent } from './components/employers-list/employers-list.component';
 import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives.module';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives
     NbTagModule,
     NbAccordionModule,
     NbActionsModule,
+    CommudleCardModule,
   ],
   exports: [JobListCardComponent],
 })

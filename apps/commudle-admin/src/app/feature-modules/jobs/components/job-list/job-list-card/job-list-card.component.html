@@ -1,187 +1,125 @@
-<nb-card [ngClass]="{ statusClosed: job.status === jobStatus.CLOSED }">
-  <nb-card-body class="nb-body">
-    <a [routerLink]="['/jobs', job.id]" class="com-no-underline md:com-w-4/5">
-      <div class="job-details position">
-        <p>{{ job.position }}</p>
-      </div>
+<com-card class="job-card" [ngClass]="{ 'status-closed': job.status === jobStatus.CLOSED }">
+  <com-card-body>
+    <div class="job-top">
+      <div class="job-logo">{{ job.company?.charAt(0) | uppercase }}</div>
+      <a [routerLink]="['/jobs', job.id]" class="job-headings">
+        <p class="job-title">{{ job.position }}</p>
+        <p class="job-org">{{ job.company }}</p>
+      </a>
+      <span class="status-badge" [ngClass]="job.status === jobStatus.OPEN ? 'open' : 'closed'">
+        <span class="status-dot"></span>
+        {{ job.status === jobStatus.OPEN ? 'OPEN' : 'CLOSED' }}
+      </span>
+    </div>
 
-      <div class="job-details salary" *ngIf="job.max_salary !== 0">
-        <div>
-          <span class="icons com-bg-rose-50 com-text-rose-700">
-            <fa-icon [icon]="faMoneyBills"></fa-icon>
+    <div class="job-meta">
+      <span class="meta-chip">
+        <fa-icon [icon]="faLocationDot"></fa-icon>
+        {{ job.location_type | titlecase }}
+        <strong *ngIf="job.location">({{ job.location }})</strong>
+      </span>
+      <span class="meta-chip">
+        <fa-icon [icon]="faIdCard"></fa-icon>
+        {{ job.category | titlecase }}
+      </span>
+      <span class="meta-chip">
+        <fa-icon [icon]="faClock"></fa-icon>
+        <ng-container *ngIf="job.experience === 0">Fresher</ng-container>
+        <ng-container *ngIf="job.experience > 0">{{ job.experience }}–{{ job.experience + 2 }} yrs</ng-container>
+      </span>
+      <span class="meta-chip">
+        <fa-icon [icon]="faSuitcase"></fa-icon>
+        {{ job.job_type | enumFormat }}
+      </span>
+    </div>
+
+    <div class="job-footer" *ngIf="showAdminButtons">
+      <div class="footer-actions">
+        <button *ngIf="user?.id === currentUser?.id" (click)="updateJob.emit()" class="action-btn">
+          <fa-icon [icon]="faPencil"></fa-icon>
+          <span *appBreakpoints="'>md'">Edit</span>
+        </button>
+        <button (click)="copyTextToClipboard(job.id)" class="action-btn">
+          <fa-icon [icon]="faShareAlt"></fa-icon>
+          <span *appBreakpoints="'>md'">Share</span>
+        </button>
+        <a *ngIf="user?.id === currentUser?.id" [routerLink]="['/jobs', job.id, 'applications']" class="action-btn">
+          <fa-icon [icon]="faUsers"></fa-icon>
+          <span *appBreakpoints="'>md'">
+            Applications
+            <strong *ngIf="job.job_applications_count" class="applications-count">{{
+              job.job_applications_count
+            }}</strong>
           </span>
-        </div>
-
-        <p class="job-label">
-          {{ job.salary_currency | uppercase }} {{ job.min_salary }} - {{ job.max_salary }} ({{
-            job.salary_type | titlecase
-          }})
-        </p>
+        </a>
       </div>
-
-      <div class="job-details company_name !com-items-baseline">
-        <div>
-          <span class="icons com-bg-blue-100 com-text-blue-700">
-            <fa-icon [icon]="faBuilding"></fa-icon>
-          </span>
-        </div>
-        <p class="com-text-justify">
-          {{ job.company }}
-        </p>
-      </div>
-
-      <div class="job-details location_type">
-        <div>
-          <span class="icons com-bg-yellow-50 com-text-yellow-700">
-            <fa-icon [icon]="faLocationDot"></fa-icon>
-          </span>
-        </div>
-        <div class="com-flex">
-          <p>{{ job.location_type | titlecase }}</p>
-          <p *ngIf="job.location">({{ job.location }})</p>
-        </div>
-      </div>
-
-      <div class="job-details category">
-        <div>
-          <span class="icons com-bg-teal-50 com-text-teal-700">
-            <fa-icon [icon]="faIdCard"></fa-icon>
-          </span>
-        </div>
-        <p>{{ job.category | titlecase }}</p>
-      </div>
-
-      <div class="job-details experience">
-        <div>
-          <span class="icons com-bg-purple-50 com-text-purple-700">
-            <fa-icon [icon]="faClock"></fa-icon>
-          </span>
-        </div>
-        <p class="job-label" *ngIf="job.experience === 0">Fresher</p>
-        <p class="job-label" *ngIf="job.experience > 0">
-          Min. {{ job.experience }} year{{ job.experience > 1 ? 's' : '' }} experience
-        </p>
-      </div>
-
-      <div class="md:com-flex com-items-center md:com-justify-between">
-        <div class="job-details job-type">
-          <div>
-            <span class="icons com-bg-sky-50 com-text-sky-700">
-              <fa-icon [icon]="faSuitcase"></fa-icon>
-            </span>
-          </div>
-          <p class="job-label">{{ job.job_type | enumFormat }}</p>
-        </div>
-      </div>
-    </a>
-
-    <div class="com-flex com-justify-between com-flex-col com-relative md:com-w-1/5">
-      <div>
-        <div class="com-min-h-[40px]">
-          <button
-            *ngIf="job.status === jobStatus.OPEN && applyButton"
-            class="com-w-auto apply-button"
-            nbButton
-            shape="semi-round"
-            status="primary"
-            [routerLink]="[job.id]"
-          >
-            View Details & Apply
-          </button>
-          <div class="com-flex md:com-justify-end com-items-center">
-            <p *ngIf="job.status === jobStatus.CLOSED" class="com-text-Yankees-Blue">Closed</p>
-          </div>
-        </div>
-        <div class="com-flex md:com-justify-end com-my-3 md:com-m-0">
-          <p *ngIf="applicationsCount" class="com-text-gray-500">{{ job.job_applications_count }} Applications</p>
-        </div>
-      </div>
-      <div class="com-w-44">
-        <app-user-profile-card-medium *ngIf="userProfile" [user]="job.user"></app-user-profile-card-medium>
+      <div class="footer-right">
+        <a [routerLink]="['/jobs', job.id]" class="action-btn primary">
+          <fa-icon [icon]="faInfoCircle"></fa-icon>
+          <span *appBreakpoints="'>md'">Details</span>
+        </a>
+        <button *ngIf="user?.id === currentUser?.id" (click)="updateJobStatus()" class="action-btn">
+          <fa-icon [icon]="job.status === jobStatus.OPEN ? faEyeSlash : faEye"></fa-icon>
+          <span *appBreakpoints="'>md'">{{ job.status === jobStatus.OPEN ? 'Close Job' : 'Open Job' }}</span>
+        </button>
+        <div class="action-divider"></div>
+        <button *ngIf="user?.id === currentUser?.id" (click)="onDialogOpen(deleteJobDialog)" class="action-btn danger">
+          <fa-icon [icon]="faTrash"></fa-icon>
+        </button>
       </div>
     </div>
-  </nb-card-body>
-  <nb-card-footer *ngIf="showAdminButtons">
-    <nb-actions>
-      <nb-action *ngIf="user?.id === currentUser?.id">
-        <button (click)="updateJob.emit()" ghost nbButton size="small" status="warning">
-          <fa-icon [icon]="faPencil" class="com-px-1 md:com-px-2"></fa-icon>
-          <ng-container *appBreakpoints="'>md'">Edit</ng-container>
-        </button>
-      </nb-action>
-      <nb-action>
-        <button (click)="copyTextToClipboard(job.id)" ghost nbButton size="small" status="primary">
-          <fa-icon [icon]="faShareAlt" class="com-px-1 md:com-px-2"></fa-icon>
-          <ng-container *appBreakpoints="'>md'">Share</ng-container>
-        </button>
-      </nb-action>
-      <nb-action *ngIf="user?.id === currentUser?.id">
-        <a
-          [routerLink]="['/jobs', job.id, 'applications']"
-          ghost
+
+    <!-- Applicant view (non-owner) -->
+    <div class="job-footer applicant-footer" *ngIf="!showAdminButtons">
+      <div class="footer-actions">
+        <span *ngIf="applicationsCount" class="applicant-count">
+          <fa-icon [icon]="faUsers"></fa-icon>
+          {{ job.job_applications_count }} applied
+        </span>
+      </div>
+      <div class="footer-right">
+        <a [routerLink]="['/jobs', job.id]" class="action-btn primary">
+          <fa-icon [icon]="faInfoCircle"></fa-icon>
+          <span>Details</span>
+        </a>
+        <button
+          *ngIf="job.status === jobStatus.OPEN && applyButton"
           nbButton
+          status="primary"
+          shape="semi-round"
           size="small"
-          status="success"
-          class="com-p-0"
+          [routerLink]="[job.id]"
         >
-          <fa-icon [icon]="faUsers" class="com-px-1 md:com-px-2"></fa-icon>
-          <ng-container *appBreakpoints="'>md'"
-            >All Received Applications
-            <span *ngIf="job.job_applications_count !== 0">({{ job.job_applications_count }})</span></ng-container
-          >
-        </a>
-      </nb-action>
-      <nb-action>
-        <a [routerLink]="['/jobs', job.id]" ghost nbButton size="small" status="info">
-          <fa-icon [icon]="faInfoCircle" class="com-px-1 md:com-px-2"></fa-icon>
-          <ng-container *appBreakpoints="'>md'">View Details</ng-container>
-        </a>
-      </nb-action>
-      <nb-action *ngIf="user?.id === currentUser?.id">
-        <button (click)="updateJobStatus()" ghost nbButton size="small" status="basic">
-          <ng-container *ngIf="job.status === jobStatus.OPEN">
-            <fa-icon [icon]="faEyeSlash" class="com-px-1 md:com-px-2"></fa-icon>
-            <ng-container *appBreakpoints="'>md'">Close Job</ng-container>
-          </ng-container>
-          <ng-container *ngIf="job.status === jobStatus.CLOSED">
-            <fa-icon [icon]="faEye" class="com-px-1 md:com-px-2"></fa-icon>
-            <ng-container *appBreakpoints="'>md'">Open Job</ng-container>
-          </ng-container>
+          Apply
         </button>
-      </nb-action>
-      <nb-action *ngIf="user?.id === currentUser?.id">
-        <button (click)="onDialogOpen(deleteJobDialog)" ghost nbButton size="small" status="danger">
-          <fa-icon [icon]="faTrash" class="com-px-1 md:com-px-2"></fa-icon>
-          <ng-container *appBreakpoints="'>md'">Delete</ng-container>
-        </button>
-      </nb-action>
-    </nb-actions>
-  </nb-card-footer>
-</nb-card>
+      </div>
+    </div>
+  </com-card-body>
+</com-card>
 
 <ng-template #deleteJobDialog let-ref="dialogRef">
-  <nb-card>
-    <nb-card-header class="com-flex com-items-center com-justify-between">
-      <span class="com-flex com-items-center com-gap-2">
+  <com-card class="delete-dialog">
+    <com-card-header class="com-flex com-items-center com-justify-between">
+      <span class="com-flex com-items-center com-gap-2 com-text-base com-font-semibold com-text-Yankees-Blue">
         <nb-icon icon="alert-triangle" status="warning"></nb-icon>
         Confirmation
       </span>
-      <button (click)="ref.close()" ghost nbButton size="small">
+      <button (click)="ref.close()" ghost nbButton size="small" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body class="confirmation-dialogue-box">
-      <p>
-        Are you sure your want to delete
-        <strong> {{ job.position }} &#64; {{ job.company }} </strong>? <br />
-        All the received applications will be deleted permanently as well.
+    </com-card-header>
+    <com-card-body class="com-max-w-[350px]">
+      <p class="com-text-sm com-text-gray-700">
+        Are you sure you want to delete
+        <strong>{{ job.position }} &#64; {{ job.company }}</strong
+        >? All received applications will be deleted permanently.
       </p>
       <br />
-      <p><strong>Note:</strong>&nbsp;This action cannot be undone.</p>
-    </nb-card-body>
-    <nb-card-footer class="confirmation-dialogue-footer">
-      <button (click)="onDeleteJob(); ref.close()" nbButton status="success" class="option-yes">Yes</button>
-      <button (click)="ref.close()" nbButton status="danger" class="option-no">No</button>
-    </nb-card-footer>
-  </nb-card>
+      <p class="com-text-sm com-text-gray-500"><strong>Note:</strong>&nbsp;This action cannot be undone.</p>
+    </com-card-body>
+    <com-card-footer class="com-flex com-items-center com-justify-between">
+      <button (click)="ref.close()" ghost nbButton status="danger">No</button>
+      <button (click)="onDeleteJob(); ref.close()" nbButton status="success">Yes</button>
+    </com-card-footer>
+  </com-card>
 </ng-template>
