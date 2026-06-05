@@ -20,16 +20,21 @@
 }
 
 .dialog-card {
-  @apply com-m-0 com-max-h-[100dvh];
+  @apply com-m-0 com-max-h-[90dvh];
   width: clamp(20rem, 36rem, 100vw);
 
   com-card-header {
-    @apply com-px-4 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    @apply com-flex com-justify-between com-items-center com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
     background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
   }
 
   com-card-body {
-    @apply com-p-4;
+    @apply com-p-4 com-overflow-y-auto;
+    max-height: 60dvh;
+  }
+
+  com-card-footer {
+    @apply com-flex com-justify-between com-items-center;
   }
 }
 

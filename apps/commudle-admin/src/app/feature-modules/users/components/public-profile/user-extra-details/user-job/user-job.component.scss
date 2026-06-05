@@ -22,12 +22,14 @@
 }
 
 .dialog-card {
-  @apply com-m-0 com-max-h-[100vh];
+  @apply com-m-0;
   width: clamp(20rem, 36rem, 100vw);
+  max-height: 90dvh;
 
   com-card-header {
-    @apply com-px-4 com-py-3 com-flex com-justify-between com-items-center com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    @apply com-px-4 com-py-3 com-flex com-justify-between com-items-center;
     background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
+    border-bottom: 1px solid var(--color-bright-gray);
   }
 
   .dialog-title {
@@ -39,7 +41,13 @@
   }
 
   com-card-body {
-    @apply com-p-4;
+    @apply com-p-4 com-overflow-y-auto;
+    max-height: 60dvh;
+  }
+
+  com-card-footer {
+    @apply com-px-4 com-py-3;
+    border-top: 1px solid var(--color-bright-gray);
   }
 }
 

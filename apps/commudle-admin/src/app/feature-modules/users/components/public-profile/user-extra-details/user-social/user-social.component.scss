@@ -54,16 +54,24 @@
 }
 
 .user-social-popup {
-  @apply com-min-w-[300px] com-w-[30vw];
+  @apply com-m-0 com-p-0 com-min-w-[300px] com-w-[30vw];
 
   com-card-header {
-    @apply com-flex com-justify-between com-items-center;
+    @apply com-px-4 com-py-3 com-flex com-justify-between com-items-center;
+    background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
+    border-bottom: 1px solid var(--color-bright-gray);
+
+    p {
+      @apply com-m-0 com-text-base com-font-semibold;
+    }
   }
 
   com-card-body {
+    @apply com-p-4;
+
     .user-social-popup-details {
       .user-social-popup-heading {
-        @apply com-mt-2 com-text-sm com-font-medium com-text-Yankees-Blue;
+        @apply com-mt-3 com-text-sm com-font-medium com-text-Yankees-Blue;
       }
 
       .user-social-popup-favicon {
@@ -71,7 +79,7 @@
       }
 
       .user-social-popup-image {
-        @apply com-max-h-[150px] com-max-w-[300px] com-overflow-hidden;
+        @apply com-max-h-[150px] com-max-w-[300px] com-overflow-hidden com-rounded-md;
 
         img {
           @apply com-w-full;
@@ -81,7 +89,7 @@
   }
 
   com-card-footer {
-    @apply com-flex com-justify-between;
+    @apply com-flex com-justify-between com-px-4 com-py-3 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
   }
 }
 

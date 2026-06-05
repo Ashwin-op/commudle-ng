@@ -24,17 +24,16 @@
   @apply com-m-0 com-max-w-[100vw] com-max-h-[100vh];
 
   com-card-header {
-    @apply com-px-4 com-py-3;
+    @apply com-px-4 com-py-3 com-flex com-justify-between com-items-center;
     background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
     border-bottom: 1px solid var(--color-bright-gray);
   }
 
   com-card-body {
-    @apply com-p-4;
+    @apply com-p-4 com-overflow-y-auto com-max-h-[70dvh];
   }
 
   com-card-footer {
-    @apply com-px-4 com-py-3;
-    border-top: 1px solid var(--color-bright-gray);
+    @apply com-px-4 com-py-3 com-flex com-justify-between com-items-center com-border-0 com-border-t com-border-Bright-Gray;
   }
 }

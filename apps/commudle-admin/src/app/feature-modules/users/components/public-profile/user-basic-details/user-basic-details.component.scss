@@ -136,3 +136,31 @@ p {
 .no-menu-items {
   @apply com-mb-4 com-rounded-b-10;
 }
+
+.tag-dialog {
+  @apply com-m-0 com-min-w-[300px] com-max-w-[90vw];
+  width: clamp(320px, 50vw, 600px);
+
+  com-card-header {
+    @apply com-px-4 com-py-3 com-flex com-justify-between com-items-center;
+    background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
+    border-bottom: 1px solid var(--color-bright-gray);
+    justify-content: space-between;
+  }
+
+  com-card-body {
+    @apply com-p-4;
+  }
+
+  com-card-footer {
+    @apply com-flex com-justify-between com-px-4 com-py-3 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+  }
+
+  .tag-dialog-info {
+    @apply com-flex com-items-center com-gap-2 com-mb-4 com-p-3 com-rounded-lg com-bg-blue-50;
+
+    nb-icon {
+      @apply com-text-primary-500 com-flex-shrink-0;
+    }
+  }
+}

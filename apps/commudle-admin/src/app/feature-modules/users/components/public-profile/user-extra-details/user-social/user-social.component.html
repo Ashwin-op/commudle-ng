@@ -70,8 +70,8 @@
           type="url"
         />
       </nb-form-field>
-      <p>
-        <small *ngIf="invalidUrl" class="validation-error-text"> Please enter a valid url </small>
+      <p *ngIf="invalidUrl">
+        <small class="validation-error-text"> Please enter a valid url </small>
       </p>
       <form
         *ngIf="showLinkPreview"
