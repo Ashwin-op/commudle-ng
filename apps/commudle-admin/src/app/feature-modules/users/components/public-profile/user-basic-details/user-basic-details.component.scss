@@ -1,37 +1,39 @@
 h1,
 p {
-  margin: 0;
+  @apply com-m-0;
 }
 
 .user-details-container {
-  @apply com-m-0 com-rounded-bl-none com-rounded-br-none;
+  @apply com-m-0 com-rounded-bl-none com-rounded-br-none com-overflow-hidden;
 
   nb-card-body {
     @apply com-p-0;
 
     .profile-header {
-      @apply com-p-6;
+      @apply com-px-5 com-py-5 md:com-px-6 md:com-py-6;
 
       .action-buttons {
         @apply com-flex com-flex-col com-items-center md:com-flex-row md:com-justify-between;
       }
 
       .action-btn-mobile {
-        @apply com-flex com-gap-3 md:com-mt-0 com-mt-4;
+        @apply com-flex com-items-center com-gap-2 md:com-mt-0 com-mt-4;
       }
 
       .edit-icon {
-        @apply com-text-sm com-font-medium com-bg-transparent;
+        @apply com-text-xs com-font-semibold com-bg-transparent;
 
         fa-icon {
-          @apply com-mr-2;
+          @apply com-mr-1;
         }
       }
     }
+
     .user-avatar {
-      @apply md:com-h-[140px] md:com-w-[140px] com-rounded-full com-relative com-z-50 -com-mt-20 md:com-mt-[-94px] com-bg-white;
+      @apply md:com-h-[120px] md:com-w-[120px] com-rounded-full com-relative com-z-50 -com-mt-16 md:com-mt-[-80px] com-bg-white com-shadow-md;
+
       .avatar {
-        @apply com-block com-h-40 com-w-40 md:com-h-[140px] md:com-w-[140px] com-rounded-full com-object-cover com-object-center com-mx-auto com-border-3 com-border-solid com-border-white;
+        @apply com-block com-h-32 com-w-32 md:com-h-[120px] md:com-w-[120px] com-rounded-full com-object-cover com-object-center com-mx-auto com-border-3 com-border-solid com-border-white;
       }
     }
 
@@ -43,10 +45,10 @@ p {
       @apply com-w-full com-mt-4;
 
       .name {
-        @apply com-flex md:com-flex-row com-flex-col md:com-gap-6px com-gap-0 md:com-items-start com-items-center com-w-auto com-mb-2 md:com-flex-wrap com-flex-wrap;
+        @apply com-flex md:com-flex-row com-flex-col md:com-gap-2 com-gap-1 md:com-items-center com-items-center com-w-auto com-mb-1 md:com-flex-wrap com-flex-wrap;
 
         h1 {
-          @apply com-text-2xl md:com-text-[32px] com-font-semibold com-text-Yankees-Blue com-flex com-items-center md:com-flex-shrink com-flex-shrink-0;
+          @apply com-text-3xl com-font-semibold com-text-Yankees-Blue com-flex com-items-center md:com-flex-shrink com-flex-shrink-0;
         }
 
         h1 span {
@@ -56,12 +58,12 @@ p {
         }
 
         .deactivated-button {
-          @apply com-text-sm com-font-semibold com-text-Yankees-Blue com-border-none;
+          @apply com-text-xs com-font-semibold com-text-gray-500 com-border-none;
         }
       }
 
       .username {
-        @apply com-text-base com-text-gray-400;
+        @apply com-text-base com-text-gray-500;
       }
 
       .name-username {
@@ -69,53 +71,54 @@ p {
       }
 
       .job-tags {
-        @apply com-flex md:com-items-end com-flex-col com-gap-3 com-mt-3 md:com-mt-0;
+        @apply com-flex md:com-items-end com-flex-col com-gap-2 com-mt-3 md:com-mt-0;
       }
 
       .network {
-        @apply com-flex com-mt-4 com-gap-2;
+        @apply com-flex com-mt-3 com-gap-3;
 
         a {
-          @apply com-text-base hover:com-underline com-text-Yankees-Blue com-no-underline;
+          @apply com-text-sm com-font-medium com-text-Yankees-Blue com-no-underline;
         }
       }
 
       .designation-location {
-        @apply com-flex com-items-start com-flex-col;
+        @apply com-flex com-items-start com-flex-col com-gap-2 com-mt-2;
       }
 
       .designation {
-        @apply com-text-base com-flex md:com-items-center com-items-start com-gap-2 com-mt-4;
+        @apply com-flex md:com-items-center com-items-start com-gap-2;
 
         p {
-          @apply com-text-base com-text-Yankees-Blue;
+          @apply com-text-sm com-text-Yankees-Blue;
         }
 
         nb-icon {
-          @apply com-text-base md:com-text-lg com-text-Azure md:com-mt-0 com-mt-1 com-flex-shrink-0;
+          @apply com-text-base com-text-Azure com-flex-shrink-0;
         }
       }
 
       .location {
-        @apply com-text-base com-flex com-items-center com-gap-2 com-mt-2;
+        @apply com-flex com-items-center com-gap-2;
 
         p {
-          @apply com-text-base com-text-Yankees-Blue;
+          @apply com-text-sm com-text-Yankees-Blue;
         }
 
         nb-icon {
-          @apply com-text-base md:com-text-lg com-text-Azure;
+          @apply com-text-base com-text-Azure;
         }
       }
 
       .tags {
-        @apply com-mt-5;
+        @apply com-mt-4 com-flex com-flex-wrap com-gap-1.5;
 
         .user-tags {
-          @apply com-text-sm com-font-medium com-border-none com-text-Yankees-Blue com-bg-blue-50;
+          @apply com-text-xs com-font-semibold com-border-none com-text-Azure com-bg-blue-50 com-rounded-full;
         }
+
         .add-tag {
-          @apply com-text-sm com-font-medium com-border-none com-text-white com-bg-Azure com-cursor-pointer;
+          @apply com-text-xs com-font-semibold com-border-none com-text-white com-bg-Azure com-cursor-pointer com-rounded-full;
         }
       }
     }
@@ -131,5 +134,5 @@ p {
 }
 
 .no-menu-items {
-  @apply com-mb-4 com-rounded-b-[10px];
+  @apply com-mb-4 com-rounded-b-10;
 }
