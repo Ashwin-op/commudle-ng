@@ -11,7 +11,7 @@ import {
 import { RoundMentorSlotService, RoundMentorSlotBookingService, ToastrService } from '@commudle/shared-services';
 import { NbDialogService } from '@commudle/theme';
 import { PptUploadDialogComponent } from 'apps/commudle-admin/src/app/feature-modules/public-hackathon/components/public-hackathon-registration/ppt-upload-dialog/ppt-upload-dialog.component';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
   standalone: false,
@@ -138,8 +138,9 @@ export class HackathonRoundCardComponent implements OnInit, AfterViewInit {
 
   openBookSlotDialog(mentorId: number) {
     this.selectedMentorId = mentorId;
+    const oneHourAgo = moment().subtract(1, 'hour');
     this.selectedMentorSlots = (this.mentorSlotsByMentor.get(mentorId) || []).filter(
-      (slot) => slot.status === ERoundMentorSlotStatus.OPEN,
+      (slot) => slot.status === ERoundMentorSlotStatus.OPEN && moment(slot.ends_at).isAfter(oneHourAgo),
     );
 
     this.dialogService.open(this.bookSlotDialog);
