@@ -5,150 +5,194 @@ p {
 .job-card {
   @apply com-m-0 com-border com-border-solid com-border-Bright-Gray com-rounded-xl com-overflow-hidden;
   @apply com-transition-all com-duration-300 com-ease-out;
-  @apply hover:com-shadow-md hover:com-border-primary-100;
+  @apply hover:com-shadow-lg hover:com-scale-[1.01];
+}
 
-  com-card-body {
-    @apply com-p-0 com-pt-4 com-px-4;
+.applicant-card {
+  @apply com-m-0 com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-overflow-hidden;
+  @apply com-transition-all com-duration-300 com-ease-out;
+  @apply hover:com-shadow-md;
+}
+
+.card-body {
+  @apply com-p-0 com-pt-4 com-px-4;
+}
+
+.job-logo {
+  @apply com-w-10 com-h-10 com-rounded-xl com-flex-shrink-0;
+  @apply com-flex com-items-center com-justify-center;
+  @apply com-text-xl com-font-bold com-text-primary-500;
+  background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+  border: 1px solid #bfdbfe;
+}
+
+.applicant-view-body {
+  @apply com-py-4;
+}
+
+.job-top {
+  @apply com-flex com-items-start com-gap-3;
+
+  .job-headings {
+    @apply com-flex-1 com-min-w-0 com-no-underline;
+
+    .job-title {
+      @apply com-text-sm com-font-semibold com-text-Yankees-Blue;
+    }
+
+    .job-org {
+      @apply com-text-sm com-text-gray-500 com-mt-0.5;
+    }
   }
 
-  .job-top {
-    @apply com-flex com-items-start com-gap-3;
+  .status-badge {
+    @apply com-flex com-items-center com-gap-1.5 com-flex-shrink-0;
+    @apply com-text-xs com-font-semibold com-tracking-wider com-uppercase;
+    @apply com-px-3 com-py-1.5 com-rounded-full;
 
-    .job-logo {
-      @apply com-w-10 com-h-10 com-rounded-xl com-flex-shrink-0;
-      @apply com-flex com-items-center com-justify-center;
-      @apply com-text-xl com-font-bold com-text-primary-500;
-      background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
-      border: 1px solid #bfdbfe;
+    .status-dot {
+      @apply com-w-2 com-h-2 com-rounded-full;
     }
 
-    .job-headings {
-      @apply com-flex-1 com-min-w-0 com-no-underline;
-
-      .job-title {
-        @apply com-text-sm com-font-semibold com-text-Yankees-Blue com-leading-tight;
-      }
-
-      .job-org {
-        @apply com-text-sm com-text-gray-500 com-mt-0.5;
-      }
-    }
-
-    .status-badge {
-      @apply com-flex com-items-center com-gap-1.5 com-flex-shrink-0;
-      @apply com-text-xs com-font-semibold com-tracking-wider com-uppercase;
-      @apply com-px-3 com-py-1.5 com-rounded-full;
-
+    &.open {
+      @apply com-bg-green-50 com-text-green-700;
       .status-dot {
-        @apply com-w-2 com-h-2 com-rounded-full;
-      }
-
-      &.open {
-        @apply com-bg-green-50 com-text-green-700;
-        .status-dot {
-          @apply com-bg-green-500;
-        }
-      }
-
-      &.closed {
-        @apply com-bg-gray-100 com-text-gray-500;
-        .status-dot {
-          @apply com-bg-gray-400;
-        }
-      }
-    }
-  }
-
-  .job-meta {
-    @apply com-flex com-flex-wrap com-gap-2 com-py-3;
-
-    .meta-chip {
-      @apply com-inline-flex com-items-center com-gap-1.5;
-      @apply com-px-3 com-py-1.5 com-rounded-full;
-      @apply com-text-xs com-font-semibold com-text-gray-600;
-      @apply com-border com-border-solid com-border-Bright-Gray com-bg-white;
-
-      fa-icon {
-        @apply com-text-gray-400;
-      }
-
-      strong {
-        @apply com-text-Yankees-Blue;
-      }
-    }
-  }
-
-  .job-footer {
-    @apply com-flex com-items-center com-flex-wrap com-gap-1 com-p-0 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
-
-    .footer-actions {
-      @apply com-flex com-items-center com-gap-1 com-pt-2 com-pb-3;
-    }
-
-    .footer-right {
-      @apply com-flex com-items-center com-gap-1 com-ml-auto;
-    }
-
-    .action-btn {
-      @apply com-inline-flex com-items-center com-gap-1.5;
-      @apply com-px-2 com-py-1 com-rounded-lg;
-      @apply com-text-xs com-font-semibold com-text-gray-600;
-      @apply com-no-underline com-cursor-pointer com-border-0 com-bg-transparent;
-      @apply com-transition-all com-duration-200;
-
-      fa-icon {
-        @apply com-text-gray-400;
-      }
-
-      &:hover {
-        @apply com-bg-blue-50 com-text-primary-500;
-        fa-icon {
-          @apply com-text-primary-500;
-        }
-      }
-
-      &.primary {
-        @apply com-text-primary-500;
-        fa-icon {
-          @apply com-text-primary-500;
-        }
-      }
-
-      &.danger:hover {
-        @apply com-bg-rose-50 com-text-rose-600;
-        fa-icon {
-          @apply com-text-rose-600;
-        }
-      }
-
-      &:disabled {
-        @apply com-text-gray-400 com-cursor-not-allowed com-opacity-60;
-        &:hover {
-          @apply com-bg-transparent;
-        }
-      }
-
-      .applications-count {
-        @apply com-text-primary-500 com-font-bold;
+        @apply com-bg-green-500;
       }
     }
 
-    .action-divider {
-      @apply com-w-px com-h-5 com-bg-Bright-Gray com-mx-1;
-    }
-  }
-
-  .applicant-footer {
-    .applicant-count {
-      @apply com-inline-flex com-items-center com-gap-1.5;
-      @apply com-text-sm com-font-semibold com-text-gray-500;
-
-      fa-icon {
-        @apply com-text-gray-400;
+    &.closed {
+      @apply com-bg-gray-100 com-text-gray-500;
+      .status-dot {
+        @apply com-bg-gray-400;
       }
     }
   }
 }
+
+.job-meta {
+  @apply com-flex com-flex-wrap com-gap-2 com-py-3;
+
+  .meta-chip {
+    @apply com-inline-flex com-items-center com-gap-1.5;
+    @apply com-px-3 com-py-1.5 com-rounded-full;
+    @apply com-text-xs com-font-semibold com-text-gray-600;
+    @apply com-border com-border-solid com-border-Bright-Gray com-bg-white;
+
+    fa-icon {
+      @apply com-text-gray-400;
+    }
+
+    strong {
+      @apply com-text-Yankees-Blue;
+    }
+  }
+}
+
+.job-footer {
+  @apply com-flex com-items-center com-flex-wrap com-gap-1 com-p-0 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+
+  .footer-actions {
+    @apply com-flex com-items-center com-gap-1 com-pt-2 com-pb-3;
+  }
+
+  .footer-right {
+    @apply com-flex com-items-center com-gap-1 com-ml-auto;
+  }
+
+  .action-btn {
+    @apply com-inline-flex com-items-center com-gap-1.5;
+    @apply com-px-2 com-py-1 com-rounded-lg;
+    @apply com-text-xs com-font-semibold com-text-gray-600;
+    @apply com-no-underline com-cursor-pointer com-border-0 com-bg-transparent;
+    @apply com-transition-all com-duration-200;
+
+    fa-icon {
+      @apply com-text-gray-400;
+    }
+
+    &:hover {
+      @apply com-bg-blue-50 com-text-primary-500;
+      fa-icon {
+        @apply com-text-primary-500;
+      }
+    }
+
+    &.primary {
+      @apply com-text-primary-500;
+      fa-icon {
+        @apply com-text-primary-500;
+      }
+    }
+
+    &.danger:hover {
+      @apply com-bg-rose-50 com-text-rose-600;
+      fa-icon {
+        @apply com-text-rose-600;
+      }
+    }
+
+    &:disabled {
+      @apply com-text-gray-400 com-cursor-not-allowed com-opacity-60;
+      &:hover {
+        @apply com-bg-transparent;
+      }
+    }
+
+    .applications-count {
+      @apply com-text-primary-500 com-font-bold;
+    }
+  }
+
+  .action-divider {
+    @apply com-w-px com-h-5 com-bg-Bright-Gray com-mx-1;
+  }
+}
+
+.applicant-footer {
+  .applicant-count {
+    @apply com-inline-flex com-items-center com-gap-1.5;
+    @apply com-text-sm com-font-semibold com-text-gray-500;
+
+    fa-icon {
+      @apply com-text-gray-400;
+    }
+  }
+}
+
+.applicant-view {
+  @apply com-items-center com-p-0;
+
+  .job-headings {
+    .job-title {
+      @apply com-text-sm com-font-semibold com-text-Yankees-Blue;
+    }
+
+    .job-inline-meta {
+      @apply com-text-xs com-font-normal com-text-gray-500 com-mt-0.5;
+
+      .dot-sep {
+        @apply com-mx-1;
+      }
+    }
+  }
+
+  .apply-btn {
+    @apply com-flex-shrink-0;
+  }
+}
+
+// &.applicant-card {
+//   @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-rounded-none com-shadow-none;
+
+//   &:hover {
+//     @apply com-shadow-none com-border-Bright-Gray;
+//   }
+
+//   &:last-child {
+//     @apply com-border-b-0;
+//   }
+// }
 
 .status-closed {
   @apply com-opacity-80;
