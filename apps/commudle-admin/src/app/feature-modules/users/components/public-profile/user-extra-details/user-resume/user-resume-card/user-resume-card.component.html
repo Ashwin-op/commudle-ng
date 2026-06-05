@@ -1,79 +1,58 @@
-<nb-card class="user-resume-card">
-  <nb-card-body>
-    <p class="name">{{ userResume.name }}</p>
-    <p class="date">Last updated: {{ userResume.updated_at | date }}</p>
-    <nb-actions class="actions" fullWidth>
-      <nb-action>
-        <button
-          (click)="updateUserResume.emit()"
-          ghost
-          nbButton
-          nbTooltip="Edit"
-          nbTooltipStatus="warning"
-          shape="round"
-          size="small"
-        >
-          <nb-icon icon="edit" status="warning"></nb-icon>
-        </button>
-      </nb-action>
-      <nb-action>
-        <button
-          (click)="onDialogOpen(deleteResumeDialog)"
-          ghost
-          nbButton
-          nbTooltip="Delete"
-          nbTooltipStatus="danger"
-          shape="round"
-          size="small"
-        >
-          <nb-icon icon="trash" status="danger"></nb-icon>
-        </button>
-      </nb-action>
-      <nb-action>
-        <button
-          (click)="copyTextToClipboard()"
-          ghost
-          nbButton
-          nbTooltip="Share"
-          nbTooltipStatus="primary"
-          shape="round"
-          size="small"
-        >
-          <nb-icon icon="share" status="primary"></nb-icon>
-        </button>
-      </nb-action>
-      <nb-action>
-        <a [href]="resumeLink" ghost nbButton nbTooltip="Preview" nbTooltipStatus="success" shape="round" size="small">
-          <nb-icon icon="eye" status="success"></nb-icon>
-        </a>
-      </nb-action>
-    </nb-actions>
-  </nb-card-body>
-</nb-card>
+<com-card class="resume-card">
+  <com-card-body>
+    <div class="resume-info">
+      <div class="resume-icon">
+        <nb-icon icon="file-text-outline"></nb-icon>
+      </div>
+      <div class="resume-details">
+        <p class="name">{{ userResume.name }}</p>
+        <p class="date">Updated {{ userResume.updated_at | date : 'MMM d, yyyy' }}</p>
+      </div>
+    </div>
+    <div class="resume-actions">
+      <button (click)="updateUserResume.emit()" class="action-btn">
+        <nb-icon icon="edit"></nb-icon>
+        <span>Edit</span>
+      </button>
+      <button (click)="copyTextToClipboard()" class="action-btn">
+        <nb-icon icon="share"></nb-icon>
+        <span>Share</span>
+      </button>
+      <a [href]="resumeLink" target="_blank" class="action-btn primary">
+        <nb-icon icon="eye"></nb-icon>
+        <span>Preview</span>
+      </a>
+      <div class="action-divider"></div>
+      <button (click)="onDialogOpen(deleteResumeDialog)" class="action-btn danger">
+        <nb-icon icon="trash"></nb-icon>
+      </button>
+    </div>
+  </com-card-body>
+</com-card>
 
 <ng-template #deleteResumeDialog let-ref="dialogRef">
-  <nb-card>
-    <nb-card-header class="com-flex com-items-center com-justify-between">
-      <span class="com-flex com-items-center com-gap-2">
+  <com-card class="delete-dialog">
+    <com-card-header class="com-flex com-items-center com-justify-between">
+      <span class="com-flex com-items-center com-gap-2 com-text-base com-font-semibold com-text-Yankees-Blue">
         <nb-icon icon="alert-triangle" status="warning"></nb-icon>
         Confirmation
       </span>
-      <button (click)="ref.close()" ghost nbButton size="small">
+      <button (click)="ref.close()" ghost nbButton size="small" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body class="com-max-w-[350px]">
-      <p>
-        Are you sure you want to <strong>delete</strong>
-        <em> {{ userResume.name }}</em>
-        ?
+    </com-card-header>
+    <com-card-body class="com-max-w-[350px]">
+      <p class="com-text-sm com-text-gray-700">
+        Are you sure you want to delete
+        <em>{{ userResume.name }}</em
+        >?
       </p>
       <br />
-      <p><strong>Note:</strong>&nbsp;This action cannot be undone.</p>
-    </nb-card-body>
-    <nb-card-footer class="com-flex com-items-center com-justify-between">
+      <p class="com-text-sm com-text-gray-500"><strong>Note:</strong>&nbsp;This action cannot be undone.</p>
+    </com-card-body>
+    <com-card-footer class="com-flex com-items-center com-justify-between">
       <button (click)="ref.close()" ghost nbButton status="danger">No</button>
       <button (click)="deleteUserResume(); ref.close()" nbButton status="success">Yes</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

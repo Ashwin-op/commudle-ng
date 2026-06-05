@@ -1,16 +1,40 @@
 .user-resume {
   @apply com-m-0 com-mb-4;
-  nb-card-header {
-    @apply com-bg-gray-50;
+
+  com-card-header {
+    @apply com-px-4 com-py-3 com-border-0;
+    background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
+    border-bottom: 1px solid var(--color-bright-gray);
+
     a {
-      @apply com-flex com-m-0 com-text-lg com-font-medium com-text-Yankees-Blue com-no-underline com-items-center;
+      @apply com-flex com-m-0 com-text-base com-font-semibold com-text-tYankees-Blue com-no-underline com-items-center com-gap-2;
+
       fa-icon {
-        @apply com-h-6 com-w-6 com-flex com-items-center com-justify-center com-mr-1;
+        @apply com-text-lg;
       }
     }
   }
 
-  nb-card-body {
-    @apply com-space-y-2;
+  com-card-body {
+    @apply com-p-4 com-space-y-4;
+  }
+}
+
+.resume-dialog {
+  @apply com-m-0 com-max-w-[100vw] com-max-h-[100vh];
+
+  com-card-header {
+    @apply com-px-4 com-py-3;
+    background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
+    border-bottom: 1px solid var(--color-bright-gray);
+  }
+
+  com-card-body {
+    @apply com-p-4;
+  }
+
+  com-card-footer {
+    @apply com-px-4 com-py-3;
+    border-top: 1px solid var(--color-bright-gray);
   }
 }

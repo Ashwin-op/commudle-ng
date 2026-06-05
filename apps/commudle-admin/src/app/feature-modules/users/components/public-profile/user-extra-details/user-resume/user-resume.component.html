@@ -1,8 +1,11 @@
-<nb-card *ngIf="currentUser?.id === user.id" class="user-resume" id="resume">
-  <nb-card-header>
-    <a [routerLink]="'.'" fragment="resume"><fa-icon [icon]="faClipboard" class="com-text-Azure"></fa-icon>Resume</a>
-  </nb-card-header>
-  <nb-card-body>
+<com-card *ngIf="currentUser?.id === user.id" class="user-resume" id="resume">
+  <com-card-header>
+    <a [routerLink]="'.'" fragment="resume">
+      <fa-icon [icon]="faClipboard" class="com-text-Azure"></fa-icon>
+      Resume
+    </a>
+  </com-card-header>
+  <com-card-body>
     <button
       (click)="onOpenDialog(userResumeDialog)"
       [disabled]="userResumes.length >= 3"
@@ -16,7 +19,7 @@
     </button>
     <div
       *ngIf="userResumes.length > 0"
-      class="com-grid com-grid-cols-1 sm:com-grid-cols-2 lg:com-grid-cols-3 com-gap-2"
+      class="com-grid com-grid-cols-1 sm:com-grid-cols-2 lg:com-grid-cols-3 com-gap-3"
     >
       <app-user-resume-card
         (reloadUserResume)="getUserResumes()"
@@ -26,24 +29,26 @@
         [user]="user"
       ></app-user-resume-card>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
 <ng-template #userResumeDialog let-data>
-  <nb-card class="!com-m-0 com-max-w-[100vw] com-max-h-[100vh]">
-    <nb-card-header class="com-flex com-justify-between com-items-center">
-      {{ isEditing ? 'Edit Resume/Portfolio' : 'Add Resume/Portfolio' }}
+  <com-card class="resume-dialog">
+    <com-card-header class="com-flex com-justify-between com-items-center">
+      <span class="com-text-base com-font-semibold com-text-Yankees-Blue">
+        {{ isEditing ? 'Edit Resume/Portfolio' : 'Add Resume/Portfolio' }}
+      </span>
       <button (click)="onCloseDialog()" ghost nbButton shape="round" size="small">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body class="com-max-h-[60vh] md:com-max-h-full">
+    </com-card-header>
+    <com-card-body class="com-max-h-[60vh] md:com-max-h-full">
       <form [formGroup]="userResumeForm" class="com-flex com-flex-col com-space-y-3">
-        <label>
+        <label class="com-text-sm com-font-medium com-text-Yankees-Blue">
           Name*
           <input formControlName="name" fullWidth nbInput type="text" />
         </label>
-        <label>
+        <label class="com-text-sm com-font-medium com-text-Yankees-Blue">
           File* (PDF, max size: 5MB)
           <input
             formControlName="file"
@@ -62,8 +67,8 @@
         attr.data="{{ uploadedResumeSrc | safe : 'resourceUrl' }}"
         type="application/pdf"
       ></object>
-    </nb-card-body>
-    <nb-card-footer class="com-flex com-justify-between">
+    </com-card-body>
+    <com-card-footer class="com-flex com-justify-between">
       <button (click)="onCloseDialog()" ghost nbButton size="small" status="danger">Cancel</button>
       <button
         (click)="isEditing ? updateResume(data.uuid) : createResume()"
@@ -73,6 +78,6 @@
       >
         {{ isEditing ? 'Update' : 'Create' }}
       </button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
