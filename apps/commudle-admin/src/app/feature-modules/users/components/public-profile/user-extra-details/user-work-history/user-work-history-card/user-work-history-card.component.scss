@@ -66,7 +66,11 @@ p {
   }
 
   .date {
-    @apply com-text-sm com-font-medium com-text-gray-500 com-whitespace-nowrap com-flex-shrink-0;
+    @apply com-flex com-flex-col com-items-end com-text-sm com-font-medium com-text-gray-500 com-whitespace-nowrap com-flex-shrink-0;
+
+    .duration {
+      @apply com-text-xs com-font-normal com-text-gray-500 com-mt-0.5;
+    }
   }
 
   .description {

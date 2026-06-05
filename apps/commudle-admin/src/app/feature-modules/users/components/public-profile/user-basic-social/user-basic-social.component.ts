@@ -1,14 +1,24 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { faDribbble, faGitlab, faMediumM, faYoutube, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import {
+  faDribbble,
+  faGitlab,
+  faMediumM,
+  faYoutube,
+  faInstagram,
+  faFacebook,
+  faLinkedin,
+  faTwitter,
+  faGithub,
+} from '@fortawesome/free-brands-svg-icons';
 import { UserProfileMenuService } from 'apps/commudle-admin/src/app/feature-modules/users/services/user-profile-menu.service';
 import { IUser } from 'apps/shared-models/user.model';
-import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationCircle, faGlobe } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-    selector: 'app-user-basic-social',
-    templateUrl: './user-basic-social.component.html',
-    styleUrls: ['./user-basic-social.component.scss'],
-    standalone: false
+  selector: 'app-user-basic-social',
+  templateUrl: './user-basic-social.component.html',
+  styleUrls: ['./user-basic-social.component.scss'],
+  standalone: false,
 })
 export class UserBasicSocialComponent implements OnChanges {
   @Input() user: IUser;
@@ -21,6 +31,11 @@ export class UserBasicSocialComponent implements OnChanges {
   faGitlab = faGitlab;
   faExclamationCircle = faExclamationCircle;
   faInstagram = faInstagram;
+  faFacebook = faFacebook;
+  faLinkedin = faLinkedin;
+  faTwitter = faTwitter;
+  faGithub = faGithub;
+  faGlobe = faGlobe;
 
   constructor(public userProfileMenuService: UserProfileMenuService) {}
 

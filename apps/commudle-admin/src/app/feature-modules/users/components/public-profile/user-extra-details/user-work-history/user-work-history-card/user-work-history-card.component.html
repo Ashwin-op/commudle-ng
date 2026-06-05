@@ -44,11 +44,14 @@
               <span *ngIf="userWorkHistory.location"> · {{ userWorkHistory.location }}</span>
             </p>
           </div>
-          <p class="date">
-            {{ userWorkHistory.start_date | date : 'MMM yyyy' }} –
-            <span *ngIf="userWorkHistory.is_working; else endDate">Present</span>
-            <ng-template #endDate>{{ userWorkHistory.end_date | date : 'MMM yyyy' }}</ng-template>
-          </p>
+          <div class="date">
+            <span>
+              {{ userWorkHistory.start_date | date : 'MMM yyyy' }} –
+              <span *ngIf="userWorkHistory.is_working; else endDate">Present</span>
+              <ng-template #endDate>{{ userWorkHistory.end_date | date : 'MMM yyyy' }}</ng-template>
+            </span>
+            <span class="duration">{{ getDuration() }}</span>
+          </div>
         </div>
         <p *ngIf="userWorkHistory.description" class="description">{{ userWorkHistory.description }}</p>
       </div>

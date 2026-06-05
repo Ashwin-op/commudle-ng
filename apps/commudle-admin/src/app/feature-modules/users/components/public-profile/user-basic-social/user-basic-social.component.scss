@@ -32,17 +32,11 @@
     }
 
     .user-social {
-      @apply com-flex com-flex-wrap com-gap-3;
+      @apply com-flex com-flex-wrap com-gap-3 com-items-center;
 
       a {
-        @apply com-flex com-items-center com-justify-center com-h-9 com-w-9 com-rounded-full com-no-underline;
-        @apply com-bg-blue-50 com-text-primary-100 com-transition-all com-duration-300 com-ease-out;
-        @apply hover:com-border-primary-100 hover:com-scale-110;
-
-        nb-icon,
-        fa-icon {
-          @apply com-text-base com-text-primary-500;
-        }
+        @apply com-no-underline com-transition-all com-duration-300 com-ease-out;
+        @apply hover:com-scale-110;
       }
     }
   }

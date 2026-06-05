@@ -14,38 +14,145 @@
       </a>
     </div>
     <div class="user-social">
-      <a *ngIf="isValid(user.personal_website)" href="{{ user.personal_website | completeurl }}" target="_blank">
-        <nb-icon icon="globe" status="primary"></nb-icon>
+      <a
+        *ngIf="isValid(user.personal_website)"
+        href="{{ user.personal_website | completeurl }}"
+        rel="noreferrer"
+        target="_blank"
+      >
+        <app-badge
+          [faIcon]="faGlobe"
+          [fontColor]="'com-text-primary-500'"
+          [fontSize]="'regular'"
+          [borderRadius]="'round'"
+          [color]="'com-bg-blue-50'"
+        ></app-badge>
       </a>
-      <a *ngIf="isValid(user.linkedin)" href="{{ user.linkedin | completeurl : 'linkedin' }}" target="_blank">
-        <nb-icon icon="linkedin" status="primary"></nb-icon>
+      <a
+        *ngIf="isValid(user.linkedin)"
+        href="{{ user.linkedin | completeurl : 'linkedin' }}"
+        rel="noreferrer"
+        target="_blank"
+      >
+        <app-badge
+          [faIcon]="faLinkedin"
+          [fontColor]="'com-text-primary-500'"
+          [fontSize]="'regular'"
+          [borderRadius]="'round'"
+          [color]="'com-bg-blue-50'"
+        ></app-badge>
       </a>
-      <a *ngIf="isValid(user.twitter)" href="{{ user.twitter | completeurl : 'twitter' }}" target="_blank">
-        <nb-icon icon="twitter" status="primary"></nb-icon>
+      <a
+        *ngIf="isValid(user.twitter)"
+        href="{{ user.twitter | completeurl : 'twitter' }}"
+        rel="noreferrer"
+        target="_blank"
+      >
+        <app-badge
+          [faIcon]="faTwitter"
+          [fontColor]="'com-text-primary-500'"
+          [fontSize]="'regular'"
+          [borderRadius]="'round'"
+          [color]="'com-bg-blue-50'"
+        ></app-badge>
       </a>
-      <a *ngIf="isValid(user.github)" href="{{ user.github | completeurl : 'github' }}" target="_blank">
-        <nb-icon icon="github" status="primary"></nb-icon>
+      <a
+        *ngIf="isValid(user.github)"
+        href="{{ user.github | completeurl : 'github' }}"
+        rel="noreferrer"
+        target="_blank"
+      >
+        <app-badge
+          [faIcon]="faGithub"
+          [fontColor]="'com-text-primary-500'"
+          [fontSize]="'regular'"
+          [borderRadius]="'round'"
+          [color]="'com-bg-blue-50'"
+        ></app-badge>
       </a>
-      <a *ngIf="isValid(user.youtube)" href="{{ user.youtube | completeurl : 'youtube' }}" target="_blank">
-        <fa-icon [icon]="faYoutube"></fa-icon>
+      <a
+        *ngIf="isValid(user.youtube)"
+        href="{{ user.youtube | completeurl : 'youtube' }}"
+        rel="noreferrer"
+        target="_blank"
+      >
+        <app-badge
+          [faIcon]="faYoutube"
+          [fontColor]="'com-text-primary-500'"
+          [fontSize]="'regular'"
+          [borderRadius]="'round'"
+          [color]="'com-bg-blue-50'"
+        ></app-badge>
       </a>
-      <a *ngIf="isValid(user.medium)" href="{{ user.medium | completeurl : 'medium' }}" target="_blank">
-        <fa-icon [icon]="faMediumM"></fa-icon>
+      <a
+        *ngIf="isValid(user.medium)"
+        href="{{ user.medium | completeurl : 'medium' }}"
+        rel="noreferrer"
+        target="_blank"
+      >
+        <app-badge
+          [faIcon]="faMediumM"
+          [fontColor]="'com-text-primary-500'"
+          [fontSize]="'regular'"
+          [borderRadius]="'round'"
+          [color]="'com-bg-blue-50'"
+        ></app-badge>
       </a>
-      <a *ngIf="isValid(user.dribbble)" href="{{ user.dribbble | completeurl : 'dribbble' }}" target="_blank">
-        <fa-icon [icon]="faDribbble"></fa-icon>
+      <a
+        *ngIf="isValid(user.dribbble)"
+        href="{{ user.dribbble | completeurl : 'dribbble' }}"
+        rel="noreferrer"
+        target="_blank"
+      >
+        <app-badge
+          [faIcon]="faDribbble"
+          [fontColor]="'com-text-primary-500'"
+          [fontSize]="'regular'"
+          [borderRadius]="'round'"
+          [color]="'com-bg-blue-50'"
+        ></app-badge>
       </a>
-      <a *ngIf="isValid(user.behance)" href="{{ user.behance | completeurl : 'behance' }}" target="_blank">
-        <nb-icon icon="behance" status="primary"></nb-icon>
+      <a
+        *ngIf="isValid(user.gitlab)"
+        href="{{ user.gitlab | completeurl : 'gitlab' }}"
+        rel="noreferrer"
+        target="_blank"
+      >
+        <app-badge
+          [faIcon]="faGitlab"
+          [fontColor]="'com-text-primary-500'"
+          [fontSize]="'regular'"
+          [borderRadius]="'round'"
+          [color]="'com-bg-blue-50'"
+        ></app-badge>
       </a>
-      <a *ngIf="isValid(user.gitlab)" href="{{ user.gitlab | completeurl : 'gitlab' }}" target="_blank">
-        <fa-icon [icon]="faGitlab"></fa-icon>
+      <a
+        *ngIf="isValid(user.facebook)"
+        href="{{ user.facebook | completeurl : 'facebook' }}"
+        rel="noreferrer"
+        target="_blank"
+      >
+        <app-badge
+          [faIcon]="faFacebook"
+          [fontColor]="'com-text-primary-500'"
+          [fontSize]="'regular'"
+          [borderRadius]="'round'"
+          [color]="'com-bg-blue-50'"
+        ></app-badge>
       </a>
-      <a *ngIf="isValid(user.facebook)" href="{{ user.facebook | completeurl : 'facebook' }}" target="_blank">
-        <nb-icon icon="facebook" status="primary"></nb-icon>
-      </a>
-      <a *ngIf="isValid(user.instagram)" href="{{ user.instagram | completeurl : 'instagram' }}" target="_blank">
-        <fa-icon [icon]="faInstagram"></fa-icon>
+      <a
+        *ngIf="isValid(user.instagram)"
+        href="{{ user.instagram | completeurl : 'instagram' }}"
+        rel="noreferrer"
+        target="_blank"
+      >
+        <app-badge
+          [faIcon]="faInstagram"
+          [fontColor]="'com-text-primary-500'"
+          [fontSize]="'regular'"
+          [borderRadius]="'round'"
+          [color]="'com-bg-blue-50'"
+        ></app-badge>
       </a>
     </div>
   </com-card-body>
