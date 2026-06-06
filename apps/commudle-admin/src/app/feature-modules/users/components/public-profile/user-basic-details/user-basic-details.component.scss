@@ -114,11 +114,11 @@ p {
         @apply com-mt-4 com-flex com-flex-wrap com-gap-1.5;
 
         .user-tags {
-          @apply com-text-xs com-font-semibold com-border-none com-text-Azure com-bg-blue-50 com-rounded-full;
+          @apply com-text-xs com-font-medium com-border-none com-text-Azure com-bg-blue-50 com-rounded-full;
         }
 
         .add-tag {
-          @apply com-text-xs com-font-semibold com-border-none com-text-white com-bg-Azure com-cursor-pointer com-rounded-full;
+          @apply com-text-xs com-font-medium com-border-none com-text-white com-bg-Azure com-cursor-pointer com-rounded-full;
         }
       }
     }
