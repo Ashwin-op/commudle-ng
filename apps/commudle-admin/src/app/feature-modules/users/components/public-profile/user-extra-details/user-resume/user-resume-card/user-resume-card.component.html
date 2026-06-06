@@ -32,7 +32,7 @@
 
 <ng-template #deleteResumeDialog let-ref="dialogRef">
   <com-card class="delete-dialog">
-    <com-card-header class="com-flex com-items-center com-justify-between">
+    <com-card-header>
       <span class="com-flex com-items-center com-gap-2 com-text-base com-font-semibold com-text-Yankees-Blue">
         <nb-icon icon="alert-triangle" status="warning"></nb-icon>
         Confirmation
@@ -50,7 +50,7 @@
       <br />
       <p class="com-text-sm com-text-gray-500"><strong>Note:</strong>&nbsp;This action cannot be undone.</p>
     </com-card-body>
-    <com-card-footer class="com-flex com-items-center com-justify-between">
+    <com-card-footer>
       <button (click)="ref.close()" ghost nbButton status="danger">No</button>
       <button (click)="deleteUserResume(); ref.close()" nbButton status="success">Yes</button>
     </com-card-footer>

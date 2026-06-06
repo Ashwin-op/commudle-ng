@@ -50,6 +50,7 @@
               <span *ngIf="userWorkHistory.is_working; else endDate">Present</span>
               <ng-template #endDate>{{ userWorkHistory.end_date | date : 'MMM yyyy' }}</ng-template>
             </span>
+            <span class="dot-sep">·</span>
             <span class="duration">{{ getDuration() }}</span>
           </div>
         </div>

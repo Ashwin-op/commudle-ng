@@ -37,12 +37,11 @@ p {
     }
 
     .resume-actions {
-      @apply com-flex com-items-center com-gap-1 com-pt-3;
-      border-top: 1px solid var(--color-bright-gray);
+      @apply com-flex com-items-center com-gap-1 com-pt-2 com-border-0 com-border-t com-border-Bright-Gray com-justify-between;
 
       .action-btn {
         @apply com-inline-flex com-items-center com-gap-1.5;
-        @apply com-px-3 com-py-2 com-rounded-lg;
+        @apply com-p-1 com-rounded-lg;
         @apply com-font-semibold com-text-gray-600;
         @apply com-no-underline com-cursor-pointer com-border-0 com-bg-transparent;
         @apply com-transition-all com-duration-200;
@@ -84,7 +83,7 @@ p {
 
 .delete-dialog {
   com-card-header {
-    @apply com-px-4 com-py-3;
+    @apply com-flex com-items-center com-justify-between com-px-4 com-py-3;
     background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
     border-bottom: 1px solid var(--color-bright-gray);
   }
@@ -94,7 +93,7 @@ p {
   }
 
   com-card-footer {
-    @apply com-px-4 com-py-3;
+    @apply com-flex com-items-center com-justify-between com-px-4 com-py-3;
     border-top: 1px solid var(--color-bright-gray);
   }
 }

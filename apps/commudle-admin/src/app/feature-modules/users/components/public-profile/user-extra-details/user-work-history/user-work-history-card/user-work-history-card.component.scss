@@ -9,7 +9,6 @@ p {
 .user-work-history-card {
   @apply com-m-0 com-border com-border-solid com-border-Bright-Gray com-rounded-lg;
   @apply com-transition-all com-duration-300 com-ease-out;
-  @apply hover:com-shadow-md;
 
   com-card-body {
     @apply com-p-4;
@@ -42,14 +41,14 @@ p {
   }
 
   .heading {
-    @apply com-flex com-justify-between com-items-start com-gap-4;
+    @apply com-flex md:com-flex-row com-flex-col com-justify-between com-items-start md:com-gap-4 com-gap-1;
   }
 
   .job {
     @apply com-flex com-flex-col com-min-w-0;
 
     .job-title-row {
-      @apply com-flex com-items-center com-gap-2;
+      @apply com-flex md:com-flex-row com-flex-col md:com-items-center com-gap-2;
     }
 
     .job-title {
@@ -58,23 +57,31 @@ p {
 
     .actions {
       @apply com-flex com-items-center com-flex-shrink-0;
+
+      button {
+        @apply com-px-2 com-py-0 #{!important};
+      }
     }
 
     .company-location {
-      @apply com-text-sm com-text-gray-500 com-mt-0.5;
+      @apply com-text-sm com-text-gray-500 md:com-mt-1 com-mt-6px;
     }
   }
 
   .date {
-    @apply com-flex com-flex-col com-items-end com-text-sm com-font-medium com-text-gray-500 com-whitespace-nowrap com-flex-shrink-0;
+    @apply com-flex com-flex-row com-items-center com-gap-1.5 com-text-sm com-font-medium com-text-gray-500 com-whitespace-nowrap;
+
+    .dot-sep {
+      @apply com-text-gray-400;
+    }
 
     .duration {
-      @apply com-text-xs com-font-normal com-text-gray-500 com-mt-0.5;
+      @apply com-text-sm com-font-medium com-text-gray-500;
     }
   }
 
   .description {
-    @apply com-mt-3 com-text-sm com-text-gray-600 com-whitespace-pre-wrap;
+    @apply com-mt-3 com-text-sm com-text-gray-800 com-whitespace-pre-wrap;
   }
 }
 
