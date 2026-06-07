@@ -3,7 +3,7 @@
   @apply hover:com-shadow-lg com-transition-shadow;
 
   .card-banner {
-    @apply com-relative com-h-32 com-overflow-hidden com-bg-gray-100;
+    @apply com-relative com-overflow-hidden;
 
     img {
       @apply com-w-full com-h-full com-object-cover;

@@ -1,10 +1,13 @@
 <a class="com-no-underline" [routerLink]="['/communities', hackathon.community?.slug, 'hackathons', hackathon.slug]">
   <com-card class="role-card">
     <div class="card-banner">
-      <img *ngIf="hackathon.banner_image?.url" [src]="hackathon.banner_image.url" [alt]="hackathon.name" />
-      <div *ngIf="!hackathon.banner_image?.url" class="card-banner-placeholder">
-        <img [src]="placeholderImage" alt="hackathon" />
-      </div>
+      <commudle-banner-image
+        [headerImagePath]="hackathon.banner_image?.i320 || placeholderImage"
+        [name]="hackathon.name"
+        [aspectRatio]="'16/7'"
+        [bottomRightCurve]="false"
+        [bottomLeftCurve]="false"
+      ></commudle-banner-image>
       <span class="role-badge" [attr.data-role]="roleKey">
         <fa-icon *ngIf="roleIcon" [icon]="roleIcon"></fa-icon>
         {{ roleLabel }}

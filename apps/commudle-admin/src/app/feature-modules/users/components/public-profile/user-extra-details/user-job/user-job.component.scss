@@ -5,6 +5,7 @@
     @apply com-px-4 com-py-3 com-border-0 com-flex com-flex-row com-items-center com-gap-2;
     justify-content: flex-start;
     background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
+    @apply dark:com-from-[#080808] dark:com-via-[#141414] dark:com-to-[#080808] dark:com-bg-gradient-to-br;
     border-bottom: 1px solid var(--color-bright-gray);
 
     a {
@@ -29,6 +30,7 @@
   com-card-header {
     @apply com-px-4 com-py-3 com-flex com-justify-between com-items-center com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
     background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
+    @apply dark:com-from-[#080808] dark:com-via-[#141414] dark:com-to-[#080808] dark:com-bg-gradient-to-br;
   }
 
   .dialog-title {

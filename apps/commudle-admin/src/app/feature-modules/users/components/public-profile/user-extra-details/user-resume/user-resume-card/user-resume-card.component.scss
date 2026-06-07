@@ -83,9 +83,9 @@ p {
 
 .delete-dialog {
   com-card-header {
-    @apply com-flex com-items-center com-justify-between com-px-4 com-py-3;
+    @apply com-flex com-items-center com-justify-between com-px-4 com-py-3 com-border-0 com-border-b com-border-Bright-Gray com-border-solid;
     background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
-    border-bottom: 1px solid var(--color-bright-gray);
+    @apply dark:com-from-[#080808] dark:com-via-[#141414] dark:com-to-[#080808] dark:com-bg-gradient-to-br;
   }
 
   com-card-body {
