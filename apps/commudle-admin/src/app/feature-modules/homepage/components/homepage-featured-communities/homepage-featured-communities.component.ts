@@ -1,6 +1,5 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 // import getImagePalette from 'image-palette-core';
-import { FeaturedCommunitiesService } from 'apps/commudle-admin/src/app/services/featured-communities.service';
 import { FeaturedItemsService } from 'apps/commudle-admin/src/app/services/featured-items.service';
 import { environment } from 'apps/commudle-admin/src/environments/environment';
 import { IFeaturedItems } from 'apps/shared-models/featured-items.model';
@@ -16,7 +15,7 @@ export class HomepageFeaturedCommunitiesComponent implements OnInit {
 
   environment = environment;
 
-  constructor(private featuredItemsService: FeaturedItemsService, private changeDetectorRef: ChangeDetectorRef) {}
+  constructor(private featuredItemsService: FeaturedItemsService) {}
 
   ngOnInit(): void {
     this.getFeaturedCommunities();
@@ -27,16 +26,6 @@ export class HomepageFeaturedCommunitiesComponent implements OnInit {
       this.featuredCommunities = this.featuredCommunities
         .concat(data.page.reduce((acc, value) => [...acc, value.data], []))
         .slice(0, 4);
-      this.extractPalette();
-      this.changeDetectorRef.markForCheck();
     });
-  }
-
-  extractPalette(): void {
-    // this.featuredCommunities.forEach((community) => {
-    //   const img = new Image();
-    //   img.src = community.kommunity.logo_image.url;
-    //   img.onload = () => (community.palette = getImagePalette(img));
-    // });
   }
 }
