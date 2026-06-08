@@ -174,9 +174,14 @@ export class CommunityChannelMessageComponent implements OnInit, AfterViewInit {
   }
 
   share(): void {
-    const shareLink = `${this.environment.app_url}/${this.shareMessageUrl}/${this.channelOrForumId}?after=${this.cursor}`;
+    const path = this.shareMessageUrl
+      ? `/${this.shareMessageUrl}/${this.channelOrForumId}`
+      : this.isBrowser
+      ? window.location.pathname
+      : this.router.url.split('?')[0];
+    const shareLink = `${this.environment.app_url}${path}?after=${this.cursor}`;
     this.shareService.shareContent(
-      `${shareLink}`,
+      shareLink,
       'Hey, check out this discussion on Commudle',
       this.message.content.length > 40 ? `${this.message.content.substring(0, 40)}...` : this.message.content,
       shareLink,
