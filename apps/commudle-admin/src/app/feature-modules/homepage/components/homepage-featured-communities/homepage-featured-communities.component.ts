@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 // import getImagePalette from 'image-palette-core';
 import { FeaturedCommunitiesService } from 'apps/commudle-admin/src/app/services/featured-communities.service';
 import { FeaturedItemsService } from 'apps/commudle-admin/src/app/services/featured-items.service';
@@ -6,11 +6,10 @@ import { environment } from 'apps/commudle-admin/src/environments/environment';
 import { IFeaturedItems } from 'apps/shared-models/featured-items.model';
 
 @Component({
-    selector: 'app-homepage-featured-communities',
-    templateUrl: './homepage-featured-communities.component.html',
-    styleUrls: ['./homepage-featured-communities.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-homepage-featured-communities',
+  templateUrl: './homepage-featured-communities.component.html',
+  styleUrls: ['./homepage-featured-communities.component.scss'],
+  standalone: false,
 })
 export class HomepageFeaturedCommunitiesComponent implements OnInit {
   featuredCommunities: IFeaturedItems[] = [];
