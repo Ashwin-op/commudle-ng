@@ -139,4 +139,14 @@ export class TagComponent implements OnInit, OnDestroy {
       this.onTagAdd(tag);
     }
   }
+
+  onInputChange(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    if (value.includes(',')) {
+      const tag = value.replace(/,/g, '').trim();
+      if (tag) {
+        this.onTagAdd(tag);
+      }
+    }
+  }
 }

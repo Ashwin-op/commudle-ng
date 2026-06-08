@@ -23,6 +23,7 @@
     <input
       (keydown)="onKeyDown($event)"
       (keyup.enter)="addTagFromInput($event)"
+      (input)="onInputChange($event)"
       *ngIf="editable"
       [disabled]="inputDisabled"
       fullWidth
