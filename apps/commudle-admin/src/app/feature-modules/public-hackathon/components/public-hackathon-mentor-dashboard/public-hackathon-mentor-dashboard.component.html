@@ -145,7 +145,7 @@
           <th>Track</th>
           <th>Problem Statement</th>
           <th>Members count</th>
-          <th width="100">Submission & Updates</th>
+          <th width="140">Submission & Updates</th>
           <th>Total Score</th>
           <th>Score Details</th>
           <th>Status</th>
@@ -232,17 +232,33 @@
             <div class="submission-details">
               @if(teamData.submission?.file_attachment) {
               <div class="ppt-link">
-                <strong>PPT Link:</strong>
-                <a [href]="teamData.submission.file_attachment.url" target="_blank">
-                  {{ teamData.submission.file_attachment.name }}
+                <strong>Submission:</strong>
+                <a
+                  (click)="
+                    openDocumentViewer(
+                      teamData.submission.round?.name || 'Submission',
+                      teamData.team.name,
+                      teamData.submission.file_attachment.url
+                    )
+                  "
+                  [title]="teamData.submission.file_attachment.name"
+                  class="submission-chip"
+                >
+                  <fa-icon [icon]="icons.faFilePowerpoint"></fa-icon>&nbsp;
+                  <span>View PPT/PDF</span>
                 </a>
                 <span class="date-time">({{ teamData.submission.created_at | date : 'short' }})</span>
               </div>
               } @else if(teamData.submission?.link) {
               <div class="ppt-link">
-                <strong>Submission Link:</strong>
-                <a [href]="teamData.submission.link" target="_blank" rel="noopener noreferrer">
-                  {{ teamData.submission.link }}
+                <strong>Submission:</strong>
+                <a
+                  (click)="openExternalLink(teamData.submission.link)"
+                  [title]="teamData.submission.link"
+                  class="submission-chip"
+                >
+                  <fa-icon [icon]="icons.faLink"></fa-icon>
+                  <span>View Link</span>
                 </a>
                 <span class="date-time">({{ teamData.submission.created_at | date : 'short' }})</span>
               </div>
@@ -522,5 +538,22 @@
       <button nbButton status="danger" (click)="ref.close(true)">Yes, Remove</button>
       <button nbButton (click)="ref.close(false)">No</button>
     </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<ng-template #documentViewerDialog let-ref="dialogRef" let-data>
+  <nb-card class="document-viewer-dialog">
+    <nb-card-header class="com-flex com-justify-between com-items-center">
+      <div>
+        <h3>{{ data.roundName }}</h3>
+        <p>{{ data.teamName }}</p>
+      </div>
+      <button nbButton ghost (click)="ref.close()" shape="round">
+        <nb-icon icon="close"></nb-icon>
+      </button>
+    </nb-card-header>
+    <nb-card-body>
+      <ngx-doc-viewer [url]="data.url" viewer="google" style="width: 100%; height: 80vh"></ngx-doc-viewer>
+    </nb-card-body>
   </nb-card>
 </ng-template>

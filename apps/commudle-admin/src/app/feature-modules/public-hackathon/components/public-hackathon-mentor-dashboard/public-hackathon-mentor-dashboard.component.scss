@@ -299,6 +299,9 @@ nb-card {
           .project-link,
           .updates-list {
             @apply com-flex com-flex-col com-gap-1;
+            .submission-chip {
+              @apply com-cursor-pointer;
+            }
 
             strong {
               @apply com-text-xs com-font-semibold com-text-gray-700;
@@ -476,5 +479,25 @@ nb-card {
 
   .members-popover-empty {
     @apply com-text-xs com-text-gray-400;
+  }
+}
+
+.document-viewer-dialog {
+  @apply com-w-full md:com-w-[90vw] com-max-h-[95vh];
+
+  nb-card-header {
+    @apply com-flex com-justify-between com-items-start com-p-4;
+
+    h3 {
+      @apply com-text-lg com-font-semibold com-text-gray-900 com-m-0;
+    }
+
+    p {
+      @apply com-text-sm com-text-gray-600 com-m-0 com-mt-1;
+    }
+  }
+
+  nb-card-body {
+    @apply com-p-0 com-overflow-hidden;
   }
 }

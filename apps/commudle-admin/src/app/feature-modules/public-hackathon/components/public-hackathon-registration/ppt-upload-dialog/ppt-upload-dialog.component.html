@@ -98,6 +98,11 @@
       <div class="link-section">
         <label class="link-label">Submission Link</label>
         <input nbInput fullWidth type="url" placeholder="https://example.com/your-submission" formControlName="link" />
+        <commudle-alert
+          *ngIf="uploadForm.get('link').invalid && uploadForm.get('link').touched"
+          [error]="true"
+          errorMessage="Please enter a valid URL starting with http:// or https://"
+        ></commudle-alert>
         <p class="link-hint">Provide a link to your submission (e.g., Google Drive, GitHub, Figma, etc.)</p>
       </div>
       }

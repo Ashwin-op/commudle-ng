@@ -25,7 +25,7 @@ import { NbDialogService } from '@commudle/theme';
 import { Subject, takeUntil } from 'rxjs';
 import { MentorScoringDialogComponent } from './mentor-scoring-dialog/mentor-scoring-dialog.component';
 import moment from 'moment';
-import { faEdit, faPlus, faXmark, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faXmark, faCheck, faFilePowerpoint, faLink } from '@fortawesome/free-solid-svg-icons';
 import { RoundMentorSlotBookingChannel } from 'apps/shared-components/services/websockets/round-mentor-slot-booking.channel';
 import { HackathonJudgeService } from 'apps/commudle-admin/src/app/services/hackathon-judge.service';
 
@@ -59,8 +59,11 @@ export class PublicHackathonMentorDashboardComponent implements OnInit, OnDestro
     faXmark,
     faEdit,
     faCheck,
+    faFilePowerpoint,
+    faLink,
   };
 
+  @ViewChild('documentViewerDialog') documentViewerDialog: TemplateRef<any>;
   @ViewChild('ProblemStatementView') problemStatementView: TemplateRef<any>;
   @ViewChild('addTeamDialog') addTeamDialog: TemplateRef<any>;
   @ViewChild('cancelSlotDialog') cancelSlotDialog: TemplateRef<any>;
@@ -314,5 +317,17 @@ export class PublicHackathonMentorDashboardComponent implements OnInit, OnDestro
 
   toggleUpdateExpansion(updateId: number): void {
     this.expandedUpdates[updateId] = !this.expandedUpdates[updateId];
+  }
+
+  openDocumentViewer(roundName: string, teamName: string, url: string): void {
+    this.dialogService.open(this.documentViewerDialog, {
+      context: { roundName, teamName, url },
+    });
+  }
+
+  openExternalLink(url: string): void {
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
   }
 }

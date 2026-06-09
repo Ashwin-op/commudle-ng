@@ -18,6 +18,7 @@ import {
 import { PublicHackathonHomepageComponent } from './components/public-hackathon-homepage/public-hackathon-homepage.component';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { PublicHackathonDetailsComponent } from 'apps/commudle-admin/src/app/feature-modules/public-hackathon/components/public-hackathon-details/public-hackathon-details.component';
 import { PublicHackathonScheduleComponent } from 'apps/commudle-admin/src/app/feature-modules/public-hackathon/components/public-hackathon-schedule/public-hackathon-schedule.component';
 import { PublicHackathonJudgesComponent } from 'apps/commudle-admin/src/app/feature-modules/public-hackathon/components/public-hackathon-judges/public-hackathon-judges.component';
@@ -69,6 +70,7 @@ import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives
     NbTagModule,
     NbPopoverModule,
     FontAwesomeModule,
+    NgxDocViewerModule,
     SharedComponentsModule,
     NewSharedComponentsModule,
     MiniUserProfileModule,

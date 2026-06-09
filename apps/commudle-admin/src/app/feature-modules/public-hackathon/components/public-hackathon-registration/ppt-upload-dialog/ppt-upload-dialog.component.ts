@@ -42,7 +42,7 @@ export class PptUploadDialogComponent implements OnInit {
   ) {
     this.uploadForm = this.fb.group({
       comments: [''],
-      link: [''],
+      link: ['', [Validators.pattern(/^https?:\/\/.+/)]],
     });
   }
 
@@ -108,19 +108,9 @@ export class PptUploadDialogComponent implements OnInit {
   }
 
   isSubmitDisabled(): boolean {
-    if (this.isUploading) {
-      return true;
-    }
-
-    if (this.existingSubmission) {
-      return false;
-    }
-
-    if (this.submissionMode === 'file') {
-      return !this.selectedFile;
-    }
-
-    return !this.uploadForm.get('link')?.value?.trim();
+    if (this.isUploading) return true;
+    if (this.submissionMode === 'file') return !this.existingSubmission && !this.selectedFile;
+    return !this.uploadForm.get('link')?.value?.trim() || this.uploadForm.get('link').invalid;
   }
 
   onSubmit() {
@@ -130,9 +120,8 @@ export class PptUploadDialogComponent implements OnInit {
         this.toasterService.warningDialog('Please provide a link.');
         return;
       }
-
-      if (linkValue && !this.isValidUrl(linkValue)) {
-        this.toasterService.warningDialog('Please provide a valid URL (starting with http:// or https://).');
+      if (this.uploadForm.get('link').invalid) {
+        this.uploadForm.get('link').markAsTouched();
         return;
       }
     }
@@ -168,14 +157,5 @@ export class PptUploadDialogComponent implements OnInit {
 
   close() {
     this.dialogRef.close();
-  }
-
-  private isValidUrl(url: string): boolean {
-    try {
-      const parsed = new URL(url);
-      return parsed.protocol === 'http:' || parsed.protocol === 'https:';
-    } catch {
-      return false;
-    }
   }
 }
