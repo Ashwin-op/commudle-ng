@@ -310,6 +310,11 @@
             <option [ngValue]="false">Not Submitted</option>
           </select>
 
+          <!-- <select class="filter-select" [(ngModel)]="sortOrder" (change)="setSortByWinners(sortOrder)">
+            <option value="desc">Winners First</option>
+            <option value="asc">Non-winners First</option>
+          </select> -->
+
           <button
             *ngIf="hasActiveFilters"
             nbButton

@@ -71,6 +71,8 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
   onlyWinners: boolean;
   withCommunityBuild: boolean | null = null;
   withSubmissions: boolean | null = null;
+  sortBy = 'winners';
+  sortOrder = 'desc';
 
   tinyMCE = {
     min_height: 200,
@@ -297,8 +299,8 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
         this.onlyWinners,
         this.selectedTrackId,
         this.selectedProblemStatementId,
-        undefined,
-        undefined,
+        this.sortBy,
+        this.sortOrder,
         undefined,
         this.withSubmissions,
         this.withCommunityBuild,
@@ -362,6 +364,13 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
     this.fetchHackathonUserResponses();
   }
 
+  setSortByWinners(order: 'asc' | 'desc') {
+    this.sortBy = 'winners';
+    this.sortOrder = order;
+    this.winnerPage = 1;
+    this.fetchHackathonUserResponses();
+  }
+
   resetFilters() {
     this.searchForm.patchValue({ search: '' }, { emitEvent: false });
     this.selectedRoundId = undefined;
@@ -371,6 +380,8 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
     this.onlyWinners = undefined;
     this.withCommunityBuild = null;
     this.withSubmissions = null;
+    this.sortBy = 'winners';
+    this.sortOrder = 'desc';
     this.onFilterChange();
   }
 
