@@ -364,12 +364,13 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
     this.fetchHackathonUserResponses();
   }
 
-  setSortByWinners(order: 'asc' | 'desc') {
-    this.sortBy = 'winners';
-    this.sortOrder = order;
-    this.winnerPage = 1;
-    this.fetchHackathonUserResponses();
-  }
+  //  TODO: will add in future to sort or unsort by winners now by default it will be sort by winners count
+  // setSortByWinners(order: 'asc' | 'desc') {
+  //   this.sortBy = 'winners';
+  //   this.sortOrder = order;
+  //   this.winnerPage = 1;
+  //   this.fetchHackathonUserResponses();
+  // }
 
   resetFilters() {
     this.searchForm.patchValue({ search: '' }, { emitEvent: false });
