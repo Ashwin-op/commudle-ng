@@ -1,19 +1,26 @@
 nb-card {
   @apply com-mx-0;
+
+  nb-card-body {
+    @apply com-overflow-hidden;
+  }
 }
 
 .header-content {
-  @apply com-flex com-justify-between com-items-center com-gap-4;
+  @apply com-flex com-flex-col com-gap-3;
+  @apply sm:com-flex-row sm:com-justify-between sm:com-items-center sm:com-gap-4;
 
   .round-selector {
-    @apply com-flex com-items-center com-gap-2;
+    @apply com-flex com-flex-col com-gap-1;
+    @apply sm:com-flex-row sm:com-items-center sm:com-gap-2;
 
     label {
       @apply com-text-sm com-font-medium com-text-gray-700;
     }
 
     .round-select {
-      @apply com-min-w-[250px] com-px-3 com-py-2 com-border com-border-gray-300 com-rounded;
+      @apply com-w-full com-px-3 com-py-2 com-border com-border-gray-300 com-rounded;
+      @apply sm:com-min-w-[250px] sm:com-w-auto;
       @apply focus:com-outline-none focus:com-ring-2 focus:com-ring-primary-500;
     }
   }
@@ -174,8 +181,12 @@ nb-card {
   }
 }
 
+.teams-table-wrapper {
+  @apply com-overflow-x-auto com-w-full;
+}
+
 .teams-table {
-  @apply com-w-full com-border-collapse;
+  @apply com-w-full com-border-collapse com-min-w-[800px];
 
   thead {
     @apply com-bg-gray-100;

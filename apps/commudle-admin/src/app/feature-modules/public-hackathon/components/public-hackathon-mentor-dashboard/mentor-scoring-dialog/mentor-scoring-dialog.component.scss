@@ -1,5 +1,5 @@
 .scoring-dialog {
-  @apply com-min-w-[500px] com-max-w-[600px] com-max-h-90dvh;
+  @apply md:com-min-w-[500px] md:com-max-w-[600px] com-max-h-90dvh;
 
   nb-card-header {
     @apply com-pb-4;
@@ -46,7 +46,7 @@
     }
 
     .info-section {
-      @apply com-flex com-gap-6 com-mb-6 com-p-4 com-bg-gray-100 com-rounded-lg;
+      @apply com-gap-6 com-mb-6 com-p-4 com-bg-gray-100 com-rounded-lg;
 
       .info-item {
         @apply com-flex com-gap-2;

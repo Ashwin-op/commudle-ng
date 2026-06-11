@@ -138,258 +138,246 @@
       <p>No teams assigned for this round</p>
     </div>
 
-    <table *ngIf="!isLoading && teamDetails.length > 0" class="teams-table">
-      <thead>
-        <tr>
-          <th>Team Name</th>
-          <th>Track</th>
-          <th>Problem Statement</th>
-          <th>Members count</th>
-          <th width="140">Submission & Updates</th>
-          <th>Total Score</th>
-          <th>Score Details</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let teamData of teamDetails">
-          <td class="team-name">
-            <div class="team-name-wrapper">
-              <span>{{ teamData.team.name }}</span>
-              @if(teamData.evaluators && teamData.evaluators.length > 0) {
-              <div class="evaluators-section">
-                <span class="evaluators-label">Other Evaluators:</span>
-                <div class="evaluators-cards">
-                  @for(evaluator of teamData.evaluators; track evaluator.id) {
-                  <div class="evaluator-card" [class.evaluator-submitted]="evaluator.has_submitted">
-                    <div class="evaluator-avatar-wrapper">
-                      <img
-                        *ngIf="evaluator.photo?.i32"
-                        [src]="evaluator.photo.i32"
-                        [alt]="evaluator.name"
-                        [username]="evaluator.username"
-                        appMiniUserProfile
-                        class="evaluator-avatar"
-                      />
-                      <div
-                        *ngIf="!evaluator.photo?.i32"
-                        class="evaluator-avatar-placeholder"
-                        [username]="evaluator.username"
-                        appMiniUserProfile
-                      >
-                        <span>{{ evaluator.name.charAt(0).toUpperCase() }}</span>
+    <div class="teams-table-wrapper">
+      <table *ngIf="!isLoading && teamDetails.length > 0" class="teams-table">
+        <thead>
+          <tr>
+            <th>Team Name</th>
+            <th>Track</th>
+            <th>Problem Statement</th>
+            <th>Members count</th>
+            <th width="100">Submission & Updates</th>
+            <th>Total Score</th>
+            <th>Score Details</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let teamData of teamDetails">
+            <td class="team-name">
+              <div class="team-name-wrapper">
+                <span>{{ teamData.team.name }}</span>
+                @if(teamData.evaluators && teamData.evaluators.length > 0) {
+                <div class="evaluators-section">
+                  <span class="evaluators-label">Other Evaluators:</span>
+                  <div class="evaluators-cards">
+                    @for(evaluator of teamData.evaluators; track evaluator.id) {
+                    <div class="evaluator-card" [class.evaluator-submitted]="evaluator.has_submitted">
+                      <div class="evaluator-avatar-wrapper">
+                        <img
+                          *ngIf="evaluator.photo?.i32"
+                          [src]="evaluator.photo.i32"
+                          [alt]="evaluator.name"
+                          [username]="evaluator.username"
+                          appMiniUserProfile
+                          class="evaluator-avatar"
+                        />
+                        <div
+                          *ngIf="!evaluator.photo?.i32"
+                          class="evaluator-avatar-placeholder"
+                          [username]="evaluator.username"
+                          appMiniUserProfile
+                        >
+                          <span>{{ evaluator.name.charAt(0).toUpperCase() }}</span>
+                        </div>
+                      </div>
+                      <div class="evaluator-info" [username]="evaluator.username" appMiniUserProfile>
+                        <span class="evaluator-name">{{ evaluator.name }}</span>
+                        <span class="evaluator-status" [class.status-submitted]="evaluator.has_submitted">
+                          {{ evaluator.has_submitted ? 'Scored' : 'Pending' }}
+                        </span>
                       </div>
                     </div>
-                    <div class="evaluator-info" [username]="evaluator.username" appMiniUserProfile>
-                      <span class="evaluator-name">{{ evaluator.name }}</span>
-                      <span class="evaluator-status" [class.status-submitted]="evaluator.has_submitted">
-                        {{ evaluator.has_submitted ? 'Scored' : 'Pending' }}
-                      </span>
-                    </div>
+                    }
                   </div>
-                  }
                 </div>
-              </div>
-              }
-            </div>
-          </td>
-          <td>{{ teamData.team.track?.name || 'N/A' }}</td>
-          <td>
-            <span
-              *ngIf="teamData.team.problem_statement"
-              class="ps-link"
-              (click)="showProblemStatement(teamData.team.problem_statement)"
-            >
-              {{ teamData.team.problem_statement.display_id }}
-            </span>
-            <span *ngIf="!teamData.team.problem_statement">N/A</span>
-          </td>
-          <td>
-            <span
-              class="members-count-trigger"
-              [nbPopover]="membersPopover"
-              nbPopoverTrigger="click"
-              nbPopoverPlacement="bottom"
-            >
-              {{ teamData.team.team_members_count }}
-            </span>
-            <ng-template #membersPopover>
-              <div class="members-popover">
-                @if(teamData.team.team_members && teamData.team.team_members.length > 0) {
-                <div class="members-popover-list">
-                  @for(member of teamData.team.team_members; track member.id) {
-                  <app-user-profile-card-small [user]="member.user || member"></app-user-profile-card-small>
-                  }
-                </div>
-                } @else {
-                <span class="members-popover-empty">No member details available</span>
                 }
               </div>
-            </ng-template>
-          </td>
-          <td>
-            <div class="submission-details">
-              @if(teamData.submission?.file_attachment) {
-              <div class="ppt-link">
-                <strong>Submission:</strong>
-                <a
-                  (click)="
-                    openDocumentViewer(
-                      teamData.submission.round?.name || 'Submission',
-                      teamData.team.name,
-                      teamData.submission.file_attachment.url
-                    )
-                  "
-                  [title]="teamData.submission.file_attachment.name"
-                  class="submission-chip"
-                >
-                  <fa-icon [icon]="icons.faFilePowerpoint"></fa-icon>&nbsp;
-                  <span>View PPT/PDF</span>
-                </a>
-                <span class="date-time">({{ teamData.submission.created_at | date : 'short' }})</span>
-              </div>
-              } @else if(teamData.submission?.link) {
-              <div class="ppt-link">
-                <strong>Submission:</strong>
-                <a
-                  (click)="openExternalLink(teamData.submission.link)"
-                  [title]="teamData.submission.link"
-                  class="submission-chip"
-                >
-                  <fa-icon [icon]="icons.faLink"></fa-icon>
-                  <span>View Link</span>
-                </a>
-                <span class="date-time">({{ teamData.submission.created_at | date : 'short' }})</span>
-              </div>
-              } @if(teamData.team.community_build) {
-              <div class="project-link">
-                <strong>Project:</strong>
-                <a [routerLink]="['/builds', teamData.team.community_build.slug]" target="_blank">
-                  {{ teamData.team.community_build.name }}
-                </a>
-              </div>
-              } @if(teamData.team.entity_updates && teamData.team.entity_updates.length > 0) {
-              <div class="updates-list">
-                <strong>Updates:</strong>
-                <ol>
-                  @for(update of teamData.team.entity_updates; track update.id) {
-                  <li>
-                    <span
-                      class="update-details"
-                      [innerHTML]="
-                        (expandedUpdates[update.id]
-                          ? update.details
-                          : update.details.length > 100
-                          ? (update.details | slice : 0 : 100) + '...'
-                          : update.details
-                        )
-                          | stripHtmlExceptLinks
-                          | safeHtml
-                      "
-                    ></span>
-                    <button
-                      *ngIf="update.details.length > 100"
-                      nbButton
-                      ghost
-                      size="tiny"
-                      status="primary"
-                      (click)="toggleUpdateExpansion(update.id)"
-                    >
-                      {{ expandedUpdates[update.id] ? 'View Less' : 'View More' }}
-                    </button>
-                    <span class="date-time">({{ update.created_at | date : 'short' }})</span>
-                  </li>
+            </td>
+            <td>{{ teamData.team.track?.name || 'N/A' }}</td>
+            <td>
+              <span
+                *ngIf="teamData.team.problem_statement"
+                class="ps-link"
+                (click)="showProblemStatement(teamData.team.problem_statement)"
+              >
+                {{ teamData.team.problem_statement.display_id }}
+              </span>
+              <span *ngIf="!teamData.team.problem_statement">N/A</span>
+            </td>
+            <td>
+              <span
+                class="members-count-trigger"
+                [nbPopover]="membersPopover"
+                nbPopoverTrigger="click"
+                nbPopoverPlacement="bottom"
+              >
+                {{ teamData.team.team_members_count }}
+              </span>
+              <ng-template #membersPopover>
+                <div class="members-popover">
+                  @if(teamData.team.team_members && teamData.team.team_members.length > 0) {
+                  <div class="members-popover-list">
+                    @for(member of teamData.team.team_members; track member.id) {
+                    <app-user-profile-card-small [user]="member.user || member"></app-user-profile-card-small>
+                    }
+                  </div>
+                  } @else {
+                  <span class="members-popover-empty">No member details available</span>
                   }
-                </ol>
-              </div>
-              } @if(!teamData.submission?.file_attachment && !teamData.submission?.link &&
-              !teamData.team.community_build && (!teamData.team.entity_updates || teamData.team.entity_updates.length
-              === 0)) {
-              <span class="no-submission">No submission</span>
-              }
-            </div>
-          </td>
-          <td>
-            @if(teamData.score?.total_score !== null && teamData.score?.total_score !== undefined) {
-            {{ teamData.score.total_score }}
-            } @else { - }
-          </td>
-          <td>
-            @if(teamData.score?.status === EHackathonTeamRoundScoreStatus.SUBMITTED || teamData.score?.status ===
-            EHackathonTeamRoundScoreStatus.DRAFT) { @if(teamData.score?.score && teamData.score.score.length > 0) {
-            <table class="inner-score-table">
-              <tbody>
-                @for(item of teamData.score.score; track item.text) {
-                <tr>
-                  <td>{{ item.text }}</td>
-                  <td>{{ item.score }}</td>
-                </tr>
+                </div>
+              </ng-template>
+            </td>
+            <td>
+              <div class="submission-details">
+                @if(teamData.submission?.file_attachment) {
+                <div class="ppt-link">
+                  <strong>PPT Link:</strong>
+                  <a [href]="teamData.submission.file_attachment.url" target="_blank">
+                    {{ teamData.submission.file_attachment.name }}
+                  </a>
+                  <span class="date-time">({{ teamData.submission.created_at | date : 'short' }})</span>
+                </div>
+                } @else if(teamData.submission?.link) {
+                <div class="ppt-link">
+                  <strong>Submission Link:</strong>
+                  <a [href]="teamData.submission.link" target="_blank" rel="noopener noreferrer">
+                    {{ teamData.submission.link }}
+                  </a>
+                  <span class="date-time">({{ teamData.submission.created_at | date : 'short' }})</span>
+                </div>
+                } @if(teamData.team.community_build) {
+                <div class="project-link">
+                  <strong>Project:</strong>
+                  <a [routerLink]="['/builds', teamData.team.community_build.slug]" target="_blank">
+                    {{ teamData.team.community_build.name }}
+                  </a>
+                </div>
+                } @if(teamData.team.entity_updates && teamData.team.entity_updates.length > 0) {
+                <div class="updates-list">
+                  <strong>Updates:</strong>
+                  <ol>
+                    @for(update of teamData.team.entity_updates; track update.id) {
+                    <li>
+                      <span
+                        class="update-details"
+                        [innerHTML]="
+                          (expandedUpdates[update.id]
+                            ? update.details
+                            : update.details.length > 100
+                            ? (update.details | slice : 0 : 100) + '...'
+                            : update.details
+                          )
+                            | stripHtmlExceptLinks
+                            | safeHtml
+                        "
+                      ></span>
+                      <button
+                        *ngIf="update.details.length > 100"
+                        nbButton
+                        ghost
+                        size="tiny"
+                        status="primary"
+                        (click)="toggleUpdateExpansion(update.id)"
+                      >
+                        {{ expandedUpdates[update.id] ? 'View Less' : 'View More' }}
+                      </button>
+                      <span class="date-time">({{ update.created_at | date : 'short' }})</span>
+                    </li>
+                    }
+                  </ol>
+                </div>
+                } @if(!teamData.submission?.file_attachment && !teamData.submission?.link &&
+                !teamData.team.community_build && (!teamData.team.entity_updates || teamData.team.entity_updates.length
+                === 0)) {
+                <span class="no-submission">No submission</span>
                 }
-              </tbody>
-            </table>
-            } @else {
-            {{ teamData.score.total_score }}
-            } } @else { - }
-          </td>
-          <td>
-            <span
-              class="status-badge"
-              [class.submitted]="teamData.score?.status === 'submitted'"
-              [class.draft]="teamData.score?.status === 'draft'"
-            >
-              @if(teamData.score?.status === EHackathonTeamRoundScoreStatus.SUBMITTED){
-              <nb-icon icon="checkmark-circle-outline"></nb-icon>
-              Submitted } @else if(teamData.score?.status === EHackathonTeamRoundScoreStatus.DRAFT){
-              <nb-icon icon="clock-outline"></nb-icon>
-              Draft } @else if(teamData.score?.status === EHackathonTeamRoundScoreStatus.NOT_CREATED){
-              <nb-icon icon="minus-circle-outline"></nb-icon>
-              Pending }
-            </span>
-          </td>
-          <td>
-            @if(selectedRound?.has_marking_criteria) { @if(teamData.can_submit_score) {
-            <button
-              nbButton
-              size="small"
-              status="primary"
-              (click)="openScoringDialog(teamData)"
-              [disabled]="!moment().isBetween(moment(selectedRound?.date), moment(selectedRound?.end_date), null, '[]')"
-            >
-              {{
-                teamData.score?.status === EHackathonTeamRoundScoreStatus.SUBMITTED ||
-                teamData.score?.status === EHackathonTeamRoundScoreStatus.DRAFT
-                  ? 'Update Score'
-                  : 'Add Score'
-              }}
-            </button>
-            } @else {
+              </div>
+            </td>
+            <td>
+              @if(teamData.score?.total_score !== null && teamData.score?.total_score !== undefined) {
+              {{ teamData.score.total_score }}
+              } @else { - }
+            </td>
+            <td>
+              @if(teamData.score?.status === EHackathonTeamRoundScoreStatus.SUBMITTED || teamData.score?.status ===
+              EHackathonTeamRoundScoreStatus.DRAFT) { @if(teamData.score?.score && teamData.score.score.length > 0) {
+              <table class="inner-score-table">
+                <tbody>
+                  @for(item of teamData.score.score; track item.text) {
+                  <tr>
+                    <td>{{ item.text }}</td>
+                    <td>{{ item.score }}</td>
+                  </tr>
+                  }
+                </tbody>
+              </table>
+              } @else {
+              {{ teamData.score.total_score }}
+              } } @else { - }
+            </td>
+            <td>
+              <span
+                class="status-badge"
+                [class.submitted]="teamData.score?.status === 'submitted'"
+                [class.draft]="teamData.score?.status === 'draft'"
+              >
+                @if(teamData.score?.status === EHackathonTeamRoundScoreStatus.SUBMITTED){
+                <nb-icon icon="checkmark-circle-outline"></nb-icon>
+                Submitted } @else if(teamData.score?.status === EHackathonTeamRoundScoreStatus.DRAFT){
+                <nb-icon icon="clock-outline"></nb-icon>
+                Draft } @else if(teamData.score?.status === EHackathonTeamRoundScoreStatus.NOT_CREATED){
+                <nb-icon icon="minus-circle-outline"></nb-icon>
+                Pending }
+              </span>
+            </td>
+            <td>
+              @if(selectedRound?.has_marking_criteria) { @if(true) {
+              <button
+                nbButton
+                size="small"
+                status="primary"
+                (click)="openScoringDialog(teamData)"
+                [disabled]="
+                  !moment().isBetween(moment(selectedRound?.date), moment(selectedRound?.end_date), null, '[]')
+                "
+              >
+                {{
+                  teamData.score?.status === EHackathonTeamRoundScoreStatus.SUBMITTED ||
+                  teamData.score?.status === EHackathonTeamRoundScoreStatus.DRAFT
+                    ? 'Update Score'
+                    : 'Add Score'
+                }}
+              </button>
+              } @else {
 
-            <button
-              nbButton
-              size="small"
-              status="primary"
-              (click)="openScoringDialog(teamData)"
-              [disabled]="
-                !moment().isBetween(moment(selectedRound?.date), moment(selectedRound?.end_date), null, '[]') || true
-              "
-              nbTooltip="Another mentor has already submitted a score for this team"
-              nbTooltipPlacement="top"
-            >
-              {{
-                teamData.score?.status === EHackathonTeamRoundScoreStatus.SUBMITTED ||
-                teamData.score?.status === EHackathonTeamRoundScoreStatus.DRAFT
-                  ? 'Update Score'
-                  : 'Add Score'
-              }}
-            </button>
-            } } @else {
-            <span class="no-scoring">-</span>
-            }
-          </td>
-        </tr>
-      </tbody>
-    </table>
+              <button
+                nbButton
+                size="small"
+                status="primary"
+                (click)="openScoringDialog(teamData)"
+                [disabled]="
+                  !moment().isBetween(moment(selectedRound?.date), moment(selectedRound?.end_date), null, '[]') || true
+                "
+                nbTooltip="Another mentor has already submitted a score for this team"
+                nbTooltipPlacement="top"
+              >
+                {{
+                  teamData.score?.status === EHackathonTeamRoundScoreStatus.SUBMITTED ||
+                  teamData.score?.status === EHackathonTeamRoundScoreStatus.DRAFT
+                    ? 'Update Score'
+                    : 'Add Score'
+                }}
+              </button>
+              } } @else {
+              <span class="no-scoring">-</span>
+              }
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </nb-card-body>
 </nb-card>
 
