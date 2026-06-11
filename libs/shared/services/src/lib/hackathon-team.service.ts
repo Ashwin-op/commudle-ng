@@ -77,7 +77,7 @@ export class HackathonTeamService {
       params = params.set('problem_statement_id', problemStatementId);
     }
     if (offlineInviteStatusFilter) {
-      params = params.set('offline_invite_status_filter', offlineInviteStatusFilter);
+      params = params.set('offline_invite_status', offlineInviteStatusFilter);
     }
     if (withSubmissions !== null && withSubmissions !== undefined) {
       params = params.set('with_submissions', withSubmissions);
@@ -184,7 +184,7 @@ export class HackathonTeamService {
       params = params.set('problem_statement_id', problemStatementId);
     }
     if (offlineInviteStatusFilter) {
-      params = params.set('offline_invite_status_filter', offlineInviteStatusFilter);
+      params = params.set('offline_invite_status', offlineInviteStatusFilter);
     }
     if (withSubmissions !== null && withSubmissions !== undefined) {
       params = params.set('with_submissions', withSubmissions);
@@ -232,7 +232,7 @@ export class HackathonTeamService {
       params = params.set('problem_statement_id', problemStatementId);
     }
     if (offlineInviteStatusFilter) {
-      params = params.set('offline_invite_status_filter', offlineInviteStatusFilter);
+      params = params.set('offline_invite_status', offlineInviteStatusFilter);
     }
     if (withSubmissions !== null && withSubmissions !== undefined) {
       params = params.set('with_submissions', withSubmissions);
