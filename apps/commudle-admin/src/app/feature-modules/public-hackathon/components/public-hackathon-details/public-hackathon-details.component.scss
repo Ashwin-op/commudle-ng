@@ -1,17 +1,25 @@
 .main-column {
-  nb-card {
-    @apply com-ml-0;
-    nb-card-header {
-      @apply com-flex com-gap-4 com-items-center;
+  @apply com-m-0 com-mb-20 md:com-mr-6;
+
+  com-card {
+    @apply com-m-0 com-mb-4;
+
+    com-card-header {
+      @apply com-flex com-gap-4 com-items-center com-px-4 com-py-3 com-rounded-t-lg com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+      background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
+      @apply dark:com-from-[#080808] dark:com-via-[#141414] dark:com-to-[#080808] dark:com-bg-gradient-to-br;
+
       h2 {
-        @apply com-text-Yankees-Blue com-text-2xl com-font-bold;
+        @apply com-text-base com-font-semibold com-text-Yankees-Blue com-m-0;
+
         a {
           @apply com-no-underline com-text-inherit;
         }
       }
     }
-    nb-card-body {
-      @apply com-py-3;
+
+    com-card-body {
+      @apply com-p-4;
     }
   }
 
@@ -228,7 +236,7 @@
 }
 
 .right-column {
-  nb-card {
+  com-card {
     @apply com-mr-0;
   }
 
@@ -252,4 +260,10 @@
       @apply com-inline-block com-px-3 com-py-1 com-rounded-full com-text-sm com-font-semibold com-bg-primary-100 com-text-primary-600;
     }
   }
+}
+
+.collaboration-communities,
+.comments,
+.faq {
+  @apply com-m-0 com-mb-4;
 }

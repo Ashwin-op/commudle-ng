@@ -1,30 +1,30 @@
 <div class="two-column-layout medium mobile-reverse">
-  <div class="main-column com-mb-20">
-    <nb-card>
-      <nb-card-body>
+  <div class="main-column">
+    <com-card>
+      <com-card-body>
         <div [innerHTML]="hackathon.description"></div>
-      </nb-card-body>
-    </nb-card>
+      </com-card-body>
+    </com-card>
 
     <div *ngIf="hackathon.updates_count > 0" id="updates">
-      <nb-card>
-        <nb-card-header>
+      <com-card>
+        <com-card-header>
           <h2>
             <a [routerLink]="['.']" fragment="updates"> Updates </a>
           </h2>
-        </nb-card-header>
-        <nb-card-body>
+        </com-card-header>
+        <com-card-body>
           <commudle-entity-updates
             [entityId]="hackathon.id"
             [entityType]="EDbModels.HACKATHON"
           ></commudle-entity-updates>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
     </div>
 
     <div *ngIf="hackathon.sponsors_count > 0 && hackathonSponsorGroupedByTierName" id="sponsors">
-      <nb-card>
-        <nb-card-header>
+      <com-card>
+        <com-card-header>
           <h6 class="title collaborations-card-heading section-heading-anchor">
             <fa-icon [icon]="icons.faSackDollar" class="sponsors-card-heading-icon"></fa-icon>
             <span>Sponsors</span>
@@ -32,8 +32,8 @@
               <fa-icon [icon]="icons.faLink" class="anchor-icon-small"></fa-icon>
             </a>
           </h6>
-        </nb-card-header>
-        <nb-card-body class="sponsors-cards">
+        </com-card-header>
+        <com-card-body class="sponsors-cards">
           <div
             *ngFor="
               let hackathonSponsorGrouped of hackathonSponsorGroupedByTierName | keyvalue : tierPriorityComparator
@@ -92,40 +92,40 @@
               </a>
             </div>
           </div>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
     </div>
 
-    <div id="collaborations">
+    <div id="collaborations" class="collaboration-communities">
       <commudle-public-hackathon-collaboration-communities
         [community]="community"
         [hackathon]="hackathon"
       ></commudle-public-hackathon-collaboration-communities>
     </div>
 
-    <nb-card id="comments">
-      <nb-card-header>
+    <com-card id="comments" class="comments">
+      <com-card-header>
         <h2>
           <a [routerLink]="['.']" fragment="comments"> Comments </a>
         </h2>
-      </nb-card-header>
-      <nb-card-body>
+      </com-card-header>
+      <com-card-body>
         <commudle-discussion
           *ngIf="discussionChat"
           [discussionId]="discussionChat.id"
           discussionParent="hackathon"
         ></commudle-discussion>
-      </nb-card-body>
-    </nb-card>
+      </com-card-body>
+    </com-card>
 
-    <div *ngIf="hackathon.faqs_count > 0" id="faq">
+    <div *ngIf="hackathon.faqs_count > 0" id="faq" class="faq">
       <commudle-public-faqs [faqs]="faqs"></commudle-public-faqs>
     </div>
   </div>
 
   <div class="right-column">
-    <nb-card *ngIf="isOrganizer">
-      <nb-card-body class="com-p-0">
+    <com-card *ngIf="isOrganizer">
+      <com-card-body class="com-p-0">
         <button
           nbButton
           status="danger"
@@ -136,30 +136,30 @@
           &nbsp;
           <span>Go To Admin panel</span>
         </button>
-      </nb-card-body>
-    </nb-card>
-    <nb-card>
-      <nb-card-body
+      </com-card-body>
+    </com-card>
+    <com-card>
+      <com-card-body
         ><commudle-public-hackathon-details-mini-card
           [hackathon]="hackathon"
           [hrgId]="hrgId"
           [community]="community"
         ></commudle-public-hackathon-details-mini-card
-      ></nb-card-body>
-    </nb-card>
+      ></com-card-body>
+    </com-card>
 
-    <nb-card *ngIf="rounds && rounds.length > 0">
-      <nb-card-header> Rounds </nb-card-header>
-      <nb-card-body>
+    <com-card *ngIf="rounds && rounds.length > 0">
+      <com-card-header> Rounds </com-card-header>
+      <com-card-body>
         <div *ngFor="let round of rounds" class="round-card">
           <div class="name">{{ round.name }}</div>
           <div class="date">{{ moment(round.date).format('DD MMM YYYY') }}</div>
         </div>
-      </nb-card-body>
-    </nb-card>
-    <nb-card *ngIf="userTeamDetails && userTeamDetails.length > 0">
-      <nb-card-header>Registration Status</nb-card-header>
-      <nb-card-body>
+      </com-card-body>
+    </com-card>
+    <com-card *ngIf="userTeamDetails && userTeamDetails.length > 0">
+      <com-card-header>Registration Status</com-card-header>
+      <com-card-body>
         <div class="status-info">
           <div class="status-badge">{{ userTeamDetails[0].registration_status | capitalizeAndRemoveUnderscore }}</div>
         </div>
@@ -173,7 +173,7 @@
         >
           <button nbButton status="primary" size="small" fullWidth>Edit Registration</button>
         </a>
-      </nb-card-body>
-    </nb-card>
+      </com-card-body>
+    </com-card>
   </div>
 </div>

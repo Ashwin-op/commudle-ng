@@ -1,9 +1,9 @@
-<nb-card>
-  <nb-card-body (click)="toggleShowAnswers()" class="faq-card">
+<com-card>
+  <com-card-body (click)="toggleShowAnswers()" class="faq-card">
     <div class="question">
       <p>{{ faq.question }}</p>
       <div class="actions">
-        <fa-icon [icon]="showAnswer ? icons.faMinus : icons.faAdd"></fa-icon>
+        <fa-icon [icon]="showAnswer ? icons.faMinus : icons.faAdd" [ngClass]="{ 'icon-rotated': showAnswer }"></fa-icon>
         <div class="admin-actions" *ngIf="isAdmin">
           <fa-icon
             [icon]="icons.faTrash"
@@ -19,5 +19,5 @@
       </div>
     </div>
     <p class="answer" [ngClass]="showAnswer ? 'com-flex' : 'com-hidden'">{{ faq.answer }}</p>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

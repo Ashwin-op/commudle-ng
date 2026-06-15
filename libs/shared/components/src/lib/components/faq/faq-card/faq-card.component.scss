@@ -1,25 +1,36 @@
 .faq-card {
-  @apply com-cursor-pointer;
+  @apply com-cursor-pointer com-p-3 com-rounded-lg com-transition-all com-duration-200;
+
+  &:hover {
+    @apply com-bg-gray-50 com-shadow-sm;
+    transform: scale(1.01);
+  }
 
   .question {
-    @apply com-flex com-justify-between com-pb-1;
+    @apply com-flex com-justify-between com-items-center;
 
     p {
-      @apply com-m-0 md:com-text-xl com-font-semibold com-text-base com-text-gray-900;
+      @apply com-m-0 com-text-sm md:com-text-base com-font-medium com-text-Yankees-Blue;
     }
 
     fa-icon {
-      @apply md:com-text-lg com-text-base;
+      @apply com-text-sm com-text-Cadet-Grey com-transition-transform com-duration-300;
+
+      &.icon-rotated {
+        @apply com-rotate-180;
+      }
     }
+
     .actions {
-      @apply com-flex com-flex-wrap com-gap-2;
+      @apply com-flex com-flex-wrap com-gap-2 com-items-center;
+
       .admin-actions {
-        @apply com-border-0 com-border-l-2 com-border-solid com-border-Bright-Gray-Light com-flex com-flex-wrap com-gap-2 com-pl-2;
+        @apply com-border-0 com-border-l-2 com-border-solid com-border-Bright-Gray com-flex com-flex-wrap com-gap-2 com-pl-2;
       }
     }
   }
 
   .answer {
-    @apply com-m-0 md:com-text-lg com-text-base com-font-normal com-text-gray-500;
+    @apply com-m-0 com-mt-2 com-text-sm com-font-normal com-text-gray-500;
   }
 }

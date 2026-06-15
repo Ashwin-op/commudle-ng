@@ -1,18 +1,25 @@
-nb-card {
+com-card {
   @apply com-ml-0;
-  nb-card-header {
-    @apply com-flex com-gap-4 com-items-center;
+
+  com-card-header {
+    @apply com-flex com-gap-2 com-items-center com-justify-start com-px-4 com-py-3 com-rounded-t-lg com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
+    @apply dark:com-from-[#080808] dark:com-via-[#141414] dark:com-to-[#080808] dark:com-bg-gradient-to-br;
+
     fa-icon {
-      @apply com-text-xl;
+      @apply com-text-lg com-text-primary-500;
     }
+
     h2 {
-      @apply com-text-Yankees-Blue com-text-2xl com-font-bold;
+      @apply com-text-base com-font-semibold com-text-Yankees-Blue com-m-0;
+
       a {
         @apply com-no-underline com-text-inherit;
       }
     }
   }
-  nb-card-body {
-    @apply com-py-3;
+
+  com-card-body {
+    @apply com-p-4 com-flex com-flex-col com-gap-4;
   }
 }

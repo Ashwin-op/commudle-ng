@@ -49,7 +49,7 @@ import { HackathonRoundCardComponent } from 'apps/commudle-admin/src/app/feature
 import { PublicHackathonTracksComponent } from 'apps/commudle-admin/src/app/feature-modules/public-hackathon/components/public-hackathon-tracks/public-hackathon-tracks.component';
 import { PublicHackathonMentorDashboardComponent } from 'apps/commudle-admin/src/app/feature-modules/public-hackathon/components/public-hackathon-mentor-dashboard/public-hackathon-mentor-dashboard.component';
 import { MentorScoringDialogComponent } from 'apps/commudle-admin/src/app/feature-modules/public-hackathon/components/public-hackathon-mentor-dashboard/mentor-scoring-dialog/mentor-scoring-dialog.component';
-import { CommudleButtonModule } from '@commudle/commudle-theme';
+import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-theme';
 import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives.module';
 
 @NgModule({
@@ -76,6 +76,7 @@ import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives
     MiniUserProfileModule,
     CommunityChannelsModule,
     CommudleButtonModule,
+    CommudleCardModule,
     SharedDirectivesModule,
     //standalone
     UserProfileComponent,

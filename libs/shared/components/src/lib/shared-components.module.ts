@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { EditorModule } from '@commudle/editor';
 import { InViewportDirective } from '@commudle/in-viewport';
 import { InfiniteScrollModule } from '@commudle/infinite-scroll';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 import {
   NbButtonModule,
   NbCardModule,
@@ -67,6 +68,7 @@ import { InterestedMembersComponent } from './components/interested-members/inte
     NbButtonModule,
     NbPopoverModule,
     NbCardModule,
+    CommudleCardModule,
     InViewportDirective,
     NbContextMenuModule,
     FontAwesomeModule,

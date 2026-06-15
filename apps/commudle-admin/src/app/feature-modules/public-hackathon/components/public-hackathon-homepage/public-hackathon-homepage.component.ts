@@ -1,5 +1,6 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { environment } from '@commudle/shared-environments';
 import { EHackathonRegistrationStatus, ICommunity, IHackathonTeam } from '@commudle/shared-models';
@@ -34,11 +35,15 @@ import { faTrophy } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./public-hackathon-homepage.component.scss'],
   standalone: false,
 })
-export class PublicHackathonHomepageComponent implements OnInit, OnDestroy {
+export class PublicHackathonHomepageComponent implements OnInit, OnDestroy, AfterViewInit {
   subscriptions: Subscription[] = [];
   hackathon: IHackathon;
   community: ICommunity;
   contactInfo: IContactInfo;
+  isTabsSticky = false;
+
+  @ViewChild('stickySentinel') sentinel: ElementRef;
+  private observer: IntersectionObserver;
   icons = {
     faLinkedinIn,
     faTwitter,
@@ -83,6 +88,7 @@ export class PublicHackathonHomepageComponent implements OnInit, OnDestroy {
     private seoService: SeoService,
     private authService: AuthService,
     private hackathonJudgeService: HackathonJudgeService,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {}
 
   ngOnInit() {
@@ -106,6 +112,24 @@ export class PublicHackathonHomepageComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
     this.destroy$.next();
     this.destroy$.complete();
+    this.observer?.disconnect();
+  }
+
+  ngAfterViewInit(): void {
+    if (this.sentinel && isPlatformBrowser(this.platformId)) {
+      this.setupStickyObserver(this.sentinel.nativeElement);
+    }
+  }
+
+  private setupStickyObserver(element: HTMLElement): void {
+    this.observer?.disconnect();
+    this.observer = new IntersectionObserver(
+      ([entry]) => {
+        this.isTabsSticky = !entry.isIntersecting;
+      },
+      { root: null, threshold: 0 },
+    );
+    this.observer.observe(element);
   }
 
   getHackathonAndCommunity() {

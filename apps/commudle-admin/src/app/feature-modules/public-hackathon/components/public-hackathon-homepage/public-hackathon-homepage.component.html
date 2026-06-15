@@ -4,179 +4,204 @@
       <div class="com-min-h-screen com-flex com-items-center com-justify-center" *ngIf="isLoading">
         <commudle-loading-spinner></commudle-loading-spinner>
       </div>
-      <nb-card *ngIf="!isLoading">
-        <nb-card-body class="details-section">
-          <div class="details">
-            <h1 class="hackathon-name">
-              {{ hackathon.name }}
-            </h1>
-            <app-community-badge [community]="community" class="hackathon-badge"></app-community-badge>
+      <com-card *ngIf="!isLoading" class="card">
+        <com-card-body class="details-section">
+          <div class="details-row">
+            <h1 class="hackathon-name">{{ hackathon.name }}</h1>
+            <div class="registration-badge open" *ngIf="hackathon?.status === EHackathonStatus?.OPEN">
+              <span class="badge-dot active-dot"></span>
+              <span>Registrations Open</span>
+            </div>
+            <div
+              class="registration-badge closed"
+              *ngIf="
+                hackathon?.status === EHackathonStatus?.COMPLETED || hackathon?.status === EHackathonStatus?.CANCELLED
+              "
+            >
+              <span class="badge-dot closed-dot"></span>
+              <span>Registrations Closed</span>
+            </div>
           </div>
-          <div class="social-links" *ngIf="contactInfo">
-            <ng-container *ngIf="contactInfo.website">
-              <a [href]="contactInfo.website">
-                <fa-icon [icon]="icons.faGlobe"></fa-icon>
-              </a>
-            </ng-container>
-            <ng-container *ngIf="contactInfo.facebook">
-              <a [href]="contactInfo.facebook">
-                <fa-icon [icon]="icons.faFacebookF"></fa-icon>
-              </a>
-            </ng-container>
-            <ng-container *ngIf="contactInfo.twitter">
-              <a [href]="contactInfo.twitter">
-                <fa-icon [icon]="icons.faTwitter"></fa-icon>
-              </a>
-            </ng-container>
-            <ng-container *ngIf="contactInfo.github">
-              <a [href]="contactInfo.github">
-                <fa-icon [icon]="icons.faGithub"></fa-icon>
-              </a>
-            </ng-container>
-            <ng-container *ngIf="contactInfo.linkedIn">
-              <a [href]="contactInfo.linkedIn">
-                <fa-icon [icon]="icons.faLinkedinIn"></fa-icon>
-              </a>
-            </ng-container>
+          <div class="details-sub">
+            <app-community-badge [community]="community" [size]="'small'" class="hackathon-badge"></app-community-badge>
+            <div class="social-links" *ngIf="contactInfo">
+              <ng-container *ngIf="contactInfo.website">
+                <a [href]="contactInfo.website">
+                  <fa-icon [icon]="icons.faGlobe"></fa-icon>
+                </a>
+              </ng-container>
+              <ng-container *ngIf="contactInfo.facebook">
+                <a [href]="contactInfo.facebook">
+                  <fa-icon [icon]="icons.faFacebookF"></fa-icon>
+                </a>
+              </ng-container>
+              <ng-container *ngIf="contactInfo.twitter">
+                <a [href]="contactInfo.twitter">
+                  <fa-icon [icon]="icons.faTwitter"></fa-icon>
+                </a>
+              </ng-container>
+              <ng-container *ngIf="contactInfo.github">
+                <a [href]="contactInfo.github">
+                  <fa-icon [icon]="icons.faGithub"></fa-icon>
+                </a>
+              </ng-container>
+              <ng-container *ngIf="contactInfo.linkedIn">
+                <a [href]="contactInfo.linkedIn">
+                  <fa-icon [icon]="icons.faLinkedinIn"></fa-icon>
+                </a>
+              </ng-container>
+            </div>
           </div>
-        </nb-card-body>
-      </nb-card>
-      <nb-card class="banner-image" *ngIf="!isLoading && !showBannerImage && hackathon.banner_image">
-        <nb-card-body>
+        </com-card-body>
+      </com-card>
+      <com-card class="banner-image" *ngIf="!isLoading && !showBannerImage && hackathon.banner_image">
+        <com-card-body>
           <commudle-banner-image
             [name]="hackathon.name"
             [headerImagePath]="hackathon.banner_image.url"
           ></commudle-banner-image>
-        </nb-card-body>
-      </nb-card>
-      <nb-card class="tabs" *ngIf="!isLoading">
-        <nb-card-body class="router-links custom-scrollbar">
-          <ng-container *appBreakpoints="'<=md'">
-            <div *ngIf="hasDashboardAndChannelAccess" class="dashboard-btn-wrapper">
-              <a [routerLink]="['user-dashboard']">
-                <button comButton status="primary" size="tiny" shape="semi-round" class="dashboard-btn">
-                  <fa-icon [icon]="icons.faArrowTrendUp"></fa-icon> &nbsp; Participant Team Dashboard
-                </button>
+        </com-card-body>
+      </com-card>
+      <div #stickySentinel class="sticky-sentinel"></div>
+      <div
+        class="menu-items-footer menu-items-footer-sticky"
+        *ngIf="!isLoading"
+        [ngClass]="{ 'sticky-active': isTabsSticky }"
+      >
+        <div class="page-menu">
+          <div class="menu-items d-flex">
+            <ng-container *appBreakpoints="'<=md'">
+              <div *ngIf="hasDashboardAndChannelAccess" class="dashboard-btn-wrapper">
+                <a [routerLink]="['user-dashboard']">
+                  <button comButton status="primary" size="tiny" shape="semi-round" class="dashboard-btn">
+                    <fa-icon [icon]="icons.faArrowTrendUp"></fa-icon> &nbsp; Participant Team Dashboard
+                  </button>
+                </a>
+              </div>
+              <div *ngIf="userRoles.is_mentor" class="dashboard-btn-wrapper">
+                <a [routerLink]="['mentor-dashboard']">
+                  <button comButton status="info" size="tiny" shape="semi-round" class="dashboard-btn">
+                    <fa-icon [icon]="icons.faGavel"></fa-icon> &nbsp; Mentor Dashboard
+                  </button>
+                </a>
+              </div>
+              <div *ngIf="userRoles.is_judge" class="dashboard-btn-wrapper">
+                <a [routerLink]="['judge-dashboard']">
+                  <button comButton status="warning" size="tiny" shape="semi-round" class="dashboard-btn">
+                    <fa-icon [icon]="icons.faGavel"></fa-icon> &nbsp; Judge Dashboard
+                  </button>
+                </a>
+              </div>
+            </ng-container>
+            <div>
+              <a class="d-flex" [routerLink]="['.']" [class.active]="activeFragment === '' && !showBannerImage">
+                <fa-icon [icon]="icons.faInfoCircle"></fa-icon>
+                <span class="title">Overview</span>
               </a>
             </div>
-            <div *ngIf="userRoles.is_mentor" class="dashboard-btn-wrapper">
-              <a [routerLink]="['mentor-dashboard']">
-                <button comButton status="info" size="tiny" shape="semi-round" class="dashboard-btn">
-                  <fa-icon [icon]="icons.faGavel"></fa-icon> &nbsp; Mentor Dashboard
-                </button>
+            <div *ngIf="hackathon.updates_count > 0">
+              <a class="d-flex" [routerLink]="'.'" fragment="updates" [class.active]="activeFragment === 'updates'">
+                <fa-icon [icon]="icons.faStar"></fa-icon>
+                <span class="title">Updates</span>
               </a>
             </div>
-            <div *ngIf="userRoles.is_judge" class="dashboard-btn-wrapper">
-              <a [routerLink]="['judge-dashboard']">
-                <button comButton status="warning" size="tiny" shape="semi-round" class="dashboard-btn">
-                  <fa-icon [icon]="icons.faGavel"></fa-icon> &nbsp; Judge Dashboard
-                </button>
+
+            <div *ngIf="hackathon.tracks_count > 0">
+              <a class="d-flex" [routerLink]="['tracks']" routerLinkActive="active">
+                <fa-icon [icon]="icons.faAward"></fa-icon>
+                <span class="title">Tracks</span>
               </a>
             </div>
-          </ng-container>
-          <div>
-            <a [routerLink]="['.']" [class.active]="activeFragment === '' && !showBannerImage">
-              <fa-icon [icon]="icons.faInfoCircle"></fa-icon>
-              <p class="name">Overview</p>
-            </a>
-          </div>
-          <div *ngIf="hackathon.updates_count > 0">
-            <a [routerLink]="'.'" fragment="updates" [class.active]="activeFragment === 'updates'">
-              <fa-icon [icon]="icons.faStar"></fa-icon>
-              <p class="name">Updates</p>
-            </a>
-          </div>
 
-          <div *ngIf="hackathon.tracks_count > 0">
-            <a [routerLink]="['tracks']" routerLinkActive="active">
-              <fa-icon [icon]="icons.faAward"></fa-icon>
-              <p class="name">Tracks</p>
-            </a>
-          </div>
+            <div *ngIf="hackathon.sponsors_count > 0">
+              <a class="d-flex" [routerLink]="'.'" fragment="sponsors" [class.active]="activeFragment === 'sponsors'">
+                <fa-icon [icon]="icons.faSackDollar"></fa-icon>
+                <span class="title">Sponsors</span>
+              </a>
+            </div>
 
-          <div *ngIf="hackathon.sponsors_count > 0">
-            <a [routerLink]="'.'" fragment="sponsors" [class.active]="activeFragment === 'sponsors'">
-              <fa-icon [icon]="icons.faSackDollar"></fa-icon>
-              <p class="name">Sponsors</p>
-            </a>
-          </div>
+            <div *ngIf="hackathon.faqs_count > 0">
+              <a class="d-flex" [routerLink]="'.'" fragment="faq" [class.active]="activeFragment === 'faq'">
+                <fa-icon [icon]="icons.faCircleQuestion"></fa-icon>
+                <span class="title">Faq's</span>
+              </a>
+            </div>
 
-          <div *ngIf="hackathon.faqs_count > 0">
-            <a [routerLink]="'.'" fragment="faq" [class.active]="activeFragment === 'faq'">
-              <fa-icon [icon]="icons.faCircleQuestion"></fa-icon>
-              <p class="name">Faq's</p>
-            </a>
-          </div>
+            <div *ngIf="hasCollaborationCommunities">
+              <a
+                class="d-flex"
+                [routerLink]="'.'"
+                fragment="collaborations"
+                [class.active]="activeFragment === 'collaborations'"
+              >
+                <fa-icon [icon]="icons.faHandshake"></fa-icon>
+                <span class="title">Collaborations</span>
+              </a>
+            </div>
 
-          <div *ngIf="hasCollaborationCommunities">
-            <a [routerLink]="'.'" fragment="collaborations" [class.active]="activeFragment === 'collaborations'">
-              <fa-icon [icon]="icons.faHandshake"></fa-icon>
-              <p class="name">Collaborations</p>
-            </a>
-          </div>
-
-          <!-- TODO Done to be later -->
-          <!-- <div>
+            <!-- TODO Done to be later -->
+            <!-- <div>
             <a [routerLink]="['schedule']" routerLinkActive="active">
               <fa-icon [icon]="icons.faGlobe"></fa-icon>
               <p class="name">schedule</p>
             </a>
           </div> -->
-          <div *ngIf="hackathon.judges_count > 0">
-            <a [routerLink]="['judges']" routerLinkActive="active">
-              <fa-icon [icon]="icons.faUser"></fa-icon>
-              <p class="name">Judges</p>
-            </a>
-          </div>
-          <div *ngIf="hasDashboardAndChannelAccess">
-            <a [routerLink]="['channels']" routerLinkActive="active">
-              <fa-icon [icon]="icons.faHashtag"></fa-icon>
-              <p class="name">Channels</p>
-            </a>
-          </div>
-          <div *ngIf="hackathon.prizes_count > 0">
-            <a [routerLink]="['prizes']" routerLinkActive="active">
-              <fa-icon [icon]="icons.faAward"></fa-icon>
-              <p class="name">Prizes</p>
-            </a>
-          </div>
-          <div *ngIf="hackathon.winners_count > 0">
-            <a [routerLink]="['winners']" routerLinkActive="active">
-              <fa-icon [icon]="icons.faTrophy"></fa-icon>
-              <p class="name">Winners</p>
-            </a>
-          </div>
-          <div *ngIf="hackathon.projects_count > 0">
-            <a [routerLink]="['projects']" routerLinkActive="active">
-              <fa-icon [icon]="icons.faLaptopCode"></fa-icon>
-              <p class="name">Projects</p>
-            </a>
-          </div>
-          <ng-container *appBreakpoints="'>md'">
-            <div *ngIf="hasDashboardAndChannelAccess" class="dashboard-btn-wrapper">
-              <a [routerLink]="['user-dashboard']">
-                <button comButton status="primary" size="tiny" shape="semi-round" class="dashboard-btn">
-                  <fa-icon [icon]="icons.faArrowTrendUp"></fa-icon> &nbsp; Participant Team Dashboard
-                </button>
+            <div *ngIf="hackathon.judges_count > 0">
+              <a class="d-flex" [routerLink]="['judges']" routerLinkActive="active">
+                <fa-icon [icon]="icons.faUser"></fa-icon>
+                <span class="title">Judges</span>
               </a>
             </div>
-            <div *ngIf="userRoles.is_mentor" class="dashboard-btn-wrapper">
-              <a [routerLink]="['mentor-dashboard']">
-                <button comButton status="info" size="tiny" shape="semi-round" class="dashboard-btn">
-                  <fa-icon [icon]="icons.faGavel"></fa-icon> &nbsp; Mentor Dashboard
-                </button>
+            <div *ngIf="hasDashboardAndChannelAccess">
+              <a class="d-flex" [routerLink]="['channels']" routerLinkActive="active">
+                <fa-icon [icon]="icons.faHashtag"></fa-icon>
+                <span class="title">Channels</span>
               </a>
             </div>
-            <div *ngIf="userRoles.is_judge" class="dashboard-btn-wrapper">
-              <a [routerLink]="['judge-dashboard']">
-                <button comButton status="warning" size="tiny" shape="semi-round" class="dashboard-btn">
-                  <fa-icon [icon]="icons.faGavel"></fa-icon> &nbsp; Judge Dashboard
-                </button>
+            <div *ngIf="hackathon.prizes_count > 0">
+              <a class="d-flex" [routerLink]="['prizes']" routerLinkActive="active">
+                <fa-icon [icon]="icons.faAward"></fa-icon>
+                <span class="title">Prizes</span>
               </a>
             </div>
-          </ng-container>
-        </nb-card-body>
-      </nb-card>
+            <div *ngIf="hackathon.winners_count > 0">
+              <a class="d-flex" [routerLink]="['winners']" routerLinkActive="active">
+                <fa-icon [icon]="icons.faTrophy"></fa-icon>
+                <span class="title">Winners</span>
+              </a>
+            </div>
+            <div *ngIf="hackathon.projects_count > 0">
+              <a class="d-flex" [routerLink]="['projects']" routerLinkActive="active">
+                <fa-icon [icon]="icons.faLaptopCode"></fa-icon>
+                <span class="title">Projects</span>
+              </a>
+            </div>
+            <ng-container *appBreakpoints="'>md'">
+              <div *ngIf="hasDashboardAndChannelAccess" class="dashboard-btn-wrapper">
+                <a [routerLink]="['user-dashboard']">
+                  <button comButton status="primary" size="tiny" shape="semi-round" class="dashboard-btn">
+                    <fa-icon [icon]="icons.faArrowTrendUp"></fa-icon> &nbsp; Participant Team Dashboard
+                  </button>
+                </a>
+              </div>
+              <div *ngIf="userRoles.is_mentor" class="dashboard-btn-wrapper">
+                <a [routerLink]="['mentor-dashboard']">
+                  <button comButton status="info" size="tiny" shape="semi-round" class="dashboard-btn">
+                    <fa-icon [icon]="icons.faGavel"></fa-icon> &nbsp; Mentor Dashboard
+                  </button>
+                </a>
+              </div>
+              <div *ngIf="userRoles.is_judge" class="dashboard-btn-wrapper">
+                <a [routerLink]="['judge-dashboard']">
+                  <button comButton status="warning" size="tiny" shape="semi-round" class="dashboard-btn">
+                    <fa-icon [icon]="icons.faGavel"></fa-icon> &nbsp; Judge Dashboard
+                  </button>
+                </a>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
       <div class="router" *ngIf="!isLoading">
         <router-outlet></router-outlet>
       </div>
