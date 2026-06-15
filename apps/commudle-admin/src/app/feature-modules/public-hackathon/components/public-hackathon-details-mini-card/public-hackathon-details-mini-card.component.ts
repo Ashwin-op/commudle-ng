@@ -1,7 +1,7 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { IHackathon, EHackathonLocationType } from 'apps/shared-models/hackathon.model';
-import { faGlobe, faAward } from '@fortawesome/free-solid-svg-icons';
+import { faGlobe, faAward, faCalendarDays, faClock } from '@fortawesome/free-solid-svg-icons';
 import { AuthService, countries_details } from '@commudle/shared-services';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { EHackathonStatus, ICommunity, IHackathonTeam, IUser } from '@commudle/shared-models';
@@ -26,6 +26,8 @@ export class PublicHackathonDetailsMiniCardComponent implements OnInit, OnDestro
   icons = {
     faGlobe,
     faAward,
+    faCalendarDays,
+    faClock,
   };
 
   moment = moment;

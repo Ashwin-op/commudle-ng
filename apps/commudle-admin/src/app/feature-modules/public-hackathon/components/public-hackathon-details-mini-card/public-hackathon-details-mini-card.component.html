@@ -1,16 +1,28 @@
-<div>
-  <div class="date-section" *ngIf="hackathon.start_date && hackathon.end_date">
+<div class="mini-card">
+  <!-- Prize Pool Header -->
+  <div class="prize-header" *ngIf="totalPrizesByCurrency?.length > 0 && totalPrizesByCurrency[0].amount !== 0">
+    <span class="prize-label">TOTAL PRIZE POOL</span>
+    <span class="prize-amount"
+      >{{ totalPrizesByCurrency[0].currency.symbol }} {{ totalPrizesByCurrency[0].amount | number }}</span
+    >
+    <span class="prize-meta" *ngIf="hackathon.winners_count">{{ hackathon.winners_count }} winners</span>
+  </div>
+
+  <!-- Info Chips -->
+  <div class="info-chips">
+    <!-- Registration Status Chip -->
     <div
       class="date-chip"
-      [ngClass]="{ '!com-bg-red-500': hackathonStatus === 'Closed', 'com-bg-teal-600': hackathonStatus !== 'Closed' }"
+      *ngIf="hackathon.application_start_date && hackathon.application_end_date"
+      [ngClass]="{ 'chip-closed': hackathonStatus === 'Closed', 'chip-open': hackathonStatus !== 'Closed' }"
     >
       <span *ngIf="hackathonStatus === 'Upcoming'">
         <span class="dot">&#x2022;</span>
-        <span>
-          Registrations starts on -
+        <span
+          >Registrations starts on -
           <ng-container *ngIf="hackathon.timezone">
             {{
-              momentTimezone.tz(moment.utc(hackathon.application_start_date), hackathon.timezone).format('dd MMM yyyy')
+              momentTimezone.tz(moment.utc(hackathon.application_start_date), hackathon.timezone).format('DD MMM YYYY')
             }}
             {{ momentTimezone.tz(hackathon.timezone).format('z') }}
           </ng-container>
@@ -19,96 +31,107 @@
           }}</ng-container>
         </span>
       </span>
-
       <span *ngIf="hackathonStatus === 'Outgoing'">
         <span class="dot">&#x2022;</span>
-        <span>{{ daysLeft }} Days Left </span>
+        <span>{{ daysLeft }} Days Left</span>
       </span>
-
       <span *ngIf="hackathonStatus === 'Closed'">
         <span class="dot">&#x2022;</span>
-        <span> Registrations closed </span>
+        <span>Registrations closed</span>
       </span>
     </div>
-    <div class="date-heading">Hackathon Dates</div>
-    <div class="date-value">
-      <p *ngIf="hackathon.timezone">
-        Starts on:
-        {{ momentTimezone.tz(moment.utc(hackathon.start_date), hackathon.timezone).format('DD MMM yyyy, h:mm a') }}
+
+    <div class="chip" *ngIf="hackathon.start_date">
+      <fa-icon [icon]="icons.faCalendarDays"></fa-icon>
+      <span>{{ hackathon.start_date | date : 'd MMM' }}</span>
+    </div>
+    <div class="chip">
+      <fa-icon [icon]="icons.faGlobe"></fa-icon>
+      <span>{{ hackathon.hackathon_location_type | titlecase }}</span>
+    </div>
+    <div class="chip" *ngIf="hackathon.prizes_count">
+      <fa-icon [icon]="icons.faAward"></fa-icon>
+      <span>{{ hackathon.prizes_count }} Prizes</span>
+    </div>
+  </div>
+
+  <!-- Hackathon Dates -->
+  <div class="section" *ngIf="hackathon.start_date && hackathon.end_date">
+    <span class="section-label">Hackathon Dates</span>
+    <div class="section-content">
+      <p class="section-value" *ngIf="hackathon.timezone">
+        <span>Starts on: </span>
+        {{ momentTimezone.tz(moment.utc(hackathon.start_date), hackathon.timezone).format('DD MMM YYYY, h:mm A') }}
         {{ momentTimezone.tz(hackathon.timezone).format('z') }}
       </p>
-      <p *ngIf="hackathon.timezone">
-        Ends on:
-        {{ momentTimezone.tz(moment.utc(hackathon.end_date), hackathon.timezone).format('DD MMM yyyy, h:mm a') }}
+      <p class="section-value" *ngIf="hackathon.timezone">
+        <span>Ends on: </span>
+        {{ momentTimezone.tz(moment.utc(hackathon.end_date), hackathon.timezone).format('DD MMM YYYY, h:mm A') }}
         {{ momentTimezone.tz(hackathon.timezone).format('z') }}
       </p>
     </div>
-    <div class="date-heading" *ngIf="hackathonStatus !== 'Closed'">Registration Dates</div>
-    <div class="date-value" *ngIf="hackathonStatus !== 'Closed'">
-      <ng-container *ngIf="hackathon.timezone">
-        <span *ngIf="hackathonStatus !== 'Outgoing'">
-          {{
-            momentTimezone
-              .tz(moment.utc(hackathon.application_start_date), hackathon.timezone)
-              .format('DD MMM yyyy, h:mm a')
-          }}
-          {{ momentTimezone.tz(hackathon.timezone).format('z') }} -
-        </span>
+  </div>
+
+  <!-- Registration Dates -->
+  <div
+    class="section"
+    *ngIf="hackathon.application_start_date && hackathon.application_end_date && hackathonStatus !== 'Closed'"
+  >
+    <span class="section-label">Registration Dates</span>
+    <div class="section-content" *ngIf="hackathon.timezone">
+      <p class="section-value" *ngIf="hackathonStatus !== 'Outgoing'">
         {{
-          momentTimezone
-            .tz(moment.utc(hackathon.application_end_date), hackathon.timezone)
-            .format('DD MMM yyyy, h:mm a')
+          momentTimezone.tz(moment.utc(hackathon.application_start_date), hackathon.timezone).format(
+            'DD MMM YYYY, h:mm
+        A'
+          )
+        }}
+        {{ momentTimezone.tz(hackathon.timezone).format('z') }} –
+      </p>
+      <p class="section-value">
+        {{
+          momentTimezone.tz(moment.utc(hackathon.application_end_date), hackathon.timezone).format(
+            'DD MMM YYYY, h:mm
+        A'
+          )
         }}
         {{ momentTimezone.tz(hackathon.timezone).format('z') }}
-      </ng-container>
+      </p>
     </div>
   </div>
-  <hr *ngIf="hackathon.start_date && hackathon.end_date" class="divided-line" />
-  <div class="prize-location">
-    <div class="location-prize-chips">
-      <div class="location chip">
-        <span>
-          <fa-icon [icon]="icons.faGlobe"></fa-icon>
-          <span>{{ hackathon.hackathon_location_type | titlecase }}</span>
-        </span>
-      </div>
-      <div class="prize chip" *ngIf="hackathon.prizes_count">
-        <span>
-          <fa-icon [icon]="icons.faAward"></fa-icon>
-          <span>{{ hackathon.prizes_count }} Prizes</span>
-        </span>
-      </div>
-    </div>
-    <div class="prize-amount" *ngIf="totalPrizesByCurrency[0] && totalPrizesByCurrency[0].amount !== 0">
-      <strong> {{ totalPrizesByCurrency[0].currency.symbol }} {{ totalPrizesByCurrency[0].amount }}</strong>
-      <span> in prizes</span>
-    </div>
-  </div>
-  <hr class="divided-line" />
-  <div class="interested-members-button">
-    <div *ngIf="users?.length > 0 && totalUsers > 0" class="interested-members">
+
+  <!-- Participants -->
+  <div class="section" *ngIf="users?.length > 0 && totalUsers > 0">
+    <span class="section-label">Participants registered</span>
+    <div class="participants-row">
       <commudle-interested-members [users]="users" [totalCount]="totalUsers"></commudle-interested-members>
     </div>
-    <br />
-    <div *ngIf="hrgId && hackathonStatus === 'Outgoing' && hackathon.status === EHackathonStatus.OPEN">
-      <button
-        *ngIf="userTeamDetails?.length === 0"
-        nbButton
-        status="primary"
-        fullWidth
-        [routerLink]="['/communities', community?.slug, 'hackathons', hackathon?.slug, 'fill-form', hrgId]"
-      >
-        Apply Now
-      </button>
-      <button
-        *ngIf="!currentUser"
-        nbButton
-        status="primary"
-        fullWidth
-        [routerLink]="['/communities', community?.slug, 'hackathons', hackathon?.slug, 'fill-form', hrgId]"
-      >
-        Login To Apply
-      </button>
-    </div>
+  </div>
+
+  <!-- Apply Button -->
+  <div
+    class="apply-section"
+    *ngIf="hrgId && hackathonStatus === 'Outgoing' && hackathon.status === EHackathonStatus.OPEN"
+  >
+    <button
+      *ngIf="userTeamDetails?.length === 0"
+      nbButton
+      status="primary"
+      fullWidth
+      shape="semi-round"
+      [routerLink]="['/communities', community?.slug, 'hackathons', hackathon?.slug, 'fill-form', hrgId]"
+    >
+      Apply Now
+    </button>
+    <button
+      *ngIf="!currentUser"
+      nbButton
+      status="primary"
+      fullWidth
+      shape="semi-round"
+      [routerLink]="['/communities', community?.slug, 'hackathons', hackathon?.slug, 'fill-form', hrgId]"
+    >
+      Login To Apply
+    </button>
   </div>
 </div>

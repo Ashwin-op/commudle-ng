@@ -1,38 +1,89 @@
-.date-section {
-  .date-chip {
-    @apply com-rounded-[20px]   com-w-max;
-    > span {
-      @apply com-flex com-items-center com-px-3  com-text-white com-text-sm com-gap-2;
-      .dot {
-        @apply com-text-2xl;
-      }
-    }
-  }
-  .date-heading {
-    @apply com-font-semibold com-text-base com-mt-4;
-  }
-  .date-value {
-    p {
-      @apply com-font-medium com-text-base com-text-gray-500 com-m-0;
-    }
-  }
-}
-.prize-location {
-  @apply com-my-5;
-  .location-prize-chips {
-    @apply com-flex com-gap-6 com-items-center com-mb-3;
-    .chip {
-      @apply com-bg-gray-100 com-rounded-[20px];
-      > span {
-        @apply com-flex com-px-2 com-py-1.5 com-items-center com-gap-2 com-font-medium com-text-base com-text-gray-600;
-      }
-    }
-  }
-  .prize-amount {
-    @apply com-text-base;
-  }
-}
+.mini-card {
+  @apply com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-overflow-hidden com-bg-white;
 
-.divided-line {
-  @apply com-border com-border-solid com-border-Bright-Gray;
+  .prize-header {
+    @apply com-flex com-flex-col com-items-center com-py-5 com-px-4 com-text-center;
+    background: linear-gradient(145deg, #1e40af, #3b82f6);
+
+    .prize-label {
+      @apply com-text-xs com-font-bold com-uppercase com-tracking-widest com-text-blue-200;
+    }
+
+    .prize-amount {
+      @apply com-text-3xl com-font-bold com-text-tWhite com-mt-1;
+    }
+
+    .prize-meta {
+      @apply com-text-sm com-text-blue-200 com-mt-1;
+    }
+  }
+
+  .info-chips {
+    @apply com-flex com-flex-wrap com-gap-3 com-px-4 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+
+    .date-chip {
+      @apply com-w-full com-rounded-full com-px-3 com-py-1 com-text-sm com-font-medium;
+
+      &.chip-open {
+        @apply com-bg-blue-50 com-text-primary-500;
+      }
+
+      &.chip-closed {
+        @apply com-bg-red-50 com-text-red-500;
+      }
+
+      > span {
+        @apply com-flex com-items-center com-gap-1;
+
+        .dot {
+          @apply com-text-lg;
+        }
+      }
+    }
+
+    .chip {
+      @apply com-flex com-items-center com-gap-1 com-px-3 com-py-1 com-rounded-full com-text-sm com-font-medium;
+      @apply com-bg-gray-50 com-text-Yankees-Blue;
+
+      fa-icon {
+        @apply com-text-xs com-text-blue-500;
+      }
+    }
+  }
+
+  .section {
+    @apply com-px-4 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+
+    .section-label {
+      @apply com-text-sm com-text-gray-500;
+    }
+
+    .section-content {
+      @apply com-mt-1;
+    }
+
+    .section-value {
+      @apply com-m-0 com-text-sm com-text-Yankees-Blue;
+
+      span {
+        @apply com-text-gray-500;
+      }
+    }
+
+    .section-meta {
+      @apply com-m-0 com-text-sm com-text-Cadet-Grey;
+    }
+
+    .participants-row {
+      @apply com-mt-2;
+    }
+  }
+
+  .apply-section {
+    @apply com-px-4 com-py-4;
+
+    button {
+      @apply com-w-full;
+    }
+  }
 }

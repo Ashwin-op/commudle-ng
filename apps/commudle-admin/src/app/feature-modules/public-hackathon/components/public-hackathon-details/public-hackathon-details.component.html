@@ -124,33 +124,29 @@
   </div>
 
   <div class="right-column">
-    <com-card *ngIf="isOrganizer">
-      <com-card-body class="com-p-0">
-        <button
-          nbButton
-          status="danger"
-          fullWidth
-          [routerLink]="['/admin', 'communities', community.slug, 'hackathon-dashboard', hackathon.slug]"
-        >
-          <fa-icon [icon]="icons.faPencil"></fa-icon>
-          &nbsp;
-          <span>Go To Admin panel</span>
-        </button>
-      </com-card-body>
-    </com-card>
-    <com-card>
-      <com-card-body
-        ><commudle-public-hackathon-details-mini-card
-          [hackathon]="hackathon"
-          [hrgId]="hrgId"
-          [community]="community"
-        ></commudle-public-hackathon-details-mini-card
-      ></com-card-body>
-    </com-card>
+    <button
+      comButton
+      status="danger"
+      fullWidth
+      class="organizer-btn"
+      [shape]="'semi-round'"
+      [routerLink]="['/admin', 'communities', community.slug, 'hackathon-dashboard', hackathon.slug]"
+    >
+      <fa-icon [icon]="icons.faPencil"></fa-icon>
+      &nbsp;
+      <span>Go To Admin panel</span>
+    </button>
+    <div class="hackathon-details">
+      <commudle-public-hackathon-details-mini-card
+        [hackathon]="hackathon"
+        [hrgId]="hrgId"
+        [community]="community"
+      ></commudle-public-hackathon-details-mini-card>
+    </div>
 
     <com-card *ngIf="rounds && rounds.length > 0">
       <com-card-header> Rounds </com-card-header>
-      <com-card-body>
+      <com-card-body class="round-card-body">
         <div *ngFor="let round of rounds" class="round-card">
           <div class="name">{{ round.name }}</div>
           <div class="date">{{ moment(round.date).format('DD MMM YYYY') }}</div>
