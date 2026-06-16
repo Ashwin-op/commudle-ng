@@ -255,7 +255,7 @@
   }
 
   .round-card {
-    @apply com-flex com-items-center com-justify-between com-p-2 com-rounded-lg com-transition-all com-duration-200;
+    @apply com-flex com-items-center com-justify-between com-py-2 com-gap-5 com-transition-all com-duration-200;
 
     &:hover {
       @apply com-bg-gray-50;
@@ -279,7 +279,7 @@
   }
 
   .status-info {
-    @apply com-mb-3;
+    @apply com-pb-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
     .status-badge {
       @apply com-inline-flex com-items-center com-gap-1 com-px-3 com-py-1 com-rounded-full com-text-xs com-font-semibold com-bg-blue-50 com-text-primary-500 com-border com-border-solid com-border-primary-200;

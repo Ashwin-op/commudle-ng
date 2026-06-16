@@ -60,7 +60,7 @@
 }
 
 .banner-image {
-  @apply com-mt-0;
+  @apply com-mt-0 com-rounded-b-none;
 
   com-card-body {
     @apply com-p-0;
@@ -186,5 +186,5 @@
 }
 
 .card {
-  @apply com-bg-white com-mx-0 com-mb-4;
+  @apply com-bg-white com-mx-0 com-mb-4 com-rounded-t-none;
 }
