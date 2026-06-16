@@ -9,12 +9,30 @@
       <p>Tracks and problem statements will be published soon.</p>
     </div>
     <div *ngIf="tracks && tracks.length > 0" class="tracks-container">
+      <!-- Stats Summary -->
+      <div class="tracks-stats">
+        <div class="stat-item">
+          <span class="stat-number">{{ tracks.length }}</span>
+          <span class="stat-label">Tracks</span>
+        </div>
+        <div class="stat-item" *ngIf="totalProblemStatements > 0">
+          <span class="stat-number">{{ totalProblemStatements }}</span>
+          <span class="stat-label">Problem Statement{{ totalProblemStatements > 1 ? s : '' }}</span>
+        </div>
+        <div class="stat-item" *ngIf="totalPrizesByCurrency?.length > 0 && totalPrizesByCurrency[0].amount !== 0">
+          <span class="stat-number"
+            >{{ totalPrizesByCurrency[0].currency.symbol }}{{ totalPrizesByCurrency[0].amount | number }}</span
+          >
+          <span class="stat-label">Prizes</span>
+        </div>
+      </div>
+
       <details *ngFor="let track of tracks; let i = index" class="track-accordion" [attr.open]="i === 0 ? '' : null">
         <summary class="track-summary">
           <span class="track-number">{{ i + 1 }}</span>
           <span class="track-name">{{ track.name }}</span>
           <span *ngIf="track.hackathon_problem_statements?.length > 0" class="ps-badge">
-            {{ track.hackathon_problem_statements.length }} PS
+            {{ track.hackathon_problem_statements.length }} Problem Statement{{ totalProblemStatements > 1 ? s : '' }}
           </span>
         </summary>
         <div class="track-content">
@@ -29,7 +47,7 @@
             <div class="section-label">Problem Statements</div>
             <div class="ps-list">
               <div *ngFor="let ps of track.hackathon_problem_statements" class="ps-item">
-                <span class="ps-id">#{{ ps.display_id }}</span>
+                <span class="ps-id">{{ ps.display_id }}</span>
                 <span class="ps-title" [innerHTML]="ps.title"></span>
               </div>
             </div>
@@ -54,14 +72,10 @@
     </div>
   </div>
   <div class="right-column">
-    <nb-card>
-      <nb-card-body>
-        <commudle-public-hackathon-details-mini-card
-          [hackathon]="hackathon"
-          [hrgId]="hrgId"
-          [community]="community"
-        ></commudle-public-hackathon-details-mini-card>
-      </nb-card-body>
-    </nb-card>
+    <commudle-public-hackathon-details-mini-card
+      [hackathon]="hackathon"
+      [hrgId]="hrgId"
+      [community]="community"
+    ></commudle-public-hackathon-details-mini-card>
   </div>
 </div>

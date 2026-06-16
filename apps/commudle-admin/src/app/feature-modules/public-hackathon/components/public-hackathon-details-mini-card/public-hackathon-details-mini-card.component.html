@@ -78,17 +78,19 @@
     *ngIf="hackathon.application_start_date && hackathon.application_end_date && hackathonStatus !== 'Closed'"
   >
     <span class="section-label">Registration Dates</span>
-    <div class="section-content" *ngIf="hackathon.timezone">
-      <p class="section-value" *ngIf="hackathonStatus !== 'Outgoing'">
+    <div class="section-content" *ngIf="hackathon.timezone || hackathonStatus !== 'Outgoing'">
+      <p class="section-value">
+        <span>Starts on: </span>
         {{
           momentTimezone.tz(moment.utc(hackathon.application_start_date), hackathon.timezone).format(
             'DD MMM YYYY, h:mm
         A'
           )
         }}
-        {{ momentTimezone.tz(hackathon.timezone).format('z') }} –
+        {{ momentTimezone.tz(hackathon.timezone).format('z') }}
       </p>
       <p class="section-value">
+        <span>Ends on: </span>
         {{
           momentTimezone.tz(moment.utc(hackathon.application_end_date), hackathon.timezone).format(
             'DD MMM YYYY, h:mm
@@ -99,39 +101,40 @@
       </p>
     </div>
   </div>
-
-  <!-- Participants -->
-  <div class="section" *ngIf="users?.length > 0 && totalUsers > 0">
-    <span class="section-label">Participants registered</span>
-    <div class="participants-row">
-      <commudle-interested-members [users]="users" [totalCount]="totalUsers"></commudle-interested-members>
+  <div class="section-content" *ngIf="hackathon.timezone">
+    <!-- Participants -->
+    <div class="section" *ngIf="users?.length > 0 && totalUsers > 0">
+      <span class="section-label">Interested Members</span>
+      <div class="participants-row">
+        <commudle-interested-members [users]="users" [totalCount]="totalUsers"></commudle-interested-members>
+      </div>
     </div>
-  </div>
 
-  <!-- Apply Button -->
-  <div
-    class="apply-section"
-    *ngIf="hrgId && hackathonStatus === 'Outgoing' && hackathon.status === EHackathonStatus.OPEN"
-  >
-    <button
-      *ngIf="userTeamDetails?.length === 0"
-      nbButton
-      status="primary"
-      fullWidth
-      shape="semi-round"
-      [routerLink]="['/communities', community?.slug, 'hackathons', hackathon?.slug, 'fill-form', hrgId]"
+    <!-- Apply Button -->
+    <div
+      class="apply-section"
+      *ngIf="hrgId && hackathonStatus === 'Outgoing' && hackathon.status === EHackathonStatus.OPEN"
     >
-      Apply Now
-    </button>
-    <button
-      *ngIf="!currentUser"
-      nbButton
-      status="primary"
-      fullWidth
-      shape="semi-round"
-      [routerLink]="['/communities', community?.slug, 'hackathons', hackathon?.slug, 'fill-form', hrgId]"
-    >
-      Login To Apply
-    </button>
+      <button
+        *ngIf="userTeamDetails?.length === 0"
+        nbButton
+        status="primary"
+        fullWidth
+        shape="semi-round"
+        [routerLink]="['/communities', community?.slug, 'hackathons', hackathon?.slug, 'fill-form', hrgId]"
+      >
+        Apply Now
+      </button>
+      <button
+        *ngIf="!currentUser"
+        nbButton
+        status="primary"
+        fullWidth
+        shape="semi-round"
+        [routerLink]="['/communities', community?.slug, 'hackathons', hackathon?.slug, 'fill-form', hrgId]"
+      >
+        Login To Apply
+      </button>
+    </div>
   </div>
 </div>

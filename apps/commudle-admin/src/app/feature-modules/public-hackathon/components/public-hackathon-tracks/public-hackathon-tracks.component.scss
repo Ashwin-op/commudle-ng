@@ -1,4 +1,22 @@
 .main-column {
+  @apply com-mr-6;
+
+  .tracks-stats {
+    @apply com-flex com-flex-wrap com-gap-3 com-mb-1;
+
+    .stat-item {
+      @apply com-flex com-flex-col com-items-center com-flex-1 com-py-4 com-px-3 com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-bg-white com-min-w-0;
+
+      .stat-number {
+        @apply com-text-2xl com-font-bold com-text-Yankees-Blue;
+      }
+
+      .stat-label {
+        @apply com-text-xs com-font-medium com-text-Cadet-Grey com-mt-1 com-text-center;
+      }
+    }
+  }
+
   .empty-state {
     @apply com-text-center com-py-16;
 
@@ -16,22 +34,23 @@
   }
 
   .tracks-container {
-    @apply com-flex com-flex-col com-gap-3 com-mt-4;
+    @apply com-flex com-flex-col com-m-0 com-mb-4 com-gap-3;
 
     .track-accordion {
-      @apply com-border com-border-solid com-border-gray-200 com-rounded-xl com-overflow-hidden com-transition-shadow com-bg-white;
+      @apply com-border com-border-solid com-border-Bright-Gray com-rounded-xl com-overflow-hidden com-transition-shadow com-bg-white;
 
       &[open] {
         @apply com-shadow-lg;
 
         .track-summary {
-          @apply com-border-0 com-border-b com-border-solid com-border-gray-200 com-bg-white;
+          @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
         }
       }
 
       .track-summary {
-        @apply com-flex com-items-center com-gap-3 com-px-5 com-py-4 com-cursor-pointer com-select-none com-transition-colors com-bg-white;
-        @apply hover:com-bg-gray-50;
+        @apply com-flex com-items-center com-gap-3 com-px-4 com-py-3 com-cursor-pointer com-select-none com-transition-colors com-rounded-t-lg com-border-0;
+        background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
+        @apply dark:com-from-[#080808] dark:com-via-[#141414] dark:com-to-[#080808] dark:com-bg-gradient-to-br;
         list-style: none;
 
         &::-webkit-details-marker {
@@ -74,11 +93,13 @@
 
           .ps-list {
             .ps-item {
-              @apply com-flex com-items-start com-gap-3 com-py-3 com-px-4 com-rounded-lg com-transition-colors;
+              @apply com-flex com-items-start com-gap-3 com-py-3 com-px-4 com-rounded-none com-transition-colors;
               @apply hover:com-bg-gray-50;
 
               .ps-id {
-                @apply com-text-sm com-font-bold com-text-primary-500 com-flex-shrink-0 com-min-w-[40px];
+                @apply com-flex com-items-center com-justify-center com-w-10 com-h-10 com-rounded-full com-text-xs com-font-bold com-flex-shrink-0 com-uppercase;
+                color: #312e81;
+                background-color: #ede9fe;
               }
 
               .ps-title {

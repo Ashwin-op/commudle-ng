@@ -22,6 +22,10 @@ export class PublicHackathonTracksComponent implements OnInit, OnDestroy {
   countryDetails = countries_details;
   subscriptions: Subscription[] = [];
 
+  totalProblemStatements = 0;
+  totalPrizes = 0;
+  totalPrizesByCurrency: { currency: any; amount: number }[];
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private hackathonService: HackathonService,
@@ -36,6 +40,7 @@ export class PublicHackathonTracksComponent implements OnInit, OnDestroy {
         this.community = data.community;
         this.setSeo();
         this.getTracks();
+        this.computeTotalPrizes();
       }),
     );
     this.hrgService.pShowHackathonResponseGroup(this.hackathon.id).subscribe((data) => {
@@ -45,6 +50,18 @@ export class PublicHackathonTracksComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
+  computeTotalPrizes(): void {
+    if (this.hackathon.total_prize_amount) {
+      this.totalPrizesByCurrency = Object.keys(this.hackathon.total_prize_amount).map((currency) => ({
+        currency: this.countryDetails.find((detail) => detail.currency === currency) || {
+          currency: currency,
+          symbol: currency,
+        },
+        amount: this.hackathon.total_prize_amount[currency],
+      }));
+    }
   }
 
   setSeo() {
@@ -61,6 +78,7 @@ export class PublicHackathonTracksComponent implements OnInit, OnDestroy {
         this.tracks = data;
         if (this.tracks) {
           for (const track of this.tracks) {
+            this.totalProblemStatements += track.hackathon_problem_statements?.length || 0;
             if (track.hackathon_prizes) {
               for (const prize of track.hackathon_prizes) {
                 const prizeCurrencySymbol = this.countryDetails.find(
