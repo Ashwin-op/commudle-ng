@@ -3,6 +3,104 @@
     <com-card>
       <com-card-body>
         <div [innerHTML]="hackathon.description"></div>
+        <div
+          *ngIf="
+            hackathonSocial &&
+            (hackathonSocial.facebook ||
+              hackathonSocial.linkedIn ||
+              hackathonSocial.instagram ||
+              hackathonSocial.twitter ||
+              hackathonSocial.github ||
+              hackathonSocial.website ||
+              hackathonSocial.discord)
+          "
+          class="community-social-links d-flex align-items-center"
+        >
+          <a
+            *ngIf="hackathonSocial.facebook"
+            href="{{ hackathonSocial.facebook | completeurl : 'facebook' }}"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <app-badge
+              [faIcon]="icons.faFacebook"
+              [fontColor]="'com-text-primary-500'"
+              [fontSize]="'small'"
+              [borderRadius]="'round'"
+              [color]="'com-bg-blue-50'"
+            ></app-badge>
+          </a>
+          <a
+            *ngIf="hackathonSocial.linkedIn"
+            href="{{ hackathonSocial.linkedIn | completeurl : 'linkedin' }}"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <app-badge
+              [faIcon]="icons.faLinkedin"
+              [fontColor]="'com-text-primary-500'"
+              [fontSize]="'small'"
+              [borderRadius]="'round'"
+              [color]="'com-bg-blue-50'"
+            ></app-badge>
+          </a>
+          <a
+            *ngIf="hackathonSocial.instagram"
+            href="{{ hackathonSocial.instagram | completeurl : 'instagram' }}"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <app-badge
+              [faIcon]="icons.faInstagram"
+              [fontColor]="'com-text-primary-500'"
+              [fontSize]="'small'"
+              [borderRadius]="'round'"
+              [color]="'com-bg-blue-50'"
+            ></app-badge>
+          </a>
+          <a
+            *ngIf="hackathonSocial.twitter"
+            href="{{ hackathonSocial.twitter | completeurl : 'twitter' }}"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <app-badge
+              [faIcon]="icons.faTwitter"
+              [fontColor]="'com-text-primary-500'"
+              [fontSize]="'small'"
+              [borderRadius]="'round'"
+              [color]="'com-bg-blue-50'"
+            ></app-badge>
+          </a>
+          <a
+            *ngIf="hackathonSocial.github"
+            href="{{ hackathonSocial.github | completeurl : 'github' }}"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <app-badge
+              [faIcon]="icons.faGithub"
+              [fontColor]="'com-text-primary-500'"
+              [fontSize]="'small'"
+              [borderRadius]="'round'"
+              [color]="'com-bg-blue-50'"
+            ></app-badge>
+          </a>
+          <a
+            *ngIf="hackathonSocial.website"
+            href="{{ hackathonSocial.website | completeurl }}"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <app-badge
+              [faIcon]="icons.faGlobe"
+              [fontColor]="'com-text-primary-500'"
+              [fontSize]="'small'"
+              [borderRadius]="'round'"
+              [color]="'com-bg-blue-50'"
+            ></app-badge>
+          </a>
+        </div>
       </com-card-body>
     </com-card>
 

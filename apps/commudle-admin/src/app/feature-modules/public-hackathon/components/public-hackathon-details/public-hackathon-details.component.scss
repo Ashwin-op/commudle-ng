@@ -300,3 +300,11 @@
 .hackathon-details {
   @apply com-mb-4;
 }
+
+.community-social-links {
+  @apply com-flex com-items-center com-gap-4 com-mt-6 com-flex-wrap com-mt-3;
+
+  a {
+    @apply com-no-underline;
+  }
+}

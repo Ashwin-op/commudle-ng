@@ -27,10 +27,12 @@ import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon
 import { IDiscussion } from 'apps/shared-models/discussion.model';
 import { IHackathonSponsorGroupedByTierName } from 'apps/shared-models/hackathon-sponsor';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
+import { IContactInfo } from 'apps/shared-models/contact-info.model';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
 import * as moment from 'moment';
 import { Subject, Subscription, takeUntil } from 'rxjs';
-import { faPencil, faSackDollar, faCircleQuestion, faLink } from '@fortawesome/free-solid-svg-icons';
+import { faPencil, faSackDollar, faCircleQuestion, faLink, faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { faFacebook, faLinkedin, faInstagram, faTwitter, faGithub } from '@fortawesome/free-brands-svg-icons';
 @Component({
   selector: 'commudle-public-hackathon-details',
   templateUrl: './public-hackathon-details.component.html',
@@ -53,11 +55,18 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
   hrgId: number;
   isOrganizer = false;
   hackathonStatus: string;
+  hackathonSocial: IContactInfo;
   icons = {
     faPencil,
     faSackDollar,
     faCircleQuestion,
     faLink,
+    faFacebook,
+    faLinkedin,
+    faInstagram,
+    faTwitter,
+    faGithub,
+    faGlobe,
   };
 
   onSponsorStripGradientEnter = onSponsorStripGradientEnter;
@@ -97,6 +106,7 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
         this.getDiscussionChat();
         this.getRounds();
         this.isOrganizerCheck();
+        this.getHackathonSocial();
       }),
     );
     this.getHackathonResponseGroup();
@@ -255,6 +265,14 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
         } else {
           this.isOrganizer = false;
         }
+      }),
+    );
+  }
+
+  getHackathonSocial(): void {
+    this.subscriptions.push(
+      this.hackathonService.showHackathonContactInfo(this.hackathon.id).subscribe((data) => {
+        this.hackathonSocial = data;
       }),
     );
   }
