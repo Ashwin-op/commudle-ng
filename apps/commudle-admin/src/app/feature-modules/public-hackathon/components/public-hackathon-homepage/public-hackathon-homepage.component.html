@@ -10,7 +10,7 @@
             <h1 class="hackathon-name">{{ hackathon.name }}</h1>
             <div class="registration-badge open" *ngIf="hackathon?.status === EHackathonStatus?.OPEN">
               <span class="badge-dot active-dot"></span>
-              <span>Registrations Open</span>
+              <span>Open</span>
             </div>
             <div
               class="registration-badge closed"
@@ -19,7 +19,7 @@
               "
             >
               <span class="badge-dot closed-dot"></span>
-              <span>Registrations Closed</span>
+              <span>Closed</span>
             </div>
           </div>
           <div class="details-sub">

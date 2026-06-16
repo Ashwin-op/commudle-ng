@@ -25,7 +25,7 @@ import {
 import { HackathonJudgeService } from 'apps/commudle-admin/src/app/services/hackathon-judge.service';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { IContactInfo } from 'apps/shared-models/contact-info.model';
-import { IHackathon } from 'apps/shared-models/hackathon.model';
+import { EHackathonStatus, IHackathon } from 'apps/shared-models/hackathon.model';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 
@@ -70,6 +70,7 @@ export class PublicHackathonHomepageComponent implements OnInit, OnDestroy, Afte
   activeFragment: string;
   userTeamDetails: IHackathonTeam[];
   EHackathonRegistrationStatus = EHackathonRegistrationStatus;
+  EHackathonStatus = EHackathonStatus;
   environment = environment;
   hasDashboardAndChannelAccess = false;
   hasCollaborationCommunities = false;
