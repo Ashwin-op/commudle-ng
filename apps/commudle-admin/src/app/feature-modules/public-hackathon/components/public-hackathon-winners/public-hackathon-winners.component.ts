@@ -9,6 +9,7 @@ import { ICommunity, IHackathonWinnerByPrize } from '@commudle/shared-models';
 import { countries_details as countryDetails, SeoService } from '@commudle/shared-services';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
+import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 
 @Component({
   selector: 'commudle-public-hackathon-winners',
@@ -22,6 +23,7 @@ export class PublicHackathonWinnersComponent implements OnInit, OnDestroy {
   winnersByPrize: IHackathonWinnerByPrize[] = [];
   isLoading = true;
   icons = { faTrophy, faLayerGroup, faLaptopCode };
+  staticAssets = staticAssets;
   subscriptions: Subscription[] = [];
 
   constructor(

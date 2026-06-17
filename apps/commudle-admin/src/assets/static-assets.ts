@@ -392,6 +392,18 @@ export const staticAssets = {
   //id: 253
   search_page_background:
     'https://json.commudle.com/rails/active_storage/blobs/proxy/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBMTZiQmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--c0a7cbd7a4d4795fc0b7158365f3615add31ea3d/com_55400d30e300a422_20260330145824.png',
+
+  //254
+  hackathon_trophy_winner:
+    'https://json.commudle.com/rails/active_storage/blobs/proxy/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNE1jQnc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--113a997cbf61d93139af1d13ec11ccc26546a4dc/com_300031125ea8847f_20260617125708.jpeg',
+
+  //255
+  hackathon_trophy_silver:
+    'https://json.commudle.com/rails/active_storage/blobs/proxy/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNFFjQnc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--76fae418adbf32b7ae79f2271a58851bf56e9a2e/com_f18a690155b12fd0_20260617125845.jpeg',
+
+  //256
+  hackathon_trophy_bronze:
+    'https://json.commudle.com/rails/active_storage/blobs/proxy/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBNFVjQnc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--5fc24e7d7cbdef3044c5340974877121497c3487/com_a1c7c46c418004a8_20260617130001.jpeg',
 };
 
 export const AwsS3Bucket = {

@@ -35,20 +35,32 @@
       &.prize-rank-1 {
         background: linear-gradient(135deg, #faf5ff 0%, #ffffff 60%);
         border-color: #e9d5ff;
+        @apply dark:com-from-[#1e1033] dark:com-to-[#0f172a] dark:com-bg-gradient-to-br dark:com-border-purple-800;
       }
 
       &.prize-rank-2 {
         background: linear-gradient(135deg, #eff6ff 0%, #ffffff 60%);
         border-color: #bfdbfe;
+        @apply dark:com-from-[#0c1a33] dark:com-to-[#0f172a] dark:com-bg-gradient-to-br dark:com-border-blue-800;
       }
 
       &.prize-rank-3 {
         background: linear-gradient(135deg, #fff7ed 0%, #ffffff 60%);
         border-color: #fed7aa;
+        @apply dark:com-from-[#1f1408] dark:com-to-[#0f172a] dark:com-bg-gradient-to-br dark:com-border-orange-800;
       }
 
       .prize-card-content {
         @apply com-flex com-items-center com-justify-between com-p-3 com-gap-5;
+
+        .prize-trophy {
+          @apply com-flex-shrink-0 com-w-28 com-rounded-xl com-overflow-hidden com-flex com-items-center com-justify-center;
+          aspect-ratio: 1 / 1;
+
+          img {
+            @apply com-w-full com-h-full com-object-cover;
+          }
+        }
 
         .prize-info {
           @apply com-flex com-flex-col com-gap-2 com-flex-1;
@@ -124,7 +136,7 @@
 
       &.prize-rank-3 {
         .prize-badge {
-          @apply com-text-orange-50;
+          @apply com-text-orange-500;
         }
 
         .prize-amount {

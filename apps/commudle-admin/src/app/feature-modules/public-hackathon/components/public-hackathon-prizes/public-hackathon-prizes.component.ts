@@ -8,6 +8,7 @@ import { Subject, Subscription, takeUntil } from 'rxjs';
 import { ICommunity, IHackathonPrize, IHackathonTeam } from '@commudle/shared-models';
 import { AuthService, countries_details as countryDetails, SeoService } from '@commudle/shared-services';
 import { HackathonResponseGroupService } from 'apps/commudle-admin/src/app/services/hackathon-response-group.service';
+import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
 
@@ -25,6 +26,7 @@ export class PublicHackathonPrizesComponent implements OnInit, OnDestroy {
   userTeamDetails: IHackathonTeam[];
   hrgId: number;
   icons = { faTrophy, faLayerGroup, faUsers, faAngleRight, faStar, faMedal };
+  staticAssets = staticAssets;
   subscriptions: Subscription[] = [];
 
   private destroy$ = new Subject<void>();
