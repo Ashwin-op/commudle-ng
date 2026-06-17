@@ -1,59 +1,110 @@
-nb-card {
-  @apply com-mx-0;
-  .loading {
-    @apply com-min-h-[50vh] com-w-full com-mx-auto;
-  }
+.loading {
+  @apply com-flex com-items-center com-justify-center com-py-16;
 }
 
-.judges-cards {
-  @apply com-grid com-grid-cols-1 md:com-grid-cols-4 com-gap-4 com-mb-4;
-  .judge-card {
-    @apply com-cursor-pointer;
-    nb-card {
-      @apply com-m-0 hover:com-shadow-md com-h-[480px];
-      nb-card-body {
-        @apply com-p-0 com-overflow-hidden;
+.main-column {
+  @apply com-mr-6;
+}
 
-        .user-card {
-          @apply com-flex com-flex-col com-h-full;
+.page-header {
+  @apply com-mb-5;
 
-          .user-image {
-            @apply com-min-h-[274px] com-h-[274px];
-            img {
-              @apply com-w-full com-h-full com-object-contain com-rounded-t-[10px] com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
-            }
-          }
+  .page-title {
+    @apply com-m-0 com-text-base com-font-semibold com-text-Yankees-Blue;
+  }
 
-          .details {
-            @apply com-px-4 com-pb-4 com-pt-3 com-flex com-h-full com-flex-col com-justify-between;
-            .user-name {
-              @apply com-text-base com-font-medium com-text-black com-m-0 com-mb-1;
-            }
+  .page-subtitle {
+    @apply com-m-0 com-text-sm com-text-Cadet-Grey;
+  }
 
-            .user-username {
-              @apply com-text-sm com-font-normal com-text-Quartz com-m-0 com-mb-1;
-            }
+  .stats-row {
+    @apply com-flex com-flex-wrap com-gap-3 com-mt-0;
 
-            .user-designation {
-              @apply com-text-sm com-font-normal com-text-Dark-Jungle-Green com-m-0 com-mb-1 com-line-clamp-2;
-            }
-            .judge-type {
-              @apply com-mb-1;
-            }
-            .social-media {
-              @apply com-flex com-gap-3 com-items-center com-mb-1;
-            }
-          }
-        }
+    .stat-item {
+      @apply com-flex com-flex-col com-items-center com-flex-1 com-py-4 com-px-3 com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-bg-white;
+
+      .stat-number {
+        @apply com-text-2xl com-font-bold com-text-Yankees-Blue;
+      }
+
+      .stat-label {
+        @apply com-text-xs com-font-medium com-text-Cadet-Grey com-mt-1;
       }
     }
   }
 }
 
-a {
-  @apply com-no-underline;
+.section-card {
+  @apply com-m-0 com-mb-4;
+
+  com-card-header {
+    @apply com-px-4 com-py-3 com-rounded-t-lg com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
+    @apply dark:com-from-[#080808] dark:com-via-[#141414] dark:com-to-[#080808] dark:com-bg-gradient-to-br;
+
+    .section-title {
+      @apply com-m-0 com-text-base com-font-semibold com-text-Yankees-Blue;
+    }
+  }
+
+  com-card-body {
+    @apply com-p-4;
+  }
 }
 
-.disabled {
-  @apply com-pointer-events-none;
+.people-grid {
+  @apply com-grid com-grid-cols-1 sm:com-grid-cols-2 lg:com-grid-cols-3 com-gap-4;
+}
+
+.person-card {
+  @apply com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-overflow-hidden com-transition-all com-duration-200;
+
+  &:hover {
+    @apply com-shadow-md;
+    transform: scale(1.01);
+  }
+
+  &.disabled {
+    @apply com-opacity-70 com-cursor-default;
+  }
+
+  .person-link {
+    @apply com-flex com-flex-col com-items-center com-p-4 com-no-underline com-text-center;
+  }
+
+  .person-avatar {
+    @apply com-w-20 com-h-20 com-rounded-full com-overflow-hidden com-mb-3 com-border-2 com-border-solid com-border-Bright-Gray;
+
+    img {
+      @apply com-w-full com-h-full com-object-cover;
+    }
+  }
+
+  .person-info {
+    @apply com-flex com-flex-col com-items-center com-gap-0;
+
+    .person-name {
+      @apply com-m-0 com-text-sm com-font-semibold com-text-Yankees-Blue;
+    }
+
+    .person-username {
+      @apply com-m-0 com-text-xs com-text-Cadet-Grey;
+    }
+
+    .person-designation {
+      @apply com-m-0 com-mt-1 com-text-xs com-text-Cadet-Grey com-line-clamp-2;
+    }
+  }
+
+  .person-social {
+    @apply com-flex com-gap-3 com-mt-3;
+
+    a {
+      @apply com-text-sm com-text-Cadet-Grey com-no-underline;
+
+      &:hover {
+        @apply com-text-primary-500;
+      }
+    }
+  }
 }

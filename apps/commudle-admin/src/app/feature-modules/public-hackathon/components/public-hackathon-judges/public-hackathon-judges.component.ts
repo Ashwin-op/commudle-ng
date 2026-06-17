@@ -16,7 +16,10 @@ import { IHackathonJudge } from '@commudle/shared-models';
 export class PublicHackathonJudgesComponent implements OnInit {
   subscriptions: Subscription[] = [];
   hackathon: IHackathon;
+  community: any;
   hackathonJudges: IHackathonJudge[];
+  judges: IHackathonJudge[] = [];
+  mentors: IHackathonJudge[] = [];
   isLoading = true;
   icons = {
     faLinkedinIn,
@@ -33,6 +36,7 @@ export class PublicHackathonJudgesComponent implements OnInit {
     this.subscriptions.push(
       this.activatedRoute.parent.data.subscribe((data) => {
         this.hackathon = data.hackathon;
+        this.community = data.community;
         this.setSeo();
         this.getJudges();
       }),
@@ -51,6 +55,8 @@ export class PublicHackathonJudgesComponent implements OnInit {
     this.subscriptions.push(
       this.hackathonService.pIndexJudge(this.hackathon.id).subscribe((data) => {
         this.hackathonJudges = data;
+        this.judges = data.filter((j) => j.judge_type === 'judge');
+        this.mentors = data.filter((j) => j.judge_type === 'mentor');
         this.isLoading = false;
       }),
     );
