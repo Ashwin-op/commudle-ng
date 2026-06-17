@@ -3,90 +3,138 @@
 }
 
 .empty-state {
-  @apply com-text-center com-py-16 com-text-gray-500 com-text-lg;
+  @apply com-text-center com-py-16 com-text-gray-500 com-text-base;
 }
 
-.winners-container {
-  @apply com-flex com-flex-col com-gap-6 com-mt-4;
+.winners-main {
+  @apply com-bg-white com-rounded-xl com-p-5;
 
-  .prize-section {
-    @apply com-m-0;
-    border-left: 4px solid transparent;
+  .winners-header {
+    @apply com-flex com-items-start com-gap-2 com-mb-5 com-pb-4 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
-    &.rank-first {
-      border-left-color: #eab308;
-
-      .prize-rank-badge {
-        @apply com-bg-yellow-400 com-text-white;
-      }
+    .winners-header-icon {
+      @apply com-text-lg com-text-primary-500;
     }
 
-    &.rank-second {
-      border-left-color: #9ca3af;
-
-      .prize-rank-badge {
-        @apply com-bg-gray-400 com-text-white;
-      }
+    .winners-title {
+      @apply com-m-0 com-text-base com-font-semibold com-text-Yankees-Blue;
     }
 
-    &.rank-third {
-      border-left-color: #f97316;
-
-      .prize-rank-badge {
-        @apply com-bg-orange-400 com-text-white;
-      }
+    .winners-subtitle {
+      @apply com-m-0 com-mt-1 com-text-sm com-text-Cadet-Grey;
     }
+  }
 
-    &.rank-default {
-      border-left-color: #d1d5db;
+  .winners-list {
+    @apply com-flex com-flex-col com-gap-3;
 
-      .prize-rank-badge {
-        @apply com-bg-gray-300 com-text-gray-600;
+    .winner-card {
+      @apply com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-overflow-hidden com-transition-all com-duration-200;
+
+      &:hover {
+        @apply com-shadow-md;
+        transform: scale(1.01);
       }
-    }
 
-    nb-card-body {
-      overflow: visible;
+      &.rank-first {
+        background: linear-gradient(135deg, #faf5ff 0%, #ffffff 60%);
+        border-color: #e9d5ff;
 
-      .prize-header {
-        @apply com-flex com-items-center com-gap-4 com-sticky com-z-10 com-py-3 com--mx-6 com-px-6;
-        top: 7.5rem;
-        background-color: var(--card-background-color);
-        overflow: hidden;
-        position: sticky;
-
-        &::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 60%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
-          animation: shimmer 3s infinite;
-          pointer-events: none;
+        .prize-badge {
+          @apply com-text-purple-500;
+          background-color: rgba(99, 102, 241, 0.08);
         }
 
-        .prize-rank-badge {
-          @apply com-flex com-items-center com-justify-center com-w-12 com-h-12 com-rounded-full com-flex-shrink-0 com-text-xl;
+        .prize-amount {
+          @apply com-text-purple-500;
+        }
+      }
+
+      &.rank-second {
+        background: linear-gradient(135deg, #eff6ff 0%, #ffffff 60%);
+        border-color: #bfdbfe;
+
+        .prize-badge {
+          @apply com-text-blue-500;
+          background-color: rgba(99, 102, 241, 0.08);
         }
 
-        .prize-info {
-          @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-gap-1;
+        .prize-amount {
+          @apply com-text-blue-500;
+        }
+      }
 
-          .prize-name-row {
-            @apply com-flex com-items-center com-gap-1 com-flex-wrap;
+      &.rank-third {
+        background: linear-gradient(135deg, #fff7ed 0%, #ffffff 60%);
+        border-color: #fed7aa;
 
-            .prize-name {
-              @apply com-text-xl com-font-bold;
+        .prize-badge {
+          @apply com-text-orange-500;
+          background-color: rgba(99, 102, 241, 0.08);
+        }
+
+        .prize-amount {
+          @apply com-text-orange-500;
+        }
+      }
+
+      &.rank-default {
+        @apply com-bg-white;
+        border-color: #e5e7eb;
+
+        .prize-badge {
+          @apply com-text-gray-600;
+          background-color: rgba(107, 114, 128, 0.1);
+        }
+
+        .prize-amount {
+          @apply com-text-gray-700;
+        }
+      }
+
+      .winner-card-header {
+        @apply com-flex com-items-center com-justify-between com-p-3 com-gap-4;
+
+        .winner-prize-info {
+          @apply com-flex com-flex-col com-gap-1 com-flex-1;
+
+          .prize-badge {
+            @apply com-inline-flex com-items-center com-gap-1 com-text-xs com-font-medium com-px-3 com-py-1 com-rounded-full com-w-fit;
+
+            .badge-icon {
+              @apply com-text-sm;
             }
+          }
 
-            .prize-amount {
-              @apply com-text-primary-600 com-text-xl com-font-bold;
+          .prize-amount {
+            @apply com-text-2xl com-font-semibold com-mt-2;
+          }
+
+          .prize-description {
+            @apply com-text-xs com-text-Cadet-Grey com-mt-1;
+
+            ::ng-deep p {
+              @apply com-m-0 com-text-xs;
             }
+          }
+        }
 
-            .prize-track {
-              @apply com-flex com-items-center com-gap-1 com-text-xs com-px-2 com-py-1 com-rounded-full com-bg-gray-100 com-text-Auro-Metal-Saurus;
+        .prize-track-chip {
+          @apply com-flex com-items-center com-gap-1 com-text-xs com-px-2 com-py-1 com-rounded-full com-bg-gray-100 com-text-Cadet-Grey com-flex-shrink-0;
+        }
+      }
+
+      .winning-teams {
+        @apply com-flex com-flex-col com-gap-3 com-px-3 com-pb-3;
+
+        .team-card {
+          @apply com-p-3 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-white;
+
+          .team-name {
+            @apply com-flex com-items-center com-gap-3 com-text-sm com-font-semibold com-text-Yankees-Blue com-mb-3;
+
+            .build-chip {
+              @apply com-flex com-items-center com-gap-1 com-text-xs com-px-2 com-py-1 com-rounded-full com-bg-blue-50 com-text-primary-500 com-no-underline com-font-normal;
 
               fa-icon {
                 @apply com-text-xs;
@@ -94,52 +142,11 @@
             }
           }
 
-          .prize-description {
-            @apply com-text-sm com-text-Auro-Metal-Saurus com-line-clamp-1;
-
-            ::ng-deep p {
-              @apply com-m-0;
-            }
-          }
-        }
-      }
-
-      .winning-teams {
-        @apply com-flex com-flex-col com-gap-3 com-mt-4 com-ml-16;
-
-        .team-card {
-          @apply com-m-0;
-
-          nb-card-body,
-          com-card-body {
-            .team-name {
-              @apply com-flex com-items-center com-gap-2 com-text-base com-font-semibold com-mb-2;
-
-              .build-chip {
-                @apply com-flex com-items-center com-gap-1 com-text-xs com-px-2 com-py-1 com-rounded-full com-bg-primary-100 com-text-primary-600 com-no-underline com-font-normal;
-                @apply hover:com-bg-primary-200;
-
-                fa-icon {
-                  @apply com-text-xs;
-                }
-              }
-            }
-
-            .team-members {
-              @apply com-flex com-flex-wrap com-gap-3;
-            }
+          .team-members {
+            @apply com-flex com-flex-wrap com-gap-4;
           }
         }
       }
     }
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 200%;
   }
 }

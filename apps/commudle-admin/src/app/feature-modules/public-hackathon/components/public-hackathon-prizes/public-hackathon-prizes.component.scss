@@ -48,13 +48,13 @@
       }
 
       .prize-card-content {
-        @apply com-flex com-items-center com-justify-between com-p-4 com-gap-5;
+        @apply com-flex com-items-center com-justify-between com-p-3 com-gap-5;
 
         .prize-info {
           @apply com-flex com-flex-col com-gap-2 com-flex-1;
 
           .prize-badge {
-            @apply com-inline-flex com-items-center com-gap-1 com-text-sm com-font-medium com-px-3 com-py-1 com-rounded-full com-w-fit;
+            @apply com-inline-flex com-items-center com-gap-1 com-text-xs com-font-medium com-px-3 com-py-1 com-rounded-full com-w-fit;
             background-color: rgba(99, 102, 241, 0.08);
 
             .badge-icon {
@@ -63,7 +63,7 @@
           }
 
           .prize-amount {
-            @apply com-text-2xl com-font-bold com-mt-1;
+            @apply com-text-2xl com-font-semibold com-mt-1;
           }
 
           .prize-description {
@@ -104,34 +104,31 @@
 
       &.prize-rank-1 {
         .prize-badge {
-          @apply com-text-purple-600;
-          background-color: rgba(139, 92, 246, 0.1);
+          @apply com-text-purple-500;
         }
 
         .prize-amount {
-          @apply com-text-purple-700;
+          @apply com-text-purple-500;
         }
       }
 
       &.prize-rank-2 {
         .prize-badge {
-          @apply com-text-blue-600;
-          background-color: rgba(59, 130, 246, 0.1);
+          @apply com-text-blue-500;
         }
 
         .prize-amount {
-          @apply com-text-blue-700;
+          @apply com-text-blue-500;
         }
       }
 
       &.prize-rank-3 {
         .prize-badge {
-          @apply com-text-orange-600;
-          background-color: rgba(249, 115, 22, 0.1);
+          @apply com-text-orange-50;
         }
 
         .prize-amount {
-          @apply com-text-orange-700;
+          @apply com-text-orange-500;
         }
       }
     }
