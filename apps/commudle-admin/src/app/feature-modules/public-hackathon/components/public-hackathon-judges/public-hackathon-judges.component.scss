@@ -3,7 +3,7 @@
 }
 
 .main-column {
-  @apply com-mr-6;
+  @apply md:com-mr-6;
 }
 
 .page-header {
@@ -18,7 +18,7 @@
   }
 
   .stats-row {
-    @apply com-flex com-flex-wrap com-gap-3 com-mt-0;
+    @apply com-flex com-flex-wrap com-gap-3 com-mt-0 com-mx-4 md:com-mx-0;
 
     .stat-item {
       @apply com-flex com-flex-col com-items-center com-flex-1 com-py-4 com-px-3 com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-bg-white;
@@ -107,4 +107,8 @@
       }
     }
   }
+}
+
+.right-column {
+  @apply com-mb-4 md:com-mb-0;
 }

@@ -1,4 +1,4 @@
-<div class="two-column-layout medium">
+<div class="two-column-layout medium mobile-reverse">
   <div class="main-column com-mb-20">
     <div *ngIf="isLoading; else prizesCards" class="loading">
       <commudle-loading-spinner></commudle-loading-spinner>
@@ -48,14 +48,10 @@
     </ng-template>
   </div>
   <div class="right-column">
-    <com-card>
-      <com-card-body>
-        <commudle-public-hackathon-details-mini-card
-          [hackathon]="hackathon"
-          [hrgId]="hrgId"
-          [community]="community"
-        ></commudle-public-hackathon-details-mini-card>
-      </com-card-body>
-    </com-card>
+    <commudle-public-hackathon-details-mini-card
+      [hackathon]="hackathon"
+      [hrgId]="hrgId"
+      [community]="community"
+    ></commudle-public-hackathon-details-mini-card>
   </div>
 </div>

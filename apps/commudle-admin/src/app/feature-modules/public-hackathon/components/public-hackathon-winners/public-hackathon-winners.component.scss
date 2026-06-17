@@ -26,7 +26,7 @@
   }
 
   .winners-list {
-    @apply com-flex com-flex-col com-gap-3;
+    @apply com-flex com-flex-col com-gap-4;
 
     .winner-card {
       @apply com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-overflow-hidden com-transition-all com-duration-200;
