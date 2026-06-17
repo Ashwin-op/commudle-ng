@@ -1,57 +1,137 @@
 .main-column {
+  @apply com-mr-6 com-bg-white com-rounded-xl com-p-5;
+
   .loading {
     @apply com-min-h-[50vh] com-w-full com-flex com-items-center com-justify-center;
   }
 
+  .prizes-header {
+    @apply com-flex com-items-start com-gap-2 com-mb-5 com-pb-4 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+
+    .prizes-header-icon {
+      @apply com-text-lg com-text-primary-500;
+    }
+
+    .prizes-title {
+      @apply com-m-0 com-text-base com-font-semibold com-text-Yankees-Blue;
+    }
+
+    .prizes-subtitle {
+      @apply com-m-0 com-mt-1 com-text-sm com-text-Cadet-Grey;
+    }
+  }
+
   .prizes-list {
-    @apply com-flex com-flex-col com-gap-3 com-mt-4;
+    @apply com-flex com-flex-col com-gap-3;
 
-    nb-card {
-      @apply com-m-0 hover:com-shadow-md com-transition-shadow;
+    .prize-card {
+      @apply com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-overflow-hidden com-transition-all com-duration-200;
 
-      nb-card-body {
-        .prize-row {
-          @apply com-flex com-items-center com-gap-4;
+      &:hover {
+        @apply com-shadow-md;
+        transform: scale(1.01);
+      }
 
-          .prize-icon {
-            @apply com-flex com-items-center com-justify-center com-w-12 com-h-12 com-rounded-full com-flex-shrink-0 com-bg-gray-100 com-text-gray-500 com-text-xl;
-          }
+      &.prize-rank-1 {
+        background: linear-gradient(135deg, #faf5ff 0%, #ffffff 60%);
+        border-color: #e9d5ff;
+      }
 
-          .prize-details {
-            @apply com-flex-1 com-min-w-0;
+      &.prize-rank-2 {
+        background: linear-gradient(135deg, #eff6ff 0%, #ffffff 60%);
+        border-color: #bfdbfe;
+      }
 
-            .prize-top {
-              @apply com-flex com-items-baseline com-gap-3 com-flex-wrap;
+      &.prize-rank-3 {
+        background: linear-gradient(135deg, #fff7ed 0%, #ffffff 60%);
+        border-color: #fed7aa;
+      }
 
-              .prize-name {
-                @apply com-text-Yankees-Blue com-text-lg com-font-bold;
-              }
+      .prize-card-content {
+        @apply com-flex com-items-center com-justify-between com-p-4 com-gap-5;
 
-              .prize-amount {
-                @apply com-text-primary-600 com-text-lg com-font-bold;
-              }
-            }
+        .prize-info {
+          @apply com-flex com-flex-col com-gap-2 com-flex-1;
 
-            .prize-track {
-              @apply com-flex com-items-center com-gap-2 com-text-sm com-text-Auro-Metal-Saurus com-mt-1;
+          .prize-badge {
+            @apply com-inline-flex com-items-center com-gap-1 com-text-sm com-font-medium com-px-3 com-py-1 com-rounded-full com-w-fit;
+            background-color: rgba(99, 102, 241, 0.08);
 
-              fa-icon {
-                @apply com-text-xs;
-              }
-            }
-
-            .prize-description {
-              @apply com-text-sm com-text-Charcoal com-mt-1 com-line-clamp-2;
-            }
-          }
-
-          .prize-meta {
-            @apply com-flex-shrink-0;
-
-            .winners-count {
-              @apply com-flex com-items-center com-gap-2 com-text-sm com-text-Auro-Metal-Saurus com-whitespace-nowrap;
+            .badge-icon {
+              @apply com-text-sm;
             }
           }
+
+          .prize-amount {
+            @apply com-text-2xl com-font-bold com-mt-1;
+          }
+
+          .prize-description {
+            @apply com-text-xs com-text-Cadet-Grey com-mt-1;
+
+            ::ng-deep p {
+              @apply com-m-0 com-text-xs;
+            }
+          }
+
+          .prize-track {
+            @apply com-flex com-items-center com-gap-1 com-text-xs com-text-Cadet-Grey com-mt-1;
+          }
+        }
+
+        .prize-right {
+          @apply com-flex com-items-center com-gap-3 com-flex-shrink-0;
+
+          .winners-count {
+            @apply com-flex com-items-center com-gap-1 com-text-sm com-text-Cadet-Grey;
+
+            fa-icon {
+              @apply com-text-Cadet-Grey;
+            }
+          }
+
+          .arrow-btn {
+            @apply com-flex com-items-center com-justify-center com-w-9 com-h-9 com-rounded-full com-text-white com-no-underline com-transition-all com-duration-200;
+            background: #6366f1;
+
+            &:hover {
+              background: #4f46e5;
+              transform: scale(1.1);
+            }
+          }
+        }
+      }
+
+      &.prize-rank-1 {
+        .prize-badge {
+          @apply com-text-purple-600;
+          background-color: rgba(139, 92, 246, 0.1);
+        }
+
+        .prize-amount {
+          @apply com-text-purple-700;
+        }
+      }
+
+      &.prize-rank-2 {
+        .prize-badge {
+          @apply com-text-blue-600;
+          background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        .prize-amount {
+          @apply com-text-blue-700;
+        }
+      }
+
+      &.prize-rank-3 {
+        .prize-badge {
+          @apply com-text-orange-600;
+          background-color: rgba(249, 115, 22, 0.1);
+        }
+
+        .prize-amount {
+          @apply com-text-orange-700;
         }
       }
     }
@@ -59,7 +139,7 @@
 }
 
 .right-column {
-  nb-card {
+  com-card {
     @apply com-mr-0;
   }
 }

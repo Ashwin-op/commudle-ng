@@ -2,7 +2,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { faTrophy, faLayerGroup, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faTrophy, faLayerGroup, faUsers, faAngleRight, faStar, faMedal } from '@fortawesome/free-solid-svg-icons';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 
 import { ICommunity, IHackathonPrize, IHackathonTeam } from '@commudle/shared-models';
@@ -24,7 +24,7 @@ export class PublicHackathonPrizesComponent implements OnInit, OnDestroy {
   isLoading = true;
   userTeamDetails: IHackathonTeam[];
   hrgId: number;
-  icons = { faTrophy, faLayerGroup, faUsers };
+  icons = { faTrophy, faLayerGroup, faUsers, faAngleRight, faStar, faMedal };
   subscriptions: Subscription[] = [];
 
   private destroy$ = new Subject<void>();
