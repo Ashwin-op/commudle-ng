@@ -8,7 +8,7 @@
       @apply com-flex com-flex-col com-items-center com-flex-1 com-py-4 com-px-3 com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-bg-white com-min-w-0;
 
       .stat-number {
-        @apply com-text-2xl com-font-bold com-text-Yankees-Blue;
+        @apply com-text-2xl com-font-semibold com-text-Yankees-Blue;
       }
 
       .stat-label {
@@ -21,11 +21,11 @@
     @apply com-text-center com-py-16;
 
     nb-icon {
-      @apply com-text-5xl com-text-gray-300 com-mb-4;
+      @apply com-text-5xl com-text-gray-500 com-mb-4;
     }
 
     h3 {
-      @apply com-text-lg com-font-semibold com-text-Yankees-Blue com-m-0 com-mb-2;
+      @apply com-text-base com-font-semibold com-text-Yankees-Blue com-m-0 com-mb-2;
     }
 
     p {
@@ -63,7 +63,7 @@
         }
 
         .track-number {
-          @apply com-flex com-items-center com-justify-center com-w-7 com-h-7 com-rounded-full com-bg-primary-500 com-text-white com-font-bold com-text-sm com-flex-shrink-0;
+          @apply com-flex com-items-center com-justify-center com-w-7 com-h-7 com-rounded-full com-bg-primary-500 com-text-white com-font-semibold com-text-sm com-flex-shrink-0;
         }
 
         .track-name {
@@ -78,17 +78,9 @@
       .track-content {
         @apply com-flex com-flex-col com-gap-5 com-px-5 com-py-5;
 
-        .track-description {
-          @apply com-text-sm com-text-gray-700 com-leading-relaxed;
-        }
-
         .track-section {
           .section-label {
-            @apply com-text-xs com-font-semibold com-uppercase com-tracking-wider com-text-gray-400 com-mb-3;
-          }
-
-          .problem-content {
-            @apply com-text-sm com-text-gray-700 com-leading-relaxed com-p-4 com-bg-gray-50 com-rounded-lg;
+            @apply com-text-xs com-font-semibold com-uppercase com-tracking-wider com-text-Cadet-Grey com-mb-3;
           }
 
           .ps-list {
@@ -97,13 +89,13 @@
               @apply hover:com-bg-gray-50;
 
               .ps-id {
-                @apply com-flex com-items-center com-justify-center com-w-10 com-h-10 com-rounded-full com-text-xs com-font-bold com-flex-shrink-0 com-uppercase;
+                @apply com-flex com-items-center com-justify-center com-w-10 com-h-10 com-rounded-full com-text-xs com-font-semibold com-flex-shrink-0 com-uppercase;
                 color: #312e81;
                 background-color: #ede9fe;
               }
 
               .ps-title {
-                @apply com-text-sm com-text-gray-700;
+                @apply com-text-sm com-text-Yankees-Blue;
               }
             }
 
@@ -126,7 +118,7 @@
                 }
 
                 .prize-amount {
-                  @apply com-text-sm com-font-bold com-text-green-600 com-whitespace-nowrap;
+                  @apply com-text-sm com-font-semibold com-text-green-500 com-whitespace-nowrap;
                 }
               }
 
@@ -143,8 +135,4 @@
 
 .right-column {
   @apply com-mb-4 md:com-mb-0;
-
-  nb-card {
-    @apply com-mr-0;
-  }
 }

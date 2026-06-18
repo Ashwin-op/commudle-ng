@@ -48,7 +48,7 @@
   }
 
   .sponsor-tier-heading {
-    @apply com-text-sm com-font-bold com-uppercase com-tracking-wider;
+    @apply com-text-sm com-font-semibold com-uppercase com-tracking-wider;
   }
 
   .sponsor-tier-count {
@@ -213,7 +213,7 @@
     @apply com-transition-all com-duration-300 com-ease-out;
 
     &:hover {
-      @apply com-text-primary-600 com-font-bold;
+      @apply com-text-primary-600;
       text-shadow: 0 0 8px rgba(51, 102, 255, 0.3);
     }
   }

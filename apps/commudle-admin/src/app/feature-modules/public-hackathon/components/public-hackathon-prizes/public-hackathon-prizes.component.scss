@@ -9,7 +9,7 @@
     @apply com-flex com-items-start com-gap-2 com-mb-5 com-pb-4 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
     .prizes-header-icon {
-      @apply com-text-lg com-text-primary-500;
+      @apply com-text-base com-text-primary-500;
     }
 
     .prizes-title {
@@ -66,7 +66,7 @@
           @apply com-flex com-flex-col com-gap-2 com-flex-1;
 
           .prize-badge {
-            @apply com-inline-flex com-items-center com-gap-1 com-text-xs com-font-medium com-px-3 com-py-1 com-rounded-full com-w-fit;
+            @apply com-inline-flex com-items-center com-gap-1 com-text-xs com-font-normal com-px-3 com-py-1 com-rounded-full com-w-fit;
             background-color: rgba(99, 102, 241, 0.08);
 
             .badge-icon {
@@ -104,10 +104,8 @@
 
           .arrow-btn {
             @apply com-flex com-items-center com-justify-center com-w-9 com-h-9 com-rounded-full com-text-white com-no-underline com-transition-all com-duration-200;
-            background: #6366f1;
 
             &:hover {
-              background: #4f46e5;
               transform: scale(1.1);
             }
           }
@@ -122,6 +120,10 @@
         .prize-amount {
           @apply com-text-purple-500;
         }
+
+        .arrow-btn {
+          background: #7c3aed;
+        }
       }
 
       &.prize-rank-2 {
@@ -132,6 +134,10 @@
         .prize-amount {
           @apply com-text-blue-500;
         }
+
+        .arrow-btn {
+          background: #3b82f6;
+        }
       }
 
       &.prize-rank-3 {
@@ -141,6 +147,10 @@
 
         .prize-amount {
           @apply com-text-orange-500;
+        }
+
+        .arrow-btn {
+          background: #f97316;
         }
       }
     }
