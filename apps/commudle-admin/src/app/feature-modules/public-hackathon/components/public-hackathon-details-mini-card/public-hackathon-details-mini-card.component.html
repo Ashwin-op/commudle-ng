@@ -58,17 +58,43 @@
   <!-- Hackathon Dates -->
   <div class="section" *ngIf="hackathon.start_date && hackathon.end_date">
     <span class="section-label">Hackathon Dates</span>
-    <div class="section-content">
-      <p class="section-value" *ngIf="hackathon.timezone">
-        <span>Starts on: </span>
-        {{ momentTimezone.tz(moment.utc(hackathon.start_date), hackathon.timezone).format('DD MMM YYYY, h:mm A') }}
-        {{ momentTimezone.tz(hackathon.timezone).format('z') }}
-      </p>
-      <p class="section-value" *ngIf="hackathon.timezone">
-        <span>Ends on: </span>
-        {{ momentTimezone.tz(moment.utc(hackathon.end_date), hackathon.timezone).format('DD MMM YYYY, h:mm A') }}
-        {{ momentTimezone.tz(hackathon.timezone).format('z') }}
-      </p>
+    <div class="date-grid">
+      <div class="date-item" *ngIf="hackathon.timezone">
+        <span class="date-prefix">Starts</span>
+        <span class="date-value">{{
+          momentTimezone.tz(moment.utc(hackathon.start_date), hackathon.timezone).format(
+            'DD
+          MMM YYYY'
+          )
+        }}</span>
+        <span class="date-time"
+          >{{
+            momentTimezone.tz(moment.utc(hackathon.start_date), hackathon.timezone).format(
+              'h:mm
+          A'
+            )
+          }}
+          {{ momentTimezone.tz(hackathon.timezone).format('z') }}</span
+        >
+      </div>
+      <div class="date-item" *ngIf="hackathon.timezone">
+        <span class="date-prefix">Ends</span>
+        <span class="date-value">{{
+          momentTimezone.tz(moment.utc(hackathon.end_date), hackathon.timezone).format(
+            'DD MMM
+          YYYY'
+          )
+        }}</span>
+        <span class="date-time"
+          >{{
+            momentTimezone.tz(moment.utc(hackathon.end_date), hackathon.timezone).format(
+              'h:mm
+          A'
+            )
+          }}
+          {{ momentTimezone.tz(hackathon.timezone).format('z') }}</span
+        >
+      </div>
     </div>
   </div>
 
@@ -78,27 +104,27 @@
     *ngIf="hackathon.application_start_date && hackathon.application_end_date && hackathonStatus !== 'Closed'"
   >
     <span class="section-label">Registration Dates</span>
-    <div class="section-content" *ngIf="hackathon.timezone || hackathonStatus !== 'Outgoing'">
-      <p class="section-value">
-        <span>Starts on: </span>
-        {{
-          momentTimezone.tz(moment.utc(hackathon.application_start_date), hackathon.timezone).format(
-            'DD MMM YYYY, h:mm
-        A'
-          )
-        }}
-        {{ momentTimezone.tz(hackathon.timezone).format('z') }}
-      </p>
-      <p class="section-value">
-        <span>Ends on: </span>
-        {{
-          momentTimezone.tz(moment.utc(hackathon.application_end_date), hackathon.timezone).format(
-            'DD MMM YYYY, h:mm
-        A'
-          )
-        }}
-        {{ momentTimezone.tz(hackathon.timezone).format('z') }}
-      </p>
+    <div class="date-grid" *ngIf="hackathon.timezone">
+      <div class="date-item">
+        <span class="date-prefix">Opens</span>
+        <span class="date-value">{{
+          momentTimezone.tz(moment.utc(hackathon.application_start_date), hackathon.timezone).format('DD MMM YYYY')
+        }}</span>
+        <span class="date-time"
+          >{{ momentTimezone.tz(moment.utc(hackathon.application_start_date), hackathon.timezone).format('h:mm A') }}
+          {{ momentTimezone.tz(hackathon.timezone).format('z') }}</span
+        >
+      </div>
+      <div class="date-item">
+        <span class="date-prefix">Closes</span>
+        <span class="date-value">{{
+          momentTimezone.tz(moment.utc(hackathon.application_end_date), hackathon.timezone).format('DD MMM YYYY')
+        }}</span>
+        <span class="date-time"
+          >{{ momentTimezone.tz(moment.utc(hackathon.application_end_date), hackathon.timezone).format('h:mm A') }}
+          {{ momentTimezone.tz(hackathon.timezone).format('z') }}</span
+        >
+      </div>
     </div>
   </div>
   <div class="section-content" *ngIf="hackathon.timezone">

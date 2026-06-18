@@ -55,18 +55,38 @@
     @apply com-px-4 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
     .section-label {
-      @apply com-text-sm com-text-gray-500;
+      @apply com-text-xs com-font-medium com-text-Cadet-Grey com-uppercase com-tracking-wide;
+    }
+
+    .date-grid {
+      @apply com-grid com-grid-cols-2 com-gap-2 com-mt-2;
+
+      .date-item {
+        @apply com-flex com-flex-col com-p-2 com-rounded-lg com-bg-gray-50;
+
+        .date-prefix {
+          @apply com-text-xs com-text-Cadet-Grey com-font-medium;
+        }
+
+        .date-value {
+          @apply com-text-sm com-font-semibold com-text-Yankees-Blue;
+        }
+
+        .date-time {
+          @apply com-text-xs com-text-Cadet-Grey;
+        }
+      }
     }
 
     .section-content {
-      @apply com-mt-1;
+      @apply com-mt-2;
     }
 
     .section-value {
       @apply com-m-0 com-text-sm com-text-Yankees-Blue;
 
       span {
-        @apply com-text-gray-500;
+        @apply com-text-Cadet-Grey;
       }
     }
 

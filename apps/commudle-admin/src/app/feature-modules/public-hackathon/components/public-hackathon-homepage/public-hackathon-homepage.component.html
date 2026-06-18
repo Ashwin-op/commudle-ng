@@ -10,16 +10,11 @@
             <h1 class="hackathon-name">{{ hackathon.name }}</h1>
             <div class="registration-badge open" *ngIf="hackathon?.status === EHackathonStatus?.OPEN">
               <span class="badge-dot active-dot"></span>
-              <span>Open</span>
+              <span>Live</span>
             </div>
-            <div
-              class="registration-badge closed"
-              *ngIf="
-                hackathon?.status === EHackathonStatus?.COMPLETED || hackathon?.status === EHackathonStatus?.CANCELLED
-              "
-            >
+            <div class="registration-badge closed" *ngIf="hackathon?.status === EHackathonStatus?.COMPLETED">
               <span class="badge-dot closed-dot"></span>
-              <span>Closed</span>
+              <span>Completed</span>
             </div>
           </div>
           <div class="details-sub">
