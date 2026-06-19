@@ -255,56 +255,74 @@
   }
 
   .round-card {
-    @apply com-flex com-items-center com-justify-between com-py-2 com-gap-5 com-transition-all com-duration-200;
+    @apply com-flex com-gap-3 com-transition-all com-duration-200;
 
     &:hover {
-      @apply com-bg-gray-50;
+      .round-info {
+        @apply com-bg-gray-50;
+      }
     }
 
-    &:not(:last-child) {
-      @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    .round-indicator {
+      @apply com-flex com-flex-col com-items-center;
+
+      .round-step {
+        @apply com-flex com-items-center com-justify-center com-w-6 com-h-6 com-rounded-full com-bg-blue-500 com-text-white com-text-xs com-font-medium com-flex-shrink-0;
+      }
+
+      .round-connector {
+        @apply com-w-px com-flex-1 com-bg-Bright-Gray com-mt-1;
+      }
     }
 
-    .name {
-      @apply com-text-sm com-font-medium com-text-Yankees-Blue;
+    .round-info {
+      @apply com-flex com-flex-col com-gap-1 com-pb-4 com-flex-1 com-rounded-lg com-px-2 com-py-1 com-transition-colors com-duration-200;
+
+      .name {
+        @apply com-text-sm com-font-medium com-text-Yankees-Blue;
+      }
+
+      .date {
+        @apply com-text-sm com-flex-shrink-0 com-text-gray-500;
+      }
     }
 
-    .date {
-      @apply com-text-sm com-font-medium com-flex-shrink-0 com-text-gray-500;
+    .round-card-body {
+      @apply com-py-2 com-px-4 com-w-full;
+    }
+
+    .edit-link {
+      @apply com-block com-mt-3 com-no-underline;
     }
   }
 
-  .round-card-body {
-    @apply com-py-2 com-px-4 com-w-full;
+  .collaboration-communities,
+  .comments,
+  .faq {
+    @apply com-m-0 com-mb-4;
   }
 
-  .status-info {
-    @apply com-pb-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+  .hackathon-details {
+    @apply com-mb-4;
+  }
 
-    .status-badge {
-      @apply com-inline-flex com-items-center com-gap-1 com-px-3 com-py-1 com-rounded-full com-text-xs com-font-semibold com-bg-blue-50 com-text-primary-500 com-border com-border-solid com-border-primary-200;
+  .community-social-links {
+    @apply com-flex com-items-center com-gap-4 com-mt-6 com-flex-wrap com-mt-3;
+
+    a {
+      @apply com-no-underline;
     }
-  }
-
-  .edit-link {
-    @apply com-block com-mt-3 com-no-underline;
   }
 }
 
-.collaboration-communities,
-.comments,
-.faq {
-  @apply com-m-0 com-mb-4;
+.registration-status-body {
+  @apply com-flex com-flex-col com-gap-3;
 }
 
-.hackathon-details {
-  @apply com-mb-4;
-}
+.status-info {
+  @apply com-pb-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
-.community-social-links {
-  @apply com-flex com-items-center com-gap-4 com-mt-6 com-flex-wrap com-mt-3;
-
-  a {
-    @apply com-no-underline;
+  .status-badge {
+    @apply com-inline-flex com-items-center com-gap-1 com-px-3 com-py-1 com-rounded-full com-text-xs com-font-medium com-bg-blue-50 com-text-primary-500;
   }
 }
