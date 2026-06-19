@@ -1,24 +1,23 @@
 .base-layout {
-  @apply com-pb-8 com-pt-4;
+  @apply com-pb-8;
+
   .container {
     .details-section {
-      @apply com-mx-0 com-mt-0;
+      @apply com-mx-0 com-mt-0 com-rounded-t-none com-rounded-b-lg com-border-0 com-shadow-none;
+
       nb-card-body {
-        @apply com-flex com-justify-between com-items-center;
+        @apply com-flex com-flex-col com-p-3 com-rounded-b-lg;
+
         .details {
           @apply com-flex com-flex-col;
+
           .event-name {
-            @apply com-text-Yankees-Blue com-text-4xl com-font-bold com-m-0 com-mb-4;
+            @apply com-text-Yankees-Blue com-m-0 com-text-base com-font-semibold com-mt-0 com-mb-2;
           }
         }
-        // .social-links {
-        //   @apply com-flex com-gap-6 com-items-center;
-        //   a {
-        //     @apply com-text-xl com-w-9 com-h-9 com-grid com-items-center com-justify-center com-border com-border-solid com-border-Bright-Gray com-rounded-lg com-text-primary-500 hover:com-shadow;
-        //   }
-        // }
       }
     }
+
     // .community-badge {
     //   @apply md:com-mb-2 com-mb-3 md:com-mx-0 com-mx-3;
     // }
@@ -35,24 +34,48 @@
     }
 
     .home-event-menu {
-      @apply com-sticky com-top-14 com-z-10 com-m-0 com-rounded-t-none md:com-rounded-b-[10px] com-rounded-b-none;
+      @apply com-sticky com-z-10 com-m-0 com-mb-4 com-rounded-tl-none com-rounded-tr-none;
+      @apply com-p-0 com-bg-white com-border com-border-solid com-border-Bright-Gray com-shadow-none;
+      top: var(--mobile-navbar-offset, 52px);
+
+      &.scrolled {
+        @apply com-shadow-lg;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.55));
+        @apply com-bg-gradient-to-b dark:com-from-[#12121299] dark:com-to-[#12121266];
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
 
       nb-card-body {
-        @apply com-px-0;
+        @apply com-px-0 com-py-0;
 
         nb-actions {
-          nb-icon {
-            @apply com-text-xl;
-          }
-
-          span {
-            a {
-              @apply com-no-underline com-text-base com-ml-2 com-font-semibold com-text-Yankees-Blue;
-            }
-          }
+          @apply com-overflow-x-auto com-scrollbar-hide com-items-center com-ml-2;
 
           nb-action {
-            @apply com-flex-shrink-0;
+            @apply com-flex-col com-p-0;
+            height: auto !important;
+
+            span {
+              @apply com-flex com-items-center com-gap-2 com-text-gunmetal com-text-sm com-font-medium com-leading-4 com-h-fit com-m-0 com-px-2 md:com-px-4 com-py-3 com-cursor-pointer com-whitespace-nowrap;
+              @apply com-border-0 com-border-b-3 com-border-solid com-border-transparent;
+
+              a {
+                @apply com-no-underline com-text-inherit;
+              }
+            }
+
+            nb-icon {
+              @apply com-text-lg com-leading-none com-text-gunmetal com-opacity-80 com-hidden;
+            }
+
+            &.active span {
+              @apply com-border-primary-500 com-text-primary-500;
+
+              a {
+                @apply com-text-primary-500;
+              }
+            }
           }
         }
       }
@@ -61,18 +84,25 @@
     .two-column-layout {
       .home-event-discussion {
         @apply com-mx-0 md:com-rounded-[10px] com-rounded-none;
+
         nb-card-header {
-          @apply com-py-4 md:com-px-6 com-px-4 com-flex com-items-center com-justify-between;
+          @apply com-py-3 com-px-4 com-flex com-items-center com-justify-between com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+          background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
+          @apply dark:com-from-[#080808] dark:com-via-[#141414] dark:com-to-[#080808] dark:com-bg-gradient-to-br;
+
           .title {
-            @apply com-flex com-m-0 com-items-center;
+            @apply com-flex com-items-center com-gap-2 com-m-0;
+
             a {
-              @apply md:com-font-semibold com-font-bold com-no-underline com-text-Yankees-Blue;
+              @apply com-text-base com-font-semibold com-no-underline com-text-Yankees-Blue com-flex com-items-center com-gap-2;
+
               nb-icon {
-                @apply com-mr-1;
+                @apply com-text-lg;
               }
             }
           }
         }
+
         nb-card-body {
           @apply com-p-0;
           overflow: initial;
@@ -81,8 +111,10 @@
 
       .event-date-time-card {
         @apply com-mb-0 com-mx-0 md:com-ml-3 com-ml-0 md:com-mt-2 md:com-rounded-[10px] com-rounded-none com-flex com-flex-col md:com-sticky md:com-top-32;
+
         .event-date-time {
           @apply com-p-0;
+
           .event-date,
           .event-timing,
           .event-type {
@@ -109,6 +141,10 @@
       }
     }
   }
+}
+
+.sticky-sentinel {
+  @apply com-h-0 com-w-full;
 }
 
 .event-date-time-container {
@@ -140,15 +176,19 @@
     @apply com-m-0 com-mt-4 md:com-rounded-[10px] com-rounded-none;
 
     nb-card-header {
-      @apply com-flex com-items-center com-justify-between com-py-4 md:com-px-6 com-px-4;
+      @apply com-flex com-items-center com-justify-between com-py-3 com-px-4 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+      background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
+      @apply dark:com-from-[#080808] dark:com-via-[#141414] dark:com-to-[#080808] dark:com-bg-gradient-to-br;
+
       .event-form-title {
-        @apply com-flex com-m-0 com-items-center;
+        @apply com-flex com-items-center com-gap-2 com-m-0;
+
         a {
-          @apply md:com-font-semibold com-font-bold com-no-underline com-text-Yankees-Blue;
+          @apply com-text-base com-font-semibold com-no-underline com-text-Yankees-Blue com-flex com-items-center com-gap-2;
         }
 
         nb-icon {
-          @apply com-mr-1;
+          @apply com-text-lg;
         }
       }
     }

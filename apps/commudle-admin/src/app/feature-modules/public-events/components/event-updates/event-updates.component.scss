@@ -2,17 +2,26 @@ nb-card {
   @apply com-m-0 com-mt-4 md:com-rounded-[10px] com-rounded-none;
 
   nb-card-header {
-    @apply com-py-4 md:com-px-6 com-px-4;
+    @apply com-py-3 md:com-px-4 com-px-4 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
+    @apply dark:com-from-[#080808] dark:com-via-[#141414] dark:com-to-[#080808] dark:com-bg-gradient-to-br;
+
     .title {
-      @apply com-flex com-items-center com-m-0;
+      @apply com-flex com-items-center com-gap-2 com-m-0;
+
       a {
-        @apply md:com-font-semibold com-font-bold com-no-underline com-text-Yankees-Blue;
+        @apply com-text-base com-font-semibold com-no-underline com-text-Yankees-Blue com-flex com-items-center com-gap-2;
+
+        nb-icon {
+          @apply com-text-lg;
+        }
       }
     }
   }
 
   nb-card-body {
     @apply com-flex com-flex-col com-gap-4;
+
     .event-update {
       .details {
         @apply com-flex com-items-baseline com-m-0;
@@ -21,10 +30,13 @@ nb-card {
           @apply com-mr-2;
         }
       }
+
       .image-section {
-        @apply com-flex com-gap-3  com-items-center com-mb-2  com-flex-wrap;
+        @apply com-flex com-gap-3 com-items-center com-mb-2 com-flex-wrap;
+
         .images {
           @apply com-w-32 com-h-32 com-aspect-1 com-border com-border-solid com-border-Bright-Gray com-rounded com-cursor-pointer;
+
           img {
             @apply com-mx-auto com-my-0 com-h-full com-w-full com-object-contain com-rounded;
           }
@@ -34,6 +46,7 @@ nb-card {
       .time {
         @apply com-m-0 com-ml-7 com-text-xs com-font-light com-text-Auro-Metal-Saurus;
       }
+
       .votes {
         @apply com-ml-7 com-mt-2;
       }
@@ -43,12 +56,15 @@ nb-card {
 
 .image-window {
   @apply com-w-[100dvw] com-h-[100dvh] md:com-h-[80dvh] md:com-w-[40dvw];
+
   nb-card-header {
     @apply com-flex com-justify-between;
   }
+
   nb-card-body {
     .image {
       @apply com-p-2 com-w-full com-h-full com-aspect-1 com-border com-border-solid com-border-Bright-Gray com-rounded;
+
       img {
         @apply com-mx-auto com-my-0 com-h-full com-w-full com-object-contain com-rounded;
       }

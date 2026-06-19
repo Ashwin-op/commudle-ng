@@ -1,5 +1,6 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 import { IUser } from '@commudle/shared-models';
 import { DiscussionService, removeHtmlTags } from '@commudle/shared-services';
 import { NbMenuService } from '@commudle/theme';
@@ -29,7 +30,7 @@ import { ERegistationTypes } from 'apps/shared-models/enums/registration_types.e
   styleUrls: ['./home-event.component.scss'],
   standalone: false,
 })
-export class HomeEventComponent implements OnInit, OnDestroy {
+export class HomeEventComponent implements OnInit, OnDestroy, AfterViewInit {
   moment = moment;
   momentTimezone = momentTimezone;
   EEventStatuses = EEventStatuses;
@@ -47,6 +48,7 @@ export class HomeEventComponent implements OnInit, OnDestroy {
   hasInterestedMembers = false;
   hasSponsors = false;
   isBottomSheetOpen = false;
+  activeSection = '';
 
   environment = environment;
 
@@ -56,6 +58,7 @@ export class HomeEventComponent implements OnInit, OnDestroy {
 
   isOrganizer = false;
   isLoading = true;
+  isMenuScrolled = false;
   faEllipsisVertical = faEllipsisVertical;
   faCalendar = faCalendar;
   faClockFour = faClockFour;
@@ -83,6 +86,10 @@ export class HomeEventComponent implements OnInit, OnDestroy {
   @ViewChild('commentsSection', { static: false }) commentsSectionRef: ElementRef<HTMLDivElement>;
   @ViewChild('volunteersSection', { static: false }) volunteersSectionRef: ElementRef<HTMLDivElement>;
   @ViewChild('eventFormSection', { static: false }) eventFormSectionRef: ElementRef<HTMLDivElement>;
+  @ViewChild('stickySentinel') stickySentinel!: ElementRef;
+
+  private observer!: IntersectionObserver;
+  private isBrowser: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -95,7 +102,10 @@ export class HomeEventComponent implements OnInit, OnDestroy {
     private eventService: EventsService,
     private eventDataFormEntityGroupsService: EventDataFormEntityGroupsService,
     private eventUpdatesService: EventUpdatesService,
-  ) {}
+    @Inject(PLATFORM_ID) private platformId: object,
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe((params) => {
@@ -105,9 +115,26 @@ export class HomeEventComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.observer?.disconnect();
   }
 
-  scroll(element: ElementRef<HTMLDivElement>) {
+  ngAfterViewInit() {
+    if (this.isBrowser && this.stickySentinel) {
+      this.observer = new IntersectionObserver(
+        ([entry]) => {
+          this.isMenuScrolled = !entry.isIntersecting;
+        },
+        {
+          root: null,
+          threshold: 0,
+        },
+      );
+      this.observer.observe(this.stickySentinel.nativeElement);
+    }
+  }
+
+  scroll(element: ElementRef<HTMLDivElement>, section = '') {
+    this.activeSection = section;
     element.nativeElement.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'smooth' });
   }
 

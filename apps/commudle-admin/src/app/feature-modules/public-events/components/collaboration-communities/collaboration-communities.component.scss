@@ -1,16 +1,22 @@
 .collaborations-card {
   @apply com-m-0 com-mt-4;
 
+  nb-card-header {
+    @apply com-py-3 com-px-4 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
+    @apply dark:com-from-[#080808] dark:com-via-[#141414] dark:com-to-[#080808] dark:com-bg-gradient-to-br;
+  }
+
   .collaborations-card-body {
     @apply com-p-4 md:com-p-6;
   }
 }
 
 .collaborations-card-heading {
-  @apply com-m-0 com-inline-flex com-flex-wrap com-items-center com-gap-2 com-font-semibold com-text-Yankees-Blue;
+  @apply com-m-0 com-inline-flex com-flex-wrap com-items-center com-gap-2 com-text-base com-font-semibold com-text-Yankees-Blue;
 
   nb-icon {
-    @apply com-text-xl;
+    @apply com-text-lg;
   }
 }
 
@@ -38,12 +44,14 @@
   @apply com-relative com-isolate com-flex com-h-full com-min-h-0 com-w-full com-flex-1 com-flex-col com-overflow-hidden com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-bg-white com-p-3 com-no-underline;
   @apply com-outline-none focus:com-outline-none focus-visible:com-outline-none;
   @apply com-shadow-[0_2px_12px_rgb(15_23_42/0.06)];
-  @apply com-origin-center com-will-change-transform com-transition-all com-duration-700 com-ease-[cubic-bezier(0.16,1,0.3,1)];
+  @apply com-origin-center com-will-change-transform com-transition-all com-duration-700;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   @apply hover:com-scale-[1.02] hover:com-shadow-[0_8px_24px_rgb(15_23_42/0.10)];
 
   &::before {
     content: '';
-    @apply com-pointer-events-none com-absolute com-inset-0 com-z-0 com-rounded-lg com-transition-all com-duration-700 com-ease-[cubic-bezier(0.16,1,0.3,1)];
+    @apply com-pointer-events-none com-absolute com-inset-0 com-z-0 com-rounded-lg com-transition-all com-duration-700;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
     background: linear-gradient(
       138deg,
       transparent 0%,

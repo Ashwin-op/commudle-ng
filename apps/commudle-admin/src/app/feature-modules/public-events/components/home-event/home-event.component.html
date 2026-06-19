@@ -39,59 +39,91 @@
       </div>
     </div>
 
-    <nb-card class="home-event-menu">
+    <div #stickySentinel class="sticky-sentinel"></div>
+    <nb-card class="home-event-menu" [ngClass]="{ scrolled: isMenuScrolled }">
       <nb-card-body>
         <nb-actions>
           <nb-action
-            (click)="scroll(eventFormSectionRef)"
+            (click)="scroll(eventFormSectionRef, 'event-form')"
             *ngIf="
               moment() < moment(event.end_time) &&
               (event.editable || event.event_status.name === EEventStatuses.OPEN) &&
               hasOpenForms
             "
             class="clickable"
+            [ngClass]="{ active: activeSection === 'event-form' }"
           >
             <nb-icon icon="file-text-outline" status="primary"></nb-icon>
             <span><a [routerLink]="'.'" fragment="event-form">Event Forms</a></span>
           </nb-action>
-          <nb-action (click)="scroll(updatesSectionRef)" *ngIf="hasUpdates" class="clickable">
+          <nb-action
+            (click)="scroll(updatesSectionRef, 'updates')"
+            *ngIf="hasUpdates"
+            class="clickable"
+            [ngClass]="{ active: activeSection === 'updates' }"
+          >
             <nb-icon icon="star-outline" status="warning"></nb-icon>
             <span><a [routerLink]="'.'" fragment="updates">Updates</a></span>
           </nb-action>
-          <nb-action (click)="scroll(descriptionSectionRef)" class="clickable">
+          <nb-action
+            (click)="scroll(descriptionSectionRef, 'details')"
+            class="clickable"
+            [ngClass]="{ active: activeSection === 'details' }"
+          >
             <nb-icon icon="info-outline" status="info"></nb-icon>
             <span><a [routerLink]="'.'" fragment="details">Details</a></span>
           </nb-action>
           <nb-action
-            (click)="scroll(agendaSectionRef)"
+            (click)="scroll(agendaSectionRef, 'agenda')"
             *ngIf="event.custom_agenda && event.event_locations_count > 0"
             class="clickable"
+            [ngClass]="{ active: activeSection === 'agenda' }"
           >
             <nb-icon icon="calendar-outline" status="primary"></nb-icon>
             <span><a [routerLink]="'.'" fragment="agenda">Agenda</a></span>
           </nb-action>
-          <nb-action (click)="scroll(speakersSectionRef)" *ngIf="event.event_speakers_count > 0" class="clickable">
+          <nb-action
+            (click)="scroll(speakersSectionRef, 'speakers')"
+            *ngIf="event.event_speakers_count > 0"
+            class="clickable"
+            [ngClass]="{ active: activeSection === 'speakers' }"
+          >
             <nb-icon icon="people-outline" status="success"></nb-icon>
             <span><a [routerLink]="'.'" fragment="speakers">Speakers</a></span>
           </nb-action>
-          <nb-action (click)="scroll(sponsorsSectionRef)" *ngIf="hasSponsors" class="clickable">
+          <nb-action
+            (click)="scroll(sponsorsSectionRef, 'sponsors')"
+            *ngIf="hasSponsors"
+            class="clickable"
+            [ngClass]="{ active: activeSection === 'sponsors' }"
+          >
             <nb-icon icon="briefcase-outline" status="danger"></nb-icon>
             <span><a [routerLink]="'.'" fragment="sponsors">Sponsors</a></span>
           </nb-action>
           <nb-action
-            (click)="scroll(collaborationCommunitiesSectionRef)"
+            (click)="scroll(collaborationCommunitiesSectionRef, 'collaborations')"
             *ngIf="hasCollaborationCommunities"
             class="clickable"
+            [ngClass]="{ active: activeSection === 'collaborations' }"
           >
             <nb-icon icon="pricetags-outline" status="warning"></nb-icon>
             <span><a [routerLink]="'.'" fragment="collaborations">Collaborations</a></span>
           </nb-action>
-          <nb-action (click)="scroll(commentsSectionRef)" *ngIf="discussionChat" class="clickable">
+          <nb-action
+            (click)="scroll(commentsSectionRef, 'comments')"
+            *ngIf="discussionChat"
+            class="clickable"
+            [ngClass]="{ active: activeSection === 'comments' }"
+          >
             <nb-icon icon="message-circle-outline" status="info"></nb-icon>
             <span><a [routerLink]="'.'" fragment="comments">Comments</a></span>
-            <span></span>
           </nb-action>
-          <nb-action (click)="scroll(volunteersSectionRef)" *ngIf="event.event_volunteers_count > 0" class="clickable">
+          <nb-action
+            (click)="scroll(volunteersSectionRef, 'team')"
+            *ngIf="event.event_volunteers_count > 0"
+            class="clickable"
+            [ngClass]="{ active: activeSection === 'team' }"
+          >
             <nb-icon icon="headphones-outline" status="basic"></nb-icon>
             <span><a [routerLink]="'.'" fragment="team">Team</a></span>
           </nb-action>
