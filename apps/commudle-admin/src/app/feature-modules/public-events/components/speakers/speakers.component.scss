@@ -20,9 +20,7 @@ nb-card {
   }
 
   nb-card-body {
-    display: flex;
-    flex-direction: column;
-    padding: 0.5rem 1.5rem;
+    @apply com-flex com-flex-col com-px-4 com-py-2px;
 
     .speaker {
       @apply com-flex com-justify-start com-items-center com-border-0 com-border-b com-border-Bright-Gray com-border-solid com-py-10px com-m-0 com-px-0;

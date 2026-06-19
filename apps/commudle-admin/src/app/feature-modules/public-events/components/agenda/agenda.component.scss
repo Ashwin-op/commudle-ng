@@ -4,6 +4,7 @@ nb-tabset nb-tab {
 
 nb-tabset {
   @apply com-overflow-hidden;
+
   &::ng-deep {
     ul {
       @apply com-overflow-x-scroll com-overflow-y-hidden;
@@ -12,7 +13,8 @@ nb-tabset {
 }
 
 nb-card-body {
-  @apply md:com-pb-4 com-pb-0;
+  @apply com-p-4;
+
   h6 {
     margin-top: 1rem;
     margin-bottom: 0.5rem;

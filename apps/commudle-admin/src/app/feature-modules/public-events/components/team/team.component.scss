@@ -20,7 +20,7 @@ nb-card {
   }
 
   nb-card-body {
-    @apply md:com-px-6 com-px-4;
+    @apply com-p-4;
 
     .volunteers {
       @apply com-grid com-grid-cols-1 com-gap-x-5 com-gap-y-4 md:com-grid-cols-2;
@@ -32,6 +32,10 @@ nb-card {
 
     &:hover {
       @apply com-shadow-lg com-scale-[1.01];
+    }
+
+    com-card-body {
+      @apply com-p-3;
     }
   }
 
