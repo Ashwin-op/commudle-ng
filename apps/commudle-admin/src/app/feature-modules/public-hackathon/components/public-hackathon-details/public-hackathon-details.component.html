@@ -245,9 +245,15 @@
     <com-card *ngIf="rounds && rounds.length > 0">
       <com-card-header> Rounds </com-card-header>
       <com-card-body class="round-card-body">
-        <div *ngFor="let round of rounds" class="round-card">
-          <div class="name">{{ round.name }}</div>
-          <div class="date">{{ moment(round.date).format('DD MMM YYYY') }}</div>
+        <div *ngFor="let round of rounds; let i = index; let last = last" class="round-card">
+          <div class="round-indicator">
+            <span class="round-step">{{ i + 1 }}</span>
+            <span *ngIf="!last" class="round-connector"></span>
+          </div>
+          <div class="round-info">
+            <div class="name">{{ round.name }}</div>
+            <div class="date">{{ moment(round.date).format('DD MMM YYYY') }}</div>
+          </div>
         </div>
       </com-card-body>
     </com-card>

@@ -254,6 +254,10 @@
     @apply com-m-0 com-mb-4;
   }
 
+  .round-card-body {
+    @apply com-py-2 com-px-4;
+  }
+
   .round-card {
     @apply com-flex com-gap-3 com-transition-all com-duration-200;
 
@@ -276,7 +280,7 @@
     }
 
     .round-info {
-      @apply com-flex com-flex-col com-gap-1 com-pb-4 com-flex-1 com-rounded-lg com-px-2 com-py-1 com-transition-colors com-duration-200;
+      @apply com-flex com-flex-col com-gap-1 com-p-0 com-pb-4 com-flex-1 com-rounded-lg com-transition-colors com-duration-200;
 
       .name {
         @apply com-text-sm com-font-medium com-text-Yankees-Blue;
@@ -286,14 +290,10 @@
         @apply com-text-sm com-flex-shrink-0 com-text-gray-500;
       }
     }
+  }
 
-    .round-card-body {
-      @apply com-py-2 com-px-4 com-w-full;
-    }
-
-    .edit-link {
-      @apply com-block com-mt-3 com-no-underline;
-    }
+  .edit-link {
+    @apply com-block com-mt-3 com-no-underline;
   }
 
   .collaboration-communities,
