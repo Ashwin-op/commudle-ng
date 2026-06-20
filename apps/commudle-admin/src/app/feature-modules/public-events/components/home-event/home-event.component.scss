@@ -178,7 +178,7 @@
 }
 
 .event-dates-heading {
-  @apply com-m-0 com-mb-3 com-text-xs com-font-medium com-uppercase com-tracking-wider com-text-tWhite;
+  @apply com-m-0 com-mb-3 com-text-xs com-uppercase com-tracking-wider com-text-gray-500;
   @apply com-pt-4 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
 }
 
@@ -259,10 +259,6 @@
 
 .organizer-panel-event {
   @apply com-m-0 com-mb-4 md:com-mx-0 com-mx-6;
-}
-
-.organizer-panel-gradient {
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #7c3aed 100%);
 }
 
 .main-column {
