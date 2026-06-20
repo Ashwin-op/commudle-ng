@@ -26,29 +26,7 @@
         </com-card-header>
         <com-card-body>
           <div class="people-grid">
-            <div *ngFor="let judge of judges" class="person-card" [class.disabled]="!judge.username">
-              <a [routerLink]="judge.username ? ['/users', judge.username] : null" class="person-link">
-                <div class="person-avatar">
-                  <img [src]="judge.photo?.i320" [alt]="judge.name" />
-                </div>
-                <div class="person-info">
-                  <p class="person-name">{{ judge.name }}</p>
-                  <p *ngIf="judge.username" class="person-username">{{ '@' + judge.username }}</p>
-                  <p *ngIf="judge.designation" class="person-designation">{{ judge.designation }}</p>
-                </div>
-                <div class="person-social" (click)="$event.stopPropagation(); $event.preventDefault()">
-                  <a *ngIf="judge.linkedin" [href]="judge.linkedin" target="_blank" rel="noreferrer">
-                    <fa-icon [icon]="icons.faLinkedinIn"></fa-icon>
-                  </a>
-                  <a *ngIf="judge.twitter" [href]="judge.twitter" target="_blank" rel="noreferrer">
-                    <fa-icon [icon]="icons.faTwitter"></fa-icon>
-                  </a>
-                  <a *ngIf="judge.website" [href]="judge.website" target="_blank" rel="noreferrer">
-                    <fa-icon [icon]="icons.faGlobe"></fa-icon>
-                  </a>
-                </div>
-              </a>
-            </div>
+            <app-speaker-card *ngFor="let judge of judges" [speaker]="judge"></app-speaker-card>
           </div>
         </com-card-body>
       </com-card>
@@ -60,29 +38,7 @@
         </com-card-header>
         <com-card-body>
           <div class="people-grid">
-            <div *ngFor="let mentor of mentors" class="person-card" [class.disabled]="!mentor.username">
-              <a [routerLink]="mentor.username ? ['/users', mentor.username] : null" class="person-link">
-                <div class="person-avatar">
-                  <img [src]="mentor.photo?.i320" [alt]="mentor.name" />
-                </div>
-                <div class="person-info">
-                  <p class="person-name">{{ mentor.name }}</p>
-                  <p *ngIf="mentor.username" class="person-username">{{ '@' + mentor.username }}</p>
-                  <p *ngIf="mentor.designation" class="person-designation">{{ mentor.designation }}</p>
-                </div>
-                <div class="person-social" (click)="$event.stopPropagation(); $event.preventDefault()">
-                  <a *ngIf="mentor.linkedin" [href]="mentor.linkedin" target="_blank" rel="noreferrer">
-                    <fa-icon [icon]="icons.faLinkedinIn"></fa-icon>
-                  </a>
-                  <a *ngIf="mentor.twitter" [href]="mentor.twitter" target="_blank" rel="noreferrer">
-                    <fa-icon [icon]="icons.faTwitter"></fa-icon>
-                  </a>
-                  <a *ngIf="mentor.website" [href]="mentor.website" target="_blank" rel="noreferrer">
-                    <fa-icon [icon]="icons.faGlobe"></fa-icon>
-                  </a>
-                </div>
-              </a>
-            </div>
+            <app-speaker-card *ngFor="let mentor of mentors" [speaker]="mentor"></app-speaker-card>
           </div>
         </com-card-body>
       </com-card>

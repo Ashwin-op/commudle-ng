@@ -130,7 +130,6 @@
   <div class="section-content" *ngIf="hackathon.timezone">
     <!-- Participants -->
     <div class="section" *ngIf="users?.length > 0 && totalUsers > 0">
-      <span class="section-label">Interested Members</span>
       <div class="participants-row">
         <commudle-interested-members [users]="users" [totalCount]="totalUsers"></commudle-interested-members>
       </div>

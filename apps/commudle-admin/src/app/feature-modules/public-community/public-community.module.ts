@@ -61,7 +61,6 @@ import { CommudleCardModule } from '@commudle/commudle-theme';
     // EventResourcesComponent,
     MembershipToggleComponent,
     CommunityChannelsListComponent,
-    SpeakerCardComponent,
     PublicCommunityNotificationsComponent,
     CustomPageComponent,
     NewslettersComponent,
@@ -72,6 +71,7 @@ import { CommudleCardModule } from '@commudle/commudle-theme';
   imports: [
     CommonModule,
     PublicCommunityRoutingModule,
+    SpeakerCardComponent,
     FormsModule,
     ReactiveFormsModule,
     SharedPipesModule,

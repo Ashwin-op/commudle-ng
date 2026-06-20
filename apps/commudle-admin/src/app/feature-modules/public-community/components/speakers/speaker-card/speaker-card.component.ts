@@ -1,14 +1,30 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IUser } from 'apps/shared-models/user.model';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { NbButtonModule, NbIconModule } from '@commudle/theme';
+import { CommudleCardModule } from '@commudle/commudle-theme';
+import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
+import { SharedPipesModule } from 'apps/shared-pipes/pipes.module';
+import { MiniUserProfileModule } from 'apps/shared-modules/mini-user-profile/mini-user-profile.module';
 
 @Component({
   selector: 'app-speaker-card',
   templateUrl: './speaker-card.component.html',
   styleUrls: ['./speaker-card.component.scss'],
-  standalone: false,
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    NbButtonModule,
+    NbIconModule,
+    CommudleCardModule,
+    SharedComponentsModule,
+    SharedPipesModule,
+    MiniUserProfileModule,
+  ],
 })
 export class SpeakerCardComponent implements OnInit {
-  @Input() speaker: IUser;
+  @Input() speaker: any;
   @Input() maxUserNameLength = 20;
   @Input() isMobileWidthFull = false;
   @Input() customWidth: string;
@@ -16,11 +32,12 @@ export class SpeakerCardComponent implements OnInit {
   tags: string[] = [];
 
   ngOnInit(): void {
-    this.speakersTagsLength = Object.keys(this.speaker.tags).length;
+    this.speakersTagsLength = this.speaker?.tags ? Object.keys(this.speaker.tags).length : 0;
   }
 
   getTagNames() {
-    this.tags = Object.values(this.speaker.tags).map((tag) => tag.name);
+    if (!this.speaker?.tags) return [];
+    this.tags = Object.values(this.speaker.tags).map((tag: any) => tag.name);
     return this.tags;
   }
 }
