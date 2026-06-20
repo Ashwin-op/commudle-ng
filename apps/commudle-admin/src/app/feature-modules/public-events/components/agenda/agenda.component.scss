@@ -22,7 +22,7 @@ nb-card-body {
 }
 
 nb-card {
-  @apply com-mx-0 com-mb-0 com-mt-4 md:com-rounded-[10px] com-rounded-none;
+  @apply com-m-0 md:com-rounded-[10px] com-rounded-none;
 
   nb-card-header {
     @apply com-flex com-flex-row com-items-center com-py-3 md:com-px-4 com-px-4 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;

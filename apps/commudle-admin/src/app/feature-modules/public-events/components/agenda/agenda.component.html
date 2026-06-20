@@ -53,7 +53,7 @@
       </div>
     </ng-container>
     <div *ngIf="eventDatesLocation">
-      <nb-card *ngIf="eventDatesLocation.length > 0" class="event-locations-list">
+      <div *ngIf="eventDatesLocation.length > 0" class="event-locations-list">
         <div class="event-location">
           <nb-tabset id="tabset" name="tabset" #tabset (changeTab)="onTabChange($event)">
             <nb-tab
@@ -92,7 +92,7 @@
             </nb-tab>
           </nb-tabset>
         </div>
-      </nb-card>
+      </div>
     </div>
   </nb-card-body>
 </nb-card>

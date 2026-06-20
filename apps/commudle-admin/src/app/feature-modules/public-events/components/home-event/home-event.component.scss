@@ -82,8 +82,21 @@
     }
 
     .two-column-layout {
+      .main-column {
+        #updates,
+        #details,
+        #agenda,
+        #speakers,
+        #sponsors,
+        #collaborations,
+        #comments,
+        #team {
+          @apply com-mb-4;
+        }
+      }
+
       .home-event-discussion {
-        @apply com-mx-0 md:com-rounded-[10px] com-rounded-none;
+        @apply com-m-0 md:com-rounded-[10px] com-rounded-none;
 
         nb-card-header {
           @apply com-py-3 com-px-4 com-flex com-items-center com-justify-between com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
@@ -110,7 +123,7 @@
       }
 
       .event-date-time-card {
-        @apply com-mb-0 com-mx-0 md:com-ml-3 com-ml-0 md:com-mt-2 md:com-rounded-[10px] com-rounded-none com-flex com-flex-col md:com-sticky md:com-top-32;
+        @apply com-m-0 md:com-rounded-lg com-rounded-none com-flex com-flex-col md:com-sticky md:com-top-28;
 
         .event-date-time {
           @apply com-p-0;
@@ -128,7 +141,7 @@
         }
 
         .attending-members {
-          @apply com-py-3 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+          @apply com-pb-3;
         }
 
         .view-attended-members-button {
@@ -148,19 +161,56 @@
 }
 
 .event-date-time-container {
-  @apply com-p-6 md:com-mt-5;
+  @apply com-p-5;
 }
 
-.event-date-icon,
-.event-timing-icon,
-.event-type-icon {
-  @apply com-flex com-items-center com-justify-center com-h-6 com-w-6 com-flex-shrink-0 com-mr-3 com-text-Cadet-Grey;
+.event-chips {
+  @apply com-flex com-flex-wrap com-gap-2 com-mb-4;
+
+  .event-chip {
+    @apply com-inline-flex com-items-center com-gap-1.5 com-px-3 com-py-1.5 com-rounded-full com-text-sm com-font-medium com-text-Yankees-Blue;
+    @apply com-border com-border-solid com-border-Bright-Gray com-bg-white;
+
+    .event-chip-icon {
+      @apply com-text-primary-500 com-text-xs;
+    }
+  }
 }
 
-.event-date-text,
-.event-timing-text,
-.event-type-text {
-  @apply com-text-base com-font-semibold com-text-Yankees-Blue com-m-0;
+.event-dates-heading {
+  @apply com-m-0 com-mb-3 com-text-xs com-font-medium com-uppercase com-tracking-wider com-text-tWhite;
+  @apply com-pt-4 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+}
+
+.multi-date-container {
+  @apply com-grid com-grid-cols-2 com-gap-3 com-pb-3;
+
+  .multi-date-card {
+    @apply com-p-2 com-rounded-lg;
+
+    &.multi-date-start {
+      @apply com-bg-gray-50;
+    }
+
+    &.multi-date-end {
+      @apply com-bg-gray-50;
+    }
+
+    .multi-date-label {
+      @apply com-m-0 com-text-xs com-font-medium;
+      color: #8b9dc3;
+    }
+
+    .multi-date-value {
+      @apply com-m-0 com-mt-1 com-text-sm com-font-bold;
+      color: #3d4f6f;
+    }
+
+    .multi-date-time {
+      @apply com-m-0 com-mt-0.5 com-text-xs com-font-normal;
+      color: #8b9dc3;
+    }
+  }
 }
 
 .mobile-register-button {
@@ -172,6 +222,10 @@
 }
 
 .registrations-buttons {
+  .nb-card {
+    @apply com-m-0 com-mb-4;
+  }
+
   .event-form-card {
     @apply com-m-0 com-mt-4 md:com-rounded-[10px] com-rounded-none;
 
@@ -200,9 +254,17 @@
 }
 
 .organizer-panel {
-  @apply com-m-0 com-mt-4;
+  @apply com-m-0 com-mb-4;
 }
 
 .organizer-panel-event {
-  @apply com-m-0 com-mt-4 md:com-mx-0 com-mx-6;
+  @apply com-m-0 com-mb-4 md:com-mx-0 com-mx-6;
+}
+
+.organizer-panel-gradient {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #7c3aed 100%);
+}
+
+.main-column {
+  @apply md:com-mr-6 com-mr-0;
 }

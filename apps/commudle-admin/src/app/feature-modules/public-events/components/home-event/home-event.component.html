@@ -228,49 +228,43 @@
               <nb-icon icon="edit-outline"></nb-icon>
             </a>
           </div>
-          <nb-card *ngIf="event.start_time && event.end_time" class="organizer-panel">
+          <nb-card *ngIf="event.start_time && event.end_time" class="organizer-panel organizer-panel-gradient">
             <nb-card-body class="event-date-time-container">
-              <div
-                class="event-date-time"
-                *ngIf="
-                  moment(event.start_time).format('MMM Do, YYYY') === moment(event.end_time).format('MMM Do, YYYY');
-                  else multiDate
-                "
-              >
-                <div class="event-date">
-                  <fa-icon [icon]="faCalendar" class="event-date-icon"></fa-icon>
-                  <span class="event-date-text">
-                    {{ momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('dddd, Do MMM, YYYY') }}
-                  </span>
+              <div class="event-chips">
+                <span class="event-chip">
+                  <fa-icon [icon]="faCalendar" class="event-chip-icon"></fa-icon>
+                  {{ momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('Do MMM') }}
+                </span>
+                <span *ngIf="event.event_type" class="event-chip">
+                  <fa-icon [icon]="faGlobe" class="event-chip-icon"></fa-icon>
+                  {{ event.event_type }}
+                </span>
+              </div>
+              <p class="event-dates-heading">Event Dates</p>
+              <div class="multi-date-container">
+                <div class="multi-date-card multi-date-start">
+                  <p class="multi-date-label">Starts</p>
+                  <p class="multi-date-value">
+                    {{ momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('Do MMM YYYY') }}
+                  </p>
+                  <p class="multi-date-time">
+                    {{ momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('h:mm A') }}
+                    {{ momentTimezone.tz(event.timezone).format('z') }}
+                  </p>
                 </div>
-                <div *ngIf="event.timezone" class="event-timing">
-                  <fa-icon [icon]="faClockFour" class="event-timing-icon"></fa-icon>
-                  <p *ngIf="event.end_time.getDate === event.start_time.getDate" class="event-timing-text">
-                    {{ momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('h:mm A') }} -
+                <div class="multi-date-card multi-date-end">
+                  <p class="multi-date-label">Ends</p>
+                  <p class="multi-date-value">
+                    {{ momentTimezone.tz(moment.utc(event.end_time), event.timezone).format('Do MMM YYYY') }}
+                  </p>
+                  <p class="multi-date-time">
                     {{ momentTimezone.tz(moment.utc(event.end_time), event.timezone).format('h:mm A') }}
                     {{ momentTimezone.tz(event.timezone).format('z') }}
                   </p>
                 </div>
-                <div *ngIf="event.event_type" class="event-type">
-                  <fa-icon [icon]="faGlobe" class="event-type-icon"></fa-icon>
-                  <p *ngIf="event.end_time.getDate === event.start_time.getDate" class="event-type-text">
-                    {{ event.event_type }}
-                  </p>
-                </div>
               </div>
-              <ng-template #multiDate>
-                <strong>
-                  {{
-                    momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('dddd, MMM Do, YYYY- h:mm a')
-                  }}
-                  {{ momentTimezone.tz(event.timezone).format('z') }} to
-                  {{
-                    momentTimezone.tz(moment.utc(event.end_time), event.timezone).format('dddd, MMM Do, YYYY- h:mm a')
-                  }}
-                  {{ momentTimezone.tz(event.timezone).format('z') }}
-                </strong>
-              </ng-template>
               <div *ngIf="interestedUsersCount" class="attending-members">
+                <p class="event-dates-heading">Interested Members</p>
                 <commudle-interested-members
                   [users]="interestedUsers"
                   [totalCount]="interestedUsersCount"

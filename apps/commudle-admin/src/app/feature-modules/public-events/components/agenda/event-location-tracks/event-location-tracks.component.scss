@@ -1,14 +1,31 @@
 .event-location-tracks {
   @apply com-mx-4;
+
   .map-location {
-    .link-to-map {
-      @apply com-mt-10px com-mb-6 com-mx-0;
+    @apply com-mb-4 com-p-3 com-rounded-lg com-bg-gray-50;
+
+    .address {
+      @apply com-m-0 com-text-sm com-text-Yankees-Blue;
+
+      strong {
+        @apply com-font-semibold;
+      }
+
       a {
-        @apply com-no-underline;
+        @apply com-text-primary-500 com-no-underline hover:com-underline;
       }
     }
-    .address {
-      @apply com-mt-5 com-mb-0 com-mx-0;
+
+    .link-to-map {
+      @apply com-mt-2 com-mb-0 com-mx-0;
+
+      a {
+        @apply com-no-underline com-text-sm com-text-primary-500 com-font-medium com-inline-flex com-items-center com-gap-1;
+
+        fa-icon {
+          @apply com-text-xs;
+        }
+      }
     }
   }
 
@@ -28,6 +45,7 @@
       .track-name {
         @apply com-text-base com-font-semibold com-m-0 com-text-tYankees-Blue;
       }
+
       ::ng-deep {
         nb-icon {
           @apply com-text-tblack;
@@ -57,6 +75,7 @@
             .start-time {
               @apply com-text-base md:com-text-sm;
             }
+
             .end-time {
               @apply com-text-xs md:com-text-sm;
             }
@@ -78,6 +97,7 @@
 
             .session-speaker {
               @apply com-flex com-gap-3 com-flex-wrap;
+
               div {
                 @apply com-m-0 com-mt-1;
               }
