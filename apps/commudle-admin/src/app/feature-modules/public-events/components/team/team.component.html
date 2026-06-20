@@ -1,10 +1,10 @@
-<nb-card id="team">
-  <nb-card-header>
+<com-card id="team">
+  <com-card-header>
     <h6 class="title">
       <a [routerLink]="'.'" fragment="team"><nb-icon icon="headphones-outline" status="basic"></nb-icon>Team</a>
     </h6>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
 
     <div class="volunteers">
@@ -14,11 +14,11 @@
         </com-card-body>
       </com-card>
     </div>
-  </nb-card-body>
-  <nb-card-footer *ngIf="pageInfo && pageInfo.has_next_page" (click)="getVolunteers()" class="com-cursor-pointer">
+  </com-card-body>
+  <com-card-footer *ngIf="pageInfo && pageInfo.has_next_page" (click)="getVolunteers()" class="com-cursor-pointer">
     <div>
       View More
       <nb-icon icon="arrow-ios-downward-outline"></nb-icon>
     </div>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

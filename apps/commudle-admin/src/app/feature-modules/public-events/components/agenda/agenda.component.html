@@ -1,5 +1,5 @@
-<nb-card id="agenda">
-  <nb-card-header>
+<com-card id="agenda">
+  <com-card-header>
     <h6 class="title">
       <a [routerLink]="'.'" fragment="agenda"><nb-icon icon="calendar-outline" status="primary"></nb-icon>Agenda</a>
     </h6>
@@ -9,14 +9,14 @@
         <nb-icon icon="external-link" status="primary"></nb-icon>
       </a>
     </div>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
     <ng-container *ngIf="upcomingEvents.length > 0">
       <h6>Upcoming Sessions</h6>
       <div class="event-upcoming">
-        <nb-card *ngFor="let slot of upcomingEvents">
-          <nb-card-body>
+        <com-card *ngFor="let slot of upcomingEvents">
+          <com-card-body>
             <div class="upcoming-session-time">
               <nb-icon icon="clock-outline"></nb-icon>&nbsp;
               <p>{{ moment(slot.start_time).format('h:mm A') }}</p>
@@ -48,8 +48,8 @@
                 </a>
               </nb-action>
             </nb-actions>
-          </nb-card-body>
-        </nb-card>
+          </com-card-body>
+        </com-card>
       </div>
     </ng-container>
     <div *ngIf="eventDatesLocation">
@@ -94,5 +94,5 @@
         </div>
       </div>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

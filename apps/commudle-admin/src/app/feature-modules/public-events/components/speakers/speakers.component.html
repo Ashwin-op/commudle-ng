@@ -1,10 +1,10 @@
-<nb-card id="speakers">
-  <nb-card-header>
+<com-card id="speakers">
+  <com-card-header>
     <h6 class="title">
       <a [routerLink]="'.'" fragment="speakers"><nb-icon icon="people-outline" status="success"></nb-icon>Speakers</a>
     </h6>
-  </nb-card-header>
-  <nb-card-body
+  </com-card-header>
+  <com-card-body
     [ngClass]="{
       'view-more': viewMoreSection && !isBot,
       'view-less': !viewMoreSection && !isBot
@@ -25,8 +25,8 @@
         [user]="speaker.user"
       ></app-user-profile-card-large>
     </div>
-  </nb-card-body>
-  <nb-card-footer
+  </com-card-body>
+  <com-card-footer
     *ngIf="event.event_speakers_count > totalSpeakers && !isBot"
     (click)="viewMore()"
     class="com-cursor-pointer"
@@ -36,5 +36,5 @@
       <nb-icon *ngIf="viewMoreSection" icon="arrow-ios-downward-outline"></nb-icon>
       <nb-icon *ngIf="!viewMoreSection" icon="arrow-ios-upward-outline"></nb-icon>
     </div>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

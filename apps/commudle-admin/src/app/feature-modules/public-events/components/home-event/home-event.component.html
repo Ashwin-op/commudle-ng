@@ -3,8 +3,8 @@
     <!-- <div class="community-badge">
       <app-community-badge [background]="'bg-white'" [community]="community"></app-community-badge>
     </div> -->
-    <nb-card class="details-section">
-      <nb-card-body>
+    <com-card class="details-section">
+      <com-card-body>
         <div class="details">
           <h1 class="event-name">
             {{ event.name }}
@@ -15,8 +15,8 @@
         </div>
         <!-- <div class="social-links">
         </div> -->
-      </nb-card-body>
-    </nb-card>
+      </com-card-body>
+    </com-card>
 
     <div *ngIf="event.header_image_path" class="event-header-image">
       <div *appBreakpoints="'>lg'">
@@ -40,8 +40,8 @@
     </div>
 
     <div #stickySentinel class="sticky-sentinel"></div>
-    <nb-card class="home-event-menu" [ngClass]="{ scrolled: isMenuScrolled }">
-      <nb-card-body>
+    <com-card class="home-event-menu" [ngClass]="{ scrolled: isMenuScrolled }">
+      <com-card-body>
         <nb-actions>
           <nb-action
             (click)="scroll(eventFormSectionRef, 'event-form')"
@@ -128,13 +128,13 @@
             <span><a [routerLink]="'.'" fragment="team">Team</a></span>
           </nb-action>
         </nb-actions>
-      </nb-card-body>
-    </nb-card>
+      </com-card-body>
+    </com-card>
 
     <div class="two-column-layout wide mobile-reverse">
       <div class="main-column">
         <div class="registrations-buttons">
-          <nb-card
+          <com-card
             *ngIf="
               moment() < moment(event.end_time) &&
               (event.editable || event.event_status.name === EEventStatuses.OPEN) &&
@@ -142,14 +142,14 @@
             "
             class="event-form-card"
           >
-            <nb-card-header>
+            <com-card-header>
               <h6 class="event-form-title">
                 <a [routerLink]="'.'" fragment="event-form"
                   ><nb-icon icon="file-text-outline" status="primary"></nb-icon>Event Forms</a
                 >
               </h6>
-            </nb-card-header>
-            <nb-card-body>
+            </com-card-header>
+            <com-card-body>
               <div #eventFormSection id="event-form" class="registration-form">
                 <app-highlighted-links
                   (hasOpenForms)="hasOpenForms = $event"
@@ -158,8 +158,8 @@
                   [event]="event"
                 ></app-highlighted-links>
               </div>
-            </nb-card-body>
-          </nb-card>
+            </com-card-body>
+          </com-card>
         </div>
         <app-live-sessions [community]="community" [event]="event"></app-live-sessions>
         <div #updatesSection id="updates">
@@ -189,8 +189,8 @@
           ></app-collaboration-communities>
         </div>
         <div #commentsSection id="comments">
-          <nb-card *ngIf="discussionChat" class="home-event-discussion">
-            <nb-card-header>
+          <com-card *ngIf="discussionChat" class="home-event-discussion">
+            <com-card-header>
               <h6 class="title">
                 <a [routerLink]="'.'" fragment="comments"
                   ><nb-icon icon="message-circle-outline" status="info"></nb-icon>Comments</a
@@ -206,11 +206,11 @@
               >
                 <fa-icon [icon]="faEllipsisVertical"></fa-icon>
               </button>
-            </nb-card-header>
-            <nb-card-body>
+            </com-card-header>
+            <com-card-body>
               <app-messages [discussion]="discussionChat" [parentData]="event" [autoFocusEditor]="false"></app-messages>
-            </nb-card-body>
-          </nb-card>
+            </com-card-body>
+          </com-card>
         </div>
         <div #volunteersSection *ngIf="event.event_volunteers_count > 0" id="team">
           <app-team [community]="community" [event]="event"></app-team>
@@ -228,8 +228,8 @@
               <nb-icon icon="edit-outline"></nb-icon>
             </a>
           </div>
-          <nb-card *ngIf="event.start_time && event.end_time" class="organizer-panel organizer-panel-gradient">
-            <nb-card-body class="event-date-time-container">
+          <com-card *ngIf="event.start_time && event.end_time" class="organizer-panel organizer-panel-gradient">
+            <com-card-body class="event-date-time-container">
               <div class="event-chips">
                 <span class="event-chip">
                   <fa-icon [icon]="faCalendar" class="event-chip-icon"></fa-icon>
@@ -283,10 +283,10 @@
                   View attended members
                 </button>
               </div>
-            </nb-card-body>
-          </nb-card>
-          <nb-card *ngIf="moment() >= moment(event.end_time) && !event.custom_agenda" class="organizer-panel">
-            <nb-card-body>
+            </com-card-body>
+          </com-card>
+          <com-card *ngIf="moment() >= moment(event.end_time) && !event.custom_agenda" class="organizer-panel">
+            <com-card-body>
               <p class="text-info">
                 <a [routerLink]="['/communities', community.slug, 'events', event.slug, 'session']">
                   <small>
@@ -296,8 +296,8 @@
                   Click here to view event session
                 </a>
               </p>
-            </nb-card-body>
-          </nb-card>
+            </com-card-body>
+          </com-card>
         </div>
       </div>
     </div>

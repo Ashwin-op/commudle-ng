@@ -1,17 +1,17 @@
-<nb-card
+<com-card
   *ngIf="
     liveSessions.length > 0 ||
     (!event.custom_agenda &&
       moment().isBetween(moment(event.start_time).subtract(25, 'minutes'), moment(event.end_time)))
   "
 >
-  <nb-card-header *ngIf="moment() > moment(event.start_time) || liveSessions.length > 0">
+  <com-card-header *ngIf="moment() > moment(event.start_time) || liveSessions.length > 0">
     <h6>
       <nb-icon icon="flash" status="success"></nb-icon>
       Live Now!
     </h6>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <ng-container *ngIf="event.custom_agenda && liveSessions.length > 0">
       <div *ngFor="let session of liveSessions" class="session">
         <a
@@ -69,5 +69,5 @@
         </a>
       </div>
     </ng-container>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

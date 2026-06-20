@@ -3,8 +3,8 @@
   id="sponsors"
   class="sponsors"
 >
-  <nb-card>
-    <nb-card-header>
+  <com-card>
+    <com-card-header>
       <h6 class="title collaborations-card-heading section-heading-anchor">
         <fa-icon [icon]="icons.faSackDollar" class="sponsors-card-heading-icon"></fa-icon>
         <span>Sponsors</span>
@@ -12,8 +12,8 @@
           <fa-icon [icon]="icons.faLink" class="anchor-icon-small"></fa-icon>
         </a>
       </h6>
-    </nb-card-header>
-    <nb-card-body class="sponsors-cards">
+    </com-card-header>
+    <com-card-body class="sponsors-cards">
       <div *ngFor="let eventSponsorGrouped of eventSponsorGroupedByTierName | keyvalue" class="sponsor-tier">
         <header
           class="sponsor-tier-header"
@@ -66,6 +66,6 @@
           </a>
         </div>
       </div>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </div>

@@ -1,10 +1,10 @@
-<nb-card *ngIf="eventUpdates.length > 0" id="updates">
-  <nb-card-header>
+<com-card *ngIf="eventUpdates.length > 0" id="updates">
+  <com-card-header>
     <h6 class="title">
       <a [routerLink]="'.'" fragment="updates"><nb-icon icon="star-outline" status="warning"></nb-icon> Updates</a>
     </h6>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <div *ngFor="let eu of eventUpdates" class="event-update">
       <div class="details">
         <nb-icon icon="star" status="warning"></nb-icon>
@@ -27,27 +27,27 @@
         ></app-votes-display>
       </div>
     </div>
-  </nb-card-body>
-  <nb-card-footer *ngIf="page_info.has_next_page" (click)="getEventUpdates()" class="com-cursor-pointer">
+  </com-card-body>
+  <com-card-footer *ngIf="page_info.has_next_page" (click)="getEventUpdates()" class="com-cursor-pointer">
     <div>
       View More
       <nb-icon icon="arrow-ios-downward-outline"></nb-icon>
     </div>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>
 
 <ng-template #imageTemplate let-ref="dialogRef" let-data>
-  <nb-card class="image-window">
-    <nb-card-header>
+  <com-card class="image-window">
+    <com-card-header>
       <div>Image Preview</div>
       <button (click)="ref.close()" nbButton size="small">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div class="image" *ngIf="data.image.url">
         <img [src]="data.image.url" [alt]="data.eventUpdate.details" />
       </div>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>

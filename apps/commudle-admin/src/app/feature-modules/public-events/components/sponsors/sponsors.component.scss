@@ -1,10 +1,10 @@
 .sponsors {
   @apply com-m-0 md:com-rounded-[10px] com-rounded-none;
 
-  nb-card {
+  com-card {
     @apply com-m-0;
 
-    nb-card-header {
+    com-card-header {
       @apply com-py-3 com-px-4 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
       background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
       @apply dark:com-from-[#080808] dark:com-via-[#141414] dark:com-to-[#080808] dark:com-bg-gradient-to-br;

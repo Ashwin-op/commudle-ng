@@ -1,5 +1,5 @@
-<nb-card id="details">
-  <nb-card-header class="com-flex com-items-center">
+<com-card id="details">
+  <com-card-header class="com-flex com-items-center">
     <h6 class="title">
       <a [routerLink]="'.'" fragment="details"><nb-icon icon="info-outline" status="info"></nb-icon>Details</a>
     </h6>
@@ -9,8 +9,8 @@
       [title]="'Meet me at ' + event.name"
       [url]="environment.app_url + '/communities/' + event.kommunity_slug + '/events/' + event.slug"
     ></app-share-button>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <div
       [innerHTML]="
         !isBot && !showFullDescription
@@ -18,12 +18,12 @@
           : (event.description | linky : { sanitizeHtml: false } | safeHtml)
       "
     ></div>
-  </nb-card-body>
-  <nb-card-footer (click)="viewMore()" *ngIf="event.description.length > 2500 && !isBot" class="com-cursor-pointer">
+  </com-card-body>
+  <com-card-footer (click)="viewMore()" *ngIf="event.description.length > 2500 && !isBot" class="com-cursor-pointer">
     <div>
       {{ footerText }}
       <nb-icon *ngIf="!showFullDescription" icon="arrow-ios-downward-outline"></nb-icon>
       <nb-icon *ngIf="showFullDescription" icon="arrow-ios-upward-outline"></nb-icon>
     </div>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

@@ -1,6 +1,6 @@
 <div *ngIf="openForms.length > 0">
   <div class="open-forms">
-    <nb-card
+    <com-card
       *ngFor="let form of openForms"
       class="form-link"
       [routerLink]="['/fill-form', form.data_form_entity_id]"
@@ -8,7 +8,7 @@
       nbTooltip="{{ form.name }}"
       size="small"
     >
-      <nb-card-body>
+      <com-card-body>
         <div class="form-name-container">
           <fa-icon
             *ngIf="!form.already_filled && form.registration_type.name === ERegistationTypes.ATTENDEE"
@@ -59,13 +59,13 @@
           &nbsp;
           <fa-icon [icon]="faArrowRight"></fa-icon>
         </div>
-      </nb-card-body>
-    </nb-card>
+      </com-card-body>
+    </com-card>
   </div>
 </div>
 
-<nb-card *ngIf="eventSimpleRegistration">
-  <nb-card-body>
+<com-card *ngIf="eventSimpleRegistration">
+  <com-card-body>
     <nb-alert
       *ngIf="
         eventSimpleRegistration.status === EEventSimpleRegistrationStatuses.CLOSED &&
@@ -100,5 +100,5 @@
         Your status: {{ userEventRegistration.registration_status.name | titlecase }}
       </nb-alert>
     </p>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
