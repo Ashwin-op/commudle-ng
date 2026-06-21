@@ -420,7 +420,8 @@
                         removeWinnerDialogBox,
                         getWinnerIdForCurrentPrize(userResponse.team),
                         i,
-                        getWinnerIndexForCurrentPrize(userResponse.team)
+                        getWinnerIndexForCurrentPrize(userResponse.team),
+                        userResponse.team.name
                       )
                     "
                   >
@@ -464,18 +465,24 @@
 
 <!-- Add Winner Confirmation -->
 <ng-template #addWinnerDialogBox let-data let-ref="dialogRef">
-  <nb-card>
+  <nb-card class="confirmation-dialog">
     <nb-card-header>
-      <span>Are you sure</span>
+      <span>Confirm Winner Selection</span>
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
     </nb-card-header>
     <nb-card-body>
-      Select <strong>{{ data.team.name }}</strong> as winner?
+      <p>
+        You are about to select <strong>{{ data.team.name }}</strong> as a winner for the
+        <strong>{{ selectedPrize?.name }}</strong> prize.
+      </p>
+      <p>Are you sure you want to proceed?</p>
     </nb-card-body>
     <nb-card-footer>
-      <button (click)="addWinner(data.team, data.index); ref.close()" nbButton status="primary">Yes</button>
+      <button (click)="addWinner(data.team, data.index); ref.close()" nbButton status="primary">
+        Yes, Select as Winner
+      </button>
       <button (click)="ref.close()" nbButton ghost>Cancel</button>
     </nb-card-footer>
   </nb-card>
@@ -483,21 +490,27 @@
 
 <!-- Remove Winner Confirmation -->
 <ng-template #removeWinnerDialogBox let-data let-ref="dialogRef">
-  <nb-card>
+  <nb-card class="confirmation-dialog">
     <nb-card-header>
-      <span>Are you sure?</span>
+      <span>Confirm Winner Removal</span>
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
     </nb-card-header>
-    <nb-card-body>You want to remove winner?</nb-card-body>
+    <nb-card-body>
+      <p>
+        You are about to remove <strong>{{ data.teamName }}</strong> as a winner for the
+        <strong>{{ selectedPrize?.name }}</strong> prize.
+      </p>
+      <p>Are you sure you want to proceed?</p>
+    </nb-card-body>
     <nb-card-footer>
       <button
         (click)="removeWinner(data.winnerId, data.userResponseIndex, data.winnerIndex); ref.close()"
         nbButton
-        status="primary"
+        status="danger"
       >
-        Yes
+        Yes, Remove Winner
       </button>
       <button (click)="ref.close()" nbButton ghost>Cancel</button>
     </nb-card-footer>

@@ -350,8 +350,14 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
     this.nbDialogService.open(dialog, { context: { team, index } });
   }
 
-  openRemoveWinnerConfirmation(dialog, winnerId: number, userResponseIndex: number, winnerIndex: number) {
-    this.nbDialogService.open(dialog, { context: { winnerId, userResponseIndex, winnerIndex } });
+  openRemoveWinnerConfirmation(
+    dialog,
+    winnerId: number,
+    userResponseIndex: number,
+    winnerIndex: number,
+    teamName: string,
+  ) {
+    this.nbDialogService.open(dialog, { context: { winnerId, userResponseIndex, winnerIndex, teamName } });
   }
 
   onWinnerPageChange(page: number) {
