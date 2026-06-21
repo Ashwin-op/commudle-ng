@@ -44,7 +44,7 @@ import {
   HackathonTeamService,
   RoundMentorSlotBookingService,
 } from '@commudle/shared-services';
-import { NbDialogService } from '@commudle/theme';
+import { NbDialogRef, NbDialogService } from '@commudle/theme';
 import {
   DataTableColumn,
   DataTableRow,
@@ -105,6 +105,7 @@ export class HackathonControlPanelMentorSlotsComponent implements OnInit, AfterV
   @ViewChild('mentorHeaderTemplate', { static: false }) mentorHeaderTemplate!: TemplateRef<unknown>;
   @ViewChild('slotCellTemplate', { static: false }) slotCellTemplate!: TemplateRef<unknown>;
   @ViewChild('roundHeaderTemplate', { static: false }) roundHeaderTemplate!: TemplateRef<unknown>;
+  @ViewChild('savingDialog', { static: false }) savingDialog!: TemplateRef<unknown>;
 
   readonly icons = {
     faPlus,
@@ -291,14 +292,14 @@ export class HackathonControlPanelMentorSlotsComponent implements OnInit, AfterV
     this.cdr.markForCheck();
   }
 
-  saveSlotRules(dialogRef: any): void {
-    this.isSlotRuleFormSubmitting = true;
+  saveSlotRules(dialogRef: NbDialogRef<unknown>): void {
     if (this.slotRuleForm.invalid) {
       this.slotRuleForm.markAllAsTouched();
       this.toastrService.warningDialog('Please fill all required fields correctly');
-      this.isSlotRuleFormSubmitting = false;
       return;
     }
+
+    this.isSlotRuleFormSubmitting = true;
 
     const formData = {
       ...this.slotRuleForm.getRawValue(),
@@ -306,25 +307,32 @@ export class HackathonControlPanelMentorSlotsComponent implements OnInit, AfterV
       ends_at: moment(this.slotRuleForm.value.ends_at).toISOString(),
     };
 
-    if (this.currentSlotRule) {
-      this.roundMentorSlotRulesService.update(this.currentRoundId, this.currentSlotRule.id, formData).subscribe({
-        next: () => {
-          this.toastrService.successDialog('Slot rules updated successfully');
-          dialogRef.close();
-          this.loadRounds();
-          this.isSlotRuleFormSubmitting = false;
-        },
-      });
-    } else {
-      this.roundMentorSlotRulesService.create(this.currentRoundId, formData).subscribe({
-        next: () => {
-          this.toastrService.successDialog('Slot rules created successfully');
-          dialogRef.close();
-          this.loadRounds();
-          this.isSlotRuleFormSubmitting = false;
-        },
-      });
-    }
+    const savingDialogRef: NbDialogRef<unknown> = this.dialogService.open(this.savingDialog, {
+      closeOnBackdropClick: false,
+      closeOnEsc: false,
+    });
+
+    const onComplete = (successMessage?: string) => {
+      savingDialogRef.close();
+      this.isSlotRuleFormSubmitting = false;
+      if (successMessage) {
+        this.toastrService.successDialog(successMessage);
+        dialogRef.close();
+        this.loadRounds();
+      }
+      this.cdr.markForCheck();
+    };
+
+    const request$ = this.currentSlotRule
+      ? this.roundMentorSlotRulesService.update(this.currentRoundId, this.currentSlotRule.id, formData)
+      : this.roundMentorSlotRulesService.create(this.currentRoundId, formData);
+
+    const successMessage = this.currentSlotRule ? 'Slot rules updated successfully' : 'Slot rules created successfully';
+
+    request$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: () => onComplete(successMessage),
+      error: () => onComplete(),
+    });
   }
 
   calculateTotalSlots(): number {

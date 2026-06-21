@@ -367,6 +367,16 @@ nb-card {
   }
 }
 
+.saving-dialog-card {
+  .saving-dialog-content {
+    @apply com-flex com-flex-col com-items-center com-gap-4 com-py-4 com-px-8;
+
+    .saving-dialog-text {
+      @apply com-text-sm com-text-gray-600 com-text-center com-m-0;
+    }
+  }
+}
+
 .mentor-header {
   @apply com-flex com-flex-col com-gap-2 com-items-start com-py-2;
 

@@ -199,6 +199,17 @@
   </div>
 </ng-template>
 
+<ng-template #savingDialog>
+  <nb-card class="saving-dialog-card">
+    <nb-card-body>
+      <div class="saving-dialog-content">
+        <app-loading-spinner></app-loading-spinner>
+        <p class="saving-dialog-text">Saving slot rules, this may take a few moments...</p>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</ng-template>
+
 <ng-template #updateMentorMeetingUrl let-data let-ref="dialogRef">
   <nb-card class="dialog-box-card">
     <nb-card-header>
