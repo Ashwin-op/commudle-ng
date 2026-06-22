@@ -32,7 +32,7 @@
           <span class="track-number">{{ i + 1 }}</span>
           <span class="track-name">{{ track.name }}</span>
           <span *ngIf="track.hackathon_problem_statements?.length > 0" class="ps-badge">
-            {{ track.hackathon_problem_statements.length }} Problem Statement{{ totalProblemStatements > 1 ? s : '' }}
+            {{ track.hackathon_problem_statements.length }} Problem Statement{{ totalProblemStatements > 1 ? 's' : '' }}
           </span>
         </summary>
         <div class="track-content">
