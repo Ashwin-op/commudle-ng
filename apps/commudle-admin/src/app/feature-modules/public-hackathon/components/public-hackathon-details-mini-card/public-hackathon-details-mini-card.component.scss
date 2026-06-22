@@ -50,7 +50,7 @@
               background: linear-gradient(145deg, #1e40af, #3b82f6);
 
               .countdown-value {
-                @apply com-text-xl com-font-medium com-text-white com-leading-none;
+                @apply com-text-xl com-font-medium com-text-tWhite com-leading-none;
                 font-variant-numeric: tabular-nums;
               }
 
