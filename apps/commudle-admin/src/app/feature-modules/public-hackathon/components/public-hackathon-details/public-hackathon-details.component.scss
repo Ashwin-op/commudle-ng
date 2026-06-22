@@ -233,6 +233,12 @@
   commudle-discussion {
     @apply com-h-96;
   }
+
+  .collaboration-communities,
+  .comments,
+  .faq {
+    @apply com-m-0 com-mb-4;
+  }
 }
 
 .right-column {
@@ -294,12 +300,6 @@
 
   .edit-link {
     @apply com-block com-mt-3 com-no-underline;
-  }
-
-  .collaboration-communities,
-  .comments,
-  .faq {
-    @apply com-m-0 com-mb-4;
   }
 
   .hackathon-details {

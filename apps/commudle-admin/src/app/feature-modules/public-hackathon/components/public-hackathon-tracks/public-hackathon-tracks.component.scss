@@ -96,6 +96,10 @@
 
               .ps-title {
                 @apply com-text-sm com-text-Yankees-Blue;
+
+                ::ng-deep p {
+                  @apply com-m-0;
+                }
               }
             }
 

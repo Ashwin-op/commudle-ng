@@ -22,11 +22,7 @@
     @apply com-flex com-flex-wrap com-gap-3 com-px-4 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
     .date-chip {
-      @apply com-w-full com-rounded-full com-px-3 com-py-1 com-text-sm com-font-medium;
-
-      &.chip-open {
-        @apply com-bg-blue-50 com-text-primary-500;
-      }
+      @apply com-w-full com-rounded-full com-p-0 com-text-sm com-font-medium;
 
       &.chip-closed {
         @apply com-bg-red-50 com-text-red-500;
@@ -37,6 +33,36 @@
 
         .dot {
           @apply com-text-lg;
+        }
+      }
+
+      .countdown-timer {
+        @apply com-flex com-flex-col com-items-start com-w-full com-p-0;
+
+        .countdown-units {
+          @apply com-flex com-items-start com-justify-start com-gap-3 com-w-full;
+
+          .countdown-unit {
+            @apply com-flex com-flex-col com-items-center com-gap-1;
+
+            .countdown-value-wrap {
+              @apply com-relative com-overflow-hidden com-rounded-xl com-flex com-items-center com-justify-center com-h-10 com-w-10;
+              background: linear-gradient(145deg, #1e40af, #3b82f6);
+
+              .countdown-value {
+                @apply com-text-xl com-font-medium com-text-white com-leading-none;
+                font-variant-numeric: tabular-nums;
+              }
+
+              .countdown-value.flip {
+                animation: flipUp 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+              }
+            }
+
+            .countdown-suffix {
+              @apply com-text-xs com-text-gray-400;
+            }
+          }
         }
       }
     }
@@ -55,7 +81,7 @@
     @apply com-px-4 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
     .section-label {
-      @apply com-text-xs com-font-medium com-text-Cadet-Grey com-uppercase com-tracking-wide;
+      @apply com-text-xs com-font-medium com-text-Cadet-Grey;
     }
 
     .date-grid {
@@ -105,5 +131,21 @@
     button {
       @apply com-w-full;
     }
+  }
+}
+
+@keyframes flipUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
   }
 }

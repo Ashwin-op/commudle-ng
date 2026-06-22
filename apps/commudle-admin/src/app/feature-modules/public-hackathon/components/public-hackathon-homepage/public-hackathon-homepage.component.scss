@@ -9,24 +9,23 @@
     }
 
     .registration-badge {
-      @apply com-inline-flex com-items-center com-gap-1 com-px-3 com-py-1 com-rounded-full com-text-xs com-font-semibold com-flex-shrink-0;
-      color: #15803d;
-      background-color: #f0fdf4;
-      border: 1px solid #bbf7d0;
+      @apply com-inline-flex com-items-center com-gap-1 com-px-3 com-py-1 com-rounded-full com-text-xs com-font-medium com-flex-shrink-0;
+
+      &.open {
+        @apply com-text-green-500 com-bg-green-50 com-border com-border-solid com-border-green-500;
+      }
+
+      &.completed {
+        @apply com-flex com-items-center com-text-gray-500 com-bg-gray-100;
+
+        .completed-icon {
+          @apply com-flex com-w-14px com-h-14px com-text-gray-500 com-ml-1;
+        }
+      }
 
       .badge-dot {
         @apply com-w-2 com-h-2 com-rounded-full com-bg-green-500;
         animation: pulse-dot 2s ease-in-out infinite;
-      }
-
-      &.closed {
-        color: #991b1b;
-        background-color: #fef2f2;
-        border-color: #fecaca;
-
-        .closed-dot {
-          @apply com-bg-red-500;
-        }
       }
     }
   }

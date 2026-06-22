@@ -41,6 +41,12 @@ export class PublicHackathonDetailsMiniCardComponent implements OnInit, OnDestro
   totalUsers: number;
   hackathonStatus: string;
   daysLeft: number;
+  countdownDays: number;
+  countdownHours: number;
+  countdownMinutes: number;
+  countdownSeconds: number;
+  countdownFlip = { days: false, hours: false, minutes: false, seconds: false };
+  private countdownInterval: any;
 
   private destroy$ = new Subject<void>();
 
@@ -68,6 +74,9 @@ export class PublicHackathonDetailsMiniCardComponent implements OnInit, OnDestro
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
   }
 
   getTeamDetails() {
@@ -92,9 +101,54 @@ export class PublicHackathonDetailsMiniCardComponent implements OnInit, OnDestro
       const millisecondsPerDay = 24 * 60 * 60 * 1000;
       const difference = this.hackathonApplicationEndDate.getTime() - this.currentDate.getTime();
       this.daysLeft = Math.ceil(difference / millisecondsPerDay);
+      this.startCountdown();
     } else if (this.currentDate > this.hackathonApplicationEndDate) {
       this.hackathonStatus = 'Closed';
     }
+  }
+
+  startCountdown() {
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const end = this.hackathonApplicationEndDate.getTime();
+      const diff = end - now;
+
+      if (diff <= 0) {
+        this.countdownDays = 0;
+        this.countdownHours = 0;
+        this.countdownMinutes = 0;
+        this.countdownSeconds = 0;
+        clearInterval(this.countdownInterval);
+        this.hackathonStatus = 'Closed';
+        return;
+      }
+
+      const newDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const newHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const newMinutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const newSeconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      // Trigger flip animation on value change
+      if (this.countdownSeconds !== undefined) {
+        this.countdownFlip.seconds = newSeconds !== this.countdownSeconds;
+        this.countdownFlip.minutes = newMinutes !== this.countdownMinutes;
+        this.countdownFlip.hours = newHours !== this.countdownHours;
+        this.countdownFlip.days = newDays !== this.countdownDays;
+
+        // Reset flip after animation duration
+        setTimeout(() => {
+          this.countdownFlip = { days: false, hours: false, minutes: false, seconds: false };
+        }, 700);
+      }
+
+      this.countdownDays = newDays;
+      this.countdownHours = newHours;
+      this.countdownMinutes = newMinutes;
+      this.countdownSeconds = newSeconds;
+    };
+
+    updateCountdown();
+    this.countdownInterval = setInterval(updateCountdown, 1000);
   }
 
   fetchInterestedMembers() {

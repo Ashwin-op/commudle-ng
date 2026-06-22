@@ -12,9 +12,9 @@
               <span class="badge-dot active-dot"></span>
               <span>Live</span>
             </div>
-            <div class="registration-badge closed" *ngIf="hackathon?.status === EHackathonStatus?.COMPLETED">
-              <span class="badge-dot closed-dot"></span>
-              <span>Completed</span>
+            <div class="registration-badge completed" *ngIf="hackathon?.status === EHackathonStatus?.COMPLETED">
+              Completed
+              <fa-icon [icon]="icons.faCircleCheck" class="completed-icon" title="Completed"></fa-icon>
             </div>
           </div>
           <div class="details-sub">

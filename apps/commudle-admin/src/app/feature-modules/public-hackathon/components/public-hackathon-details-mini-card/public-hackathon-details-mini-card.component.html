@@ -13,7 +13,9 @@
     <!-- Registration Status Chip -->
     <div
       class="date-chip"
-      *ngIf="hackathon.application_start_date && hackathon.application_end_date"
+      *ngIf="
+        hackathon.application_start_date && hackathon.application_end_date && hackathon.status === EHackathonStatus.OPEN
+      "
       [ngClass]="{ 'chip-closed': hackathonStatus === 'Closed', 'chip-open': hackathonStatus !== 'Closed' }"
     >
       <span *ngIf="hackathonStatus === 'Upcoming'">
@@ -31,11 +33,43 @@
           }}</ng-container>
         </span>
       </span>
-      <span *ngIf="hackathonStatus === 'Outgoing'">
-        <span class="dot">&#x2022;</span>
-        <span>{{ daysLeft }} Days Left</span>
+      <span *ngIf="hackathonStatus === 'Outgoing'" class="countdown-timer">
+        <span class="countdown-units">
+          <span class="countdown-unit">
+            <span class="countdown-value-wrap">
+              <span class="countdown-value" [class.flip]="countdownFlip.days">{{
+                countdownDays < 10 ? '0' + countdownDays : countdownDays
+              }}</span>
+            </span>
+            <span class="countdown-suffix">Days</span>
+          </span>
+          <span class="countdown-unit">
+            <span class="countdown-value-wrap">
+              <span class="countdown-value" [class.flip]="countdownFlip.hours">{{
+                countdownHours < 10 ? '0' + countdownHours : countdownHours
+              }}</span>
+            </span>
+            <span class="countdown-suffix">Hours</span>
+          </span>
+          <span class="countdown-unit">
+            <span class="countdown-value-wrap">
+              <span class="countdown-value" [class.flip]="countdownFlip.minutes">{{
+                countdownMinutes < 10 ? '0' + countdownMinutes : countdownMinutes
+              }}</span>
+            </span>
+            <span class="countdown-suffix">Minutes</span>
+          </span>
+          <span class="countdown-unit">
+            <span class="countdown-value-wrap">
+              <span class="countdown-value" [class.flip]="countdownFlip.seconds">{{
+                countdownSeconds < 10 ? '0' + countdownSeconds : countdownSeconds
+              }}</span>
+            </span>
+            <span class="countdown-suffix">Seconds</span>
+          </span>
+        </span>
       </span>
-      <span *ngIf="hackathonStatus === 'Closed'">
+      <span *ngIf="hackathonStatus === 'Closed' && hackathon.status === EHackathonStatus.OPEN">
         <span class="dot">&#x2022;</span>
         <span>Registrations closed</span>
       </span>
