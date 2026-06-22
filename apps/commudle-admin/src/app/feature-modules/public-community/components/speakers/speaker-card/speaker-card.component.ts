@@ -6,6 +6,8 @@ import { CommudleCardModule } from '@commudle/commudle-theme';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
 import { SharedPipesModule } from 'apps/shared-pipes/pipes.module';
 import { MiniUserProfileModule } from 'apps/shared-modules/mini-user-profile/mini-user-profile.module';
+import { UserExpertTickComponent } from 'apps/commudle-admin/src/app/app-shared-components/user-expert-tick.component';
+import { UserPersonalConnectComponent } from 'libs/shared/components/src/lib/components/user-personal-connect/user-personal-connect.component';
 
 @Component({
   selector: 'app-speaker-card',
@@ -21,6 +23,8 @@ import { MiniUserProfileModule } from 'apps/shared-modules/mini-user-profile/min
     SharedComponentsModule,
     SharedPipesModule,
     MiniUserProfileModule,
+    UserExpertTickComponent,
+    UserPersonalConnectComponent,
   ],
 })
 export class SpeakerCardComponent implements OnInit {

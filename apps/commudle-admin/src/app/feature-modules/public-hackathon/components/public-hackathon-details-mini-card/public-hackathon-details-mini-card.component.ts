@@ -1,5 +1,6 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { IHackathon, EHackathonLocationType } from 'apps/shared-models/hackathon.model';
 import { faGlobe, faAward, faCalendarDays, faClock } from '@fortawesome/free-solid-svg-icons';
 import { AuthService, countries_details } from '@commudle/shared-services';
@@ -49,8 +50,15 @@ export class PublicHackathonDetailsMiniCardComponent implements OnInit, OnDestro
   private countdownInterval: any;
 
   private destroy$ = new Subject<void>();
+  isBrowser: boolean;
 
-  constructor(private hackathonService: HackathonService, private authService: AuthService) {}
+  constructor(
+    private hackathonService: HackathonService,
+    private authService: AuthService,
+    @Inject(PLATFORM_ID) private platformId: object,
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   ngOnInit() {
     this.fetchInterestedMembers();
@@ -101,7 +109,9 @@ export class PublicHackathonDetailsMiniCardComponent implements OnInit, OnDestro
       const millisecondsPerDay = 24 * 60 * 60 * 1000;
       const difference = this.hackathonApplicationEndDate.getTime() - this.currentDate.getTime();
       this.daysLeft = Math.ceil(difference / millisecondsPerDay);
-      this.startCountdown();
+      if (this.isBrowser) {
+        this.startCountdown();
+      }
     } else if (this.currentDate > this.hackathonApplicationEndDate) {
       this.hackathonStatus = 'Closed';
     }
