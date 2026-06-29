@@ -1,71 +1,3 @@
-.details-section {
-  @apply com-flex com-flex-col com-p-3 com-m-0;
-
-  .details-row {
-    @apply com-flex com-items-center com-justify-between com-gap-3 com-flex-wrap;
-
-    .hackathon-name {
-      @apply com-text-Yankees-Blue com-text-xl md:com-text-2xl com-font-semibold com-m-0;
-    }
-
-    .registration-badge {
-      @apply com-inline-flex com-items-center com-gap-1 com-px-3 com-py-1 com-rounded-full com-text-xs com-font-medium com-flex-shrink-0;
-
-      &.open {
-        @apply com-text-green-500 com-bg-green-50 com-border com-border-solid com-border-green-500;
-      }
-
-      &.completed {
-        @apply com-flex com-items-center com-text-gray-500 com-bg-gray-100;
-
-        .completed-icon {
-          @apply com-flex com-w-14px com-h-14px com-text-gray-500 com-ml-1;
-        }
-      }
-
-      .badge-dot {
-        @apply com-w-2 com-h-2 com-rounded-full com-bg-green-500;
-        animation: pulse-dot 2s ease-in-out infinite;
-      }
-    }
-  }
-
-  .details-sub {
-    @apply com-flex com-items-center com-justify-between com-mt-2 com-flex-wrap com-gap-2;
-
-    .hackathon-badge {
-      @apply com-flex-shrink-0;
-    }
-
-    .social-links {
-      @apply com-flex com-gap-2 com-items-center;
-
-      a {
-        @apply com-text-base com-w-7 com-h-7 com-grid com-items-center com-justify-center com-border com-border-solid com-border-Bright-Gray com-rounded-lg com-text-primary-500 hover:com-shadow;
-      }
-    }
-  }
-
-  @keyframes pulse-dot {
-    0%,
-    100% {
-      opacity: 1;
-    }
-
-    50% {
-      opacity: 0.4;
-    }
-  }
-}
-
-.banner-image {
-  @apply com-mt-0 com-rounded-b-none;
-
-  com-card-body {
-    @apply com-p-0;
-  }
-}
-
 .menu-items-footer {
   @apply com-p-0 com-bg-white com-rounded-b-10 com-border com-border-solid com-border-Bright-Gray com-mb-4;
 }
@@ -181,6 +113,84 @@
   60%,
   100% {
     transform: translateX(100%);
+  }
+}
+
+.hackathon-top-bar {
+  @apply com-flex com-items-center com-justify-between com-mb-3;
+
+  .hackathon-status-badge {
+    @apply com-inline-flex com-items-center com-gap-1.5 com-px-3 com-mx-4 com-py-1.5 com-rounded-full com-text-xs com-font-semibold;
+
+    .badge-dot {
+      @apply com-w-2 com-h-2 com-rounded-full com-bg-red-400;
+    }
+
+    &.live {
+      @apply com-text-green-500 com-bg-green-50 com-border-green-200;
+
+      .badge-dot {
+        @apply com-bg-green-500;
+        animation: pulse-dot 2s ease-in-out infinite;
+      }
+    }
+
+    &.completed {
+      @apply com-flex com-items-center com-text-gray-500 com-bg-gray-100;
+
+      .completed-icon {
+        @apply com-flex com-w-14px com-h-14px com-text-gray-500 com-ml-1;
+      }
+    }
+  }
+
+  .admin-panel-btn {
+    @apply com-no-underline;
+  }
+}
+
+.hackathon-header {
+  @apply com-flex com-flex-col md:com-flex-row com-items-center com-gap-4 com-mb-4;
+
+  .hackathon-header-text {
+    @apply com-flex-[7] com-min-w-0 com-rounded-b-xl com-overflow-hidden com-bg-white;
+
+    commudle-public-hackathon-details-mini-card {
+      @apply com-block;
+
+      ::ng-deep .mini-card {
+        @apply com-border-0 com-rounded-none;
+      }
+    }
+  }
+
+  .hackathon-header-banner {
+    @apply com-flex-[3] com-min-w-0 com-hidden md:com-flex com-rounded-xl com-overflow-hidden com-border com-border-solid com-border-Bright-Gray;
+
+    commudle-banner-image {
+      @apply com-block com-w-full com-h-full;
+
+      ::ng-deep {
+        .banner-container {
+          @apply com-h-full;
+        }
+
+        img {
+          @apply com-w-full com-h-full com-object-cover;
+        }
+      }
+    }
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
   }
 }
 

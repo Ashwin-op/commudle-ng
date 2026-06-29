@@ -1,25 +1,75 @@
 .mini-card {
   @apply com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-overflow-hidden com-bg-white;
 
+  .hackathon-top-bar {
+    @apply com-flex com-items-center com-justify-between com-px-3 com-pt-3;
+
+    .hackathon-status-badge {
+      @apply com-inline-flex com-items-center com-gap-1.5 com-p-6px com-rounded-full com-text-xs com-font-semibold;
+      @apply com-text-red-500 com-bg-red-50 com-border com-border-solid com-border-red-200;
+
+      &.completed {
+        @apply com-text-red-500 com-bg-red-50 com-border-red-200;
+
+        .completed-icon {
+          @apply com-w-14px com-h-14px com-ml-1;
+        }
+      }
+
+      &.live {
+        @apply com-text-green-500 com-bg-green-50 com-border com-border-solid com-border-green-200;
+
+        .badge-dot {
+          @apply com-w-2 com-h-2 com-rounded-full com-bg-green-500;
+          animation: pulse-dot 2s ease-in-out infinite;
+        }
+      }
+    }
+
+    .admin-panel-btn {
+      @apply com-no-underline;
+    }
+  }
+
+  .hackathon-header-name-section {
+    @apply com-px-3 com-pt-3 com-pb-2;
+
+    .hackathon-name {
+      @apply com-text-Yankees-Blue com-text-xl md:com-text-2xl com-font-semibold com-m-0 com-mb-1;
+    }
+
+    .hackathon-community-badge {
+      @apply com-block;
+    }
+  }
+
   .prize-header {
-    @apply com-flex com-flex-col com-items-center com-py-5 com-px-4 com-text-center;
+    @apply com-flex com-flex-row com-items-center com-justify-between com-py-4 com-px-5 com-mx-4 com-rounded-lg;
     background: linear-gradient(145deg, #1e40af, #3b82f6);
 
-    .prize-label {
-      @apply com-text-xs com-font-bold com-uppercase com-tracking-widest com-text-blue-200;
+    .prize-left {
+      @apply com-flex com-flex-col;
+
+      .prize-label {
+        @apply com-text-xs com-font-bold com-uppercase com-tracking-widest com-text-blue-200;
+      }
+
+      .prize-amount {
+        @apply com-text-2xl com-font-bold com-text-tWhite com-mt-1;
+      }
     }
 
-    .prize-amount {
-      @apply com-text-3xl com-font-bold com-text-tWhite com-mt-1;
-    }
+    .prize-right {
+      @apply com-flex com-flex-col com-items-end com-text-right;
 
-    .prize-meta {
-      @apply com-text-sm com-text-blue-200 com-mt-1;
+      .prize-meta {
+        @apply com-text-sm com-text-blue-200;
+      }
     }
   }
 
   .info-chips {
-    @apply com-flex com-flex-wrap com-gap-3 com-px-4 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    @apply com-flex com-flex-wrap com-gap-3 com-px-3 com-py-2 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
     .date-chip {
       @apply com-w-full com-rounded-full com-p-0 com-text-sm com-font-medium;
@@ -50,7 +100,7 @@
               background: linear-gradient(145deg, #1e40af, #3b82f6);
 
               .countdown-value {
-                @apply com-text-xl com-font-medium com-text-tWhite com-leading-none;
+                @apply com-text-xl com-font-medium com-text-white com-leading-none;
                 font-variant-numeric: tabular-nums;
               }
 
@@ -60,7 +110,7 @@
             }
 
             .countdown-suffix {
-              @apply com-text-xs com-text-gray-400;
+              @apply com-text-[10px] com-text-gray-400;
             }
           }
         }
@@ -77,8 +127,20 @@
     }
   }
 
+  .dates-row {
+    @apply com-flex com-flex-col md:com-flex-row com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+
+    .dates-section {
+      @apply com-flex-1 com-border-b-0;
+
+      &:first-child {
+        @apply md:com-border-0 md:com-border-r md:com-border-solid md:com-border-Bright-Gray com-border-b com-border-solid com-border-Bright-Gray md:com-border-b-0;
+      }
+    }
+  }
+
   .section {
-    @apply com-px-4 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    @apply com-px-3 com-py-2 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
     .section-label {
       @apply com-text-xs com-font-medium com-text-Cadet-Grey;
@@ -119,10 +181,6 @@
     .section-meta {
       @apply com-m-0 com-text-sm com-text-Cadet-Grey;
     }
-
-    .participants-row {
-      @apply com-mt-2;
-    }
   }
 
   .apply-section {
@@ -147,5 +205,16 @@
   100% {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
   }
 }

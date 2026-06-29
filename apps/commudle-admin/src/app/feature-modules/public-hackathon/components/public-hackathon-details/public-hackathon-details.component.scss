@@ -257,7 +257,7 @@
   }
 
   .organizer-btn {
-    @apply com-m-0 md:com-mx-0 com-mx-4 com-mb-4;
+    @apply com-m-0 com-mb-4;
   }
 
   .round-card-body {
@@ -305,14 +305,6 @@
   .hackathon-details {
     @apply com-mb-4;
   }
-
-  .community-social-links {
-    @apply com-flex com-items-center com-gap-4 com-mt-6 com-flex-wrap com-mt-3;
-
-    a {
-      @apply com-no-underline;
-    }
-  }
 }
 
 .registration-status-body {
@@ -324,5 +316,13 @@
 
   .status-badge {
     @apply com-inline-flex com-items-center com-gap-1 com-px-3 com-py-1 com-rounded-full com-text-xs com-font-medium com-bg-blue-50 com-text-primary-500;
+  }
+}
+
+.community-social-links {
+  @apply com-flex com-flex-row com-items-center com-gap-3 com-mt-6 com-flex-wrap com-mt-3;
+
+  a {
+    @apply com-no-underline;
   }
 }

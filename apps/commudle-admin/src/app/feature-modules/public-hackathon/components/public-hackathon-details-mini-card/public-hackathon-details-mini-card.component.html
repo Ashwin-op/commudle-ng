@@ -1,11 +1,49 @@
 <div class="mini-card">
+  <!-- Top Bar: Status Badge + Admin Button -->
+  <div class="hackathon-top-bar">
+    <div class="hackathon-status-badge completed" *ngIf="hackathon?.status === EHackathonStatus?.COMPLETED">
+      Completed
+      <fa-icon [icon]="icons.faCircleCheck" class="completed-icon" title="Completed"></fa-icon>
+    </div>
+    <div class="hackathon-status-badge live" *ngIf="hackathon?.status === EHackathonStatus?.OPEN">
+      <span class="badge-dot active-dot"></span>
+      <span>Live</span>
+    </div>
+    <a
+      *ngIf="isOrganizer"
+      comButton
+      status="danger"
+      size="small"
+      shape="semi-round"
+      class="admin-panel-btn"
+      [routerLink]="['/admin', 'communities', community?.slug, 'hackathon-dashboard', hackathon?.slug]"
+    >
+      Go To Admin panel
+    </a>
+  </div>
+
+  <!-- Hackathon Name + Community Badge -->
+  <div class="hackathon-header-name-section">
+    <h1 class="hackathon-name">{{ hackathon.name }}</h1>
+    <app-community-badge
+      [community]="community"
+      [size]="'small'"
+      class="hackathon-community-badge"
+    ></app-community-badge>
+  </div>
+
   <!-- Prize Pool Header -->
   <div class="prize-header" *ngIf="totalPrizesByCurrency?.length > 0 && totalPrizesByCurrency[0].amount !== 0">
-    <span class="prize-label">TOTAL PRIZE POOL</span>
-    <span class="prize-amount"
-      >{{ totalPrizesByCurrency[0].currency.symbol }} {{ totalPrizesByCurrency[0].amount | number }}</span
-    >
-    <span class="prize-meta" *ngIf="hackathon.winners_count">{{ hackathon.winners_count }} winners</span>
+    <div class="prize-left">
+      <span class="prize-label">TOTAL PRIZE POOL</span>
+      <span class="prize-amount"
+        >{{ totalPrizesByCurrency[0].currency.symbol }} {{ totalPrizesByCurrency[0].amount | number }}</span
+      >
+    </div>
+    <div class="prize-right">
+      <span class="prize-meta" *ngIf="hackathon.winners_count">{{ hackathon.winners_count }} winners</span>
+      <span class="prize-meta" *ngIf="hackathon.tracks_count">{{ hackathon.tracks_count }} tracks</span>
+    </div>
   </div>
 
   <!-- Info Chips -->
@@ -89,75 +127,62 @@
     </div>
   </div>
 
-  <!-- Hackathon Dates -->
-  <div class="section" *ngIf="hackathon.start_date && hackathon.end_date">
-    <span class="section-label">Hackathon Dates</span>
-    <div class="date-grid">
-      <div class="date-item" *ngIf="hackathon.timezone">
-        <span class="date-prefix">Starts</span>
-        <span class="date-value">{{
-          momentTimezone.tz(moment.utc(hackathon.start_date), hackathon.timezone).format(
-            'DD
-          MMM YYYY'
-          )
-        }}</span>
-        <span class="date-time"
-          >{{
-            momentTimezone.tz(moment.utc(hackathon.start_date), hackathon.timezone).format(
-              'h:mm
-          A'
-            )
-          }}
-          {{ momentTimezone.tz(hackathon.timezone).format('z') }}</span
-        >
-      </div>
-      <div class="date-item" *ngIf="hackathon.timezone">
-        <span class="date-prefix">Ends</span>
-        <span class="date-value">{{
-          momentTimezone.tz(moment.utc(hackathon.end_date), hackathon.timezone).format(
-            'DD MMM
-          YYYY'
-          )
-        }}</span>
-        <span class="date-time"
-          >{{
-            momentTimezone.tz(moment.utc(hackathon.end_date), hackathon.timezone).format(
-              'h:mm
-          A'
-            )
-          }}
-          {{ momentTimezone.tz(hackathon.timezone).format('z') }}</span
-        >
+  <!-- Dates Row -->
+  <div class="dates-row">
+    <!-- Hackathon Dates -->
+    <div class="section dates-section" *ngIf="hackathon.start_date && hackathon.end_date">
+      <span class="section-label">Hackathon Dates</span>
+      <div class="date-grid">
+        <div class="date-item" *ngIf="hackathon.timezone">
+          <span class="date-prefix">Starts</span>
+          <span class="date-value">{{
+            momentTimezone.tz(moment.utc(hackathon.start_date), hackathon.timezone).format('DD MMM YYYY')
+          }}</span>
+          <span class="date-time"
+            >{{ momentTimezone.tz(moment.utc(hackathon.start_date), hackathon.timezone).format('h:mm A') }}
+            {{ momentTimezone.tz(hackathon.timezone).format('z') }}</span
+          >
+        </div>
+        <div class="date-item" *ngIf="hackathon.timezone">
+          <span class="date-prefix">Ends</span>
+          <span class="date-value">{{
+            momentTimezone.tz(moment.utc(hackathon.end_date), hackathon.timezone).format('DD MMM YYYY')
+          }}</span>
+          <span class="date-time"
+            >{{ momentTimezone.tz(moment.utc(hackathon.end_date), hackathon.timezone).format('h:mm A') }}
+            {{ momentTimezone.tz(hackathon.timezone).format('z') }}</span
+          >
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Registration Dates -->
-  <div
-    class="section"
-    *ngIf="hackathon.application_start_date && hackathon.application_end_date && hackathonStatus !== 'Closed'"
-  >
-    <span class="section-label">Registration Dates</span>
-    <div class="date-grid" *ngIf="hackathon.timezone">
-      <div class="date-item">
-        <span class="date-prefix">Opens</span>
-        <span class="date-value">{{
-          momentTimezone.tz(moment.utc(hackathon.application_start_date), hackathon.timezone).format('DD MMM YYYY')
-        }}</span>
-        <span class="date-time"
-          >{{ momentTimezone.tz(moment.utc(hackathon.application_start_date), hackathon.timezone).format('h:mm A') }}
-          {{ momentTimezone.tz(hackathon.timezone).format('z') }}</span
-        >
-      </div>
-      <div class="date-item">
-        <span class="date-prefix">Closes</span>
-        <span class="date-value">{{
-          momentTimezone.tz(moment.utc(hackathon.application_end_date), hackathon.timezone).format('DD MMM YYYY')
-        }}</span>
-        <span class="date-time"
-          >{{ momentTimezone.tz(moment.utc(hackathon.application_end_date), hackathon.timezone).format('h:mm A') }}
-          {{ momentTimezone.tz(hackathon.timezone).format('z') }}</span
-        >
+    <!-- Registration Dates -->
+    <div
+      class="section dates-section"
+      *ngIf="hackathon.application_start_date && hackathon.application_end_date && hackathonStatus !== 'Closed'"
+    >
+      <span class="section-label">Registration Dates</span>
+      <div class="date-grid" *ngIf="hackathon.timezone">
+        <div class="date-item">
+          <span class="date-prefix">Opens</span>
+          <span class="date-value">{{
+            momentTimezone.tz(moment.utc(hackathon.application_start_date), hackathon.timezone).format('DD MMM YYYY')
+          }}</span>
+          <span class="date-time"
+            >{{ momentTimezone.tz(moment.utc(hackathon.application_start_date), hackathon.timezone).format('h:mm A') }}
+            {{ momentTimezone.tz(hackathon.timezone).format('z') }}</span
+          >
+        </div>
+        <div class="date-item">
+          <span class="date-prefix">Closes</span>
+          <span class="date-value">{{
+            momentTimezone.tz(moment.utc(hackathon.application_end_date), hackathon.timezone).format('DD MMM YYYY')
+          }}</span>
+          <span class="date-time"
+            >{{ momentTimezone.tz(moment.utc(hackathon.application_end_date), hackathon.timezone).format('h:mm A') }}
+            {{ momentTimezone.tz(hackathon.timezone).format('z') }}</span
+          >
+        </div>
       </div>
     </div>
   </div>

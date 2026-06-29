@@ -14,7 +14,7 @@
               hackathonSocial.website ||
               hackathonSocial.discord)
           "
-          class="community-social-links d-flex align-items-center"
+          class="community-social-links"
         >
           <a
             *ngIf="hackathonSocial.facebook"
@@ -226,6 +226,7 @@
       *ngIf="isOrganizer"
       comButton
       status="danger"
+      fullWidth
       class="organizer-btn"
       [shape]="'semi-round'"
       [routerLink]="['/admin', 'communities', community.slug, 'hackathon-dashboard', hackathon.slug]"
