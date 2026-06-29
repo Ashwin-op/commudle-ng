@@ -13,7 +13,7 @@
             [isOrganizer]="isOrganizer"
           ></commudle-public-hackathon-details-mini-card>
         </div>
-        <div class="hackathon-header-banner" *ngIf="hackathon.banner_image">
+        <div class="hackathon-header-banner" *ngIf="hackathon.banner_image" appTilt [maxTilt]="8" [scale]="1.02">
           <commudle-banner-image
             [name]="hackathon.name"
             [headerImagePath]="hackathon.banner_image.url"
