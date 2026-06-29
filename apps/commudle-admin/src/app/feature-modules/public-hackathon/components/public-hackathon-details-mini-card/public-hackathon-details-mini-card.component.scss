@@ -9,10 +9,10 @@
       @apply com-text-red-500 com-bg-red-50 com-border com-border-solid com-border-red-200;
 
       &.completed {
-        @apply com-text-red-500 com-bg-red-50 com-border-red-200;
+        @apply com-text-gray-600 com-bg-gray-100 com-border-0;
 
         .completed-icon {
-          @apply com-w-14px com-h-14px com-ml-1;
+          @apply com-flex com-w-14px com-h-14px com-text-gray-500 com-ml-1;
         }
       }
 
