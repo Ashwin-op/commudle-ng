@@ -29,6 +29,7 @@ import { IContactInfo } from 'apps/shared-models/contact-info.model';
 import { EHackathonStatus, IHackathon } from 'apps/shared-models/hackathon.model';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { faTrophy } from '@fortawesome/free-solid-svg-icons';
+import { HackathonResponseGroupService } from 'apps/commudle-admin/src/app/services/hackathon-response-group.service';
 
 @Component({
   selector: 'commudle-public-hackathon-homepage',
@@ -81,6 +82,7 @@ export class PublicHackathonHomepageComponent implements OnInit, OnDestroy, Afte
     is_speaker: false,
     is_mentor: false,
   };
+  hrgId: number;
 
   private destroy$ = new Subject<void>();
 
@@ -91,12 +93,14 @@ export class PublicHackathonHomepageComponent implements OnInit, OnDestroy, Afte
     private seoService: SeoService,
     private authService: AuthService,
     private hackathonJudgeService: HackathonJudgeService,
+    private hrgService: HackathonResponseGroupService,
     @Inject(PLATFORM_ID) private platformId: object,
   ) {}
 
   ngOnInit() {
     this.checkFragment();
     this.getHackathonAndCommunity();
+    this.getHackathonResponseGroup();
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.updateHeaderVariation();
@@ -146,6 +150,12 @@ export class PublicHackathonHomepageComponent implements OnInit, OnDestroy, Afte
         this.setSchema();
       }),
     );
+  }
+
+  getHackathonResponseGroup() {
+    this.hrgService.pShowHackathonResponseGroup(this.hackathon.id).subscribe((data) => {
+      if (data) this.hrgId = data.id;
+    });
   }
 
   checkFragment() {

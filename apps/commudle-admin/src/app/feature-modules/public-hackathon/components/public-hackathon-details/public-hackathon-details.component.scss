@@ -257,7 +257,7 @@
   }
 
   .organizer-btn {
-    @apply com-m-0 com-mb-4;
+    @apply com-m-0 com-mb-4 md:com-mx-0 com-mx-4;
   }
 
   .round-card-body {
@@ -303,7 +303,7 @@
   }
 
   .hackathon-details {
-    @apply com-mb-4;
+    @apply com-mb-4 com-bg-white com-rounded-lg com-py-2;
   }
 }
 

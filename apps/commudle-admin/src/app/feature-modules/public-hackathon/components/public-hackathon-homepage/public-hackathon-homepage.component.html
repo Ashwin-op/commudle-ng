@@ -13,7 +13,6 @@
             [isOrganizer]="isOrganizer"
             [showDatesRow]="false"
             [showInterestedMembers]="false"
-            [showApplySection]="false"
             [showCountdown]="false"
           ></commudle-public-hackathon-details-mini-card>
         </div>
@@ -21,7 +20,11 @@
           <commudle-banner-image
             [name]="hackathon.name"
             [headerImagePath]="hackathon.banner_image.url"
-            [aspectRatio]="'1/1'"
+            [aspectRatio]="'2/1'"
+            [topRightCurve]="false"
+            [bottomLeftCurve]="false"
+            [bottomRightCurve]="false"
+            [topLeftCurve]="false"
           ></commudle-banner-image>
         </div>
       </div>

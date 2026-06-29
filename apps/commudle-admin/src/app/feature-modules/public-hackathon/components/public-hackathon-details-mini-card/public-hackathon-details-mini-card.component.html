@@ -1,28 +1,28 @@
 <div class="mini-card">
-  <!-- Top Bar: Status Badge + Name + Admin Button -->
-  <div class="hackathon-top-bar" *ngIf="showName || showStatusBadge || showAdminBtn">
-    <div class="hackathon-top-bar-left">
-      <h1 class="hackathon-name" *ngIf="showName">{{ hackathon.name }}</h1>
-      <ng-container *ngIf="showStatusBadge">
-        <div class="hackathon-status-badge completed" *ngIf="hackathon?.status === EHackathonStatus?.COMPLETED">
-          Completed
-          <fa-icon [icon]="icons.faCircleCheck" class="completed-icon" title="Completed"></fa-icon>
-        </div>
-        <div class="hackathon-status-badge live" *ngIf="hackathon?.status === EHackathonStatus?.OPEN">
-          <span class="badge-dot active-dot"></span>
-          <span>Live</span>
-        </div>
-      </ng-container>
+  <!-- Top Bar + Community Badge -->
+  <div class="hackathon-top-section" *ngIf="showName || showStatusBadge || showAdminBtn || showCommunityBadge">
+    <div class="hackathon-top-bar" *ngIf="showName || showStatusBadge || showAdminBtn">
+      <div class="hackathon-top-bar-left">
+        <h1 class="hackathon-name" *ngIf="showName">{{ hackathon.name }}</h1>
+        <ng-container *ngIf="showStatusBadge">
+          <div class="hackathon-status-badge completed" *ngIf="hackathon?.status === EHackathonStatus?.COMPLETED">
+            Completed
+            <fa-icon [icon]="icons.faCircleCheck" class="completed-icon" title="Completed"></fa-icon>
+          </div>
+          <div class="hackathon-status-badge live" *ngIf="hackathon?.status === EHackathonStatus?.OPEN">
+            <span class="badge-dot active-dot"></span>
+            <span>Live</span>
+          </div>
+        </ng-container>
+      </div>
     </div>
-  </div>
-
-  <!-- Community Badge -->
-  <div class="hackathon-header-name-section" *ngIf="showCommunityBadge">
-    <app-community-badge
-      [community]="community"
-      [size]="'small'"
-      class="hackathon-community-badge"
-    ></app-community-badge>
+    <div class="hackathon-header-name-section" *ngIf="showCommunityBadge">
+      <app-community-badge
+        [community]="community"
+        [size]="'small'"
+        class="hackathon-community-badge"
+      ></app-community-badge>
+    </div>
   </div>
 
   <!-- Prize Pool Header -->
@@ -43,7 +43,17 @@
   </div>
 
   <!-- Info Chips + Countdown -->
-  <div class="info-chips" *ngIf="showCountdown || showLocation">
+  <div
+    class="info-chips"
+    *ngIf="
+      (hackathon.application_start_date &&
+        hackathon.application_end_date &&
+        hackathon.status === EHackathonStatus.OPEN &&
+        showCountdown) ||
+      (hackathon.start_date && showLocation) ||
+      (showLocation && hackathon.prizes_count)
+    "
+  >
     <div class="chip" *ngIf="hackathon.start_date && showLocation">
       <fa-icon [icon]="icons.faCalendarDays"></fa-icon>
       <span>{{ hackathon.start_date | date : 'd MMM' }}</span>
@@ -207,7 +217,6 @@
       *ngIf="userTeamDetails?.length === 0"
       nbButton
       status="primary"
-      fullWidth
       shape="semi-round"
       [routerLink]="['/communities', community?.slug, 'hackathons', hackathon?.slug, 'fill-form', hrgId]"
     >
@@ -217,7 +226,6 @@
       *ngIf="!currentUser"
       nbButton
       status="primary"
-      fullWidth
       shape="semi-round"
       [routerLink]="['/communities', community?.slug, 'hackathons', hackathon?.slug, 'fill-form', hrgId]"
     >

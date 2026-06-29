@@ -1,8 +1,12 @@
 .mini-card {
-  @apply com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-overflow-hidden com-bg-white;
+  @apply com-bg-white com-overflow-hidden;
+
+  .hackathon-top-section {
+    @apply com-px-4 com-pt-3 com-pb-2;
+  }
 
   .hackathon-top-bar {
-    @apply com-flex com-items-center com-justify-between com-px-3 com-pt-3 com-gap-2;
+    @apply com-flex com-items-center com-justify-between com-gap-2;
 
     .hackathon-top-bar-left {
       @apply com-flex com-justify-between com-w-full com-gap-2 com-flex-wrap com-min-w-0;
@@ -40,7 +44,7 @@
   }
 
   .hackathon-header-name-section {
-    @apply com-px-3 com-pt-1 com-pb-2;
+    @apply com-pt-1;
 
     .hackathon-community-badge {
       @apply com-block;
@@ -73,7 +77,7 @@
   }
 
   .info-chips {
-    @apply com-flex com-flex-wrap com-gap-x-3 com-gap-y-6 com-p-4 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+    @apply com-flex com-flex-wrap com-gap-x-3 com-gap-y-6 com-px-4 com-py-2;
 
     .date-chip {
       @apply com-w-full com-rounded-full com-p-0 com-text-sm com-font-medium;
@@ -94,27 +98,45 @@
         @apply com-flex com-flex-col com-items-start com-w-full com-p-0;
 
         .countdown-units {
-          @apply com-flex com-items-start com-justify-start com-gap-3 com-w-full;
+          @apply com-flex com-items-start com-justify-start com-gap-2 com-w-full;
 
           .countdown-unit {
             @apply com-flex com-flex-col com-items-center com-gap-1;
 
             .countdown-value-wrap {
-              @apply com-relative com-overflow-hidden com-rounded-xl com-flex com-items-center com-justify-center com-h-10 com-w-10;
-              background: linear-gradient(145deg, #1e40af, #3b82f6);
+              @apply com-relative com-overflow-hidden com-flex com-items-center com-justify-center;
+              width: 42px;
+              height: 50px;
+              border-radius: 8px;
+              background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 49.9%, #2563eb 50%, #3b82f6 100%);
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+              // Center divider line (mechanical split)
+              &::after {
+                content: '';
+                @apply com-absolute com-left-0 com-right-0;
+                top: 50%;
+                height: 1px;
+                background: rgba(0, 0, 0, 0.3);
+                box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
+                z-index: 2;
+              }
 
               .countdown-value {
-                @apply com-text-xl com-font-medium com-text-tWhite com-leading-none;
+                @apply com-text-xl com-font-bold com-text-tWhite com-leading-none com-relative;
                 font-variant-numeric: tabular-nums;
+                z-index: 1;
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
               }
 
               .countdown-value.flip {
-                animation: flipUp 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+                animation: mechanicalFlip 0.6s ease-in-out;
               }
             }
 
             .countdown-suffix {
-              @apply com-text-[10px] com-text-gray-400;
+              @apply com-text-gray-400 com-font-medium com-uppercase com-tracking-wide;
+              font-size: 8px;
             }
           }
         }
@@ -136,15 +158,11 @@
 
     .dates-section {
       @apply com-flex-1 com-border-b-0;
-
-      &:first-child {
-        @apply md:com-border-0 md:com-border-r md:com-border-solid md:com-border-Bright-Gray com-border-b com-border-solid com-border-Bright-Gray md:com-border-b-0;
-      }
     }
   }
 
   .section {
-    @apply com-px-3 com-py-2 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    @apply com-px-3 com-py-2;
 
     .section-label {
       @apply com-text-xs com-font-medium com-text-Cadet-Grey;
@@ -188,27 +206,33 @@
   }
 
   .apply-section {
-    @apply com-px-4 com-py-4;
-
-    button {
-      @apply com-w-full;
-    }
+    @apply com-px-4 com-py-2;
   }
 }
 
-@keyframes flipUp {
+@keyframes mechanicalFlip {
   0% {
-    transform: translateY(100%);
-    opacity: 0;
+    transform: translateY(0);
   }
 
-  20% {
-    opacity: 1;
+  15% {
+    transform: translateY(-110%);
+  }
+
+  16% {
+    transform: translateY(110%);
+  }
+
+  70% {
+    transform: translateY(-3%);
+  }
+
+  85% {
+    transform: translateY(1%);
   }
 
   100% {
     transform: translateY(0);
-    opacity: 1;
   }
 }
 
