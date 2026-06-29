@@ -73,7 +73,7 @@
   }
 
   .info-chips {
-    @apply com-flex com-flex-wrap com-gap-3 com-px-3 com-py-2 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    @apply com-flex com-flex-wrap com-gap-x-3 com-gap-y-6 com-p-4 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
 
     .date-chip {
       @apply com-w-full com-rounded-full com-p-0 com-text-sm com-font-medium;
@@ -132,7 +132,7 @@
   }
 
   .dates-row {
-    @apply com-flex com-flex-col md:com-flex-row com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    @apply com-flex com-flex-col com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
     .dates-section {
       @apply com-flex-1 com-border-b-0;

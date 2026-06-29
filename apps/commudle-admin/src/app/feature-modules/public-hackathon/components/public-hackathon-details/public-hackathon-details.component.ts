@@ -30,6 +30,7 @@ import { IHackathon } from 'apps/shared-models/hackathon.model';
 import { IContactInfo } from 'apps/shared-models/contact-info.model';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
 import * as moment from 'moment';
+import * as momentTimezone from 'moment-timezone';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { faPencil, faSackDollar, faCircleQuestion, faLink, faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { faFacebook, faLinkedin, faInstagram, faTwitter, faGithub } from '@fortawesome/free-brands-svg-icons';
@@ -49,6 +50,7 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
   discussionChat: IDiscussion;
   rounds: IRound[];
   moment = moment;
+  momentTimezone = momentTimezone;
   userTeamDetails: IHackathonTeam[];
   subscriptions: Subscription[] = [];
   EHackathonRegistrationStatus = EHackathonRegistrationStatus;

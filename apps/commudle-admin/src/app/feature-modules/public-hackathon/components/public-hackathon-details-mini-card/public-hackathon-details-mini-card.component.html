@@ -1,32 +1,23 @@
 <div class="mini-card">
   <!-- Top Bar: Status Badge + Name + Admin Button -->
-  <div class="hackathon-top-bar">
+  <div class="hackathon-top-bar" *ngIf="showName || showStatusBadge || showAdminBtn">
     <div class="hackathon-top-bar-left">
-      <h1 class="hackathon-name">{{ hackathon.name }}</h1>
-      <div class="hackathon-status-badge completed" *ngIf="hackathon?.status === EHackathonStatus?.COMPLETED">
-        Completed
-        <fa-icon [icon]="icons.faCircleCheck" class="completed-icon" title="Completed"></fa-icon>
-      </div>
-      <div class="hackathon-status-badge live" *ngIf="hackathon?.status === EHackathonStatus?.OPEN">
-        <span class="badge-dot active-dot"></span>
-        <span>Live</span>
-      </div>
+      <h1 class="hackathon-name" *ngIf="showName">{{ hackathon.name }}</h1>
+      <ng-container *ngIf="showStatusBadge">
+        <div class="hackathon-status-badge completed" *ngIf="hackathon?.status === EHackathonStatus?.COMPLETED">
+          Completed
+          <fa-icon [icon]="icons.faCircleCheck" class="completed-icon" title="Completed"></fa-icon>
+        </div>
+        <div class="hackathon-status-badge live" *ngIf="hackathon?.status === EHackathonStatus?.OPEN">
+          <span class="badge-dot active-dot"></span>
+          <span>Live</span>
+        </div>
+      </ng-container>
     </div>
-    <a
-      *ngIf="isOrganizer"
-      comButton
-      status="danger"
-      size="small"
-      shape="semi-round"
-      class="admin-panel-btn"
-      [routerLink]="['/admin', 'communities', community?.slug, 'hackathon-dashboard', hackathon?.slug]"
-    >
-      Go To Admin panel
-    </a>
   </div>
 
   <!-- Community Badge -->
-  <div class="hackathon-header-name-section">
+  <div class="hackathon-header-name-section" *ngIf="showCommunityBadge">
     <app-community-badge
       [community]="community"
       [size]="'small'"
@@ -35,7 +26,10 @@
   </div>
 
   <!-- Prize Pool Header -->
-  <div class="prize-header" *ngIf="totalPrizesByCurrency?.length > 0 && totalPrizesByCurrency[0].amount !== 0">
+  <div
+    class="prize-header"
+    *ngIf="showPrizeHeader && totalPrizesByCurrency?.length > 0 && totalPrizesByCurrency[0].amount !== 0"
+  >
     <div class="prize-left">
       <span class="prize-label">TOTAL PRIZE POOL</span>
       <span class="prize-amount"
@@ -48,13 +42,27 @@
     </div>
   </div>
 
-  <!-- Info Chips -->
-  <div class="info-chips">
-    <!-- Registration Status Chip -->
+  <!-- Info Chips + Countdown -->
+  <div class="info-chips" *ngIf="showCountdown || showLocation">
+    <div class="chip" *ngIf="hackathon.start_date && showLocation">
+      <fa-icon [icon]="icons.faCalendarDays"></fa-icon>
+      <span>{{ hackathon.start_date | date : 'd MMM' }}</span>
+    </div>
+    <div *ngIf="showLocation" class="chip">
+      <fa-icon [icon]="icons.faGlobe"></fa-icon>
+      <span>{{ hackathon.hackathon_location_type | titlecase }}</span>
+    </div>
+    <div *ngIf="showLocation && hackathon.prizes_count" class="chip">
+      <fa-icon [icon]="icons.faAward"></fa-icon>
+      <span>{{ hackathon.prizes_count }} Prizes</span>
+    </div>
     <div
       class="date-chip"
       *ngIf="
-        hackathon.application_start_date && hackathon.application_end_date && hackathon.status === EHackathonStatus.OPEN
+        hackathon.application_start_date &&
+        hackathon.application_end_date &&
+        hackathon.status === EHackathonStatus.OPEN &&
+        showCountdown
       "
       [ngClass]="{ 'chip-closed': hackathonStatus === 'Closed', 'chip-open': hackathonStatus !== 'Closed' }"
     >
@@ -114,23 +122,10 @@
         <span>Registrations closed</span>
       </span>
     </div>
-
-    <div class="chip" *ngIf="hackathon.start_date">
-      <fa-icon [icon]="icons.faCalendarDays"></fa-icon>
-      <span>{{ hackathon.start_date | date : 'd MMM' }}</span>
-    </div>
-    <div class="chip">
-      <fa-icon [icon]="icons.faGlobe"></fa-icon>
-      <span>{{ hackathon.hackathon_location_type | titlecase }}</span>
-    </div>
-    <div class="chip" *ngIf="hackathon.prizes_count">
-      <fa-icon [icon]="icons.faAward"></fa-icon>
-      <span>{{ hackathon.prizes_count }} Prizes</span>
-    </div>
   </div>
 
   <!-- Dates Row -->
-  <div class="dates-row">
+  <div class="dates-row" *ngIf="showDatesRow">
     <!-- Hackathon Dates -->
     <div class="section dates-section" *ngIf="hackathon.start_date && hackathon.end_date">
       <span class="section-label">Hackathon Dates</span>
@@ -193,39 +188,40 @@
       </div>
     </div>
   </div>
-  <div class="section-content" *ngIf="hackathon.timezone">
-    <!-- Participants -->
+
+  <!-- Participants -->
+  <div class="section-content" *ngIf="showInterestedMembers && hackathon.timezone">
     <div class="section" *ngIf="users?.length > 0 && totalUsers > 0">
       <div class="participants-row">
         <commudle-interested-members [users]="users" [totalCount]="totalUsers"></commudle-interested-members>
       </div>
     </div>
+  </div>
 
-    <!-- Apply Button -->
-    <div
-      class="apply-section"
-      *ngIf="hrgId && hackathonStatus === 'Outgoing' && hackathon.status === EHackathonStatus.OPEN"
+  <!-- Apply Button -->
+  <div
+    class="apply-section"
+    *ngIf="showApplySection && hrgId && hackathonStatus === 'Outgoing' && hackathon.status === EHackathonStatus.OPEN"
+  >
+    <button
+      *ngIf="userTeamDetails?.length === 0"
+      nbButton
+      status="primary"
+      fullWidth
+      shape="semi-round"
+      [routerLink]="['/communities', community?.slug, 'hackathons', hackathon?.slug, 'fill-form', hrgId]"
     >
-      <button
-        *ngIf="userTeamDetails?.length === 0"
-        nbButton
-        status="primary"
-        fullWidth
-        shape="semi-round"
-        [routerLink]="['/communities', community?.slug, 'hackathons', hackathon?.slug, 'fill-form', hrgId]"
-      >
-        Apply Now
-      </button>
-      <button
-        *ngIf="!currentUser"
-        nbButton
-        status="primary"
-        fullWidth
-        shape="semi-round"
-        [routerLink]="['/communities', community?.slug, 'hackathons', hackathon?.slug, 'fill-form', hrgId]"
-      >
-        Login To Apply
-      </button>
-    </div>
+      Apply Now
+    </button>
+    <button
+      *ngIf="!currentUser"
+      nbButton
+      status="primary"
+      fullWidth
+      shape="semi-round"
+      [routerLink]="['/communities', community?.slug, 'hackathons', hackathon?.slug, 'fill-form', hrgId]"
+    >
+      Login To Apply
+    </button>
   </div>
 </div>
