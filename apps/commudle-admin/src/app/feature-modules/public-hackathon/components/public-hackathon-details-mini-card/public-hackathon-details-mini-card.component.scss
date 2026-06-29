@@ -2,7 +2,15 @@
   @apply com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-overflow-hidden com-bg-white;
 
   .hackathon-top-bar {
-    @apply com-flex com-items-center com-justify-between com-px-3 com-pt-3;
+    @apply com-flex com-items-center com-justify-between com-px-3 com-pt-3 com-gap-2;
+
+    .hackathon-top-bar-left {
+      @apply com-flex com-justify-between com-w-full com-gap-2 com-flex-wrap com-min-w-0;
+
+      .hackathon-name {
+        @apply com-text-Yankees-Blue com-text-xl md:com-text-2xl com-font-semibold com-m-0;
+      }
+    }
 
     .hackathon-status-badge {
       @apply com-inline-flex com-items-center com-gap-1.5 com-p-6px com-rounded-full com-text-xs com-font-semibold;
@@ -32,11 +40,7 @@
   }
 
   .hackathon-header-name-section {
-    @apply com-px-3 com-pt-3 com-pb-2;
-
-    .hackathon-name {
-      @apply com-text-Yankees-Blue com-text-xl md:com-text-2xl com-font-semibold com-m-0 com-mb-1;
-    }
+    @apply com-px-3 com-pt-1 com-pb-2;
 
     .hackathon-community-badge {
       @apply com-block;
@@ -100,7 +104,7 @@
               background: linear-gradient(145deg, #1e40af, #3b82f6);
 
               .countdown-value {
-                @apply com-text-xl com-font-medium com-text-white com-leading-none;
+                @apply com-text-xl com-font-medium com-text-tWhite com-leading-none;
                 font-variant-numeric: tabular-nums;
               }
 

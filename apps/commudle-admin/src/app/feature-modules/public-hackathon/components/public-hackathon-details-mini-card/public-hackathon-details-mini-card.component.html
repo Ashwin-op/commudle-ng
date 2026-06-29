@@ -1,13 +1,16 @@
 <div class="mini-card">
-  <!-- Top Bar: Status Badge + Admin Button -->
+  <!-- Top Bar: Status Badge + Name + Admin Button -->
   <div class="hackathon-top-bar">
-    <div class="hackathon-status-badge completed" *ngIf="hackathon?.status === EHackathonStatus?.COMPLETED">
-      Completed
-      <fa-icon [icon]="icons.faCircleCheck" class="completed-icon" title="Completed"></fa-icon>
-    </div>
-    <div class="hackathon-status-badge live" *ngIf="hackathon?.status === EHackathonStatus?.OPEN">
-      <span class="badge-dot active-dot"></span>
-      <span>Live</span>
+    <div class="hackathon-top-bar-left">
+      <h1 class="hackathon-name">{{ hackathon.name }}</h1>
+      <div class="hackathon-status-badge completed" *ngIf="hackathon?.status === EHackathonStatus?.COMPLETED">
+        Completed
+        <fa-icon [icon]="icons.faCircleCheck" class="completed-icon" title="Completed"></fa-icon>
+      </div>
+      <div class="hackathon-status-badge live" *ngIf="hackathon?.status === EHackathonStatus?.OPEN">
+        <span class="badge-dot active-dot"></span>
+        <span>Live</span>
+      </div>
     </div>
     <a
       *ngIf="isOrganizer"
@@ -22,9 +25,8 @@
     </a>
   </div>
 
-  <!-- Hackathon Name + Community Badge -->
+  <!-- Community Badge -->
   <div class="hackathon-header-name-section">
-    <h1 class="hackathon-name">{{ hackathon.name }}</h1>
     <app-community-badge
       [community]="community"
       [size]="'small'"
@@ -149,7 +151,12 @@
             momentTimezone.tz(moment.utc(hackathon.end_date), hackathon.timezone).format('DD MMM YYYY')
           }}</span>
           <span class="date-time"
-            >{{ momentTimezone.tz(moment.utc(hackathon.end_date), hackathon.timezone).format('h:mm A') }}
+            >{{
+              momentTimezone.tz(moment.utc(hackathon.end_date), hackathon.timezone).format(
+                'h:mm
+            A'
+              )
+            }}
             {{ momentTimezone.tz(hackathon.timezone).format('z') }}</span
           >
         </div>
