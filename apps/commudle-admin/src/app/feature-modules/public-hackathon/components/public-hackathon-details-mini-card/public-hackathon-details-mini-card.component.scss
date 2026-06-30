@@ -2,7 +2,7 @@
   @apply com-bg-white com-overflow-hidden;
 
   .hackathon-top-section {
-    @apply com-px-4 com-pt-3 com-pb-2;
+    @apply com-px-4 com-pt-8 com-pb-2;
   }
 
   .hackathon-top-bar {
@@ -12,7 +12,7 @@
       @apply com-flex com-justify-between com-w-full com-gap-2 com-flex-wrap com-min-w-0;
 
       .hackathon-name {
-        @apply com-text-Yankees-Blue com-text-xl md:com-text-2xl com-font-semibold com-m-0;
+        @apply com-text-Yankees-Blue com-text-xl md:com-text-4xl com-font-semibold com-m-0;
       }
     }
 
@@ -44,7 +44,7 @@
   }
 
   .hackathon-header-name-section {
-    @apply com-pt-1;
+    @apply com-pt-2;
 
     .hackathon-community-badge {
       @apply com-block;
@@ -154,7 +154,7 @@
   }
 
   .dates-row {
-    @apply com-flex com-flex-col com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    @apply com-flex com-flex-col;
 
     .dates-section {
       @apply com-flex-1 com-border-b-0;

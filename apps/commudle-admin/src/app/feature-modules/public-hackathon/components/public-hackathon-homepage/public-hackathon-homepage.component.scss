@@ -150,10 +150,10 @@
 }
 
 .hackathon-header {
-  @apply com-flex com-flex-col md:com-flex-row com-items-center;
+  @apply com-flex com-flex-col md:com-flex-row com-items-center com-border com-border-solid com-border-Bright-Gray com-bg-white;
 
   .hackathon-header-text {
-    @apply com-flex-[7] com-h-full com-w-full com-min-w-0 com-border com-border-solid com-border-Bright-Gray com-bg-white;
+    @apply com-flex-[7] com-h-full com-w-full com-min-w-0;
 
     commudle-public-hackathon-details-mini-card {
       @apply com-block;
@@ -161,20 +161,10 @@
   }
 
   .hackathon-header-banner {
-    @apply com-flex-[3] com-min-w-0 com-hidden md:com-flex com-overflow-hidden com-border com-border-solid com-border-Bright-Gray;
+    @apply com-flex-[3] com-min-w-0 com-hidden md:com-flex com-overflow-hidden com-p-3;
 
     commudle-banner-image {
       @apply com-block com-w-full com-h-full;
-
-      ::ng-deep {
-        .banner-container {
-          @apply com-h-full;
-        }
-
-        img {
-          @apply com-w-full com-h-full com-object-cover;
-        }
-      }
     }
   }
 }
