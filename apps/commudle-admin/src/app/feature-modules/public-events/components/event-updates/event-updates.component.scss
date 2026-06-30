@@ -20,35 +20,48 @@ com-card {
   }
 
   com-card-body {
-    @apply com-flex com-flex-col com-gap-4;
+    @apply com-flex com-flex-col com-gap-0 com-p-4;
 
     .event-update {
-      .details {
-        @apply com-flex com-items-baseline com-m-0;
+      @apply com-relative com-p-3 com-ml-6 com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-mb-4 last:com-mb-0;
+      @apply com-transition-shadow com-duration-200 hover:com-shadow-md;
 
-        nb-icon {
-          @apply com-mr-2;
-        }
+      &::before {
+        content: '';
+        @apply com-absolute;
+        left: -26px;
+        top: 0px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 2px solid #3b82f6;
+        background: white;
+        box-shadow: inset 0 0 0 3px white, inset 0 0 0 5px #3b82f6;
       }
 
-      .image-section {
-        @apply com-flex com-gap-3 com-items-center com-mb-2 com-flex-wrap;
+      .update-content {
+        @apply com-mb-2;
 
-        .images {
-          @apply com-w-32 com-h-32 com-aspect-1 com-border com-border-solid com-border-Bright-Gray com-rounded com-cursor-pointer;
+        .image-section {
+          @apply com-flex com-gap-3 com-items-center com-mt-3 com-flex-wrap;
 
-          img {
-            @apply com-mx-auto com-my-0 com-h-full com-w-full com-object-contain com-rounded;
+          .images {
+            @apply com-w-28 com-h-28 com-border com-border-solid com-border-Bright-Gray com-rounded-lg com-cursor-pointer com-overflow-hidden;
+            @apply com-transition-all com-duration-200 hover:com-shadow-md;
+
+            img {
+              @apply com-mx-auto com-my-0 com-h-full com-w-full com-object-cover com-rounded-lg;
+            }
           }
         }
       }
 
-      .time {
-        @apply com-m-0 com-ml-7 com-text-xs com-font-light com-text-Auro-Metal-Saurus;
-      }
+      .update-footer {
+        @apply com-flex com-items-center com-justify-between com-pt-2 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
 
-      .votes {
-        @apply com-ml-7 com-mt-2;
+        .time {
+          @apply com-m-0 com-text-xs com-font-normal com-text-Auro-Metal-Saurus;
+        }
       }
     }
   }

@@ -34,11 +34,11 @@
     }
 
     .home-event-menu {
-      @apply com-sticky com-z-10 com-m-0 com-mb-4 com-rounded-tl-none com-rounded-tr-none;
-      @apply com-p-0 com-bg-white com-border com-border-solid com-border-Bright-Gray com-shadow-none;
-      top: var(--mobile-navbar-offset, 52px);
+      @apply com-sticky com-z-20 com-m-0 com-mb-4 com-rounded-b-10;
+      @apply com-p-0 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+      top: var(--mobile-navbar-offset, 68px);
 
-      &.scrolled {
+      &.sticky-active {
         @apply com-shadow-lg;
         background: linear-gradient(to bottom, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.55));
         @apply com-bg-gradient-to-b dark:com-from-[#12121299] dark:com-to-[#12121266];
@@ -51,31 +51,35 @@
 
         nb-actions {
           @apply com-overflow-x-auto com-scrollbar-hide com-items-center com-ml-2;
+        }
 
-          nb-action {
-            @apply com-flex-col com-p-0;
-            height: auto !important;
+        nb-action {
+          @apply com-flex-col com-p-0 com-flex-shrink-0;
+          height: auto !important;
+        }
 
-            span {
-              @apply com-flex com-items-center com-gap-2 com-text-gunmetal com-text-sm com-font-medium com-leading-4 com-h-fit com-m-0 com-px-2 md:com-px-4 com-py-3 com-cursor-pointer com-whitespace-nowrap;
-              @apply com-border-0 com-border-b-3 com-border-solid com-border-transparent;
+        .item {
+          @apply com-flex com-items-center com-gap-2 com-text-gunmetal com-text-sm com-font-medium com-leading-4 com-h-fit com-m-0 com-px-2 md:com-px-4 com-py-3 com-cursor-pointer com-no-underline com-whitespace-nowrap;
+          @apply com-border-0 com-border-b-3 com-border-solid com-border-transparent;
 
-              a {
-                @apply com-no-underline com-text-inherit;
-              }
-            }
+          nb-icon {
+            @apply com-text-lg com-leading-none com-text-gunmetal com-opacity-80 com-hidden;
+          }
 
-            nb-icon {
-              @apply com-text-lg com-leading-none com-text-gunmetal com-opacity-80 com-hidden;
-            }
+          span {
+            @apply com-text-gunmetal com-self-center com-inline;
+          }
+        }
 
-            &.active span {
-              @apply com-border-primary-500 com-text-primary-500;
+        nb-action.active .item {
+          @apply com-border-primary-500;
 
-              a {
-                @apply com-text-primary-500;
-              }
-            }
+          nb-icon {
+            @apply com-text-primary-500 com-opacity-100;
+          }
+
+          span {
+            @apply com-text-primary-500;
           }
         }
       }
@@ -202,8 +206,7 @@
     }
 
     .multi-date-value {
-      @apply com-m-0 com-mt-1 com-text-sm com-font-bold;
-      color: #3d4f6f;
+      @apply com-m-0 com-mt-1 com-text-sm com-font-bold com-text-Yankees-Blue;
     }
 
     .multi-date-time {
@@ -227,7 +230,7 @@
   }
 
   .event-form-card {
-    @apply com-m-0 com-mt-4 md:com-rounded-[10px] com-rounded-none;
+    @apply com-m-0 com-mb-4 md:com-rounded-[10px] com-rounded-none;
 
     com-card-header {
       @apply com-flex com-items-center com-justify-between com-py-3 com-px-4 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
@@ -248,7 +251,7 @@
     }
 
     com-card-body {
-      @apply com-px-6 com-py-4 com-bg-gray-50 com-rounded-10;
+      @apply com-p-4 com-bg-gray-50 com-rounded-10;
     }
   }
 }

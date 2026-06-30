@@ -58,7 +58,7 @@ export class HomeEventComponent implements OnInit, OnDestroy, AfterViewInit {
 
   isOrganizer = false;
   isLoading = true;
-  isMenuScrolled = false;
+  isMenuSticky = false;
   faEllipsisVertical = faEllipsisVertical;
   faCalendar = faCalendar;
   faClockFour = faClockFour;
@@ -119,18 +119,29 @@ export class HomeEventComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.isBrowser && this.stickySentinel) {
-      this.observer = new IntersectionObserver(
-        ([entry]) => {
-          this.isMenuScrolled = !entry.isIntersecting;
-        },
-        {
-          root: null,
-          threshold: 0,
-        },
-      );
-      this.observer.observe(this.stickySentinel.nativeElement);
+    this.initStickyObserver();
+  }
+
+  private setupStickyObserver(element: HTMLElement): void {
+    this.observer?.disconnect();
+    if (!this.isBrowser) {
+      return;
     }
+    this.observer = new IntersectionObserver(
+      ([entry]) => {
+        this.isMenuSticky = !entry.isIntersecting;
+      },
+      { root: null, threshold: 0 },
+    );
+    this.observer.observe(element);
+  }
+
+  private initStickyObserver(): void {
+    setTimeout(() => {
+      if (this.stickySentinel?.nativeElement) {
+        this.setupStickyObserver(this.stickySentinel.nativeElement);
+      }
+    });
   }
 
   scroll(element: ElementRef<HTMLDivElement>, section = '') {
@@ -186,6 +197,7 @@ export class HomeEventComponent implements OnInit, OnDestroy, AfterViewInit {
         removeHtmlTags(this.event.description).substring(0, 200),
         this.event.header_image_path ? this.event.header_image_path : this.community.logo_image_path.url,
       );
+      this.initStickyObserver();
     });
   }
 
