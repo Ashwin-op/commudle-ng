@@ -165,54 +165,97 @@
 }
 
 .event-date-time-container {
-  @apply com-p-5;
+  @apply com-p-4;
 }
 
-.event-chips {
-  @apply com-flex com-flex-wrap com-gap-2 com-mb-4;
+.countdown-timer {
+  @apply com-mb-4;
 
-  .event-chip {
+  .countdown-units {
+    @apply com-flex com-items-start com-gap-2;
+
+    .countdown-unit {
+      @apply com-flex com-flex-col com-items-center com-gap-1;
+
+      .countdown-value-wrap {
+        @apply com-relative com-overflow-hidden com-flex com-items-center com-justify-center;
+        width: 42px;
+        height: 50px;
+        border-radius: 8px;
+        background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 49.9%, #2563eb 50%, #3b82f6 100%);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+        &::after {
+          content: '';
+          @apply com-absolute com-left-0 com-right-0;
+          top: 50%;
+          height: 1px;
+          background: rgba(0, 0, 0, 0.3);
+          z-index: 2;
+        }
+
+        .countdown-value {
+          @apply com-text-xl com-font-bold com-text-tWhite com-leading-none com-relative;
+          font-variant-numeric: tabular-nums;
+          z-index: 1;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+      }
+
+      .countdown-suffix {
+        @apply com-text-gray-400 com-font-medium com-uppercase com-tracking-wide;
+        font-size: 9px;
+      }
+    }
+  }
+}
+
+.info-chips {
+  @apply com-flex com-flex-wrap com-gap-x-3 com-gap-y-2 com-mb-4;
+
+  .chip {
     @apply com-inline-flex com-items-center com-gap-1.5 com-px-3 com-py-1.5 com-rounded-full com-text-sm com-font-medium com-text-Yankees-Blue;
     @apply com-border com-border-solid com-border-Bright-Gray com-bg-white;
 
-    .event-chip-icon {
+    .chip-icon {
       @apply com-text-primary-500 com-text-xs;
     }
   }
 }
 
-.event-dates-heading {
-  @apply com-m-0 com-mb-3 com-text-xs com-uppercase com-tracking-wider com-text-gray-500;
-  @apply com-pt-4 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+.dates-section {
+  @apply com-pt-3 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+
+  .section-label {
+    @apply com-text-xs com-font-medium com-text-gray-400 com-mb-2 com-block;
+  }
 }
 
-.multi-date-container {
-  @apply com-grid com-grid-cols-2 com-gap-3 com-pb-3;
+.date-grid {
+  @apply com-grid com-grid-cols-2 com-gap-2;
 
-  .multi-date-card {
-    @apply com-p-2 com-rounded-lg;
+  .date-item {
+    @apply com-flex com-flex-col com-p-2 com-rounded-lg com-bg-gray-50;
 
-    &.multi-date-start {
-      @apply com-bg-gray-50;
+    .date-prefix {
+      @apply com-text-xs com-text-gray-400 com-font-medium;
     }
 
-    &.multi-date-end {
-      @apply com-bg-gray-50;
+    .date-value {
+      @apply com-text-sm com-font-semibold com-text-Yankees-Blue;
     }
 
-    .multi-date-label {
-      @apply com-m-0 com-text-xs com-font-medium;
-      color: #8b9dc3;
+    .date-time {
+      @apply com-text-xs com-font-medium com-text-gray-400;
     }
+  }
+}
 
-    .multi-date-value {
-      @apply com-m-0 com-mt-1 com-text-sm com-font-bold com-text-Yankees-Blue;
-    }
+.interested-section {
+  @apply com-pt-3 com-mt-3 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
 
-    .multi-date-time {
-      @apply com-m-0 com-mt-0.5 com-text-xs com-font-normal;
-      color: #8b9dc3;
-    }
+  .section-label {
+    @apply com-text-xs com-font-medium com-text-gray-400 com-mb-2 com-block;
   }
 }
 

@@ -232,49 +232,98 @@
               <nb-icon icon="edit-outline"></nb-icon>
             </a>
           </div>
-          <com-card *ngIf="event.start_time && event.end_time" class="organizer-panel organizer-panel-gradient">
+          <com-card *ngIf="event.start_time && event.end_time" class="organizer-panel">
             <com-card-body class="event-date-time-container">
-              <div class="event-chips">
-                <span class="event-chip">
-                  <fa-icon [icon]="faCalendar" class="event-chip-icon"></fa-icon>
+              <!-- Countdown Timer -->
+              <div class="countdown-timer" *ngIf="event.event_status?.name !== 'completed'">
+                <div class="countdown-units">
+                  <div class="countdown-unit">
+                    <span class="countdown-value-wrap">
+                      <span class="countdown-value">{{
+                        countdownDays < 10 ? '0' + countdownDays : countdownDays
+                      }}</span>
+                    </span>
+                    <span class="countdown-suffix">Days</span>
+                  </div>
+                  <div class="countdown-unit">
+                    <span class="countdown-value-wrap">
+                      <span class="countdown-value">{{
+                        countdownHours < 10 ? '0' + countdownHours : countdownHours
+                      }}</span>
+                    </span>
+                    <span class="countdown-suffix">Hours</span>
+                  </div>
+                  <div class="countdown-unit">
+                    <span class="countdown-value-wrap">
+                      <span class="countdown-value">{{
+                        countdownMinutes < 10 ? '0' + countdownMinutes : countdownMinutes
+                      }}</span>
+                    </span>
+                    <span class="countdown-suffix">Minutes</span>
+                  </div>
+                  <div class="countdown-unit">
+                    <span class="countdown-value-wrap">
+                      <span class="countdown-value">{{
+                        countdownSeconds < 10 ? '0' + countdownSeconds : countdownSeconds
+                      }}</span>
+                    </span>
+                    <span class="countdown-suffix">Seconds</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Chips -->
+              <div class="info-chips">
+                <span class="chip">
+                  <fa-icon [icon]="faCalendar" class="chip-icon"></fa-icon>
                   {{ momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('Do MMM') }}
                 </span>
-                <span *ngIf="event.event_type" class="event-chip">
-                  <fa-icon [icon]="faGlobe" class="event-chip-icon"></fa-icon>
+                <span *ngIf="event.event_type" class="chip">
+                  <fa-icon [icon]="faGlobe" class="chip-icon"></fa-icon>
                   {{ event.event_type }}
                 </span>
               </div>
-              <p class="event-dates-heading">Event Dates</p>
-              <div class="multi-date-container">
-                <div class="multi-date-card multi-date-start">
-                  <p class="multi-date-label">Starts</p>
-                  <p class="multi-date-value">
-                    {{ momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('Do MMM YYYY') }}
-                  </p>
-                  <p class="multi-date-time">
-                    {{ momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('h:mm A') }}
-                    {{ momentTimezone.tz(event.timezone).format('z') }}
-                  </p>
-                </div>
-                <div class="multi-date-card multi-date-end">
-                  <p class="multi-date-label">Ends</p>
-                  <p class="multi-date-value">
-                    {{ momentTimezone.tz(moment.utc(event.end_time), event.timezone).format('Do MMM YYYY') }}
-                  </p>
-                  <p class="multi-date-time">
-                    {{ momentTimezone.tz(moment.utc(event.end_time), event.timezone).format('h:mm A') }}
-                    {{ momentTimezone.tz(event.timezone).format('z') }}
-                  </p>
+
+              <!-- Event Dates -->
+              <div class="dates-section">
+                <span class="section-label">Event Dates</span>
+                <div class="date-grid">
+                  <div class="date-item">
+                    <span class="date-prefix">Starts</span>
+                    <span class="date-value">{{
+                      momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('DD MMM YYYY')
+                    }}</span>
+                    <span class="date-time"
+                      >{{ momentTimezone.tz(moment.utc(event.start_time), event.timezone).format('h:mm A') }}
+                      {{ momentTimezone.tz(event.timezone).format('z') }}</span
+                    >
+                  </div>
+                  <div class="date-item">
+                    <span class="date-prefix">Ends</span>
+                    <span class="date-value">{{
+                      momentTimezone.tz(moment.utc(event.end_time), event.timezone).format(
+                        'DD
+                      MMM YYYY'
+                      )
+                    }}</span>
+                    <span class="date-time"
+                      >{{ momentTimezone.tz(moment.utc(event.end_time), event.timezone).format('h:mm A') }}
+                      {{ momentTimezone.tz(event.timezone).format('z') }}</span
+                    >
+                  </div>
                 </div>
               </div>
-              <div *ngIf="interestedUsersCount" class="attending-members">
-                <p class="event-dates-heading">Interested Members</p>
+
+              <!-- Interested Members -->
+              <div *ngIf="interestedUsersCount" class="interested-section">
+                <span class="section-label">Interested Members!</span>
                 <commudle-interested-members
                   [users]="interestedUsers"
                   [totalCount]="interestedUsersCount"
                   [showHeading]="false"
                 ></commudle-interested-members>
               </div>
+
               <div *ngIf="moment() >= moment(event.start_time)" class="view-attended-members-button">
                 <button
                   [routerLink]="['/communities', community.slug, 'events', event.slug, 'attended-members']"

@@ -58,6 +58,11 @@ export class HomeEventComponent implements OnInit, OnDestroy, AfterViewInit {
 
   isOrganizer = false;
   isLoading = true;
+  countdownDays = 0;
+  countdownHours = 0;
+  countdownMinutes = 0;
+  countdownSeconds = 0;
+  private countdownInterval: any;
   isMenuSticky = false;
   faEllipsisVertical = faEllipsisVertical;
   faCalendar = faCalendar;
@@ -116,6 +121,9 @@ export class HomeEventComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
     this.observer?.disconnect();
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
   }
 
   ngAfterViewInit() {
@@ -157,6 +165,9 @@ export class HomeEventComponent implements OnInit, OnDestroy, AfterViewInit {
       this.fetchOpenForms();
       this.fetchLiveBlogUpdates();
       this.isLoading = false;
+      if (this.isBrowser) {
+        this.startCountdown();
+      }
       this.getCommunity(event.kommunity_id);
     });
   }
@@ -343,6 +354,33 @@ export class HomeEventComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     this.seoService.setSchema(schemaObject);
+  }
+
+  startCountdown() {
+    if (!this.event?.start_time) return;
+    const endTime = new Date(this.event.start_time).getTime();
+
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const diff = endTime - now;
+
+      if (diff <= 0) {
+        this.countdownDays = 0;
+        this.countdownHours = 0;
+        this.countdownMinutes = 0;
+        this.countdownSeconds = 0;
+        clearInterval(this.countdownInterval);
+        return;
+      }
+
+      this.countdownDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+      this.countdownHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      this.countdownMinutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      this.countdownSeconds = Math.floor((diff % (1000 * 60)) / 1000);
+    };
+
+    updateCountdown();
+    this.countdownInterval = setInterval(updateCountdown, 1000);
   }
 
   isOrganizerCheck(community) {
