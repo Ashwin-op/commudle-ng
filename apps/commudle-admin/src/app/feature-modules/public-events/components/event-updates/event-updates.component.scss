@@ -23,21 +23,8 @@ com-card {
     @apply com-flex com-flex-col com-gap-0 com-p-4;
 
     .event-update {
-      @apply com-relative com-p-3 com-ml-6 com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-mb-4 last:com-mb-0;
+      @apply com-relative com-p-3 com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-mb-4 last:com-mb-0;
       @apply com-transition-colors com-duration-200 hover:com-border-primary-500;
-
-      &::before {
-        content: '';
-        @apply com-absolute;
-        left: -26px;
-        top: 0px;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        border: 2px solid #3b82f6;
-        background: white;
-        box-shadow: inset 0 0 0 3px white, inset 0 0 0 5px #3b82f6;
-      }
 
       .update-content {
         @apply com-mb-6px;
