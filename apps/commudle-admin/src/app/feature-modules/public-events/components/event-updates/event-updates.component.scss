@@ -24,7 +24,7 @@ com-card {
 
     .event-update {
       @apply com-relative com-p-3 com-ml-6 com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-mb-4 last:com-mb-0;
-      @apply com-transition-shadow com-duration-200 hover:com-shadow-md;
+      @apply com-transition-colors com-duration-200 hover:com-border-primary-500;
 
       &::before {
         content: '';

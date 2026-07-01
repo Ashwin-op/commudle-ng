@@ -3,7 +3,7 @@
 }
 
 .bottom-sheet {
-  @apply com-bg-white com-rounded-t-xl com-overflow-y-auto com-max-h-[90dvh] com-w-full;
+  @apply com-bg-white com-rounded-t-xl com-overflow-y-auto com-max-h-[90dvh] com-min-h-[40dvh] com-w-full;
   animation: slideUp 0.3s ease-out;
 }
 

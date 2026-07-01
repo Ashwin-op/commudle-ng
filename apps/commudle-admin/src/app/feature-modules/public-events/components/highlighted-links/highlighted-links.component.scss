@@ -14,6 +14,10 @@
   .form-link {
     @apply com-m-0 com-mb-2 com-h-max md:com-border com-border-0 com-border-b com-border-solid com-border-Bright-Gray md:com-rounded-10 com-rounded-none com-shadow-sm com-shadow-Bright-Gray;
 
+    .form-link-anchor {
+      @apply com-no-underline;
+    }
+
     com-card-body {
       @apply com-flex com-items-center com-justify-between com-w-full com-p-4 com-text-start com-text-sm com-font-medium com-text-Yankees-Blue com-gap-5;
 

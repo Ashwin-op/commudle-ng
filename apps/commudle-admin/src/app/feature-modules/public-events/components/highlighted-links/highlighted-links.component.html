@@ -1,65 +1,65 @@
 <div *ngIf="openForms.length > 0">
   <div class="open-forms">
-    <com-card
-      *ngFor="let form of openForms"
-      class="form-link"
-      [routerLink]="['/fill-form', form.data_form_entity_id]"
-      nbButton
-      nbTooltip="{{ form.name }}"
-      size="small"
-    >
-      <com-card-body class="highlightes-body">
-        <div class="form-name-container">
-          <fa-icon
-            *ngIf="!form.already_filled && form.registration_type.name === ERegistationTypes.ATTENDEE"
-            [icon]="faUser"
-            class="form-icon"
-          ></fa-icon>
-          <fa-icon
-            *ngIf="!form.already_filled && form.registration_type.name === ERegistationTypes.SPEAKER"
-            [icon]="faMicrophone"
-            class="form-icon"
-          ></fa-icon>
-          <fa-icon
-            *ngIf="!form.already_filled && form.registration_type.name === ERegistationTypes.FEEDBACK"
-            [icon]="faCommentDots"
-            class="form-icon"
-          ></fa-icon>
-          <fa-icon
-            *ngIf="!form.already_filled && form.registration_type.name === ERegistationTypes.COMMUNICATION"
-            [icon]="faComments"
-            class="form-icon"
-          ></fa-icon>
-          <fa-icon *ngIf="form.already_filled" [icon]="faPencil" class="form-icon"></fa-icon>
-          <span class="form-name"> {{ form.name }}</span>
-          <span *ngIf="form.is_paid" class="form-badge paid-form">PAID</span>
-          <span
-            *ngIf="
-              !form.is_paid &&
-              (form.registration_type.name === ERegistationTypes.ATTENDEE ||
-                form.registration_type.name === ERegistationTypes.SPEAKER)
-            "
-            class="form-badge free-form"
-            >FREE</span
-          >
-        </div>
-        <div class="register-now-container">
-          @if (form.is_paid && form.paid_ticket_setting) {
-          <span class="price">{{
-            form.paid_ticket_setting.price / 100 | currency : form.paid_ticket_setting.currency
-          }}</span>
-          }
-          <span *appBreakpoints="'>md'" class="register-now-text">{{
-            form.registration_type.name === ERegistationTypes.FEEDBACK
-              ? 'Give Feedback'
-              : form.registration_type.name === ERegistationTypes.COMMUNICATION
-              ? 'Fill Form'
-              : 'Register Now'
-          }}</span>
-          &nbsp;
-          <fa-icon [icon]="faArrowRight"></fa-icon>
-        </div>
-      </com-card-body>
+    <com-card *ngFor="let form of openForms" class="form-link">
+      <a
+        [routerLink]="['/fill-form', form.data_form_entity_id]"
+        target="_blank"
+        class="form-link-anchor"
+        nbTooltip="{{ form.name }}"
+      >
+        <com-card-body class="highlightes-body">
+          <div class="form-name-container">
+            <fa-icon
+              *ngIf="!form.already_filled && form.registration_type.name === ERegistationTypes.ATTENDEE"
+              [icon]="faUser"
+              class="form-icon"
+            ></fa-icon>
+            <fa-icon
+              *ngIf="!form.already_filled && form.registration_type.name === ERegistationTypes.SPEAKER"
+              [icon]="faMicrophone"
+              class="form-icon"
+            ></fa-icon>
+            <fa-icon
+              *ngIf="!form.already_filled && form.registration_type.name === ERegistationTypes.FEEDBACK"
+              [icon]="faCommentDots"
+              class="form-icon"
+            ></fa-icon>
+            <fa-icon
+              *ngIf="!form.already_filled && form.registration_type.name === ERegistationTypes.COMMUNICATION"
+              [icon]="faComments"
+              class="form-icon"
+            ></fa-icon>
+            <fa-icon *ngIf="form.already_filled" [icon]="faPencil" class="form-icon"></fa-icon>
+            <span class="form-name"> {{ form.name }}</span>
+            <span *ngIf="form.is_paid" class="form-badge paid-form">PAID</span>
+            <span
+              *ngIf="
+                !form.is_paid &&
+                (form.registration_type.name === ERegistationTypes.ATTENDEE ||
+                  form.registration_type.name === ERegistationTypes.SPEAKER)
+              "
+              class="form-badge free-form"
+              >FREE</span
+            >
+          </div>
+          <div class="register-now-container">
+            @if (form.is_paid && form.paid_ticket_setting) {
+            <span class="price">{{
+              form.paid_ticket_setting.price / 100 | currency : form.paid_ticket_setting.currency
+            }}</span>
+            }
+            <span *appBreakpoints="'>md'" class="register-now-text">{{
+              form.registration_type.name === ERegistationTypes.FEEDBACK
+                ? 'Give Feedback'
+                : form.registration_type.name === ERegistationTypes.COMMUNICATION
+                ? 'Fill Form'
+                : 'Register Now'
+            }}</span>
+            &nbsp;
+            <fa-icon [icon]="faArrowRight"></fa-icon>
+          </div>
+        </com-card-body>
+      </a>
     </com-card>
   </div>
 </div>
