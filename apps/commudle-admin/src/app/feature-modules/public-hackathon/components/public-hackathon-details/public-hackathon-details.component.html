@@ -143,8 +143,8 @@
   <div class="right-column">
     <div class="hackathon-details">
       <commudle-public-hackathon-details-mini-card [hackathon]="hackathon" [hrgId]="hrgId" [community]="community"
-        [showName]="false" [showStatusBadge]="false" [showCommunityBadge]="false" [showPrizeHeader]="false"
-        [showLocation]="false"></commudle-public-hackathon-details-mini-card>
+        [showName]="false" [showStatusBadge]="false" [showCommunityBadge]="false" [showPrizeHeader]="true"
+        [showLocation]="false" [showApplySection]="false"></commudle-public-hackathon-details-mini-card>
     </div>
 
     <com-card *ngIf="rounds && rounds.length > 0">
@@ -180,7 +180,7 @@
       </com-card-body>
     </com-card>
 
-    <button *ngIf="isOrganizer" comButton status="danger" fullWidth class="organizer-btn" [shape]="'semi-round'"
+    <button *ngIf="isOrganizer" comButton status="danger" class="organizer-btn" [shape]="'semi-round'"
       [routerLink]="['/admin', 'communities', community.slug, 'hackathon-dashboard', hackathon.slug]">
       <fa-icon [icon]="icons.faPencil"></fa-icon>
       <span>Go To Admin panel</span>

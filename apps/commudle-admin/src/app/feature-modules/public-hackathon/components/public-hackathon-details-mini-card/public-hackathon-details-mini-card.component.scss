@@ -1,5 +1,5 @@
 .mini-card {
-  @apply com-bg-white com-overflow-hidden;
+  @apply com-bg-white com-overflow-hidden com-pb-3 com-rounded-lg;
 
   .hackathon-top-section {
     @apply com-px-4 com-pt-8 com-pb-2;
@@ -52,7 +52,7 @@
   }
 
   .prize-header {
-    @apply com-flex com-flex-row com-items-center com-justify-between com-py-4 com-px-5 com-mx-4 com-rounded-lg;
+    @apply com-flex com-flex-row com-items-center com-justify-between com-pt-3 com-pb-2 com-px-5 com-rounded-t-lg;
     background: linear-gradient(145deg, #1e40af, #3b82f6);
 
     .prize-left {
@@ -77,7 +77,7 @@
   }
 
   .info-chips {
-    @apply com-flex com-flex-wrap com-gap-x-3 com-gap-y-6 com-px-4 com-py-2;
+    @apply com-flex com-flex-wrap com-gap-x-3 com-gap-y-2 com-px-4 com-pt-3 com-pb-0;
 
     .date-chip {
       @apply com-w-full com-rounded-full com-p-0 com-text-sm com-font-medium;
@@ -150,6 +150,23 @@
       fa-icon {
         @apply com-text-xs com-text-blue-500;
       }
+
+      &.completed-chip {
+        @apply com-bg-gray-100 com-text-gray-600;
+
+        fa-icon {
+          @apply com-text-gray-500;
+        }
+      }
+
+      &.live-chip {
+        @apply com-bg-green-50 com-text-green-500 com-border com-border-solid com-border-green-200;
+
+        .badge-dot {
+          @apply com-w-2 com-h-2 com-rounded-full com-bg-green-500;
+          animation: pulse-dot 2s ease-in-out infinite;
+        }
+      }
     }
   }
 
@@ -206,7 +223,7 @@
   }
 
   .apply-section {
-    @apply com-px-4 com-py-2;
+    @apply com-px-4 com-pt-3 com-pb-0;
   }
 }
 

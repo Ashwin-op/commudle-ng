@@ -1,20 +1,21 @@
 <div class="mini-card">
   <!-- Top Bar + Community Badge -->
-  <div class="hackathon-top-section" *ngIf="showName || showStatusBadge || showAdminBtn || showCommunityBadge">
-    <div class="hackathon-top-bar" *ngIf="showName || showStatusBadge || showAdminBtn">
+  <div class="hackathon-top-section" *ngIf="showName || showAdminBtn || showCommunityBadge">
+    <div class="hackathon-top-bar" *ngIf="showName || showAdminBtn">
       <div class="hackathon-top-bar-left">
         <h1 class="hackathon-name" *ngIf="showName">{{ hackathon.name }}</h1>
-        <ng-container *ngIf="showStatusBadge">
-          <div class="hackathon-status-badge completed" *ngIf="hackathon?.status === EHackathonStatus?.COMPLETED">
-            Completed
-            <fa-icon [icon]="icons.faCircleCheck" class="completed-icon" title="Completed"></fa-icon>
-          </div>
-          <div class="hackathon-status-badge live" *ngIf="hackathon?.status === EHackathonStatus?.OPEN">
-            <span class="badge-dot active-dot"></span>
-            <span>Live</span>
-          </div>
-        </ng-container>
       </div>
+      <a
+        *ngIf="showAdminBtn && isOrganizer"
+        comButton
+        status="danger"
+        size="small"
+        shape="semi-round"
+        class="admin-panel-btn"
+        [routerLink]="['/admin', 'communities', community?.slug, 'hackathon-dashboard', hackathon?.slug]"
+      >
+        Go To Admin panel
+      </a>
     </div>
     <div class="hackathon-header-name-section" *ngIf="showCommunityBadge">
       <app-community-badge
@@ -51,7 +52,8 @@
         hackathon.status === EHackathonStatus.OPEN &&
         showCountdown) ||
       (hackathon.start_date && showLocation) ||
-      (showLocation && hackathon.prizes_count)
+      (showLocation && hackathon.prizes_count) ||
+      showStatusBadge
     "
   >
     <div class="chip" *ngIf="hackathon.start_date && showLocation">
@@ -66,6 +68,16 @@
       <fa-icon [icon]="icons.faAward"></fa-icon>
       <span>{{ hackathon.prizes_count }} Prizes</span>
     </div>
+    <ng-container *ngIf="showStatusBadge">
+      <div class="chip completed-chip" *ngIf="hackathon?.status === EHackathonStatus?.COMPLETED">
+        <fa-icon [icon]="icons.faCircleCheck"></fa-icon>
+        <span>Completed</span>
+      </div>
+      <div class="chip live-chip" *ngIf="hackathon?.status === EHackathonStatus?.OPEN">
+        <span class="badge-dot"></span>
+        <span>Live</span>
+      </div>
+    </ng-container>
     <div
       class="date-chip"
       *ngIf="
@@ -200,11 +212,12 @@
   </div>
 
   <!-- Participants -->
-  <div class="section-content" *ngIf="showInterestedMembers && hackathon.timezone">
-    <div class="section" *ngIf="users?.length > 0 && totalUsers > 0">
-      <div class="participants-row">
-        <commudle-interested-members [users]="users" [totalCount]="totalUsers"></commudle-interested-members>
-      </div>
+  <div
+    class="section-content section"
+    *ngIf="showInterestedMembers && hackathon.timezone && users?.length > 0 && totalUsers > 0"
+  >
+    <div class="participants-row">
+      <commudle-interested-members [users]="users" [totalCount]="totalUsers"></commudle-interested-members>
     </div>
   </div>
 
