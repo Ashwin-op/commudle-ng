@@ -55,19 +55,17 @@ com-card {
 }
 
 .image-window {
-  @apply com-w-[100dvw] com-h-[100dvh] md:com-h-[80dvh] md:com-w-[40dvw];
+  @apply com-w-[100dvw] com-h-[100dvh] md:com-h-[90dvh] md:com-w-[40dvw] com-bg-white com-rounded-xl com-flex com-flex-col;
 
-  com-card-header {
-    @apply com-flex com-justify-between;
+  .image-window-header {
+    @apply com-flex com-justify-between com-items-center com-px-4 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-flex-shrink-0;
   }
 
-  com-card-body {
-    .image {
-      @apply com-p-2 com-w-full com-h-full com-aspect-1 com-border com-border-solid com-border-Bright-Gray com-rounded;
+  .image-window-body {
+    @apply com-flex-1 com-overflow-y-auto com-p-4;
 
-      img {
-        @apply com-mx-auto com-my-0 com-h-full com-w-full com-object-contain com-rounded;
-      }
+    img {
+      @apply com-w-full com-h-auto com-rounded-lg;
     }
   }
 }

@@ -34,17 +34,15 @@
 </com-card>
 
 <ng-template #imageTemplate let-ref="dialogRef" let-data>
-  <com-card class="image-window">
-    <com-card-header>
-      <div>Image Preview</div>
-      <button (click)="ref.close()" nbButton size="small">
+  <div class="image-window">
+    <div class="image-window-header">
+      <span>Image Preview</span>
+      <button (click)="ref.close()" nbButton size="small" ghost>
         <nb-icon icon="close"></nb-icon>
       </button>
-    </com-card-header>
-    <com-card-body>
-      <div class="image" *ngIf="data.image.url">
-        <img [src]="data.image.url" [alt]="data.eventUpdate.details" />
-      </div>
-    </com-card-body>
-  </com-card>
+    </div>
+    <div class="image-window-body" *ngIf="data.image.url">
+      <img [src]="data.image.url" [alt]="data.eventUpdate.details" />
+    </div>
+  </div>
 </ng-template>
