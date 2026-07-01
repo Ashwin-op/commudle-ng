@@ -17,7 +17,7 @@
     }
 
     .hackathon-status-badge {
-      @apply com-inline-flex com-items-center com-gap-1.5 com-p-6px com-rounded-full com-text-xs com-font-semibold;
+      @apply com-inline-flex com-items-center com-gap-1.5 com-px-2 com-py-1 com-rounded-full com-text-xs com-font-semibold com-h-fit com-flex-shrink-0;
       @apply com-text-red-500 com-bg-red-50 com-border com-border-solid com-border-red-200;
 
       &.completed {
