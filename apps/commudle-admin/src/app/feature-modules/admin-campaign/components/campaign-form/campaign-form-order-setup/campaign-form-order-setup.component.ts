@@ -615,6 +615,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
     this.selectedLocations.push(address);
     this.syncLocationsForm();
     this.locationsFormControl.setValue('', { emitEvent: false });
+    this.locationSearchInput?.nativeElement?.focus();
     if (this.campaign?.id) {
       this.updateCampaign();
     }
