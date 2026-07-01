@@ -239,7 +239,7 @@
                 <div class="countdown-units">
                   <div class="countdown-unit">
                     <span class="countdown-value-wrap">
-                      <span class="countdown-value">{{
+                      <span class="countdown-value" [class.flip]="countdownFlip?.days">{{
                         countdownDays < 10 ? '0' + countdownDays : countdownDays
                       }}</span>
                     </span>
@@ -247,7 +247,7 @@
                   </div>
                   <div class="countdown-unit">
                     <span class="countdown-value-wrap">
-                      <span class="countdown-value">{{
+                      <span class="countdown-value" [class.flip]="countdownFlip?.hours">{{
                         countdownHours < 10 ? '0' + countdownHours : countdownHours
                       }}</span>
                     </span>
@@ -255,7 +255,7 @@
                   </div>
                   <div class="countdown-unit">
                     <span class="countdown-value-wrap">
-                      <span class="countdown-value">{{
+                      <span class="countdown-value" [class.flip]="countdownFlip?.minutes">{{
                         countdownMinutes < 10 ? '0' + countdownMinutes : countdownMinutes
                       }}</span>
                     </span>
@@ -263,7 +263,7 @@
                   </div>
                   <div class="countdown-unit">
                     <span class="countdown-value-wrap">
-                      <span class="countdown-value">{{
+                      <span class="countdown-value" [class.flip]="countdownFlip?.seconds">{{
                         countdownSeconds < 10 ? '0' + countdownSeconds : countdownSeconds
                       }}</span>
                     </span>

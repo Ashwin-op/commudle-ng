@@ -62,6 +62,7 @@ export class HomeEventComponent implements OnInit, OnDestroy, AfterViewInit {
   countdownHours = 0;
   countdownMinutes = 0;
   countdownSeconds = 0;
+  countdownFlip = { days: false, hours: false, minutes: false, seconds: false };
   private countdownInterval: any;
   isMenuSticky = false;
   faEllipsisVertical = faEllipsisVertical;
@@ -373,10 +374,26 @@ export class HomeEventComponent implements OnInit, OnDestroy, AfterViewInit {
         return;
       }
 
-      this.countdownDays = Math.floor(diff / (1000 * 60 * 60 * 24));
-      this.countdownHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      this.countdownMinutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      this.countdownSeconds = Math.floor((diff % (1000 * 60)) / 1000);
+      const newDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const newHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const newMinutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const newSeconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      if (this.countdownSeconds !== undefined) {
+        this.countdownFlip.seconds = newSeconds !== this.countdownSeconds;
+        this.countdownFlip.minutes = newMinutes !== this.countdownMinutes;
+        this.countdownFlip.hours = newHours !== this.countdownHours;
+        this.countdownFlip.days = newDays !== this.countdownDays;
+
+        setTimeout(() => {
+          this.countdownFlip = { days: false, hours: false, minutes: false, seconds: false };
+        }, 600);
+      }
+
+      this.countdownDays = newDays;
+      this.countdownHours = newHours;
+      this.countdownMinutes = newMinutes;
+      this.countdownSeconds = newSeconds;
     };
 
     updateCountdown();
