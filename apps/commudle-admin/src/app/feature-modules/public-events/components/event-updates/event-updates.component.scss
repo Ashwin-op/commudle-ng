@@ -55,7 +55,7 @@ com-card {
 }
 
 .image-window {
-  @apply com-w-[100dvw] com-h-[100dvh] md:com-h-[90dvh] md:com-w-[40dvw] com-bg-white com-rounded-xl com-flex com-flex-col;
+  @apply com-w-[100dvw] com-h-[100dvh] md:com-h-[90dvh] md:com-w-[40dvw] com-bg-white md:com-rounded-xl com-rounded-none com-flex com-flex-col;
 
   .image-window-header {
     @apply com-flex com-justify-between com-items-center com-px-4 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-flex-shrink-0;
