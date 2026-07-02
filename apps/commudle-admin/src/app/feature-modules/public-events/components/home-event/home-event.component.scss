@@ -195,7 +195,7 @@
         }
 
         .countdown-value {
-          @apply com-text-xl com-font-bold com-text-white com-leading-none com-relative;
+          @apply com-text-xl com-font-bold com-text-tWhite com-leading-none com-relative;
           font-variant-numeric: tabular-nums;
           z-index: 1;
           text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
@@ -304,27 +304,32 @@
 
   .event-form-card {
     @apply com-m-0 com-mb-4 md:com-rounded-[10px] com-rounded-none;
+    background: transparent !important;
+
+    .event-form-title {
+      @apply com-flex com-items-center com-gap-2 com-m-0 com-mb-4;
+
+      a {
+        @apply com-text-base com-font-semibold com-no-underline com-text-Yankees-Blue com-flex com-items-center com-gap-2;
+      }
+
+      nb-icon {
+        @apply com-text-lg;
+      }
+    }
 
     com-card-header {
       @apply com-flex com-items-center com-justify-between com-py-3 com-px-4 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
       background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
       @apply dark:com-from-[#080808] dark:com-via-[#141414] dark:com-to-[#080808] dark:com-bg-gradient-to-br;
-
-      .event-form-title {
-        @apply com-flex com-items-center com-gap-2 com-m-0;
-
-        a {
-          @apply com-text-base com-font-semibold com-no-underline com-text-Yankees-Blue com-flex com-items-center com-gap-2;
-        }
-
-        nb-icon {
-          @apply com-text-lg;
-        }
-      }
     }
 
     com-card-body {
-      @apply com-p-4 com-bg-gray-50 com-rounded-10;
+      @apply com-p-4 com-rounded-10;
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      @apply dark:com-bg-gray-800;
     }
   }
 }

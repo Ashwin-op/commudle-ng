@@ -146,14 +146,12 @@
             "
             class="event-form-card"
           >
-            <com-card-header>
+            <com-card-body>
               <h6 class="event-form-title">
                 <a [routerLink]="'.'" fragment="event-form"
                   ><nb-icon icon="file-text-outline" status="primary"></nb-icon>Event Forms</a
                 >
               </h6>
-            </com-card-header>
-            <com-card-body>
               <div #eventFormSection id="event-form" class="registration-form">
                 <app-highlighted-links
                   (hasOpenForms)="hasOpenForms = $event"

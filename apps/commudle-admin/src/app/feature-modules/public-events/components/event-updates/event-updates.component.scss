@@ -23,17 +23,21 @@ com-card {
     @apply com-flex com-flex-col com-gap-0 com-p-4;
 
     .event-update {
-      @apply com-relative com-p-3 com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-mb-4 last:com-mb-0;
-      @apply com-transition-colors com-duration-200 hover:com-border-primary-500;
+      @apply com-relative com-px-2 com-pb-2 com-mb-0 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+
+      &:last-child {
+        @apply com-border-b-0 com-pb-0;
+      }
 
       .update-content {
         @apply com-mb-6px;
 
         .image-section {
-          @apply com-flex com-gap-3 com-items-center com-mt-3 com-flex-wrap;
+          @apply com-flex com-gap-3 com-items-center com-mt-3 com-overflow-x-auto com-scrollbar-hide com-flex-nowrap;
+          @apply md:com-overflow-x-visible md:com-flex-wrap;
 
           .images {
-            @apply com-w-28 com-h-28 com-border com-border-solid com-border-Bright-Gray com-rounded-lg com-cursor-pointer com-overflow-hidden;
+            @apply com-flex-shrink-0 com-border com-border-solid com-border-Bright-Gray com-rounded-lg com-cursor-pointer com-overflow-hidden com-h-[12rem] com-w-[12rem];
             @apply com-transition-all com-duration-200 hover:com-shadow-md;
 
             img {
@@ -44,7 +48,7 @@ com-card {
       }
 
       .update-footer {
-        @apply com-flex com-items-center com-justify-between com-pt-6px com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+        @apply com-flex com-items-center com-justify-between;
 
         .time {
           @apply com-m-0 com-text-[10px] com-font-normal com-text-Auro-Metal-Saurus;
