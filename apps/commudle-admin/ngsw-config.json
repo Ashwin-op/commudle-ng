@@ -28,9 +28,9 @@
     }
   ],
   "appData": {
-    "version": "2.4.1",
-    "releaseNotes": "Release 2.4.1",
+    "version": "2.4.2",
+    "releaseNotes": "Release 2.4.2",
     "critical": true,
-    "timestamp": "2026-05-13T07:39:40.000Z"
+    "timestamp": "2026-07-02T10:04:17.000Z"
   }
 }
