@@ -3,7 +3,8 @@
     <com-card>
       <com-card-body>
         <div [innerHTML]="hackathon.description"></div>
-        <div *ngIf="
+        <div
+          *ngIf="
             hackathonSocial &&
             (hackathonSocial.facebook ||
               hackathonSocial.linkedIn ||
@@ -12,36 +13,92 @@
               hackathonSocial.github ||
               hackathonSocial.website ||
               hackathonSocial.discord)
-          " class="community-social-links">
-          <a *ngIf="hackathonSocial.facebook" href="{{ hackathonSocial.facebook | completeurl : 'facebook' }}"
-            rel="noreferrer" target="_blank">
-            <app-badge [faIcon]="icons.faFacebook" [fontColor]="'com-text-primary-500'" [fontSize]="'small'"
-              [borderRadius]="'round'" [color]="'com-bg-blue-50'"></app-badge>
+          "
+          class="community-social-links"
+        >
+          <a
+            *ngIf="hackathonSocial.facebook"
+            href="{{ hackathonSocial.facebook | completeurl : 'facebook' }}"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <app-badge
+              [faIcon]="icons.faFacebook"
+              [fontColor]="'com-text-primary-500'"
+              [fontSize]="'small'"
+              [borderRadius]="'round'"
+              [color]="'com-bg-blue-50'"
+            ></app-badge>
           </a>
-          <a *ngIf="hackathonSocial.linkedIn" href="{{ hackathonSocial.linkedIn | completeurl : 'linkedin' }}"
-            rel="noreferrer" target="_blank">
-            <app-badge [faIcon]="icons.faLinkedin" [fontColor]="'com-text-primary-500'" [fontSize]="'small'"
-              [borderRadius]="'round'" [color]="'com-bg-blue-50'"></app-badge>
+          <a
+            *ngIf="hackathonSocial.linkedIn"
+            href="{{ hackathonSocial.linkedIn | completeurl : 'linkedin' }}"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <app-badge
+              [faIcon]="icons.faLinkedin"
+              [fontColor]="'com-text-primary-500'"
+              [fontSize]="'small'"
+              [borderRadius]="'round'"
+              [color]="'com-bg-blue-50'"
+            ></app-badge>
           </a>
-          <a *ngIf="hackathonSocial.instagram" href="{{ hackathonSocial.instagram | completeurl : 'instagram' }}"
-            rel="noreferrer" target="_blank">
-            <app-badge [faIcon]="icons.faInstagram" [fontColor]="'com-text-primary-500'" [fontSize]="'small'"
-              [borderRadius]="'round'" [color]="'com-bg-blue-50'"></app-badge>
+          <a
+            *ngIf="hackathonSocial.instagram"
+            href="{{ hackathonSocial.instagram | completeurl : 'instagram' }}"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <app-badge
+              [faIcon]="icons.faInstagram"
+              [fontColor]="'com-text-primary-500'"
+              [fontSize]="'small'"
+              [borderRadius]="'round'"
+              [color]="'com-bg-blue-50'"
+            ></app-badge>
           </a>
-          <a *ngIf="hackathonSocial.twitter" href="{{ hackathonSocial.twitter | completeurl : 'twitter' }}"
-            rel="noreferrer" target="_blank">
-            <app-badge [faIcon]="icons.faTwitter" [fontColor]="'com-text-primary-500'" [fontSize]="'small'"
-              [borderRadius]="'round'" [color]="'com-bg-blue-50'"></app-badge>
+          <a
+            *ngIf="hackathonSocial.twitter"
+            href="{{ hackathonSocial.twitter | completeurl : 'twitter' }}"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <app-badge
+              [faIcon]="icons.faTwitter"
+              [fontColor]="'com-text-primary-500'"
+              [fontSize]="'small'"
+              [borderRadius]="'round'"
+              [color]="'com-bg-blue-50'"
+            ></app-badge>
           </a>
-          <a *ngIf="hackathonSocial.github" href="{{ hackathonSocial.github | completeurl : 'github' }}"
-            rel="noreferrer" target="_blank">
-            <app-badge [faIcon]="icons.faGithub" [fontColor]="'com-text-primary-500'" [fontSize]="'small'"
-              [borderRadius]="'round'" [color]="'com-bg-blue-50'"></app-badge>
+          <a
+            *ngIf="hackathonSocial.github"
+            href="{{ hackathonSocial.github | completeurl : 'github' }}"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <app-badge
+              [faIcon]="icons.faGithub"
+              [fontColor]="'com-text-primary-500'"
+              [fontSize]="'small'"
+              [borderRadius]="'round'"
+              [color]="'com-bg-blue-50'"
+            ></app-badge>
           </a>
-          <a *ngIf="hackathonSocial.website" href="{{ hackathonSocial.website | completeurl }}" rel="noreferrer"
-            target="_blank">
-            <app-badge [faIcon]="icons.faGlobe" [fontColor]="'com-text-primary-500'" [fontSize]="'small'"
-              [borderRadius]="'round'" [color]="'com-bg-blue-50'"></app-badge>
+          <a
+            *ngIf="hackathonSocial.website"
+            href="{{ hackathonSocial.website | completeurl }}"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <app-badge
+              [faIcon]="icons.faGlobe"
+              [fontColor]="'com-text-primary-500'"
+              [fontSize]="'small'"
+              [borderRadius]="'round'"
+              [color]="'com-bg-blue-50'"
+            ></app-badge>
           </a>
         </div>
       </com-card-body>
@@ -55,8 +112,10 @@
           </h2>
         </com-card-header>
         <com-card-body>
-          <commudle-entity-updates [entityId]="hackathon.id"
-            [entityType]="EDbModels.HACKATHON"></commudle-entity-updates>
+          <commudle-entity-updates
+            [entityId]="hackathon.id"
+            [entityType]="EDbModels.HACKATHON"
+          ></commudle-entity-updates>
         </com-card-body>
       </com-card>
     </div>
@@ -73,11 +132,16 @@
           </h6>
         </com-card-header>
         <com-card-body class="sponsors-cards">
-          <div *ngFor="
+          <div
+            *ngFor="
               let hackathonSponsorGrouped of hackathonSponsorGroupedByTierName | keyvalue : tierPriorityComparator
-            " class="sponsor-tier">
-            <header class="sponsor-tier-header"
-              [ngClass]="'sponsor-tier-header--priority-' + (hackathonSponsorGrouped.value?.[0]?.tier_priority || 1)">
+            "
+            class="sponsor-tier"
+          >
+            <header
+              class="sponsor-tier-header"
+              [ngClass]="'sponsor-tier-header--priority-' + (hackathonSponsorGrouped.value?.[0]?.tier_priority || 1)"
+            >
               <span class="sponsor-tier-dot" aria-hidden="true"></span>
               <span class="sponsor-tier-heading">{{ hackathonSponsorGrouped.key }}</span>
               <span class="sponsor-tier-count">
@@ -86,24 +150,36 @@
               </span>
             </header>
 
-            <div class="sponsor-tier-strips" [ngClass]="{
+            <div
+              class="sponsor-tier-strips"
+              [ngClass]="{
                 'sponsor-tier-strips--cols-1': hackathonSponsorGrouped.value?.[0]?.tier_priority <= 2,
                 'sponsor-tier-strips--cols-2': hackathonSponsorGrouped.value?.[0]?.tier_priority >= 3
-              }">
-              <a *ngFor="let hackathonSponsor of hackathonSponsorGrouped.value || []"
-                [href]="hackathonSponsor.sponsor.link ? hackathonSponsor.sponsor.link : null" target="_blank"
-                class="sponsor-strip" [class.sponsor-strip--tier-1]="hackathonSponsor.tier_priority === 1"
+              }"
+            >
+              <a
+                *ngFor="let hackathonSponsor of hackathonSponsorGrouped.value || []"
+                [href]="hackathonSponsor.sponsor.link ? hackathonSponsor.sponsor.link : null"
+                target="_blank"
+                class="sponsor-strip"
+                [class.sponsor-strip--tier-1]="hackathonSponsor.tier_priority === 1"
                 [class.sponsor-strip--tier-2]="hackathonSponsor.tier_priority === 2"
                 [ngClass]="{ 'sponsor-strip--no-link': !hackathonSponsor.sponsor.link }"
                 [style.--sponsor-logo-gradient]="sponsorLogoTints[hackathonSponsor.id]?.gradient"
-                (mouseenter)="onSponsorStripGradientEnter($event)" (mousemove)="onSponsorStripGradientMove($event)"
+                (mouseenter)="onSponsorStripGradientEnter($event)"
+                (mousemove)="onSponsorStripGradientMove($event)"
                 (mouseleave)="onSponsorStripGradientLeave($event)"
-                (click)="!hackathonSponsor.sponsor.link && $event.preventDefault()">
+                (click)="!hackathonSponsor.sponsor.link && $event.preventDefault()"
+              >
                 <span class="sponsor-strip-mouse-gradient" aria-hidden="true"></span>
                 <div class="sponsor-strip-logo-wrap">
-                  <img [src]="hackathonSponsor.sponsor.logo.i320 || hackathonSponsor.sponsor.logo.url"
-                    [alt]="hackathonSponsor.sponsor.name" loading="lazy" class="sponsor-strip-logo"
-                    crossorigin="anonymous" />
+                  <img
+                    [src]="hackathonSponsor.sponsor.logo.i320 || hackathonSponsor.sponsor.logo.url"
+                    [alt]="hackathonSponsor.sponsor.name"
+                    loading="lazy"
+                    class="sponsor-strip-logo"
+                    crossorigin="anonymous"
+                  />
                 </div>
                 <div class="sponsor-strip-text">
                   <h3 class="sponsor-strip-name">{{ hackathonSponsor.sponsor.name }}</h3>
@@ -119,8 +195,10 @@
     </div>
 
     <div id="collaborations" class="collaboration-communities">
-      <commudle-public-hackathon-collaboration-communities [community]="community"
-        [hackathon]="hackathon"></commudle-public-hackathon-collaboration-communities>
+      <commudle-public-hackathon-collaboration-communities
+        [community]="community"
+        [hackathon]="hackathon"
+      ></commudle-public-hackathon-collaboration-communities>
     </div>
 
     <com-card id="comments" class="comments">
@@ -130,8 +208,11 @@
         </h2>
       </com-card-header>
       <com-card-body>
-        <commudle-discussion *ngIf="discussionChat" [discussionId]="discussionChat.id"
-          discussionParent="hackathon"></commudle-discussion>
+        <commudle-discussion
+          *ngIf="discussionChat"
+          [discussionId]="discussionChat.id"
+          discussionParent="hackathon"
+        ></commudle-discussion>
       </com-card-body>
     </com-card>
 
@@ -142,9 +223,17 @@
 
   <div class="right-column">
     <div class="hackathon-details">
-      <commudle-public-hackathon-details-mini-card [hackathon]="hackathon" [hrgId]="hrgId" [community]="community"
-        [showName]="false" [showStatusBadge]="false" [showCommunityBadge]="false" [showPrizeHeader]="true"
-        [showLocation]="false" [showApplySection]="false"></commudle-public-hackathon-details-mini-card>
+      <commudle-public-hackathon-details-mini-card
+        [hackathon]="hackathon"
+        [hrgId]="hrgId"
+        [community]="community"
+        [showName]="false"
+        [showStatusBadge]="false"
+        [showCommunityBadge]="false"
+        [showPrizeHeader]="true"
+        [showLocation]="false"
+        [showApplySection]="false"
+      ></commudle-public-hackathon-details-mini-card>
     </div>
 
     <com-card *ngIf="rounds && rounds.length > 0">
@@ -173,15 +262,24 @@
           <div class="name">{{ userTeamDetails[0].round.name }}</div>
           <div class="date">{{ moment(userTeamDetails[0].round.date).format('DD MMM YYYY') }}</div>
         </div>
-        <a [routerLink]="['/communities', community.slug, 'hackathons', hackathon.slug, 'fill-form', hrgId]"
-          class="edit-link">
+        <a
+          *ngIf="hackathon.application_start_date && hackathon.application_end_date && isRegistrationOpen"
+          [routerLink]="['/communities', community.slug, 'hackathons', hackathon.slug, 'fill-form', hrgId]"
+          class="edit-link"
+        >
           <button comButton [shape]="'semi-round'" status="primary" size="small" fullWidth>Edit Registration</button>
         </a>
       </com-card-body>
     </com-card>
 
-    <button *ngIf="isOrganizer" comButton status="danger" class="organizer-btn" [shape]="'semi-round'"
-      [routerLink]="['/admin', 'communities', community.slug, 'hackathon-dashboard', hackathon.slug]">
+    <button
+      *ngIf="isOrganizer"
+      comButton
+      status="danger"
+      class="organizer-btn"
+      [shape]="'semi-round'"
+      [routerLink]="['/admin', 'communities', community.slug, 'hackathon-dashboard', hackathon.slug]"
+    >
       <fa-icon [icon]="icons.faPencil"></fa-icon>
       <span>Go To Admin panel</span>
     </button>

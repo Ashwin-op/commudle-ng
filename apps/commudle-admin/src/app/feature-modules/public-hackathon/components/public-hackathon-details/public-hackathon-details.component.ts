@@ -56,6 +56,7 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
   EHackathonRegistrationStatus = EHackathonRegistrationStatus;
   hrgId: number;
   isOrganizer = false;
+  isRegistrationOpen = false;
   hackathonStatus: string;
   hackathonSocial: IContactInfo;
   icons = {
@@ -103,6 +104,7 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
         this.community = data.community;
         this.setSeoService();
         this.calculateHackathonDatesStatus();
+        this.checkRegistrationOpen();
         this.getSponsors();
         this.getFaqs();
         this.getDiscussionChat();
@@ -289,6 +291,15 @@ export class PublicHackathonDetailsComponent implements OnInit, OnDestroy {
       this.hackathonStatus = 'Outgoing';
     } else if (currentDate > hackathonApplicationEndDate) {
       this.hackathonStatus = 'Closed';
+    }
+  }
+
+  checkRegistrationOpen() {
+    if (this.hackathon.application_start_date && this.hackathon.application_end_date) {
+      const now = new Date();
+      const start = new Date(this.hackathon.application_start_date);
+      const end = new Date(this.hackathon.application_end_date);
+      this.isRegistrationOpen = now >= start && now <= end;
     }
   }
 
