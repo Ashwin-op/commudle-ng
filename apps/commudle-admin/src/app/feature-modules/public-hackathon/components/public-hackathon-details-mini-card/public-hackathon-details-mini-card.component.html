@@ -1,21 +1,10 @@
 <div class="mini-card">
   <!-- Top Bar + Community Badge -->
-  <div class="hackathon-top-section" *ngIf="showName || showAdminBtn || showCommunityBadge">
-    <div class="hackathon-top-bar" *ngIf="showName || showAdminBtn">
+  <div class="hackathon-top-section" *ngIf="showName || showCommunityBadge">
+    <div class="hackathon-top-bar" *ngIf="showName">
       <div class="hackathon-top-bar-left">
         <h1 class="hackathon-name" *ngIf="showName">{{ hackathon.name }}</h1>
       </div>
-      <a
-        *ngIf="showAdminBtn && isOrganizer"
-        comButton
-        status="danger"
-        size="small"
-        shape="semi-round"
-        class="admin-panel-btn"
-        [routerLink]="['/admin', 'communities', community?.slug, 'hackathon-dashboard', hackathon?.slug]"
-      >
-        Go To Admin panel
-      </a>
     </div>
     <div class="hackathon-header-name-section" *ngIf="showCommunityBadge">
       <app-community-badge

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IHackathon } from 'apps/shared-models/hackathon.model';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
+import { HackathonResponseGroupService } from 'apps/commudle-admin/src/app/services/hackathon-response-group.service';
 import { SeoService } from '@commudle/shared-services';
 import { faLinkedinIn, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faGlobe } from '@fortawesome/free-solid-svg-icons';
@@ -17,6 +18,7 @@ export class PublicHackathonJudgesComponent implements OnInit {
   subscriptions: Subscription[] = [];
   hackathon: IHackathon;
   community: any;
+  hrgId: number;
   hackathonJudges: IHackathonJudge[];
   judges: IHackathonJudge[] = [];
   mentors: IHackathonJudge[] = [];
@@ -29,6 +31,7 @@ export class PublicHackathonJudgesComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private hackathonService: HackathonService,
+    private hrgService: HackathonResponseGroupService,
     private seoService: SeoService,
   ) {}
 
@@ -39,8 +42,15 @@ export class PublicHackathonJudgesComponent implements OnInit {
         this.community = data.community;
         this.setSeo();
         this.getJudges();
+        this.getHackathonResponseGroup();
       }),
     );
+  }
+
+  getHackathonResponseGroup() {
+    this.hrgService.pShowHackathonResponseGroup(this.hackathon.id).subscribe((data) => {
+      if (data) this.hrgId = data.id;
+    });
   }
 
   setSeo() {
