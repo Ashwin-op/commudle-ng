@@ -21,6 +21,7 @@ export class PublicHackathonDetailsMiniCardComponent implements OnInit, OnDestro
   @Input() hrgId: number;
   @Input() isOrganizer = false;
   @Input() showName = true;
+  @Input() showAdminBtn = true;
   @Input() showStatusBadge = true;
   @Input() showCommunityBadge = true;
   @Input() showPrizeHeader = true;
