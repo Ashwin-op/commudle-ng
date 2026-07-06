@@ -1,9 +1,9 @@
 nb-card {
-  @apply com-m-3 com-w-full;
+  @apply com-m-0 com-w-full com-max-w-full;
 }
 
 nb-card-body {
-  @apply com-w-full com-overflow-hidden;
+  @apply com-w-full com-overflow-x-auto;
 }
 
 ::ng-deep nb-route-tabset .route-tabset .route-tab .tab-link {
