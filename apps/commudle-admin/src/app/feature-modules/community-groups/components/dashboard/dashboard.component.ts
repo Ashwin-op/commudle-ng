@@ -19,10 +19,10 @@ import { ESidebarWidth, ESidebarHeading } from 'apps/shared-components/sidebar/e
 import { FooterService } from 'apps/commudle-admin/src/app/services/footer.service';
 
 @Component({
-    selector: 'app-dashboard',
-    templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.scss'],
-    standalone: false
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss'],
+  standalone: false,
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   communityGroup: ICommunityGroup;
@@ -30,6 +30,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   sidebarExpanded = true;
   showSideBar = false;
+  isMobileView = false;
 
   //font-awesome
   icons = {
@@ -55,6 +56,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.checkMobileView();
     this.footerService.changeMiniFooterStatus(false);
 
     this.seoService.noIndex(true);
@@ -64,7 +66,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.setMeta();
       }),
     );
-    this.sidebarService.setSidebarVisibility(this.sidebarEventName, true);
+
+    if (this.isMobileView) {
+      this.sidebarService.setSidebarVisibility(this.sidebarEventName, false, true);
+    } else {
+      this.sidebarService.setSidebarVisibility(this.sidebarEventName, true);
+    }
 
     // eslint-disable-next-line no-prototype-builtins
     if (this.sidebarService.setSidebar$.hasOwnProperty(this.sidebarEventName)) {
@@ -77,6 +84,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
     this.seoService.noIndex(false);
+  }
+
+  checkMobileView() {
+    this.isMobileView = window.innerWidth < 768;
   }
 
   toggleSidebar() {

@@ -1,75 +1,89 @@
-<div class="com-flex com-w-full">
-  <div class="sidebar-container">
+<section class="hackathon-details">
+  <button *ngIf="isMobileView" nbButton ghost size="small" (click)="toggleSidebar()" class="toggle-sidebar-btn">
+    <fa-icon [icon]="icons.faRightLeft"></fa-icon>
+  </button>
+  <h1>{{ communityGroup?.name }}</h1>
+</section>
+
+<section class="com-flex">
+  <div class="sidebar">
     <commudle-sidebar
       [expandedWidth]="sidebarExpanded ? ESidebarWidth.XL : ESidebarWidth.XSMALL"
-      [eventName]="sidebarEventName"
-      [forWindow]="false"
+      [forWindow]="isMobileView ? true : false"
       [showExpandedButton]="true"
-      [textSize]="ESidebarHeading.MEDIUM"
+      [eventName]="sidebarEventName"
       [heading]="communityGroup.name"
+      [textSize]="ESidebarHeading.MEDIUM"
     >
       <div class="action-buttons">
-        <div class="category">
-          <a
-            class="action-button"
-            [routerLink]="['./']"
-            [routerLinkActive]="'active'"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
-            <div class="icon">
-              <nb-icon icon="info-outline"></nb-icon>
+        <div
+          class="header-icons"
+          [ngClass]="{ 'header-icons-non-expanded': !sidebarExpanded, 'header-icons-expanded': sidebarExpanded }"
+        ></div>
+        <div class="categories">
+          <div class="category">
+            <div *ngIf="sidebarExpanded" class="category-heading">MANAGE</div>
+            <div>
+              <a
+                class="action-button"
+                [routerLink]="['./']"
+                [routerLinkActive]="'active'"
+                [routerLinkActiveOptions]="{ exact: true }"
+              >
+                <div class="icon">
+                  <nb-icon icon="info-outline"></nb-icon>
+                </div>
+                <div *ngIf="sidebarExpanded" class="action-button-name">Communities</div>
+              </a>
+              <a class="action-button" [routerLink]="['members']" [routerLinkActive]="'active'">
+                <div class="icon">
+                  <fa-icon [icon]="icons.faUsers"></fa-icon>
+                </div>
+                <div *ngIf="sidebarExpanded" class="action-button-name">All Members</div>
+              </a>
+              <a class="action-button" [routerLink]="['admin-team']" [routerLinkActive]="'active'">
+                <div class="icon">
+                  <fa-icon [icon]="icons.faUserGroup"></fa-icon>
+                </div>
+                <div *ngIf="sidebarExpanded" class="action-button-name">Admin Team</div>
+              </a>
+              <a class="action-button" [routerLink]="['edit']" [routerLinkActive]="'active'">
+                <div class="icon">
+                  <fa-icon [icon]="icons.faPen"></fa-icon>
+                </div>
+                <div *ngIf="sidebarExpanded" class="action-button-name">Edit Details</div>
+              </a>
+              <a class="action-button" [routerLink]="['surveys']" [routerLinkActive]="'active'">
+                <div class="icon">
+                  <fa-icon [icon]="icons.faScroll"></fa-icon>
+                </div>
+                <div *ngIf="sidebarExpanded" class="action-button-name">Surveys</div>
+              </a>
+              <a class="action-button" [routerLink]="['pages']" [routerLinkActive]="'active'">
+                <div class="icon">
+                  <fa-icon [icon]="icons.faHouse"></fa-icon>
+                </div>
+                <div *ngIf="sidebarExpanded" class="action-button-name">Pages</div>
+              </a>
+              <a class="action-button" [routerLink]="['channels']" [routerLinkActive]="'active'">
+                <div class="icon">
+                  <fa-icon [icon]="icons.faHashtag"></fa-icon>
+                </div>
+                <div *ngIf="sidebarExpanded" class="action-button-name">Channels</div>
+              </a>
+              <a class="action-button" [routerLink]="['forums']" [routerLinkActive]="'active'">
+                <div class="icon">
+                  <fa-icon [icon]="icons.faMessage"></fa-icon>
+                </div>
+                <div *ngIf="sidebarExpanded" class="action-button-name">Forums</div>
+              </a>
             </div>
-            <div *ngIf="sidebarExpanded" class="heading">Communities</div>
-          </a>
-          <a class="action-button" [routerLink]="['members']" [routerLinkActive]="'active'">
-            <div class="icon">
-              <fa-icon [icon]="icons.faUsers"></fa-icon>
-            </div>
-            <div *ngIf="sidebarExpanded" class="heading">All Members</div>
-          </a>
-          <a class="action-button" [routerLink]="['admin-team']" [routerLinkActive]="'active'">
-            <div class="icon">
-              <fa-icon [icon]="icons.faUserGroup"></fa-icon>
-            </div>
-            <div *ngIf="sidebarExpanded" class="heading">Admin Team</div>
-          </a>
-          <a class="action-button" [routerLink]="['edit']" [routerLinkActive]="'active'">
-            <div class="icon">
-              <fa-icon [icon]="icons.faPen"></fa-icon>
-            </div>
-            <div *ngIf="sidebarExpanded" class="heading">Edit Details</div>
-          </a>
-          <a class="action-button" [routerLink]="['surveys']" [routerLinkActive]="'active'">
-            <div class="icon">
-              <fa-icon [icon]="icons.faScroll"></fa-icon>
-            </div>
-            <div *ngIf="sidebarExpanded" class="heading">Surveys</div>
-          </a>
-          <a class="action-button" [routerLink]="['pages']" [routerLinkActive]="'active'">
-            <div class="icon">
-              <fa-icon [icon]="icons.faHouse"></fa-icon>
-            </div>
-            <div *ngIf="sidebarExpanded" class="heading">Pages</div>
-          </a>
-          <a class="action-button" [routerLink]="['channels']" [routerLinkActive]="'active'">
-            <div class="icon">
-              <fa-icon [icon]="icons.faHashtag"></fa-icon>
-            </div>
-            <div *ngIf="sidebarExpanded" class="heading">Channels</div>
-          </a>
-          <a class="action-button" [routerLink]="['forums']" [routerLinkActive]="'active'">
-            <div class="icon">
-              <fa-icon [icon]="icons.faMessage"></fa-icon>
-            </div>
-            <div *ngIf="sidebarExpanded" class="heading">Forums</div>
-          </a>
+          </div>
         </div>
       </div>
     </commudle-sidebar>
   </div>
-  <div class="right-column">
-    <div class="router">
-      <router-outlet></router-outlet>
-    </div>
+  <div class="router">
+    <router-outlet></router-outlet>
   </div>
-</div>
+</section>
