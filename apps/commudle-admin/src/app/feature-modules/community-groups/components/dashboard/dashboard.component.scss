@@ -1,5 +1,6 @@
 .sidebar-container {
   @apply com-sticky com-top-16 com-h-screen;
+
   a {
     @apply com-text-inherit com-no-underline;
   }
@@ -9,6 +10,7 @@
 
     .header {
       @apply com-font-semibold com-flex com-items-center com-justify-between com-py-2 com-rounded-md;
+
       .community-name {
         @apply com-text-base com-m-0 com-flex-1 com-font-semibold;
       }
@@ -20,30 +22,39 @@
 
     .action-button {
       @apply com-p-2 com-rounded-lg com-flex com-gap-2 com-items-center com-cursor-pointer;
+
       &.active,
       &:hover {
         @apply com-bg-Azure-opacity-10;
+
         .heading {
           @apply com-font-semibold com-text-primary-500;
         }
+
         .icon {
           @apply com-text-primary-500;
         }
       }
+
       .icon {
         @apply com-text-sm com-text-Cadet-Grey com-flex com-items-center com-justify-center com-w-5 com-h-5;
       }
+
       .heading {
         @apply com-text-sm com-font-normal;
       }
+
       &.public-event-page {
         @apply com-text-Azure;
+
         .icon {
           @apply com-text-Azure;
         }
       }
+
       &.stats {
         @apply com-text-Caribbean-Green;
+
         .icon {
           @apply com-text-Caribbean-Green;
         }
@@ -53,7 +64,8 @@
 }
 
 .right-column {
-  @apply com-w-[calc(100%-320px)];
+  @apply com-w-full md:com-w-[calc(100%-320px)] com-overflow-x-hidden;
+
   .router {
     @apply com-w-full com-max-w-screen-xl com-mx-auto;
   }

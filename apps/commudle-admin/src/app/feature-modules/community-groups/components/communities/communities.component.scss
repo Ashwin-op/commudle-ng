@@ -1,0 +1,11 @@
+nb-card {
+  @apply com-m-3 com-w-full;
+}
+
+nb-card-body {
+  @apply com-w-full com-overflow-hidden;
+}
+
+::ng-deep nb-route-tabset .route-tabset .route-tab .tab-link {
+  @apply com-p-3;
+}
