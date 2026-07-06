@@ -21,7 +21,7 @@ import { GooglePlacesAutocompleteService } from 'apps/commudle-admin/src/app/ser
 import { SearchService } from 'apps/commudle-admin/src/app/feature-modules/search/services/search.service';
 import { ISearch } from 'apps/shared-models/search.model';
 import { faArrowRight, faFileImage, faRectangleAd, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { distinctUntilChanged, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, EMPTY, switchMap } from 'rxjs';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 import { environment } from '@commudle/shared-environments';
 
@@ -48,6 +48,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
 
   communitiesFormControl = new FormControl('');
   communitiesSearchResult = [];
+  searchingCommunities = false;
   selectedCommunities: Array<{ id: number; name: string; slug: string }> = [];
   locationsFormControl = new FormControl('');
   selectedLocations: string[] = [];
@@ -638,13 +639,25 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
   observeCommunitiesInput() {
     this.communitiesFormControl.valueChanges
       .pipe(
+        debounceTime(300),
         distinctUntilChanged(),
-        switchMap((value: string) =>
-          this.searchService.getSearchResultsByScope(value || '', this.page, this.count, EDbModels.KOMMUNITY),
-        ),
+        switchMap((value: string) => {
+          if (!value) {
+            this.communitiesSearchResult = [];
+            this.searchingCommunities = false;
+            this.cdr.detectChanges();
+            return EMPTY;
+          }
+          this.searchingCommunities = true;
+          this.communitiesSearchResult = [];
+          this.cdr.detectChanges();
+          return this.searchService.getSearchResultsByScope(value, this.page, this.count, EDbModels.KOMMUNITY);
+        }),
       )
       .subscribe((value: ISearch) => {
         this.communitiesSearchResult = value.results;
+        this.searchingCommunities = false;
+        this.cdr.detectChanges();
       });
   }
 

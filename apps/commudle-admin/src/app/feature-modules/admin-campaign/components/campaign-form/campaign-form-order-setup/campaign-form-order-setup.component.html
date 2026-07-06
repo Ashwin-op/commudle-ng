@@ -214,6 +214,7 @@
                           type="text"
                         />
                       </nb-form-field>
+                      <app-loading-spinner *ngIf="searchingCommunities"></app-loading-spinner>
                       <nb-autocomplete #communitiesAutoNgModel>
                         <nb-option
                           *ngFor="let result of communitiesSearchResult"
