@@ -94,7 +94,15 @@
                         class="organization-details"
                         [title]="community.community_group.name"
                       >
-                        <fa-icon [icon]="faBuilding"></fa-icon>
+                        <img
+                          *ngIf="community.community_group.logo?.i64; else orgIconFallback"
+                          [src]="community.community_group.logo.i64"
+                          [alt]="community.community_group.name"
+                          class="org-logo"
+                        />
+                        <ng-template #orgIconFallback>
+                          <fa-icon [icon]="faBuilding"></fa-icon>
+                        </ng-template>
                         <span>{{ community.community_group.name }} ({{ community.community_group.member_count }})</span>
                       </a>
                       <app-membership-toggle

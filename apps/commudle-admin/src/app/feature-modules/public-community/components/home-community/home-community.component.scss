@@ -48,12 +48,15 @@
       .membership {
         .member-location {
           @apply com-flex com-items-start com-gap-2 com-flex-row md:com-gap-2 com-min-w-0;
+
           .member-count {
             @apply com-gap-2 com-h-5 com-self-stretch md:com-m-0 com-items-start com-m-0 md:com-border-0 md:com-border-r-2 md:com-border-solid md:com-border-Bright-Gray md:com-pr-3 com-flex-shrink-0;
+
             a {
               @apply com-text-gray-500 com-no-underline com-gap-2 com-inline-flex;
             }
           }
+
           .location {
             @apply com-inline-flex com-items-center com-gap-2 com-h-5 com-text-gray-500 com-min-w-0 com-flex-1;
 
@@ -64,8 +67,9 @@
         }
       }
     }
+
     .membership-toggle {
-      @apply com-flex md:com-flex-row md:com-gap-3 com-flex-col com-mr-4 com-mt-[30px] com-ml-4 md:com-ml-0 md:com-items-start com-flex-shrink-0;
+      @apply com-flex md:com-flex-row md:com-gap-3 com-flex-col com-mr-4 com-mt-2 com-ml-4 md:com-ml-0 md:com-items-start com-flex-shrink-0 md:com-mt-5;
 
       app-membership-toggle {
         @apply com-w-full #{!important};
@@ -74,6 +78,7 @@
       ::ng-deep {
         nb-select {
           @apply com-w-full com-max-w-full;
+
           button {
             color: initial;
             @apply com-p-1 md:com-w-44 com-w-full;
@@ -109,6 +114,7 @@
 
   .menu-items {
     @apply com-ml-2 com-overflow-y-scroll md:com-overflow-y-hidden com-items-center com-scrollbar-hide;
+
     a {
       @apply com-text-gunmetal com-text-sm com-leading-4 com-h-fit com-m-0 com-px-2 com-cursor-pointer com-no-underline com-font-medium md:com-px-4 com-py-3;
       @apply com-border-0 com-border-b-3 com-border-solid com-border-transparent;
@@ -187,10 +193,13 @@
 
 .mini-header {
   @apply com-h-16 com-flex com-items-center com-mx-6 md:com-mx-8 com-justify-between;
+
   .community-details {
     @apply com-flex com-space-x-3;
+
     .mini-logo-section {
       @apply com-w-10 com-h-10 com-rounded-lg com-border com-border-gray-200 com-border-solid com-bg-tWhite;
+
       .mini-logo {
         @apply com-my-0 com-mx-auto com-h-10 com-w-10 com-object-contain com-rounded-lg com-overflow-hidden com-px-1;
       }
@@ -200,6 +209,7 @@
       .name {
         @apply com-text-base com-font-semibold com-m-0 com-line-clamp-1 com-text-Yankees-Blue;
       }
+
       .members-count {
         @apply com-text-sm com-font-normal com-text-Quartz com-m-0;
       }
@@ -212,19 +222,23 @@
 }
 
 .organization-details {
-  @apply com-flex com-items-center com-bg-blue-50 com-text-primary-500 com-rounded-lg com-p-6px com-flex-shrink-0 com-mr-4 com-no-underline;
+  @apply com-flex com-items-center com-bg-blue-50 com-text-primary-500 com-rounded-lg com-p-6px com-mr-4 com-no-underline com-min-w-0 com-overflow-hidden;
 
   fa-icon {
-    @apply com-flex com-text-xs;
+    @apply com-flex com-text-xs com-flex-shrink-0;
+  }
+
+  .org-logo {
+    @apply com-w-5 com-h-5 com-rounded-sm com-object-contain com-flex-shrink-0;
   }
 
   span {
-    @apply com-text-sm com-font-semibold com-ml-2;
+    @apply com-text-sm com-font-semibold com-ml-2 com-truncate;
   }
 }
 
 .details-container {
-  @apply com-flex com-min-w-0 com-w-full md:com-mt-5 com-mt-0 com-mb-2;
+  @apply com-flex com-min-w-0 com-w-full md:com-mt-5 com-mt-0 com-mb-2 com-flex-wrap com-items-center com-gap-2;
 }
 
 .heading-community-name {
