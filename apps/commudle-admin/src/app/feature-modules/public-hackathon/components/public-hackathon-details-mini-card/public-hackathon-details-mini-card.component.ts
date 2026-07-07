@@ -1,9 +1,9 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, ElementRef, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { IHackathon, EHackathonLocationType } from 'apps/shared-models/hackathon.model';
 import { faGlobe, faAward, faCalendarDays, faClock, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
-import { AuthService, countries_details } from '@commudle/shared-services';
+import { AuthService, countries_details, LogoTintService } from '@commudle/shared-services';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { EHackathonStatus, ICommunity, IHackathonTeam, IUser } from '@commudle/shared-models';
 import { Subject, takeUntil } from 'rxjs';
@@ -65,6 +65,8 @@ export class PublicHackathonDetailsMiniCardComponent implements OnInit, OnDestro
   constructor(
     private hackathonService: HackathonService,
     private authService: AuthService,
+    private logoTintService: LogoTintService,
+    private el: ElementRef,
     @Inject(PLATFORM_ID) private platformId: object,
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -87,6 +89,7 @@ export class PublicHackathonDetailsMiniCardComponent implements OnInit, OnDestro
         amount: this.hackathon.total_prize_amount[currency],
       }));
     }
+    this.resolveCountdownColor();
   }
 
   ngOnDestroy(): void {
@@ -175,6 +178,35 @@ export class PublicHackathonDetailsMiniCardComponent implements OnInit, OnDestro
     this.hackathonService.pInterestedUsers(this.hackathon.id).subscribe((data) => {
       this.users = data.users;
       this.totalUsers = data.total_count;
+    });
+  }
+
+  private resolveCountdownColor(): void {
+    if (!this.isBrowser) {
+      return;
+    }
+    // Prefer hackathon banner image, fall back to community logo
+    const logo = this.hackathon?.banner_image || this.community?.logo_image_path;
+    if (!logo) {
+      return;
+    }
+    this.logoTintService.resolveTints([{ id: 'countdown', logo: { logo_image: logo } }]).then((tints) => {
+      if (tints['countdown']?.solid) {
+        // Use the solid color (0.8 opacity) from LogoTintService
+        const match = tints['countdown'].solid.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+        if (match) {
+          const r = Number(match[1]);
+          const g = Number(match[2]);
+          const b = Number(match[3]);
+          // Rich gradient: dark at top → full logo color at bottom
+          const gradient = `linear-gradient(180deg, rgb(${Math.round(r * 0.3)}, ${Math.round(g * 0.3)}, ${Math.round(
+            b * 0.3,
+          )}) 0%, rgb(${Math.round(r * 0.5)}, ${Math.round(g * 0.5)}, ${Math.round(b * 0.5)}) 49.9%, rgb(${Math.round(
+            r * 0.7,
+          )}, ${Math.round(g * 0.7)}, ${Math.round(b * 0.7)}) 50%, rgb(${r}, ${g}, ${b}) 100%)`;
+          this.el.nativeElement.style.setProperty('--countdown-color', gradient);
+        }
+      }
     });
   }
 }

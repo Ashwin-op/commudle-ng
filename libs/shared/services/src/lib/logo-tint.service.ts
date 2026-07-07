@@ -5,6 +5,7 @@ import { IAttachedFile } from '@commudle/shared-models';
 const LOGO_WRAP_OPACITY = 0.25;
 const LOGO_GRADIENT_OPACITY = 0.75;
 const LOGO_BORDER_OPACITY = 0.3;
+const LOGO_SOLID_OPACITY = 0.6;
 const NEAR_WHITE_THRESHOLD = 230;
 
 /** Seashell (#FFF6EB) — default wrap + gradient (matches theme + SCSS fallbacks). */
@@ -18,12 +19,14 @@ const DEFAULT_LOGO_TINT: Readonly<ILogoTint> = {
   wrap: `rgba(${DEFAULT_TINT_RGB[0]}, ${DEFAULT_TINT_RGB[1]}, ${DEFAULT_TINT_RGB[2]}, ${LOGO_WRAP_OPACITY})`,
   gradient: `rgb(${DEFAULT_TINT_RGB[0]} ${DEFAULT_TINT_RGB[1]} ${DEFAULT_TINT_RGB[2]} / 0.16)`,
   border: `rgba(${DEFAULT_BORDER_RGB[0]}, ${DEFAULT_BORDER_RGB[1]}, ${DEFAULT_BORDER_RGB[2]}, ${LOGO_BORDER_OPACITY})`,
+  solid: `rgba(${DEFAULT_TINT_RGB[0]}, ${DEFAULT_TINT_RGB[1]}, ${DEFAULT_TINT_RGB[2]}, ${LOGO_SOLID_OPACITY})`,
 };
 
 export interface ILogoTint {
   wrap: string;
   gradient: string;
   border: string;
+  solid: string;
 }
 
 type LogoSource = { logo_image?: IAttachedFile; logo_image_path?: IAttachedFile };
@@ -66,12 +69,14 @@ function toLogoTint([r, g, b]: Rgb): ILogoTint {
       wrap: tintColor(NEAR_WHITE_WRAP_RGB[0], NEAR_WHITE_WRAP_RGB[1], NEAR_WHITE_WRAP_RGB[2], 1, true),
       gradient: DEFAULT_LOGO_TINT.gradient,
       border: DEFAULT_LOGO_TINT.border,
+      solid: `rgba(${NEAR_WHITE_WRAP_RGB[0]}, ${NEAR_WHITE_WRAP_RGB[1]}, ${NEAR_WHITE_WRAP_RGB[2]}, ${LOGO_SOLID_OPACITY})`,
     };
   }
   return {
     wrap: tintColor(r, g, b, LOGO_WRAP_OPACITY, true),
     gradient: tintColor(r, g, b, LOGO_GRADIENT_OPACITY, false),
     border: tintColor(r, g, b, LOGO_BORDER_OPACITY, true),
+    solid: `rgba(${r}, ${g}, ${b}, ${LOGO_SOLID_OPACITY})`,
   };
 }
 
@@ -126,21 +131,24 @@ export class LogoTintService {
       const options = { ignoreWhite: true, quality: 10, colorSpace: 'rgb' as const };
 
       let rgb: Rgb | undefined;
-      const palette = getPaletteSync(img, { ...options, colorCount: 8 });
-      if (palette?.length) {
-        for (const entry of palette) {
-          const { r, g, b } = entry.rgb();
-          if (!isNearWhite(r, g, b)) {
-            rgb = [r, g, b];
-            break;
-          }
-        }
+
+      // Prefer dominant color (largest area in image)
+      const dominant = getColorSync(img, options)?.rgb();
+      if (dominant && !isNearWhite(dominant.r, dominant.g, dominant.b)) {
+        rgb = [dominant.r, dominant.g, dominant.b];
       }
 
+      // Fall back to palette if dominant is near-white
       if (!rgb) {
-        const dominant = getColorSync(img, options)?.rgb();
-        if (dominant && !isNearWhite(dominant.r, dominant.g, dominant.b)) {
-          rgb = [dominant.r, dominant.g, dominant.b];
+        const palette = getPaletteSync(img, { ...options, colorCount: 8 });
+        if (palette?.length) {
+          for (const entry of palette) {
+            const { r, g, b } = entry.rgb();
+            if (!isNearWhite(r, g, b)) {
+              rgb = [r, g, b];
+              break;
+            }
+          }
         }
       }
 

@@ -1,5 +1,5 @@
 .menu-items-footer {
-  @apply com-p-0 com-bg-white com-rounded-t-none com-rounded-b-10 com-border com-border-solid com-border-Bright-Gray com-mb-4;
+  @apply com-p-0 com-bg-white com-rounded-t-none com-rounded-b-10 com-border com-border-solid com-border-Bright-Gray com-border-t-0 com-mb-4;
 }
 
 .menu-items-footer-sticky {
@@ -161,7 +161,7 @@
   }
 
   .hackathon-header-banner {
-    @apply com-flex-[3] com-min-w-0 com-hidden md:com-flex com-overflow-hidden com-p-3;
+    @apply com-flex-[3] com-min-w-0 com-hidden md:com-flex com-overflow-hidden com-p-4;
 
     commudle-banner-image {
       @apply com-block com-w-full com-h-full;
@@ -182,4 +182,16 @@
 
 .card {
   @apply com-bg-white com-mx-0 com-mb-4 com-rounded-t-none;
+}
+
+@keyframes tiltEntrance {
+  0% {
+    transform: perspective(1000px) rotateX(4deg) rotateY(-4deg) scale(0.96);
+    opacity: 0;
+  }
+
+  100% {
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1);
+    opacity: 1;
+  }
 }

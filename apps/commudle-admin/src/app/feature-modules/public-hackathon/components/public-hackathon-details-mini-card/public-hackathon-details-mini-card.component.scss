@@ -108,7 +108,10 @@
               width: 42px;
               height: 50px;
               border-radius: 8px;
-              background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 49.9%, #2563eb 50%, #3b82f6 100%);
+              background: var(
+                --countdown-color,
+                linear-gradient(180deg, #1e3a8a 0%, #1e40af 49.9%, #2563eb 50%, #3b82f6 100%)
+              );
               box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 
               // Center divider line (mechanical split)
@@ -130,7 +133,7 @@
               }
 
               .countdown-value.flip {
-                animation: mechanicalFlip 0.6s ease-in-out;
+                animation: mechanicalFlip 0.4s ease-in-out;
               }
             }
 
@@ -223,7 +226,7 @@
   }
 
   .apply-section {
-    @apply com-px-4 com-pt-3 com-pb-0;
+    @apply com-px-4 com-pt-3 com-pb-5;
   }
 }
 

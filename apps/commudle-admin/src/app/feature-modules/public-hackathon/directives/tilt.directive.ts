@@ -1,18 +1,35 @@
-import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, HostListener, Input } from '@angular/core';
 
 @Directive({
   selector: '[appTilt]',
   standalone: true,
 })
-export class TiltDirective {
+export class TiltDirective implements AfterViewInit {
   @Input() maxTilt = 15;
   @Input() perspective = 1000;
   @Input() scale = 1.05;
+  @Input() tiltOnLoad = true;
 
   constructor(private el: ElementRef) {
     this.el.nativeElement.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
     this.el.nativeElement.style.transformStyle = 'preserve-3d';
     this.el.nativeElement.style.willChange = 'transform';
+  }
+
+  ngAfterViewInit() {
+    if (this.tiltOnLoad) {
+      // Apply the same tilt as if user is hovering — full maxTilt and scale
+      this.el.nativeElement.style.transition = 'none';
+      this.el.nativeElement.style.transform = `perspective(${this.perspective}px) rotateX(${
+        -this.maxTilt * 0.6
+      }deg) rotateY(${this.maxTilt * 0.8}deg) scale(${this.scale})`;
+
+      // Hold the tilt briefly, then smoothly animate back to neutral
+      setTimeout(() => {
+        this.el.nativeElement.style.transition = 'transform 1.5s cubic-bezier(0.25, 0.8, 0.25, 1)';
+        this.el.nativeElement.style.transform = `perspective(${this.perspective}px) rotateX(0deg) rotateY(0deg) scale(1)`;
+      }, 800);
+    }
   }
 
   @HostListener('mouseenter') onMouseEnter() {

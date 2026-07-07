@@ -34,7 +34,7 @@
     }
 
     .home-event-menu {
-      @apply com-sticky com-z-20 com-m-0 com-mb-4 com-rounded-b-10;
+      @apply com-sticky com-z-20 com-m-0 com-mb-4 com-rounded-t-none com-rounded-b-10;
       @apply com-p-0 com-bg-white com-border com-border-solid com-border-Bright-Gray;
       top: var(--mobile-navbar-offset, 68px);
 
