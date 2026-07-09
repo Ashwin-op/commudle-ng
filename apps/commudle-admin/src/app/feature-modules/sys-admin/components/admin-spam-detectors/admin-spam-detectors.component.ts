@@ -71,6 +71,22 @@ export class AdminSpamDetectorsComponent implements OnInit, OnDestroy {
     return parseFloat(((score || 0) * 100).toFixed(2));
   }
 
+  isUserContent(spamDetector: ISpamDetector): boolean {
+    return spamDetector.content_type === 'User';
+  }
+
+  isCommunityBuildContent(spamDetector: ISpamDetector): boolean {
+    return spamDetector.content_type === 'CommunityBuild';
+  }
+
+  getContentDisplayName(spamDetector: ISpamDetector): string {
+    if (this.isCommunityBuildContent(spamDetector)) {
+      return spamDetector.community_build?.name || 'Unknown Build';
+    }
+
+    return spamDetector.content_user_preview?.name || spamDetector.user?.name || 'Unknown User';
+  }
+
   getSpamDetectorsData() {
     this.spamDetectorService
       .getSpamResult(this.page, this.count, this.isSpam, this.isSpamDecision)

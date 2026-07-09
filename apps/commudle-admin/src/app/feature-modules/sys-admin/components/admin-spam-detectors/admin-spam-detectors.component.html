@@ -70,7 +70,7 @@
     <div class="filter-controls">
       <div class="filter-field">
         <label>Spam Detection</label>
-        <select [(ngModel)]="isSpam" (change)="changeSpamDetectorType($event.target)">
+        <select [(ngModel)]="isSpam" (change)="changeSpamDetectorType($any($event.target))">
           <option value="null">All Results</option>
           <option value="true">Flagged as Spam</option>
           <option value="false">Not Spam</option>
@@ -78,7 +78,7 @@
       </div>
       <div class="filter-field">
         <label>Admin Decision</label>
-        <select [(ngModel)]="isSpamDecision" (change)="changeSpamDecisionType($event.target)">
+        <select [(ngModel)]="isSpamDecision" (change)="changeSpamDecisionType($any($event.target))">
           <option value="null">All Decisions</option>
           <option value="true">Confirmed Spam</option>
           <option value="false">Confirmed Safe</option>
@@ -104,15 +104,36 @@
         <tr *ngFor="let spamDetector of spamDetectors" [class.row-flagged]="spamDetector.is_spam">
           <!-- Content -->
           <td>
-            <div class="content-info">
+            <div
+              class="content-info"
+              *ngIf="isCommunityBuildContent(spamDetector) && spamDetector.community_build as build"
+            >
               <span class="content-type-chip">{{ spamDetector.content_type }}</span>
-              <span class="content-title">{{ spamDetector.community_build.name }}</span>
-              <span class="content-desc" *ngIf="spamDetector.community_build.description">
-                {{ spamDetector.community_build.description }}
+              <span class="content-title">{{ build.name }}</span>
+              <span class="content-desc" *ngIf="build.description">
+                {{ build.description }}
               </span>
-              <a class="view-btn" [routerLink]="['/builds/', spamDetector.community_build.slug]" target="_blank">
+              <a class="view-btn" [routerLink]="['/builds/', build.slug]" target="_blank">
                 <fa-icon [icon]="icons.faArrowUpRightFromSquare"></fa-icon>
                 View Build
+              </a>
+            </div>
+
+            <div
+              class="content-info"
+              *ngIf="isUserContent(spamDetector) && spamDetector.content_user_preview as contentUser"
+            >
+              <span class="content-type-chip">{{ spamDetector.content_type }}</span>
+              <app-user-profile-card-small
+                [user]="$any(spamDetector.user)"
+                [disableAnchor]="false"
+              ></app-user-profile-card-small>
+              <span class="content-title" *ngIf="contentUser.designation">{{ contentUser.designation }}</span>
+              <span class="content-desc" *ngIf="contentUser.location">{{ contentUser.location }}</span>
+              <span class="content-desc" *ngIf="contentUser.about_me">{{ contentUser.about_me }}</span>
+              <a class="view-btn" [routerLink]="['/users/', contentUser.username]" target="_blank">
+                <fa-icon [icon]="icons.faArrowUpRightFromSquare"></fa-icon>
+                View Profile
               </a>
             </div>
           </td>
@@ -256,10 +277,10 @@
       </div>
       <p class="confirm-message">
         <ng-container *ngIf="data.selectedValue === 'true'">
-          Mark <strong>{{ data.spamDetector.community_build.name }}</strong> as <span class="text-spam">spam</span>?
+          Mark <strong>{{ getContentDisplayName(data.spamDetector) }}</strong> as <span class="text-spam">spam</span>?
         </ng-container>
         <ng-container *ngIf="data.selectedValue === 'false'">
-          Mark <strong>{{ data.spamDetector.community_build.name }}</strong> as <span class="text-safe">safe</span>?
+          Mark <strong>{{ getContentDisplayName(data.spamDetector) }}</strong> as <span class="text-safe">safe</span>?
         </ng-container>
       </p>
       <p class="confirm-sub">This action will update the spam decision for this content.</p>
