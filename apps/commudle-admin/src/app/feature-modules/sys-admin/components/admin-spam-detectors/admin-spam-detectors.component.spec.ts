@@ -1,31 +1,105 @@
+import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ErrorHandler } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of } from 'rxjs';
+import { SeoService, ToastrService } from '@commudle/shared-services';
+import { NbDialogService } from '@commudle/theme';
+import { SpamDetectorService } from '../../services/spam-detector.service';
 import { AdminSpamDetectorsComponent } from './admin-spam-detectors.component';
+import { ISpamDetector } from '@commudle/shared-models';
+
+const buildSpamDetectorFixture: ISpamDetector = {
+  id: 1,
+  request_sent_at: '2026-07-08T10:00:00Z',
+  response_received_at: '2026-07-08T10:01:00Z',
+  is_spam: true,
+  score: 0.88,
+  is_spam_decision: null,
+  created_at: '2026-07-08T10:00:00Z',
+  updated_at: '2026-07-08T10:01:00Z',
+  content_type: 'CommunityBuild',
+  content_id: 5,
+  community_build: {
+    name: 'Demo Build',
+    description: 'Build description',
+    slug: 'demo-build',
+  } as any,
+  content_user_preview: null,
+  user: {
+    id: 10,
+    name: 'Build Owner',
+    username: 'build-owner',
+    blocked: false,
+  },
+};
+
+const userSpamDetectorFixture: ISpamDetector = {
+  id: 2,
+  request_sent_at: '2026-07-08T10:00:00Z',
+  response_received_at: '2026-07-08T10:01:00Z',
+  is_spam: true,
+  score: 0.92,
+  is_spam_decision: null,
+  created_at: '2026-07-08T10:00:00Z',
+  updated_at: '2026-07-08T10:01:00Z',
+  content_type: 'User',
+  content_id: 22,
+  community_build: null,
+  content_user_preview: {
+    name: 'Alice Example',
+    username: 'alice',
+    designation: 'Developer Advocate',
+    location: 'Bengaluru',
+    about_me: 'Builder and mentor',
+  },
+  user: {
+    id: 22,
+    name: 'Alice Example',
+    username: 'alice',
+    blocked: false,
+    avatar: '',
+    photo: null,
+  },
+};
 
 describe('AdminSpamDetectorsComponent', () => {
   let component: AdminSpamDetectorsComponent;
   let fixture: ComponentFixture<AdminSpamDetectorsComponent>;
-  let mockRouter: any;
-  let mockErrorHandler: any;
+
+  const spamDetectorServiceStub = {
+    getSpamResult: jasmine
+      .createSpy('getSpamResult')
+      .and.returnValue(of({ values: [buildSpamDetectorFixture], total: 1, page: 1, count: 10 })),
+    updateSpamDetector: jasmine.createSpy('updateSpamDetector').and.returnValue(of({})),
+  };
+
+  const dialogServiceStub = {
+    open: jasmine.createSpy('open').and.returnValue({ onClose: of(false) }),
+  };
+
+  const seoServiceStub = {
+    noIndex: jasmine.createSpy('noIndex'),
+    setTitle: jasmine.createSpy('setTitle'),
+  };
+
+  const toastrServiceStub = {
+    successDialog: jasmine.createSpy('successDialog'),
+  };
 
   beforeEach(async () => {
-    mockRouter = {
-      navigate: jasmine.createSpy('navigate'),
-      url: '/sys-admin/spam-detectors',
-    };
-
-    mockErrorHandler = {
-      handleError: jasmine.createSpy('handleError'),
-    };
-
     await TestBed.configureTestingModule({
-      imports: [AdminSpamDetectorsComponent, ReactiveFormsModule, FormsModule],
+      declarations: [AdminSpamDetectorsComponent],
+      imports: [CommonModule, FormsModule, RouterTestingModule],
       providers: [
-        { provide: Router, useValue: mockRouter },
-        { provide: ErrorHandler, useValue: mockErrorHandler },
+        { provide: SpamDetectorService, useValue: spamDetectorServiceStub },
+        { provide: NbDialogService, useValue: dialogServiceStub },
+        { provide: SeoService, useValue: seoServiceStub },
+        { provide: ToastrService, useValue: toastrServiceStub },
+        ChangeDetectorRef,
       ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AdminSpamDetectorsComponent);
@@ -37,127 +111,35 @@ describe('AdminSpamDetectorsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should initialize with default values', () => {
-    expect(component.spamDetectors).toBeDefined();
-    expect(component.spamDetectorForm).toBeDefined();
-    expect(component.page).toBe(1);
-    expect(component.count).toBe(10);
-    expect(component.total).toBe(0);
+  it('should detect user and build content types correctly', () => {
+    expect(component.isCommunityBuildContent(buildSpamDetectorFixture)).toBeTrue();
+    expect(component.isUserContent(buildSpamDetectorFixture)).toBeFalse();
+    expect(component.isUserContent(userSpamDetectorFixture)).toBeTrue();
+    expect(component.isCommunityBuildContent(userSpamDetectorFixture)).toBeFalse();
   });
 
-  it('should have a valid form structure', () => {
-    const form = component.spamDetectorForm;
-    expect(form.get('name')).toBeTruthy();
-    expect(form.get('type')).toBeTruthy();
-    expect(form.get('enabled')).toBeTruthy();
-    expect(form.get('threshold')).toBeTruthy();
+  it('should return the correct display name for both content types', () => {
+    expect(component.getContentDisplayName(buildSpamDetectorFixture)).toBe('Demo Build');
+    expect(component.getContentDisplayName(userSpamDetectorFixture)).toBe('Alice Example');
   });
 
-  it('should have default form values', () => {
-    const form = component.spamDetectorForm;
-    expect(form.get('enabled')?.value).toBe(true);
-    expect(form.get('threshold')?.value).toBe(0.8);
-    expect(form.get('name')?.value).toBe('');
-    expect(form.get('type')?.value).toBe('');
+  it('should render community build rows as before', () => {
+    component.spamDetectors = [buildSpamDetectorFixture];
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Demo Build');
+    expect(fixture.nativeElement.textContent).toContain('Build description');
+    expect(fixture.nativeElement.textContent).toContain('View Build');
   });
 
-  it('should load spam detectors on init', () => {
-    expect(component.spamDetectors.length).toBeGreaterThan(0);
-    expect(component.total).toBe(component.spamDetectors.length);
-  });
+  it('should render user rows with compact user summary', () => {
+    component.spamDetectors = [userSpamDetectorFixture];
+    fixture.detectChanges();
 
-  it('should create a new spam detector when form is valid', () => {
-    const initialCount = component.spamDetectors.length;
-
-    component.spamDetectorForm.patchValue({
-      name: 'Test Detector',
-      type: 'text_analysis',
-      enabled: true,
-      threshold: 0.9,
-    });
-
-    component.create();
-
-    expect(component.spamDetectors.length).toBe(initialCount + 1);
-    expect(component.total).toBe(component.spamDetectors.length);
-  });
-
-  it('should not create detector when form is invalid', () => {
-    const initialCount = component.spamDetectors.length;
-
-    component.spamDetectorForm.patchValue({
-      name: '', // Invalid - required field
-      type: 'text_analysis',
-      enabled: true,
-      threshold: 0.9,
-    });
-
-    component.create();
-
-    expect(component.spamDetectors.length).toBe(initialCount);
-  });
-
-  it('should toggle detector status', () => {
-    const detector = component.spamDetectors[0];
-    const initialStatus = detector.enabled;
-
-    component.toggleDetector(detector);
-
-    expect(detector.enabled).toBe(!initialStatus);
-  });
-
-  it('should delete detector', () => {
-    const initialCount = component.spamDetectors.length;
-    const detectorToDelete = component.spamDetectors[0];
-
-    component.deleteDetector(detectorToDelete);
-
-    expect(component.spamDetectors.length).toBe(initialCount - 1);
-    expect(component.total).toBe(component.spamDetectors.length);
-  });
-
-  it('should reset form with default values', () => {
-    component.spamDetectorForm.patchValue({
-      name: 'Test Name',
-      type: 'test_type',
-      enabled: false,
-      threshold: 0.5,
-    });
-
-    component.spamDetectorForm.reset({
-      enabled: true,
-      threshold: 0.8,
-    });
-
-    expect(component.spamDetectorForm.get('enabled')?.value).toBe(true);
-    expect(component.spamDetectorForm.get('threshold')?.value).toBe(0.8);
-    expect(component.spamDetectorForm.get('name')?.value).toBe(null);
-    expect(component.spamDetectorForm.get('type')?.value).toBe(null);
-  });
-
-  it('should change page and reload detectors', () => {
-    spyOn(component, 'getSpamDetectors');
-
-    component.changeSpamDetectorType();
-
-    expect(component.page).toBe(1);
-    expect(component.getSpamDetectors).toHaveBeenCalled();
-  });
-
-  it('should display the component title', () => {
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Spam Detectors Management');
-  });
-
-  it('should show create detector form', () => {
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.create-detector-card')).toBeTruthy();
-    expect(compiled.querySelector('form')).toBeTruthy();
-  });
-
-  it('should show detectors list', () => {
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.detectors-list-card')).toBeTruthy();
-    expect(compiled.querySelector('.detectors-list')).toBeTruthy();
+    expect(fixture.nativeElement.textContent).toContain('Alice Example');
+    expect(fixture.nativeElement.textContent).toContain('Developer Advocate');
+    expect(fixture.nativeElement.textContent).toContain('Bengaluru');
+    expect(fixture.nativeElement.textContent).toContain('Builder and mentor');
+    expect(fixture.nativeElement.textContent).toContain('View Profile');
   });
 });
