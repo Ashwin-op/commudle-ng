@@ -236,7 +236,7 @@
               <input
                 type="checkbox"
                 class="row-checkbox"
-                [attr.aria-label]="'Select ' + spamDetector.community_build.name"
+                [attr.aria-label]="'Select ' + getContentDisplayName(spamDetector)"
                 [checked]="isSelected(spamDetector.id)"
                 (change)="toggleSelection(spamDetector.id)"
               />
@@ -244,15 +244,42 @@
 
             <!-- Content -->
             <td>
-              <div class="content-info">
+              <div
+                class="content-info"
+                *ngIf="isCommunityBuildContent(spamDetector) && spamDetector.community_build as build"
+              >
                 <span class="content-type-chip">{{ spamDetector.content_type }}</span>
-                <span class="content-title">{{ spamDetector.community_build.name }}</span>
-                <span class="content-desc" *ngIf="spamDetector.community_build.description">
-                  {{ spamDetector.community_build.description }}
+                <span class="content-title">{{ build.name }}</span>
+                <span class="content-desc" *ngIf="build.description">
+                  {{ build.description }}
                 </span>
-                <a class="view-btn" [routerLink]="['/builds/', spamDetector.community_build.slug]" target="_blank">
+                <span class="content-desc" *ngIf="spamDetector.reason">
+                  {{ spamDetector.reason }}
+                </span>
+                <a class="view-btn" [routerLink]="['/builds/', build.slug]" target="_blank">
                   <fa-icon [icon]="icons.faArrowUpRightFromSquare"></fa-icon>
                   View Build
+                </a>
+              </div>
+
+              <div
+                class="content-info"
+                *ngIf="isUserContent(spamDetector) && spamDetector.content_user_preview as contentUser"
+              >
+                <span class="content-type-chip">{{ spamDetector.content_type }}</span>
+                <app-user-profile-card-small
+                  [user]="$any(spamDetector.user)"
+                  [disableAnchor]="false"
+                ></app-user-profile-card-small>
+                <span class="content-title" *ngIf="contentUser.designation">{{ contentUser.designation }}</span>
+                <span class="content-desc" *ngIf="contentUser.location">{{ contentUser.location }}</span>
+                <span class="content-desc" *ngIf="contentUser.about_me">{{ contentUser.about_me }}</span>
+                <span class="content-desc" *ngIf="spamDetector.reason">
+                  {{ spamDetector.reason }}
+                </span>
+                <a class="view-btn" [routerLink]="['/users/', contentUser.username]" target="_blank">
+                  <fa-icon [icon]="icons.faArrowUpRightFromSquare"></fa-icon>
+                  View Profile
                 </a>
               </div>
             </td>
@@ -368,7 +395,7 @@
             <input
               type="checkbox"
               class="row-checkbox"
-              [attr.aria-label]="'Select ' + spamDetector.community_build.name"
+              [attr.aria-label]="'Select ' + getContentDisplayName(spamDetector)"
               [checked]="isSelected(spamDetector.id)"
               (change)="toggleSelection(spamDetector.id)"
             />
@@ -393,9 +420,21 @@
         </div>
 
         <div class="mobile-card-body">
-          <p class="content-title">{{ spamDetector.community_build.name }}</p>
-          <p class="content-desc" *ngIf="spamDetector.community_build.description">
-            {{ spamDetector.community_build.description }}
+          <ng-container *ngIf="isCommunityBuildContent(spamDetector) && spamDetector.community_build as build">
+            <p class="content-title">{{ build.name }}</p>
+            <p class="content-desc" *ngIf="build.description">
+              {{ build.description }}
+            </p>
+          </ng-container>
+
+          <ng-container *ngIf="isUserContent(spamDetector) && spamDetector.content_user_preview as contentUser">
+            <p class="content-title">{{ contentUser.name }}</p>
+            <p class="content-desc" *ngIf="contentUser.designation">{{ contentUser.designation }}</p>
+            <p class="content-desc" *ngIf="contentUser.about_me">{{ contentUser.about_me }}</p>
+          </ng-container>
+
+          <p class="content-desc" *ngIf="spamDetector.reason">
+            {{ spamDetector.reason }}
           </p>
 
           <div class="mobile-author-row">
@@ -407,7 +446,12 @@
           </div>
 
           <div class="mobile-links-row">
-            <a class="view-btn" [routerLink]="['/builds/', spamDetector.community_build.slug]" target="_blank">
+            <a
+              class="view-btn"
+              *ngIf="isCommunityBuildContent(spamDetector) && spamDetector.community_build as build"
+              [routerLink]="['/builds/', build.slug]"
+              target="_blank"
+            >
               <fa-icon [icon]="icons.faArrowUpRightFromSquare"></fa-icon> Build
             </a>
             <a class="view-btn" [routerLink]="['/users/', spamDetector.user.username]" target="_blank">
@@ -419,8 +463,8 @@
             <div
               class="score-bar-fill"
               [class.score-critical]="spamDetector.score >= 0.7"
-              [class.score-warning]="spamDetector.score >= 0.4 && spamDetector.score < 0.7"
-              [class.score-ok]="spamDetector.score < 0.4"
+              [class.score-warning]="spamDetector.score >= 0.3 && spamDetector.score < 0.7"
+              [class.score-ok]="spamDetector.score < 0.3"
               [style.width.%]="getScorePercent(spamDetector.score)"
             ></div>
           </div>
