@@ -1,0 +1,229 @@
+<div class="dashboard">
+  <!-- Row 1: Greeting -->
+  <section class="greeting-section" [ngClass]="'hero-' + timeTheme.period">
+    <div class="hero-blob hero-blob-1"></div>
+    <div class="hero-blob hero-blob-2"></div>
+    <div class="hero-blob hero-blob-3"></div>
+    <div class="greeting-content">
+      <span class="greeting-eyebrow">{{ greeting }} {{ timeTheme.emoji }}</span>
+      <h2 class="greeting-text">
+        Welcome back, <span class="greeting-name">{{ currentUser?.name?.split(' ')[0] }}</span>
+      </h2>
+      <p class="greeting-sub">Here's what's happening in your community today.</p>
+    </div>
+    <div class="greeting-highlights">
+      <div class="highlight-card">
+        <div class="highlight-icon members-icon">
+          <fa-icon [icon]="icons.faUsers"></fa-icon>
+        </div>
+        <div class="highlight-info">
+          <span class="highlight-primary">🎉 {{ newMembersThisWeek }} new members this week</span>
+          <span class="highlight-secondary">Total {{ newMembersThisMonth }} this month</span>
+        </div>
+      </div>
+      <div class="highlight-card">
+        <div class="highlight-icon events-icon">
+          <fa-icon [icon]="icons.faCalendarPlus"></fa-icon>
+        </div>
+        <div class="highlight-info">
+          <span class="highlight-primary">📅 1 event and 1 hackathon start tomorrow</span>
+        </div>
+      </div>
+      <div class="highlight-card">
+        <div class="highlight-icon events-icon">
+          <fa-icon [icon]="icons.faChartPie"></fa-icon>
+        </div>
+        <div class="highlight-info">
+          <span class="highlight-primary">💡 [API] people visited your community this week</span>
+          <span class="highlight-secondary">Total [API] in last 30 days</span>
+        </div>
+      </div>
+      <div class="highlight-card">
+        <div class="highlight-icon newsletter-icon">
+          <fa-icon [icon]="icons.faEnvelope"></fa-icon>
+        </div>
+        <div class="highlight-info">
+          <span class="highlight-primary">📧 Newsletter is scheduled for tomorrow</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Row 2: Needs Attention + Schedule + Activity -->
+  <section class="three-col-row">
+    <!-- Needs Attention -->
+    <div class="attention-card">
+      <div class="section-header">
+        <h3 class="section-heading"><span>🔔</span> Needs Attention</h3>
+      </div>
+      <div class="attention-list">
+        <a [routerLink]="['edit']" class="attention-item">
+          <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">Community profile incomplete</span>
+            <span class="attention-sub">Add a few details</span>
+          </div>
+          <span class="attention-action">Complete Profile</span>
+          <span class="attention-arrow">›</span>
+        </a>
+        <a [routerLink]="['newsletters', 'new']" class="attention-item">
+          <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">Create your first newsletter</span>
+            <span class="attention-sub">Engage your members</span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+        <a *ngIf="community?.payments_enabled" [routerLink]="['payments']" class="attention-item">
+          <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">Set up bank details</span>
+            <span class="attention-sub">Required for paid events</span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Upcoming Schedule -->
+    <div class="schedule-card">
+      <div class="section-header">
+        <h3 class="section-heading">Upcoming Schedule</h3>
+        <a [routerLink]="['events']" class="view-all-link">View All Events & Hackathons →</a>
+      </div>
+      <div class="schedule-timeline">
+        <div class="timeline-item">
+          <div class="timeline-date today">Today</div>
+          <div class="timeline-event">
+            <span class="timeline-event-name">Newsletter ABC</span>
+            <span class="timeline-event-time">11:00 AM</span>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date tomorrow">Tomorrow</div>
+          <div class="timeline-event">
+            <span class="timeline-event-name">AI Community Meetup</span>
+            <span class="timeline-event-time">6:00 PM</span>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">Fri, Aug 1</div>
+          <div class="timeline-event">
+            <span class="timeline-event-name">Build with AI Hackathon</span>
+            <span class="timeline-event-time">All Day</span>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">Mon, Aug 4</div>
+          <div class="timeline-event">
+            <span class="timeline-event-name">Web Dev Workshop</span>
+            <span class="timeline-event-time">5:00 PM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="activity-card">
+      <div class="section-header">
+        <h3 class="section-heading">Recent Activity</h3>
+        <a [routerLink]="['notifications']" class="view-all-link">View All →</a>
+      </div>
+      <div class="activity-list">
+        <div class="activity-item">
+          <div class="activity-avatar members-avatar">
+            <fa-icon [icon]="icons.faUsers"></fa-icon>
+          </div>
+          <div class="activity-content">
+            <span class="activity-text">New members this week: <strong>Arpan, Arshdeep, Prerna</strong></span>
+            <span class="activity-sub">SDE at Google · Product Designer · Frontend Developer</span>
+          </div>
+          <span class="activity-badge">+{{ newMembersThisWeek }}</span>
+        </div>
+        <div class="activity-item">
+          <div class="activity-avatar channel-avatar">
+            <fa-icon [icon]="icons.faHashtag"></fa-icon>
+          </div>
+          <div class="activity-content">
+            <span class="activity-text">Prerna posted a message in <strong>#frontend-dev channel</strong></span>
+          </div>
+          <span class="activity-time">2h ago</span>
+        </div>
+        <div class="activity-item">
+          <div class="activity-avatar survey-avatar">
+            <fa-icon [icon]="icons.faChartPie"></fa-icon>
+          </div>
+          <div class="activity-content">
+            <span class="activity-text">Total 100 responses on <strong>"Developer Experience Survey"</strong></span>
+          </div>
+          <span class="activity-time">5h ago</span>
+        </div>
+        <div class="activity-item">
+          <div class="activity-avatar members-avatar">
+            <fa-icon [icon]="icons.faUsers"></fa-icon>
+          </div>
+          <div class="activity-content">
+            <span class="activity-text">18 new members joined the community</span>
+          </div>
+          <span class="activity-time">1d ago</span>
+        </div>
+        <div class="activity-item">
+          <div class="activity-avatar channel-avatar">
+            <fa-icon [icon]="icons.faMessage"></fa-icon>
+          </div>
+          <div class="activity-content">
+            <span class="activity-text">New forum discussion in <strong>General</strong></span>
+          </div>
+          <span class="activity-time">1d ago</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Row 3: Community Snapshot + Quick Actions -->
+  <section class="snapshot-actions-row">
+    <div class="snapshot-section">
+      <h3 class="section-heading"><span>📊</span> Community Snapshot</h3>
+      <div class="snapshot-cards">
+        <div class="snapshot-card">
+          <div class="snapshot-card-header">
+            <fa-icon [icon]="icons.faUsers" class="snapshot-icon members-icon"></fa-icon>
+            <span class="snapshot-label">Members</span>
+          </div>
+          <div class="snapshot-value">{{ community?.members_count | number }}</div>
+        </div>
+        <div class="snapshot-card">
+          <div class="snapshot-card-header">
+            <fa-icon [icon]="icons.faCalendarPlus" class="snapshot-icon events-icon"></fa-icon>
+            <span class="snapshot-label">Events & Hackathons</span>
+          </div>
+          <div class="snapshot-value">—</div>
+        </div>
+        <div class="snapshot-card">
+          <div class="snapshot-card-header">
+            <fa-icon [icon]="icons.faEnvelope" class="snapshot-icon newsletter-icon"></fa-icon>
+            <span class="snapshot-label">Emails sent this week</span>
+          </div>
+          <div class="snapshot-value">—</div>
+        </div>
+        <div class="snapshot-card">
+          <div class="snapshot-card-header">
+            <fa-icon [icon]="icons.faChartPie" class="snapshot-icon analytics-icon"></fa-icon>
+            <span class="snapshot-label">Growth (this week)</span>
+          </div>
+          <div class="snapshot-value">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-section">
+      <h3 class="section-heading">Quick Actions</h3>
+      <div class="actions-grid">
+        <a *ngFor="let action of quickActions" class="action-card" [routerLink]="action.route">
+          <fa-icon [icon]="action.icon" class="action-icon"></fa-icon>
+          <span class="action-label">{{ action.label }}</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

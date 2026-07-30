@@ -1,0 +1,382 @@
+.dashboard {
+  @apply com-flex com-flex-col com-gap-5 com-p-4 lg:com-p-0;
+}
+
+.section-heading {
+  @apply com-m-0 com-text-base com-font-semibold com-text-Yankees-Blue com-flex com-items-center com-gap-2;
+}
+
+.section-header {
+  @apply com-flex com-items-center com-justify-between com-mb-3;
+}
+
+.view-all-link {
+  @apply com-text-xs com-font-medium com-text-primary-500 com-no-underline;
+
+  &:hover {
+    @apply com-text-primary-700;
+  }
+}
+
+// Row 1: Greeting
+.greeting-section {
+  @apply com-relative com-overflow-hidden com-pt-6 com-mb-2 com-p-6 com-rounded-2xl;
+  @apply sm:com-p-8;
+  background: linear-gradient(135deg, #4a90d9, #2c5f9e);
+  animation: heroFadeUp 0.6s ease-out both;
+
+  &.hero-morning {
+    background: linear-gradient(135deg, #fdb813, #f68b1f);
+
+    .hero-blob {
+      background-color: #ffd985;
+    }
+  }
+
+  &.hero-afternoon {
+    background: linear-gradient(135deg, #4a90d9, #2c5f9e);
+
+    .hero-blob {
+      background-color: #8fc1ee;
+    }
+  }
+
+  &.hero-evening {
+    background: linear-gradient(135deg, #4b3f9e, #1b1464);
+
+    .hero-blob {
+      background-color: #7d72d1;
+    }
+  }
+
+  &.hero-night {
+    background: linear-gradient(135deg, #1a1a2e, #0d0d1a);
+
+    .hero-blob {
+      background-color: #363652;
+    }
+  }
+
+  .hero-blob {
+    @apply com-absolute com-rounded-full com-pointer-events-none;
+    filter: blur(2px);
+
+    &.hero-blob-1 {
+      width: 16rem;
+      height: 16rem;
+      top: -6rem;
+      right: -4rem;
+      animation: blobFloat 9s ease-in-out infinite;
+    }
+
+    &.hero-blob-2 {
+      width: 10rem;
+      height: 10rem;
+      bottom: -5rem;
+      right: 8rem;
+      animation: blobFloat 11s ease-in-out infinite reverse;
+    }
+
+    &.hero-blob-3 {
+      width: 6rem;
+      height: 6rem;
+      top: 1.5rem;
+      right: 30%;
+      animation: blobFloat 13s ease-in-out infinite;
+    }
+  }
+
+  .greeting-content {
+    @apply com-relative com-flex com-flex-col com-gap-1 com-mb-5;
+    z-index: 1;
+
+    .greeting-eyebrow {
+      @apply com-self-start com-text-sm com-font-semibold com-text-white com-opacity-90;
+      animation: heroFadeUp 0.6s ease-out 0.05s both;
+    }
+
+    .greeting-text {
+      @apply com-m-0 com-text-2xl sm:com-text-3xl com-font-bold com-text-white;
+      animation: heroFadeUp 0.6s ease-out 0.12s both;
+
+      .greeting-name {
+        @apply com-font-extrabold com-text-white;
+      }
+    }
+
+    .greeting-sub {
+      @apply com-m-0 com-text-sm com-text-white com-opacity-90;
+      animation: heroFadeUp 0.6s ease-out 0.18s both;
+    }
+  }
+
+  .greeting-highlights {
+    @apply com-relative com-flex com-flex-col md:com-flex-row com-gap-3 com-flex-wrap;
+    z-index: 1;
+
+    .highlight-card {
+      @apply com-flex com-items-center com-gap-3 com-flex-1 com-rounded-xl com-p-3 com-border com-border-solid;
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+
+      .highlight-icon {
+        @apply com-w-9 com-h-9 com-rounded-lg com-flex com-items-center com-justify-center com-text-sm com-shrink-0 com-text-white;
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .highlight-info {
+        .highlight-primary {
+          @apply com-text-sm com-font-medium com-text-white;
+        }
+
+        .highlight-secondary {
+          @apply com-text-xs com-text-white com-opacity-75 com-mt-0.5 com-block;
+        }
+      }
+    }
+  }
+}
+
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blobFloat {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(-1.5rem, 1rem) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .greeting-section,
+  .greeting-section * {
+    animation: none !important;
+  }
+}
+
+// Row 2: Three-column
+.three-col-row {
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-4;
+
+  .attention-card,
+  .schedule-card,
+  .activity-card {
+    @apply com-bg-white com-rounded-xl com-p-4 com-border com-border-solid com-border-Bright-Gray;
+  }
+
+  .attention-list {
+    @apply com-mt-3;
+
+    .attention-item {
+      @apply com-flex com-items-center com-gap-3 com-py-2.5 com-px-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+
+      &:last-child {
+        @apply com-border-b-0;
+      }
+
+      &:hover {
+        @apply com-bg-gray-50 com-rounded-lg;
+      }
+
+      .attention-icon-check {
+        @apply com-text-green-500 com-text-lg com-shrink-0;
+      }
+
+      .attention-icon-cross {
+        @apply com-text-red-400 com-text-lg com-shrink-0;
+      }
+
+      .attention-content {
+        @apply com-flex com-flex-col com-flex-1 com-min-w-0;
+
+        .attention-title {
+          @apply com-text-sm com-font-medium com-text-Yankees-Blue;
+        }
+
+        .attention-sub {
+          @apply com-text-xs com-text-gray-500;
+        }
+      }
+
+      .attention-action {
+        @apply com-text-xs com-font-medium com-text-primary-500 com-shrink-0 com-px-2 com-py-1 com-rounded com-bg-primary-50;
+      }
+
+      .attention-arrow {
+        @apply com-text-lg com-text-gray-400 com-shrink-0;
+      }
+    }
+  }
+
+  .schedule-timeline {
+    @apply com-mt-3 com-flex com-flex-col;
+
+    .timeline-item {
+      @apply com-flex com-items-start com-gap-3;
+
+      .timeline-date {
+        @apply com-text-xs com-font-semibold com-text-gray-500 com-w-16 com-shrink-0 com-py-2;
+
+        &.today {
+          @apply com-text-primary-500;
+        }
+
+        &.tomorrow {
+          @apply com-text-green-600;
+        }
+      }
+
+      .timeline-event {
+        @apply com-flex com-flex-col com-flex-1 com-pl-3 com-py-2 com-border-0 com-border-l-2 com-border-solid com-border-Bright-Gray;
+
+        .timeline-event-name {
+          @apply com-text-sm com-font-medium com-text-Yankees-Blue;
+        }
+
+        .timeline-event-time {
+          @apply com-text-xs com-text-gray-500;
+        }
+      }
+    }
+  }
+}
+
+// Row 3: Snapshot + Quick Actions
+.snapshot-actions-row {
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-[2fr_1fr] com-gap-4;
+}
+
+.snapshot-section {
+  @apply com-bg-white com-rounded-xl com-p-4 com-border com-border-solid com-border-Bright-Gray;
+
+  .snapshot-cards {
+    @apply com-grid com-grid-cols-2 com-gap-3 com-mt-3;
+
+    .snapshot-card {
+      @apply com-bg-white com-rounded-xl com-p-4 com-border com-border-solid com-border-Bright-Gray;
+
+      .snapshot-card-header {
+        @apply com-flex com-items-center com-gap-2 com-mb-2;
+
+        .snapshot-icon {
+          @apply com-text-sm;
+
+          &.members-icon {
+            @apply com-text-blue-500;
+          }
+
+          &.events-icon {
+            @apply com-text-green-500;
+          }
+
+          &.newsletter-icon {
+            @apply com-text-purple-500;
+          }
+
+          &.analytics-icon {
+            @apply com-text-orange-500;
+          }
+        }
+
+        .snapshot-label {
+          @apply com-text-xs com-font-medium com-text-gray-600;
+        }
+      }
+
+      .snapshot-value {
+        @apply com-text-2xl com-font-bold com-text-Yankees-Blue;
+      }
+    }
+  }
+}
+
+.actions-section {
+  @apply com-bg-white com-rounded-xl com-p-4 com-border com-border-solid com-border-Bright-Gray;
+
+  .actions-grid {
+    @apply com-grid com-grid-cols-2 lg:com-grid-cols-4 com-gap-2 com-mt-3;
+
+    .action-card {
+      @apply com-flex com-flex-col com-items-center com-gap-2 com-p-3 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-no-underline com-transition-all com-duration-200 com-cursor-pointer;
+
+      &:hover {
+        @apply com-border-primary-300 com-bg-blue-50;
+      }
+
+      .action-icon {
+        @apply com-text-lg com-text-primary-500;
+      }
+
+      .action-label {
+        @apply com-text-xs com-font-medium com-text-Yankees-Blue com-text-center;
+      }
+    }
+  }
+}
+
+// Activity list
+.activity-list {
+  @apply com-mt-3 com-flex com-flex-col;
+
+  .activity-item {
+    @apply com-flex com-items-center com-gap-3 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+
+    &:last-child {
+      @apply com-border-b-0;
+    }
+
+    .activity-avatar {
+      @apply com-w-9 com-h-9 com-rounded-full com-flex com-items-center com-justify-center com-text-sm com-shrink-0;
+
+      &.members-avatar {
+        @apply com-bg-blue-100 com-text-blue-600;
+      }
+
+      &.channel-avatar {
+        @apply com-bg-purple-100 com-text-purple-600;
+      }
+
+      &.survey-avatar {
+        @apply com-bg-green-100 com-text-green-600;
+      }
+    }
+
+    .activity-content {
+      @apply com-flex com-flex-col com-flex-1 com-min-w-0;
+
+      .activity-text {
+        @apply com-text-sm com-text-Yankees-Blue com-line-clamp-1;
+
+        strong {
+          @apply com-font-semibold;
+        }
+      }
+
+      .activity-sub {
+        @apply com-text-xs com-text-gray-500 com-line-clamp-1;
+      }
+    }
+
+    .activity-time {
+      @apply com-text-xs com-text-gray-400 com-shrink-0;
+    }
+
+    .activity-badge {
+      @apply com-text-xs com-font-medium com-text-primary-500 com-bg-blue-50 com-px-2 com-py-1 com-rounded-full com-shrink-0;
+    }
+  }
+}
