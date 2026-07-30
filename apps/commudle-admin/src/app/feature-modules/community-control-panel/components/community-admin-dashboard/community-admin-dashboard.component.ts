@@ -109,7 +109,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private seoService: SeoService,
     private dashboardCommunitiesService: DashboardCommunitiesService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.setGreeting();
