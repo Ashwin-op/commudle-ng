@@ -607,7 +607,615 @@
 }
 
 .dashboard {
-  @apply com-flex com-flex-col com-gap-5 com-p-4 lg:com-p-0;
+  @apply com-flex com-flex-col com-gap-2;
+}
+
+.section-loader {
+  @apply com-flex com-justify-center com-w-full com-py-3;
+}
+
+.section-heading {
+  @apply com-m-0 com-text-base com-font-medium com-text-Yankees-Blue com-flex md:com-items-center com-items-start com-gap-2;
+
+  .heading-icon-attention {
+    @apply com-text-Azure;
+  }
+
+  .heading-icon-schedule {
+    @apply com-text-primary-500;
+  }
+
+  .heading-icon-activity {
+    @apply com-text-yellow-500;
+  }
+
+  .heading-icon-snapshot,
+  .heading-icon-cities {
+    @apply com-text-green-500;
+  }
+
+  .heading-icon-actions {
+    @apply com-text-purple-500;
+  }
+
+  .heading-icon-visitors {
+    @apply com-text-blue-500;
+  }
+
+  .heading-icon-pages {
+    @apply com-text-primary-500;
+  }
+}
+
+.section-header {
+  @apply com-flex com-items-center com-justify-between com-mb-2 com-m-0;
+}
+
+.view-all-link {
+  @apply com-text-xs com-font-medium com-text-primary-500 com-no-underline com-flex-shrink-0;
+
+  &:hover {
+    @apply com-text-primary-700;
+  }
+}
+
+// Row 1: Greeting
+.greeting-section {
+  @apply com-relative com-overflow-hidden com-p-3 md:com-rounded-xl com-rounded-none;
+  background: linear-gradient(135deg, #4a90d9, #2c5f9e);
+  animation: heroFadeUp 0.6s ease-out both;
+
+  &.hero-morning {
+    background: linear-gradient(135deg, #fdb813, #f68b1f);
+
+    .hero-blob {
+      background-color: #ffd985;
+    }
+  }
+
+  &.hero-afternoon {
+    background: linear-gradient(135deg, #4a90d9, #2c5f9e);
+
+    .hero-blob {
+      background-color: #8fc1ee;
+    }
+  }
+
+  &.hero-evening {
+    background: linear-gradient(135deg, #4b3f9e, #1b1464);
+
+    .hero-blob {
+      background-color: #7d72d1;
+    }
+  }
+
+  &.hero-night {
+    background: linear-gradient(135deg, #1a1a2e, #0d0d1a);
+
+    .hero-blob {
+      background-color: #363652;
+    }
+
+    .greeting-content {
+      .greeting-eyebrow {
+        @apply com-text-tWhite com-opacity-80;
+      }
+
+      .greeting-text {
+        @apply com-text-tWhite;
+
+        .greeting-name {
+          @apply com-text-tWhite;
+        }
+      }
+
+      .greeting-sub {
+        @apply com-text-gray-200;
+      }
+    }
+
+    .greeting-highlights .highlight-card {
+      border-color: rgba(0, 0, 0, 0.15);
+      background: rgba(255, 255, 255, 0.25);
+
+      .highlight-info .highlight-primary {
+        @apply com-text-tWhite;
+      }
+
+      .highlight-info .highlight-secondary {
+        @apply com-text-tWhite;
+      }
+
+      .highlight-icon {
+        @apply com-text-tWhite;
+        background: rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+
+  .hero-blob {
+    @apply com-absolute com-rounded-full com-pointer-events-none;
+    filter: blur(2px);
+
+    &.hero-blob-1 {
+      @apply com-w-64 com-h-64 -com-top-24 -com-right-16;
+      animation: blobFloat 9s ease-in-out infinite;
+    }
+
+    &.hero-blob-2 {
+      @apply com-w-40 com-h-40 -com-bottom-20 com-right-32;
+      animation: blobFloat 11s ease-in-out infinite reverse;
+    }
+
+    &.hero-blob-3 {
+      @apply com-w-24 com-h-24 com-top-6;
+      right: 30%;
+      animation: blobFloat 13s ease-in-out infinite;
+    }
+  }
+
+  .greeting-content {
+    @apply com-relative com-flex com-flex-col com-gap-0 com-mb-2;
+    z-index: 1;
+
+    .greeting-eyebrow {
+      @apply com-self-start com-text-sm com-font-semibold com-text-tWhite com-opacity-90;
+      animation: heroFadeUp 0.6s ease-out 0.05s both;
+    }
+
+    .greeting-text {
+      @apply com-m-0 com-text-lg sm:com-text-xl com-font-bold com-text-tWhite;
+      animation: heroFadeUp 0.6s ease-out 0.12s both;
+
+      .greeting-name {
+        @apply com-font-extrabold com-text-tWhite;
+      }
+    }
+
+    .greeting-sub {
+      @apply com-m-0 com-text-sm com-text-tWhite com-opacity-90;
+      animation: heroFadeUp 0.6s ease-out 0.18s both;
+    }
+  }
+
+  .greeting-highlights {
+    @apply com-relative com-flex com-flex-col md:com-flex-row com-gap-2 com-flex-wrap com-m-0 com-p-0 com-list-none;
+    z-index: 1;
+
+    .highlight-card {
+      @apply com-flex com-items-center com-gap-2 com-flex-1 com-rounded-lg com-px-2 com-py-1.5 com-relative;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+
+      &::before {
+        content: '';
+        @apply com-absolute com-inset-[-1px] com-rounded-xl com-pointer-events-none com-p-px;
+        background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.8) 50%, transparent 100%);
+        background-size: 200% 100%;
+        animation: borderShimmer 3s linear infinite;
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+      }
+
+      .highlight-icon {
+        @apply com-w-7 com-h-7 com-rounded-md com-flex com-items-center com-justify-center com-text-sm com-shrink-0 com-text-tWhite;
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .highlight-info {
+        @apply com-m-0;
+
+        .highlight-primary {
+          @apply com-text-sm com-font-medium com-text-tWhite;
+        }
+
+        .highlight-secondary {
+          @apply com-text-xs com-text-tWhite com-opacity-75 com-mt-0.5 com-block;
+        }
+      }
+    }
+  }
+}
+
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes borderShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes blobFloat {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(-1.5rem, 1rem) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .greeting-section,
+  .greeting-section *,
+  .highlight-card::before {
+    animation: none !important;
+  }
+}
+
+// Row 2: Three-column
+.three-col-row {
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-2;
+
+  .attention-card,
+  .schedule-card,
+  .activity-card {
+    @apply com-rounded-xl com-p-2.5 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+  }
+
+  // Lay the activity card out as a column so the pagination can be pushed to
+  // the bottom; the grid already stretches cards to equal height, so the
+  // pagination stays anchored instead of jumping up when rows reload.
+  .activity-card {
+    @apply com-flex com-flex-col;
+
+    commudle-pagination-compact {
+      @apply com-mt-auto;
+    }
+  }
+
+  .attention-list {
+    @apply com-m-0;
+
+    .attention-item {
+      @apply com-flex com-items-center com-gap-2 com-p-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+
+      &:last-child {
+        @apply com-border-b-0;
+      }
+
+      &:hover {
+        @apply com-bg-gray-50 com-rounded-lg;
+      }
+
+      .attention-icon-check {
+        @apply com-text-green-500 com-text-base com-shrink-0;
+      }
+
+      .attention-icon-cross {
+        @apply com-text-red-400 com-text-base com-shrink-0;
+      }
+
+      .attention-content {
+        @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-m-0;
+
+        .attention-title {
+          @apply com-text-sm com-font-medium com-text-Yankees-Blue;
+        }
+
+        .attention-sub {
+          @apply com-text-xs com-text-gray-500;
+        }
+      }
+
+      .attention-action {
+        @apply com-text-xs com-font-medium com-text-Cadet-Grey com-shrink-0 com-px-2 com-py-1 com-rounded com-bg-gray-100;
+      }
+
+      .attention-arrow {
+        @apply com-text-lg com-text-gray-400 com-shrink-0;
+      }
+    }
+
+    .attention-empty {
+      @apply com-flex com-items-center com-gap-2 com-m-0 com-py-2 com-text-xs com-text-gray-500;
+
+      .attention-empty-icon {
+        @apply com-text-green-500;
+      }
+    }
+  }
+
+  .schedule-timeline {
+    @apply com-flex com-flex-col com-m-0 com-p-0 com-list-none;
+
+    .timeline-item {
+      @apply com-flex com-items-start com-gap-3;
+
+      .timeline-date {
+        @apply com-text-xs com-font-medium com-text-gray-500 com-w-16 com-shrink-0 com-py-1 com-whitespace-nowrap;
+
+        &.today {
+          @apply com-text-primary-500;
+        }
+
+        &.tomorrow {
+          @apply com-text-green-600;
+        }
+      }
+
+      .timeline-event {
+        @apply com-flex com-flex-col com-flex-1 com-pl-2 com-py-1 com-border-0 com-border-l-2 com-border-solid com-border-Bright-Gray com-m-0;
+
+        .timeline-event-name {
+          @apply com-text-sm com-font-medium com-text-Yankees-Blue;
+
+          .timeline-event-icon {
+            @apply com-mr-1.5 com-text-xs com-text-primary-500;
+          }
+        }
+
+        .timeline-event-time {
+          @apply com-text-xs com-text-gray-500;
+        }
+      }
+    }
+
+    .timeline-empty {
+      @apply com-py-2 com-text-xs com-text-gray-500;
+    }
+  }
+}
+
+// Row 3: Snapshot + Quick Actions
+.snapshot-actions-row {
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-2;
+}
+
+.snapshot-section,
+.actions-section {
+  .section-heading {
+    @apply com-mb-1.5;
+  }
+}
+
+.snapshot-section {
+  @apply com-bg-white com-rounded-xl com-p-2.5 com-border com-border-solid com-border-Bright-Gray lg:com-col-span-2;
+
+  .snapshot-cards {
+    @apply com-grid com-grid-cols-2 md:com-grid-cols-3 com-gap-2 com-m-0 com-p-0 com-list-none;
+
+    .snapshot-card {
+      @apply com-bg-white com-rounded-lg com-p-2.5 com-border com-border-solid com-border-Bright-Gray;
+
+      .snapshot-card-header {
+        @apply com-flex com-items-center com-gap-1.5 com-mb-2;
+
+        .snapshot-icon {
+          @apply com-flex com-text-sm;
+
+          &.members-icon {
+            @apply com-text-blue-500;
+          }
+
+          &.events-icon {
+            @apply com-text-green-500;
+          }
+
+          &.newsletter-icon {
+            @apply com-text-purple-500;
+          }
+
+          &.analytics-icon {
+            @apply com-text-orange-500;
+          }
+        }
+
+        .snapshot-label {
+          @apply com-text-xs com-font-medium com-text-gray-600 com-truncate;
+        }
+      }
+
+      .snapshot-value {
+        @apply com-flex com-items-baseline com-flex-wrap com-gap-x-1.5 com-text-lg com-font-semibold com-leading-tight com-text-Yankees-Blue com-m-0;
+
+        .snapshot-delta {
+          @apply com-text-10px com-font-medium com-text-green-600;
+
+          &.negative {
+            @apply com-text-red-500;
+          }
+        }
+      }
+    }
+  }
+}
+
+.actions-section {
+  @apply com-bg-white com-rounded-xl com-p-2.5 com-border com-border-solid com-border-Bright-Gray;
+
+  .actions-grid {
+    @apply com-grid com-grid-cols-2 com-gap-2;
+
+    .action-card {
+      @apply com-flex com-items-center com-gap-1.5 com-px-2 com-py-1.5 com-rounded-md com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-no-underline com-transition-all com-duration-200 com-cursor-pointer;
+
+      &:hover {
+        @apply com-border-primary-300 com-bg-blue-50;
+      }
+
+      .action-icon {
+        @apply com-text-sm com-text-indigo-500;
+      }
+
+      .action-label {
+        @apply com-text-sm com-font-normal com-text-Yankees-Blue com-truncate;
+      }
+    }
+  }
+}
+
+// Activity list
+.activity-list {
+  @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col;
+
+  .activity-item {
+    @apply com-flex com-items-center com-gap-2 com-py-1 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+
+    &:last-child {
+      @apply com-border-b-0;
+    }
+
+    .activity-avatar {
+      @apply com-w-6 com-h-6 com-rounded-full com-flex com-items-center com-justify-center com-text-10px com-font-medium com-shrink-0 com-text-white;
+
+      &.members-avatar {
+        @apply com-bg-blue-500;
+      }
+
+      &.channel-avatar {
+        @apply com-bg-purple-500;
+      }
+
+      &.survey-avatar {
+        @apply com-bg-green-500;
+      }
+    }
+
+    .activity-content {
+      @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-m-0;
+
+      .activity-text {
+        @apply com-text-sm com-text-Yankees-Blue com-line-clamp-2 com-cursor-default;
+
+        strong {
+          @apply com-font-medium;
+        }
+      }
+
+      .activity-sub {
+        @apply com-text-xs com-text-gray-500 com-line-clamp-1;
+      }
+    }
+
+    .activity-time {
+      @apply com-text-xs com-text-gray-400 com-shrink-0;
+    }
+
+    .activity-badge {
+      @apply com-text-xs com-font-medium com-text-primary-500 com-bg-blue-50 com-px-2 com-py-1 com-rounded-full com-shrink-0;
+    }
+
+    .activity-name-avatar {
+      @apply com-inline-flex com-items-center com-justify-center com-w-5 com-h-5 com-rounded-full com-bg-primary-500 com-text-white com-text-[10px] com-font-medium com-mr-0.5 com-align-middle;
+    }
+  }
+
+  .activity-empty {
+    @apply com-py-2 com-text-xs com-text-gray-500;
+  }
+}
+
+.activity-load-more {
+  @apply com-mt-3 com-w-full com-py-2 com-text-sm com-font-medium com-text-primary-500 com-bg-white com-border com-border-solid com-border-Bright-Gray com-rounded-lg com-cursor-pointer;
+  @apply hover:com-bg-gray-50 disabled:com-opacity-50 disabled:com-cursor-not-allowed;
+}
+
+// Row 4: Live Visitors + Top Pages + Top Cities
+.live-traffic-row {
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-2;
+
+  .live-visitors-card,
+  .top-list-card {
+    @apply com-rounded-xl com-p-2.5 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+  }
+
+  .top-list-card {
+    @apply com-flex com-flex-col;
+
+    commudle-pagination-compact {
+      @apply com-mt-auto;
+    }
+  }
+
+  .live-visitors-body {
+    @apply com-flex com-flex-col com-gap-3;
+
+    .live-visitors-counts {
+      @apply com-flex com-gap-6;
+
+      .live-count {
+        @apply com-flex com-flex-col com-gap-1;
+
+        .live-count-value {
+          @apply com-text-lg com-font-semibold com-text-Yankees-Blue com-leading-none;
+        }
+
+        .live-count-label {
+          @apply com-flex com-items-center com-gap-1.5 com-text-xs com-text-gray-500;
+
+          .live-dot {
+            @apply com-w-2 com-h-2 com-rounded-full com-bg-green-500 com-inline-block;
+          }
+        }
+      }
+    }
+  }
+
+  .top-list {
+    @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-2;
+
+    .top-list-item {
+      @apply com-flex com-items-center com-gap-2 com-text-xs com-text-Yankees-Blue;
+
+      .top-list-name {
+        @apply com-w-28 com-shrink-0 com-truncate com-text-sm com-text-Yankees-Blue com-no-underline;
+
+        &:hover {
+          @apply com-text-primary-600 com-underline;
+        }
+      }
+
+      .top-list-track {
+        @apply com-h-1 com-flex-1 com-shrink-0 com-rounded-full com-bg-gray-100 com-overflow-hidden;
+      }
+
+      .top-list-bar {
+        @apply com-block com-h-full com-rounded-full com-min-w-1;
+        width: var(--bar-share, 0%);
+
+        &.top-list-bar-pages {
+          @apply com-bg-primary-500;
+        }
+
+        &.top-list-bar-cities {
+          @apply com-bg-green-500;
+        }
+      }
+
+      .top-list-value {
+        @apply com-ml-auto com-text-xs com-font-medium com-text-Cadet-Grey com-shrink-0;
+      }
+    }
+
+    .top-list-empty {
+      @apply com-py-2 com-text-xs com-text-gray-500;
+    }
+  }
+}
+
+.dashboard {
+  @apply com-flex com-flex-col com-gap-5;
 }
 
 .section-heading {
@@ -785,7 +1393,7 @@
   .attention-card,
   .schedule-card,
   .activity-card {
-    @apply com-bg-white com-rounded-xl com-p-4 com-border com-border-solid com-border-Bright-Gray;
+    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray;
   }
 
   .attention-list {
@@ -823,7 +1431,7 @@
       }
 
       .attention-action {
-        @apply com-text-xs com-font-medium com-text-primary-500 com-shrink-0 com-px-2 com-py-1 com-rounded com-bg-primary-50;
+        @apply com-text-xs com-font-medium com-text-primary-500 com-shrink-0 com-px-2 com-py-1 com-rounded com-bg-blue-50;
       }
 
       .attention-arrow {

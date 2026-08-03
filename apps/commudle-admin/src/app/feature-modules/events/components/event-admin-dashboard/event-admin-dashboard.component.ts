@@ -116,7 +116,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     private libToastLogService: LibToastLogService,
     private navigatorShareService: NavigatorShareService,
     private dashboardEventsService: DashboardEventsService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.subscriptions.push(
