@@ -120,7 +120,11 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   setQuickActions(): void {
     const slug = this.community.slug;
     this.quickActions = [
-      { label: 'Create Event', icon: faCalendarPlus, route: ['/admin', 'communities', slug, 'event-dashboard', 'new'] },
+      {
+        label: 'Create Event',
+        icon: faCalendarPlus,
+        route: ['/admin', 'communities', slug, 'events', 'event-dashboard', 'new'],
+      },
       {
         label: 'Create Hackathon',
         icon: faTrophy,

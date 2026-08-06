@@ -5,7 +5,7 @@
         <com-card-body>
           <p>
             <a
-              [routerLink]="['/admin/communities', community.slug, 'event-dashboard', event.slug]"
+              [routerLink]="['/admin/communities', community.slug, 'events', 'event-dashboard', event.slug]"
               class="padding-0 navigation-link"
               ghost
               nbButton
@@ -38,7 +38,14 @@
                   userRoles.includes(EUserRoles.EVENT_VOLUNTEER) ||
                   userRoles.includes(EUserRoles.ORGANIZER))
               "
-              [routerLink]="['/admin/communities', community.slug, 'event-dashboard', event.slug, 'scan-entry-pass']"
+              [routerLink]="[
+                '/admin/communities',
+                community.slug,
+                'events',
+                'event-dashboard',
+                event.slug,
+                'scan-entry-pass'
+              ]"
               nbButton
               outline
               size="small"

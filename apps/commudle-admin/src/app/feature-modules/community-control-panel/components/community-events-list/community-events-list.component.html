@@ -6,7 +6,7 @@
       nbButton
       status="primary"
       shape="semi-round"
-      [routerLink]="['/admin/communities', community.slug, 'event-dashboard', 'new']"
+      [routerLink]="['/admin/communities', community.slug, 'events', 'event-dashboard', 'new']"
     >
       <fa-icon [icon]="icons.faPlus"></fa-icon> &nbsp; Create New Event
     </a>
@@ -51,7 +51,7 @@
       *appBreakpoints="'<=lg'"
       nbButton
       status="primary"
-      [routerLink]="['/admin/communities', community.slug, 'event-dashboard', 'new']"
+      [routerLink]="['/admin/communities', community.slug, 'events', 'event-dashboard', 'new']"
       class="empty-state-button"
       fullWidth
     >
@@ -69,7 +69,7 @@
       *appBreakpoints="'>lg'"
       nbButton
       status="primary"
-      [routerLink]="['/admin/communities', community.slug, 'event-dashboard', 'new']"
+      [routerLink]="['/admin/communities', community.slug, 'events', 'event-dashboard', 'new']"
       class="empty-state-button"
     >
       <fa-icon [icon]="icons.faPlus"></fa-icon>
@@ -101,13 +101,7 @@
                 <td class="event-name-container">
                   <a
                     class="event-name"
-                    [routerLink]="
-                      event.status === EEventStatuses.OPEN
-                        ? ['event-dashboard', event.slug, 'registrations']
-                        : event.status === EEventStatuses.COMPLETED
-                        ? ['event-dashboard', event.slug, 'stats']
-                        : ['event-dashboard', event.slug]
-                    "
+                    [routerLink]="['/admin/communities', community.slug, 'events', 'event-dashboard', event.slug]"
                     >{{ event.name }}
                   </a>
                   <app-badge
@@ -150,13 +144,7 @@
                 <td class="action-buttons">
                   <div class="event-dashboard-actions">
                     <a
-                      [routerLink]="
-                        event.status === EEventStatuses.OPEN
-                          ? ['event-dashboard', event.slug, 'registrations']
-                          : event.status === EEventStatuses.COMPLETED
-                          ? ['event-dashboard', event.slug, 'stats']
-                          : ['event-dashboard', event.slug]
-                      "
+                      [routerLink]="['/admin/communities', community.slug, 'events', 'event-dashboard', event.slug]"
                       nbButton
                       status="basic"
                       shape="semi-round"

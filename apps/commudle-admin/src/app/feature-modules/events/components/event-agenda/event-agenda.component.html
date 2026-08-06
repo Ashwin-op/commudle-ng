@@ -31,7 +31,7 @@
       <div *ngIf="!event.start_time">
         <nb-alert accent="info">
           <a
-            [routerLink]="['/admin/communities', community.slug, 'event-dashboard', event.slug, 'edit']"
+            [routerLink]="['/admin/communities', community.slug, 'events', 'event-dashboard', event.slug, 'edit']"
             ghost
             nbButton
             status="info"

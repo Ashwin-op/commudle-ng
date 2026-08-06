@@ -184,7 +184,14 @@
                   parent_id: edfeg.id,
                   data_form_id: edfeg.data_form_entity?.data_form_id
                 }"
-                [routerLink]="['/admin/communities', community.slug, 'event-dashboard', event.slug, 'form-responses']"
+                [routerLink]="[
+                  '/admin/communities',
+                  community.slug,
+                  'events',
+                  'event-dashboard',
+                  event.slug,
+                  'form-responses'
+                ]"
                 nbButton
                 size="small"
               >

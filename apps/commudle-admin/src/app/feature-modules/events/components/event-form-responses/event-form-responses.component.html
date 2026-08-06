@@ -1258,7 +1258,14 @@
         "
       >
         <a
-          [routerLink]="['/admin/communities', community.slug, 'event-dashboard', event.slug, 'scan-entry-pass']"
+          [routerLink]="[
+            '/admin/communities',
+            community.slug,
+            'events',
+            'event-dashboard',
+            event.slug,
+            'scan-entry-pass'
+          ]"
           class="action-link"
         >
           <fa-icon [icon]="icons.faQrcode" class="action-icon"></fa-icon>
@@ -1277,7 +1284,14 @@
         "
       >
         <a
-          [routerLink]="['/admin/communities', community.slug, 'event-dashboard', event.slug, 'scan-exit-pass']"
+          [routerLink]="[
+            '/admin/communities',
+            community.slug,
+            'events',
+            'event-dashboard',
+            event.slug,
+            'scan-exit-pass'
+          ]"
           class="action-link"
         >
           <fa-icon [icon]="icons.faSignOutAlt" class="action-icon"></fa-icon>
@@ -1346,7 +1360,14 @@
       "
     >
       <a
-        [routerLink]="['/admin/communities', community.slug, 'event-dashboard', event.slug, 'scan-entry-pass']"
+        [routerLink]="[
+          '/admin/communities',
+          community.slug,
+          'events',
+          'event-dashboard',
+          event.slug,
+          'scan-entry-pass'
+        ]"
         class="action-link"
       >
         <fa-icon [icon]="icons.faQrcode" class="action-icon"></fa-icon>
@@ -1367,7 +1388,7 @@
       "
     >
       <a
-        [routerLink]="['/admin/communities', community.slug, 'event-dashboard', event.slug, 'scan-exit-pass']"
+        [routerLink]="['/admin/communities', community.slug, 'events', 'event-dashboard', event.slug, 'scan-exit-pass']"
         class="action-link"
       >
         <fa-icon [icon]="icons.faSignOutAlt" class="action-icon"></fa-icon>

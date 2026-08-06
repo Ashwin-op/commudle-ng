@@ -333,7 +333,7 @@ const routes: Routes = [
         loadChildren: () => import('./feature-modules/data-forms/data-forms.module').then((m) => m.DataFormsModule),
       },
       {
-        path: 'communities/:community_id/event-dashboard',
+        path: 'communities/:community_id/events/event-dashboard',
         canActivate: [AuthGuard],
         loadChildren: () => import('./feature-modules/events/events.module').then((m) => m.EventsModule),
       },
