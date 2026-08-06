@@ -2546,10 +2546,23 @@
     z-index: 1;
 
     .highlight-card {
-      @apply com-flex com-items-center com-gap-3 com-flex-1 com-rounded-xl com-p-3 com-border com-border-solid;
-      border-color: rgba(255, 255, 255, 0.2);
+      @apply com-flex com-items-center com-gap-3 com-flex-1 com-rounded-xl com-p-3 com-relative;
+      border: 1px solid rgba(255, 255, 255, 0.3);
       background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(8px);
+
+      &::before {
+        content: '';
+        @apply com-absolute com-inset-[-1px] com-rounded-xl com-pointer-events-none;
+        background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.8) 50%, transparent 100%);
+        background-size: 200% 100%;
+        animation: borderShimmer 3s linear infinite;
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        padding: 1px;
+      }
 
       .highlight-icon {
         @apply com-w-9 com-h-9 com-rounded-lg com-flex com-items-center com-justify-center com-text-sm com-shrink-0 com-text-white;
@@ -2583,6 +2596,16 @@
   }
 }
 
+@keyframes borderShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 @keyframes blobFloat {
 
   0%,
@@ -2598,7 +2621,8 @@
 @media (prefers-reduced-motion: reduce) {
 
   .greeting-section,
-  .greeting-section * {
+  .greeting-section *,
+  .highlight-card::before {
     animation: none !important;
   }
 }
