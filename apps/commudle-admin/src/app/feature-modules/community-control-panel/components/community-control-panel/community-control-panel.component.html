@@ -60,11 +60,16 @@
           </div>
           <a
             [routerLink]="['./']"
-            class="d-flex"
             class="action-button"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
           >
+            <div class="icon">
+              <nb-icon icon="grid-outline"></nb-icon>
+            </div>
+            <span *ngIf="sidebarExpanded" class="heading">Overview</span>
+          </a>
+          <a [routerLink]="['events']" class="action-button" routerLinkActive="active">
             <div class="icon">
               <fa-icon [icon]="icons.faCalendarDay"></fa-icon>
             </div>

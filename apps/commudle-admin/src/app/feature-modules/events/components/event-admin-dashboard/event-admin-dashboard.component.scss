@@ -172,7 +172,7 @@
     @apply com-mt-3;
 
     .attention-item {
-      @apply com-flex com-items-center com-gap-3 com-py-2.5 com-px-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+      @apply com-flex com-items-center com-gap-3 com-py-2 com-px-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
 
       &:last-child {
         @apply com-border-b-0;

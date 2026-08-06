@@ -1,5 +1,5 @@
 .dashboard {
-  @apply com-flex com-flex-col com-gap-5;
+  @apply com-flex com-flex-col com-gap-4;
 }
 
 .section-heading {
@@ -7,7 +7,7 @@
 }
 
 .section-header {
-  @apply com-flex com-items-center com-justify-between com-mb-3;
+  @apply com-flex com-items-center com-justify-between com-mb-2 com-m-0;
 }
 
 .view-all-link {
@@ -20,8 +20,7 @@
 
 // Row 1: Greeting
 .greeting-section {
-  @apply com-relative com-overflow-hidden com-pt-6 com-mb-2 com-p-6 com-rounded-2xl;
-  @apply sm:com-p-8;
+  @apply com-relative com-overflow-hidden com-pt-6 com-p-6 sm:com-p-8 md:com-rounded-xl com-rounded-none;
   background: linear-gradient(135deg, #4a90d9, #2c5f9e);
   animation: heroFadeUp 0.6s ease-out both;
 
@@ -111,7 +110,7 @@
   }
 
   .greeting-highlights {
-    @apply com-relative com-flex com-flex-col md:com-flex-row com-gap-3 com-flex-wrap;
+    @apply com-relative com-flex com-flex-col md:com-flex-row com-gap-3 com-flex-wrap com-m-0 com-p-0 com-list-none;
     z-index: 1;
 
     .highlight-card {
@@ -126,6 +125,8 @@
       }
 
       .highlight-info {
+        @apply com-m-0;
+
         .highlight-primary {
           @apply com-text-sm com-font-medium com-text-white;
         }
@@ -179,10 +180,10 @@
   }
 
   .attention-list {
-    @apply com-mt-3;
+    @apply com-m-0;
 
     .attention-item {
-      @apply com-flex com-items-center com-gap-3 com-py-2.5 com-px-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+      @apply com-flex com-items-center com-gap-3 com-py-2 com-px-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
 
       &:last-child {
         @apply com-border-b-0;
@@ -193,15 +194,15 @@
       }
 
       .attention-icon-check {
-        @apply com-text-green-500 com-text-lg com-shrink-0;
+        @apply com-text-green-500 com-text-base com-shrink-0;
       }
 
       .attention-icon-cross {
-        @apply com-text-red-400 com-text-lg com-shrink-0;
+        @apply com-text-red-400 com-text-base com-shrink-0;
       }
 
       .attention-content {
-        @apply com-flex com-flex-col com-flex-1 com-min-w-0;
+        @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-m-0;
 
         .attention-title {
           @apply com-text-sm com-font-medium com-text-Yankees-Blue;
@@ -223,13 +224,13 @@
   }
 
   .schedule-timeline {
-    @apply com-mt-3 com-flex com-flex-col;
+    @apply com-mt-3 com-flex com-flex-col com-m-0 com-p-0 com-list-none;
 
     .timeline-item {
       @apply com-flex com-items-start com-gap-3;
 
       .timeline-date {
-        @apply com-text-xs com-font-semibold com-text-gray-500 com-w-16 com-shrink-0 com-py-2;
+        @apply com-text-xs com-font-semibold com-text-gray-500 com-w-20 com-shrink-0 com-py-2 com-whitespace-nowrap;
 
         &.today {
           @apply com-text-primary-500;
@@ -241,7 +242,7 @@
       }
 
       .timeline-event {
-        @apply com-flex com-flex-col com-flex-1 com-pl-3 com-py-2 com-border-0 com-border-l-2 com-border-solid com-border-Bright-Gray;
+        @apply com-flex com-flex-col com-flex-1 com-pl-3 com-py-2 com-border-0 com-border-l-2 com-border-solid com-border-Bright-Gray com-m-0;
 
         .timeline-event-name {
           @apply com-text-sm com-font-medium com-text-Yankees-Blue;
@@ -257,14 +258,14 @@
 
 // Row 3: Snapshot + Quick Actions
 .snapshot-actions-row {
-  @apply com-grid com-grid-cols-1 lg:com-grid-cols-[2fr_1fr] com-gap-4;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-4;
 }
 
 .snapshot-section {
-  @apply com-bg-white com-rounded-xl com-p-4 com-border com-border-solid com-border-Bright-Gray;
+  @apply com-bg-white com-rounded-xl com-p-4 com-border com-border-solid com-border-Bright-Gray lg:com-col-span-2;
 
   .snapshot-cards {
-    @apply com-grid com-grid-cols-2 com-gap-3 com-mt-3;
+    @apply com-grid com-grid-cols-2 com-gap-3 com-mt-3 com-m-0 com-p-0 com-list-none;
 
     .snapshot-card {
       @apply com-bg-white com-rounded-xl com-p-4 com-border com-border-solid com-border-Bright-Gray;
@@ -298,14 +299,14 @@
       }
 
       .snapshot-value {
-        @apply com-text-2xl com-font-bold com-text-Yankees-Blue;
+        @apply com-text-2xl com-font-semibold com-text-Yankees-Blue com-m-0;
       }
     }
   }
 }
 
 .actions-section {
-  @apply com-bg-white com-rounded-xl com-p-4 com-border com-border-solid com-border-Bright-Gray;
+  @apply com-bg-white com-rounded-xl com-p-4 com-border com-border-solid com-border-Bright-Gray md:com-mb-0 com-mb-4;
 
   .actions-grid {
     @apply com-grid com-grid-cols-2 lg:com-grid-cols-4 com-gap-2 com-mt-3;
@@ -330,33 +331,33 @@
 
 // Activity list
 .activity-list {
-  @apply com-mt-3 com-flex com-flex-col;
+  @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col;
 
   .activity-item {
-    @apply com-flex com-items-center com-gap-3 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    @apply com-flex com-items-center com-gap-3 com-py-2 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
     &:last-child {
       @apply com-border-b-0;
     }
 
     .activity-avatar {
-      @apply com-w-9 com-h-9 com-rounded-full com-flex com-items-center com-justify-center com-text-sm com-shrink-0;
+      @apply com-w-3 com-h-3 com-p-4 com-rounded-full com-flex com-items-center com-justify-center com-shrink-0;
 
       &.members-avatar {
-        @apply com-bg-blue-100 com-text-blue-600;
+        @apply com-bg-blue-100 com-text-blue-500;
       }
 
       &.channel-avatar {
-        @apply com-bg-purple-100 com-text-purple-600;
+        @apply com-bg-purple-100 com-text-purple-500;
       }
 
       &.survey-avatar {
-        @apply com-bg-green-100 com-text-green-600;
+        @apply com-bg-green-100 com-text-green-500;
       }
     }
 
     .activity-content {
-      @apply com-flex com-flex-col com-flex-1 com-min-w-0;
+      @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-m-0;
 
       .activity-text {
         @apply com-text-sm com-text-Yankees-Blue com-line-clamp-1;
