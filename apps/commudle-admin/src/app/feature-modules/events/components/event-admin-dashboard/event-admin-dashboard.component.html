@@ -1,93 +1,115 @@
 <div class="event-overview" *ngIf="event">
   <!-- Row 1: Event Hero -->
   <section class="event-hero">
-    <div class="hero-top">
-      <div class="hero-banner" [ngClass]="{ 'no-image': !event.header_image_path }">
-        <img *ngIf="event.header_image_path" [src]="event.header_image_path" [alt]="event.name" />
-        <nb-icon *ngIf="!event.header_image_path" icon="image-outline"></nb-icon>
-      </div>
-      <div class="hero-info">
-        <div class="hero-title-row">
-          <h1 class="hero-event-name">{{ event.name }}</h1>
-          <a [routerLink]="['edit']" class="hero-edit-btn">
-            <nb-icon icon="edit-outline"></nb-icon>
-          </a>
-        </div>
-        <div class="hero-meta">
-          <span class="hero-status-badge" [ngClass]="{ 'status-live': isEventLive }">
-            {{ event.event_status?.name || 'Draft' }}
-          </span>
-          <span class="hero-meta-item" *ngIf="daysUntilEvent">{{ daysUntilEvent }}</span>
-          <span class="hero-meta-dot" *ngIf="formattedDate">·</span>
-          <span class="hero-meta-item" *ngIf="formattedDate">{{ formattedDate }}</span>
-          <span class="hero-meta-dot" *ngIf="formattedTime">·</span>
-          <span class="hero-meta-item" *ngIf="formattedTime">{{ formattedTime }}</span>
-        </div>
-        <div class="hero-location">
-          <span *ngIf="event.event_type"
-            >📍 {{ event.event_type === 'Online' ? 'Online Event' : event.location || 'Location TBD' }}</span
-          >
-          <span class="hero-divider" *ngIf="event.event_type">|</span>
-          <a
-            [routerLink]="['/communities', community.slug, 'events', event.slug]"
-            target="_blank"
-            class="hero-public-link"
-          >
-            🔗 Public Event Page
-            <nb-icon icon="external-link-outline"></nb-icon>
-          </a>
-        </div>
-      </div>
-      <div class="hero-actions">
-        <button comButton status="basic" size="small" shape="semi-round" outline (click)="copyTextToClipboard()">
-          <fa-icon [icon]="icons.faArrowTrendUp"></fa-icon> &nbsp;Share Event
-        </button>
-        <a [routerLink]="['edit']" comButton status="primary" size="small" shape="semi-round">
-          <nb-icon icon="edit-outline"></nb-icon> &nbsp;Edit Event
-        </a>
-      </div>
+    <div class="hero-banner" [ngClass]="{ 'no-image': !event.header_image_path }">
+      <img *ngIf="event.header_image_path" [src]="event.header_image_path" [alt]="event.name" />
+      <img
+        *ngIf="!event.header_image_path"
+        src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=300&fit=crop"
+        alt="Event placeholder"
+      />
     </div>
-
-    <!-- Highlight stats bar -->
-    <div class="hero-highlights">
-      <div class="highlight-stat">
-        <div class="highlight-stat-icon registrations-icon">
-          <fa-icon [icon]="icons.faUsers"></fa-icon>
+    <div class="hero-content">
+      <div class="hero-top-row">
+        <div class="hero-info">
+          <div class="hero-title-row">
+            <h1 class="hero-event-name">{{ event.name }}</h1>
+            <a [routerLink]="['edit']" class="hero-edit-btn">
+              <nb-icon icon="edit-outline"></nb-icon>
+            </a>
+          </div>
+          <div class="hero-meta">
+            <span class="hero-status-badge" [ngClass]="{ 'status-live': isEventLive }">
+              <span class="status-dot"></span>
+              {{ event.event_status?.name || 'Draft' }}
+            </span>
+            <span class="hero-meta-item" *ngIf="daysUntilEvent">{{ daysUntilEvent }}</span>
+            <span class="hero-meta-dot" *ngIf="formattedDate">·</span>
+            <span class="hero-meta-item" *ngIf="formattedDate">{{ formattedDate }}</span>
+            <span class="hero-meta-dot" *ngIf="formattedTime">·</span>
+            <span class="hero-meta-item" *ngIf="formattedTime">{{ formattedTime }}</span>
+          </div>
+          <div class="hero-location">
+            <span class="hero-location-item" *ngIf="event.event_type">
+              <nb-icon icon="pin-outline"></nb-icon>
+              {{ event.event_type === 'Online' ? 'Online Event' : event.location || 'Location TBD' }}
+            </span>
+            <span class="hero-divider" *ngIf="event.event_type">|</span>
+            <a
+              [routerLink]="['/communities', community.slug, 'events', event.slug]"
+              target="_blank"
+              class="hero-public-link"
+            >
+              <nb-icon icon="globe-outline"></nb-icon>
+              Public Event Page
+              <nb-icon icon="external-link-outline" class="hero-external-icon"></nb-icon>
+            </a>
+          </div>
         </div>
-        <div class="highlight-stat-info">
-          <span class="highlight-stat-value">{{ event.registrations_count || 0 }}</span>
-          <span class="highlight-stat-label">Registrations today</span>
-          <span class="highlight-stat-sub">↑ 28%</span>
+        <div class="hero-actions">
+          <button comButton status="info" size="small" shape="semi-round" outline (click)="copyTextToClipboard()">
+            <fa-icon [icon]="icons.faArrowTrendUp"></fa-icon> &nbsp;Share Event
+          </button>
+          <a [routerLink]="['edit']" comButton status="primary" size="small" shape="semi-round">
+            <nb-icon icon="edit-outline"></nb-icon> &nbsp;Edit Event
+          </a>
         </div>
       </div>
-      <div class="highlight-stat">
-        <div class="highlight-stat-icon progress-icon">
-          <fa-icon [icon]="icons.faChartPie"></fa-icon>
+      <!-- Stats row -->
+      <div class="hero-highlights">
+        <div class="highlight-stat">
+          <div class="highlight-stat-icon registrations-icon">
+            <fa-icon [icon]="icons.faUsers"></fa-icon>
+          </div>
+          <div class="highlight-stat-info">
+            <span class="highlight-stat-value">{{ event.registrations_count || 0 }}</span>
+            <span class="highlight-stat-label">Registrations today</span>
+          </div>
+          <div class="highlight-stat-visual">
+            <svg class="sparkline" viewBox="0 0 60 24" fill="none">
+              <polyline points="0,20 10,16 20,18 30,10 40,12 50,6 60,8" stroke="#22c55e" stroke-width="2" fill="none" />
+            </svg>
+          </div>
         </div>
-        <div class="highlight-stat-info">
-          <span class="highlight-stat-value">82%</span>
-          <span class="highlight-stat-label">Registration progress</span>
-          <span class="highlight-stat-sub">482 / 600</span>
+        <div class="highlight-stat">
+          <div class="highlight-stat-icon progress-icon">
+            <fa-icon [icon]="icons.faArrowTrendUp"></fa-icon>
+          </div>
+          <div class="highlight-stat-info">
+            <span class="highlight-stat-value">82%</span>
+            <span class="highlight-stat-label">Registration progress</span>
+          </div>
+          <div class="highlight-stat-visual">
+            <svg class="progress-ring" viewBox="0 0 36 36">
+              <circle class="progress-ring-bg" cx="18" cy="18" r="15" />
+              <circle
+                class="progress-ring-fill"
+                cx="18"
+                cy="18"
+                r="15"
+                stroke-dasharray="94.2"
+                stroke-dashoffset="17"
+              />
+            </svg>
+          </div>
         </div>
-      </div>
-      <div class="highlight-stat">
-        <div class="highlight-stat-icon email-icon">
-          <fa-icon [icon]="icons.faEnvelope"></fa-icon>
+        <div class="highlight-stat">
+          <div class="highlight-stat-icon email-icon">
+            <fa-icon [icon]="icons.faEnvelope"></fa-icon>
+          </div>
+          <div class="highlight-stat-info">
+            <span class="highlight-stat-value">{{ event.custom_emails_count || 0 }}</span>
+            <span class="highlight-stat-label">Reminder email sent</span>
+          </div>
         </div>
-        <div class="highlight-stat-info">
-          <span class="highlight-stat-value">{{ event.custom_emails_count || 0 }}</span>
-          <span class="highlight-stat-label">Reminder email sent</span>
-          <span class="highlight-stat-sub">Today, 10:30 AM</span>
-        </div>
-      </div>
-      <div class="highlight-stat">
-        <div class="highlight-stat-icon health-icon">
-          <fa-icon [icon]="icons.faHeart"></fa-icon>
-        </div>
-        <div class="highlight-stat-info">
-          <span class="highlight-stat-value">Good</span>
-          <span class="highlight-stat-label">Event Health</span>
-          <span class="highlight-stat-sub">Keep it up!</span>
+        <div class="highlight-stat">
+          <div class="highlight-stat-icon health-icon">
+            <span class="health-emoji">😊</span>
+          </div>
+          <div class="highlight-stat-info">
+            <span class="highlight-stat-value">Good</span>
+            <span class="highlight-stat-label">Event health</span>
+          </div>
         </div>
       </div>
     </div>
@@ -303,7 +325,7 @@
     <!-- Post-Event Dashboard -->
     <article class="post-event-card">
       <header class="section-header">
-        <h3 class="section-heading">
+        <h3 class="section-heading-post">
           <fa-icon [icon]="icons.faChartPie" class="com-text-green-500"></fa-icon> Post-Event Dashboard
         </h3>
         <span class="post-event-date">Completed on 20 Jul, 2026</span>
@@ -312,7 +334,7 @@
         <div class="post-event-hero">
           <p class="post-event-title">🎉 Event Completed!</p>
           <p class="post-event-sub">Thank you for an amazing event.</p>
-          <a class="post-event-link">View Full Report</a>
+          <a [routerLink]="['stats']" class="post-event-link">View Full Report</a>
         </div>
         <div class="post-event-stats">
           <div class="post-stat">

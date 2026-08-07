@@ -102,7 +102,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     }
     const days = moment(this.event.start_time).diff(moment(), 'days');
     if (days < 0) {
-      return 'Ended';
+      return '';
     }
     if (days === 0) {
       return 'Today';
