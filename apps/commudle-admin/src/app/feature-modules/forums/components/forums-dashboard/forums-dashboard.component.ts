@@ -1,10 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { EDbModels } from '@commudle/shared-models';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { ForumsStore } from '@commudle/shared-services';
-import { ESidebarHeading } from 'apps/shared-components/sidebar/enum/sidebar.enum';
-import { SidebarService } from 'apps/shared-components/sidebar/service/sidebar.service';
 
 interface ParentInfo {
   parent_id: string;
@@ -18,33 +15,21 @@ interface ParentInfo {
   styleUrls: ['./forums-dashboard.component.scss'],
 })
 export class ForumsDashboardComponent implements OnInit {
-  parentInfo: ParentInfo | null = null;
   categories$ = this.forumStore.categories$;
   isLoadingCategories = true;
-  sidebarEventName = 'forumCategories';
-  ESidebarHeading = ESidebarHeading;
-  faIcons = {
-    faBars,
-  };
+  readonly sidebarLimit = 7;
+
   private readonly isBrowser: boolean;
 
-  constructor(
-    private forumStore: ForumsStore,
-    public sidebarService: SidebarService,
-    @Inject(PLATFORM_ID) private platformId: object,
-  ) {
+  constructor(private forumStore: ForumsStore, @Inject(PLATFORM_ID) private platformId: object) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
-  ngOnInit() {
-    this.parentInfo = this.getParentFromUrl();
-    if (this.parentInfo) {
-      this.forumStore.setParentContext(this.parentInfo.parent_id, this.parentInfo.parent_type);
-    }
-    this.sidebarService.setSidebarVisibility(this.sidebarEventName, false, true);
-
-    if (this.parentInfo) {
-      this.forumStore.loadCategories(this.parentInfo.parent_id, this.parentInfo.parent_type);
+  ngOnInit(): void {
+    const parentInfo = this.getParentFromUrl();
+    if (parentInfo) {
+      this.forumStore.setParentContext(parentInfo.parent_id, parentInfo.parent_type);
+      this.forumStore.loadCategories(parentInfo.parent_id, parentInfo.parent_type);
     }
 
     this.categories$.subscribe(() => {
@@ -53,33 +38,20 @@ export class ForumsDashboardComponent implements OnInit {
   }
 
   private getParentFromUrl(): ParentInfo | null {
-    if (!this.isBrowser) {
-      return null;
-    }
+    if (!this.isBrowser) return null;
+
     const url = window.location.pathname;
 
-    // Match /admin/communities/{parent_id}/forums or /communities/{parent_id}/forums
     const communityMatch = url.match(/\/(admin\/)?communities\/([^/]+)\/forums/);
     if (communityMatch) {
-      return {
-        parent_id: communityMatch[2],
-        parent_type: EDbModels.KOMMUNITY,
-      };
+      return { parent_id: communityMatch[2], parent_type: EDbModels.KOMMUNITY };
     }
 
-    // Match /admin/orgs/{parent_id}/forums or /orgs/{parent_id}/forums
     const orgMatch = url.match(/\/(admin\/)?orgs\/([^/]+)\/forums/);
     if (orgMatch) {
-      return {
-        parent_id: orgMatch[2],
-        parent_type: EDbModels.COMMUNITY_GROUP,
-      };
+      return { parent_id: orgMatch[2], parent_type: EDbModels.COMMUNITY_GROUP };
     }
 
     return null;
-  }
-
-  toggleSidebar(): void {
-    this.sidebarService.toggleSidebarVisibility(this.sidebarEventName);
   }
 }
