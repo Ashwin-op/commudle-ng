@@ -36,6 +36,10 @@
   }
 }
 
+.section-heading-post {
+  @apply com-m-0 com-text-base com-font-medium com-text-tYankees-Blue com-flex com-items-center com-gap-2;
+}
+
 .section-header {
   @apply com-flex com-items-center com-justify-between com-mb-2 com-m-0;
 }
@@ -379,6 +383,10 @@
     @apply com-py-2 com-text-center com-text-xs com-text-gray-500 com-m-0;
   }
 
+  .snapshot-empty {
+    @apply com-py-2 com-text-center com-text-xs com-text-gray-500 com-m-0;
+  }
+
   // Recent Activity
   .activity-list {
     @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col;
@@ -447,19 +455,20 @@
   }
 
   .post-event-card {
-    background: linear-gradient(135deg, #f5f3ff 0%, #ffffff 50%, #eef2ff 100%);
-    border-color: #c7d2fe;
+    background: linear-gradient(135deg, #ede9fe 0%, #f5f3ff 30%, #ffffff 55%, #eef2ff 80%, #e0e7ff 100%);
+    border-color: #a5b4fc;
   }
 }
 
 .audience-content {
-  @apply com-flex com-gap-4 com-mt-3;
+  @apply com-flex com-flex-col md:com-flex-row com-gap-4 com-mt-3;
 
   .audience-chart {
     @apply com-flex com-flex-col com-items-center com-gap-3 com-shrink-0;
 
     .chart-placeholder {
-      @apply com-w-28 com-h-28 com-rounded-full com-border-8 com-border-solid com-border-blue-500;
+      @apply com-w-28 com-h-28 com-rounded-full com-border-solid com-border-blue-500;
+      border-width: 12px;
       border-right-color: #22c55e;
       border-bottom-color: #f97316;
     }
@@ -482,10 +491,10 @@
   }
 
   .audience-stats {
-    @apply com-flex com-gap-4 com-flex-1 com-min-w-0;
+    @apply com-flex com-flex-col sm:com-flex-row com-gap-4 com-flex-1 com-min-w-0;
 
     .audience-col {
-      @apply com-flex com-flex-col com-flex-1 com-min-w-0;
+      @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-bg-gray-50 com-rounded-lg com-p-3;
 
       .audience-col-heading {
         @apply com-m-0 com-text-xs com-font-medium com-text-Cadet-Grey com-mb-2;
@@ -551,18 +560,20 @@
 }
 
 .post-event-card {
+  @apply com-m-0 md:com-mb-0 com-mb-4;
+
   .post-event-date {
     @apply com-text-xs com-text-Cadet-Grey;
   }
 
   .post-event-content {
-    @apply com-flex com-gap-4 com-mt-3 com-items-start;
+    @apply com-flex com-flex-col sm:com-flex-row com-gap-4 com-mt-3 com-items-start;
 
     .post-event-hero {
-      @apply com-flex com-flex-col com-gap-1 com-shrink-0;
+      @apply com-flex com-flex-col com-gap-1 com-shrink-0 com-p-3;
 
       .post-event-title {
-        @apply com-m-0 com-text-base com-font-bold com-text-Yankees-Blue;
+        @apply com-m-0 com-text-base com-font-medium com-text-tYankees-Blue;
       }
 
       .post-event-sub {
@@ -576,13 +587,13 @@
     }
 
     .post-event-stats {
-      @apply com-grid com-grid-cols-3 com-gap-3 com-flex-1;
+      @apply com-grid com-grid-cols-2 sm:com-grid-cols-3 com-gap-3 com-flex-1;
 
       .post-stat {
-        @apply com-flex com-flex-col com-items-center com-gap-0.5 com-p-2;
+        @apply com-flex com-flex-col com-items-center com-gap-0.5 com-p-2 com-bg-white com-rounded-lg com-border com-border-solid com-border-Bright-Gray;
 
         .post-stat-value {
-          @apply com-text-xl com-font-bold com-text-Yankees-Blue;
+          @apply com-text-xl com-font-medium com-text-Yankees-Blue;
         }
 
         .post-stat-label {
