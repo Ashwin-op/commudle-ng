@@ -16,6 +16,8 @@ import {
   faCircleXmark,
   faArrowTrendUp,
   faUserGroup,
+  faBell,
+  faBolt,
 } from '@fortawesome/free-solid-svg-icons';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
@@ -45,18 +47,11 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     faCircleXmark,
     faArrowTrendUp,
     faUserGroup,
+    faBell,
+    faBolt,
   };
 
   needsAttention: { title: string; sub: string; route: string[]; done: boolean }[] = [];
-
-  recentActivity = [
-    { text: 'Prerna registered', time: '5m ago', icon: 'people' },
-    { text: 'Rahul accepted RSVP to be speaker', time: '15m ago', icon: 'mic' },
-    { text: 'Aman submitted proposal', time: '1h ago', icon: 'file-text' },
-    { text: 'Prerna submitted session slides', time: '2h ago', icon: 'file-text' },
-    { text: 'Prerna liked your update', time: '3h ago', icon: 'heart' },
-    { text: 'Reminder email delivered', time: '5h ago', icon: 'email' },
-  ];
 
   constructor(
     private activatedRoute: ActivatedRoute,

@@ -98,7 +98,9 @@
     <!-- Needs Attention -->
     <div class="attention-card">
       <div class="section-header">
-        <h3 class="section-heading"><span>🔔</span> Needs Attention</h3>
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faBell" class="com-text-Azure"></fa-icon> Needs Attention
+        </h3>
         <a [routerLink]="['details']" class="view-all-link">View All →</a>
       </div>
       <div class="attention-list">
@@ -119,7 +121,9 @@
     <!-- Event Snapshot -->
     <div class="snapshot-card">
       <div class="section-header">
-        <h3 class="section-heading"><span>📊</span> Event Snapshot</h3>
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faChartPie" class="com-text-primary-500"></fa-icon> Event Snapshot
+        </h3>
       </div>
       <div class="snapshot-grid">
         <div class="snapshot-stat">
@@ -148,20 +152,191 @@
     <!-- Recent Activity -->
     <div class="activity-card">
       <div class="section-header">
-        <h3 class="section-heading"><span>⚡</span> Recent Activity</h3>
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faBolt" class="com-text-yellow-500"></fa-icon> Recent Activity
+        </h3>
         <a class="view-all-link">View All →</a>
       </div>
-      <div class="activity-list">
-        <div *ngFor="let item of recentActivity" class="activity-item">
-          <div class="activity-avatar">
-            <nb-icon [icon]="item.icon + '-outline'"></nb-icon>
+      <ul class="activity-list">
+        <li class="activity-item">
+          <span class="activity-avatar members-avatar">
+            <fa-icon [icon]="icons.faUsers"></fa-icon>
+          </span>
+          <p class="activity-content com-m-0">
+            <span class="activity-text" title="Prerna registered for the event">
+              <span class="activity-name-avatar">P</span><strong>Prerna</strong> registered
+            </span>
+          </p>
+          <time class="activity-time">5m ago</time>
+        </li>
+        <li class="activity-item">
+          <span class="activity-avatar speaker-avatar">
+            <fa-icon [icon]="icons.faMicrophone"></fa-icon>
+          </span>
+          <p class="activity-content com-m-0">
+            <span class="activity-text" title="Rahul accepted RSVP to be speaker">
+              <span class="activity-name-avatar">R</span><strong>Rahul</strong> accepted RSVP to be speaker
+            </span>
+          </p>
+          <time class="activity-time">15m ago</time>
+        </li>
+        <li class="activity-item">
+          <span class="activity-avatar submission-avatar">
+            <fa-icon [icon]="icons.faEnvelope"></fa-icon>
+          </span>
+          <p class="activity-content com-m-0">
+            <span class="activity-text" title="Aman submitted proposal">
+              <span class="activity-name-avatar">A</span><strong>Aman</strong> submitted proposal
+            </span>
+          </p>
+          <time class="activity-time">1h ago</time>
+        </li>
+        <li class="activity-item">
+          <span class="activity-avatar submission-avatar">
+            <fa-icon [icon]="icons.faEnvelope"></fa-icon>
+          </span>
+          <p class="activity-content com-m-0">
+            <span class="activity-text" title="Prerna submitted session slides">
+              <span class="activity-name-avatar">P</span><strong>Prerna</strong> submitted session slides
+            </span>
+          </p>
+          <time class="activity-time">2h ago</time>
+        </li>
+        <li class="activity-item">
+          <span class="activity-avatar heart-avatar">
+            <fa-icon [icon]="icons.faHeart"></fa-icon>
+          </span>
+          <p class="activity-content com-m-0">
+            <span class="activity-text" title="Prerna liked your update">
+              <span class="activity-name-avatar">P</span><strong>Prerna</strong> liked your update
+            </span>
+          </p>
+          <time class="activity-time">3h ago</time>
+        </li>
+        <li class="activity-item">
+          <span class="activity-avatar email-avatar">
+            <fa-icon [icon]="icons.faEnvelope"></fa-icon>
+          </span>
+          <p class="activity-content com-m-0">
+            <span class="activity-text" title="Reminder email delivered">Reminder email delivered</span>
+          </p>
+          <time class="activity-time">5h ago</time>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Row 3: Audience Snapshot + Post-Event Dashboard -->
+  <section class="two-col-row">
+    <!-- Audience Snapshot -->
+    <article class="audience-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faChartPie" class="com-text-primary-500"></fa-icon> Audience Snapshot
+        </h3>
+        <a [routerLink]="['stats']" class="view-all-link">View Analytics →</a>
+      </header>
+      <div class="audience-content">
+        <div class="audience-chart">
+          <div class="chart-placeholder"></div>
+          <ul class="chart-legend">
+            <li><span class="legend-dot com-bg-blue-500"></span> Students <span class="legend-pct">68%</span></li>
+            <li><span class="legend-dot com-bg-green-500"></span> Professionals <span class="legend-pct">24%</span></li>
+            <li><span class="legend-dot com-bg-orange-500"></span> Others <span class="legend-pct">8%</span></li>
+          </ul>
+        </div>
+        <div class="audience-stats">
+          <div class="audience-col">
+            <h6 class="audience-col-heading">Top Designations</h6>
+            <ul class="audience-list">
+              <li>
+                <span class="audience-name">SDE</span><span class="audience-bar com-bg-blue-500 bar-42"></span
+                ><span class="audience-pct">42%</span>
+              </li>
+              <li>
+                <span class="audience-name">Student</span><span class="audience-bar com-bg-blue-400 bar-34"></span
+                ><span class="audience-pct">34%</span>
+              </li>
+              <li>
+                <span class="audience-name">Product Manager</span
+                ><span class="audience-bar com-bg-blue-300 bar-12"></span><span class="audience-pct">12%</span>
+              </li>
+              <li>
+                <span class="audience-name">Designer</span><span class="audience-bar com-bg-blue-200 bar-8"></span
+                ><span class="audience-pct">8%</span>
+              </li>
+              <li>
+                <span class="audience-name">Others</span><span class="audience-bar com-bg-gray-300 bar-4"></span
+                ><span class="audience-pct">4%</span>
+              </li>
+            </ul>
           </div>
-          <div class="activity-content">
-            <span class="activity-text">{{ item.text }}</span>
+          <div class="audience-col">
+            <h6 class="audience-col-heading">Top Companies / Colleges</h6>
+            <ul class="audience-list">
+              <li>
+                <span class="audience-name">Commudle</span><span class="audience-bar com-bg-indigo-500 bar-18"></span
+                ><span class="audience-pct">18%</span>
+              </li>
+              <li>
+                <span class="audience-name">Google</span><span class="audience-bar com-bg-red-400 bar-14"></span
+                ><span class="audience-pct">14%</span>
+              </li>
+              <li>
+                <span class="audience-name">Microsoft</span><span class="audience-bar com-bg-green-400 bar-10"></span
+                ><span class="audience-pct">10%</span>
+              </li>
+              <li>
+                <span class="audience-name">Adobe</span><span class="audience-bar com-bg-red-300 bar-8"></span
+                ><span class="audience-pct">8%</span>
+              </li>
+              <li>
+                <span class="audience-name">Others</span><span class="audience-bar com-bg-green-600 bar-50"></span
+                ><span class="audience-pct">50%</span>
+              </li>
+            </ul>
           </div>
-          <span class="activity-time">{{ item.time }}</span>
         </div>
       </div>
-    </div>
+    </article>
+
+    <!-- Post-Event Dashboard -->
+    <article class="post-event-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faChartPie" class="com-text-green-500"></fa-icon> Post-Event Dashboard
+        </h3>
+        <span class="post-event-date">Completed on 20 Jul, 2026</span>
+      </header>
+      <div class="post-event-content">
+        <div class="post-event-hero">
+          <p class="post-event-title">🎉 Event Completed!</p>
+          <p class="post-event-sub">Thank you for an amazing event.</p>
+          <a class="post-event-link">View Full Report</a>
+        </div>
+        <div class="post-event-stats">
+          <div class="post-stat">
+            <span class="post-stat-value">472</span>
+            <span class="post-stat-label">Registered</span>
+          </div>
+          <div class="post-stat">
+            <span class="post-stat-value">388</span>
+            <span class="post-stat-label">Attended</span>
+          </div>
+          <div class="post-stat">
+            <span class="post-stat-value">82%</span>
+            <span class="post-stat-label">Attendance Rate</span>
+          </div>
+          <div class="post-stat">
+            <span class="post-stat-value">4.8 ⭐</span>
+            <span class="post-stat-label">Rating</span>
+          </div>
+          <div class="post-stat">
+            <span class="post-stat-value">95</span>
+            <span class="post-stat-label">Feedback Responses</span>
+          </div>
+        </div>
+      </div>
+    </article>
   </section>
 </div>

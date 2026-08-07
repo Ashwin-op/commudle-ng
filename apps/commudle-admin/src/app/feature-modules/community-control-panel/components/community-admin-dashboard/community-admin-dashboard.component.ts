@@ -17,6 +17,10 @@ import {
   faScroll,
   faCircleCheck,
   faCircleXmark,
+  faBell,
+  faCalendarDay,
+  faBolt,
+  faRocket,
 } from '@fortawesome/free-solid-svg-icons';
 import * as moment from 'moment';
 
@@ -46,6 +50,10 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     faScroll,
     faCircleCheck,
     faCircleXmark,
+    faBell,
+    faCalendarDay,
+    faBolt,
+    faRocket,
   };
 
   quickActions = [];

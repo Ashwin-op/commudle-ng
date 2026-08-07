@@ -17,7 +17,7 @@
           <fa-icon [icon]="icons.faUsers"></fa-icon>
         </span>
         <p class="highlight-info">
-          <span class="highlight-primary">🎉 {{ newMembersThisWeek }} new members this week</span>
+          <span class="highlight-primary">{{ newMembersThisWeek }} new members this week</span>
           <span class="highlight-secondary">Total {{ newMembersThisMonth }} this month</span>
         </p>
       </li>
@@ -26,7 +26,7 @@
           <fa-icon [icon]="icons.faCalendarPlus"></fa-icon>
         </span>
         <p class="highlight-info">
-          <span class="highlight-primary">📅 1 event and 1 hackathon start tomorrow</span>
+          <span class="highlight-primary">1 event and 1 hackathon start tomorrow</span>
         </p>
       </li>
       <li class="highlight-card">
@@ -35,7 +35,7 @@
         </span>
         <p class="highlight-info">
           <span class="highlight-primary"
-            >💡 {{ highlights?.visitsThisWeek || 0 }} people visited your community this week</span
+            >{{ highlights?.visitsThisWeek || 0 }} people visited your community this week</span
           >
           <span class="highlight-secondary">Total {{ highlights?.visitsThisMonth || 0 }} in last 30 days</span>
         </p>
@@ -45,7 +45,7 @@
           <fa-icon [icon]="icons.faEnvelope"></fa-icon>
         </span>
         <p class="highlight-info">
-          <span class="highlight-primary">📧 Newsletter is scheduled for tomorrow</span>
+          <span class="highlight-primary">Newsletter is scheduled for tomorrow</span>
         </p>
       </li>
     </ul>
@@ -56,7 +56,9 @@
     <!-- Needs Attention -->
     <article class="attention-card">
       <header class="section-header">
-        <h3 class="section-heading"><span>🔔</span> Needs Attention</h3>
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faBell" class="com-text-Azure"></fa-icon> Needs Attention
+        </h3>
       </header>
       <nav class="attention-list">
         <a [routerLink]="['edit']" class="attention-item">
@@ -65,7 +67,7 @@
             <span class="attention-title">Community profile incomplete</span>
             <span class="attention-sub">Add a few details</span>
           </p>
-          <span class="attention-action">Complete Profile</span>
+          <span class="attention-action">Complete Now</span>
           <span class="attention-arrow">›</span>
         </a>
         <a [routerLink]="['newsletters', 'new']" class="attention-item">
@@ -90,7 +92,9 @@
     <!-- Upcoming Schedule -->
     <article class="schedule-card">
       <header class="section-header">
-        <h3 class="section-heading"><span>📅</span> Upcoming Schedule</h3>
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faCalendarDay" class="com-text-primary-500"></fa-icon> Upcoming Schedule
+        </h3>
         <a [routerLink]="['events']" class="view-all-link">View All Events & Hackathons →</a>
       </header>
       <ol class="schedule-timeline">
@@ -128,7 +132,9 @@
     <!-- Recent Activity -->
     <article class="activity-card">
       <header class="section-header">
-        <h3 class="section-heading"><span>⚡</span> Recent Activity</h3>
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faBolt" class="com-text-yellow-500"></fa-icon> Recent Activity
+        </h3>
         <a [routerLink]="['notifications']" class="view-all-link">View All →</a>
       </header>
       <ul class="activity-list">
@@ -137,7 +143,11 @@
             <fa-icon [icon]="icons.faUsers"></fa-icon>
           </span>
           <p class="activity-content">
-            <span class="activity-text">New members this week: <strong>Arpan, Arshdeep, Prerna</strong></span>
+            <span class="activity-text"
+              >New members this week: <span class="activity-name-avatar">A</span><strong>Arpan</strong>,
+              <span class="activity-name-avatar">A</span><strong>Arshdeep</strong>,
+              <span class="activity-name-avatar">P</span><strong>Prerna</strong>
+            </span>
             <span class="activity-sub">SDE at Google · Product Designer · Frontend Developer</span>
           </p>
           <span class="activity-badge">+{{ newMembersThisWeek }}</span>
@@ -147,7 +157,9 @@
             <fa-icon [icon]="icons.faHashtag"></fa-icon>
           </span>
           <p class="activity-content">
-            <span class="activity-text">Prerna posted a message in <strong>#frontend-dev channel</strong></span>
+            <span class="activity-text" title="Prerna posted a message in #frontend-dev channel"
+              >Prerna posted a message in <strong>#frontend-dev channel</strong></span
+            >
           </p>
           <time class="activity-time">2h ago</time>
         </li>
@@ -156,7 +168,9 @@
             <fa-icon [icon]="icons.faChartPie"></fa-icon>
           </span>
           <p class="activity-content">
-            <span class="activity-text">Total 100 responses on <strong>"Developer Experience Survey"</strong></span>
+            <span class="activity-text" title="Total 100 responses on Developer Experience Survey"
+              >Total 100 responses on <strong>"Developer Experience Survey"</strong></span
+            >
           </p>
           <time class="activity-time">5h ago</time>
         </li>
@@ -165,7 +179,9 @@
             <fa-icon [icon]="icons.faUsers"></fa-icon>
           </span>
           <p class="activity-content">
-            <span class="activity-text">18 new members joined the community</span>
+            <span class="activity-text" title="18 new members joined the community"
+              >18 new members joined the community</span
+            >
           </p>
           <time class="activity-time">1d ago</time>
         </li>
@@ -174,7 +190,9 @@
             <fa-icon [icon]="icons.faMessage"></fa-icon>
           </span>
           <p class="activity-content">
-            <span class="activity-text">New forum discussion in <strong>General</strong></span>
+            <span class="activity-text" title="New forum discussion in General"
+              >New forum discussion in <strong>General</strong></span
+            >
           </p>
           <time class="activity-time">1d ago</time>
         </li>
@@ -185,7 +203,9 @@
   <!-- Row 3: Community Snapshot + Quick Actions -->
   <section class="snapshot-actions-row">
     <article class="snapshot-section">
-      <h3 class="section-heading"><span>📊</span> Community Snapshot</h3>
+      <h3 class="section-heading">
+        <fa-icon [icon]="icons.faChartPie" class="com-text-green-500"></fa-icon> Community Snapshot
+      </h3>
       <ul class="snapshot-cards">
         <li class="snapshot-card">
           <header class="snapshot-card-header">
@@ -219,7 +239,9 @@
     </article>
 
     <article class="actions-section">
-      <h3 class="section-heading"><span>🚀</span> Quick Actions</h3>
+      <h3 class="section-heading">
+        <fa-icon [icon]="icons.faRocket" class="com-text-purple-500"></fa-icon> Quick Actions
+      </h3>
       <nav class="actions-grid">
         <a *ngFor="let action of quickActions" class="action-card" [routerLink]="action.route">
           <fa-icon [icon]="action.icon" class="action-icon"></fa-icon>
