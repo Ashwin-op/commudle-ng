@@ -1,106 +1,116 @@
-<div class="forum-messages-container">
-  <div *ngIf="isLoadingUserMessage$ | async" class="loading-state">
+<div class="fm-wrap">
+  <div class="fm-loading" *ngIf="isLoadingUserMessage$ | async">
     <commudle-loading-spinner></commudle-loading-spinner>
-    <p>Loading message...</p>
   </div>
 
-  <div *ngIf="userMessage$ | async as userMessage" class="message-content">
-    <div class="header-section">
-      <div class="back-button" (click)="backToDiscussions()">
-        <fa-icon [icon]="icons.faArrowLeft"></fa-icon> &nbsp;Back to (Category Name)
+  <ng-container *ngIf="userMessage$ | async as userMessage">
+    <!-- Back -->
+    <div class="fm-header">
+      <button nbButton ghost size="tiny" (click)="backToDiscussions()">
+        <nb-icon icon="arrow-ios-back-outline"></nb-icon>
+      </button>
+      <span class="fm-back-label">Back to discussions</span>
+    </div>
+
+    <!-- Original post -->
+    <div class="fm-post">
+      <div class="fm-post-top">
+        <img
+          [src]="userMessage.user?.photo?.i64 || userMessage.user?.photo?.url"
+          [alt]="userMessage.user?.name"
+          class="fm-avatar-img"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+        />
+        <div class="fm-avatar-fallback" style="display: none">
+          <nb-icon icon="person-outline"></nb-icon>
+        </div>
+        <div>
+          <p class="fm-post-author">{{ userMessage.user?.name || userMessage.user?.username }}</p>
+          <p class="fm-post-date">{{ userMessage.created_at | date : 'd MMM y, h:mm a' }}</p>
+        </div>
       </div>
 
-      <div class="discussion-header">
-        <h2>{{ userMessage.subject }}</h2>
-        <div class="post-meta">
-          <span>Posted on {{ userMessage.created_at | date : 'MMM d, y, h:mm a' }}</span>
-        </div>
+      <h1 class="fm-post-subject">{{ userMessage.subject }}</h1>
+
+      <div class="fm-post-body">
+        <commudle-editor [content]="userMessage.content" [editable]="false"></commudle-editor>
+      </div>
+
+      <div class="fm-post-footer">
+        <commudle-vote
+          [icon]="'thumb-up-with-text'"
+          [votableId]="userMessage.id"
+          votableType="UserMessage"
+        ></commudle-vote>
       </div>
     </div>
 
-    <div class="main-content">
-      <div class="">
-        <div class="discussion-post">
-          <app-user-profile-card-large [user]="userMessage.user"></app-user-profile-card-large>
-          <div class="post-content">
-            <commudle-editor [content]="userMessage.content" [editable]="false" class="com-w-full"></commudle-editor>
+    <!-- Replies -->
+    <div class="fm-replies" *ngIf="userMessage.user_messages?.length > 0">
+      <p class="fm-replies-header">
+        {{ userMessage.user_messages.length }} {{ userMessage.user_messages.length === 1 ? 'Reply' : 'Replies' }}
+      </p>
+
+      <div class="fm-reply" *ngFor="let reply of userMessage.user_messages">
+        <div class="fm-reply-left">
+          <img
+            [src]="reply.user?.photo?.i64 || reply.user?.photo?.url"
+            [alt]="reply.user?.name"
+            class="fm-avatar-img"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+          />
+          <div class="fm-avatar-fallback" style="display: none">
+            <nb-icon icon="person-outline"></nb-icon>
           </div>
-          <div class="post-actions">
+          <div class="fm-reply-line"></div>
+        </div>
+        <div class="fm-reply-card">
+          <div class="fm-reply-top">
+            <p class="fm-reply-author">{{ reply.user?.name || reply.user?.username }}</p>
+            <p class="fm-reply-date">{{ reply.created_at | date : 'd MMM y' }}</p>
+          </div>
+          <div class="fm-reply-body">
+            <commudle-editor [content]="reply.content" [editable]="false"></commudle-editor>
+          </div>
+          <div class="fm-reply-footer">
             <commudle-vote
               [icon]="'thumb-up-with-text'"
-              [votableId]="userMessage.id"
+              [votableId]="reply.id"
               votableType="UserMessage"
             ></commudle-vote>
-            <!-- <div class="action-item">
-            <fa-icon [icon]="icons.faEye"></fa-icon>
-            <span>Views</span>
-            <span class="count">{{ userMessage.user_messages?.length || 0 }}</span>
-          </div> -->
           </div>
         </div>
-
-        <div class="reply-section">
-          <form [formGroup]="replyForm" (ngSubmit)="onSubmit()">
-            <div class="form">
-              <div class="header">
-                <span>Replying to {{ userMessage.user?.name }}</span>
-              </div>
-              <div class="reply-form">
-                <textarea
-                  placeholder="Be the first to reply!!"
-                  formControlName="reply"
-                  nbInput
-                  fullWidth
-                  rows="4"
-                  class="reply-textarea"
-                >
-                </textarea>
-                <commudle-alert
-                  *ngIf="replyForm.get('reply')?.touched && replyForm.get('reply')?.errors?.['required']"
-                  [error]="true"
-                  errorMessage="Reply is required"
-                ></commudle-alert>
-                <commudle-alert
-                  *ngIf="replyForm.get('reply')?.touched && replyForm.get('reply')?.errors?.['maxlength']"
-                  [error]="true"
-                  errorMessage="Reply cannot exceed 1000 characters"
-                ></commudle-alert>
-              </div>
-            </div>
-
-            <div class="reply-actions">
-              <button type="button" nbButton status="primary" outline (click)="replyForm.reset()">Cancel</button>
-              <button type="submit" nbButton status="primary" [disabled]="!replyForm.valid">Reply</button>
-            </div>
-          </form>
-
-          <div class="replies-section" *ngIf="userMessage.user_messages && userMessage.user_messages.length > 0">
-            <h3>Replies</h3>
-            <div *ngFor="let reply of userMessage.user_messages" class="reply-item">
-              <div class="reply-header">
-                <app-user-profile-card-medium [user]="reply.user"></app-user-profile-card-medium>
-                <span class="reply-date">Posted on {{ reply.created_at | date : 'MMM d, y, h:mm a' }}</span>
-              </div>
-              <div class="reply-content">
-                <commudle-editor [content]="reply.content" [editable]="false" class="com-w-full"></commudle-editor>
-              </div>
-              <div class="reply-actions">
-                <commudle-vote
-                  [icon]="'thumb-up-with-text'"
-                  [votableId]="reply.id"
-                  votableType="UserMessage"
-                ></commudle-vote>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="sidebar">
-        <!-- <div class="explore-section">
-        <h3>Explore Top Discussions</h3>
-        Sidebar content will go here
-      </div> -->
       </div>
     </div>
-  </div>
+
+    <!-- Reply form -->
+    <div class="fm-reply-form">
+      <p class="fm-reply-form-title">
+        <nb-icon icon="corner-down-right-outline"></nb-icon>
+        Reply to {{ userMessage.user?.name || userMessage.user?.username }}
+      </p>
+      <form [formGroup]="replyForm" (ngSubmit)="onSubmit()">
+        <textarea nbInput fullWidth formControlName="reply" rows="4" placeholder="Write your reply..."></textarea>
+        <commudle-alert
+          *ngIf="replyForm.get('reply')?.touched && replyForm.get('reply')?.errors?.['required']"
+          [error]="true"
+          errorMessage="Reply cannot be empty"
+        ></commudle-alert>
+        <div class="fm-form-actions">
+          <button type="button" nbButton ghost size="small" (click)="replyForm.reset()">Clear</button>
+          <button
+            type="submit"
+            nbButton
+            status="primary"
+            shape="semi-round"
+            size="small"
+            [disabled]="replyForm.invalid"
+          >
+            <nb-icon icon="paper-plane-outline"></nb-icon>
+            Post Reply
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-container>
 </div>

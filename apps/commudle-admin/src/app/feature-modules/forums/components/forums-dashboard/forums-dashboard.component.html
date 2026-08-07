@@ -16,23 +16,25 @@
         <span>All</span>
       </a>
 
-      <ng-container *ngIf="!isLoadingCategories">
-        <a
-          *ngFor="let cat of (categories$ | async)?.slice(0, sidebarLimit)"
-          class="fd-nav-link"
-          [routerLink]="[cat.slug]"
-          routerLinkActive="fd-nav-active"
-        >
-          <span>{{ cat.name }}</span>
-        </a>
-
-        <a *ngIf="(categories$ | async)?.length > sidebarLimit" class="fd-nav-link fd-nav-more" [routerLink]="['.']">
-          View all
-        </a>
+      <ng-container *ngIf="isLoadingCategories$ | async">
+        <div class="fd-nav-skeleton" *ngFor="let i of [1, 2, 3, 4, 5]"></div>
       </ng-container>
 
-      <ng-container *ngIf="isLoadingCategories">
-        <div class="fd-nav-skeleton" *ngFor="let i of [1, 2, 3, 4, 5]"></div>
+      <ng-container *ngIf="!(isLoadingCategories$ | async)">
+        <ng-container *ngIf="categories$ | async as categories">
+          <a
+            *ngFor="let cat of categories.slice(0, sidebarLimit)"
+            class="fd-nav-link"
+            [routerLink]="[cat.slug]"
+            routerLinkActive="fd-nav-active"
+          >
+            <span>{{ cat.name }}</span>
+          </a>
+
+          <a *ngIf="categories.length > sidebarLimit" class="fd-nav-link fd-nav-more" [routerLink]="['.']">
+            View all
+          </a>
+        </ng-container>
       </ng-container>
     </nav>
   </aside>

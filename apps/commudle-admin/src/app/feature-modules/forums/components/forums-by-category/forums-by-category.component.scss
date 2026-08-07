@@ -1,73 +1,206 @@
-.forums-by-category {
-  @apply com-p-6;
-  .back-new-topic {
-    @apply com-flex com-justify-between com-items-center;
-    .back-button {
-      @apply com-cursor-pointer com-text-black;
+.fbcat-wrap {
+  @apply com-p-4 com-flex com-flex-col com-gap-3;
+
+  .fbcat-header {
+    @apply com-flex com-items-center com-justify-between com-gap-3;
+
+    .fbcat-header-left {
+      @apply com-flex com-items-center com-gap-2;
+
+      .fbcat-category-info {
+        @apply com-flex com-items-center com-gap-2;
+
+        .fbcat-category-icon {
+          @apply com-w-8 com-h-8 com-rounded-lg com-flex-shrink-0;
+          @apply com-flex com-items-center com-justify-center;
+          @apply com-bg-primary-100 com-text-primary-500 com-text-base;
+        }
+
+        .fbcat-title {
+          @apply com-text-sm com-font-bold com-text-Yankees-Blue com-m-0;
+        }
+
+        .fbcat-meta {
+          @apply com-text-xs com-text-Cadet-Grey com-m-0 com-mt-0.5;
+        }
+      }
     }
   }
 
-  .forums-by-category-header {
-    @apply com-mt-6;
-    span {
-      @apply com-text-Yankees-Blue com-text-2xl com-font-semibold;
+  // ── Search ────────────────────────────────────────────
+  .fbcat-search {
+    @apply com-relative;
+
+    .fbcat-search-icon {
+      @apply com-absolute com-left-2.5 com-top-1/2 -com-translate-y-1/2;
+      @apply com-text-Cadet-Grey com-text-sm com-pointer-events-none;
+    }
+
+    .fbcat-search-input {
+      @apply com-w-full com-h-8 com-pl-8 com-pr-3;
+      @apply com-border com-border-solid com-border-Bright-Gray com-rounded-md;
+      @apply com-bg-white com-text-Yankees-Blue com-text-sm com-outline-none;
+
+      &::placeholder {
+        @apply com-text-Cadet-Grey;
+      }
+      &:focus {
+        @apply com-border-primary-400;
+      }
     }
   }
 
-  .forums-by-category-list {
-    .no-forums {
-      @apply com-text-center com-text-gray-500 com-py-8;
-    }
+  .fbcat-loading {
+    @apply com-flex com-justify-center com-py-16;
+  }
 
-    ul {
-      @apply com-list-none com-p-0 com-m-0 com-mt-8;
-      li {
-        @apply com-list-none;
+  .fbcat-body {
+    @apply com-flex com-gap-4;
 
-        .forum-item {
-          @apply com-flex com-items-start com-justify-between com-py-3;
+    .fbcat-list-col {
+      @apply com-flex-1 com-min-w-0 com-flex com-flex-col com-gap-3;
 
-          .forum-content {
-            @apply com-no-underline com-flex-1;
+      .fbcat-thread-list {
+        @apply com-rounded-lg com-overflow-hidden;
+        @apply com-border com-border-solid com-border-Bright-Gray;
+        @apply com-bg-white;
 
-            .topic-name {
-              @apply com-text-base com-font-semibold com-text-Yankees-Blue;
+        .fbcat-list-head {
+          @apply com-flex com-items-center com-justify-between;
+          @apply com-px-4 com-py-2;
+          @apply com-bg-Anti-Flash-White;
+          @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+          @apply com-text-xs com-font-semibold com-text-Cadet-Grey com-uppercase com-tracking-wide;
+        }
+
+        .fbcat-thread-row {
+          @apply com-flex com-items-center;
+          @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray last:com-border-b-0;
+          @apply com-transition-colors com-duration-150;
+
+          &:hover {
+            @apply com-bg-Azureish-White;
+          }
+
+          .fbcat-thread-main {
+            @apply com-flex com-items-center com-gap-3 com-flex-1 com-no-underline com-min-w-0;
+            @apply com-px-4 com-py-3;
+
+            .fbcat-thread-icon {
+              @apply com-w-8 com-h-8 com-rounded-lg com-flex-shrink-0;
+              @apply com-flex com-items-center com-justify-center;
+              @apply com-bg-primary-100 com-text-primary-500 com-text-sm;
             }
 
-            .description-last-message {
-              @apply com-mb-2;
+            .fbcat-thread-content {
+              @apply com-flex-1 com-min-w-0;
 
-              .description,
-              .last-message {
-                @apply com-text-gray-500 com-text-sm com-font-normal com-line-clamp-2;
+              .fbcat-thread-name {
+                @apply com-text-sm com-font-semibold com-text-Yankees-Blue com-m-0;
+              }
+
+              .fbcat-thread-desc {
+                @apply com-text-xs com-text-Cadet-Grey com-m-0 com-mt-0.5;
+                @apply com-overflow-hidden com-whitespace-nowrap com-text-ellipsis;
               }
             }
 
-            .stats {
-              @apply com-flex com-gap-2 com-mb-3;
+            .fbcat-thread-stats {
+              @apply com-flex com-items-center com-gap-3 com-flex-shrink-0;
 
-              .discussions,
-              .reply {
-                @apply com-text-Ultramarine-Blue com-text-sm com-font-medium;
-              }
-              fa-icon {
-                @apply com-text-[2px];
+              .fbcat-thread-stat {
+                @apply com-flex com-items-center com-gap-1 com-text-xs com-text-Cadet-Grey;
+
+                nb-icon {
+                  @apply com-text-sm;
+                }
               }
             }
           }
-          .action-buttons {
-            @apply com-w-max;
-            @apply com-opacity-0 com-transition-opacity com-duration-200 com-flex com-gap-2;
+
+          .fbcat-thread-actions {
+            @apply com-flex com-items-center com-gap-1 com-pr-3 com-flex-shrink-0;
+            @apply com-opacity-0 com-transition-opacity com-duration-150;
+
+            .fbcat-delete-btn {
+              @apply hover:com-text-Infra-Red;
+            }
           }
 
-          &:hover .action-buttons {
+          &:hover .fbcat-thread-actions {
             @apply com-opacity-100;
           }
         }
       }
-      .forum:not(:last-child) .forum-item {
-        @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-my-3;
+    }
+
+    .fbcat-right-panel {
+      @apply com-flex-shrink-0;
+      width: 200px;
+
+      .fbcat-panel-card {
+        @apply com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-white com-p-3;
+
+        .fbcat-panel-title {
+          @apply com-text-xs com-font-bold com-text-Yankees-Blue com-uppercase com-tracking-wide com-m-0 com-mb-2;
+        }
+
+        .fbcat-panel-text {
+          @apply com-text-xs com-text-Cadet-Grey com-m-0 com-leading-relaxed;
+        }
       }
     }
+  }
+
+  .fbcat-empty {
+    @apply com-flex com-flex-col com-items-center com-justify-center com-gap-2;
+    @apply com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-white;
+    @apply com-py-16;
+
+    .fbcat-empty-icon {
+      @apply com-text-4xl com-text-Bright-Gray;
+    }
+
+    .fbcat-empty-title {
+      @apply com-text-sm com-font-semibold com-text-Yankees-Blue com-m-0;
+    }
+
+    .fbcat-empty-sub {
+      @apply com-text-xs com-text-Cadet-Grey com-m-0;
+    }
+  }
+}
+
+// ── Delete dialog ─────────────────────────────────────
+.fbcat-delete-dialog {
+  @apply com-w-[95vw] md:com-w-[420px] com-m-0;
+
+  .fbcat-delete-dialog-header {
+    @apply com-flex com-items-center com-justify-between;
+  }
+
+  .fbcat-delete-dialog-body {
+    @apply com-flex com-flex-col com-items-center com-text-center com-gap-3;
+
+    .fbcat-delete-icon {
+      @apply com-w-12 com-h-12 com-rounded-full com-flex com-items-center com-justify-center;
+      @apply com-bg-red-100 com-text-Infra-Red com-text-2xl;
+    }
+
+    .fbcat-delete-title {
+      @apply com-text-base com-font-bold com-text-Yankees-Blue com-m-0;
+    }
+
+    .fbcat-delete-msg {
+      @apply com-text-sm com-text-Cadet-Grey com-m-0 com-leading-relaxed;
+    }
+
+    .fbcat-delete-check {
+      @apply com-flex com-items-center com-gap-2 com-text-sm com-text-Yankees-Blue com-cursor-pointer;
+    }
+  }
+
+  .fbcat-delete-dialog-footer {
+    @apply com-flex com-justify-end com-gap-2;
   }
 }

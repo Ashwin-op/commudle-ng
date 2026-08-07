@@ -1,9 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDialogRef } from '@commudle/theme';
-import { ForumsStore } from '@commudle/shared-services';
-import { ForumService } from '@commudle/shared-services';
-import { EDiscussionType, IForum } from '@commudle/shared-models';
+import { ForumService, ForumsStore, ToastrService } from '@commudle/shared-services';
+import { EDiscussionType, IChannelCategory, IForum } from '@commudle/shared-models';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   standalone: false,
@@ -11,62 +11,117 @@ import { EDiscussionType, IForum } from '@commudle/shared-models';
   templateUrl: './forum-form.component.html',
   styleUrls: ['./forum-form.component.scss'],
 })
-export class ForumFormComponent implements OnInit {
+export class ForumFormComponent implements OnInit, OnDestroy {
   @Input() forumId: number;
-  @Input() displayType: EDiscussionType;
   @Input() categoryName = '';
+  @Input() isAdmin = false;
+  @Input() existingCategories: IChannelCategory[] = [];
+
   topicForm: FormGroup;
+  isSubmitting = false;
+  isLoadingForum = false;
+  filteredCategories: IChannelCategory[] = [];
+  showSuggestions = false;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
-    private forumsStore: ForumsStore,
-    private dialogRef: NbDialogRef<ForumFormComponent>,
     private forumService: ForumService,
+    private forumsStore: ForumsStore,
+    private toastrService: ToastrService,
+    private dialogRef: NbDialogRef<ForumFormComponent>,
   ) {
     this.topicForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(120)]],
-      group_name: ['', [Validators.required, Validators.maxLength(60)]],
+      category_name: ['', [Validators.required, Validators.maxLength(60)]],
       description: ['', [Validators.required, Validators.maxLength(500)]],
-      is_private: [false],
-      is_readonly: [false],
-      display_type: ['', Validators.required],
     });
   }
 
-  ngOnInit() {
-    this.topicForm.patchValue({
-      display_type: this.displayType,
-      group_name: this.categoryName,
-    });
+  ngOnInit(): void {
+    if (this.categoryName) {
+      this.topicForm.patchValue({ category_name: this.categoryName });
+    }
+
     if (this.forumId) {
-      this.forumService.showForum(this.forumId).subscribe({
-        next: (data: IForum) => {
-          this.topicForm.patchValue({
-            name: data.name,
-            description: data.description,
-            is_private: data.is_private,
-            is_readonly: data.is_readonly,
-          });
-        },
-      });
+      this.isLoadingForum = true;
+      this.forumService
+        .showForum(this.forumId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (data: IForum) => {
+            this.topicForm.patchValue({
+              name: data.name,
+              description: data.description,
+              category_name: data.channel_category?.name || '',
+            });
+            this.isLoadingForum = false;
+          },
+          error: () => {
+            this.toastrService.errorDialog('Failed to load forum');
+            this.isLoadingForum = false;
+          },
+        });
     }
   }
 
-  onSubmit() {
-    if (this.topicForm.valid) {
-      if (this.forumId) {
-        this.forumsStore.updateForum(this.topicForm.value, this.forumId);
-      } else {
-        this.forumsStore.addForum(this.topicForm.value);
-      }
-      this.closeForm();
-    } else {
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  // ── Category autocomplete (admin only) ─────────────────────────────────────
+
+  onCategoryInput(value: string): void {
+    const query = (value || '').trim().toLowerCase();
+    this.filteredCategories = query
+      ? this.existingCategories.filter((c) => c.name.toLowerCase().includes(query))
+      : this.existingCategories;
+    this.showSuggestions = true;
+  }
+
+  selectCategory(category: IChannelCategory): void {
+    this.topicForm.get('category_name').setValue(category.name);
+    this.showSuggestions = false;
+  }
+
+  hideSuggestions(): void {
+    setTimeout(() => {
+      this.showSuggestions = false;
+    }, 150);
+  }
+
+  get isNewCategory(): boolean {
+    const val = this.topicForm.get('category_name')?.value?.trim().toLowerCase();
+    return !!val && !this.existingCategories.some((c) => c.name.toLowerCase() === val);
+  }
+
+  // ── Submit — store handles list + category refresh ─────────────────────────
+
+  onSubmit(): void {
+    if (this.topicForm.invalid) {
       this.topicForm.markAllAsTouched();
+      return;
     }
+
+    this.isSubmitting = true;
+    const payload = { ...this.topicForm.value, display_type: EDiscussionType.FORUM };
+
+    const request$ = this.forumId
+      ? this.forumsStore.updateForum(payload, this.forumId)
+      : this.forumsStore.createForum(payload);
+
+    request$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: () => this.dialogRef.close(true),
+      error: () => {
+        this.toastrService.errorDialog(this.forumId ? 'Failed to update forum' : 'Failed to create forum');
+        this.isSubmitting = false;
+      },
+    });
   }
 
-  closeForm() {
-    this.topicForm.reset();
+  closeForm(): void {
     this.dialogRef.close();
   }
 }

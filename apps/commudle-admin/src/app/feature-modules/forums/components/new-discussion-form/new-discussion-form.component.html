@@ -1,15 +1,26 @@
-<nb-card>
-  <nb-card-header>
-    <span>New Discussion</span>
-    <button ghost nbButton size="small" (click)="closeDialog()" shape="round">
-      <nb-icon icon="close"></nb-icon>
+<nb-card class="ndf-dialog">
+  <nb-card-header class="ndf-header">
+    <div class="ndf-header-content">
+      <div class="ndf-header-icon">
+        <nb-icon icon="edit-outline"></nb-icon>
+      </div>
+      <div>
+        <h4 class="ndf-title">Start a Discussion</h4>
+        <p class="ndf-subtitle">Share your question or idea with the community</p>
+      </div>
+    </div>
+    <button nbButton ghost size="small" shape="round" (click)="closeDialog()">
+      <nb-icon icon="close-outline"></nb-icon>
     </button>
   </nb-card-header>
-  <nb-card-body>
-    <form [formGroup]="discussionForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="subject">Subject <span class="required">*</span></label>
-        <input id="subject" type="text" placeholder="Enter Subject" formControlName="subject" nbInput fullWidth />
+
+  <nb-card-body class="ndf-body">
+    <form [formGroup]="discussionForm" class="ndf-form">
+      <!-- Subject -->
+      <div class="ndf-field">
+        <label class="ndf-label">Subject <span class="ndf-required">*</span></label>
+        <input nbInput fullWidth formControlName="subject" type="text" placeholder="What's this discussion about?" />
+        <span class="ndf-hint">{{ discussionForm.get('subject')?.value?.length || 0 }} / 120</span>
         <commudle-alert
           *ngIf="discussionForm.get('subject')?.touched && discussionForm.get('subject')?.errors?.['required']"
           [error]="true"
@@ -18,20 +29,21 @@
         <commudle-alert
           *ngIf="discussionForm.get('subject')?.touched && discussionForm.get('subject')?.errors?.['maxlength']"
           [error]="true"
-          errorMessage="Subject cannot exceed 120 characters"
+          errorMessage="Cannot exceed 120 characters"
         ></commudle-alert>
       </div>
 
-      <div class="form-group">
-        <label for="message">Message <span class="required">*</span></label>
+      <!-- Message -->
+      <div class="ndf-field">
+        <label class="ndf-label">Message <span class="ndf-required">*</span></label>
         <textarea
-          id="message"
-          placeholder="A very long line of text which is expected to span more than two to three lines so it breaks as the text increases."
-          formControlName="message"
           nbInput
           fullWidth
+          formControlName="message"
           rows="6"
+          placeholder="Describe your question or share your thoughts in detail..."
         ></textarea>
+        <span class="ndf-hint">{{ discussionForm.get('message')?.value?.length || 0 }} / 1000</span>
         <commudle-alert
           *ngIf="discussionForm.get('message')?.touched && discussionForm.get('message')?.errors?.['required']"
           [error]="true"
@@ -40,16 +52,24 @@
         <commudle-alert
           *ngIf="discussionForm.get('message')?.touched && discussionForm.get('message')?.errors?.['maxlength']"
           [error]="true"
-          errorMessage="Message cannot exceed 1000 characters"
+          errorMessage="Cannot exceed 1000 characters"
         ></commudle-alert>
       </div>
     </form>
   </nb-card-body>
-  <nb-card-footer>
-    <div class="form-actions">
-      <button type="submit" nbButton status="primary" fullWidth [disabled]="!discussionForm.valid" (click)="onSubmit()">
-        Post
-      </button>
-    </div>
+
+  <nb-card-footer class="ndf-footer">
+    <button nbButton ghost size="small" (click)="closeDialog()">Cancel</button>
+    <button
+      nbButton
+      status="primary"
+      shape="semi-round"
+      size="small"
+      [disabled]="discussionForm.invalid"
+      (click)="onSubmit()"
+    >
+      <nb-icon icon="paper-plane-outline"></nb-icon>
+      Post Discussion
+    </button>
   </nb-card-footer>
 </nb-card>

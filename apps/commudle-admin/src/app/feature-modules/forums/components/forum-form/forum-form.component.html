@@ -1,15 +1,26 @@
-<nb-card>
-  <nb-card-header>
-    <span class="topic-form-title">New Topic</span>
-    <button nbButton ghost size="small" (click)="closeForm()" shape="round">
-      <nb-icon icon="close"></nb-icon>
+<nb-card class="ff-dialog">
+  <nb-card-header class="ff-header">
+    <div class="ff-header-content">
+      <div class="ff-header-icon">
+        <nb-icon [icon]="forumId ? 'edit-2-outline' : 'plus-circle-outline'"></nb-icon>
+      </div>
+      <div>
+        <h4 class="ff-title">{{ forumId ? 'Edit Topic' : 'New Topic' }}</h4>
+        <p class="ff-subtitle">{{ forumId ? 'Update the topic details below' : 'Create a new discussion topic' }}</p>
+      </div>
+    </div>
+    <button nbButton ghost size="small" shape="round" (click)="closeForm()">
+      <nb-icon icon="close-outline"></nb-icon>
     </button>
   </nb-card-header>
-  <nb-card-body>
-    <form [formGroup]="topicForm" (ngSubmit)="onSubmit()" class="topic-form">
-      <div class="form-field-container">
-        <label class="form-field"> Topic Name <span class="required">*</span> </label>
-        <input class="form-field" formControlName="name" nbInput fullWidth placeholder="Enter Topic Name" />
+
+  <nb-card-body class="ff-body">
+    <form [formGroup]="topicForm" class="ff-form">
+      <!-- ── Topic Name ── -->
+      <div class="ff-field">
+        <label class="ff-label">Topic Name <span class="ff-required">*</span></label>
+        <input nbInput fullWidth formControlName="name" placeholder="e.g. Getting started with Angular" type="text" />
+        <span class="ff-hint">{{ topicForm.get('name')?.value?.length || 0 }} / 120</span>
         <commudle-alert
           *ngIf="topicForm.get('name')?.touched && topicForm.get('name')?.errors?.['required']"
           [error]="true"
@@ -18,35 +29,83 @@
         <commudle-alert
           *ngIf="topicForm.get('name')?.touched && topicForm.get('name')?.errors?.['maxlength']"
           [error]="true"
-          errorMessage="Topic name cannot exceed 120 characters"
+          errorMessage="Cannot exceed 120 characters"
         ></commudle-alert>
       </div>
 
-      <div class="form-field-container">
-        <label class="form-field"> Category <span class="required">*</span> </label>
-        <input class="form-field" formControlName="group_name" nbInput fullWidth placeholder="Enter Category" />
+      <!-- ── Category: DROPDOWN for non-admins ── -->
+      <div class="ff-field" *ngIf="!isAdmin">
+        <label class="ff-label">Category <span class="ff-required">*</span></label>
+        <select nbInput fullWidth formControlName="category_name" class="ff-select">
+          <option value="" disabled>Select a category</option>
+          <option *ngFor="let cat of existingCategories" [value]="cat.name">{{ cat.name }}</option>
+        </select>
         <commudle-alert
-          *ngIf="topicForm.get('group_name')?.touched && topicForm.get('group_name')?.errors?.['required']"
+          *ngIf="topicForm.get('category_name')?.touched && topicForm.get('category_name')?.errors?.['required']"
+          [error]="true"
+          errorMessage="Please select a category"
+        ></commudle-alert>
+      </div>
+
+      <!-- ── Category: AUTOCOMPLETE + NEW for admins ── -->
+      <div class="ff-field ff-autocomplete-field" *ngIf="isAdmin">
+        <label class="ff-label">
+          Category <span class="ff-required">*</span>
+          <span class="ff-admin-hint">Admin: type to search or create new</span>
+        </label>
+        <div class="ff-autocomplete-wrap">
+          <input
+            nbInput
+            fullWidth
+            formControlName="category_name"
+            placeholder="Search existing or type to create new..."
+            type="text"
+            autocomplete="off"
+            (input)="onCategoryInput($event.target['value'])"
+            (focus)="onCategoryInput($event.target['value'])"
+            (blur)="hideSuggestions()"
+          />
+          <!-- New category badge -->
+          <span class="ff-new-badge" *ngIf="isNewCategory"> <nb-icon icon="plus-circle-outline"></nb-icon> New </span>
+        </div>
+
+        <!-- Suggestions dropdown -->
+        <div class="ff-suggestions" *ngIf="showSuggestions && filteredCategories.length > 0">
+          <button
+            type="button"
+            class="ff-suggestion-item"
+            *ngFor="let cat of filteredCategories"
+            (mousedown)="selectCategory(cat)"
+          >
+            <nb-icon icon="message-circle-outline" class="ff-suggestion-icon"></nb-icon>
+            <span>{{ cat.name }}</span>
+            <span class="ff-suggestion-count">{{ cat.channels_count }} topics</span>
+          </button>
+        </div>
+
+        <commudle-alert
+          *ngIf="topicForm.get('category_name')?.touched && topicForm.get('category_name')?.errors?.['required']"
           [error]="true"
           errorMessage="Category is required"
         ></commudle-alert>
         <commudle-alert
-          *ngIf="topicForm.get('group_name')?.touched && topicForm.get('group_name')?.errors?.['maxlength']"
+          *ngIf="topicForm.get('category_name')?.touched && topicForm.get('category_name')?.errors?.['maxlength']"
           [error]="true"
-          errorMessage="Category cannot exceed 60 characters"
+          errorMessage="Cannot exceed 60 characters"
         ></commudle-alert>
       </div>
 
-      <div class="form-field-container">
-        <label class="form-field"> Add Description <span class="required">*</span> </label>
+      <!-- ── Description ── -->
+      <div class="ff-field">
+        <label class="ff-label">Description <span class="ff-required">*</span></label>
         <textarea
-          class="form-field"
-          formControlName="description"
           nbInput
           fullWidth
-          rows="6"
-          placeholder="A very long line of text which is expected to span more than two to three lines so it breaks as the text increases."
+          formControlName="description"
+          rows="4"
+          placeholder="Briefly describe what this topic is about..."
         ></textarea>
+        <span class="ff-hint">{{ topicForm.get('description')?.value?.length || 0 }} / 500</span>
         <commudle-alert
           *ngIf="topicForm.get('description')?.touched && topicForm.get('description')?.errors?.['required']"
           [error]="true"
@@ -55,14 +114,24 @@
         <commudle-alert
           *ngIf="topicForm.get('description')?.touched && topicForm.get('description')?.errors?.['maxlength']"
           [error]="true"
-          errorMessage="Description cannot exceed 500 characters"
+          errorMessage="Cannot exceed 500 characters"
         ></commudle-alert>
       </div>
     </form>
   </nb-card-body>
-  <nb-card-footer>
-    <button type="submit" nbButton status="primary" fullWidth [disabled]="topicForm.invalid" (click)="onSubmit()">
-      Save
+
+  <nb-card-footer class="ff-footer">
+    <button nbButton ghost size="small" (click)="closeForm()">Cancel</button>
+    <button
+      nbButton
+      status="primary"
+      shape="semi-round"
+      size="small"
+      [disabled]="topicForm.invalid || isSubmitting"
+      (click)="onSubmit()"
+    >
+      <nb-icon *ngIf="isSubmitting" icon="loader-outline" class="ff-spin"></nb-icon>
+      {{ isSubmitting ? 'Saving...' : forumId ? 'Save Changes' : 'Create Topic' }}
     </button>
   </nb-card-footer>
 </nb-card>

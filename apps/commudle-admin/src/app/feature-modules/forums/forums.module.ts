@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ForumsRoutes } from './forums.routing';
 import { ForumsDashboardComponent } from './components/forums-dashboard/forums-dashboard.component';
-import { NbButtonModule, NbCardModule, NbIconModule, NbInputModule } from '@commudle/theme';
+import { NbButtonModule, NbCardModule, NbIconModule, NbInputModule, NbTooltipModule } from '@commudle/theme';
 import { ForumsCategoriesComponent } from './components/forums-categories/forums-categories.component';
 import { ForumFormComponent } from './components/forum-form/forum-form.component';
 import { ForumsByCategoryComponent } from './components/forums-by-category/forums-by-category.component';
@@ -16,6 +16,7 @@ import { MiniUserProfileModule } from 'apps/shared-modules/mini-user-profile/min
 import { EditorModule } from '@commudle/editor';
 import { SharedComponentsModule as NewSharedComponentsModule } from '@commudle/shared-components';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -33,17 +34,18 @@ import { SharedComponentsModule } from 'apps/shared-components/shared-components
     ReactiveFormsModule,
     FormsModule,
     FontAwesomeModule,
+    RouterModule,
     MiniUserProfileModule,
-    // Standalone Components
     SidebarComponent,
-    // Nebular
     NbCardModule,
     NbIconModule,
     NbButtonModule,
     NbInputModule,
+    NbTooltipModule,
     EditorModule,
     SharedComponentsModule,
     NewSharedComponentsModule,
   ],
+  providers: [],
 })
 export class ForumsModule {}

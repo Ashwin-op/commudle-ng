@@ -1,62 +1,125 @@
-<div class="forum-discussion">
-  <div class="header-section">
-    <div class="back-new-discussion">
-      <div class="back-button" (click)="backToCategory()">
-        <fa-icon [icon]="icons.faArrowLeft"></fa-icon> &nbsp;Go Back
-      </div>
-      <button nbButton status="primary" (click)="startNewDiscussion()" shape="semi-round">
-        <fa-icon [icon]="icons.faPlus"></fa-icon> &nbsp; Start New Discussion
+<div class="fdis-wrap">
+  <!-- ── Header ── -->
+  <div class="fdis-header" *ngIf="forum">
+    <div class="fdis-header-left">
+      <button nbButton ghost size="tiny" (click)="backToCategory()">
+        <nb-icon icon="arrow-ios-back-outline"></nb-icon>
       </button>
+      <div class="fdis-forum-icon">
+        <nb-icon icon="message-circle-outline"></nb-icon>
+      </div>
+      <div>
+        <h1 class="fdis-forum-title">{{ forum.name }}</h1>
+        <p class="fdis-forum-desc" *ngIf="forum.description">{{ forum.description }}</p>
+      </div>
     </div>
+    <button nbButton status="primary" shape="semi-round" size="small" (click)="startNewDiscussion()">
+      <nb-icon icon="edit-outline"></nb-icon>
+      New Post
+    </button>
+  </div>
 
-    <div class="forum-header" *ngIf="forum">
-      <h2>{{ forum.name }}</h2>
-      <p [title]="">{{ forum.description }}</p>
+  <!-- ── Stats bar ── -->
+  <div class="fdis-stats" *ngIf="forum">
+    <div class="fdis-stat">
+      <span class="fdis-stat-num">{{ forum.total_discussions || 0 }}</span>
+      <span class="fdis-stat-lbl">Threads</span>
+    </div>
+    <div class="fdis-stat">
+      <span class="fdis-stat-num">{{ forum.total_replies || 0 }}</span>
+      <span class="fdis-stat-lbl">Posts</span>
+    </div>
+    <div class="fdis-stat">
+      <span class="fdis-stat-num">{{ forum.members_count || 0 }}</span>
+      <span class="fdis-stat-lbl">Members</span>
     </div>
   </div>
 
-  <div class="discussions-list">
-    <div *ngIf="(isLoading$ | async) && (userMessages$ | async)?.length === 0" class="loading-state">
-      <commudle-loading-spinner></commudle-loading-spinner>
-      <p>Loading discussions...</p>
-    </div>
-
-    <div *ngIf="(userMessages$ | async)?.length === 0 && (isLoading$ | async) === false" class="empty-state">
-      <img [src]="staticAssets.message_empty" alt="No discussions" class="empty-image" />
-      <h3>No Discussions Available</h3>
-      <p>You can create one by clicking the "Start New Discussion" button</p>
-      <button nbButton status="primary" (click)="startNewDiscussion()" shape="semi-round">
-        + Start New Discussion
-      </button>
-    </div>
-
-    <a *ngFor="let userMessage of userMessages$ | async" [routerLink]="[userMessage.slug]" class="discussion-item">
-      <div class="discussion-avatar">
-        <img [src]="userMessage.user?.photo?.i64" [alt]="userMessage.user?.name || 'User'" />
+  <!-- ── Body ── -->
+  <div class="fdis-body">
+    <!-- Thread list -->
+    <div class="fdis-list-col" *ngIf="userMessages$ | async as messages">
+      <div class="fdis-loading" *ngIf="(isLoading$ | async) && messages.length === 0">
+        <commudle-loading-spinner></commudle-loading-spinner>
       </div>
-      <div class="discussion-content">
-        <h3 class="discussion-title">{{ userMessage.subject }}</h3>
-        <span class="discussion-description" [title]="userMessage.content">{{ userMessage.content }}</span>
-        <div class="discussion-meta">
-          <span class="posted-date">Posted on {{ userMessage.created_at | date : 'MMM d, y, h:mm a' }}</span>
+
+      <!-- Empty -->
+      <div class="fdis-empty" *ngIf="messages.length === 0 && !(isLoading$ | async)">
+        <nb-icon icon="message-square-outline" class="fdis-empty-icon"></nb-icon>
+        <p class="fdis-empty-title">No discussions yet</p>
+        <p class="fdis-empty-sub">Be the first to post in this forum</p>
+        <button nbButton status="primary" shape="semi-round" size="small" (click)="startNewDiscussion()">
+          <nb-icon icon="edit-outline"></nb-icon> New Post
+        </button>
+      </div>
+
+      <!-- Thread rows -->
+      <div class="fdis-thread-list" *ngIf="messages.length > 0">
+        <div class="fdis-filter-row">
+          <span class="fdis-filter-tab fdis-filter-active">Latest</span>
+          <span class="fdis-filter-tab">Unanswered</span>
+        </div>
+
+        <a *ngFor="let msg of messages" [routerLink]="[msg.slug]" class="fdis-thread-row">
+          <div class="fdis-thread-avatar">
+            <img
+              [src]="msg.user?.photo?.i64 || msg.user?.photo?.url"
+              [alt]="msg.user?.name"
+              class="fdis-avatar-img"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+            />
+            <div class="fdis-avatar-fallback" style="display: none">
+              <nb-icon icon="person-outline"></nb-icon>
+            </div>
+          </div>
+          <div class="fdis-thread-info">
+            <p class="fdis-thread-subject">{{ msg.subject }}</p>
+            <div class="fdis-thread-meta">
+              <span class="fdis-thread-author">{{ msg.user?.name || msg.user?.username }}</span>
+              <span class="fdis-dot">·</span>
+              <span class="fdis-thread-date">{{ msg.created_at | date : 'd MMM y' }}</span>
+            </div>
+          </div>
+          <div class="fdis-thread-counts">
+            <span class="fdis-count-item">
+              <nb-icon icon="message-square-outline"></nb-icon>
+              {{ msg.replies_count || 0 }}
+            </span>
+          </div>
+        </a>
+
+        <div class="fdis-load-more" *ngIf="hasNextPage$ | async">
+          <button
+            nbButton
+            outline
+            status="primary"
+            shape="semi-round"
+            size="small"
+            (click)="loadMoreDiscussions()"
+            [disabled]="isLoading$ | async"
+          >
+            Load more
+          </button>
         </div>
       </div>
-      <div class="discussion-stats">
-        <div class="stat-item">
-          <fa-icon [icon]="icons.faComment"></fa-icon>
-          <span>{{ userMessage.replies_count || 0 }}</span>
-        </div>
-        <div class="stat-item">
-          <fa-icon [icon]="icons.faEye"></fa-icon>
-          <span>{{ userMessage.flags_count || 0 }}</span>
+    </div>
+
+    <!-- Right panel -->
+    <aside class="fdis-right-panel">
+      <div class="fdis-panel-card" *ngIf="forum">
+        <p class="fdis-panel-title">About</p>
+        <p class="fdis-panel-text">{{ forum.description || 'Discussion forum' }}</p>
+        <div class="fdis-panel-stats">
+          <div class="fdis-panel-stat">
+            <span class="fdis-panel-num">{{ forum.total_discussions || 0 }}</span>
+            <span class="fdis-panel-lbl">Threads</span>
+          </div>
+          <div class="fdis-panel-stat">
+            <span class="fdis-panel-num">{{ forum.total_replies || 0 }}</span>
+            <span class="fdis-panel-lbl">Posts</span>
+          </div>
         </div>
       </div>
-    </a>
-
-    <div class="load-more-section" *ngIf="hasNextPage$ | async">
-      <button nbButton status="basic" (click)="loadMoreDiscussions()" [disabled]="isLoading$ | async" fullWidth>
-        {{ (isLoading$ | async) ? 'Loading...' : 'Load More Discussions' }}
-      </button>
-    </div>
+    </aside>
   </div>
 </div>

@@ -1,14 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { finalize } from 'rxjs/operators';
-import {
-  IForum,
-  IPagination,
-  IPaginationCount,
-  EDbModels,
-  IChannelCategory,
-  IUserMessage,
-} from '@commudle/shared-models';
+import { BehaviorSubject, Observable, Subject, combineLatest } from 'rxjs';
+import { debounceTime, distinctUntilChanged, finalize, switchMap, tap } from 'rxjs/operators';
+import { IForum, IPaginationCount, EDbModels, IChannelCategory, IUserMessage } from '@commudle/shared-models';
 import { ForumService } from './forum.service';
 import { ToastrService } from './toastr.service';
 import { DiscussionService } from './discussion.service';
@@ -18,18 +11,47 @@ import { UserMessagesService } from './user-messages.service';
   providedIn: 'root',
 })
 export class ForumsStore {
-  private readonly forums = new BehaviorSubject<IForum[]>([]);
-  readonly forums$ = this.forums.asObservable();
-
+  // ── Parent context ──────────────────────────────────────────────────────────
   private readonly parentId = new BehaviorSubject<string | null>(null);
   readonly parentId$ = this.parentId.asObservable();
 
   private readonly parentType = new BehaviorSubject<EDbModels | null>(null);
   readonly parentType$ = this.parentType.asObservable();
 
+  // ── Categories ──────────────────────────────────────────────────────────────
   private readonly categories = new BehaviorSubject<IChannelCategory[]>([]);
   readonly categories$ = this.categories.asObservable();
 
+  private readonly isLoadingCategories = new BehaviorSubject<boolean>(true);
+  readonly isLoadingCategories$ = this.isLoadingCategories.asObservable();
+
+  // ── Forum list ──────────────────────────────────────────────────────────────
+  private readonly forums = new BehaviorSubject<IForum[]>([]);
+  readonly forums$ = this.forums.asObservable();
+
+  private readonly isLoadingForums = new BehaviorSubject<boolean>(true);
+  readonly isLoadingForums$ = this.isLoadingForums.asObservable();
+
+  private readonly totalForums = new BehaviorSubject<number>(0);
+  readonly totalForums$ = this.totalForums.asObservable();
+
+  private readonly currentPage = new BehaviorSubject<number>(1);
+  readonly currentPage$ = this.currentPage.asObservable();
+
+  private readonly perPage = new BehaviorSubject<number>(15);
+  readonly perPage$ = this.perPage.asObservable();
+
+  // ── Search & filter (drive backend queries) ─────────────────────────────────
+  private readonly searchQuery = new BehaviorSubject<string>('');
+  readonly searchQuery$ = this.searchQuery.asObservable();
+
+  private readonly selectedCategory = new BehaviorSubject<string | null>(null);
+  readonly selectedCategory$ = this.selectedCategory.asObservable();
+
+  /** Emits whenever any query input changes so the list reloads from the server */
+  private readonly queryTrigger = new Subject<void>();
+
+  // ── Discussion (thread list inside a forum) ─────────────────────────────────
   private readonly userMessages = new BehaviorSubject<IUserMessage[]>([]);
   readonly userMessages$ = this.userMessages.asObservable();
 
@@ -45,107 +67,185 @@ export class ForumsStore {
   private readonly isLoadingUserMessage = new BehaviorSubject<boolean>(false);
   readonly isLoadingUserMessage$ = this.isLoadingUserMessage.asObservable();
 
-  private currentPage = 1;
+  private discussionPage = 1;
 
   constructor(
     private readonly forumService: ForumService,
     private readonly toastrService: ToastrService,
     private readonly discussionService: DiscussionService,
     private readonly userMessagesService: UserMessagesService,
-  ) {}
-
-  loadForums(parentId: string, parentType: EDbModels): void {
-    this.forumService.indexForums(parentId, parentType).subscribe({
-      next: (data: IPagination<IForum[]>) => {
-        const forums = data.page.flatMap((item) => item.data);
-        this.forums.next(forums);
-      },
-      error: () => this.toastrService.errorDialog('Failed to load forums'),
-    });
+  ) {
+    this.wireSearchPipeline();
   }
 
-  loadCategories(parentId: string, parentType: EDbModels): void {
-    this.forumService.getCategories(parentId, parentType).subscribe({
-      next: (categories) => this.categories.next(categories),
-      error: () => this.toastrService.errorDialog('Failed to load categories'),
-    });
+  // ── Search pipeline: debounced, server-driven ──────────────────────────────
+
+  private wireSearchPipeline(): void {
+    combineLatest([
+      this.searchQuery.pipe(debounceTime(350), distinctUntilChanged()),
+      this.selectedCategory.pipe(distinctUntilChanged()),
+      this.currentPage.pipe(distinctUntilChanged()),
+    ])
+      .pipe(
+        tap(() => this.isLoadingForums.next(true)),
+        switchMap(([q, categorySlug, page]) =>
+          this.forumService.getForums({
+            parentId: this.parentId.value,
+            parentType: this.parentType.value,
+            q,
+            categorySlug,
+            page,
+            count: this.perPage.value,
+          }),
+        ),
+      )
+      .subscribe({
+        next: (res: IPaginationCount<IForum>) => {
+          this.forums.next(res.values || []);
+          this.totalForums.next(res.total || 0);
+          this.isLoadingForums.next(false);
+        },
+        error: () => {
+          this.isLoadingForums.next(false);
+          this.toastrService.errorDialog('Failed to load forums');
+        },
+      });
   }
 
-  addForum(forum: IForum): void {
-    this.forumService.createForum(forum, this.parentType.value, this.parentId.value).subscribe({
-      next: (data) => {
-        this.forums.next([...this.forums.value, data]);
-        this.updateCategories(data);
-        this.toastrService.successDialog('Forum created successfully!');
-      },
-      error: () => this.toastrService.errorDialog('Failed to create forum'),
-    });
-  }
-
-  updateForum(updatedForum: IForum, forumId: number): void {
-    this.forumService.updateForum(updatedForum, forumId).subscribe({
-      next: (data) => {
-        const forums = this.forums.value.map((f) => (f.id === forumId ? data : f));
-        this.forums.next(forums);
-        this.toastrService.successDialog('Forum updated successfully!');
-      },
-    });
-  }
-
-  removeForum(forumId: number): void {
-    const forums = this.forums.value.filter((f) => f.id !== forumId);
-    this.forums.next(forums);
-    this.toastrService.successDialog('Forum deleted successfully!');
-  }
+  // ── Parent context ─────────────────────────────────────────────────────────
 
   setParentContext(parentId: string, parentType: EDbModels): void {
     this.parentId.next(parentId);
     this.parentType.next(parentType);
+    this.loadCategories();
+    this.reloadForums();
   }
+
+  getParentId(): string {
+    return this.parentId.value;
+  }
+
+  getParentType(): EDbModels {
+    return this.parentType.value;
+  }
+
+  // ── Search & filter setters (called from components) ───────────────────────
+
+  setSearchQuery(q: string): void {
+    this.currentPage.next(1);
+    this.searchQuery.next(q ?? '');
+  }
+
+  setSelectedCategory(categorySlug: string | null): void {
+    this.currentPage.next(1);
+    this.selectedCategory.next(categorySlug);
+  }
+
+  setPage(page: number): void {
+    this.currentPage.next(page);
+  }
+
+  setPerPage(count: number): void {
+    this.perPage.next(count);
+    this.currentPage.next(1);
+  }
+
+  /** Force a reload with current query params */
+  reloadForums(): void {
+    if (!this.parentId.value || !this.parentType.value) return;
+    this.isLoadingForums.next(true);
+    this.forumService
+      .getForums({
+        parentId: this.parentId.value,
+        parentType: this.parentType.value,
+        q: this.searchQuery.value,
+        categorySlug: this.selectedCategory.value,
+        page: this.currentPage.value,
+        count: this.perPage.value,
+      })
+      .pipe(finalize(() => this.isLoadingForums.next(false)))
+      .subscribe({
+        next: (res) => {
+          this.forums.next(res.values || []);
+          this.totalForums.next(res.total || 0);
+        },
+        error: () => this.toastrService.errorDialog('Failed to load forums'),
+      });
+  }
+
+  // ── Categories ─────────────────────────────────────────────────────────────
+
+  loadCategories(): void {
+    if (!this.parentId.value || !this.parentType.value) return;
+    this.isLoadingCategories.next(true);
+    this.forumService
+      .getForumCategories(this.parentId.value, this.parentType.value)
+      .pipe(finalize(() => this.isLoadingCategories.next(false)))
+      .subscribe({
+        next: (categories) => this.categories.next(categories || []),
+        error: () => this.toastrService.errorDialog('Failed to load categories'),
+      });
+  }
+
+  // ── CRUD — keeps list, total and categories in sync ────────────────────────
+
+  createForum(payload: Partial<IForum>): Observable<IForum> {
+    return this.forumService.createForum(payload, this.parentType.value, this.parentId.value).pipe(
+      tap((forum) => {
+        this.forums.next([forum, ...this.forums.value]);
+        this.totalForums.next(this.totalForums.value + 1);
+        this.loadCategories(); // refresh category counts
+        this.toastrService.successDialog('Forum created successfully');
+      }),
+    );
+  }
+
+  updateForum(payload: Partial<IForum>, forumId: number): Observable<IForum> {
+    return this.forumService.updateForum(payload, forumId).pipe(
+      tap((forum) => {
+        this.forums.next(this.forums.value.map((f) => (f.id === forum.id ? forum : f)));
+        this.loadCategories(); // category may have changed
+        this.toastrService.successDialog('Forum updated successfully');
+      }),
+    );
+  }
+
+  deleteForum(forumId: number): Observable<boolean> {
+    return this.forumService.deleteForum(forumId).pipe(
+      tap(() => {
+        this.forums.next(this.forums.value.filter((f) => f.id !== forumId));
+        this.totalForums.next(Math.max(0, this.totalForums.value - 1));
+        this.loadCategories();
+        this.toastrService.successDialog('Forum deleted successfully');
+      }),
+    );
+  }
+
+  // ── Discussion (threads within a forum) ────────────────────────────────────
 
   loadDiscussions(discussionId: number, loadMore = false, count = 10): void {
     if (loadMore && (!this.hasNextPage.value || this.isLoading.value)) return;
 
-    if (!loadMore) {
-      this.currentPage = 1;
-    } else {
-      this.currentPage++;
-    }
-
+    this.discussionPage = loadMore ? this.discussionPage + 1 : 1;
     this.isLoading.next(true);
 
     this.discussionService
-      .getForumsMessages(discussionId, count, this.currentPage)
+      .getForumsMessages(discussionId, count, this.discussionPage)
       .pipe(finalize(() => this.isLoading.next(false)))
       .subscribe((data: IPaginationCount<IUserMessage>) => {
-        const currentMessages = this.userMessages.value;
-
-        this.userMessages.next(loadMore ? [...currentMessages, ...data.values] : data.values);
-
-        const totalPages = Math.ceil(data.total / count);
-        this.hasNextPage.next(this.currentPage < totalPages);
+        const current = this.userMessages.value;
+        this.userMessages.next(loadMore ? [...current, ...data.values] : data.values);
+        this.hasNextPage.next(this.discussionPage < Math.ceil(data.total / count));
       });
-  }
-
-  updateDiscussion(userMessage: IUserMessage) {
-    if (userMessage.parent_type === 'Discussion' && userMessage.parent_id === this.userMessages.value[0].parent_id) {
-      const currentMessages = this.userMessages.value;
-      if (!currentMessages.find((msg) => msg.id === userMessage.id)) {
-        this.userMessages.next([userMessage, ...currentMessages]);
-      }
-    }
   }
 
   loadUserMessage(userMessageSlug: string): void {
     this.isLoadingUserMessage.next(true);
-
     this.userMessagesService
       .showUserMessage(userMessageSlug)
       .pipe(finalize(() => this.isLoadingUserMessage.next(false)))
       .subscribe({
-        next: (userMessage: IUserMessage) => {
-          this.currentUserMessage.next(userMessage);
-        },
+        next: (userMessage: IUserMessage) => this.currentUserMessage.next(userMessage),
         error: () => {
           this.toastrService.errorDialog('Failed to load message');
           this.currentUserMessage.next(null);
@@ -153,14 +253,22 @@ export class ForumsStore {
       });
   }
 
-  updateUserMessage(userMessageSlug: string, reply: IUserMessage) {
-    const currentMessage = this.currentUserMessage.value;
-    if (currentMessage && currentMessage.slug === userMessageSlug) {
-      const updatedMessage = {
-        user_messages: [...currentMessage.user_messages, reply],
-        ...currentMessage,
-      };
-      this.currentUserMessage.next(updatedMessage);
+  updateDiscussion(userMessage: IUserMessage): void {
+    const current = this.userMessages.value;
+    if (
+      current.length > 0 &&
+      userMessage.parent_type === 'Discussion' &&
+      userMessage.parent_id === current[0].parent_id &&
+      !current.find((m) => m.id === userMessage.id)
+    ) {
+      this.userMessages.next([userMessage, ...current]);
+    }
+  }
+
+  updateUserMessage(userMessageSlug: string, reply: IUserMessage): void {
+    const current = this.currentUserMessage.value;
+    if (current && current.slug === userMessageSlug) {
+      this.currentUserMessage.next({ ...current, user_messages: [...current.user_messages, reply] });
     }
   }
 
@@ -172,38 +280,19 @@ export class ForumsStore {
   clearDiscussions(): void {
     this.userMessages.next([]);
     this.hasNextPage.next(false);
-    this.currentPage = 1;
+    this.discussionPage = 1;
   }
 
   clearAllData(): void {
-    this.forums.next([]);
     this.parentId.next(null);
     this.parentType.next(null);
     this.categories.next([]);
+    this.forums.next([]);
+    this.totalForums.next(0);
+    this.searchQuery.next('');
+    this.selectedCategory.next(null);
+    this.currentPage.next(1);
     this.clearDiscussions();
     this.clearUserMessage();
-  }
-
-  private updateCategories(forum: IForum): void {
-    const categories = this.categories.value;
-    const existingIndex = categories.findIndex((cat) => cat.slug === forum.channel_category.slug);
-
-    if (existingIndex !== -1) {
-      const updated = [...categories];
-      updated[existingIndex] = {
-        ...updated[existingIndex],
-        channels_count: updated[existingIndex].channels_count + 1,
-        featured_channel: updated[existingIndex].featured_channel || forum,
-      };
-      this.categories.next(updated);
-    } else {
-      const newCategory: IChannelCategory = {
-        name: forum.channel_category.name,
-        slug: forum.channel_category.slug,
-        channels_count: 1,
-        featured_channel: forum,
-      };
-      this.categories.next([...categories, newCategory]);
-    }
   }
 }

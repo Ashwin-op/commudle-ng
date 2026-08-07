@@ -1,7 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { EDbModels } from '@commudle/shared-models';
 import { ForumsStore } from '@commudle/shared-services';
+import { Subject, takeUntil } from 'rxjs';
 
 interface ParentInfo {
   parent_id: string;
@@ -14,12 +15,13 @@ interface ParentInfo {
   templateUrl: './forums-dashboard.component.html',
   styleUrls: ['./forums-dashboard.component.scss'],
 })
-export class ForumsDashboardComponent implements OnInit {
-  categories$ = this.forumStore.categories$;
-  isLoadingCategories = true;
+export class ForumsDashboardComponent implements OnInit, OnDestroy {
+  readonly categories$ = this.forumStore.categories$;
+  readonly isLoadingCategories$ = this.forumStore.isLoadingCategories$;
   readonly sidebarLimit = 7;
 
   private readonly isBrowser: boolean;
+  private readonly destroy$ = new Subject<void>();
 
   constructor(private forumStore: ForumsStore, @Inject(PLATFORM_ID) private platformId: object) {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -28,13 +30,14 @@ export class ForumsDashboardComponent implements OnInit {
   ngOnInit(): void {
     const parentInfo = this.getParentFromUrl();
     if (parentInfo) {
+      // setParentContext internally triggers loadCategories() + reloadForums()
       this.forumStore.setParentContext(parentInfo.parent_id, parentInfo.parent_type);
-      this.forumStore.loadCategories(parentInfo.parent_id, parentInfo.parent_type);
     }
+  }
 
-    this.categories$.subscribe(() => {
-      this.isLoadingCategories = false;
-    });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private getParentFromUrl(): ParentInfo | null {
