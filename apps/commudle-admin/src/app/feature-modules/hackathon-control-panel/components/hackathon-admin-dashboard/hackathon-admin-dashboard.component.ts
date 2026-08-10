@@ -111,7 +111,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     private clipboard: Clipboard,
     private libToastLogService: LibToastLogService,
     private navigatorShareService: NavigatorShareService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.subscriptions.push(
