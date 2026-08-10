@@ -87,6 +87,12 @@
                     routerLinkActive="active"
                   >
                     <div class="icon">
+                      <nb-icon icon="grid-outline"></nb-icon>
+                    </div>
+                    <div *ngIf="sidebarExpanded" class="action-button-name">Overview</div>
+                  </a>
+                  <a class="action-button" [routerLink]="['basic']" routerLinkActive="active">
+                    <div class="icon">
                       <fa-icon [icon]="icons.faCircleInfo"></fa-icon>
                     </div>
                     <div *ngIf="sidebarExpanded" class="action-button-name">Basic Information</div>

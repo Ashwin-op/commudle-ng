@@ -54,6 +54,42 @@
     .hero-blob {
       background-color: #363652;
     }
+
+    .greeting-content {
+      .greeting-eyebrow {
+        @apply com-text-tWhite com-opacity-80;
+      }
+
+      .greeting-text {
+        @apply com-text-tWhite;
+
+        .greeting-name {
+          @apply com-text-tWhite;
+        }
+      }
+
+      .greeting-sub {
+        @apply com-text-gray-200;
+      }
+    }
+
+    .greeting-highlights .highlight-card {
+      border-color: rgba(0, 0, 0, 0.15);
+      background: rgba(255, 255, 255, 0.25);
+
+      .highlight-info .highlight-primary {
+        @apply com-text-tWhite;
+      }
+
+      .highlight-info .highlight-secondary {
+        @apply com-text-tWhite;
+      }
+
+      .highlight-icon {
+        @apply com-text-tWhite;
+        background: rgba(0, 0, 0, 0.1);
+      }
+    }
   }
 
   .hero-blob {

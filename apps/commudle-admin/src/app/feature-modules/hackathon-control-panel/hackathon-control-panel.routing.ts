@@ -27,6 +27,7 @@ import { HackathonControlPanelMentorSlotsComponent } from 'apps/commudle-admin/s
 import { HackathonEntryPassScanComponent } from 'apps/commudle-admin/src/app/feature-modules/hackathon-control-panel/components/hackathon-entry-pass-scan/hackathon-entry-pass-scan.component';
 import { HackathonCheckedInListComponent } from 'apps/commudle-admin/src/app/feature-modules/hackathon-control-panel/components/hackathon-checked-in-list/hackathon-checked-in-list.component';
 import { HackathonScoreDashboardComponent } from 'apps/commudle-admin/src/app/feature-modules/hackathon-control-panel/components/hackathon-score-dashboard/hackathon-score-dashboard.component';
+import { HackathonAdminDashboardComponent } from 'apps/commudle-admin/src/app/feature-modules/hackathon-control-panel/components/hackathon-admin-dashboard/hackathon-admin-dashboard.component';
 
 const routes: Routes = [
   {
@@ -42,6 +43,10 @@ const routes: Routes = [
         children: [
           {
             path: '',
+            component: HackathonAdminDashboardComponent,
+          },
+          {
+            path: 'basic',
             component: HackathonControlPanelBasicFormComponent,
           },
           {

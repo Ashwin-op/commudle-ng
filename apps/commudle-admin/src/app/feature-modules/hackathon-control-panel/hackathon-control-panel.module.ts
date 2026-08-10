@@ -81,6 +81,8 @@ import { MentorTeamAssignmentEmailDialogComponent } from 'apps/commudle-admin/sr
 import { MentorMessageToTeamsDialogComponent } from 'apps/commudle-admin/src/app/feature-modules/hackathon-control-panel/components/hackathon-control-panel-emails/mentor-message-to-teams-dialog/mentor-message-to-teams-dialog.component';
 import { HackathonProblemStatementChartComponent } from 'apps/commudle-admin/src/app/feature-modules/hackathon-control-panel/components/hackathon-control-panel-review/hackathon-problem-statement-chart/hackathon-problem-statement-chart.component';
 import { HackathonScoreDashboardComponent } from 'apps/commudle-admin/src/app/feature-modules/hackathon-control-panel/components/hackathon-score-dashboard/hackathon-score-dashboard.component';
+import { HackathonAdminDashboardComponent } from 'apps/commudle-admin/src/app/feature-modules/hackathon-control-panel/components/hackathon-admin-dashboard/hackathon-admin-dashboard.component';
+import { CommudleButtonModule } from '@commudle/commudle-theme';
 
 @NgModule({
   declarations: [
@@ -130,6 +132,7 @@ import { HackathonScoreDashboardComponent } from 'apps/commudle-admin/src/app/fe
     MentorMessageToTeamsDialogComponent,
     HackathonProblemStatementChartComponent,
     HackathonScoreDashboardComponent,
+    HackathonAdminDashboardComponent,
   ],
   imports: [
     CommonModule,
@@ -168,6 +171,7 @@ import { HackathonScoreDashboardComponent } from 'apps/commudle-admin/src/app/fe
     ZXingScannerModule,
     MiniUserProfileModule,
     NgxDocViewerModule,
+    CommudleButtonModule,
   ],
   providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }],
 })

@@ -1,0 +1,395 @@
+<div class="hackathon-overview" *ngIf="hackathon">
+  <!-- Row 1: Hackathon Hero -->
+  <section class="hackathon-hero">
+    <div class="hero-banner" [ngClass]="{ 'no-image': !hackathon.banner_image?.url }">
+      <img *ngIf="hackathon.banner_image?.url" [src]="hackathon.banner_image.url" [alt]="hackathon.name" />
+      <img
+        *ngIf="!hackathon.banner_image?.url"
+        src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400&h=300&fit=crop"
+        alt="Hackathon placeholder"
+      />
+    </div>
+    <div class="hero-content">
+      <div class="hero-top-row">
+        <div class="hero-info">
+          <div class="hero-title-row">
+            <span class="hero-title-emoji">🚀</span>
+            <h1 class="hero-hackathon-name">{{ hackathon.name }}</h1>
+            <a [routerLink]="['basic']" class="hero-edit-btn"><nb-icon icon="edit-outline"></nb-icon></a>
+          </div>
+          <div class="hero-meta">
+            <span
+              class="hero-status-badge"
+              [ngClass]="{
+                'status-open': isHackathonOpen,
+                'status-completed': isHackathonCompleted
+              }"
+            >
+              <span class="status-dot"></span>
+              {{ hackathon.status | titlecase }}
+            </span>
+            <span class="hero-meta-item" *ngIf="daysUntilHackathon">{{ daysUntilHackathon }}</span>
+            <span class="hero-meta-dot" *ngIf="formattedStartDate">·</span>
+            <span class="hero-meta-item" *ngIf="formattedStartDate"
+              >{{ formattedStartDate }} – {{ formattedEndDate }}</span
+            >
+            <span class="hero-meta-dot" *ngIf="hackathon.location_name">·</span>
+            <span class="hero-meta-item" *ngIf="hackathon.location_name">{{ hackathon.location_name }}</span>
+            <span class="hero-meta-dot">|</span>
+            <a
+              [routerLink]="['/communities', hackathon.community.slug, 'hackathons', hackathon.slug]"
+              target="_blank"
+              class="hero-public-link"
+            >
+              Public Hackathon Page
+              <nb-icon icon="external-link-outline" class="hero-external-icon"></nb-icon>
+            </a>
+          </div>
+        </div>
+        <div class="hero-actions-prize">
+          <div class="hero-actions">
+            <button comButton status="info" size="small" shape="semi-round" outline (click)="copyTextToClipboard()">
+              <fa-icon [icon]="icons.faArrowTrendUp"></fa-icon> &nbsp;Share
+            </button>
+            <a [routerLink]="['basic']" comButton status="primary" size="small" shape="semi-round">
+              <nb-icon icon="edit-outline"></nb-icon> &nbsp;Edit Hackathon
+            </a>
+          </div>
+          <div class="hero-prize-pool" *ngIf="hackathon.total_prize_amount">
+            <div class="prize-icon">
+              <fa-icon [icon]="icons.faTrophy"></fa-icon>
+            </div>
+            <div class="prize-info">
+              <span class="prize-value">{{ hackathon.total_prize_amount }}</span>
+              <span class="prize-label">Total Prize Pool</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timeline Progress -->
+      <div class="hero-timeline">
+        <div class="timeline-steps">
+          <div class="timeline-step completed">
+            <div class="step-dot"></div>
+            <div class="step-info">
+              <span class="step-title">Registration</span>
+              <span class="step-value">{{ hackathon.number_of_participants || 0 }} Teams</span>
+              <span class="step-sub">{{ hackathon.interested_members_count || 0 }} Individuals</span>
+            </div>
+          </div>
+          <div class="timeline-step completed">
+            <div class="step-dot"></div>
+            <div class="step-info">
+              <span class="step-title">Registration End</span>
+              <span class="step-value" *ngIf="hackathon.application_end_date">{{
+                hackathon.application_end_date | date : 'd MMM, yyyy'
+              }}</span>
+            </div>
+          </div>
+          <div class="timeline-step" [ngClass]="{ active: isHackathonOpen }">
+            <div class="step-dot"></div>
+            <div class="step-info">
+              <span class="step-title">Round 1</span>
+              <span class="step-value">{{ hackathon.projects_count || 0 }} Submissions</span>
+            </div>
+          </div>
+          <div class="timeline-step">
+            <div class="step-dot"></div>
+            <div class="step-info">
+              <span class="step-title">Round 2</span>
+              <span class="step-value">–</span>
+            </div>
+          </div>
+          <div class="timeline-step">
+            <div class="step-dot"></div>
+            <div class="step-info">
+              <span class="step-title">Round N</span>
+              <span class="step-value">–</span>
+            </div>
+          </div>
+          <div class="timeline-step" [ngClass]="{ completed: isHackathonCompleted }">
+            <div class="step-dot"></div>
+            <div class="step-info">
+              <span class="step-title">Hackathon End</span>
+              <span class="step-value">{{ isHackathonCompleted ? 'Winners Announced' : '–' }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+        <span class="timeline-progress-label">Overall Progress 42%</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Row 2: Needs Attention + Hackathon Snapshot + Recent Activity -->
+  <section class="three-col-row">
+    <!-- Needs Attention -->
+    <div class="attention-card">
+      <div class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faBell" class="com-text-Azure"></fa-icon> Needs Attention
+        </h3>
+      </div>
+      <div class="attention-list">
+        <a *ngFor="let item of needsAttention" [routerLink]="item.route" class="attention-item">
+          <fa-icon
+            [icon]="item.done ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="item.done ? 'attention-icon-check' : 'attention-icon-cross'"
+          ></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">{{ item.title }}</span>
+            <span class="attention-sub">{{ item.sub }}</span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Hackathon Snapshot -->
+    <div class="snapshot-card">
+      <div class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faChartPie" class="com-text-primary-500"></fa-icon> Hackathon Snapshot
+        </h3>
+      </div>
+      <div class="snapshot-grid">
+        <div class="snapshot-stat">
+          <fa-icon [icon]="icons.faUsers" class="snapshot-stat-icon registrations-icon"></fa-icon>
+          <span class="snapshot-stat-label">Applications</span>
+          <span class="snapshot-stat-value">{{ hackathon.number_of_participants || 0 }}</span>
+        </div>
+        <div class="snapshot-stat">
+          <fa-icon [icon]="icons.faUserGroup" class="snapshot-stat-icon team-icon"></fa-icon>
+          <span class="snapshot-stat-label">Teams</span>
+          <span class="snapshot-stat-value">{{ hackathon.number_of_participants || 0 }}</span>
+        </div>
+        <div class="snapshot-stat">
+          <fa-icon [icon]="icons.faCode" class="snapshot-stat-icon tracks-icon"></fa-icon>
+          <span class="snapshot-stat-label">Projects Submitted</span>
+          <span class="snapshot-stat-value">{{ hackathon.projects_count || 0 }}</span>
+        </div>
+        <div class="snapshot-stat">
+          <fa-icon [icon]="icons.faMicrophone" class="snapshot-stat-icon judges-icon"></fa-icon>
+          <span class="snapshot-stat-label">Judges</span>
+          <span class="snapshot-stat-value">{{ hackathon.judges_count || 0 }}</span>
+        </div>
+        <div class="snapshot-stat">
+          <fa-icon [icon]="icons.faHandshakeSimple" class="snapshot-stat-icon sponsors-icon"></fa-icon>
+          <span class="snapshot-stat-label">Sponsors</span>
+          <span class="snapshot-stat-value">{{ hackathon.sponsors_count || 0 }}</span>
+        </div>
+        <div class="snapshot-stat">
+          <fa-icon [icon]="icons.faTrophy" class="snapshot-stat-icon prize-icon"></fa-icon>
+          <span class="snapshot-stat-label">Prize Pool</span>
+          <span class="snapshot-stat-value">{{ hackathon.total_prize_amount || '–' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="activity-card">
+      <div class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faBolt" class="com-text-yellow-500"></fa-icon> Recent Activity
+        </h3>
+      </div>
+      <ul class="activity-list">
+        <li class="activity-item">
+          <span class="activity-avatar submission-avatar">
+            <fa-icon [icon]="icons.faTrophy"></fa-icon>
+          </span>
+          <p class="activity-content com-m-0">
+            <span class="activity-text" title="Team Alpha submitted project">
+              <span class="activity-name-avatar">T</span><strong>Team Alpha</strong> submitted project
+            </span>
+          </p>
+          <time class="activity-time">10m ago</time>
+        </li>
+        <li class="activity-item">
+          <span class="activity-avatar speaker-avatar">
+            <fa-icon [icon]="icons.faMicrophone"></fa-icon>
+          </span>
+          <p class="activity-content com-m-0">
+            <span class="activity-text" title="Judge Sarah accepted invitation">
+              <span class="activity-name-avatar">S</span><strong>Judge Sarah</strong> accepted invitation
+            </span>
+          </p>
+          <time class="activity-time">1h ago</time>
+        </li>
+        <li class="activity-item">
+          <span class="activity-avatar sponsors-avatar">
+            <fa-icon [icon]="icons.faHandshakeSimple"></fa-icon>
+          </span>
+          <p class="activity-content com-m-0">
+            <span class="activity-text" title="Google became sponsor">
+              <span class="activity-name-avatar">G</span><strong>Google</strong> became sponsor
+            </span>
+          </p>
+          <time class="activity-time">3h ago</time>
+        </li>
+        <li class="activity-item">
+          <span class="activity-avatar tracks-avatar">
+            <fa-icon [icon]="icons.faCode"></fa-icon>
+          </span>
+          <p class="activity-content com-m-0">
+            <span class="activity-text" title="Track AI Agents added">Track <strong>"AI Agents"</strong> added</span>
+          </p>
+          <time class="activity-time">5h ago</time>
+        </li>
+        <li class="activity-item">
+          <span class="activity-avatar members-avatar">
+            <fa-icon [icon]="icons.faUsers"></fa-icon>
+          </span>
+          <p class="activity-content com-m-0">
+            <span class="activity-text" title="25 new registrations">25 new registrations</span>
+          </p>
+          <time class="activity-time">1d ago</time>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Row 3: Competition Progress + People & Judging -->
+  <section class="progress-people-row">
+    <!-- Competition Progress -->
+    <article class="competition-progress-card">
+      <div class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faTrophy" class="com-text-purple-500"></fa-icon> Competition Progress
+        </h3>
+        <a [routerLink]="['rounds']" class="view-all-link">Manage Rounds →</a>
+      </div>
+      <div class="progress-cards">
+        <div class="progress-card">
+          <span class="progress-card-label">Round 1</span>
+          <span class="progress-card-value">✅ Completed</span>
+        </div>
+        <span class="progress-arrow">→</span>
+        <div class="progress-card active">
+          <span class="progress-card-label">Round 2</span>
+          <span class="progress-card-value">🟢 Live</span>
+        </div>
+        <span class="progress-arrow">→</span>
+        <div class="progress-card">
+          <span class="progress-card-label">Judging</span>
+          <span class="progress-card-value">42%</span>
+        </div>
+        <span class="progress-arrow">→</span>
+        <div class="progress-card">
+          <span class="progress-card-label">Finalists</span>
+          <span class="progress-card-value">12 Selected</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- People & Judging -->
+    <article class="people-judging-card">
+      <div class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faUserGroup" class="com-text-indigo-500"></fa-icon> People & Judging
+        </h3>
+        <a [routerLink]="['speakers']" class="view-all-link">Manage →</a>
+      </div>
+      <div class="people-stats">
+        <div class="people-stat">
+          <fa-icon [icon]="icons.faUsers" class="people-stat-icon com-text-indigo-500"></fa-icon>
+          <span class="people-stat-value">{{ hackathon.judges_count || 0 }}</span>
+          <span class="people-stat-label">Judges</span>
+        </div>
+        <div class="people-stat">
+          <fa-icon [icon]="icons.faUserGroup" class="people-stat-icon com-text-blue-500"></fa-icon>
+          <span class="people-stat-value">24</span>
+          <span class="people-stat-label">Mentors</span>
+        </div>
+        <div class="people-stat">
+          <fa-icon [icon]="icons.faEnvelope" class="people-stat-icon com-text-green-500"></fa-icon>
+          <span class="people-stat-value">3</span>
+          <span class="people-stat-label">Pending Invitations</span>
+        </div>
+        <div class="people-stat">
+          <fa-icon [icon]="icons.faCode" class="people-stat-icon com-text-orange-500"></fa-icon>
+          <span class="people-stat-value">8</span>
+          <span class="people-stat-label">Unassigned Projects</span>
+        </div>
+      </div>
+      <div class="mentor-session-banner">
+        <fa-icon [icon]="icons.faCalendarDay" class="mentor-session-icon"></fa-icon>
+        <div class="mentor-session-info">
+          <span class="mentor-session-label">Next Mentor Session</span>
+          <span class="mentor-session-value">Tomorrow, 6:00 PM</span>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- Row 5: Setup Progress + Quick Actions -->
+  <section class="actions-setup-row">
+    <article class="setup-progress-card" *ngIf="hackathon.status === 'draft'">
+      <div class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faChartPie" class="com-text-green-500"></fa-icon> Setup Progress
+        </h3>
+        <span class="setup-note">Only visible until published</span>
+      </div>
+      <div class="setup-content">
+        <div class="setup-bar-row">
+          <span class="setup-bar-label">Hackathon Readiness</span>
+          <span class="setup-bar-pct">80%</span>
+        </div>
+        <div class="setup-bar">
+          <div class="setup-bar-fill"></div>
+        </div>
+        <div class="setup-checklist">
+          <span class="setup-item done">✔ Basic Information</span>
+          <span class="setup-item done">✔ Dates</span>
+          <span class="setup-item done">✔ Registration</span>
+          <span class="setup-item done">✔ Tracks</span>
+          <span class="setup-item pending">⚠ Sponsors</span>
+          <span class="setup-item pending">⚠ Judges</span>
+          <span class="setup-item pending">⚠ FAQs</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="quick-actions-card">
+      <div class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faBolt" class="com-text-orange-500"></fa-icon> Quick Actions
+        </h3>
+      </div>
+      <div class="actions-grid">
+        <a class="action-card" [routerLink]="['applications-dashboard']">
+          <fa-icon [icon]="icons.faUsers" class="action-icon"></fa-icon>
+          <span class="action-label">View Applications</span>
+        </a>
+        <a class="action-card" [routerLink]="['score-dashboard']">
+          <fa-icon [icon]="icons.faTrophy" class="action-icon"></fa-icon>
+          <span class="action-label">Review Projects</span>
+        </a>
+        <a class="action-card" [routerLink]="['speakers']">
+          <fa-icon [icon]="icons.faUserGroup" class="action-icon"></fa-icon>
+          <span class="action-label">Assign Judges</span>
+        </a>
+        <a class="action-card" [routerLink]="['updates']">
+          <fa-icon [icon]="icons.faEnvelope" class="action-icon"></fa-icon>
+          <span class="action-label">Send Announcement</span>
+        </a>
+        <a
+          class="action-card"
+          [routerLink]="['/communities', hackathon.community.slug, 'hackathons', hackathon.slug]"
+          target="_blank"
+        >
+          <fa-icon [icon]="icons.faArrowTrendUp" class="action-icon"></fa-icon>
+          <span class="action-label">Public Page</span>
+        </a>
+        <a class="action-card" [routerLink]="['entry-pass-scan']">
+          <fa-icon [icon]="icons.faChartPie" class="action-icon"></fa-icon>
+          <span class="action-label">Entry Scanner</span>
+        </a>
+      </div>
+    </article>
+  </section>
+</div>
