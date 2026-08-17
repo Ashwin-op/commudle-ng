@@ -4,6 +4,9 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['system-ui', 'sans-serif'],
+      },
       colors: {
         /* Adding custom colors to the tailwind config. by www.color-name.com */
         primary: {
