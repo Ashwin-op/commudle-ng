@@ -29,8 +29,7 @@ export class MentorTeamAssignmentEmailDialogComponent implements OnInit {
     menubar: false,
     convert_urls: false,
     placeholder: 'Add an optional message for mentors',
-    content_style:
-      "@import url('https://fonts.googleapis.com/css?family=Inter'); body {font-family: 'Inter'; font-size: 16px !important;}",
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 16px !important;}',
     plugins: ['advlist', 'lists', 'autolink', 'link', 'charmap', 'preview', 'autoresize'],
     toolbar: 'bold italic | link | alignleft aligncenter alignright | bullist numlist | removeformat',
     default_link_target: '_blank',

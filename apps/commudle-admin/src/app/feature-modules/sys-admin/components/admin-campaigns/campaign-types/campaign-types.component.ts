@@ -6,10 +6,10 @@ import { NbDialogService } from '@commudle/theme';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { SysAdminCampaignService } from 'apps/commudle-admin/src/app/feature-modules/sys-admin/services/sys-admin-campaign.service';
 @Component({
-    selector: 'commudle-campaign-types',
-    templateUrl: './campaign-types.component.html',
-    styleUrls: ['./campaign-types.component.scss'],
-    standalone: false
+  selector: 'commudle-campaign-types',
+  templateUrl: './campaign-types.component.html',
+  styleUrls: ['./campaign-types.component.scss'],
+  standalone: false,
 })
 export class CampaignTypesComponent implements OnInit, OnDestroy {
   campaignTypeForm: FormGroup;
@@ -25,8 +25,7 @@ export class CampaignTypesComponent implements OnInit, OnDestroy {
     menubar: false,
     convert_urls: false,
     placeholder: 'Description for your Campaign Type',
-    content_style:
-      "@import url('https://fonts.googleapis.com/css?family=Inter'); body {font-family: 'Inter'; font-size: 14px !important;}",
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 14px !important;}',
     plugins: [
       'emoticons',
       'advlist',
