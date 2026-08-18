@@ -14,10 +14,10 @@ import { NbMenuService } from '@commudle/theme';
 import { filter, map } from 'rxjs/operators';
 
 @Component({
-    selector: 'app-edit-data-form',
-    templateUrl: './edit-data-form.component.html',
-    styleUrls: ['./edit-data-form.component.scss'],
-    standalone: false
+  selector: 'app-edit-data-form',
+  templateUrl: './edit-data-form.component.html',
+  styleUrls: ['./edit-data-form.component.scss'],
+  standalone: false,
 })
 export class EditDataFormComponent implements OnInit, OnDestroy {
   faTrashAlt = faTrashAlt;
@@ -44,8 +44,7 @@ export class EditDataFormComponent implements OnInit, OnDestroy {
     statusbar: false,
     toolbar: false,
     plugins: ['autoresize'],
-    content_style:
-      "@import url('https://fonts.googleapis.com/css?family=Inter'); body {font-family: 'Inter'; font-size: 14px !important;}",
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 14px !important;}',
     license_key: 'gpl',
   };
 

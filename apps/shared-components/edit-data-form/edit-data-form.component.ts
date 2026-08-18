@@ -25,10 +25,10 @@ import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
 import { filter, map } from 'rxjs';
 
 @Component({
-    selector: 'commudle-edit-data-form',
-    templateUrl: './edit-data-form.component.html',
-    styleUrls: ['./edit-data-form.component.scss'],
-    standalone: false
+  selector: 'commudle-edit-data-form',
+  templateUrl: './edit-data-form.component.html',
+  styleUrls: ['./edit-data-form.component.scss'],
+  standalone: false,
 })
 export class EditDataFormComponent implements OnInit, OnChanges {
   @Input() dataFormId: number;
@@ -62,8 +62,7 @@ export class EditDataFormComponent implements OnInit, OnChanges {
     statusbar: false,
     toolbar: false,
     plugins: ['autoresize'],
-    content_style:
-      "@import url('https://fonts.googleapis.com/css?family=Inter'); body {font-family: 'Inter'; font-size: 16px !important;}",
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 16px !important;}',
     license_key: 'gpl',
   };
 
