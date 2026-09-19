@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, finalize, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, combineLatest, of, throwError } from 'rxjs';
+import { catchError, delay, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { IForum, IPaginationCount, EDbModels, IChannelCategory, IUserMessage } from '@commudle/shared-models';
 import { ForumService } from './forum.service';
 import { ToastrService } from './toastr.service';
 import { DiscussionService } from './discussion.service';
 import { UserMessagesService } from './user-messages.service';
+
+/** How long to wait after the last keystroke before querying the server */
+const SEARCH_DEBOUNCE_MS = 350;
 
 @Injectable({
   providedIn: 'root',
@@ -48,8 +51,8 @@ export class ForumsStore {
   private readonly selectedCategory = new BehaviorSubject<string | null>(null);
   readonly selectedCategory$ = this.selectedCategory.asObservable();
 
-  /** Emits whenever any query input changes so the list reloads from the server */
-  private readonly queryTrigger = new Subject<void>();
+  /** Bumped by reloadForums() to re-run the query with the current parameters */
+  private readonly refreshTrigger = new BehaviorSubject<number>(0);
 
   // ── Discussion (thread list inside a forum) ─────────────────────────────────
   private readonly userMessages = new BehaviorSubject<IUserMessage[]>([]);
@@ -67,6 +70,10 @@ export class ForumsStore {
   private readonly isLoadingUserMessage = new BehaviorSubject<boolean>(false);
   readonly isLoadingUserMessage$ = this.isLoadingUserMessage.asObservable();
 
+  /** The forum currently being viewed, shared so the route resolver can reuse it */
+  private readonly currentForum = new BehaviorSubject<IForum | null>(null);
+  readonly currentForum$ = this.currentForum.asObservable();
+
   private discussionPage = 1;
 
   constructor(
@@ -80,52 +87,71 @@ export class ForumsStore {
 
   // ── Search pipeline: debounced, server-driven ──────────────────────────────
 
+  /**
+   * The current search term. The initial value passes through immediately so the
+   * first page load is not held back by the debounce; later keystrokes are debounced,
+   * with switchMap cancelling any emission still waiting.
+   */
+  private debouncedSearchQuery(): Observable<string> {
+    return this.searchQuery.pipe(
+      distinctUntilChanged(),
+      switchMap((q, index) => (index === 0 ? of(q) : of(q).pipe(delay(SEARCH_DEBOUNCE_MS)))),
+    );
+  }
+
   private wireSearchPipeline(): void {
     combineLatest([
-      this.searchQuery.pipe(debounceTime(350), distinctUntilChanged()),
+      this.parentId.pipe(distinctUntilChanged()),
+      this.parentType.pipe(distinctUntilChanged()),
+      this.debouncedSearchQuery(),
       this.selectedCategory.pipe(distinctUntilChanged()),
       this.currentPage.pipe(distinctUntilChanged()),
+      this.perPage.pipe(distinctUntilChanged()),
+      this.refreshTrigger.pipe(distinctUntilChanged()),
     ])
       .pipe(
+        // Without a parent there is nothing to fetch. This also stops the store from
+        // firing a parent_id=null request as soon as it is constructed.
+        filter(([parentId, parentType]) => !!parentId && !!parentType),
         tap(() => this.isLoadingForums.next(true)),
-        switchMap(([q, categorySlug, page]) =>
-          this.forumService.getForums({
-            parentId: this.parentId.value,
-            parentType: this.parentType.value,
-            q,
-            categorySlug,
-            page,
-            count: this.perPage.value,
-          }),
+        switchMap(([parentId, parentType, q, categorySlug, page, count]) =>
+          this.forumService.getForums({ parentId, parentType, q, categorySlug, page, count }).pipe(
+            map((res) => ({ res, failed: false })),
+            // Caught inside switchMap so a single failed request cannot terminate the
+            // outer subscription and leave search, filtering and pagination dead.
+            catchError(() => of({ res: null, failed: true })),
+          ),
         ),
       )
-      .subscribe({
-        next: (res: IPaginationCount<IForum>) => {
-          this.forums.next(res.values || []);
-          this.totalForums.next(res.total || 0);
-          this.isLoadingForums.next(false);
-        },
-        error: () => {
-          this.isLoadingForums.next(false);
+      .subscribe(({ res, failed }) => {
+        this.isLoadingForums.next(false);
+        if (failed || !res) {
+          // Keep whatever was on screen rather than blanking the list
           this.toastrService.errorDialog('Failed to load forums');
-        },
+          return;
+        }
+        this.forums.next(res.values || []);
+        this.totalForums.next(res.total || 0);
       });
   }
 
   // ── Parent context ─────────────────────────────────────────────────────────
 
+  /**
+   * Sets the owner of the forum list. The search pipeline watches the parent, so
+   * changing it reloads the list on its own — no explicit reload needed here.
+   */
   setParentContext(parentId: string, parentType: EDbModels): void {
     this.parentId.next(parentId);
     this.parentType.next(parentType);
     this.loadCategories();
-    this.reloadForums();
   }
 
-  getParentId(): string {
+  getParentId(): string | null {
     return this.parentId.value;
   }
 
-  getParentType(): EDbModels {
+  getParentType(): EDbModels | null {
     return this.parentType.value;
   }
 
@@ -150,36 +176,24 @@ export class ForumsStore {
     this.currentPage.next(1);
   }
 
-  /** Force a reload with current query params */
+  /**
+   * Force a reload with the current query params. Routed through the same pipeline
+   * as every other query so there is only one request path to reason about.
+   */
   reloadForums(): void {
-    if (!this.parentId.value || !this.parentType.value) return;
-    this.isLoadingForums.next(true);
-    this.forumService
-      .getForums({
-        parentId: this.parentId.value,
-        parentType: this.parentType.value,
-        q: this.searchQuery.value,
-        categorySlug: this.selectedCategory.value,
-        page: this.currentPage.value,
-        count: this.perPage.value,
-      })
-      .pipe(finalize(() => this.isLoadingForums.next(false)))
-      .subscribe({
-        next: (res) => {
-          this.forums.next(res.values || []);
-          this.totalForums.next(res.total || 0);
-        },
-        error: () => this.toastrService.errorDialog('Failed to load forums'),
-      });
+    this.refreshTrigger.next(this.refreshTrigger.value + 1);
   }
 
   // ── Categories ─────────────────────────────────────────────────────────────
 
   loadCategories(): void {
-    if (!this.parentId.value || !this.parentType.value) return;
+    const parentId = this.parentId.value;
+    const parentType = this.parentType.value;
+    if (!parentId || !parentType) return;
+
     this.isLoadingCategories.next(true);
     this.forumService
-      .getForumCategories(this.parentId.value, this.parentType.value)
+      .getForumCategories(parentId, parentType)
       .pipe(finalize(() => this.isLoadingCategories.next(false)))
       .subscribe({
         next: (categories) => this.categories.next(categories || []),
@@ -190,7 +204,14 @@ export class ForumsStore {
   // ── CRUD — keeps list, total and categories in sync ────────────────────────
 
   createForum(payload: Partial<IForum>): Observable<IForum> {
-    return this.forumService.createForum(payload, this.parentType.value, this.parentId.value).pipe(
+    const parentId = this.parentId.value;
+    const parentType = this.parentType.value;
+
+    if (!parentId || !parentType) {
+      return throwError(() => new Error('Cannot create a forum before the parent context is set'));
+    }
+
+    return this.forumService.createForum(payload, parentType, parentId).pipe(
       tap((forum) => {
         this.forums.next([forum, ...this.forums.value]);
         this.totalForums.next(this.totalForums.value + 1);
@@ -272,6 +293,14 @@ export class ForumsStore {
     }
   }
 
+  getCurrentForum(): IForum | null {
+    return this.currentForum.value;
+  }
+
+  setCurrentForum(forum: IForum | null): void {
+    this.currentForum.next(forum);
+  }
+
   clearUserMessage(): void {
     this.currentUserMessage.next(null);
     this.isLoadingUserMessage.next(false);
@@ -292,6 +321,7 @@ export class ForumsStore {
     this.searchQuery.next('');
     this.selectedCategory.next(null);
     this.currentPage.next(1);
+    this.currentForum.next(null);
     this.clearDiscussions();
     this.clearUserMessage();
   }

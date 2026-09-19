@@ -16,12 +16,13 @@
     <div class="fm-post">
       <div class="fm-post-top">
         <img
-          [src]="userMessage.user?.photo?.i64 || userMessage.user?.photo?.url"
+          *ngIf="avatarUrl(userMessage.user) as avatar"
+          [src]="avatar"
           [alt]="userMessage.user?.name"
           class="fm-avatar-img"
-          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+          (error)="onAvatarError(userMessage.user)"
         />
-        <div class="fm-avatar-fallback" style="display: none">
+        <div *ngIf="!avatarUrl(userMessage.user)" class="fm-avatar-fallback">
           <nb-icon icon="person-outline"></nb-icon>
         </div>
         <div>
@@ -54,12 +55,13 @@
       <div class="fm-reply" *ngFor="let reply of userMessage.user_messages">
         <div class="fm-reply-left">
           <img
-            [src]="reply.user?.photo?.i64 || reply.user?.photo?.url"
+            *ngIf="avatarUrl(reply.user) as avatar"
+            [src]="avatar"
             [alt]="reply.user?.name"
             class="fm-avatar-img"
-            onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+            (error)="onAvatarError(reply.user)"
           />
-          <div class="fm-avatar-fallback" style="display: none">
+          <div *ngIf="!avatarUrl(reply.user)" class="fm-avatar-fallback">
             <nb-icon icon="person-outline"></nb-icon>
           </div>
           <div class="fm-reply-line"></div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDialogRef } from '@commudle/theme';
 import { CommunityChannelHandlerService } from '@commudle/shared-components';
@@ -10,7 +10,7 @@ import { ToastrService } from '@commudle/shared-services';
   templateUrl: './new-discussion-form.component.html',
   styleUrls: ['./new-discussion-form.component.scss'],
 })
-export class NewDiscussionFormComponent implements OnInit {
+export class NewDiscussionFormComponent {
   @Input() discussionId: number;
   @Input() discussionParent: string;
   discussionForm: FormGroup;
@@ -27,8 +27,6 @@ export class NewDiscussionFormComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
-
   onSubmit(): void {
     if (this.discussionForm.valid) {
       const { message, subject } = this.discussionForm.value;
@@ -41,7 +39,6 @@ export class NewDiscussionFormComponent implements OnInit {
 
   private sendMessage(content: string, subject?: string): void {
     if (!this.communityChannelHandlerService.CommunityChannelChatChannel) {
-      console.error('CommunityChannelChatChannel not initialized');
       this.toastrService.warningDialog('Unable to send message. Channel not connected.');
       return;
     }

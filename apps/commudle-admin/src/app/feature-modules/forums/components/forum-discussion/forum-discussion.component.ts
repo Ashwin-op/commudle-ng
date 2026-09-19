@@ -3,13 +3,17 @@ import { Component, Inject, OnInit, OnDestroy, PLATFORM_ID } from '@angular/core
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { IForum, IUserMessage } from '@commudle/shared-models';
+import { IForum, IUser, IUserMessage } from '@commudle/shared-models';
 import { faArrowLeft, faComment, faEye, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { NbDialogService } from '@commudle/theme';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 import { ForumsStore, removeHtmlTags, SeoService } from '@commudle/shared-services';
 import { environment } from '@commudle/shared-environments';
 import { NewDiscussionFormComponent } from 'apps/commudle-admin/src/app/feature-modules/forums/components/new-discussion-form/new-discussion-form.component';
+import {
+  ForumsContextService,
+  IForumParentContext,
+} from 'apps/commudle-admin/src/app/feature-modules/forums/services/forums-context.service';
 
 @Component({
   standalone: false,
@@ -32,6 +36,8 @@ export class ForumDiscussionComponent implements OnInit, OnDestroy {
   readonly hasNextPage$ = this.forumsStore.hasNextPage$;
   readonly isLoading$ = this.forumsStore.isLoading$;
   private readonly isBrowser: boolean;
+  private parentContext: IForumParentContext | null = null;
+  private readonly brokenAvatarUserIds = new Set<number>();
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -39,14 +45,18 @@ export class ForumDiscussionComponent implements OnInit, OnDestroy {
     private readonly dialogService: NbDialogService,
     private readonly forumsStore: ForumsStore,
     private readonly seoService: SeoService,
+    private readonly forumsContextService: ForumsContextService,
     @Inject(PLATFORM_ID) private platformId: object,
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
   ngOnInit(): void {
+    this.parentContext = this.forumsContextService.resolveParentContext(this.route);
+
     this.route.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       this.forum = data.forum;
+      this.setSeo();
       this.forumsStore.loadDiscussions(this.forum.discussion_id);
     });
 
@@ -55,6 +65,25 @@ export class ForumDiscussionComponent implements OnInit, OnDestroy {
         this.setSeoSchema(messages);
       }
     });
+  }
+
+  private setSeo(): void {
+    if (!this.forum) return;
+
+    const parentName = this.parentContext?.name || 'Commudle';
+    const description =
+      removeHtmlTags(this.forum.description || '').slice(0, 157) ||
+      `Join the discussion in ${this.forum.name} on ${parentName}`;
+
+    this.seoService.setTags(
+      `${this.forum.name} | ${parentName}`,
+      description,
+      this.forum.logo?.url || this.parentContext?.imageUrl,
+    );
+
+    if (this.parentContext?.isAdminRoute) {
+      this.seoService.noIndex(true);
+    }
   }
 
   ngOnDestroy(): void {
@@ -78,6 +107,21 @@ export class ForumDiscussionComponent implements OnInit, OnDestroy {
 
   backToCategory(): void {
     this.router.navigate(['../'], { relativeTo: this.route });
+  }
+
+  // ── Avatars ───────────────────────────────────────────────────────────────
+  // Replaces an inline onerror handler: returns null once an image has failed so
+  // the template can fall back to the icon without inline styles or inline JS.
+
+  avatarUrl(user: IUser): string | null {
+    if (!user || this.brokenAvatarUserIds.has(user.id)) return null;
+    return user.photo?.i64 || user.photo?.url || null;
+  }
+
+  onAvatarError(user: IUser): void {
+    if (user?.id) {
+      this.brokenAvatarUserIds.add(user.id);
+    }
   }
 
   setSeoSchema(messages: IUserMessage[]): void {
@@ -124,8 +168,8 @@ export class ForumDiscussionComponent implements OnInit, OnDestroy {
     this.seoService.setSchema(discussionSchema);
   }
 
-  getUserMessages(message: IUserMessage) {
-    const resultArray = [];
+  getUserMessages(message: IUserMessage): Record<string, unknown>[] {
+    const resultArray: Record<string, unknown>[] = [];
     for (const userMessage of message.user_messages) {
       if (userMessage && userMessage.user) {
         const transformedMessage = {

@@ -1,11 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { EDbModels, IChannelCategory, ICommunity, ICommunityGroup, IForum } from '@commudle/shared-models';
-import { ForumsStore } from '@commudle/shared-services';
+import { IChannelCategory, IForum } from '@commudle/shared-models';
+import { ForumsStore, SeoService } from '@commudle/shared-services';
 import { NbDialogService } from '@commudle/theme';
 import { ForumFormComponent } from 'apps/commudle-admin/src/app/feature-modules/forums/components/forum-form/forum-form.component';
-import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
-import { CommunityGroupsService } from 'apps/commudle-admin/src/app/services/community-groups.service';
+import {
+  ForumsContextService,
+  IForumParentContext,
+} from 'apps/commudle-admin/src/app/feature-modules/forums/services/forums-context.service';
 
 @Component({
   standalone: false,
@@ -28,47 +31,53 @@ export class ForumsCategoriesComponent implements OnInit, OnDestroy {
   currentPage = 1;
   perPage = 15;
 
-  private parentId: string;
-  private parentType: EDbModels;
+  private parentContext: IForumParentContext | null = null;
   private destroy$ = new Subject<void>();
 
   constructor(
     private readonly forumsStore: ForumsStore,
     private readonly dialogService: NbDialogService,
-    private readonly communitiesService: CommunitiesService,
-    private readonly communityGroupsService: CommunityGroupsService,
+    private readonly route: ActivatedRoute,
+    private readonly seoService: SeoService,
+    private readonly forumsContextService: ForumsContextService,
   ) {}
 
   ngOnInit(): void {
-    this.forumsStore.parentId$.pipe(takeUntil(this.destroy$)).subscribe((id) => (this.parentId = id));
-    this.forumsStore.parentType$.pipe(takeUntil(this.destroy$)).subscribe((t) => (this.parentType = t));
+    this.parentContext = this.forumsContextService.resolveParentContext(this.route);
+    this.setSeo();
+
+    // This is the unfiltered landing page, so it owns clearing the category filter
+    this.forumsStore.setSelectedCategory(null);
+
     this.forumsStore.categories$.pipe(takeUntil(this.destroy$)).subscribe((c) => (this.categories = c || []));
     this.forumsStore.selectedCategory$.pipe(takeUntil(this.destroy$)).subscribe((s) => (this.selectedCategory = s));
     this.forumsStore.totalForums$.pipe(takeUntil(this.destroy$)).subscribe((t) => (this.totalForums = t));
     this.forumsStore.currentPage$.pipe(takeUntil(this.destroy$)).subscribe((p) => (this.currentPage = p));
     this.forumsStore.perPage$.pipe(takeUntil(this.destroy$)).subscribe((p) => (this.perPage = p));
 
-    // Long-lived so it picks up managed-communities once the global sidebar loads them
-    this.communitiesService.userManagedCommunities$
+    // Long-lived: managed-entity lists populate once the global sidebar loads them
+    this.forumsContextService
+      .isAdmin$(this.parentContext)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((communities: ICommunity[]) => {
-        if (this.parentType === EDbModels.KOMMUNITY && this.parentId) {
-          this.isAdmin = communities.some((c) => c.slug === this.parentId);
-        }
-      });
-
-    this.communityGroupsService.userManagedCommunityGroups$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((groups: ICommunityGroup[]) => {
-        if (this.parentType === EDbModels.COMMUNITY_GROUP && this.parentId) {
-          this.isAdmin = groups.some((g) => g.slug === this.parentId);
-        }
-      });
+      .subscribe((isAdmin) => (this.isAdmin = isAdmin));
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private setSeo(): void {
+    const parentName = this.parentContext?.name || 'Commudle';
+    this.seoService.setTags(
+      `Forums | ${parentName}`,
+      `Browse discussion forums and topics from the ${parentName} community`,
+      this.parentContext?.imageUrl,
+    );
+
+    if (this.parentContext?.isAdminRoute) {
+      this.seoService.noIndex(true);
+    }
   }
 
   // ── Search, filter, pagination — all delegated to the store (server-side) ──

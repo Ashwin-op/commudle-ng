@@ -118,9 +118,7 @@
               }
 
               .fcat-stat-lbl {
-                @apply com-text-Cadet-Grey;
-                font-size: 10px;
-                text-transform: uppercase;
+                @apply com-text-Cadet-Grey com-text-10px com-uppercase;
                 letter-spacing: 0.04em;
               }
             }

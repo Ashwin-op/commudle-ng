@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDialogRef } from '@commudle/theme';
 import { ForumService, ForumsStore, ToastrService } from '@commudle/shared-services';
-import { EDiscussionType, IChannelCategory, IForum } from '@commudle/shared-models';
+import { IChannelCategory, IForum } from '@commudle/shared-models';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -106,7 +106,8 @@ export class ForumFormComponent implements OnInit, OnDestroy {
     }
 
     this.isSubmitting = true;
-    const payload = { ...this.topicForm.value, display_type: EDiscussionType.FORUM };
+    // display_type is forced to 'forum' server-side, so it is not sent here
+    const payload = { ...this.topicForm.value };
 
     const request$ = this.forumId
       ? this.forumsStore.updateForum(payload, this.forumId)

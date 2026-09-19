@@ -63,12 +63,13 @@
         <a *ngFor="let msg of messages" [routerLink]="[msg.slug]" class="fdis-thread-row">
           <div class="fdis-thread-avatar">
             <img
-              [src]="msg.user?.photo?.i64 || msg.user?.photo?.url"
+              *ngIf="avatarUrl(msg.user) as avatar"
+              [src]="avatar"
               [alt]="msg.user?.name"
               class="fdis-avatar-img"
-              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+              (error)="onAvatarError(msg.user)"
             />
-            <div class="fdis-avatar-fallback" style="display: none">
+            <div *ngIf="!avatarUrl(msg.user)" class="fdis-avatar-fallback">
               <nb-icon icon="person-outline"></nb-icon>
             </div>
           </div>

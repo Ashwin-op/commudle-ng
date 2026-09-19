@@ -1,13 +1,7 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
-import { EDbModels } from '@commudle/shared-models';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ForumsStore } from '@commudle/shared-services';
-import { Subject, takeUntil } from 'rxjs';
-
-interface ParentInfo {
-  parent_id: string;
-  parent_type: EDbModels;
-}
+import { ForumsContextService } from 'apps/commudle-admin/src/app/feature-modules/forums/services/forums-context.service';
 
 @Component({
   standalone: false,
@@ -20,41 +14,24 @@ export class ForumsDashboardComponent implements OnInit, OnDestroy {
   readonly isLoadingCategories$ = this.forumStore.isLoadingCategories$;
   readonly sidebarLimit = 7;
 
-  private readonly isBrowser: boolean;
-  private readonly destroy$ = new Subject<void>();
-
-  constructor(private forumStore: ForumsStore, @Inject(PLATFORM_ID) private platformId: object) {
-    this.isBrowser = isPlatformBrowser(this.platformId);
-  }
+  constructor(
+    private readonly forumStore: ForumsStore,
+    private readonly route: ActivatedRoute,
+    private readonly forumsContextService: ForumsContextService,
+  ) {}
 
   ngOnInit(): void {
-    const parentInfo = this.getParentFromUrl();
-    if (parentInfo) {
-      // setParentContext internally triggers loadCategories() + reloadForums()
-      this.forumStore.setParentContext(parentInfo.parent_id, parentInfo.parent_type);
+    // Resolved from the router, so this also runs during server-side rendering
+    const context = this.forumsContextService.resolveParentContext(this.route);
+    if (context) {
+      // The store's query pipeline watches the parent, so this loads the list too
+      this.forumStore.setParentContext(context.parentId, context.parentType);
     }
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  private getParentFromUrl(): ParentInfo | null {
-    if (!this.isBrowser) return null;
-
-    const url = window.location.pathname;
-
-    const communityMatch = url.match(/\/(admin\/)?communities\/([^/]+)\/forums/);
-    if (communityMatch) {
-      return { parent_id: communityMatch[2], parent_type: EDbModels.KOMMUNITY };
-    }
-
-    const orgMatch = url.match(/\/(admin\/)?orgs\/([^/]+)\/forums/);
-    if (orgMatch) {
-      return { parent_id: orgMatch[2], parent_type: EDbModels.COMMUNITY_GROUP };
-    }
-
-    return null;
+    // The store is a root singleton, so it has to be reset or the next community's
+    // forums page briefly renders the previous community's data
+    this.forumStore.clearAllData();
   }
 }

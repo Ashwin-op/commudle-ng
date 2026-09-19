@@ -1,12 +1,14 @@
 import { Component, OnInit, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { IForum, IChannelCategory, EDbModels, ICommunity, ICommunityGroup } from '@commudle/shared-models';
-import { ForumService, ForumsStore, ToastrService } from '@commudle/shared-services';
+import { IForum, IChannelCategory } from '@commudle/shared-models';
+import { ForumService, ForumsStore, SeoService, ToastrService } from '@commudle/shared-services';
 import { NbDialogRef, NbDialogService } from '@commudle/theme';
 import { ForumFormComponent } from 'apps/commudle-admin/src/app/feature-modules/forums/components/forum-form/forum-form.component';
-import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
-import { CommunityGroupsService } from 'apps/commudle-admin/src/app/services/community-groups.service';
+import {
+  ForumsContextService,
+  IForumParentContext,
+} from 'apps/commudle-admin/src/app/feature-modules/forums/services/forums-context.service';
 
 @Component({
   standalone: false,
@@ -15,7 +17,7 @@ import { CommunityGroupsService } from 'apps/commudle-admin/src/app/services/com
   styleUrls: ['./forums-by-category.component.scss'],
 })
 export class ForumsByCategoryComponent implements OnInit, OnDestroy {
-  @ViewChild('deleteDialog') deleteDialogTemplate: TemplateRef<any>;
+  @ViewChild('deleteDialog') deleteDialogTemplate: TemplateRef<unknown>;
 
   readonly forums$ = this.forumsStore.forums$;
   readonly isLoadingForums$ = this.forumsStore.isLoadingForums$;
@@ -30,10 +32,9 @@ export class ForumsByCategoryComponent implements OnInit, OnDestroy {
   currentPage = 1;
   perPage = 15;
 
-  private parentId: string;
-  private parentType: EDbModels;
+  private parentContext: IForumParentContext | null = null;
   private categorySlug: string;
-  private deleteDialogRef: NbDialogRef<any>;
+  private deleteDialogRef: NbDialogRef<unknown>;
   private readonly destroy$ = new Subject<void>();
 
   constructor(
@@ -43,13 +44,13 @@ export class ForumsByCategoryComponent implements OnInit, OnDestroy {
     private readonly dialogService: NbDialogService,
     private readonly router: Router,
     private readonly toastrService: ToastrService,
-    private readonly communitiesService: CommunitiesService,
-    private readonly communityGroupsService: CommunityGroupsService,
+    private readonly seoService: SeoService,
+    private readonly forumsContextService: ForumsContextService,
   ) {}
 
   ngOnInit(): void {
-    this.forumsStore.parentId$.pipe(takeUntil(this.destroy$)).subscribe((id) => (this.parentId = id));
-    this.forumsStore.parentType$.pipe(takeUntil(this.destroy$)).subscribe((t) => (this.parentType = t));
+    this.parentContext = this.forumsContextService.resolveParentContext(this.route);
+
     this.forumsStore.categories$.pipe(takeUntil(this.destroy$)).subscribe((c) => (this.allCategories = c || []));
     this.forumsStore.totalForums$.pipe(takeUntil(this.destroy$)).subscribe((t) => (this.totalForums = t));
     this.forumsStore.currentPage$.pipe(takeUntil(this.destroy$)).subscribe((p) => (this.currentPage = p));
@@ -59,38 +60,47 @@ export class ForumsByCategoryComponent implements OnInit, OnDestroy {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.categorySlug = params['category_slug'];
       this.forumsStore.setSelectedCategory(this.categorySlug);
+      this.setSeo();
       this.loadCategoryDetails();
     });
 
-    this.communitiesService.userManagedCommunities$
+    // Long-lived: managed-entity lists populate once the global sidebar loads them
+    this.forumsContextService
+      .isAdmin$(this.parentContext)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((communities: ICommunity[]) => {
-        if (this.parentType === EDbModels.KOMMUNITY && this.parentId) {
-          this.isAdmin = communities.some((c) => c.slug === this.parentId);
-        }
-      });
+      .subscribe((isAdmin) => (this.isAdmin = isAdmin));
+  }
 
-    this.communityGroupsService.userManagedCommunityGroups$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((groups: ICommunityGroup[]) => {
-        if (this.parentType === EDbModels.COMMUNITY_GROUP && this.parentId) {
-          this.isAdmin = groups.some((g) => g.slug === this.parentId);
-        }
-      });
+  ngOnDestroy(): void {
+    // The landing page clears the category filter itself, so nothing to reset here
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private loadCategoryDetails(): void {
     this.forumService
       .showCategory(this.categorySlug)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((cat) => (this.forumCategory = cat));
+      .subscribe((cat) => {
+        this.forumCategory = cat;
+        // Re-run once the readable category name is known
+        this.setSeo();
+      });
   }
 
-  ngOnDestroy(): void {
-    // Clear the category filter so the landing page shows everything again
-    this.forumsStore.setSelectedCategory(null);
-    this.destroy$.next();
-    this.destroy$.complete();
+  private setSeo(): void {
+    const parentName = this.parentContext?.name || 'Commudle';
+    const categoryName = this.forumCategory?.name || this.categorySlug;
+
+    this.seoService.setTags(
+      `${categoryName} Forums | ${parentName}`,
+      `Browse forums and discussions in ${categoryName} from the ${parentName} community`,
+      this.parentContext?.imageUrl,
+    );
+
+    if (this.parentContext?.isAdminRoute) {
+      this.seoService.noIndex(true);
+    }
   }
 
   // ── Search & pagination — delegated to store ───────────────────────────────

@@ -26,7 +26,8 @@ const routes: Routes = [
           forum: ForumDiscussionResolver,
         },
       },
-      // TODO: handle case to recall resolver for call twice with duplicate data
+      // The resolver reuses the forum already held in ForumsStore, so drilling from
+      // the thread list into a thread does not refetch it.
       {
         path: ':category_slug/:topic_slug/:user_message_slug',
         component: ForumMessagesComponent,
