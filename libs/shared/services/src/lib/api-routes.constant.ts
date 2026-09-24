@@ -755,6 +755,19 @@ export const API_ROUTES = {
     },
   },
 
+  DASHBOARDS: {
+    COMMUNITIES: {
+      ORGANIZER_BRIEFING: 'api/v2/dashboards/communities/organizer_briefing', //GET
+      NEEDS_ATTENTION: 'api/v2/dashboards/communities/needs_attention', //GET
+      SNAPSHOT: 'api/v2/dashboards/communities/snapshot', //GET
+      UPCOMING_SCHEDULE: 'api/v2/dashboards/communities/upcoming_schedule', //GET
+      RECENT_ACTIVITY: 'api/v2/dashboards/communities/recent_activity', //GET
+      LIVE_VISITORS: 'api/v2/dashboards/communities/live_visitors', //GET
+      TOP_PAGES: 'api/v2/dashboards/communities/top_pages', //GET
+      TOP_CITIES: 'api/v2/dashboards/communities/top_cities', //GET
+    },
+  },
+
   TAGS: {
     INDEX: 'api/v2/tags',
     UPDATE: 'api/v2/tags',

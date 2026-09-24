@@ -10,6 +10,7 @@ export * from './lib/event.model';
 export * from './lib/event-status.model';
 export * from './lib/lab.model';
 export * from './lib/lab-step.model';
+export * from './lib/community-dashboard.model';
 export * from './lib/pagination.model';
 export * from './lib/speaker-resource.model';
 export * from './lib/tag.model';
