@@ -17,30 +17,58 @@
           <fa-icon [icon]="icons.faUsers"></fa-icon>
         </span>
         <p class="highlight-info">
-          <span class="highlight-primary">{{ newMembersThisWeek }} new members this week</span>
-          <span class="highlight-secondary">Total {{ newMembersThisMonth }} this month</span>
+          <span class="highlight-primary"
+            >{{ organizerBriefing?.new_members?.this_week || 0 }} new members this week</span
+          >
+          <span class="highlight-secondary"
+            >Total {{ organizerBriefing?.new_members?.this_month || 0 }} this month</span
+          >
         </p>
       </li>
-      <li class="highlight-card">
+      <li
+        *ngIf="organizerBriefing?.events_tomorrow?.length > 0 || organizerBriefing?.hackathons_tomorrow?.length > 0"
+        class="highlight-card"
+      >
         <span class="highlight-icon events-icon">
           <fa-icon [icon]="icons.faCalendarPlus"></fa-icon>
         </span>
         <p class="highlight-info">
-          <span class="highlight-primary">1 event and 1 hackathon start tomorrow</span>
+          <span class="highlight-primary">
+            <ng-container *ngIf="organizerBriefing?.events_tomorrow?.length > 0">
+              {{ organizerBriefing.events_tomorrow.length }} event{{
+                organizerBriefing.events_tomorrow.length === 1 ? '' : 's'
+              }}
+            </ng-container>
+            <ng-container
+              *ngIf="
+                organizerBriefing?.events_tomorrow?.length > 0 && organizerBriefing?.hackathons_tomorrow?.length > 0
+              "
+            >
+              and
+            </ng-container>
+            <ng-container *ngIf="organizerBriefing?.hackathons_tomorrow?.length > 0">
+              {{ organizerBriefing.hackathons_tomorrow.length }} hackathon{{
+                organizerBriefing.hackathons_tomorrow.length === 1 ? '' : 's'
+              }}
+            </ng-container>
+            start tomorrow
+          </span>
         </p>
       </li>
-      <li class="highlight-card">
+      <li *ngIf="organizerBriefing?.community_visits?.this_week > 0" class="highlight-card">
         <span class="highlight-icon events-icon">
           <fa-icon [icon]="icons.faChartPie"></fa-icon>
         </span>
         <p class="highlight-info">
           <span class="highlight-primary"
-            >{{ highlights?.visitsThisWeek || 0 }} people visited your community this week</span
+            >{{ organizerBriefing.community_visits.this_week }} people visited your community this week</span
           >
-          <span class="highlight-secondary">Total {{ highlights?.visitsThisMonth || 0 }} in last 30 days</span>
+          <span *ngIf="organizerBriefing?.community_visits?.last_30_days > 0" class="highlight-secondary"
+            >Total {{ organizerBriefing.community_visits.last_30_days }} in last 30 days</span
+          >
         </p>
       </li>
-      <li class="highlight-card">
+      <li *ngIf="organizerBriefing?.newsletter_scheduled_tomorrow" class="highlight-card">
         <span class="highlight-icon newsletter-icon">
           <fa-icon [icon]="icons.faEnvelope"></fa-icon>
         </span>

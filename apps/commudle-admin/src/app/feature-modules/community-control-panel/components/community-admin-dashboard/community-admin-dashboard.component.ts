@@ -3,7 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ICommunity } from '@commudle/shared-models';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
 import { AuthService, SeoService } from '@commudle/shared-services';
-import { StatsCommunitiesService } from 'apps/commudle-admin/src/app/services/stats/stats-communities.service';
+import { DashboardCommunitiesService } from 'apps/commudle-admin/src/app/services/stats/dashboard-communities.service';
+import { ICommunityDashboardOrganizerBriefing } from '@commudle/shared-models';
 import { Subscription } from 'rxjs';
 import {
   faCalendarPlus,
@@ -35,8 +36,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   currentUser: ICurrentUser;
   subscriptions: Subscription[] = [];
   greeting = '';
-  newMembersThisWeek = 0;
-  newMembersThisMonth = 0;
+  organizerBriefing: ICommunityDashboardOrganizerBriefing;
 
   icons = {
     faCalendarPlus,
@@ -63,7 +63,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private seoService: SeoService,
     private router: Router,
-    private statsCommunitiesService: StatsCommunitiesService,
+    private dashboardCommunitiesService: DashboardCommunitiesService,
   ) {}
 
   ngOnInit(): void {
@@ -73,7 +73,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         this.community = data.community;
         this.seoService.setTitle(`Dashboard | ${this.community.name}`);
         this.seoService.noIndex(true);
-        this.loadNewMembersCount();
+        this.loadOrganizerBriefing();
         this.setQuickActions();
       }),
     );
@@ -116,13 +116,12 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     this.router.navigate(route, { relativeTo: this.activatedRoute });
   }
 
-  loadNewMembersCount(): void {
-    this.statsCommunitiesService.newMembersCount(this.community.slug, 7).subscribe((data) => {
-      this.newMembersThisWeek = data.total;
-    });
-    this.statsCommunitiesService.newMembersCount(this.community.slug, 30).subscribe((data) => {
-      this.newMembersThisMonth = data.total;
-    });
+  loadOrganizerBriefing(): void {
+    this.subscriptions.push(
+      this.dashboardCommunitiesService.organizerBriefing(this.community.slug).subscribe((data) => {
+        this.organizerBriefing = data;
+      }),
+    );
   }
 
   setQuickActions(): void {
