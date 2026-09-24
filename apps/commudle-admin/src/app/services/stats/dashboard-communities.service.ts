@@ -20,7 +20,7 @@ import {
   providedIn: 'root',
 })
 export class DashboardCommunitiesService {
-  constructor(private http: HttpClient, private apiRoutesService: ApiRoutesService) {}
+  constructor(private http: HttpClient, private apiRoutesService: ApiRoutesService) { }
 
   organizerBriefing(communityId): Observable<ICommunityDashboardOrganizerBriefing> {
     const params = new HttpParams().set('community_id', communityId);
