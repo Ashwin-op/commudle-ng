@@ -2751,6 +2751,10 @@
         }
       }
     }
+
+    .timeline-empty {
+      @apply com-py-4 com-text-sm com-text-gray-500;
+    }
   }
 }
 
