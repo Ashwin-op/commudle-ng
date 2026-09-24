@@ -89,24 +89,64 @@
         </h3>
       </header>
       <nav class="attention-list">
-        <a [routerLink]="['edit']" class="attention-item">
+        <a
+          *ngIf="needsAttention?.profile && !needsAttention.profile.is_complete"
+          [routerLink]="['edit']"
+          class="attention-item"
+        >
           <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
           <p class="attention-content">
             <span class="attention-title">Community profile incomplete</span>
-            <span class="attention-sub">Add a few details</span>
+            <span *ngIf="needsAttention.profile.missing_fields?.length; else genericProfileHint" class="attention-sub">
+              Add
+              <ng-container *ngFor="let field of needsAttention.profile.missing_fields; let last = last"
+                >{{ field | capitalizeAndRemoveUnderscore }}<span *ngIf="!last">,&nbsp;</span></ng-container
+              >
+            </span>
+            <ng-template #genericProfileHint>
+              <span class="attention-sub">Add a few details</span>
+            </ng-template>
           </p>
           <span class="attention-action">Complete Now</span>
           <span class="attention-arrow">›</span>
         </a>
-        <a [routerLink]="['newsletters', 'new']" class="attention-item">
+        <a
+          *ngFor="let request of needsAttention?.collaboration_requests"
+          [routerLink]="['collaborations']"
+          class="attention-item"
+        >
           <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
           <p class="attention-content">
-            <span class="attention-title">Create your first newsletter</span>
+            <span class="attention-title">Collaboration request pending</span>
+            <span class="attention-sub">Review and respond</span>
+          </p>
+          <span class="attention-arrow">›</span>
+        </a>
+        <a *ngFor="let newsletter of needsAttention?.newsletters" [routerLink]="['newsletters']" class="attention-item">
+          <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
+          <p class="attention-content">
+            <span class="attention-title">Newsletter needs attention</span>
             <span class="attention-sub">Engage your members</span>
           </p>
           <span class="attention-arrow">›</span>
         </a>
-        <a *ngIf="community?.payments_enabled" [routerLink]="['payments']" class="attention-item">
+        <a *ngFor="let survey of needsAttention?.surveys" [routerLink]="['surveys']" class="attention-item">
+          <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
+          <p class="attention-content">
+            <span class="attention-title">Survey needs attention</span>
+            <span class="attention-sub">Check responses</span>
+          </p>
+          <span class="attention-arrow">›</span>
+        </a>
+        <a *ngIf="needsAttention?.refund_policy" [routerLink]="['edit']" class="attention-item">
+          <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
+          <p class="attention-content">
+            <span class="attention-title">Refund policy needs attention</span>
+            <span class="attention-sub">Required for paid events</span>
+          </p>
+          <span class="attention-arrow">›</span>
+        </a>
+        <a *ngFor="let account of needsAttention?.bank_account" [routerLink]="['payments']" class="attention-item">
           <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
           <p class="attention-content">
             <span class="attention-title">Set up bank details</span>
@@ -114,6 +154,23 @@
           </p>
           <span class="attention-arrow">›</span>
         </a>
+        <p
+          *ngIf="
+            needsAttention &&
+            !(
+              this.needsAttention.profile?.is_complete === false ||
+              this.needsAttention.collaboration_requests?.length > 0 ||
+              this.needsAttention.surveys?.length > 0 ||
+              this.needsAttention.newsletters?.length > 0 ||
+              this.needsAttention.bank_account?.length > 0 ||
+              !!this.needsAttention.refund_policy
+            )
+          "
+          class="attention-empty"
+        >
+          <fa-icon [icon]="icons.faCircleCheck" class="com-text-green-500"></fa-icon>
+          You're all caught up.
+        </p>
       </nav>
     </article>
 
@@ -178,7 +235,7 @@
             </span>
             <span class="activity-sub">SDE at Google · Product Designer · Frontend Developer</span>
           </p>
-          <span class="activity-badge">+{{ newMembersThisWeek }}</span>
+          <span class="activity-badge">+{{ organizerBriefing?.new_members?.this_week || 0 }}</span>
         </li>
         <li class="activity-item">
           <span class="activity-avatar channel-avatar">

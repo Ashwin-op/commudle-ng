@@ -4,7 +4,7 @@ import { ICommunity } from '@commudle/shared-models';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
 import { AuthService, SeoService } from '@commudle/shared-services';
 import { DashboardCommunitiesService } from 'apps/commudle-admin/src/app/services/stats/dashboard-communities.service';
-import { ICommunityDashboardOrganizerBriefing } from '@commudle/shared-models';
+import { ICommunityDashboardNeedsAttention, ICommunityDashboardOrganizerBriefing } from '@commudle/shared-models';
 import { Subscription } from 'rxjs';
 import {
   faCalendarPlus,
@@ -37,6 +37,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   greeting = '';
   organizerBriefing: ICommunityDashboardOrganizerBriefing;
+  needsAttention: ICommunityDashboardNeedsAttention;
 
   icons = {
     faCalendarPlus,
@@ -74,6 +75,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         this.seoService.setTitle(`Dashboard | ${this.community.name}`);
         this.seoService.noIndex(true);
         this.loadOrganizerBriefing();
+        this.loadNeedsAttention();
         this.setQuickActions();
       }),
     );
@@ -120,6 +122,14 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.dashboardCommunitiesService.organizerBriefing(this.community.slug).subscribe((data) => {
         this.organizerBriefing = data;
+      }),
+    );
+  }
+
+  loadNeedsAttention(): void {
+    this.subscriptions.push(
+      this.dashboardCommunitiesService.needsAttention(this.community.slug).subscribe((data) => {
+        this.needsAttention = data;
       }),
     );
   }
