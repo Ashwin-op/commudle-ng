@@ -208,65 +208,52 @@
         <a [routerLink]="['notifications']" class="view-all-link">View All →</a>
       </header>
       <ul class="activity-list">
-        <li class="activity-item">
-          <span class="activity-avatar members-avatar">
-            <fa-icon [icon]="icons.faUsers"></fa-icon>
+        <li *ngFor="let activity of recentActivity" class="activity-item">
+          <span
+            class="activity-avatar"
+            [class.members-avatar]="
+              activity.type === 'new_member' ||
+              (activity.type !== 'channel_message' &&
+                activity.type !== 'forum_message' &&
+                activity.type !== 'survey_response_milestone')
+            "
+            [class.channel-avatar]="activity.type === 'channel_message' || activity.type === 'forum_message'"
+            [class.survey-avatar]="activity.type === 'survey_response_milestone'"
+          >
+            <fa-icon
+              [icon]="
+                activity.type === 'new_member'
+                  ? icons.faUsers
+                  : activity.type === 'channel_message'
+                  ? icons.faHashtag
+                  : activity.type === 'forum_message'
+                  ? icons.faMessage
+                  : activity.type === 'survey_response_milestone'
+                  ? icons.faChartPie
+                  : icons.faBolt
+              "
+            ></fa-icon>
           </span>
           <p class="activity-content">
-            <span class="activity-text"
-              >New members this week: <span class="activity-name-avatar">A</span><strong>Arpan</strong>,
-              <span class="activity-name-avatar">A</span><strong>Arshdeep</strong>,
-              <span class="activity-name-avatar">P</span><strong>Prerna</strong>
+            <span class="activity-text" [title]="activity.title || activity.message || activity.text">
+              {{ activity.title || activity.message || activity.text }}
             </span>
-            <span class="activity-sub">SDE at Google · Product Designer · Frontend Developer</span>
+            <span *ngIf="activity.subtitle" class="activity-sub">{{ activity.subtitle }}</span>
           </p>
-          <span class="activity-badge">+{{ organizerBriefing?.new_members?.this_week || 0 }}</span>
+          <p class="activity-time">{{ moment(activity.created_at).fromNow() }}</p>
         </li>
-        <li class="activity-item">
-          <span class="activity-avatar channel-avatar">
-            <fa-icon [icon]="icons.faHashtag"></fa-icon>
-          </span>
-          <p class="activity-content">
-            <span class="activity-text" title="Prerna posted a message in #frontend-dev channel"
-              >Prerna posted a message in <strong>#frontend-dev channel</strong></span
-            >
-          </p>
-          <time class="activity-time">2h ago</time>
-        </li>
-        <li class="activity-item">
-          <span class="activity-avatar survey-avatar">
-            <fa-icon [icon]="icons.faChartPie"></fa-icon>
-          </span>
-          <p class="activity-content">
-            <span class="activity-text" title="Total 100 responses on Developer Experience Survey"
-              >Total 100 responses on <strong>"Developer Experience Survey"</strong></span
-            >
-          </p>
-          <time class="activity-time">5h ago</time>
-        </li>
-        <li class="activity-item">
-          <span class="activity-avatar members-avatar">
-            <fa-icon [icon]="icons.faUsers"></fa-icon>
-          </span>
-          <p class="activity-content">
-            <span class="activity-text" title="18 new members joined the community"
-              >18 new members joined the community</span
-            >
-          </p>
-          <time class="activity-time">1d ago</time>
-        </li>
-        <li class="activity-item">
-          <span class="activity-avatar channel-avatar">
-            <fa-icon [icon]="icons.faMessage"></fa-icon>
-          </span>
-          <p class="activity-content">
-            <span class="activity-text" title="New forum discussion in General"
-              >New forum discussion in <strong>General</strong></span
-            >
-          </p>
-          <time class="activity-time">1d ago</time>
+        <li *ngIf="!recentActivityLoading && recentActivity.length === 0" class="activity-empty">
+          No recent activity yet.
         </li>
       </ul>
+      <button
+        *ngIf="recentActivity.length < recentActivityTotal"
+        (click)="loadMoreRecentActivity()"
+        [disabled]="recentActivityLoading"
+        class="activity-load-more"
+      >
+        {{ recentActivityLoading ? 'Loading…' : 'Show more' }}
+      </button>
     </article>
   </section>
 

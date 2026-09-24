@@ -5,6 +5,7 @@ import { ICurrentUser } from 'apps/shared-models/current_user.model';
 import { AuthService, SeoService } from '@commudle/shared-services';
 import { DashboardCommunitiesService } from 'apps/commudle-admin/src/app/services/stats/dashboard-communities.service';
 import {
+  ICommunityDashboardActivityItem,
   ICommunityDashboardNeedsAttention,
   ICommunityDashboardOrganizerBriefing,
   ICommunityDashboardScheduleItem,
@@ -43,6 +44,11 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   organizerBriefing: ICommunityDashboardOrganizerBriefing;
   needsAttention: ICommunityDashboardNeedsAttention;
   upcomingSchedule: ICommunityDashboardScheduleItem[];
+  recentActivity: ICommunityDashboardActivityItem[] = [];
+  recentActivityPage = 1;
+  recentActivityTotal = 0;
+  recentActivityLoading = false;
+  private readonly recentActivityCount = 10;
 
   icons = {
     faCalendarPlus,
@@ -82,6 +88,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         this.loadOrganizerBriefing();
         this.loadNeedsAttention();
         this.loadUpcomingSchedule();
+        this.loadRecentActivity();
         this.setQuickActions();
       }),
     );
@@ -157,6 +164,46 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
       return 'Tomorrow';
     }
     return date.format('ddd, MMM D');
+  }
+
+  loadRecentActivity(): void {
+    this.recentActivityLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunitiesService
+        .recentActivity(this.community.slug, this.recentActivityPage, this.recentActivityCount)
+        .subscribe({
+          next: (data) => {
+            this.recentActivity =
+              this.recentActivityPage === 1 ? data?.values || [] : [...this.recentActivity, ...(data?.values || [])];
+            this.recentActivityTotal = data?.total || 0;
+            this.recentActivityLoading = false;
+          },
+          error: () => {
+            this.recentActivityLoading = false;
+          },
+        }),
+    );
+  }
+
+  loadMoreRecentActivity(): void {
+    this.recentActivityPage += 1;
+    this.loadRecentActivity();
+  }
+
+  // Maps an activity type to its avatar icon; falls back to the bolt icon.
+  activityIcon(type: string) {
+    switch (type) {
+      case 'new_member':
+        return this.icons.faUsers;
+      case 'channel_message':
+        return this.icons.faHashtag;
+      case 'forum_message':
+        return this.icons.faMessage;
+      case 'survey_response_milestone':
+        return this.icons.faChartPie;
+      default:
+        return this.icons.faBolt;
+    }
   }
 
   setQuickActions(): void {

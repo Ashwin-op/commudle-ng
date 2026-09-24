@@ -453,4 +453,13 @@
       @apply com-inline-flex com-items-center com-justify-center com-w-5 com-h-5 com-rounded-full com-bg-primary-500 com-text-white com-text-[10px] com-font-medium com-mr-0.5 com-align-middle;
     }
   }
+
+  .activity-empty {
+    @apply com-py-4 com-text-sm com-text-gray-500;
+  }
+}
+
+.activity-load-more {
+  @apply com-mt-3 com-w-full com-py-2 com-text-sm com-font-medium com-text-primary-500 com-bg-white com-border com-border-solid com-border-Bright-Gray com-rounded-lg com-cursor-pointer;
+  @apply hover:com-bg-gray-50 disabled:com-opacity-50 disabled:com-cursor-not-allowed;
 }
