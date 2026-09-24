@@ -2715,6 +2715,10 @@
         @apply com-text-lg com-text-gray-400 com-shrink-0;
       }
     }
+
+    .attention-empty {
+      @apply com-flex com-items-center com-gap-2 com-m-0 com-py-4 com-text-sm com-text-gray-500;
+    }
   }
 
   .schedule-timeline {
