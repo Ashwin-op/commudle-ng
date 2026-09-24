@@ -4,7 +4,11 @@ import { ICommunity } from '@commudle/shared-models';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
 import { AuthService, SeoService } from '@commudle/shared-services';
 import { DashboardCommunitiesService } from 'apps/commudle-admin/src/app/services/stats/dashboard-communities.service';
-import { ICommunityDashboardNeedsAttention, ICommunityDashboardOrganizerBriefing } from '@commudle/shared-models';
+import {
+  ICommunityDashboardNeedsAttention,
+  ICommunityDashboardOrganizerBriefing,
+  ICommunityDashboardScheduleItem,
+} from '@commudle/shared-models';
 import { Subscription } from 'rxjs';
 import {
   faCalendarPlus,
@@ -38,6 +42,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   greeting = '';
   organizerBriefing: ICommunityDashboardOrganizerBriefing;
   needsAttention: ICommunityDashboardNeedsAttention;
+  upcomingSchedule: ICommunityDashboardScheduleItem[];
 
   icons = {
     faCalendarPlus,
@@ -76,6 +81,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         this.seoService.noIndex(true);
         this.loadOrganizerBriefing();
         this.loadNeedsAttention();
+        this.loadUpcomingSchedule();
         this.setQuickActions();
       }),
     );
@@ -132,6 +138,25 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         this.needsAttention = data;
       }),
     );
+  }
+
+  loadUpcomingSchedule(): void {
+    this.subscriptions.push(
+      this.dashboardCommunitiesService.upcomingSchedule(this.community.slug).subscribe((data) => {
+        this.upcomingSchedule = data?.values || [];
+      }),
+    );
+  }
+
+  scheduleDateLabel(scheduledAt: string): string {
+    const date = moment(scheduledAt);
+    if (date.isSame(moment(), 'day')) {
+      return 'Today';
+    }
+    if (date.isSame(moment().add(1, 'day'), 'day')) {
+      return 'Tomorrow';
+    }
+    return date.format('ddd, MMM D');
   }
 
   setQuickActions(): void {

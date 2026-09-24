@@ -183,34 +183,19 @@
         <a [routerLink]="['events']" class="view-all-link">View All Events & Hackathons →</a>
       </header>
       <ol class="schedule-timeline">
-        <li class="timeline-item">
-          <span class="timeline-date today">Today</span>
+        <li *ngFor="let item of upcomingSchedule" class="timeline-item">
+          <span
+            class="timeline-date"
+            [class.today]="scheduleDateLabel(item.scheduled_at) === 'Today'"
+            [class.tomorrow]="scheduleDateLabel(item.scheduled_at) === 'Tomorrow'"
+            >{{ scheduleDateLabel(item.scheduled_at) }}</span
+          >
           <p class="timeline-event">
-            <span class="timeline-event-name">Newsletter ABC</span>
-            <time class="timeline-event-time">11:00 AM</time>
+            <span class="timeline-event-name">{{ item.title }}</span>
+            <time class="timeline-event-time">{{ moment(item.scheduled_at).format('h:mm A') }}</time>
           </p>
         </li>
-        <li class="timeline-item">
-          <span class="timeline-date tomorrow">Tomorrow</span>
-          <p class="timeline-event">
-            <span class="timeline-event-name">AI Community Meetup</span>
-            <time class="timeline-event-time">6:00 PM</time>
-          </p>
-        </li>
-        <li class="timeline-item">
-          <span class="timeline-date">Fri, Aug 1</span>
-          <p class="timeline-event">
-            <span class="timeline-event-name">Build with AI Hackathon</span>
-            <time class="timeline-event-time">All Day</time>
-          </p>
-        </li>
-        <li class="timeline-item">
-          <span class="timeline-date">Mon, Aug 4</span>
-          <p class="timeline-event">
-            <span class="timeline-event-name">Web Dev Workshop</span>
-            <time class="timeline-event-time">5:00 PM</time>
-          </p>
-        </li>
+        <li *ngIf="upcomingSchedule && upcomingSchedule.length === 0" class="timeline-empty">Nothing scheduled yet.</li>
       </ol>
     </article>
 
