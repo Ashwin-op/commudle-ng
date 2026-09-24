@@ -240,7 +240,7 @@
             </span>
             <span *ngIf="activity.subtitle" class="activity-sub">{{ activity.subtitle }}</span>
           </p>
-          <p class="activity-time">{{ moment(activity.created_at).fromNow() }}</p>
+          <p class="activity-time">{{ activity.created_at | date : 'short' }}</p>
         </li>
         <li *ngIf="!recentActivityLoading && recentActivity.length === 0" class="activity-empty">
           No recent activity yet.
