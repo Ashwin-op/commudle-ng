@@ -60,6 +60,14 @@ export class ForumDiscussionComponent implements OnInit, OnDestroy {
       this.forumsStore.loadDiscussions(this.forum.discussion_id);
     });
 
+    // The store keeps the forum's thread/reply counts in step with realtime events,
+    // so the header stats come from there rather than the one-off resolved snapshot
+    this.forumsStore.currentForum$.pipe(takeUntil(this.destroy$)).subscribe((forum) => {
+      if (forum) {
+        this.forum = forum;
+      }
+    });
+
     this.userMessages$.pipe(takeUntil(this.destroy$)).subscribe((messages) => {
       if (messages && messages.length > 0) {
         this.setSeoSchema(messages);

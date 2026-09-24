@@ -38,8 +38,16 @@ export class ForumDiscussionResolver implements Resolve<IForum> {
   }
 
   private initRealtime(forum: IForum): void {
-    if (forum?.discussion_id && !this.communityChannelHandlerService.CommunityChannelChatChannel) {
-      this.communityChannelHandlerService.init(forum.discussion_id, 'channels');
+    if (!forum?.discussion_id) return;
+
+    // Only re-subscribe when the forum actually changed. The previous check was
+    // "is any channel open?", which meant the very first forum visited kept the
+    // subscription for the whole session and posts created in every other forum
+    // were sent to that first forum's discussion.
+    if (this.communityChannelHandlerService.discussionId === forum.discussion_id) {
+      return;
     }
+
+    this.communityChannelHandlerService.init(forum.discussion_id, 'channels');
   }
 }

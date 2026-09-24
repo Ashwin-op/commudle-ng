@@ -275,21 +275,61 @@ export class ForumsStore {
   }
 
   updateDiscussion(userMessage: IUserMessage): void {
+    if (!userMessage || userMessage.parent_type !== 'Discussion') return;
+
+    // Match against the open forum's discussion rather than the first loaded
+    // message, so the very first thread in an empty forum still shows up.
+    const expectedDiscussionId = this.currentForum.value?.discussion_id ?? this.userMessages.value[0]?.parent_id;
+    if (expectedDiscussionId == null) return;
+
+    // The broadcast sends parent_id as a number while REST payloads can send a
+    // string, so compare numerically rather than with strict equality.
+    if (Number(userMessage.parent_id) !== Number(expectedDiscussionId)) return;
+
     const current = this.userMessages.value;
-    if (
-      current.length > 0 &&
-      userMessage.parent_type === 'Discussion' &&
-      userMessage.parent_id === current[0].parent_id &&
-      !current.find((m) => m.id === userMessage.id)
-    ) {
-      this.userMessages.next([userMessage, ...current]);
+    if (current.some((m) => m.id === userMessage.id)) return;
+
+    this.userMessages.next([userMessage, ...current]);
+    // A root message is a new thread, so the header counts move too
+    this.bumpForumCounts({ discussions: 1 });
+  }
+
+  /**
+   * Keeps the open forum's header stats in step with realtime activity. The counts
+   * arrive with the forum payload and would otherwise stay frozen at whatever they
+   * were when the page was resolved.
+   */
+  private bumpForumCounts(delta: { discussions?: number; replies?: number }): void {
+    const forum = this.currentForum.value;
+    if (!forum) return;
+
+    const updated: IForum = {
+      ...forum,
+      total_discussions: Math.max(0, (forum.total_discussions || 0) + (delta.discussions || 0)),
+      total_replies: Math.max(0, (forum.total_replies || 0) + (delta.replies || 0)),
+    };
+
+    this.currentForum.next(updated);
+
+    // The list rows show the same counts, so keep that copy in step as well
+    const forums = this.forums.value;
+    if (forums.some((f) => f.id === updated.id)) {
+      this.forums.next(forums.map((f) => (f.id === updated.id ? { ...f, ...updated } : f)));
     }
   }
 
   updateUserMessage(userMessageSlug: string, reply: IUserMessage): void {
     const current = this.currentUserMessage.value;
-    if (current && current.slug === userMessageSlug) {
+    const alreadyPresent = !!current?.user_messages?.some((m) => m.id === reply?.id);
+
+    if (current && current.slug === userMessageSlug && !alreadyPresent) {
       this.currentUserMessage.next({ ...current, user_messages: [...current.user_messages, reply] });
+    }
+
+    // Counted whether or not that thread is the one on screen, since the reply still
+    // belongs to this forum
+    if (!alreadyPresent) {
+      this.bumpForumCounts({ replies: 1 });
     }
   }
 

@@ -45,7 +45,20 @@ export class CommunityChannelHandlerService {
     private forumsStore: ForumsStore,
   ) {}
 
+  /** Discussion this service is currently subscribed to, if any */
+  get discussionId(): number | undefined {
+    return this.CommunityChannelChatChannel ? this._discussionId : undefined;
+  }
+
   init(discussionId: number, discussionParent: string, fromLastRead?: boolean, after?: string) {
+    // Always drop an existing subscription first. Overwriting it without
+    // disconnecting leaks the old socket and leaves its handlers firing, and any
+    // command sent afterwards would still be routed to the previous room.
+    if (this.CommunityChannelChatChannel) {
+      this.CommunityChannelChatChannel.disconnect();
+      this.CommunityChannelChatChannel = undefined;
+    }
+
     this._discussionId = discussionId;
     this._discussionParent = discussionParent;
 
@@ -69,6 +82,8 @@ export class CommunityChannelHandlerService {
 
   destroy() {
     this.CommunityChannelChatChannel?.disconnect();
+    // Cleared so "is the channel connected?" checks report the truth after teardown
+    this.CommunityChannelChatChannel = undefined;
     this.messages.next([]);
     this.permittedActions.next([]);
     this.pageInfo.next({
