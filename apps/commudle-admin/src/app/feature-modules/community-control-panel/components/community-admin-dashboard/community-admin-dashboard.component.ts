@@ -44,7 +44,9 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   greeting = '';
   organizerBriefing: ICommunityDashboardOrganizerBriefing;
   needsAttention: ICommunityDashboardNeedsAttention;
-  upcomingSchedule: ICommunityDashboardScheduleItem[];
+  needsAttentionLoading = false;
+  upcomingSchedule: ICommunityDashboardScheduleItem[] = [];
+  upcomingScheduleLoading = false;
   communitySnapshot: ICommunityDashboardSnapshot;
   recentActivity: ICommunityDashboardActivityItem[] = [];
   recentActivityPage = 1;
@@ -143,17 +145,31 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   loadNeedsAttention(): void {
+    this.needsAttentionLoading = true;
     this.subscriptions.push(
-      this.dashboardCommunitiesService.needsAttention(this.community.slug).subscribe((data) => {
-        this.needsAttention = data;
+      this.dashboardCommunitiesService.needsAttention(this.community.slug).subscribe({
+        next: (data) => {
+          this.needsAttention = data;
+          this.needsAttentionLoading = false;
+        },
+        error: () => {
+          this.needsAttentionLoading = false;
+        },
       }),
     );
   }
 
   loadUpcomingSchedule(): void {
+    this.upcomingScheduleLoading = true;
     this.subscriptions.push(
-      this.dashboardCommunitiesService.upcomingSchedule(this.community.slug).subscribe((data) => {
-        this.upcomingSchedule = data?.values || [];
+      this.dashboardCommunitiesService.upcomingSchedule(this.community.slug).subscribe({
+        next: (data) => {
+          this.upcomingSchedule = data?.values || [];
+          this.upcomingScheduleLoading = false;
+        },
+        error: () => {
+          this.upcomingScheduleLoading = false;
+        },
       }),
     );
   }

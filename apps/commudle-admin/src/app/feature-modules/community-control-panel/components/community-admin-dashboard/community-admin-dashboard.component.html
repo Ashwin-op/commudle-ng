@@ -156,6 +156,7 @@
         </a>
         <p
           *ngIf="
+            !needsAttentionLoading &&
             needsAttention &&
             !(
               this.needsAttention.profile?.is_complete === false ||
@@ -169,7 +170,7 @@
           class="attention-empty"
         >
           <fa-icon [icon]="icons.faCircleCheck" class="com-text-green-500"></fa-icon>
-          You're all caught up.
+          No attention needed right now.
         </p>
       </nav>
     </article>
@@ -195,7 +196,9 @@
             <time class="timeline-event-time">{{ item.scheduled_at | date : 'h:mm a' }}</time>
           </p>
         </li>
-        <li *ngIf="upcomingSchedule && upcomingSchedule.length === 0" class="timeline-empty">Nothing scheduled yet.</li>
+        <li *ngIf="!upcomingScheduleLoading && upcomingSchedule.length === 0" class="timeline-empty">
+          Nothing scheduled yet.
+        </li>
       </ol>
     </article>
 
