@@ -13,15 +13,8 @@
     }
   }
 
-  nb-tag-list {
-    @apply com-mt-4 com-p-0 md:com-pb-6 com-pb-2 md:com-px-0 com-px-4 com-w-full com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
-
-    nb-tag {
-      @apply md:com-mb-0 com-mb-4;
-      .selected {
-        @apply com-bg-primary-500;
-      }
-    }
+  .tag-list {
+    @apply com-flex com-flex-wrap com-gap-2 com-mt-4 com-p-0 md:com-pb-6 com-pb-2 md:com-px-0 com-px-4 com-w-full com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
   }
 
   .container {
@@ -166,10 +159,6 @@
 
   .view-all {
     @apply com-no-underline com-p-0 com-text-base com-font-normal com-text-Yankees-Blue;
-  }
-
-  nb-tag.appearance-filled.status-primary.selected {
-    @apply com-bg-primary-500 com-text-tWhite;
   }
 
   .load-more {

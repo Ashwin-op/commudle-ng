@@ -26,24 +26,24 @@
       <commudle-search-page-campaign></commudle-search-page-campaign>
     </div>
     <div>
-      <nb-tag-list>
-        <nb-tag
-          text="All"
-          [status]="selectedFilters.includes('All') ? 'primary' : 'basic'"
-          appearance="filled"
+      <div class="tag-list">
+        <app-tag
+          [tags]="['All']"
           (click)="onFilterChange('All')"
           [removable]="selectedFilters.includes('All')"
-        ></nb-tag>
-        <nb-tag
-          (click)="onFilterChange(filter)"
+          [backgroundColor]="selectedFilters.includes('All') ? 'com-bg-primary-500' : 'com-bg-tAnti-Flash'"
+          [fontColor]="selectedFilters.includes('All') ? 'com-text-tWhite' : 'com-text-tYankees-Blue'"
+        ></app-tag>
+        <app-tag
           *ngFor="let filter of filters"
-          [status]="selectedFilters.includes(filter) ? 'primary' : 'basic'"
-          [text]="filter"
-          appearance="filled"
+          [tags]="[filter]"
+          (click)="onFilterChange(filter)"
           class="com-cursor-pointer"
           [removable]="selectedFilters.includes(filter)"
-        ></nb-tag>
-      </nb-tag-list>
+          [backgroundColor]="selectedFilters.includes(filter) ? 'com-bg-primary-500' : 'com-bg-tAnti-Flash'"
+          [fontColor]="selectedFilters.includes(filter) ? 'com-text-tWhite' : 'com-text-tYankees-Blue'"
+        ></app-tag>
+      </div>
       <div class="container">
         <div class="three-column-layout medium">
           <div class="left-column">

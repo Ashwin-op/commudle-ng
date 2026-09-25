@@ -28,16 +28,11 @@
     .tags {
       @apply com-m-0;
 
-      nb-tag {
-        @apply com-text-Dark-Jungle-Green com-border-0;
-      }
-
-      .activeTag {
-        @apply com-bg-primary-500 com-text-tWhite;
+      .tag-list {
+        @apply com-flex com-flex-wrap com-gap-2;
       }
     }
   }
-
   .communities-list-cards {
     @apply com-flex com-flex-wrap com-gap-4 lg:com-grid lg:com-grid-cols-3;
   }

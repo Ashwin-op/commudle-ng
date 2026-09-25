@@ -30,6 +30,12 @@
       @apply com-m-1;
     }
   }
+
+  &.input-none {
+    .tag {
+      @apply com-m-0;
+    }
+  }
 }
 
 .tag {

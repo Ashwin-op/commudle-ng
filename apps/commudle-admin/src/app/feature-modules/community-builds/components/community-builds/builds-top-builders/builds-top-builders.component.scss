@@ -25,22 +25,12 @@ com-card {
     .tags {
       @apply md:com-flex md:com-justify-center com-m-0 com-mx-0 md:com-pt-4 md:com-pb-5 com-p-4;
 
-      nb-tag {
-        @apply com-bg-white com-text-gray-600 com-text-xs com-font-medium;
+      .tag-list {
+        @apply com-flex com-flex-wrap com-gap-2;
 
-        ::ng-deep {
-          nb-icon {
-            @apply com-text-xs com-font-medium;
-          }
+        .custom-tag {
+          @apply com-border-solid com-border com-rounded-full com-inline-flex;
         }
-      }
-
-      .nb-tag-remove {
-        @apply com-text-xs com-font-medium #{!important};
-      }
-
-      .activeTag {
-        @apply com-border-gray-500 com-bg-gray-100 com-text-xs com-font-medium;
       }
     }
 

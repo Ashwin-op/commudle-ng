@@ -31,32 +31,31 @@
     </div>
 
     <div class="tags">
-      <nb-tag-list>
-        <nb-tag
-          appearance="outline"
-          [text]="options[0]"
-          size="small"
-          [removable]="newest_communities ? 'true' : 'false'"
-          [ngClass]="{ activeTag: newest_communities }"
+      <div class="tag-list">
+        <app-tag
+          [tags]="[options[0]]"
+          [removable]="newest_communities"
+          [backgroundColor]="newest_communities ? 'com-bg-Azure' : 'com-bg-tAnti-Flash'"
+          [fontColor]="newest_communities ? 'com-text-white' : 'com-text-tYankees-Blue'"
           (click)="filterByTags(options[0])"
-        ></nb-tag>
-        <nb-tag
-          appearance="outline"
-          [text]="options[1]"
-          size="small"
-          [removable]="completed_events_count ? 'true' : 'false'"
-          [ngClass]="{ activeTag: completed_events_count }"
+        ></app-tag>
+
+        <app-tag
+          [tags]="[options[1]]"
+          [removable]="completed_events_count"
+          [backgroundColor]="completed_events_count ? 'com-bg-Azure' : 'com-bg-tAnti-Flash'"
+          [fontColor]="completed_events_count ? 'com-text-white' : 'com-text-tYankees-Blue'"
           (click)="filterByTags(options[1])"
-        ></nb-tag>
-        <nb-tag
-          appearance="outline"
-          [text]="options[2]"
-          size="small"
-          [removable]="members_count ? 'true' : 'false'"
-          [ngClass]="{ activeTag: members_count }"
+        ></app-tag>
+
+        <app-tag
+          [tags]="[options[2]]"
+          [removable]="members_count"
+          [backgroundColor]="members_count ? 'com-bg-Azure' : 'com-bg-tAnti-Flash'"
+          [fontColor]="members_count ? 'com-text-white' : 'com-text-tYankees-Blue'"
           (click)="filterByTags(options[2])"
-        ></nb-tag>
-      </nb-tag-list>
+        ></app-tag>
+      </div>
     </div>
   </div>
   <div *ngIf="skeletonLoaderCard" class="skeleton-vertical-cards">

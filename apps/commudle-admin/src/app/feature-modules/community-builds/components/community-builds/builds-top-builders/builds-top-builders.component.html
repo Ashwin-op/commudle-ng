@@ -18,35 +18,37 @@
       <h4 class="sub-heading">{{ subHeading }}</h4>
     </div>
     <div class="tags">
-      <nb-tag-list>
-        <nb-tag
-          appearance="outline"
-          [text]="options[0]"
-          status="basic"
-          size="small"
-          [removable]="month ? 'true' : 'false'"
-          [ngClass]="{ activeTag: month }"
+      <div class="tag-list">
+        <app-tag
+          class="custom-tag"
+          [tags]="[options[0]]"
+          [inputSize]="'none'"
+          [removable]="month"
+          [backgroundColor]="'com-bg-tAnti-Flash'"
+          [fontColor]="month ? 'com-text-Azure' : 'com-text-Dark-Jungle-Green'"
           (click)="filterByTags(options[0])"
-        ></nb-tag>
-        <nb-tag
-          appearance="outline"
-          [text]="options[1]"
-          status="basic"
-          size="small"
-          [removable]="year ? 'true' : 'false'"
-          [ngClass]="{ activeTag: year }"
+        ></app-tag>
+
+        <app-tag
+          class="custom-tag"
+          [tags]="[options[1]]"
+          [inputSize]="'none'"
+          [removable]="year"
+          [backgroundColor]="'com-bg-tAnti-Flash'"
+          [fontColor]="year ? 'com-text-Azure' : 'com-text-Dark-Jungle-Green'"
           (click)="filterByTags(options[1])"
-        ></nb-tag>
-        <nb-tag
-          appearance="outline"
-          [text]="options[2]"
-          status="basic"
-          size="small"
-          [removable]="allTime ? 'true' : 'false'"
-          [ngClass]="{ activeTag: allTime }"
+        ></app-tag>
+
+        <app-tag
+          class="custom-tag"
+          [tags]="[options[2]]"
+          [inputSize]="'none'"
+          [removable]="allTime"
+          [backgroundColor]="'com-bg-tAnti-Flash'"
+          [fontColor]="allTime ? 'com-text-Azure' : 'com-text-Dark-Jungle-Green'"
           (click)="filterByTags(options[2])"
-        ></nb-tag>
-      </nb-tag-list>
+        ></app-tag>
+      </div>
     </div>
     <app-skeleton-cards
       [cards]="4"
