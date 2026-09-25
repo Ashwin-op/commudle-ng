@@ -269,28 +269,40 @@
             <fa-icon [icon]="icons.faUsers" class="snapshot-icon members-icon"></fa-icon>
             <span class="snapshot-label">Members</span>
           </header>
-          <p class="snapshot-value">{{ community?.members_count | number }}</p>
+          <p class="snapshot-value">{{ communitySnapshot?.members?.total ?? 0 | number }}</p>
         </li>
         <li class="snapshot-card">
           <header class="snapshot-card-header">
             <fa-icon [icon]="icons.faCalendarPlus" class="snapshot-icon events-icon"></fa-icon>
-            <span class="snapshot-label">Events & Hackathons</span>
+            <span class="snapshot-label">Upcoming Events & Hackathons</span>
           </header>
-          <p class="snapshot-value">—</p>
+          <p class="snapshot-value">
+            {{
+              (communitySnapshot?.upcoming_events_count || 0) + (communitySnapshot?.upcoming_hackathons_count || 0)
+                | number
+            }}
+          </p>
         </li>
         <li class="snapshot-card">
           <header class="snapshot-card-header">
             <fa-icon [icon]="icons.faEnvelope" class="snapshot-icon newsletter-icon"></fa-icon>
-            <span class="snapshot-label">Emails sent this week</span>
+            <span class="snapshot-label">Emails sent (last 7 days)</span>
           </header>
-          <p class="snapshot-value">—</p>
+          <p class="snapshot-value">{{ communitySnapshot?.emails_sent_last_7_days ?? 0 | number }}</p>
+        </li>
+        <li class="snapshot-card">
+          <header class="snapshot-card-header">
+            <fa-icon [icon]="icons.faMessage" class="snapshot-icon analytics-icon"></fa-icon>
+            <span class="snapshot-label">Channel messages (last 7 days)</span>
+          </header>
+          <p class="snapshot-value">{{ communitySnapshot?.channel_messages_last_7_days ?? 0 | number }}</p>
         </li>
         <li class="snapshot-card">
           <header class="snapshot-card-header">
             <fa-icon [icon]="icons.faChartPie" class="snapshot-icon analytics-icon"></fa-icon>
             <span class="snapshot-label">Growth (this week)</span>
           </header>
-          <p class="snapshot-value">—</p>
+          <p class="snapshot-value">{{ communitySnapshot?.growth_percent_this_week ?? 0 | number : '1.0-2' }}%</p>
         </li>
       </ul>
     </article>

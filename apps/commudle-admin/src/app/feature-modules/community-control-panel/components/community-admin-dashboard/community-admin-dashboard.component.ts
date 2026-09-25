@@ -9,6 +9,7 @@ import {
   ICommunityDashboardNeedsAttention,
   ICommunityDashboardOrganizerBriefing,
   ICommunityDashboardScheduleItem,
+  ICommunityDashboardSnapshot,
 } from '@commudle/shared-models';
 import { Subscription } from 'rxjs';
 import {
@@ -44,6 +45,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   organizerBriefing: ICommunityDashboardOrganizerBriefing;
   needsAttention: ICommunityDashboardNeedsAttention;
   upcomingSchedule: ICommunityDashboardScheduleItem[];
+  communitySnapshot: ICommunityDashboardSnapshot;
   recentActivity: ICommunityDashboardActivityItem[] = [];
   recentActivityPage = 1;
   recentActivityTotal = 0;
@@ -89,6 +91,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         this.loadNeedsAttention();
         this.loadUpcomingSchedule();
         this.loadRecentActivity();
+        this.loadSnapshot();
         this.setQuickActions();
       }),
     );
@@ -182,6 +185,14 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
             this.recentActivityLoading = false;
           },
         }),
+    );
+  }
+
+  loadSnapshot(): void {
+    this.subscriptions.push(
+      this.dashboardCommunitiesService.snapshot(this.community.slug).subscribe((data) => {
+        this.communitySnapshot = data;
+      }),
     );
   }
 
