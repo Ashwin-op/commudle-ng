@@ -157,14 +157,14 @@
         <p
           *ngIf="
             !needsAttentionLoading &&
-            needsAttention &&
+            !needsAttentionError &&
             !(
-              this.needsAttention.profile?.is_complete === false ||
-              this.needsAttention.collaboration_requests?.length > 0 ||
-              this.needsAttention.surveys?.length > 0 ||
-              this.needsAttention.newsletters?.length > 0 ||
-              this.needsAttention.bank_account?.length > 0 ||
-              !!this.needsAttention.refund_policy
+              needsAttention?.profile?.is_complete === false ||
+              needsAttention?.collaboration_requests?.length > 0 ||
+              needsAttention?.surveys?.length > 0 ||
+              needsAttention?.newsletters?.length > 0 ||
+              needsAttention?.bank_account?.length > 0 ||
+              needsAttention?.refund_policy
             )
           "
           class="attention-empty"
@@ -272,7 +272,9 @@
             <fa-icon [icon]="icons.faUsers" class="snapshot-icon members-icon"></fa-icon>
             <span class="snapshot-label">Members</span>
           </header>
-          <p class="snapshot-value">{{ communitySnapshot?.members?.total ?? 0 | number }}</p>
+          <p class="snapshot-value">
+            {{ communitySnapshot?.members?.total ? (communitySnapshot.members.total | number) : '—' }}
+          </p>
         </li>
         <li class="snapshot-card">
           <header class="snapshot-card-header">
@@ -282,7 +284,9 @@
           <p class="snapshot-value">
             {{
               (communitySnapshot?.upcoming_events_count || 0) + (communitySnapshot?.upcoming_hackathons_count || 0)
-                | number
+                ? ((communitySnapshot?.upcoming_events_count || 0) + (communitySnapshot?.upcoming_hackathons_count || 0)
+                  | number)
+                : '—'
             }}
           </p>
         </li>
@@ -291,21 +295,37 @@
             <fa-icon [icon]="icons.faEnvelope" class="snapshot-icon newsletter-icon"></fa-icon>
             <span class="snapshot-label">Emails sent (last 7 days)</span>
           </header>
-          <p class="snapshot-value">{{ communitySnapshot?.emails_sent_last_7_days ?? 0 | number }}</p>
+          <p class="snapshot-value">
+            {{
+              communitySnapshot?.emails_sent_last_7_days ? (communitySnapshot.emails_sent_last_7_days | number) : '—'
+            }}
+          </p>
         </li>
         <li class="snapshot-card">
           <header class="snapshot-card-header">
             <fa-icon [icon]="icons.faMessage" class="snapshot-icon analytics-icon"></fa-icon>
             <span class="snapshot-label">Channel messages (last 7 days)</span>
           </header>
-          <p class="snapshot-value">{{ communitySnapshot?.channel_messages_last_7_days ?? 0 | number }}</p>
+          <p class="snapshot-value">
+            {{
+              communitySnapshot?.channel_messages_last_7_days
+                ? (communitySnapshot.channel_messages_last_7_days | number)
+                : '—'
+            }}
+          </p>
         </li>
         <li class="snapshot-card">
           <header class="snapshot-card-header">
             <fa-icon [icon]="icons.faChartPie" class="snapshot-icon analytics-icon"></fa-icon>
             <span class="snapshot-label">Growth (this week)</span>
           </header>
-          <p class="snapshot-value">{{ communitySnapshot?.growth_percent_this_week ?? 0 | number : '1.0-2' }}%</p>
+          <p class="snapshot-value">
+            {{
+              communitySnapshot?.growth_percent_this_week
+                ? (communitySnapshot.growth_percent_this_week | number : '1.0-2') + '%'
+                : '—'
+            }}
+          </p>
         </li>
       </ul>
     </article>
