@@ -192,7 +192,7 @@
           >
           <p class="timeline-event">
             <span class="timeline-event-name">{{ item.title }}</span>
-            <time class="timeline-event-time">{{ moment(item.scheduled_at).format('h:mm A') }}</time>
+            <time class="timeline-event-time">{{ item.scheduled_at | date : 'h:mm a' }}</time>
           </p>
         </li>
         <li *ngIf="upcomingSchedule && upcomingSchedule.length === 0" class="timeline-empty">Nothing scheduled yet.</li>
