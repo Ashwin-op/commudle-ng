@@ -339,10 +339,10 @@
       @apply com-bg-white com-rounded-xl com-p-4 com-border com-border-solid com-border-Bright-Gray;
 
       .snapshot-card-header {
-        @apply com-flex com-items-center com-gap-2 com-mb-2;
+        @apply com-flex com-gap-2 com-mb-2;
 
         .snapshot-icon {
-          @apply com-text-sm;
+          @apply com-flex com-text-sm;
 
           &.members-icon {
             @apply com-text-blue-500;
