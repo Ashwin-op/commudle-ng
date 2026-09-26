@@ -21,6 +21,14 @@ com-card {
   }
   .chart-container {
     @apply com-h-auto com-border com-border-solid com-border-Bright-Gray com-rounded-xl com-p-2 com-mt-3 com-mb-7;
+
+    .tag-list {
+      @apply com-flex com-flex-wrap com-gap-2;
+
+      .custom-tag {
+        @apply com-border com-border-solid com-rounded-full com-border-Azure com-text-Azure;
+      }
+    }
   }
 
   .chart-time-container {

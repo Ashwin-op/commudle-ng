@@ -65,15 +65,15 @@
       <div class="graph-container">
         <span class="title">User Tags</span>
         <div class="chart-container">
-          <nb-tag-list *ngIf="hackathonUserResponsesTags">
-            <nb-tag
-              status="info"
-              appearance="outline"
+          <div *ngIf="hackathonUserResponsesTags" class="tag-list">
+            <app-tag
+              [inputSize]="custom"
+              class="custom-tag"
               *ngFor="let tag of hackathonUserResponsesTags.users_tags.tags"
-              text="{{ tag[0] }} ({{ tag[1] }})"
-              [removable]="false"
-            ></nb-tag>
-          </nb-tag-list>
+              [tags]="[tag[0] + ' (' + tag[1] + ')']"
+              backgroundColor="com-bg-Azure-opacity-10"
+            ></app-tag>
+          </div>
         </div>
       </div>
     </div>
