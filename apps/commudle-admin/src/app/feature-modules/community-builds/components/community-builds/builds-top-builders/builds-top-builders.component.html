@@ -22,7 +22,7 @@
         <app-tag
           class="custom-tag"
           [tags]="[options[0]]"
-          [inputSize]="'none'"
+          [inputSize]="'custom'"
           [removable]="month"
           [fontColor]="month ? 'com-text-Azure' : 'com-text-tYankees-Blue'"
           (click)="filterByTags(options[0])"
@@ -31,7 +31,7 @@
         <app-tag
           class="custom-tag"
           [tags]="[options[1]]"
-          [inputSize]="'none'"
+          [inputSize]="'custom'"
           [removable]="year"
           [fontColor]="year ? 'com-text-Azure' : 'com-text-tYankees-Blue'"
           (click)="filterByTags(options[1])"
@@ -40,7 +40,7 @@
         <app-tag
           class="custom-tag"
           [tags]="[options[2]]"
-          [inputSize]="'none'"
+          [inputSize]="'custom'"
           [removable]="allTime"
           [fontColor]="allTime ? 'com-text-Azure' : 'com-text-tYankees-Blue'"
           (click)="filterByTags(options[2])"
