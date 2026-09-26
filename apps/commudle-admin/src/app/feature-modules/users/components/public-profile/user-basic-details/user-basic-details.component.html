@@ -140,7 +140,6 @@
             <app-tag
               *ngFor="let tag of user.tags"
               [tags]="[tag.name]"
-              [removable]="false"
               backgroundColor="com-bg-blue-50"
               fontColor="com-text-Azure"
               class="user-tags"
@@ -149,7 +148,6 @@
           <app-tag
             *ngIf="currentUser?.id === user.id"
             [tags]="['+']"
-            [removable]="false"
             backgroundColor="com-bg-Azure"
             fontColor="com-text-white"
             (click)="onTagDialogOpen()"
@@ -179,7 +177,6 @@
       <app-tag
         [tags]="tagsDialog"
         [editable]="true"
-        [removable]="true"
         [minTagLimit]="false"
         [label]="'Type a tag and press enter or comma'"
         (tagAdd)="onTagAdd($event)"
