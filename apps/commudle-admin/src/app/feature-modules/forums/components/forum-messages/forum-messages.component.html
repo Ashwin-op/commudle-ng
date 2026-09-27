@@ -67,19 +67,21 @@
           <div class="fm-reply-line"></div>
         </div>
         <div class="fm-reply-card">
+          <!-- Author, timestamp and vote share one line so the vote does not take a
+               row of its own below the message -->
           <div class="fm-reply-top">
             <p class="fm-reply-author">{{ reply.user?.name || reply.user?.username }}</p>
-            <p class="fm-reply-date">{{ reply.created_at | date : 'd MMM y' }}</p>
+            <div class="fm-reply-top-right">
+              <p class="fm-reply-date">{{ reply.created_at | date : 'd MMM y' }}</p>
+              <commudle-vote
+                [icon]="'thumb-up-with-text'"
+                [votableId]="reply.id"
+                votableType="UserMessage"
+              ></commudle-vote>
+            </div>
           </div>
           <div class="fm-reply-body">
             <commudle-editor [content]="reply.content" [editable]="false"></commudle-editor>
-          </div>
-          <div class="fm-reply-footer">
-            <commudle-vote
-              [icon]="'thumb-up-with-text'"
-              [votableId]="reply.id"
-              votableType="UserMessage"
-            ></commudle-vote>
           </div>
         </div>
       </div>
@@ -91,28 +93,18 @@
         <nb-icon icon="corner-down-right-outline"></nb-icon>
         Reply to {{ userMessage.user?.name || userMessage.user?.username }}
       </p>
-      <form [formGroup]="replyForm" (ngSubmit)="onSubmit()">
-        <textarea nbInput fullWidth formControlName="reply" rows="4" placeholder="Write your reply..."></textarea>
-        <commudle-alert
-          *ngIf="replyForm.get('reply')?.touched && replyForm.get('reply')?.errors?.['required']"
-          [error]="true"
-          errorMessage="Reply cannot be empty"
-        ></commudle-alert>
-        <div class="fm-form-actions">
-          <button type="button" nbButton ghost size="small" (click)="replyForm.reset()">Clear</button>
-          <button
-            type="submit"
-            nbButton
-            status="primary"
-            shape="semi-round"
-            size="small"
-            [disabled]="replyForm.invalid"
-          >
-            <nb-icon icon="paper-plane-outline"></nb-icon>
-            Post Reply
-          </button>
-        </div>
-      </form>
+      <!-- The editor brings its own send button, emoji picker and enter-to-send, and
+           keeps replies consistent with how they are rendered above. clearOnSubmit is
+           off so the draft survives a failed send. -->
+      <commudle-editor
+        #replyEditor
+        [validators]="editorValidators"
+        [clearOnSubmit]="false"
+        [showMenu]="true"
+        placeholder="Write your reply..."
+        status="primary"
+        (contentChange)="onReplySubmit($event)"
+      ></commudle-editor>
     </div>
   </ng-container>
 </div>

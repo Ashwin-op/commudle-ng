@@ -4,7 +4,16 @@ export const KeyboardHandler = Extension.create({
   name: 'keyboardHandler',
   addKeyboardShortcuts() {
     return {
-      Enter: () => true,
+      // This handler is registered after the list extensions, so its Enter wins.
+      // Inside a list Enter has to start the next item; everywhere else it stays
+      // swallowed so the host component can treat Enter as "submit".
+      Enter: ({ editor }) => {
+        if (editor.isActive('listItem')) {
+          return editor.commands.splitListItem('listItem');
+        }
+
+        return true;
+      },
       'Mod-Enter': () => true,
       'Shift-Enter': ({ editor }) => {
         return editor.commands.first(({ commands }) => [

@@ -1,26 +1,35 @@
-<div class="commudle-editor">
-  <button *ngIf="editable" [tp]="emojiTemplate" class="emoji-button" nbButton tpVariation="popper">
-    <p>😃</p>
-    <!-- <nb-icon icon="smiling-face-outline"></nb-icon> -->
-  </button>
-  <button *ngIf="addAttachment && editable" class="image-button" nbButton (click)="fileInput.click()">
-    <p>📎</p>
-  </button>
+<!-- The toolbar sits above the input row rather than inside it, so it cannot
+     compete for horizontal space with the full-width editor. -->
+<div class="commudle-editor-wrapper">
   <commudle-editor-menu *ngIf="showMenu && editable" [editor]="editor"></commudle-editor-menu>
-  <tiptap *ngIf="editor" [editor]="editor" [ngClass]="{ editable: editable, 'two-line-clamp': twoLineClamp }"></tiptap>
-  <div *ngIf="!editor && content" [innerHTML]="content" [ngClass]="{ 'two-line-clamp': twoLineClamp }"></div>
 
-  <button
-    (click)="onClick()"
-    *ngIf="editable"
-    [disabled]="!isValid"
-    class="submit-button"
-    nbButton
-    [status]="status"
-    [appearance]="appearance"
-  >
-    <nb-icon icon="paper-plane"></nb-icon>
-  </button>
+  <div class="commudle-editor">
+    <button *ngIf="editable" [tp]="emojiTemplate" class="emoji-button" nbButton tpVariation="popper">
+      <p>😃</p>
+      <!-- <nb-icon icon="smiling-face-outline"></nb-icon> -->
+    </button>
+    <button *ngIf="addAttachment && editable" class="image-button" nbButton (click)="fileInput.click()">
+      <p>📎</p>
+    </button>
+    <tiptap
+      *ngIf="editor"
+      [editor]="editor"
+      [ngClass]="{ editable: editable, 'two-line-clamp': twoLineClamp }"
+    ></tiptap>
+    <div *ngIf="!editor && content" [innerHTML]="content" [ngClass]="{ 'two-line-clamp': twoLineClamp }"></div>
+
+    <button
+      (click)="onClick()"
+      *ngIf="editable"
+      [disabled]="!isValid"
+      class="submit-button"
+      nbButton
+      [status]="status"
+      [appearance]="appearance"
+    >
+      <nb-icon icon="paper-plane"></nb-icon>
+    </button>
+  </div>
 </div>
 
 <ng-template #emojiTemplate>

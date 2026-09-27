@@ -1,1 +1,33 @@
-<p>editor-menu works!</p>
+<div class="editor-menu" role="toolbar" aria-label="Text formatting">
+  <div class="editor-menu-group">
+    <button
+      *ngFor="let item of marks"
+      type="button"
+      class="editor-menu-btn"
+      [class.editor-menu-btn-active]="isActive(item)"
+      [attr.aria-label]="item.label"
+      [attr.aria-pressed]="isActive(item)"
+      [title]="item.label"
+      (click)="toggle(item)"
+    >
+      <fa-icon [icon]="item.icon"></fa-icon>
+    </button>
+  </div>
+
+  <span class="editor-menu-divider" aria-hidden="true"></span>
+
+  <div class="editor-menu-group">
+    <button
+      *ngFor="let item of lists"
+      type="button"
+      class="editor-menu-btn"
+      [class.editor-menu-btn-active]="isActive(item)"
+      [attr.aria-label]="item.label"
+      [attr.aria-pressed]="isActive(item)"
+      [title]="item.label"
+      (click)="toggle(item)"
+    >
+      <fa-icon [icon]="item.icon"></fa-icon>
+    </button>
+  </div>
+</div>

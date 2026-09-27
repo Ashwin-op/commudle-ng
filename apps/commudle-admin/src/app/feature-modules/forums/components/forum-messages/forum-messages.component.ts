@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { EditorComponent, IEditorValidator } from '@commudle/editor';
 import { IForum, IUser, IUserMessage } from '@commudle/shared-models';
 import { Subject, takeUntil } from 'rxjs';
 import { faArrowLeft, faThumbsUp, faEye } from '@fortawesome/free-solid-svg-icons';
@@ -11,6 +11,9 @@ import {
   IForumParentContext,
 } from 'apps/commudle-admin/src/app/feature-modules/forums/services/forums-context.service';
 
+/** Matches the cap the previous textarea enforced via Validators.maxLength */
+const MAX_REPLY_LENGTH = 1000;
+
 @Component({
   standalone: false,
   selector: 'commudle-forum-messages',
@@ -18,10 +21,16 @@ import {
   styleUrls: ['./forum-messages.component.scss'],
 })
 export class ForumMessagesComponent implements OnInit, OnDestroy {
+  @ViewChild('replyEditor') replyEditor: EditorComponent;
+
   categorySlug: string;
   userMessageSlug: string;
   forum: IForum;
-  replyForm: FormGroup;
+
+  readonly editorValidators: IEditorValidator = {
+    required: true,
+    noWhitespace: true,
+  };
 
   readonly icons = {
     faArrowLeft,
@@ -40,17 +49,12 @@ export class ForumMessagesComponent implements OnInit, OnDestroy {
   constructor(
     private readonly activatedRoute: ActivatedRoute,
     private readonly router: Router,
-    private readonly fb: FormBuilder,
     private readonly communityChannelHandlerService: CommunityChannelHandlerService,
     private readonly toastrService: ToastrService,
     private readonly forumsStore: ForumsStore,
     private readonly seoService: SeoService,
     private readonly forumsContextService: ForumsContextService,
-  ) {
-    this.replyForm = this.fb.group({
-      reply: ['', [Validators.required, Validators.maxLength(1000)]],
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.parentContext = this.forumsContextService.resolveParentContext(this.activatedRoute);
@@ -117,21 +121,29 @@ export class ForumMessagesComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSubmit(): void {
-    if (this.replyForm.valid) {
-      const { reply } = this.replyForm.value;
-      this.sendMessage(reply);
-      this.replyForm.reset();
-    } else {
-      this.replyForm.markAllAsTouched();
+  onReplySubmit(content: string): void {
+    const reply = (content || '').trim();
+    if (!reply) return;
+
+    // EditorComponent accepts a maxLength validator but does not actually enforce it,
+    // so the cap the old textarea had is applied here against the visible text.
+    if (removeHtmlTags(reply).trim().length > MAX_REPLY_LENGTH) {
+      this.toastrService.warningDialog(`Replies are limited to ${MAX_REPLY_LENGTH} characters.`);
+      return;
+    }
+
+    if (this.sendMessage(reply)) {
+      this.replyEditor?.editor?.commands.clearContent(true);
     }
   }
 
-  private sendMessage(message: string): void {
+  private sendMessage(message: string): boolean {
     if (!this.communityChannelHandlerService.CommunityChannelChatChannel) {
       this.toastrService.warningDialog('Unable to send message. Channel not connected.');
-      return;
+      return false;
     }
+
     this.communityChannelHandlerService.sendReply(this.userMessageSlug, message);
+    return true;
   }
 }

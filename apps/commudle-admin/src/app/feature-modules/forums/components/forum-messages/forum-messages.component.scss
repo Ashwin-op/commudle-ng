@@ -61,50 +61,64 @@
     }
 
     .fm-reply {
-      @apply com-flex com-gap-2 com-mb-2;
+      @apply com-flex com-gap-3 com-mb-3;
+
+      &:last-child {
+        @apply com-mb-0;
+
+        .fm-reply-line {
+          @apply com-hidden;
+        }
+      }
 
       .fm-reply-left {
         @apply com-flex com-flex-col com-items-center com-flex-shrink-0;
 
         .fm-reply-line {
-          @apply com-w-px com-flex-1 com-bg-Bright-Gray com-mt-1;
+          @apply com-w-px com-flex-1 com-bg-Bright-Gray com-my-1;
         }
       }
 
+      // Filled, not outlined: a tinted block separates the reply from the white
+      // post card without adding another border to the page.
       .fm-reply-card {
-        @apply com-flex-1 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-white com-p-3;
+        @apply com-flex-1 com-min-w-0 com-p-3;
+        @apply com-rounded-lg com-bg-Anti-Flash-White;
 
         .fm-reply-top {
-          @apply com-flex com-items-center com-justify-between com-mb-2;
+          @apply com-flex com-items-center com-justify-between com-gap-2 com-mb-1;
 
           .fm-reply-author {
-            @apply com-text-sm com-font-semibold com-text-Yankees-Blue com-m-0;
+            // min-w-0 so truncate can actually shrink this flex item
+            @apply com-text-Paragraph-2 com-font-semibold com-text-Yankees-Blue com-m-0 com-min-w-0 com-truncate;
+          }
+
+          // Timestamp and vote sit together at the end of the header line
+          .fm-reply-top-right {
+            @apply com-flex com-items-center com-gap-3 com-flex-shrink-0;
           }
 
           .fm-reply-date {
-            @apply com-text-xs com-text-Cadet-Grey com-m-0;
+            @apply com-text-Caption com-text-Cadet-Grey com-m-0;
           }
         }
 
         .fm-reply-body {
-          @apply com-text-sm com-text-Yankees-Blue;
-        }
-
-        .fm-reply-footer {
-          @apply com-flex com-justify-end com-pt-2 com-mt-2;
-          @apply com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+          @apply com-text-Paragraph-2 com-text-Yankees-Blue;
         }
       }
     }
   }
 
   // ── Reply form ────────────────────────────────────────
+  // No card border here: the editor draws its own box around the input, so an outer
+  // outline would double it up.
   .fm-reply-form {
-    @apply com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-white com-p-4;
+    @apply com-bg-white;
 
     .fm-reply-form-title {
       @apply com-flex com-items-center com-gap-2;
-      @apply com-text-sm com-font-semibold com-text-Yankees-Blue com-m-0 com-mb-3;
+      @apply com-text-Paragraph-2 com-font-semibold com-text-Yankees-Blue com-m-0 com-mb-3;
 
       nb-icon {
         @apply com-text-primary-500 com-text-base;

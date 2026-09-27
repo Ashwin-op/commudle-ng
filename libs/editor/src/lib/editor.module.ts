@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { NbButtonModule, NbIconModule, NbListModule, NbUserModule } from '@commudle/theme';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { popperVariation, provideTippyConfig, TippyDirective, tooltipVariation } from '@ngneat/helipopper';
 import { EditorMenuComponent } from './components/editor/editor-menu/editor-menu.component';
@@ -14,7 +15,16 @@ import { FloatingMenuDirective } from './directives/floating-menu.directive';
 import { NodeViewContentDirective } from './directives/node-view-content.directive';
 
 @NgModule({
-  imports: [CommonModule, NbListModule, NbUserModule, NbButtonModule, NbIconModule, PickerModule, TippyDirective],
+  imports: [
+    CommonModule,
+    NbListModule,
+    NbUserModule,
+    NbButtonModule,
+    NbIconModule,
+    FontAwesomeModule,
+    PickerModule,
+    TippyDirective,
+  ],
   declarations: [
     EditorDirective,
     FloatingMenuDirective,
