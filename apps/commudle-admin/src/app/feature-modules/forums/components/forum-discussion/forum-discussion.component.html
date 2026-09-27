@@ -45,11 +45,16 @@
 
       <!-- Empty -->
       <div class="fdis-empty" *ngIf="messages.length === 0 && !(isLoading$ | async)">
-        <nb-icon icon="message-square-outline" class="fdis-empty-icon"></nb-icon>
-        <p class="fdis-empty-title">No discussions yet</p>
+        <div class="fdis-empty-art" aria-hidden="true">
+          <nb-icon icon="message-square-outline" class="fdis-empty-icon"></nb-icon>
+        </div>
+
+        <h2 class="fdis-empty-title">Start the conversation</h2>
         <p class="fdis-empty-sub">Be the first to post in this forum</p>
-        <button nbButton status="primary" shape="semi-round" size="small" (click)="startNewDiscussion()">
-          <nb-icon icon="edit-outline"></nb-icon> New Post
+
+        <button nbButton status="primary" shape="semi-round" size="large" (click)="startNewDiscussion()">
+          <nb-icon icon="edit-outline"></nb-icon>
+          Create the first post
         </button>
       </div>
 

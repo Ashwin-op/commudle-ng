@@ -114,7 +114,8 @@ export class ForumFormComponent implements OnInit, OnDestroy {
       : this.forumsStore.createForum(payload);
 
     request$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: () => this.dialogRef.close(true),
+      // Hand the saved forum back so the opener can navigate straight to it
+      next: (forum: IForum) => this.dialogRef.close(forum),
       error: () => {
         this.toastrService.errorDialog(this.forumId ? 'Failed to update forum' : 'Failed to create forum');
         this.isSubmitting = false;

@@ -42,21 +42,62 @@
         <ng-container *ngIf="forums$ | async as forums">
           <!-- Empty -->
           <div class="fcat-empty" *ngIf="forums.length === 0">
-            <nb-icon icon="message-square-outline" class="fcat-empty-icon"></nb-icon>
-            <p class="fcat-empty-title">{{ searchQuery ? 'No forums match your search' : 'No forums yet' }}</p>
+            <div class="fcat-empty-art" aria-hidden="true">
+              <nb-icon
+                [icon]="searchQuery ? 'search-outline' : 'message-square-outline'"
+                class="fcat-empty-icon"
+              ></nb-icon>
+            </div>
+
+            <h2 class="fcat-empty-title">
+              {{ searchQuery ? 'No forums match your search' : 'No forums yet' }}
+            </h2>
             <p class="fcat-empty-sub">
-              {{ searchQuery ? 'Try a different keyword' : 'Create the first forum to get started' }}
+              {{
+                searchQuery
+                  ? 'Try a different keyword, or clear the search to see everything.'
+                  : 'Forums are where your community asks questions and talks things through. Create the first one to get started.'
+              }}
             </p>
+
             <button
               nbButton
               status="primary"
               shape="semi-round"
-              size="small"
+              size="large"
               *ngIf="isAdmin && !searchQuery"
               (click)="openCreateDialog()"
             >
-              <nb-icon icon="plus-outline"></nb-icon> Create Forum
+              <nb-icon icon="plus-outline"></nb-icon>
+              Create the first forum
             </button>
+          </div>
+
+          <!-- Sort -->
+          <div class="fcat-sort-row" *ngIf="forums.length > 0">
+            <span class="fcat-sort-label" id="fcat-sort-label">Sort by</span>
+            <div class="fcat-sort-group" role="group" aria-labelledby="fcat-sort-label">
+              <button
+                type="button"
+                class="fcat-sort-btn"
+                [class.fcat-sort-active]="sortBy === forumSort.LATEST"
+                [attr.aria-pressed]="sortBy === forumSort.LATEST"
+                (click)="onSortChange(forumSort.LATEST)"
+              >
+                <nb-icon icon="clock-outline" aria-hidden="true"></nb-icon>
+                Newest
+              </button>
+              <button
+                type="button"
+                class="fcat-sort-btn"
+                [class.fcat-sort-active]="sortBy === forumSort.ACTIVITY"
+                [attr.aria-pressed]="sortBy === forumSort.ACTIVITY"
+                (click)="onSortChange(forumSort.ACTIVITY)"
+              >
+                <nb-icon icon="message-circle-outline" aria-hidden="true"></nb-icon>
+                Latest reply
+              </button>
+            </div>
           </div>
 
           <!-- List -->
@@ -68,6 +109,7 @@
             <a
               *ngFor="let forum of forums; trackBy: trackById"
               [routerLink]="[forum.channel_category?.slug, forum.slug]"
+              [state]="{ fromAllForums: true }"
               class="fcat-forum-row"
             >
               <div class="fcat-forum-icon">
@@ -78,7 +120,10 @@
                 <p class="fcat-forum-meta">
                   <span class="fcat-forum-category">{{ forum.channel_category?.name }}</span>
                   <span class="fcat-dot">·</span>
-                  <span>{{ forum.created_at | date : 'd MMM y' }}</span>
+                  <span *ngIf="forum.last_activity_at">
+                    Last reply {{ forum.last_activity_at | date : 'd MMM y' }}
+                  </span>
+                  <span *ngIf="!forum.last_activity_at"> Created {{ forum.created_at | date : 'd MMM y' }} </span>
                 </p>
                 <p class="fcat-forum-desc" *ngIf="forum.description">{{ forum.description }}</p>
               </div>

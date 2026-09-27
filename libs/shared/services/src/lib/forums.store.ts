@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, combineLatest, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, combineLatest, of, throwError } from 'rxjs';
 import { catchError, delay, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
-import { IForum, IPaginationCount, EDbModels, IChannelCategory, IUserMessage } from '@commudle/shared-models';
+import {
+  IForum,
+  IPaginationCount,
+  EDbModels,
+  EForumSort,
+  IChannelCategory,
+  IUserMessage,
+} from '@commudle/shared-models';
 import { ForumService } from './forum.service';
 import { ToastrService } from './toastr.service';
 import { DiscussionService } from './discussion.service';
@@ -51,8 +58,19 @@ export class ForumsStore {
   private readonly selectedCategory = new BehaviorSubject<string | null>(null);
   readonly selectedCategory$ = this.selectedCategory.asObservable();
 
+  private readonly sortBy = new BehaviorSubject<EForumSort>(EForumSort.LATEST);
+  readonly sortBy$ = this.sortBy.asObservable();
+
   /** Bumped by reloadForums() to re-run the query with the current parameters */
   private readonly refreshTrigger = new BehaviorSubject<number>(0);
+
+  /**
+   * Emits each thread that arrives over the websocket. Threads are created by the
+   * realtime channel rather than an HTTP call, so this is the only point at which
+   * the new record (and its slug) becomes known to the client.
+   */
+  private readonly discussionAdded = new Subject<IUserMessage>();
+  readonly discussionAdded$ = this.discussionAdded.asObservable();
 
   // ── Discussion (thread list inside a forum) ─────────────────────────────────
   private readonly userMessages = new BehaviorSubject<IUserMessage[]>([]);
@@ -107,6 +125,7 @@ export class ForumsStore {
       this.selectedCategory.pipe(distinctUntilChanged()),
       this.currentPage.pipe(distinctUntilChanged()),
       this.perPage.pipe(distinctUntilChanged()),
+      this.sortBy.pipe(distinctUntilChanged()),
       this.refreshTrigger.pipe(distinctUntilChanged()),
     ])
       .pipe(
@@ -114,8 +133,8 @@ export class ForumsStore {
         // firing a parent_id=null request as soon as it is constructed.
         filter(([parentId, parentType]) => !!parentId && !!parentType),
         tap(() => this.isLoadingForums.next(true)),
-        switchMap(([parentId, parentType, q, categorySlug, page, count]) =>
-          this.forumService.getForums({ parentId, parentType, q, categorySlug, page, count }).pipe(
+        switchMap(([parentId, parentType, q, categorySlug, page, count, sort]) =>
+          this.forumService.getForums({ parentId, parentType, q, categorySlug, page, count, sort }).pipe(
             map((res) => ({ res, failed: false })),
             // Caught inside switchMap so a single failed request cannot terminate the
             // outer subscription and leave search, filtering and pagination dead.
@@ -174,6 +193,11 @@ export class ForumsStore {
   setPerPage(count: number): void {
     this.perPage.next(count);
     this.currentPage.next(1);
+  }
+
+  setSortBy(sort: EForumSort): void {
+    this.currentPage.next(1);
+    this.sortBy.next(sort);
   }
 
   /**
@@ -292,6 +316,7 @@ export class ForumsStore {
     this.userMessages.next([userMessage, ...current]);
     // A root message is a new thread, so the header counts move too
     this.bumpForumCounts({ discussions: 1 });
+    this.discussionAdded.next(userMessage);
   }
 
   /**
@@ -361,6 +386,7 @@ export class ForumsStore {
     this.searchQuery.next('');
     this.selectedCategory.next(null);
     this.currentPage.next(1);
+    this.sortBy.next(EForumSort.LATEST);
     this.currentForum.next(null);
     this.clearDiscussions();
     this.clearUserMessage();

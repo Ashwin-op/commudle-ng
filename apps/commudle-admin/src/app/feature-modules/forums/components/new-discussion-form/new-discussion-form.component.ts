@@ -28,22 +28,26 @@ export class NewDiscussionFormComponent {
   }
 
   onSubmit(): void {
-    if (this.discussionForm.valid) {
-      const { message, subject } = this.discussionForm.value;
-      this.sendMessage(message, subject);
-      this.closeDialog();
-    } else {
+    if (!this.discussionForm.valid) {
       this.discussionForm.markAllAsTouched();
-    }
-  }
-
-  private sendMessage(content: string, subject?: string): void {
-    if (!this.communityChannelHandlerService.CommunityChannelChatChannel) {
-      this.toastrService.warningDialog('Unable to send message. Channel not connected.');
       return;
     }
 
+    const { message, subject } = this.discussionForm.value;
+
+    // Report the subject back only when the message actually went out, so the opener
+    // knows to watch for the matching broadcast and can then open the new thread
+    this.dialogRef.close(this.sendMessage(message, subject) ? { subject } : undefined);
+  }
+
+  private sendMessage(content: string, subject?: string): boolean {
+    if (!this.communityChannelHandlerService.CommunityChannelChatChannel) {
+      this.toastrService.warningDialog('Unable to send message. Channel not connected.');
+      return false;
+    }
+
     this.communityChannelHandlerService.sendForumMessage(content, subject);
+    return true;
   }
 
   closeDialog(): void {

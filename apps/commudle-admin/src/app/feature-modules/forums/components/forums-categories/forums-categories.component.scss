@@ -179,20 +179,60 @@
     @apply com-flex com-justify-center com-py-16;
   }
 
+  // ── Sort ──────────────────────────────────────────────
+  .fcat-sort-row {
+    @apply com-flex com-flex-wrap com-items-center com-gap-2 com-mb-3;
+
+    .fcat-sort-label {
+      @apply com-text-Caption com-font-medium com-text-Cadet-Grey;
+    }
+
+    .fcat-sort-group {
+      @apply com-inline-flex com-items-center com-gap-1 com-p-1;
+      @apply com-rounded-md com-bg-Anti-Flash-White;
+    }
+
+    .fcat-sort-btn {
+      @apply com-inline-flex com-items-center com-gap-1 com-px-3 com-py-1 com-cursor-pointer;
+      @apply com-rounded com-border-0 com-bg-transparent;
+      @apply com-text-Caption com-font-medium com-text-Auro-Metal-Saurus;
+      @apply com-transition-colors com-duration-200;
+      @apply hover:com-text-Yankees-Blue;
+      @apply focus-visible:com-outline-none focus-visible:com-ring-2 focus-visible:com-ring-primary-500;
+
+      nb-icon {
+        @apply com-text-sm;
+      }
+    }
+
+    .fcat-sort-active {
+      @apply com-bg-white com-text-primary-500 com-shadow-sm;
+      @apply hover:com-text-primary-600;
+    }
+  }
+
   // ── Empty ─────────────────────────────────────────────
   .fcat-empty {
-    @apply com-flex com-flex-col com-items-center com-justify-center com-gap-2;
-    @apply com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-white;
-    @apply com-py-16;
+    @apply com-flex com-flex-col com-items-center com-justify-center com-text-center;
+    @apply com-rounded-lg com-bg-white;
+    @apply com-px-6 com-py-12;
+    @apply sm:com-px-10 sm:com-py-16;
+
+    .fcat-empty-art {
+      @apply com-flex com-items-center com-justify-center com-flex-shrink-0;
+      @apply com-w-16 com-h-16 com-mb-5 com-rounded-full com-bg-Alice-Blue;
+    }
 
     .fcat-empty-icon {
-      @apply com-text-4xl com-text-Bright-Gray;
+      @apply com-text-3xl com-text-primary-500;
     }
+
     .fcat-empty-title {
-      @apply com-text-sm com-font-semibold com-text-Yankees-Blue com-m-0;
+      @apply com-m-0 com-mb-2 com-text-Page-Subheading com-font-semibold com-text-Yankees-Blue;
     }
+
     .fcat-empty-sub {
-      @apply com-text-xs com-text-Cadet-Grey com-m-0;
+      @apply com-m-0 com-mb-6 com-max-w-md com-text-Paragraph-2 com-leading-relaxed com-text-Auro-Metal-Saurus;
     }
   }
 }

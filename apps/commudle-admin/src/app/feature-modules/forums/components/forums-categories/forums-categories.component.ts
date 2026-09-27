@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { IChannelCategory, IForum } from '@commudle/shared-models';
+import { EForumSort, IChannelCategory, IForum } from '@commudle/shared-models';
 import { ForumsStore, SeoService } from '@commudle/shared-services';
 import { NbDialogService } from '@commudle/theme';
 import { ForumFormComponent } from 'apps/commudle-admin/src/app/feature-modules/forums/components/forum-form/forum-form.component';
@@ -26,6 +26,11 @@ export class ForumsCategoriesComponent implements OnInit, OnDestroy {
   categories: IChannelCategory[] = [];
   selectedCategory: string | null = null;
   searchQuery = '';
+
+  /** Exposed so the template can reference the enum members */
+  readonly forumSort = EForumSort;
+  sortBy: EForumSort = EForumSort.LATEST;
+
   isAdmin = false;
   totalForums = 0;
   currentPage = 1;
@@ -38,6 +43,7 @@ export class ForumsCategoriesComponent implements OnInit, OnDestroy {
     private readonly forumsStore: ForumsStore,
     private readonly dialogService: NbDialogService,
     private readonly route: ActivatedRoute,
+    private readonly router: Router,
     private readonly seoService: SeoService,
     private readonly forumsContextService: ForumsContextService,
   ) {}
@@ -51,6 +57,7 @@ export class ForumsCategoriesComponent implements OnInit, OnDestroy {
 
     this.forumsStore.categories$.pipe(takeUntil(this.destroy$)).subscribe((c) => (this.categories = c || []));
     this.forumsStore.selectedCategory$.pipe(takeUntil(this.destroy$)).subscribe((s) => (this.selectedCategory = s));
+    this.forumsStore.sortBy$.pipe(takeUntil(this.destroy$)).subscribe((sort) => (this.sortBy = sort));
     this.forumsStore.totalForums$.pipe(takeUntil(this.destroy$)).subscribe((t) => (this.totalForums = t));
     this.forumsStore.currentPage$.pipe(takeUntil(this.destroy$)).subscribe((p) => (this.currentPage = p));
     this.forumsStore.perPage$.pipe(takeUntil(this.destroy$)).subscribe((p) => (this.perPage = p));
@@ -95,12 +102,36 @@ export class ForumsCategoriesComponent implements OnInit, OnDestroy {
     this.forumsStore.setPage(page);
   }
 
+  onSortChange(sort: EForumSort): void {
+    if (sort === this.sortBy) return;
+    this.forumsStore.setSortBy(sort);
+  }
+
   openCreateDialog(): void {
-    this.dialogService.open(ForumFormComponent, {
-      context: {
-        isAdmin: this.isAdmin,
-        existingCategories: this.categories,
-      },
+    this.dialogService
+      .open(ForumFormComponent, {
+        context: {
+          isAdmin: this.isAdmin,
+          existingCategories: this.categories,
+        },
+      })
+      .onClose.pipe(takeUntil(this.destroy$))
+      .subscribe((forum?: IForum) => this.openCreatedForum(forum));
+  }
+
+  /**
+   * Land on the forum that was just created so the user can post in it immediately.
+   * Resolves nothing when the dialog was dismissed, since onClose also fires then.
+   */
+  private openCreatedForum(forum?: IForum): void {
+    const categorySlug = forum?.channel_category?.slug;
+    if (!forum?.slug || !categorySlug) return;
+
+    // Same shape as the forum rows on this page: :category_slug/:topic_slug.
+    // Tagged like those rows so the new forum's back button returns here.
+    this.router.navigate([categorySlug, forum.slug], {
+      relativeTo: this.route,
+      state: { fromAllForums: true },
     });
   }
 

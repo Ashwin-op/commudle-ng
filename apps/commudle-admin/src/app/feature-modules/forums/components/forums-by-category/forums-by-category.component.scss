@@ -153,20 +153,26 @@
   }
 
   .fbcat-empty {
-    @apply com-flex com-flex-col com-items-center com-justify-center com-gap-2;
-    @apply com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-white;
-    @apply com-py-16;
+    @apply com-flex com-flex-col com-items-center com-justify-center com-text-center;
+    @apply com-rounded-lg com-bg-white;
+    @apply com-px-6 com-py-12;
+    @apply sm:com-px-10 sm:com-py-16;
+
+    .fbcat-empty-art {
+      @apply com-flex com-items-center com-justify-center com-flex-shrink-0;
+      @apply com-w-16 com-h-16 com-mb-5 com-rounded-full com-bg-Alice-Blue;
+    }
 
     .fbcat-empty-icon {
-      @apply com-text-4xl com-text-Bright-Gray;
+      @apply com-text-3xl com-text-primary-500;
     }
 
     .fbcat-empty-title {
-      @apply com-text-sm com-font-semibold com-text-Yankees-Blue com-m-0;
+      @apply com-m-0 com-mb-2 com-text-Page-Subheading com-font-semibold com-text-Yankees-Blue;
     }
 
     .fbcat-empty-sub {
-      @apply com-text-xs com-text-Cadet-Grey com-m-0;
+      @apply com-m-0 com-mb-6 com-max-w-md com-text-Paragraph-2 com-leading-relaxed com-text-Auro-Metal-Saurus;
     }
   }
 }

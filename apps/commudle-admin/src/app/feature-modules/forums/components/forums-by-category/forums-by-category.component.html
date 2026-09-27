@@ -45,20 +45,34 @@
         <ng-container *ngIf="forums$ | async as forums">
           <!-- Empty -->
           <div class="fbcat-empty" *ngIf="forums.length === 0">
-            <nb-icon icon="message-square-outline" class="fbcat-empty-icon"></nb-icon>
-            <p class="fbcat-empty-title">{{ searchQuery ? 'No forums match your search' : 'No forums yet' }}</p>
+            <div class="fbcat-empty-art" aria-hidden="true">
+              <nb-icon
+                [icon]="searchQuery ? 'search-outline' : 'message-square-outline'"
+                class="fbcat-empty-icon"
+              ></nb-icon>
+            </div>
+
+            <h2 class="fbcat-empty-title">
+              {{ searchQuery ? 'No forums match your search' : 'No forums in this category yet' }}
+            </h2>
             <p class="fbcat-empty-sub">
-              {{ searchQuery ? 'Try a different keyword' : 'Create the first forum in this category' }}
+              {{
+                searchQuery
+                  ? 'Try a different keyword, or clear the search to see everything.'
+                  : 'Nothing has been added to this category so far. Create the first forum and start the discussion.'
+              }}
             </p>
+
             <button
               nbButton
               status="primary"
               shape="semi-round"
-              size="small"
+              size="large"
               *ngIf="isAdmin && !searchQuery"
               (click)="openCreateDialog()"
             >
-              <nb-icon icon="plus-outline"></nb-icon> New Forum
+              <nb-icon icon="plus-outline"></nb-icon>
+              Create the first forum
             </button>
           </div>
 

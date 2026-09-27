@@ -2,7 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil } from 'rxjs/operators';
 import { IForum, IUser, IUserMessage } from '@commudle/shared-models';
 import { faArrowLeft, faComment, faEye, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { NbDialogService } from '@commudle/theme';
@@ -101,12 +101,36 @@ export class ForumDiscussionComponent implements OnInit, OnDestroy {
   }
 
   startNewDiscussion(): void {
-    this.dialogService.open(NewDiscussionFormComponent, {
-      context: {
-        discussionId: this.forum.discussion_id,
-        discussionParent: 'forums',
-      },
-    });
+    this.dialogService
+      .open(NewDiscussionFormComponent, {
+        context: {
+          discussionId: this.forum.discussion_id,
+          discussionParent: 'forums',
+        },
+      })
+      .onClose.pipe(takeUntil(this.destroy$))
+      .subscribe((result?: { subject?: string }) => {
+        if (result?.subject) {
+          this.openNewThread(result.subject);
+        }
+      });
+  }
+
+  /**
+   * Threads are created over the websocket, so the slug needed to route to the new
+   * thread only exists once the broadcast comes back. Wait for the matching one,
+   * then open it. Gives up silently if it never arrives.
+   */
+  private openNewThread(subject: string): void {
+    this.forumsStore.discussionAdded$
+      .pipe(
+        filter((message) => !!message?.slug && message.subject === subject),
+        take(1),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((message) => {
+        this.router.navigate([message.slug], { relativeTo: this.route });
+      });
   }
 
   loadMoreDiscussions(): void {
@@ -114,7 +138,22 @@ export class ForumDiscussionComponent implements OnInit, OnDestroy {
   }
 
   backToCategory(): void {
-    this.router.navigate(['../'], { relativeTo: this.route });
+    // Always navigate to an explicit ancestor rather than using history. The thread
+    // page's own back button pushes a new entry instead of popping one, so stepping
+    // through history here bounced between this page and the thread forever.
+    //
+    // '../..' is the all-forums list, '..' is this forum's category.
+    const target = this.cameFromAllForums() ? ['../..'] : ['..'];
+    this.router.navigate(target, { relativeTo: this.route });
+  }
+
+  /**
+   * The all-forums list tags its links with router state, so arriving from there
+   * returns there instead of dropping the user on a category they never visited.
+   */
+  private cameFromAllForums(): boolean {
+    if (!this.isBrowser) return false;
+    return !!window.history.state?.fromAllForums;
   }
 
   // ── Avatars ───────────────────────────────────────────────────────────────

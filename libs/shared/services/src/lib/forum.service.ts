@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EDbModels, IChannelCategory, IForum, IPaginationCount } from '@commudle/shared-models';
+import { EDbModels, EForumSort, IChannelCategory, IForum, IPaginationCount } from '@commudle/shared-models';
 import { Observable } from 'rxjs';
 import { API_ROUTES } from './api-routes.constant';
 import { BaseApiService } from './base-api.service';
@@ -12,6 +12,7 @@ export interface IForumQuery {
   categorySlug?: string;
   page?: number;
   count?: number;
+  sort?: EForumSort;
 }
 
 @Injectable({
@@ -30,6 +31,7 @@ export class ForumService {
 
     if (query.q?.trim()) params = params.set('q', query.q.trim());
     if (query.categorySlug) params = params.set('category_slug', query.categorySlug);
+    if (query.sort) params = params.set('sort', query.sort);
 
     return this.http.get<IPaginationCount<IForum>>(this.baseApiService.getRoute(API_ROUTES.FORUMS.INDEX), { params });
   }

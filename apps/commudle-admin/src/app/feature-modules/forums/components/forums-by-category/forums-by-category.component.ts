@@ -121,13 +121,28 @@ export class ForumsByCategoryComponent implements OnInit, OnDestroy {
   // ── Create / Edit ─────────────────────────────────────────────────────────
 
   openCreateDialog(): void {
-    this.dialogService.open(ForumFormComponent, {
-      context: {
-        categoryName: this.forumCategory?.name,
-        isAdmin: this.isAdmin,
-        existingCategories: this.allCategories,
-      },
-    });
+    this.dialogService
+      .open(ForumFormComponent, {
+        context: {
+          categoryName: this.forumCategory?.name,
+          isAdmin: this.isAdmin,
+          existingCategories: this.allCategories,
+        },
+      })
+      .onClose.pipe(takeUntil(this.destroy$))
+      .subscribe((forum?: IForum) => this.openCreatedForum(forum));
+  }
+
+  /**
+   * Land on the forum that was just created. Routed from the forums root rather
+   * than relative to this page, because the form allows any category name and the
+   * new forum may not belong to the category currently being viewed.
+   */
+  private openCreatedForum(forum?: IForum): void {
+    const categorySlug = forum?.channel_category?.slug;
+    if (!forum?.slug || !categorySlug) return;
+
+    this.router.navigate(['../', categorySlug, forum.slug], { relativeTo: this.route });
   }
 
   editForum(forum: IForum): void {
