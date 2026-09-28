@@ -193,6 +193,14 @@ com-card {
   }
 }
 
+.loading-more-state {
+  @apply com-flex com-items-center com-justify-center com-gap-2 com-py-4;
+
+  span {
+    @apply com-text-gray-500;
+  }
+}
+
 .teams-table-wrapper {
   @apply com-overflow-x-auto com-w-full;
 }
