@@ -766,6 +766,37 @@ export const API_ROUTES = {
       TOP_PAGES: 'api/v2/dashboards/communities/top_pages', //GET
       TOP_CITIES: 'api/v2/dashboards/communities/top_cities', //GET
     },
+    EVENTS: {
+      EVENT_BRIEFING: 'api/v2/dashboards/events/event_briefing', //GET
+      NEEDS_ATTENTION: 'api/v2/dashboards/events/needs_attention', //GET
+      SNAPSHOT: 'api/v2/dashboards/events/snapshot', //GET
+      RECENT_ACTIVITY: 'api/v2/dashboards/events/recent_activity', //GET
+      LIVE_VISITORS: 'api/v2/dashboards/events/live_visitors', //GET
+      TOP_PAGES: 'api/v2/dashboards/events/top_pages', //GET
+      AUDIENCE_SNAPSHOT: 'api/v2/dashboards/events/audience_snapshot', //GET
+      POST_EVENT_SNAPSHOT: 'api/v2/dashboards/events/post_event_snapshot', //GET
+    },
+    HACKATHONS: {
+      STAGE_PROGRESS: 'api/v2/dashboards/hackathons/stage_progress', //GET
+      NEEDS_ATTENTION: 'api/v2/dashboards/hackathons/needs_attention', //GET
+      SNAPSHOT: 'api/v2/dashboards/hackathons/snapshot', //GET
+      RECENT_ACTIVITY: 'api/v2/dashboards/hackathons/recent_activity', //GET
+      PEOPLE_JUDGING: 'api/v2/dashboards/hackathons/people_judging', //GET
+      SETUP_PROGRESS: 'api/v2/dashboards/hackathons/setup_progress', //GET
+    },
+    COMMUNITY_GROUPS: {
+      PULSE: 'api/v2/dashboards/community_groups/pulse', //GET
+      NEEDS_ATTENTION: 'api/v2/dashboards/community_groups/needs_attention', //GET
+      UPCOMING_SCHEDULE: 'api/v2/dashboards/community_groups/upcoming_schedule', //GET
+      RECENT_ACTIVITY: 'api/v2/dashboards/community_groups/recent_activity', //GET
+      COMMUNITY_FOOTPRINT: 'api/v2/dashboards/community_groups/community_footprint', //GET
+      AUDIENCE_DEMOGRAPHICS: 'api/v2/dashboards/community_groups/audience_demographics', //GET
+      EMAIL_COMMUNICATION: 'api/v2/dashboards/community_groups/email_communication', //GET
+      LATEST_CHANNEL_ACTIVITY: 'api/v2/dashboards/community_groups/latest_channel_activity', //GET
+      LATEST_FORUM_ACTIVITY: 'api/v2/dashboards/community_groups/latest_forum_activity', //GET
+      COMMUNITIES: 'api/v2/dashboards/community_groups/communities', //GET
+      ENGAGEMENT_SNAPSHOT: 'api/v2/dashboards/community_groups/engagement_snapshot', //GET
+    },
   },
 
   TAGS: {
