@@ -4,6 +4,11 @@ h2 {
   @apply com-m-0;
 }
 
+com-card-header,
+com-card-footer {
+  @apply com-flex com-items-center com-justify-between;
+}
+
 a {
   width: max-content;
 }
