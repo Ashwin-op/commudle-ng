@@ -339,6 +339,10 @@ com-card {
         .submission-details {
           @apply com-flex com-flex-col com-gap-2 com-max-w-[400px];
 
+          .submissions-list {
+            @apply com-flex com-flex-col com-gap-2;
+          }
+
           .ppt-link,
           .project-link,
           .updates-list {
@@ -608,6 +612,14 @@ com-card {
 
         .no-submission {
           @apply com-text-gray-400;
+        }
+
+        .submission-round-item {
+          @apply com-flex com-flex-col com-gap-0.5 com-mb-1.5;
+
+          strong {
+            @apply com-text-gray-500 com-font-medium;
+          }
         }
       }
 
