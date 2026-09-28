@@ -24,6 +24,7 @@
           [tags]="[options[0]]"
           [inputSize]="'custom'"
           [removable]="month"
+          [Background]="'com-bg-tAnti-Flash'"
           [fontColor]="month ? 'com-text-Azure' : 'com-text-tYankees-Blue'"
           (click)="filterByTags(options[0])"
         ></app-tag>
@@ -33,6 +34,7 @@
           [tags]="[options[1]]"
           [inputSize]="'custom'"
           [removable]="year"
+          [Background]="'com-bg-tAnti-Flash'"
           [fontColor]="year ? 'com-text-Azure' : 'com-text-tYankees-Blue'"
           (click)="filterByTags(options[1])"
         ></app-tag>
@@ -42,6 +44,7 @@
           [tags]="[options[2]]"
           [inputSize]="'custom'"
           [removable]="allTime"
+          [Background]="'com-bg-tAnti-Flash'"
           [fontColor]="allTime ? 'com-text-Azure' : 'com-text-tYankees-Blue'"
           (click)="filterByTags(options[2])"
         ></app-tag>
