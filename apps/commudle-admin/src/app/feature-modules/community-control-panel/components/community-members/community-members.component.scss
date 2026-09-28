@@ -56,6 +56,14 @@
     .active-filter-tags {
       @apply com-flex com-flex-wrap com-gap-2 com-p-0 com-w-full com-items-center;
 
+      .filter-tag-list {
+        @apply com-flex com-flex-wrap com-gap-2 com-items-center;
+
+        .filter-tag {
+          @apply com-cursor-pointer com-border com-border-solid com-border-Azure com-rounded-full;
+        }
+      }
+
       .clear-filters-btn {
         @apply com-ml-2 com-text-xs com-font-medium com-text-gray-600 com-cursor-pointer;
       }
