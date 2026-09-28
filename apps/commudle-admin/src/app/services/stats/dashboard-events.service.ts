@@ -20,7 +20,7 @@ import {
   providedIn: 'root',
 })
 export class DashboardEventsService {
-  constructor(private http: HttpClient, private apiRoutesService: BaseApiService) {}
+  constructor(private http: HttpClient, private apiRoutesService: BaseApiService) { }
 
   eventHeader(eventId): Observable<IEventDashboardHeader> {
     const params = new HttpParams().set('event_id', eventId);

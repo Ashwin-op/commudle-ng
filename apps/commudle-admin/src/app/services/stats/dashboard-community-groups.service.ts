@@ -20,7 +20,7 @@ import {
   providedIn: 'root',
 })
 export class DashboardCommunityGroupsService {
-  constructor(private http: HttpClient, private apiRoutesService: BaseApiService) {}
+  constructor(private http: HttpClient, private apiRoutesService: BaseApiService) { }
 
   pulse(communityGroupId): Observable<ICommunityGroupDashboardPulse> {
     const params = new HttpParams().set('community_group_id', communityGroupId);
