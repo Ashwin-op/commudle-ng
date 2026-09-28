@@ -158,7 +158,7 @@
     }
 
     .tag-list {
-      @apply com-flex com-flex-wrap com-gap-2;
+      @apply com-mt-3 com-flex com-flex-wrap com-gap-2;
 
       .custom-tag {
         @apply com-border com-border-solid com-rounded-full com-border-Azure com-text-Azure;
