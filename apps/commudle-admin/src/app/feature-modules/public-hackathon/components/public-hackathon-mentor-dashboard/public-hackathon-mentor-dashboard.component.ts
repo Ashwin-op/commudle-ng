@@ -57,6 +57,7 @@ export class PublicHackathonMentorDashboardComponent implements OnInit, OnDestro
   protected ERoundMentorSlotStatus = ERoundMentorSlotStatus;
 
   private destroy$ = new Subject<void>();
+  private cancelTeamsFetch$ = new Subject<void>();
 
   protected readonly icons = {
     faPlus,
@@ -107,6 +108,7 @@ export class PublicHackathonMentorDashboardComponent implements OnInit, OnDestro
     this.roundMentorSlotBookingChannel.unsubscribe();
     this.destroy$.next();
     this.destroy$.complete();
+    this.cancelTeamsFetch$.complete();
   }
 
   fetchRounds() {
@@ -129,6 +131,7 @@ export class PublicHackathonMentorDashboardComponent implements OnInit, OnDestro
   fetchTeams() {
     this.hackathonTeamRoundScoreService
       .showDetails(this.hackathon.id, this.selectedRound.id, this.teamsPage, this.teamsCount)
+      .pipe(takeUntil(this.cancelTeamsFetch$), takeUntil(this.destroy$))
       .subscribe((data) => {
         this.teamDetails = [...this.teamDetails, ...data.values];
         this.teamsTotal = data.total;
@@ -146,7 +149,9 @@ export class PublicHackathonMentorDashboardComponent implements OnInit, OnDestro
   }
 
   onRoundChange(event: any): void {
+    this.cancelTeamsFetch$.next();
     this.isLoading = true;
+    this.isLoadingMore = false;
     this.teamDetails = [];
     this.teamsPage = 1;
     this.teamsTotal = 0;
