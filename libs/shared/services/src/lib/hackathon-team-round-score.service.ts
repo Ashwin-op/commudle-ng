@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IHackathonTeamRoundScore, IHackathonTeamWithScoreAndSubmissions } from '@commudle/shared-models';
+import {
+  IHackathonTeamRoundScore,
+  IHackathonTeamWithScoreAndSubmissions,
+  IPaginationCount,
+} from '@commudle/shared-models';
 import { BaseApiService } from './base-api.service';
 import { API_ROUTES } from './api-routes.constant';
 @Injectable({
@@ -88,9 +92,18 @@ export class HackathonTeamRoundScoreService {
     );
   }
 
-  showDetails(hackathonId: number | string, roundId: number): Observable<IHackathonTeamWithScoreAndSubmissions[]> {
-    const params = new HttpParams().set('hackathon_id', hackathonId).set('round_id', roundId);
-    return this.http.get<IHackathonTeamWithScoreAndSubmissions[]>(
+  showDetails(
+    hackathonId: number | string,
+    roundId: number,
+    page = 1,
+    count = 10,
+  ): Observable<IPaginationCount<IHackathonTeamWithScoreAndSubmissions>> {
+    const params = new HttpParams()
+      .set('hackathon_id', hackathonId)
+      .set('round_id', roundId)
+      .set('page', page)
+      .set('count', count);
+    return this.http.get<IPaginationCount<IHackathonTeamWithScoreAndSubmissions>>(
       this.apiRoutesService.getRoute(API_ROUTES.HACKATHON_TEAM_ROUND_SCORES.SHOW_DETAILS),
       { params },
     );
