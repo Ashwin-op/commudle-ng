@@ -572,6 +572,11 @@
         </tbody>
       </table>
     </div>
+
+    <div *ngIf="isLoadingMore" class="loading-more-state">
+      <app-loading-spinner></app-loading-spinner>
+      <span>Loading more teams&hellip;</span>
+    </div>
   </com-card-body>
 </com-card>
 

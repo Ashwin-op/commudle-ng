@@ -42,6 +42,10 @@ export class PublicHackathonMentorDashboardComponent implements OnInit, OnDestro
   selectedRoundId: number;
   teamDetails: IHackathonTeamWithScoreAndSubmissions[] = [];
   isLoading = true;
+  isLoadingMore = false;
+  teamsPage = 1;
+  teamsCount = 3;
+  teamsTotal = 0;
   moment = moment;
   currentMentor: IHackathonJudge;
   EHackathonTeamRoundScoreStatus = EHackathonTeamRoundScoreStatus;
@@ -123,14 +127,29 @@ export class PublicHackathonMentorDashboardComponent implements OnInit, OnDestro
   }
 
   fetchTeams() {
-    this.hackathonTeamRoundScoreService.showDetails(this.hackathon.id, this.selectedRound.id).subscribe((data) => {
-      this.teamDetails = data;
-      this.isLoading = false;
-    });
+    this.hackathonTeamRoundScoreService
+      .showDetails(this.hackathon.id, this.selectedRound.id, this.teamsPage, this.teamsCount)
+      .subscribe((data) => {
+        this.teamDetails = [...this.teamDetails, ...data.values];
+        this.teamsTotal = data.total;
+        this.teamsPage = data.page;
+        this.isLoading = false;
+
+        if (this.teamDetails.length < this.teamsTotal) {
+          this.isLoadingMore = true;
+          this.teamsPage += 1;
+          this.fetchTeams();
+        } else {
+          this.isLoadingMore = false;
+        }
+      });
   }
 
   onRoundChange(event: any): void {
     this.isLoading = true;
+    this.teamDetails = [];
+    this.teamsPage = 1;
+    this.teamsTotal = 0;
     this.selectedRoundId = Number(event.target.value);
     this.selectedRound = this.rounds.find((r) => r.id === this.selectedRoundId);
     this.loadMentorSlots();
