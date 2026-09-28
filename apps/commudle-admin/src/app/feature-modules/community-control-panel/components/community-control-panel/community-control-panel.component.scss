@@ -194,11 +194,15 @@ a {
     com-card-body {
       @apply com-p-0;
 
-      div {
-        @apply com-flex;
+      .menu {
+        @apply com-flex com-flex-nowrap com-overflow-x-auto com-scrollbar-hide;
+
+        > * {
+          @apply com-flex-shrink-0;
+        }
 
         .action-button {
-          @apply com-p-2 com-flex com-gap-2 com-items-center com-text-inherit com-no-underline com-w-max;
+          @apply com-p-2 com-flex com-flex-shrink-0 com-gap-2 com-items-center com-text-inherit com-no-underline com-w-max;
 
           &.active {
             @apply com-border-0 com-border-b-3 com-border-solid com-border-primary-500;
@@ -213,7 +217,7 @@ a {
           }
 
           .heading {
-            @apply com-text-base com-font-medium com-w-max;
+            @apply com-text-base com-font-medium com-w-max com-whitespace-nowrap;
           }
         }
       }
