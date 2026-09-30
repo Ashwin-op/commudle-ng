@@ -297,7 +297,15 @@
             <span class="snapshot-label">Members</span>
           </header>
           <p class="snapshot-value">
-            {{ communitySnapshot?.members?.total ? (communitySnapshot.members.total | number) : '—' }}
+            {{ communitySnapshot?.members?.total != null ? (communitySnapshot.members.total | number) : '—' }}
+            <span
+              *ngIf="communitySnapshot?.members?.delta_vs_last_week"
+              class="snapshot-delta"
+              [class.negative]="communitySnapshot.members.delta_vs_last_week < 0"
+            >
+              {{ communitySnapshot.members.delta_vs_last_week > 0 ? '+' : ''
+              }}{{ communitySnapshot.members.delta_vs_last_week | number }} this week
+            </span>
           </p>
         </li>
         <li class="snapshot-card">
