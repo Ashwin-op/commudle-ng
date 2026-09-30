@@ -242,10 +242,30 @@
             ></fa-icon>
           </span>
           <p class="activity-content">
-            <span class="activity-text" [title]="activity.title || activity.message || activity.text">
-              {{ activity.title || activity.message || activity.text }}
+            <span class="activity-text">
+              <ng-container [ngSwitch]="activity.type">
+                <ng-container *ngSwitchCase="'channel_message'"
+                  >{{ activity.user?.name || 'Someone' }} posted in #{{ activity.channel }}</ng-container
+                >
+                <ng-container *ngSwitchCase="'forum_message'"
+                  >{{ activity.user?.name || 'Someone' }} posted in {{ activity.forum }}</ng-container
+                >
+                <ng-container *ngSwitchCase="'survey_response_milestone'"
+                  >{{ activity.survey }} reached {{ activity.response_count }} response{{
+                    activity.response_count === 1 ? '' : 's'
+                  }}</ng-container
+                >
+                <ng-container *ngSwitchCase="'new_member'"
+                  >{{ activity.user?.name || 'A new member' }} joined the community</ng-container
+                >
+                <ng-container *ngSwitchDefault>New activity</ng-container>
+              </ng-container>
             </span>
-            <span *ngIf="activity.subtitle" class="activity-sub">{{ activity.subtitle }}</span>
+            <span
+              *ngIf="(activity.type === 'channel_message' || activity.type === 'forum_message') && activity.message"
+              class="activity-sub"
+              [innerHTML]="activity.message | stripHtmlExceptLinks"
+            ></span>
           </p>
           <p class="activity-time">{{ activity.created_at | date : 'short' }}</p>
         </li>

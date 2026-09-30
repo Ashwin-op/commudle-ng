@@ -88,11 +88,20 @@ export interface ICommunityDashboardScheduleItem {
 // recent_activity -> data.values (paginated)
 export type EDashboardActivityType = 'channel_message' | 'forum_message' | 'new_member' | 'survey_response_milestone';
 
+export interface IDashboardActivityUser {
+  id: number;
+  name: string;
+}
+
 export interface ICommunityDashboardActivityItem {
   type: EDashboardActivityType;
-  id: number;
   created_at: string;
-  [key: string]: any;
+  user?: IDashboardActivityUser;
+  channel?: string;
+  forum?: string;
+  message?: string;
+  survey?: string;
+  response_count?: number;
 }
 
 // live_visitors
