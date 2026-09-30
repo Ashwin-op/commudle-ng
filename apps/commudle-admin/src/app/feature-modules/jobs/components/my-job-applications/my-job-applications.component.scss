@@ -1,7 +1,7 @@
 .job-applications-card {
-  @apply com-flex com-mt-4;
+  @apply com-flex com-m-4;
   com-card-header {
-    @apply com-flex;
+    @apply com-flex com-items-center com-justify-between;
     h2 {
       @apply com-text-lg com-font-medium;
     }
