@@ -14,13 +14,19 @@ export interface IDashboardHackathonBrief {
 
 // organizer_briefing
 export interface ICommunityDashboardOrganizerBriefing {
-  events_tomorrow: IDashboardEventBrief[];
-  hackathons_tomorrow: IDashboardHackathonBrief[];
+  events_tomorrow: {
+    count: number;
+    items: IDashboardEventBrief[];
+  };
+  hackathons_tomorrow: {
+    count: number;
+    items: IDashboardHackathonBrief[];
+  };
   community_visits: {
     this_week: number;
     last_30_days: number;
   };
-  newsletter_scheduled_tomorrow: boolean;
+  newsletter_scheduled_tomorrow: boolean | null;
   new_members: {
     this_week: number;
     this_month: number;

@@ -26,7 +26,7 @@
         </p>
       </li>
       <li
-        *ngIf="organizerBriefing?.events_tomorrow?.length > 0 || organizerBriefing?.hackathons_tomorrow?.length > 0"
+        *ngIf="organizerBriefing?.events_tomorrow?.count > 0 || organizerBriefing?.hackathons_tomorrow?.count > 0"
         class="highlight-card"
       >
         <span class="highlight-icon events-icon">
@@ -34,21 +34,19 @@
         </span>
         <p class="highlight-info">
           <span class="highlight-primary">
-            <ng-container *ngIf="organizerBriefing?.events_tomorrow?.length > 0">
-              {{ organizerBriefing.events_tomorrow.length }} event{{
-                organizerBriefing.events_tomorrow.length === 1 ? '' : 's'
+            <ng-container *ngIf="organizerBriefing?.events_tomorrow?.count > 0">
+              {{ organizerBriefing.events_tomorrow.count }} event{{
+                organizerBriefing.events_tomorrow.count === 1 ? '' : 's'
               }}
             </ng-container>
             <ng-container
-              *ngIf="
-                organizerBriefing?.events_tomorrow?.length > 0 && organizerBriefing?.hackathons_tomorrow?.length > 0
-              "
+              *ngIf="organizerBriefing?.events_tomorrow?.count > 0 && organizerBriefing?.hackathons_tomorrow?.count > 0"
             >
               and
             </ng-container>
-            <ng-container *ngIf="organizerBriefing?.hackathons_tomorrow?.length > 0">
-              {{ organizerBriefing.hackathons_tomorrow.length }} hackathon{{
-                organizerBriefing.hackathons_tomorrow.length === 1 ? '' : 's'
+            <ng-container *ngIf="organizerBriefing?.hackathons_tomorrow?.count > 0">
+              {{ organizerBriefing.hackathons_tomorrow.count }} hackathon{{
+                organizerBriefing.hackathons_tomorrow.count === 1 ? '' : 's'
               }}
             </ng-container>
             start tomorrow

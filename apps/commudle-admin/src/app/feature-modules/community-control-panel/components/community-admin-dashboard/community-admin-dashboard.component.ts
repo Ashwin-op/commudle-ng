@@ -164,7 +164,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.dashboardCommunitiesService.upcomingSchedule(this.community.slug).subscribe({
         next: (data) => {
-          this.upcomingSchedule = data?.values || [];
+          this.upcomingSchedule = Array.isArray(data?.values) ? data.values : [];
           this.upcomingScheduleLoading = false;
         },
         error: () => {
@@ -192,8 +192,8 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         .recentActivity(this.community.slug, this.recentActivityPage, this.recentActivityCount)
         .subscribe({
           next: (data) => {
-            this.recentActivity =
-              this.recentActivityPage === 1 ? data?.values || [] : [...this.recentActivity, ...(data?.values || [])];
+            const values = Array.isArray(data?.values) ? data.values : [];
+            this.recentActivity = this.recentActivityPage === 1 ? values : [...this.recentActivity, ...values];
             this.recentActivityTotal = data?.total || 0;
             this.recentActivityLoading = false;
           },
