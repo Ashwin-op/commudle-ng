@@ -157,6 +157,14 @@
       }
     }
 
+    .tag-list {
+      @apply com-mt-3 com-flex com-flex-wrap com-gap-2;
+
+      .custom-tag {
+        @apply com-border com-border-solid com-rounded-full com-border-Azure com-text-Azure;
+      }
+    }
+
     com-card.stat-card.event-members {
       com-card-header {
         h3 {

@@ -67,8 +67,16 @@
       .section-second {
         .tag-section {
           @apply com-mt-12 com-mb-4;
+
           p {
             @apply com-text-xl;
+          }
+
+          .tag-list {
+            @apply com-flex com-flex-wrap com-gap-2;
+            .custom-tag {
+              @apply com-border com-border-solid com-rounded-full com-border-Azure com-text-Azure;
+            }
           }
         }
       }

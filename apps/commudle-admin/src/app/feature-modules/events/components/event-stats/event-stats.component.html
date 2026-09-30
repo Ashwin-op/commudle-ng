@@ -94,16 +94,14 @@
             <canvas id="speaker"></canvas>
           </div>
         </div>
-        <div *ngIf="members" class="com-mt-3">
-          <nb-tag-list>
-            <nb-tag
-              status="info"
-              appearance="outline"
-              *ngFor="let tag of members.top_skill_tags"
-              text="{{ tag[0] }} ({{ tag[1] }})"
-              [removable]="false"
-            ></nb-tag>
-          </nb-tag-list>
+        <div *ngIf="members" class="tag-list">
+          <app-tag
+            [inputSize]="custom"
+            class="custom-tag"
+            *ngFor="let tag of members.top_skill_tags"
+            [tags]="[tag[0] + ' (' + tag[1] + ')']"
+            backgroundColor="com-bg-Azure-opacity-10"
+          ></app-tag>
         </div>
       </com-card-body>
       <com-card-footer>

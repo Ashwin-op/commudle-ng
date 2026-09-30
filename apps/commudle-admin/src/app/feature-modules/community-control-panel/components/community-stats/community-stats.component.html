@@ -54,15 +54,16 @@
 
               <div *ngIf="tagsDistribution" class="tag-section">
                 <p>Popular Skills ({{ tagsDistribution.tags_distribution.total }})</p>
-                <nb-tag-list>
-                  <nb-tag
-                    status="info"
-                    appearance="outline"
+
+                <div class="tag-list">
+                  <app-tag
                     *ngFor="let tag of tagsDistribution.tags_distribution.top"
-                    text="{{ tag[0] }} ({{ tag[1] }})"
-                    [removable]="false"
-                  ></nb-tag>
-                </nb-tag-list>
+                    [tags]="[tag[0] + ' (' + tag[1] + ')']"
+                    class="custom-tag"
+                    [inputSize]="custom"
+                    backgroundColor="com-bg-Azure-opacity-10"
+                  ></app-tag>
+                </div>
               </div>
             </div>
           </section>
@@ -73,10 +74,12 @@
         <com-card-header>
           <h3>Events</h3>
         </com-card-header>
+
         <com-card-body>
           <section class="first-section !com-justify-start">
             <div *ngIf="eventAttendees" class="table">
               <p>Event Attendees</p>
+
               <table>
                 <tr>
                   <td>Total Attendees</td>
@@ -93,6 +96,7 @@
               </table>
             </div>
           </section>
+
           <section class="section-second">
             <div class="wide chart-container">
               <p>Events Over Time</p>
@@ -106,6 +110,7 @@
         <com-card-header>
           <h3>Speakers</h3>
         </com-card-header>
+
         <com-card-body>
           <section class="first-section">
             <div class="count" *ngIf="speakers">
@@ -130,6 +135,7 @@
         <com-card-header>
           <h3>Work Experience Insights</h3>
         </com-card-header>
+
         <com-card-body>
           <div class="first-section">
             <div *ngIf="membersWorkExperience" class="count">
@@ -158,31 +164,36 @@
               </table>
             </div>
           </div>
+
           <div *ngIf="membersWorkExperience" class="section-second">
             <div class="tag-section">
               <p>Popular Job Titles ({{ membersWorkExperience.job_title_distribution.total }})</p>
-              <nb-tag-list>
-                <nb-tag
-                  status="info"
-                  appearance="outline"
+
+              <div class="tag-list">
+                <app-tag
                   *ngFor="let tag of membersWorkExperience.job_title_distribution.top"
-                  text="{{ tag[0] }} ({{ tag[1] }})"
+                  [tags]="[tag[0] + ' (' + tag[1] + ')']"
                   [removable]="false"
-                ></nb-tag>
-              </nb-tag-list>
+                  class="custom-tag"
+                  shape="rounded-2xl"
+                  backgroundColor="com-bg-Azure-opacity-10"
+                ></app-tag>
+              </div>
             </div>
 
             <div class="tag-section">
               <p>Popular Work companies ({{ membersWorkExperience.work_company_distribution.total }})</p>
-              <nb-tag-list>
-                <nb-tag
-                  status="info"
-                  appearance="outline"
+
+              <div class="tag-list">
+                <app-tag
                   *ngFor="let tag of membersWorkExperience.work_company_distribution.top"
-                  text="{{ tag[0] }} ({{ tag[1] }})"
+                  [tags]="[tag[0] + ' (' + tag[1] + ')']"
                   [removable]="false"
-                ></nb-tag>
-              </nb-tag-list>
+                  class="custom-tag"
+                  shape="rounded-2xl"
+                  backgroundColor="com-bg-Azure-opacity-10"
+                ></app-tag>
+              </div>
             </div>
           </div>
         </com-card-body>
