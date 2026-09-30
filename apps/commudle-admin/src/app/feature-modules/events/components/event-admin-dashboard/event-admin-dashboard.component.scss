@@ -308,7 +308,15 @@
       .snapshot-stat-value {
         @apply com-text-2xl com-font-medium com-text-Yankees-Blue;
       }
+
+      .snapshot-stat-sub {
+        @apply com-text-xs com-text-Cadet-Grey com-text-center;
+      }
     }
+  }
+
+  .snapshot-empty {
+    @apply com-py-4 com-text-center com-text-sm com-text-gray-500 com-m-0;
   }
 
   // Recent Activity
