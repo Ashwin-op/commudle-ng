@@ -6,7 +6,7 @@ p {
 .user-details-container {
   @apply com-m-0 com-rounded-none md:com-rounded-t-[10px] md:com-rounded-b-none com-overflow-hidden;
 
-  nb-card-body {
+  com-card-body {
     @apply com-p-0;
 
     .profile-header {
@@ -175,21 +175,15 @@ p {
       }
 
       .tags {
-        @apply com-mt-4 com-flex com-gap-1.5 com-overflow-x-auto com-flex-nowrap com-scrollbar-hide;
-        @apply md:com-flex-wrap md:com-overflow-x-visible;
+        @apply com-mt-4 com-flex com-gap-1.5 com-overflow-x-auto com-flex-nowrap com-scrollbar-hide md:com-flex-wrap md:com-overflow-x-visible;
 
-        ::ng-deep {
-          .nb-tag-list-tags-wrapper {
-            @apply com-flex-nowrap md:com-flex-wrap com-overflow-x-visible com-m-0;
-          }
-        }
-
-        .user-tags {
-          @apply com-text-xs com-font-medium com-border-none com-text-Azure com-bg-blue-50 com-rounded-full com-flex-shrink-0;
+        .user-tags,
+        .add-tag {
+          @apply com-flex-shrink-0;
         }
 
         .add-tag {
-          @apply com-text-xs com-font-medium com-border-none com-text-white com-bg-Azure com-cursor-pointer com-rounded-full com-flex-shrink-0;
+          @apply com-cursor-pointer;
         }
       }
     }
@@ -240,11 +234,11 @@ p {
 .qr-dialog-card {
   @apply com-m-0;
 
-  nb-card-header {
+  com-card-header {
     @apply com-flex com-justify-between com-items-center com-p-4;
   }
 
-  nb-card-body {
+  com-card-body {
     @apply com-p-0;
   }
 }

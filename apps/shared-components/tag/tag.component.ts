@@ -27,7 +27,7 @@ export class TagComponent implements OnInit, OnDestroy {
   @Input() showTagsOnLoad = false;
   @Input() shape: 'rounded' | 'semi-round' | 'rectangle' = 'rectangle';
   @Input() label = 'Type something and press enter or comma to keep adding';
-  @Input() inputSize: 'small' | 'medium' = 'medium';
+  @Input() inputSize: 'small' | 'medium' | 'custom' = 'medium';
 
   @Output() tagAdd: EventEmitter<string> = new EventEmitter<string>();
   @Output() tagDelete: EventEmitter<string> = new EventEmitter<string>();
