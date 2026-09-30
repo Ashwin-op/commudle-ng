@@ -110,13 +110,19 @@
         </a>
         <a
           *ngFor="let request of needsAttention?.collaboration_requests"
-          [routerLink]="['collaborations']"
+          [routerLink]="[request.type === 'hackathon' ? 'hackathons' : 'events']"
           class="attention-item"
         >
           <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
           <p class="attention-content">
-            <span class="attention-title">Collaboration request pending</span>
-            <span class="attention-sub">Review and respond</span>
+            <span class="attention-title">
+              {{ request.direction === 'incoming' ? 'Collaboration request from' : 'Collaboration request to' }}
+              {{ request.requester }}
+            </span>
+            <span class="attention-sub">
+              {{ request.type | capitalizeAndRemoveUnderscore }} ·
+              {{ request.direction === 'incoming' ? 'Review and respond' : 'Awaiting response' }}
+            </span>
           </p>
           <span class="attention-arrow">›</span>
         </a>

@@ -34,10 +34,26 @@ export interface ICommunityDashboardOrganizerBriefing {
 }
 
 // needs_attention
+export interface IDashboardCollaborationRequest {
+  id: number;
+  type: string;
+  requester: string;
+  direction: 'incoming' | 'outgoing';
+  status: string;
+  created_at: string;
+}
+
+export interface IDashboardNewsletterBrief {
+  id: number;
+  title: string;
+  status: string;
+  scheduled_for: string | null;
+}
+
 export interface ICommunityDashboardNeedsAttention {
-  collaboration_requests: any[];
+  collaboration_requests: IDashboardCollaborationRequest[];
   surveys: any[];
-  newsletters: any[];
+  newsletters: IDashboardNewsletterBrief[];
   profile: {
     is_complete: boolean;
     missing_fields: string[];
