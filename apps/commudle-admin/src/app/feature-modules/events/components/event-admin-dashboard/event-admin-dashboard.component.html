@@ -62,8 +62,8 @@
             <fa-icon [icon]="icons.faUsers"></fa-icon>
           </div>
           <div class="highlight-stat-info">
-            <span class="highlight-stat-value">{{ event.registrations_count || 0 }}</span>
-            <span class="highlight-stat-label">Registrations today</span>
+            <span class="highlight-stat-value">{{ eventBriefing?.registrations_count || 0 }}</span>
+            <span class="highlight-stat-label">Registrations</span>
           </div>
           <div class="highlight-stat-visual">
             <svg class="sparkline" viewBox="0 0 60 24" fill="none">
@@ -73,11 +73,11 @@
         </div>
         <div class="highlight-stat">
           <div class="highlight-stat-icon progress-icon">
-            <fa-icon [icon]="icons.faArrowTrendUp"></fa-icon>
+            <fa-icon [icon]="icons.faCircleCheck"></fa-icon>
           </div>
           <div class="highlight-stat-info">
-            <span class="highlight-stat-value">82%</span>
-            <span class="highlight-stat-label">Registration progress</span>
+            <span class="highlight-stat-value">{{ eventBriefing?.confirmed_count || 0 }}</span>
+            <span class="highlight-stat-label">Confirmed ({{ confirmedPercent }}%)</span>
           </div>
           <div class="highlight-stat-visual">
             <svg class="progress-ring" viewBox="0 0 36 36">
@@ -88,7 +88,7 @@
                 cy="18"
                 r="15"
                 stroke-dasharray="94.2"
-                stroke-dashoffset="17"
+                [attr.stroke-dashoffset]="confirmedRingOffset"
               />
             </svg>
           </div>
@@ -98,17 +98,17 @@
             <fa-icon [icon]="icons.faEnvelope"></fa-icon>
           </div>
           <div class="highlight-stat-info">
-            <span class="highlight-stat-value">{{ event.custom_emails_count || 0 }}</span>
-            <span class="highlight-stat-label">Reminder email sent</span>
+            <span class="highlight-stat-value">{{ eventBriefing?.emails_sent_count || 0 }}</span>
+            <span class="highlight-stat-label">Emails sent</span>
           </div>
         </div>
         <div class="highlight-stat">
-          <div class="highlight-stat-icon health-icon">
-            <span class="health-emoji">😊</span>
+          <div class="highlight-stat-icon passes-icon">
+            <fa-icon [icon]="icons.faTicket"></fa-icon>
           </div>
           <div class="highlight-stat-info">
-            <span class="highlight-stat-value">Good</span>
-            <span class="highlight-stat-label">Event health</span>
+            <span class="highlight-stat-value">{{ eventBriefing?.entry_passes_sent_count || 0 }}</span>
+            <span class="highlight-stat-label">Entry passes sent</span>
           </div>
         </div>
       </div>
@@ -151,22 +151,22 @@
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faUsers" class="snapshot-stat-icon registrations-icon"></fa-icon>
           <span class="snapshot-stat-label">Registrations</span>
-          <span class="snapshot-stat-value">{{ event.registrations_count || 0 }}</span>
+          <span class="snapshot-stat-value">{{ eventSnapshot?.registrations?.total || 0 }}</span>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faMicrophone" class="snapshot-stat-icon speakers-icon"></fa-icon>
           <span class="snapshot-stat-label">Speakers</span>
-          <span class="snapshot-stat-value">{{ event.speakers_count || 0 }}</span>
+          <span class="snapshot-stat-value">{{ eventSnapshot?.speakers_count || 0 }}</span>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faHandshakeSimple" class="snapshot-stat-icon sponsors-icon"></fa-icon>
           <span class="snapshot-stat-label">Sponsors</span>
-          <span class="snapshot-stat-value">{{ event.sponsors_count || 0 }}</span>
+          <span class="snapshot-stat-value">{{ eventSnapshot?.sponsors_count || 0 }}</span>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faUserGroup" class="snapshot-stat-icon team-icon"></fa-icon>
           <span class="snapshot-stat-label">Team</span>
-          <span class="snapshot-stat-value">{{ event.volunteers_count || 0 }}</span>
+          <span class="snapshot-stat-value">{{ eventSnapshot?.team_members_count || 0 }}</span>
         </div>
       </div>
     </div>
@@ -177,74 +177,32 @@
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faBolt" class="com-text-yellow-500"></fa-icon> Recent Activity
         </h3>
-        <a class="view-all-link">View All →</a>
+        <a *ngIf="hasMoreActivity" class="view-all-link" (click)="loadMoreActivity()">View All →</a>
       </div>
       <ul class="activity-list">
-        <li class="activity-item">
-          <span class="activity-avatar members-avatar">
-            <fa-icon [icon]="icons.faUsers"></fa-icon>
+        <li *ngFor="let item of recentActivity" class="activity-item">
+          <span class="activity-avatar" [ngClass]="activityAvatarClass(item.type)">
+            <fa-icon [icon]="activityIcon(item.type)"></fa-icon>
           </span>
           <p class="activity-content com-m-0">
-            <span class="activity-text" title="Prerna registered for the event">
-              <span class="activity-name-avatar">P</span><strong>Prerna</strong> registered
+            <span class="activity-text" [title]="activityActorName(item) + ' ' + activityLabel(item.type)">
+              <ng-container *ngIf="activityActorName(item)">
+                <span class="activity-name-avatar">{{ activityInitial(item) }}</span
+                ><strong>{{ activityActorName(item) }}</strong>
+                {{ activityLabel(item.type) }}
+              </ng-container>
+              <ng-container *ngIf="!activityActorName(item)">{{ activityLabel(item.type) }}</ng-container>
             </span>
           </p>
-          <time class="activity-time">5m ago</time>
+          <time class="activity-time">{{ activityTime(item) }}</time>
         </li>
-        <li class="activity-item">
-          <span class="activity-avatar speaker-avatar">
-            <fa-icon [icon]="icons.faMicrophone"></fa-icon>
-          </span>
+        <li *ngIf="!isActivityLoading && recentActivity.length === 0" class="activity-item">
           <p class="activity-content com-m-0">
-            <span class="activity-text" title="Rahul accepted RSVP to be speaker">
-              <span class="activity-name-avatar">R</span><strong>Rahul</strong> accepted RSVP to be speaker
-            </span>
+            <span class="activity-text">No recent activity yet</span>
           </p>
-          <time class="activity-time">15m ago</time>
-        </li>
-        <li class="activity-item">
-          <span class="activity-avatar submission-avatar">
-            <fa-icon [icon]="icons.faEnvelope"></fa-icon>
-          </span>
-          <p class="activity-content com-m-0">
-            <span class="activity-text" title="Aman submitted proposal">
-              <span class="activity-name-avatar">A</span><strong>Aman</strong> submitted proposal
-            </span>
-          </p>
-          <time class="activity-time">1h ago</time>
-        </li>
-        <li class="activity-item">
-          <span class="activity-avatar submission-avatar">
-            <fa-icon [icon]="icons.faEnvelope"></fa-icon>
-          </span>
-          <p class="activity-content com-m-0">
-            <span class="activity-text" title="Prerna submitted session slides">
-              <span class="activity-name-avatar">P</span><strong>Prerna</strong> submitted session slides
-            </span>
-          </p>
-          <time class="activity-time">2h ago</time>
-        </li>
-        <li class="activity-item">
-          <span class="activity-avatar heart-avatar">
-            <fa-icon [icon]="icons.faHeart"></fa-icon>
-          </span>
-          <p class="activity-content com-m-0">
-            <span class="activity-text" title="Prerna liked your update">
-              <span class="activity-name-avatar">P</span><strong>Prerna</strong> liked your update
-            </span>
-          </p>
-          <time class="activity-time">3h ago</time>
-        </li>
-        <li class="activity-item">
-          <span class="activity-avatar email-avatar">
-            <fa-icon [icon]="icons.faEnvelope"></fa-icon>
-          </span>
-          <p class="activity-content com-m-0">
-            <span class="activity-text" title="Reminder email delivered">Reminder email delivered</span>
-          </p>
-          <time class="activity-time">5h ago</time>
         </li>
       </ul>
+      <app-loading-spinner *ngIf="isActivityLoading"></app-loading-spinner>
     </div>
   </section>
 
@@ -262,59 +220,44 @@
         <div class="audience-chart">
           <div class="chart-placeholder"></div>
           <ul class="chart-legend">
-            <li><span class="legend-dot com-bg-blue-500"></span> Students <span class="legend-pct">68%</span></li>
-            <li><span class="legend-dot com-bg-green-500"></span> Professionals <span class="legend-pct">24%</span></li>
-            <li><span class="legend-dot com-bg-orange-500"></span> Others <span class="legend-pct">8%</span></li>
+            <li *ngFor="let level of audienceSnapshot?.experience_levels; let i = index">
+              <span
+                class="legend-dot"
+                [ngClass]="{
+                  'com-bg-blue-500': i % 3 === 0,
+                  'com-bg-green-500': i % 3 === 1,
+                  'com-bg-orange-500': i % 3 === 2
+                }"
+              ></span>
+              {{ level.name }} <span class="legend-pct">{{ level.percentage }}%</span>
+            </li>
+            <li *ngIf="!isAudienceLoading && !audienceSnapshot?.experience_levels?.length">No data yet</li>
           </ul>
         </div>
         <div class="audience-stats">
           <div class="audience-col">
             <h6 class="audience-col-heading">Top Designations</h6>
             <ul class="audience-list">
-              <li>
-                <span class="audience-name">SDE</span><span class="audience-bar com-bg-blue-500 bar-42"></span
-                ><span class="audience-pct">42%</span>
+              <li *ngFor="let item of audienceSnapshot?.designations">
+                <span class="audience-name">{{ item.name }}</span
+                ><span class="audience-bar com-bg-blue-500" [style.width.%]="item.percentage"></span
+                ><span class="audience-pct">{{ item.percentage }}%</span>
               </li>
-              <li>
-                <span class="audience-name">Student</span><span class="audience-bar com-bg-blue-400 bar-34"></span
-                ><span class="audience-pct">34%</span>
-              </li>
-              <li>
-                <span class="audience-name">Product Manager</span
-                ><span class="audience-bar com-bg-blue-300 bar-12"></span><span class="audience-pct">12%</span>
-              </li>
-              <li>
-                <span class="audience-name">Designer</span><span class="audience-bar com-bg-blue-200 bar-8"></span
-                ><span class="audience-pct">8%</span>
-              </li>
-              <li>
-                <span class="audience-name">Others</span><span class="audience-bar com-bg-gray-300 bar-4"></span
-                ><span class="audience-pct">4%</span>
+              <li *ngIf="!isAudienceLoading && !audienceSnapshot?.designations?.length">
+                <span class="audience-name">No data yet</span>
               </li>
             </ul>
           </div>
           <div class="audience-col">
             <h6 class="audience-col-heading">Top Companies / Colleges</h6>
             <ul class="audience-list">
-              <li>
-                <span class="audience-name">Commudle</span><span class="audience-bar com-bg-indigo-500 bar-18"></span
-                ><span class="audience-pct">18%</span>
+              <li *ngFor="let item of audienceSnapshot?.companies">
+                <span class="audience-name">{{ item.name }}</span
+                ><span class="audience-bar com-bg-indigo-500" [style.width.%]="item.percentage"></span
+                ><span class="audience-pct">{{ item.percentage }}%</span>
               </li>
-              <li>
-                <span class="audience-name">Google</span><span class="audience-bar com-bg-red-400 bar-14"></span
-                ><span class="audience-pct">14%</span>
-              </li>
-              <li>
-                <span class="audience-name">Microsoft</span><span class="audience-bar com-bg-green-400 bar-10"></span
-                ><span class="audience-pct">10%</span>
-              </li>
-              <li>
-                <span class="audience-name">Adobe</span><span class="audience-bar com-bg-red-300 bar-8"></span
-                ><span class="audience-pct">8%</span>
-              </li>
-              <li>
-                <span class="audience-name">Others</span><span class="audience-bar com-bg-green-600 bar-50"></span
-                ><span class="audience-pct">50%</span>
+              <li *ngIf="!isAudienceLoading && !audienceSnapshot?.companies?.length">
+                <span class="audience-name">No data yet</span>
               </li>
             </ul>
           </div>
@@ -328,7 +271,7 @@
         <h3 class="section-heading-post">
           <fa-icon [icon]="icons.faChartPie" class="com-text-green-500"></fa-icon> Post-Event Dashboard
         </h3>
-        <span class="post-event-date">Completed on 20 Jul, 2026</span>
+        <span class="post-event-date" *ngIf="formattedEndDate">Completed on {{ formattedEndDate }}</span>
       </header>
       <div class="post-event-content">
         <div class="post-event-hero">
@@ -338,24 +281,40 @@
         </div>
         <div class="post-event-stats">
           <div class="post-stat">
-            <span class="post-stat-value">472</span>
+            <span class="post-stat-value">{{ eventSnapshot?.registrations?.total || 0 }}</span>
             <span class="post-stat-label">Registered</span>
           </div>
           <div class="post-stat">
-            <span class="post-stat-value">388</span>
-            <span class="post-stat-label">Attended</span>
+            <span class="post-stat-value">{{ postEventSnapshot?.speakers_count || 0 }}</span>
+            <span class="post-stat-label">Speakers</span>
           </div>
-          <div class="post-stat">
-            <span class="post-stat-value">82%</span>
-            <span class="post-stat-label">Attendance Rate</span>
+        </div>
+        <div class="audience-stats">
+          <div class="audience-col">
+            <h6 class="audience-col-heading">Experience Level (attended)</h6>
+            <ul class="audience-list">
+              <li *ngFor="let item of postEventSnapshot?.experience_distribution">
+                <span class="audience-name">{{ item.name }}</span
+                ><span class="audience-bar com-bg-green-500" [style.width.%]="item.percentage"></span
+                ><span class="audience-pct">{{ item.percentage }}%</span>
+              </li>
+              <li *ngIf="!isPostEventLoading && !postEventSnapshot?.experience_distribution?.length">
+                <span class="audience-name">No data yet</span>
+              </li>
+            </ul>
           </div>
-          <div class="post-stat">
-            <span class="post-stat-value">4.8 ⭐</span>
-            <span class="post-stat-label">Rating</span>
-          </div>
-          <div class="post-stat">
-            <span class="post-stat-value">95</span>
-            <span class="post-stat-label">Feedback Responses</span>
+          <div class="audience-col">
+            <h6 class="audience-col-heading">Domain (attended)</h6>
+            <ul class="audience-list">
+              <li *ngFor="let item of postEventSnapshot?.domain_distribution">
+                <span class="audience-name">{{ item.name }}</span
+                ><span class="audience-bar com-bg-indigo-500" [style.width.%]="item.percentage"></span
+                ><span class="audience-pct">{{ item.percentage }}%</span>
+              </li>
+              <li *ngIf="!isPostEventLoading && !postEventSnapshot?.domain_distribution?.length">
+                <span class="audience-name">No data yet</span>
+              </li>
+            </ul>
           </div>
         </div>
       </div>

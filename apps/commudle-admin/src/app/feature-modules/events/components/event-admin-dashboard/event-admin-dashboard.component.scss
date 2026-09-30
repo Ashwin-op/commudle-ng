@@ -155,6 +155,10 @@
             @apply com-bg-purple-100 com-text-purple-600;
           }
 
+          &.passes-icon {
+            @apply com-bg-orange-100 com-text-orange-600;
+          }
+
           &.health-icon {
             @apply com-bg-green-50 com-flex com-items-center com-justify-center;
 
@@ -481,6 +485,7 @@
 
 .post-event-card {
   @apply com-m-0 md:com-mb-0 com-mb-4;
+
   .post-event-date {
     @apply com-text-xs com-text-Cadet-Grey;
   }
