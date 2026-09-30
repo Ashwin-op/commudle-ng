@@ -135,8 +135,8 @@
 </div>
 
 <ng-template #removeUserDialog let-data let-ref="dialogRef">
-  <com-card class="com-max-h-[90dvh]">
-    <com-card-header class="com-flex com-items-center com-justify-between">
+  <com-card class="remove-dialog">
+    <com-card-header class="remove-dialog-header">
       <span class="com-flex com-items-center com-gap-2">
         <nb-icon icon="alert-triangle" status="warning"></nb-icon>
         Confirmation
@@ -145,7 +145,7 @@
         <nb-icon icon="close"></nb-icon>
       </button>
     </com-card-header>
-    <com-card-body class="com-max-w-[350px]">
+    <com-card-body class="remove-dialog-body">
       <p>
         Are you sure you want to <strong>remove</strong>&nbsp;<em>{{ data.userRolesUser?.user?.name }}</em> from the
         community?
@@ -163,7 +163,7 @@
       </div> -->
       <p><strong>Note:</strong>&nbsp;This action cannot be undone.</p>
     </com-card-body>
-    <com-card-footer class="com-flex com-items-center com-justify-between">
+    <com-card-footer class="remove-dialog-footer">
       <button (click)="ref.close()" ghost nbButton status="danger">No</button>
       <button (click)="remove(data.userRolesUser, data.arrayType, data.index); ref.close()" nbButton status="success">
         Yes
