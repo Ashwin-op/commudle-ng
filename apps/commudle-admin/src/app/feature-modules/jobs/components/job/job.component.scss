@@ -71,3 +71,7 @@ a {
     }
   }
 }
+
+.tag-list {
+  @apply com-flex com-gap-2 com-my-2;
+}

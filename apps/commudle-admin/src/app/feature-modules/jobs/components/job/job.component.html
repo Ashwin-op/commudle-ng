@@ -124,9 +124,14 @@
                 </p>
               </div>
             </div>
-            <nb-tag-list *ngIf="job">
-              <nb-tag *ngFor="let tag of job.tags" [text]="tag.name" status="basic"></nb-tag>
-            </nb-tag-list>
+            <div class="tag-list">
+              <app-tag
+                *ngIf="job && job.tags?.length > 0"
+                [tags]="getTagNames()"
+                [backgroundColor]="'com-bg-tAnti-Flash'"
+                [fontColor]="'com-text-tYankees-Blue'"
+              ></app-tag>
+            </div>
             <p class="job-description">{{ job.description }}</p>
           </div>
           <ng-template #loading>
