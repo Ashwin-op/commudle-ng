@@ -9,6 +9,7 @@ import {
   IEventDashboardNeedsAttention,
   IEventDashboardPostEventSnapshot,
   IEventDashboardSnapshot,
+  EEventType,
 } from '@commudle/shared-models';
 import { SeoService } from '@commudle/shared-services';
 import { DashboardEventsService } from 'apps/commudle-admin/src/app/services/stats/dashboard-events.service';
@@ -46,6 +47,8 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   event: IEvent;
   community: ICommunity;
   subscriptions: Subscription[] = [];
+  moment = moment;
+  EEventType = EEventType;
 
   icons = {
     faCalendarDay,
@@ -153,27 +156,6 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
       return 'Today';
     }
     return `Starts in ${days} day${days > 1 ? 's' : ''}`;
-  }
-
-  get formattedDate(): string {
-    if (!this.event?.start_time) {
-      return '';
-    }
-    return moment(this.event.start_time).format('D MMM, YYYY');
-  }
-
-  get formattedTime(): string {
-    if (!this.event?.start_time) {
-      return '';
-    }
-    return moment(this.event.start_time).format('h:mm A z');
-  }
-
-  get formattedEndDate(): string {
-    if (!this.event?.end_time) {
-      return '';
-    }
-    return moment(this.event.end_time).format('D MMM, YYYY');
   }
 
   getEventBriefing(): void {

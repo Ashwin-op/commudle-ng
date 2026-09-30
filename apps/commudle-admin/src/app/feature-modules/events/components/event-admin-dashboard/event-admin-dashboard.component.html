@@ -1,13 +1,12 @@
 <div class="event-overview" *ngIf="event">
   <!-- Row 1: Event Hero -->
   <section class="event-hero">
-    <div class="hero-banner" [ngClass]="{ 'no-image': !event.header_image_path }">
-      <img *ngIf="event.header_image_path" [src]="event.header_image_path" [alt]="event.name" />
-      <img
-        *ngIf="!event.header_image_path"
-        src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=300&fit=crop"
-        alt="Event placeholder"
-      />
+    <div class="hero-banner">
+      <commudle-banner-image
+        [headerImagePath]="event.header_image_path"
+        [name]="event.name"
+        aspectRatio="11/10"
+      ></commudle-banner-image>
     </div>
     <div class="hero-content">
       <div class="hero-top-row">
@@ -21,18 +20,22 @@
           <div class="hero-meta">
             <span class="hero-status-badge" [ngClass]="{ 'status-live': isEventLive }">
               <span class="status-dot"></span>
-              {{ event.event_status?.name || 'Draft' }}
+              {{ event.event_status?.name | capitalizeAndRemoveUnderscore }}
             </span>
             <span class="hero-meta-item" *ngIf="daysUntilEvent">{{ daysUntilEvent }}</span>
-            <span class="hero-meta-dot" *ngIf="formattedDate">·</span>
-            <span class="hero-meta-item" *ngIf="formattedDate">{{ formattedDate }}</span>
-            <span class="hero-meta-dot" *ngIf="formattedTime">·</span>
-            <span class="hero-meta-item" *ngIf="formattedTime">{{ formattedTime }}</span>
+            <span class="hero-meta-dot" *ngIf="event.start_time">·</span>
+            <span class="hero-meta-item" *ngIf="event.start_time">{{
+              moment(event.start_time).format('D MMM, YYYY')
+            }}</span>
+            <span class="hero-meta-dot" *ngIf="event.start_time">·</span>
+            <span class="hero-meta-item" *ngIf="event.start_time">{{
+              moment(event.start_time).format('h:mm A z')
+            }}</span>
           </div>
           <div class="hero-location">
             <span class="hero-location-item" *ngIf="event.event_type">
               <nb-icon icon="pin-outline"></nb-icon>
-              {{ event.event_type === 'Online' ? 'Online Event' : event.location || 'Location TBD' }}
+              {{ event.event_type === EEventType.ONLINE ? 'Online Event' : event.location }}
             </span>
             <span class="hero-divider" *ngIf="event.event_type">|</span>
             <a
@@ -65,7 +68,7 @@
             <span class="highlight-stat-value">{{ eventBriefing?.registrations_count || 0 }}</span>
             <span class="highlight-stat-label">Registrations</span>
           </div>
-          <div class="highlight-stat-visual">
+          <div class="highlight-stat-visual" *ngIf="eventBriefing?.registrations_count">
             <svg class="sparkline" viewBox="0 0 60 24" fill="none">
               <polyline points="0,20 10,16 20,18 30,10 40,12 50,6 60,8" stroke="#22c55e" stroke-width="2" fill="none" />
             </svg>
@@ -271,7 +274,15 @@
         <h3 class="section-heading-post">
           <fa-icon [icon]="icons.faChartPie" class="com-text-green-500"></fa-icon> Post-Event Dashboard
         </h3>
-        <span class="post-event-date" *ngIf="formattedEndDate">Completed on {{ formattedEndDate }}</span>
+        <span class="post-event-date" *ngIf="event.end_time"
+          >Completed on
+          {{
+            moment(event.end_time).format(
+              'D MMM,
+          YYYY'
+            )
+          }}</span
+        >
       </header>
       <div class="post-event-content">
         <div class="post-event-hero">
