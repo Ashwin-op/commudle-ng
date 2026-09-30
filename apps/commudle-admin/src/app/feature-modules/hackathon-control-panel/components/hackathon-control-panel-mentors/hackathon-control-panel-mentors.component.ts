@@ -298,6 +298,20 @@ export class HackathonControlPanelMentorsComponent implements OnInit, OnDestroy 
     this.pendingRemoval = null;
     this.cdr.markForCheck();
   }
+  getAssignedTeamNames(): string[] {
+    return (
+      this.teamAssignmentData[this.selectedMentorId]?.[this.selectedRoundId]?.assignedTeams?.map((t) => t.name) || []
+    );
+  }
+
+  onTeamTagDelete(teamName: string): void {
+    const team = this.teamAssignmentData[this.selectedMentorId]?.[this.selectedRoundId]?.assignedTeams?.find(
+      (t) => t.name === teamName,
+    );
+    if (team) {
+      this.requestRemoveTeam(this.selectedMentorId, team.id, this.selectedRoundId, team.name);
+    }
+  }
 
   removeTeamFromMentor(mentorId: number, teamId: number, roundId: number): void {
     this.isRemoving = true;

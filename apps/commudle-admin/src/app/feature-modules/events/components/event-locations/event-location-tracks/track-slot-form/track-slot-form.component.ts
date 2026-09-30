@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
-import { NbDialogRef, NbTagComponent, NbTagInputAddEvent } from '@commudle/theme';
+import { NbDialogRef } from '@commudle/theme';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { TrackSlotsService } from 'apps/commudle-admin/src/app/services/track_slots.service';
 import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
@@ -12,10 +12,10 @@ import { ICommunity, IEvent } from '@commudle/shared-models';
 import { DataFormEntityResponseGroupsService } from 'apps/commudle-admin/src/app/services/data-form-entity-response-groups.service';
 
 @Component({
-    selector: 'commudle-track-slot-form',
-    templateUrl: './track-slot-form.component.html',
-    styleUrls: ['./track-slot-form.component.scss'],
-    standalone: false
+  selector: 'commudle-track-slot-form',
+  templateUrl: './track-slot-form.component.html',
+  styleUrls: ['./track-slot-form.component.scss'],
+  standalone: false,
 })
 export class TrackSlotFormComponent implements OnInit {
   @Input() operationType: 'create' | 'edit';
@@ -188,7 +188,7 @@ export class TrackSlotFormComponent implements OnInit {
 
   sortTrackSlots(track_slots) {
     const sortedTrackSlots = _.sortBy(track_slots, (slot) => {
-      // @ts-ignore
+      // @ts-expect-error moment constructor typing rejects this legacy call
       return new moment(slot.start_time);
     });
     return sortedTrackSlots;
@@ -226,17 +226,14 @@ export class TrackSlotFormComponent implements OnInit {
     });
   }
 
-  onTagAdd({ value, input }: NbTagInputAddEvent): void {
-    if (value) {
-      if (!this.tags.includes(value)) {
-        this.tags.push(value);
-      }
+  onTagAdd(value: string): void {
+    if (value && !this.tags.includes(value)) {
+      this.tags.push(value);
     }
-    input.nativeElement.value = '';
   }
 
-  onTagRemove(tagToRemove: NbTagComponent): void {
-    this.tags = this.tags.filter((tag) => tag !== tagToRemove.text);
+  onTagRemove(value: string): void {
+    this.tags = this.tags.filter((tag) => tag !== value);
   }
 
   speakerSelected(event, index) {

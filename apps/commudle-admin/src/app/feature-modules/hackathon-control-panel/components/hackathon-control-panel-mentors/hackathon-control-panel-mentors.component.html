@@ -295,14 +295,15 @@
       </div>
 
       <div class="team-tags">
-        <nb-tag
-          *ngFor="let team of teamAssignmentData[selectedMentorId]?.[selectedRoundId]?.assignedTeams"
-          status="success"
+        <app-tag
+          *ngIf="teamAssignmentData[selectedMentorId]?.[selectedRoundId]?.count"
+          [tags]="getAssignedTeamNames()"
           [removable]="true"
-          (remove)="requestRemoveTeam(selectedMentorId, team.id, selectedRoundId, team.name)"
-          [text]="team.name"
-        >
-        </nb-tag>
+          [minTagLimit]="false"
+          [backgroundColor]="'com-bg-green-100'"
+          [fontColor]="'com-text-green-700'"
+          (tagDelete)="onTeamTagDelete($event)"
+        ></app-tag>
         <span *ngIf="!teamAssignmentData[selectedMentorId]?.[selectedRoundId]?.count" class="no-teams">
           No teams assigned yet
         </span>
