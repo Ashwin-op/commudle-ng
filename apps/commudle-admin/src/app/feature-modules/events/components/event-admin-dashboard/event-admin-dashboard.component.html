@@ -129,7 +129,7 @@
         <a [routerLink]="['details']" class="view-all-link">View All →</a>
       </div>
       <div class="attention-list">
-        <a *ngFor="let item of needsAttention | slice : 0 : 4" [routerLink]="item.route" class="attention-item">
+        <a *ngFor="let item of needsAttention" [routerLink]="item.route" class="attention-item">
           <fa-icon
             [icon]="item.done ? icons.faCircleCheck : icons.faCircleXmark"
             [ngClass]="item.done ? 'attention-icon-check' : 'attention-icon-cross'"

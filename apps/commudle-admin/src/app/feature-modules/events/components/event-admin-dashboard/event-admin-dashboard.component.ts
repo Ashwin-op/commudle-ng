@@ -237,55 +237,64 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     this.needsAttention = [
       {
         title: 'Agenda',
-        sub: data?.agenda?.status ? `Status: ${data.agenda.status}` : 'Add sessions and schedule',
+        sub: this.isStatusReady(data?.agenda?.status) ? 'Agenda is set up' : 'Agenda needs to be created',
         route: ['agenda'],
         done: this.isStatusReady(data?.agenda?.status),
       },
       {
         title: 'Registration form',
         sub: !registrationForm?.created
-          ? 'Create and publish form'
+          ? 'Registration form needs to be created'
           : registrationForm?.opened
-          ? 'Created and open'
-          : 'Created, not opened yet',
+          ? 'Registrations are open'
+          : 'Registrations are not open yet',
         route: ['registrations'],
         done: !!registrationForm?.created && !!registrationForm?.opened,
       },
       {
         title: 'Speakers',
-        sub: data?.speakers?.count ? `${data.speakers.count} added` : 'Add your speakers',
+        sub:
+          (data?.speakers?.count || 0) > 0
+            ? `${data.speakers.count} speakers added`
+            : 'Speakers have not been added yet',
         route: ['agenda'],
         done: (data?.speakers?.count || 0) > 0,
       },
       {
         title: 'RSVP emails',
-        sub: rsvp ? `${rsvp.sent_count || 0} of ${rsvp.eligible_count || 0} sent` : 'Send reminder email',
+        sub:
+          rsvp && (rsvp.eligible_count || 0) > 0
+            ? `RSVP sent (${rsvp.sent_count || 0} out of ${rsvp.eligible_count})`
+            : 'RSVP has not been sent',
         route: ['updates'],
         done: !!rsvp && (rsvp.eligible_count || 0) > 0 && (rsvp.not_sent_count || 0) === 0,
       },
       {
         title: 'Entry passes',
-        sub: entryPass
-          ? `${entryPass.sent_count || 0} of ${entryPass.eligible_count || 0} sent`
-          : 'Generate and send passes',
+        sub:
+          entryPass && (entryPass.eligible_count || 0) > 0
+            ? `Entry passes sent (${entryPass.sent_count || 0} out of ${entryPass.eligible_count})`
+            : 'Entry passes have not been sent',
         route: ['updates'],
         done: !!entryPass && (entryPass.eligible_count || 0) > 0 && (entryPass.not_sent_count || 0) === 0,
       },
       {
         title: 'Speaker form',
-        sub: data?.speaker_form?.created ? 'Created' : 'Create a speaker form',
+        sub: data?.speaker_form?.created ? 'Speaker form is created' : 'Speaker form needs to be created',
         route: ['agenda'],
         done: !!data?.speaker_form?.created,
       },
       {
         title: 'Streaming',
-        sub: data?.streaming?.status ? `Status: ${data.streaming.status}` : 'Set up streaming',
+        sub: this.isStatusReady(data?.streaming?.status)
+          ? 'Online streaming is set up'
+          : 'Online streaming needs to be set up',
         route: ['edit'],
         done: this.isStatusReady(data?.streaming?.status),
       },
       {
         title: 'Attendance',
-        sub: data?.attendance?.started ? 'Check-in in progress' : 'Enable check-in & tracking',
+        sub: data?.attendance?.started ? 'Marking attendance in progress' : 'Start marking attendance',
         route: ['scan-entry-pass'],
         done: !!data?.attendance?.started,
       },
