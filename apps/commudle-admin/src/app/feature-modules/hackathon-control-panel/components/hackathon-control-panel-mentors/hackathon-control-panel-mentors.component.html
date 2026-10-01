@@ -296,13 +296,13 @@
 
       <div class="team-tags">
         <app-tag
-          *ngIf="teamAssignmentData[selectedMentorId]?.[selectedRoundId]?.count"
-          [tags]="getAssignedTeamNames()"
+          *ngFor="let team of teamAssignmentData[selectedMentorId]?.[selectedRoundId]?.assignedTeams"
+          [tags]="[team.name]"
           [removable]="true"
           [minTagLimit]="false"
           [backgroundColor]="'com-bg-green-100'"
           [fontColor]="'com-text-green-700'"
-          (tagDelete)="onTeamTagDelete($event)"
+          (tagDelete)="requestRemoveTeam(selectedMentorId, team.id, selectedRoundId, team.name)"
         ></app-tag>
         <span *ngIf="!teamAssignmentData[selectedMentorId]?.[selectedRoundId]?.count" class="no-teams">
           No teams assigned yet
