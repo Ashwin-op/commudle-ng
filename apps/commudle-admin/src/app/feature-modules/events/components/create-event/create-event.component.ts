@@ -12,6 +12,7 @@ import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
 import { SeoService } from 'apps/shared-services/seo.service';
 import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
+import { Observable, of } from 'rxjs';
 import { Visibility } from 'apps/shared-models/data_form_entity.model';
 
 @Component({
@@ -165,36 +166,48 @@ export class CreateEventComponent implements OnInit {
 
     this.eventsService.createEvent(formValue, this.community, this.tags).subscribe(
       (data) => {
-        if (this.uploadedHeaderImageFile) {
-          this.uploadHeaderImage(data.id);
-        }
         if (this.setupRegistration) {
           this.createDefaultRegistrationForm(data.id);
         }
-        if (publish) {
-          this.eventsService.updateStatus(data.id, 'open').subscribe(
-            () => {
-              this.isPublishing = false;
-              this.toastLogService.successDialog('Event published!');
-              this.router.navigate(['/admin/communities', this.community.slug, 'event-dashboard', data.slug]);
-            },
-            () => {
-              this.isPublishing = false;
-              this.toastLogService.successDialog('Created as draft, but could not publish.');
-              this.router.navigate(['/admin/communities', this.community.slug, 'event-dashboard', data.slug]);
-            },
-          );
-        } else {
-          this.isFormSubmitting = false;
-          this.toastLogService.successDialog('Created and Saved as draft!');
-          this.router.navigate(['/admin/communities', this.community.slug, 'event-dashboard', data.slug]);
-        }
+
+        // Wait for the header image upload to finish before navigating, otherwise the
+        // dashboard resolver re-fetches the event before the banner is persisted and
+        // shows no banner until a manual refresh.
+        const headerImage$: Observable<any> = this.uploadedHeaderImageFile
+          ? this.uploadHeaderImage(data.id)
+          : of(null);
+
+        headerImage$.subscribe({
+          next: () => this.finishEventCreation(data, publish),
+          error: () => this.finishEventCreation(data, publish),
+        });
       },
       (error) => {
         this.isFormSubmitting = false;
         this.isPublishing = false;
       },
     );
+  }
+
+  private finishEventCreation(data: IEvent, publish: boolean) {
+    if (publish) {
+      this.eventsService.updateStatus(data.id, 'open').subscribe(
+        () => {
+          this.isPublishing = false;
+          this.toastLogService.successDialog('Event published!');
+          this.router.navigate(['/admin/communities', this.community.slug, 'event-dashboard', data.slug]);
+        },
+        () => {
+          this.isPublishing = false;
+          this.toastLogService.successDialog('Created as draft, but could not publish.');
+          this.router.navigate(['/admin/communities', this.community.slug, 'event-dashboard', data.slug]);
+        },
+      );
+    } else {
+      this.isFormSubmitting = false;
+      this.toastLogService.successDialog('Created and Saved as draft!');
+      this.router.navigate(['/admin/communities', this.community.slug, 'event-dashboard', data.slug]);
+    }
   }
 
   setStartDateTime() {
@@ -266,10 +279,10 @@ export class CreateEventComponent implements OnInit {
     this.uploadedHeaderImage = null;
   }
 
-  private uploadHeaderImage(eventId: number) {
+  private uploadHeaderImage(eventId: number): Observable<IEvent> {
     const formData = new FormData();
     formData.append('header_image', this.uploadedHeaderImageFile);
-    this.eventsService.updateHeaderImage(eventId, formData).subscribe();
+    return this.eventsService.updateHeaderImage(eventId, formData);
   }
 
   private createDefaultRegistrationForm(eventId: number) {

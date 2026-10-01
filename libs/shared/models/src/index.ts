@@ -1,4 +1,5 @@
 export * from './lib/attached-file.model';
+export * from './lib/http-context-tokens.model';
 export * from './lib/badge.model';
 export * from './lib/community.model';
 export * from './lib/community-auth-token.model';
@@ -71,3 +72,9 @@ export * from './lib/round-mentor-slot.model';
 export * from './lib/round-mentor-slot-booking.model';
 export * from './lib/hms-hls.model';
 export * from './lib/hms-room-mode.enum';
+export * from './lib/certificate-batch.model';
+export * from './lib/certificate-design.model';
+export * from './lib/certificate-variable.model';
+export * from './lib/certificate-recipient.model';
+export * from './lib/certificate-csv.model';
+export * from './lib/certificate-progress.model';

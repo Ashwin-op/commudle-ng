@@ -1,0 +1,94 @@
+<div [attr.id]="config.fragmentId || null" class="showcase-section">
+  <div class="base-layout container section-container">
+    <div class="showcase-grid">
+      <div class="showcase-copy">
+        <h2 class="showcase-heading" [ngClass]="{ 'section-heading-anchor': config.fragmentId }">
+          {{ config.heading }}
+          <a
+            *ngIf="config.fragmentId"
+            [routerLink]="'.'"
+            [fragment]="config.fragmentId"
+            class="anchor-link"
+            [attr.aria-label]="'Link to ' + config.heading + ' section'"
+          >
+            <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+          </a>
+        </h2>
+        <p *ngIf="config.subtext" class="showcase-subtext">
+          {{ config.subtext }}
+        </p>
+
+        <div *ngIf="config.logos?.length" class="showcase-logos">
+          <p *ngIf="config.logosLabel" class="showcase-logos__label">
+            {{ config.logosLabel }}
+          </p>
+          <div class="showcase-logos__row">
+            <a
+              *ngFor="let logo of config.logos"
+              class="showcase-logo"
+              [class.showcase-logo--placeholder]="!logo.url"
+              [class.showcase-logo--dark]="logo.url && logo.dark"
+              [class.showcase-logo--linked]="logo.routerLink"
+              [routerLink]="logo.routerLink || null"
+              [queryParams]="logo.queryParams || null"
+              [attr.aria-label]="logo.routerLink ? 'View ' + (logo.name || 'this brand') + '’s Vibeathon gallery' : null"
+            >
+              <img *ngIf="logo.url" [src]="logo.url" [alt]="logo.name || 'Brand logo'" loading="lazy" />
+              <fa-icon *ngIf="!logo.url" [icon]="faImage" aria-hidden="true"></fa-icon>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase-detail">
+        <div *ngIf="config.stats?.length" class="stats">
+          <div *ngFor="let stat of config.stats" class="stat">
+            <span class="stat__value">{{ stat.value }}</span>
+            <span class="stat__label">{{ stat.label }}</span>
+          </div>
+        </div>
+
+        <ng-container *ngIf="config.chips?.length">
+          <p *ngIf="config.chipsLabel" class="chips-label">
+            {{ config.chipsLabel }}
+          </p>
+          <div class="chips">
+            <a
+              *ngFor="let chip of config.chips"
+              class="chip"
+              [routerLink]="chip.routerLink"
+              [queryParams]="chip.queryParams || null"
+            >
+              {{ chip.label }}
+            </a>
+          </div>
+        </ng-container>
+
+        <div class="ctas">
+          <a
+            *ngIf="config.primaryCta.routerLink; else primaryButton"
+            [routerLink]="config.primaryCta.routerLink"
+            [queryParams]="config.primaryCta.queryParams || null"
+          >
+            <button nbButton status="primary" size="medium" shape="semi-round">{{ config.primaryCta.label }}</button>
+          </a>
+          <ng-template #primaryButton>
+            <button nbButton status="primary" size="medium" shape="semi-round" type="button" (click)="onPrimaryClick()">
+              {{ config.primaryCta.label }}
+            </button>
+          </ng-template>
+
+          <a
+            *ngIf="config.secondaryCta"
+            [routerLink]="config.secondaryCta.routerLink"
+            [queryParams]="config.secondaryCta.queryParams || null"
+          >
+            <button nbButton status="basic" outline size="medium" shape="semi-round">
+              {{ config.secondaryCta.label }}
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

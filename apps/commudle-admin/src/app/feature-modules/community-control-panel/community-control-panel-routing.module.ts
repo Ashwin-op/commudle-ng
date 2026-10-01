@@ -156,6 +156,13 @@ const routes = [
         loadChildren: () =>
           import('apps/commudle-admin/src/app/feature-modules/forums/forums.module').then((m) => m.ForumsModule),
       },
+      {
+        path: 'certificates',
+        loadChildren: () =>
+          import('apps/commudle-admin/src/app/feature-modules/certificates/certificates.module').then(
+            (m) => m.CertificatesModule,
+          ),
+      },
       // {
       //   path: 'forums',
       //   component: CommunityChannelsAndForumsComponent,

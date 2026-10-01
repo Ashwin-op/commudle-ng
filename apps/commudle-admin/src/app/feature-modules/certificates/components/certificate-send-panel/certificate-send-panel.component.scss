@@ -1,0 +1,71 @@
+.certificate-send-panel {
+  .revoked-notice {
+    @apply com-p-3 com-mb-4 com-bg-red-50 com-rounded-lg com-text-red-500;
+  }
+
+  .hint-text {
+    @apply com-text-Auro-Metal-Saurus com-mb-3;
+  }
+
+  // Shared by the standalone Issue Certificates section and the Send
+  // subsection nested inside .pre-send below - Issue Certificates lives
+  // outside .pre-send now (it's not gated to DRAFT/READY the way Send is),
+  // so this can't stay scoped under .pre-send like it used to be.
+  .send-subsection {
+    @apply com-flex com-flex-col com-gap-4 com-items-start com-w-full com-pb-6 com-mb-6 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+
+    &:last-child {
+      @apply com-pb-0 com-mb-0 com-border-b-0;
+    }
+
+    .subsection-title {
+      @apply com-text-base com-font-semibold com-text-Yankees-Blue com-m-0;
+    }
+
+    .subsection-description {
+      @apply com-text-sm com-text-Auro-Metal-Saurus com-m-0 com--mt-2;
+    }
+  }
+
+  .pre-send {
+    @apply com-flex com-flex-col com-gap-6 com-items-start com-w-full;
+
+    .email-field-container {
+      @apply com-w-full com-max-w-[28rem];
+
+      .email-field-label {
+        @apply com-block com-text-sm com-font-medium com-text-Yankees-Blue com-mb-1;
+      }
+
+      .email-field {
+        @apply com-w-full;
+      }
+    }
+  }
+
+  .progress-view {
+    .view-content-button {
+      @apply com-mb-4;
+    }
+
+    .delivery-funnel {
+      @apply com-block com-mb-4;
+    }
+
+    .row-list {
+      @apply com-mb-4;
+
+      h4 {
+        @apply com-mb-1;
+      }
+
+      .row-item {
+        @apply com-text-sm com-text-Auro-Metal-Saurus;
+      }
+    }
+
+    .actions {
+      @apply com-flex com-gap-2 com-mt-4;
+    }
+  }
+}

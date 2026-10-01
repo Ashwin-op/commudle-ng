@@ -7,7 +7,7 @@ import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.
 import { FooterService } from 'apps/commudle-admin/src/app/services/footer.service';
 import { environment } from 'apps/commudle-admin/src/environments/environment';
 import { IUser } from 'apps/shared-models/user.model';
-import { EHttpContextFlag } from 'apps/shared-models/enums/http-context-tokens';
+import { EHttpContextFlag } from '@commudle/shared-models';
 import { CmsService } from 'apps/shared-services/cms.service';
 import { SeoService } from 'apps/shared-services/seo.service';
 import { Subscription } from 'rxjs';

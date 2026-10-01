@@ -1,0 +1,132 @@
+<div class="certificate-send-panel">
+  <div *ngIf="isRevoked" class="revoked-notice">
+    This batch is revoked - every certificate in it 404s on its public page.
+  </div>
+
+  <div *ngIf="!batch.design" class="hint-text">Choose a design above before issuing or sending.</div>
+
+  <!-- Issuing is independent of send status - it never touches
+  batch.status, so unlike the Send subsection below it stays visible in
+  every status, not just DRAFT/READY. Re-running it after some recipients
+  are already issued (e.g. new recipients added after a first issue, or a
+  changed design) re-prompts via issueCertificates() -> the reissue-scope
+  dialog for "everyone" vs "only unissued". Disabled (not hidden) while
+  SENDING, so a reissue can't regenerate a certificate mid-send that
+  recipients may already have been emailed. -->
+  <div class="send-subsection issue-subsection">
+    <h4 class="subsection-title">Issue Certificates</h4>
+    <p class="subsection-description">
+      Generate a real, verifiable certificate for every recipient in this batch, independent of emailing them - useful
+      if you want certificates to exist and be viewable before (or without) sending any email. Safe to run again later -
+      if some recipients are already issued (e.g. new recipients were added, or the design changed), you'll be asked
+      whether to issue only the remaining ones or reissue everyone.
+    </p>
+    <button
+      comButton
+      status="info"
+      size="medium"
+      [disabled]="!batch.design || isIssuing || isRevoked || batch.status === ECertificateBatchStatus.SENDING"
+      nbTooltip="Wait until the current send finishes before reissuing"
+      [nbTooltipDisabled]="batch.status !== ECertificateBatchStatus.SENDING"
+      (click)="issueCertificates()"
+    >
+      {{ isIssuing ? 'Issuing...' : 'Issue Certificates' }}
+    </button>
+  </div>
+
+  <div
+    *ngIf="batch.status === ECertificateBatchStatus.DRAFT || batch.status === ECertificateBatchStatus.READY"
+    class="pre-send"
+  >
+    <div class="send-subsection">
+      <h4 class="subsection-title">Send</h4>
+      <p class="subsection-description">Email each recipient their certificate.</p>
+
+      <div class="email-field-container">
+        <label class="email-field-label">Email Subject</label>
+        <input
+          class="email-field"
+          nbInput
+          fullWidth
+          fieldSize="small"
+          [(ngModel)]="emailSubject"
+          (ngModelChange)="batch.email_subject = $event"
+          placeholder="e.g. Your certificate is ready"
+        />
+      </div>
+
+      <div class="email-field-container">
+        <label class="email-field-label">Email Body</label>
+        <textarea
+          class="email-field"
+          nbInput
+          fullWidth
+          rows="4"
+          [(ngModel)]="emailBody"
+          (ngModelChange)="batch.email_body = $event"
+          placeholder="The message recipients see in the email"
+        ></textarea>
+      </div>
+
+      <nb-checkbox [(ngModel)]="consentChecked"> I have consent to email these recipients </nb-checkbox>
+
+      <button comButton status="primary" size="medium" [disabled]="!canSend" (click)="send()">
+        {{ isSending ? 'Starting...' : 'Send Certificates' }}
+      </button>
+    </div>
+  </div>
+
+  <div
+    *ngIf="batch.status === ECertificateBatchStatus.SENDING || batch.status === ECertificateBatchStatus.SENT"
+    class="progress-view"
+  >
+    <div *ngIf="batch.status === ECertificateBatchStatus.SENDING" class="hint-text">
+      Sending in progress - this refreshes automatically.
+    </div>
+
+    <button ghost comButton size="small" class="view-content-button" (click)="viewSentContent()">
+      View email content sent
+    </button>
+
+    <app-loading-spinner *ngIf="isLoadingProgress && !progress"></app-loading-spinner>
+
+    <commudle-certificate-delivery-funnel
+      *ngIf="progress"
+      title="Delivery Funnel"
+      [total]="progress.totals.recipients"
+      [headlineSegments]="headlineSegments"
+      [metrics]="metricSegments"
+      [legend]="legendSegments"
+      class="delivery-funnel"
+    ></commudle-certificate-delivery-funnel>
+
+    <div class="row-list" *ngIf="progress && progress.blocked.length > 0">
+      <h4>Blocked</h4>
+      <div class="row-item" *ngFor="let row of progress.blocked">{{ row.email }} - {{ row.reason }}</div>
+    </div>
+
+    <div class="row-list" *ngIf="progress && progress.skipped.length > 0">
+      <h4>Skipped</h4>
+      <div class="row-item" *ngFor="let row of progress.skipped">{{ row.email }} - {{ row.reason }}</div>
+    </div>
+
+    <div class="actions" *ngIf="batch.status === ECertificateBatchStatus.SENT">
+      <button comButton status="basic" size="small" [disabled]="isSending" (click)="resend()">
+        {{ isSending ? 'Starting...' : 'Resend Batch' }}
+      </button>
+      <button
+        comButton
+        status="basic"
+        size="small"
+        ghost
+        [disabled]="isResendingUnsentOnly"
+        (click)="resendUnsentOnly()"
+      >
+        {{ isResendingUnsentOnly ? 'Starting...' : 'Resend to Unsent Only' }}
+      </button>
+      <button comButton status="danger" size="small" ghost (click)="toggleRevoke()">
+        {{ isRevoked ? 'Un-revoke Batch' : 'Revoke Batch' }}
+      </button>
+    </div>
+  </div>
+</div>

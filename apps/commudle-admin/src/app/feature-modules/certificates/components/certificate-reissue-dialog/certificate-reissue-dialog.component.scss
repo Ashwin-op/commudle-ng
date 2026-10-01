@@ -1,0 +1,27 @@
+.certificate-reissue-dialog {
+  @apply com-w-[28rem] com-max-w-[90vw];
+}
+
+.dialog-header {
+  @apply com-flex com-justify-between com-items-center;
+}
+
+.dialog-hint {
+  @apply com-text-sm com-text-Auro-Metal-Saurus com-mb-4;
+}
+
+.reissue-option {
+  @apply com-block com-w-full com-text-left com-p-3 com-mb-2 com-rounded-lg com-border com-border-Bright-Gray com-bg-white com-cursor-pointer;
+
+  &:hover {
+    @apply com-border-Ultramarine-Blue com-bg-blue-50;
+  }
+
+  .option-title {
+    @apply com-block com-font-semibold com-text-Yankees-Blue;
+  }
+
+  .option-description {
+    @apply com-block com-text-xs com-text-Auro-Metal-Saurus com-mt-1;
+  }
+}

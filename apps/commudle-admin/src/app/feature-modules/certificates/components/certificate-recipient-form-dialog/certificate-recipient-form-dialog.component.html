@@ -1,0 +1,73 @@
+<com-card class="certificate-recipient-form-dialog">
+  <com-card-header class="dialog-header">
+    <span>{{ isEditMode ? 'Edit Recipient' : 'New Recipient' }}</span>
+    <button ghost comButton size="small" (click)="close()" shape="round">
+      <fa-icon [icon]="icons.faXmark"></fa-icon>
+    </button>
+  </com-card-header>
+  <com-card-body class="dialog-body">
+    <form [formGroup]="recipientForm" (ngSubmit)="onSubmit()">
+      <div class="form-field-container">
+        <label class="form-field"> Email <span class="required">*</span> </label>
+        <input class="form-field" formControlName="email" nbInput fullWidth placeholder="recipient@example.com" />
+        <commudle-alert
+          *ngIf="recipientForm.get('email')?.touched && recipientForm.get('email')?.errors?.['required']"
+          [error]="true"
+          errorMessage="Email is required"
+        ></commudle-alert>
+        <commudle-alert
+          *ngIf="recipientForm.get('email')?.touched && recipientForm.get('email')?.errors?.['email']"
+          [error]="true"
+          errorMessage="Enter a valid email"
+        ></commudle-alert>
+      </div>
+
+      <div class="form-field-container">
+        <label class="form-field">Name</label>
+        <input class="form-field" formControlName="name" nbInput fullWidth placeholder="Optional" />
+      </div>
+
+      <ng-container formGroupName="row_values">
+        <div class="form-field-container" *ngFor="let variable of positionableVariables">
+          <label class="form-field">
+            {{ variable.label }}
+            <span class="hint" *ngIf="variable.default_value">(default: {{ variable.default_value }})</span>
+          </label>
+          <input
+            class="form-field"
+            [formControlName]="variable.key"
+            nbInput
+            fullWidth
+            [placeholder]="variable.default_value || 'Optional'"
+          />
+        </div>
+      </ng-container>
+
+      <div class="new-fields" formArrayName="newFields">
+        <div class="new-field-row" *ngFor="let field of newFields.controls; let i = index" [formGroupName]="i">
+          <input class="new-field-label" formControlName="label" nbInput fieldSize="small" placeholder="Field name" />
+          <input class="new-field-value" formControlName="value" nbInput fieldSize="small" placeholder="Value" />
+          <button ghost comButton size="tiny" status="danger" type="button" (click)="removeField(i)">
+            <fa-icon [icon]="icons.faXmark"></fa-icon>
+          </button>
+        </div>
+      </div>
+
+      <button comButton status="basic" size="small" type="button" class="add-field-button" (click)="addField()">
+        <fa-icon [icon]="icons.faPlus"></fa-icon> &nbsp; Add Field
+      </button>
+    </form>
+  </com-card-body>
+  <com-card-footer>
+    <button
+      type="submit"
+      comButton
+      status="primary"
+      fullWidth
+      [disabled]="recipientForm.invalid || isSaving"
+      (click)="onSubmit()"
+    >
+      {{ isEditMode ? 'Save Changes' : 'Add Recipient' }}
+    </button>
+  </com-card-footer>
+</com-card>

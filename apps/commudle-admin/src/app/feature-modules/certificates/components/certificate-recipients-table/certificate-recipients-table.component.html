@@ -1,0 +1,222 @@
+<div class="certificate-recipients-table">
+  <div class="table-header">
+    <form [formGroup]="searchForm" class="search-form">
+      <input formControlName="q" nbInput fieldSize="small" placeholder="Search by name or email" />
+    </form>
+    <div class="table-header-actions">
+      <button ghost comButton size="small" title="Refresh" [disabled]="isLoading" (click)="fetchRecipients()">
+        <fa-icon [icon]="icons.faRedo" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+      </button>
+      <button comButton status="basic" size="small" (click)="openCsvUploadDialog()">
+        <fa-icon [icon]="icons.faUpload"></fa-icon> &nbsp; Upload CSV
+      </button>
+      <button comButton status="primary" size="small" (click)="openAddDialog()">
+        <fa-icon [icon]="icons.faPlus"></fa-icon> &nbsp; Add Recipient
+      </button>
+    </div>
+  </div>
+
+  <div class="no-email-banner" *ngIf="!isLoading && noEmailCount > 0">
+    {{ noEmailCount }} recipient{{ noEmailCount === 1 ? '' : 's' }} on this page have no email address and can't be sent
+    a certificate.
+  </div>
+
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+  <ng-container *ngIf="!isLoading">
+    <div *ngIf="recipients.length === 0" class="empty-state">
+      {{ query ? 'No recipients match "' + query + '".' : 'No recipients yet. Add one manually, or upload a CSV.' }}
+    </div>
+
+    <section class="recipient-list-container" *ngIf="recipients.length > 0">
+      <div class="bulk-actions" *ngIf="selectedIds.size > 0">
+        <span class="bulk-actions-count">{{ selectedIds.size }} selected</span>
+        <button comButton status="basic" size="small" [disabled]="isSendingSelected" (click)="sendSelected()">
+          {{
+            isSendingSelected ? 'Starting...' : batch.consent_confirmed_at ? 'Resend to Selected' : 'Send to Selected'
+          }}
+        </button>
+        <button comButton status="danger" size="small" [disabled]="isDeletingSelected" (click)="deleteSelected()">
+          {{ isDeletingSelected ? 'Removing...' : 'Delete Selected' }}
+        </button>
+        <button ghost comButton size="small" (click)="clearSelection()">Clear</button>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="recipients-table">
+          <thead>
+            <tr class="table-header-row">
+              <th class="select-column">
+                <nb-checkbox
+                  [checked]="isAllOnPageSelected"
+                  (checkedChange)="toggleSelectAllOnPage($event)"
+                ></nb-checkbox>
+              </th>
+              <th class="thumbnail-column"></th>
+              <th>EMAIL</th>
+              <th>NAME</th>
+              <th *ngFor="let variable of tableVariables">{{ variable.label }}</th>
+              <th>STATUS</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let recipient of recipients" class="recipient-row">
+              <td class="select-column">
+                <nb-checkbox
+                  [checked]="isSelected(recipient)"
+                  (checkedChange)="toggleSelect(recipient, $event)"
+                ></nb-checkbox>
+              </td>
+              <td class="thumbnail-column">
+                <ng-container *ngIf="recipient.thumbnail_url as thumbnailUrl">
+                  <a
+                    *ngIf="isIssued(recipient) && !isBatchRevoked; else thumbnailOnly"
+                    [href]="certificateViewUrl(recipient)"
+                    target="_blank"
+                    rel="noopener"
+                    title="View certificate"
+                  >
+                    <img
+                      [src]="thumbnailUrl"
+                      [alt]="'Certificate for ' + recipient.email"
+                      class="certificate-thumbnail"
+                    />
+                  </a>
+                  <ng-template #thumbnailOnly>
+                    <img
+                      [src]="thumbnailUrl"
+                      [alt]="'Certificate for ' + recipient.email"
+                      class="certificate-thumbnail"
+                    />
+                  </ng-template>
+                </ng-container>
+              </td>
+              <td>{{ recipient.email }}</td>
+              <td>{{ recipient.name || '-' }}</td>
+              <td *ngFor="let variable of tableVariables">{{ recipient.row_values?.[variable.key] || '-' }}</td>
+              <td>
+                <app-badge
+                  [text]="statusLabel(recipient.status) | titlecase"
+                  [fontSize]="'small'"
+                  [borderRadius]="'round'"
+                  [color]="statusColor(recipient.status)"
+                  [fontColor]="statusFontColor(recipient.status)"
+                ></app-badge>
+                <div class="skip-reason" *ngIf="recipient.skip_reason">{{ recipient.skip_reason }}</div>
+                <div class="revoked-tag" *ngIf="recipient.revoked_at || isBatchRevoked">Revoked</div>
+                <fa-icon
+                  *ngIf="missingValueLabels(recipient).length > 0"
+                  class="missing-values-warning"
+                  [icon]="icons.faExclamationTriangle"
+                  [nbTooltip]="missingValuesTooltip(recipient)"
+                ></fa-icon>
+              </td>
+              <td class="actions">
+                <button
+                  *ngIf="canSendIndividually && recipient.sendable && !isBatchRevoked"
+                  ghost
+                  comButton
+                  size="tiny"
+                  status="success"
+                  nbTooltip="Generate certificate and send by email"
+                  (click)="sendOne(recipient)"
+                >
+                  <fa-icon [icon]="icons.faPaperPlane"></fa-icon>
+                </button>
+                <button
+                  *ngIf="!isIssued(recipient) && batch.design && recipient.sendable && !isBatchRevoked"
+                  ghost
+                  comButton
+                  size="tiny"
+                  status="info"
+                  [disabled]="recipient.isGenerating"
+                  nbTooltip="Generate certificate"
+                  (click)="generateOne(recipient)"
+                >
+                  <fa-icon
+                    [icon]="recipient.isGenerating ? icons.faSpinner : icons.faCertificate"
+                    [animation]="recipient.isGenerating ? 'spin' : undefined"
+                  ></fa-icon>
+                </button>
+                <button
+                  *ngIf="!isIssued(recipient)"
+                  ghost
+                  comButton
+                  size="tiny"
+                  nbTooltip="Preview certificate"
+                  (click)="openPreviewDialog(recipient)"
+                >
+                  <fa-icon [icon]="icons.faEye"></fa-icon>
+                </button>
+                <a
+                  *ngIf="isIssued(recipient) && !isBatchRevoked"
+                  [href]="certificateViewUrl(recipient)"
+                  target="_blank"
+                  rel="noopener"
+                  ghost
+                  comButton
+                  size="tiny"
+                  class="view-certificate-link"
+                  nbTooltip="Download certificate"
+                >
+                  <fa-icon [icon]="icons.faDownload"></fa-icon>
+                </a>
+                <button
+                  *ngIf="isIssued(recipient) && batch.design && !isBatchRevoked"
+                  ghost
+                  comButton
+                  size="tiny"
+                  status="warning"
+                  [disabled]="recipient.isGenerating"
+                  nbTooltip="Reissue with current design"
+                  (click)="reissueOne(recipient)"
+                >
+                  <fa-icon
+                    [icon]="recipient.isGenerating ? icons.faSpinner : icons.faRedo"
+                    [animation]="recipient.isGenerating ? 'spin' : undefined"
+                  ></fa-icon>
+                </button>
+                <button ghost comButton size="tiny" nbTooltip="Edit recipient" (click)="openEditDialog(recipient)">
+                  <fa-icon [icon]="icons.faPen"></fa-icon>
+                </button>
+                <button
+                  *ngIf="canToggleRevoke(recipient) && !isBatchRevoked"
+                  ghost
+                  comButton
+                  size="tiny"
+                  [status]="recipient.revoked_at ? 'basic' : 'danger'"
+                  [nbTooltip]="recipient.revoked_at ? 'Unrevoke certificate' : 'Revoke certificate'"
+                  (click)="toggleRecipientRevoke(recipient)"
+                >
+                  <fa-icon [icon]="recipient.revoked_at ? icons.faUndo : icons.faBan"></fa-icon>
+                </button>
+                <button
+                  ghost
+                  comButton
+                  size="tiny"
+                  status="danger"
+                  nbTooltip="Delete recipient"
+                  (click)="deleteRecipient(recipient)"
+                >
+                  <fa-icon [icon]="icons.faTrash"></fa-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <app-pagination
+        class="pagination"
+        *ngIf="total > count"
+        [current]="page"
+        [count]="count"
+        [total]="total"
+        (goTo)="onPageChange($event)"
+        (next)="onPageChange($event)"
+        (previous)="onPageChange($event)"
+      ></app-pagination>
+    </section>
+  </ng-container>
+</div>

@@ -1,0 +1,46 @@
+<div [attr.id]="config.fragmentId || null" class="faq-section">
+  <div class="base-layout container section-container">
+    <div class="faq-grid">
+      <!-- ── Left rail ─────────────────────────────────────────────── -->
+      <div class="faq-rail">
+        <p *ngIf="config.eyebrow" class="faq-rail__eyebrow">
+          {{ config.eyebrow }}
+        </p>
+        <h2
+          *ngIf="config.heading"
+          class="faq-rail__heading"
+          [ngClass]="{ 'section-heading-anchor': config.fragmentId }"
+        >
+          {{ config.heading }}
+          <a
+            *ngIf="config.fragmentId"
+            [routerLink]="'.'"
+            [fragment]="config.fragmentId"
+            class="anchor-link"
+            [attr.aria-label]="'Link to ' + config.heading + ' section'"
+          >
+            <fa-icon [icon]="icons.faHashtag" class="anchor-icon-medium"></fa-icon>
+          </a>
+        </h2>
+        <p *ngIf="config.subtext" class="faq-rail__sub">
+          {{ config.subtext }}
+        </p>
+
+        <div *ngIf="config.helpText || config.helpCta" class="faq-rail__help">
+          <p *ngIf="config.helpText" class="faq-rail__help-text">
+            {{ config.helpText }}
+          </p>
+          <a *ngIf="config.helpCta" class="faq-rail__help-link" [routerLink]="config.helpCta.routerLink">
+            {{ config.helpCta.label }}
+            <fa-icon [icon]="icons.faArrowRight" class="faq-rail__help-link-icon"></fa-icon>
+          </a>
+        </div>
+      </div>
+
+      <!-- ── Accordion ────────────────────────────────────────────── -->
+      <div class="faq-list">
+        <commudle-faq [faqs]="config.faqs"></commudle-faq>
+      </div>
+    </div>
+  </div>
+</div>

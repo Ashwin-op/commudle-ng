@@ -14,8 +14,7 @@
       (function () {
         try {
           var stored = localStorage.getItem('theme');
-          var prefersDark =
-            window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
           var isDark = stored ? stored === 'dark' : prefersDark;
           document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
         } catch (e) {
@@ -66,6 +65,16 @@
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Certificate design canvas font picker (certificate-canvas.component.ts,
+         CERTIFICATE_FONT_OPTIONS) - loaded globally, same as Inter above, since
+         there's no existing per-component/lazy webfont-loading pattern in this
+         app. Names/weights must match what Certificates::PdfRenderer
+         registers on gdgapp (AVAILABLE_FONTS in pdf_renderer.rb), so the
+         canvas preview doesn't silently diverge from the real PDF output. -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Great+Vibes&family=JetBrains+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Cinzel:wght@400;700&display=swap"
       rel="stylesheet"
     />
     <script

@@ -1,0 +1,210 @@
+:host {
+  display: block;
+}
+
+// Prevents global .base-layout from inflating the section to 100vh.
+.base-layout {
+  min-height: 0;
+}
+
+.section-container {
+  @apply com-px-4 md:com-px-6;
+}
+
+// Explicit overflow-y (the HTML already carries `com-overflow-x-hidden`) on
+// purpose: per the CSS spec, if one axis is `hidden` and the other is left
+// `visible`, the browser computes the visible one as `auto` — silently
+// turning the whole section into a scroll container the moment a
+// descendant visually bleeds past its box, which the floating accents
+// below do by design. Hidden on both axes avoids that entirely (see
+// `.november/rules/` — same footgun hit and fixed once already on the
+// Vibeathon page's tool section).
+.hero-section {
+  @apply com-bg-white com-overflow-hidden;
+}
+
+.hero-layout {
+  @apply com-relative com-grid com-grid-cols-1 com-items-center com-gap-8 lg:com-gap-12;
+
+  @screen md {
+    min-height: 480px;
+  }
+
+  // Toggled from the template when `config.image` is set — see R1/rule-1 in
+  // section-fragment-links.md's sibling doc, section-component-styling.md.
+  &--with-image {
+    @apply md:com-grid-cols-2;
+  }
+}
+
+.hero-text {
+  @apply com-flex com-flex-col com-gap-6 com-py-14 md:com-py-20 lg:com-py-24;
+}
+
+// primary-100 bg / primary-200 border / primary-700 text.
+.hero-badge {
+  @apply com-inline-flex com-items-center com-gap-2 com-self-start com-rounded-full;
+  @apply com-bg-primary-100 com-text-primary-700 com-border com-border-primary-200 com-py-1.5 com-px-4;
+
+  &__label {
+    @apply com-text-Caption com-font-semibold;
+  }
+}
+
+.hero-heading {
+  @apply com-font-extrabold com-leading-tight com-m-0;
+  @apply com-text-4xl md:com-text-5xl lg:com-text-Public-Page-CTA-Heading;
+
+  &__line1 {
+    @apply com-block com-text-Yankees-Blue;
+  }
+
+  &__line2 {
+    @apply com-block com-text-Yankees-Blue;
+
+    span {
+      @apply com-text-primary-600;
+    }
+  }
+}
+
+.hero-subtext {
+  @apply com-text-Paragraph-1 com-text-Auro-Metal-Saurus com-max-w-lg com-m-0;
+}
+
+.cta-buttons {
+  @apply com-flex com-gap-4 com-flex-wrap;
+
+  &__play-icon {
+    @apply com-mr-2;
+  }
+
+  button {
+    @apply com-w-full sm:com-w-auto;
+  }
+
+  a {
+    @apply com-w-full sm:com-w-auto;
+  }
+}
+
+// ── Right visual ─────────────────────────────────────────────────────────────
+
+.hero-visual {
+  @apply com-relative com-flex com-items-center com-justify-center;
+
+  &__glow {
+    @apply com-absolute com-w-[90%] com-max-w-[460px] com-rounded-full com-pointer-events-none;
+    // `aspect-ratio` has no working Tailwind utility in this project's
+    // build — see section-steps-1's __media for the full explanation.
+    aspect-ratio: 1 / 1;
+    // Multi-stop radial gradient — not expressible as a Tailwind gradient
+    // utility (those only support a 2–3 stop from/via/to ramp), so this
+    // stays a plain CSS `background`, same exception `.signup-cta::before`
+    // takes in navbar.component.scss for the same reason.
+    background: radial-gradient(circle, rgba(51, 102, 255, 0.12) 0%, rgba(51, 102, 255, 0.03) 55%, transparent 76%);
+  }
+
+  // Shrink-wraps to the image's own rendered size — see the template
+  // comment. This, not .hero-visual itself, is what the floating accents
+  // below are positioned against.
+  &__frame {
+    @apply com-relative com-inline-flex com-max-w-full;
+  }
+
+  &__img {
+    @apply com-relative com-w-full com-max-w-[520px] com-rounded-2xl com-object-cover;
+    @apply com-shadow-[0_20px_45px_-20px_rgba(34,43,69,0.28)];
+  }
+}
+
+// ── Floating accents (icon badges / text chips around the photo) ──────────────
+//
+// Absolutely positioned against .hero-visual__frame — i.e. the image's own
+// box, so a small, fixed pixel offset (not a percentage of some larger
+// container) is what keeps each one hugging its corner instead of drifting
+// off toward the viewport edge. Entrance + float animation is GSAP (see
+// animateFloatingAccents()); layout/position here is Tailwind-only.
+
+.floating-accents {
+  @apply com-absolute com-inset-0 com-z-[2] com-pointer-events-none com-hidden lg:com-block;
+}
+
+.floating-accent {
+  @apply com-absolute com-inline-flex com-items-center com-gap-2 com-bg-white com-rounded-full;
+  @apply com-py-2 com-px-2.5 com-whitespace-nowrap;
+  @apply com-shadow-[0_10px_24px_-10px_rgba(34,43,69,0.3)];
+
+  &__icon {
+    @apply com-inline-flex com-items-center com-justify-center com-flex-shrink-0;
+    @apply com-w-7 com-h-7 com-rounded-full com-text-[13px] com-text-tWhite;
+  }
+
+  &__label {
+    @apply com-pr-1 com-text-Yankees-Blue;
+  }
+
+  // Icon-only badges (no label) drop the pill padding for a plain circle.
+  // Selector structure only — the declaration inside is still `@apply`.
+  &:not(:has(.floating-accent__label)) {
+    @apply com-p-1;
+  }
+
+  // Small, fixed offsets (not percentages) — hugs the image corner
+  // regardless of the frame's size, instead of scaling out with it. Icon
+  // backgrounds use the real named tokens (not raw hex) they map to:
+  // primary-600, Infra-Red, Chrome-Yellow, Blue-Violet.
+  &--pos-1 {
+    @apply com-top-[-14px] com-left-[-14px];
+
+    .floating-accent__icon {
+      @apply com-bg-primary-600;
+    }
+  }
+
+  &--pos-2 {
+    @apply com-top-[-14px] com-right-[-14px];
+
+    .floating-accent__icon {
+      @apply com-bg-Infra-Red;
+    }
+  }
+
+  &--pos-3 {
+    @apply com-bottom-[-14px] com-left-[-14px];
+
+    .floating-accent__icon {
+      @apply com-bg-Chrome-Yellow;
+    }
+  }
+
+  &--pos-4 {
+    @apply com-bottom-[-14px] com-right-[-14px];
+
+    .floating-accent__icon {
+      @apply com-bg-Blue-Violet;
+    }
+  }
+}
+
+// ── Video dialog ─────────────────────────────────────────────────────────────
+
+.video-dialog {
+  @apply com-m-0;
+  width: min(90vw, 880px); // `min()` of a viewport unit isn't expressible as a Tailwind utility
+
+  &__body {
+    @apply com-p-0;
+  }
+
+  &__frame {
+    @apply com-relative com-w-full;
+    // `aspect-ratio` has no working Tailwind utility in this project's
+    // build — see section-steps-1's __media for the full explanation.
+    aspect-ratio: 16 / 9;
+
+    iframe {
+      @apply com-absolute com-inset-0 com-w-full com-h-full com-border-0;
+    }
+  }
+}

@@ -1,0 +1,139 @@
+<div class="certificate-canvas">
+  <div *ngIf="!batch.design" class="empty-state">Choose a design above before positioning variables.</div>
+
+  <ng-container *ngIf="batch.design">
+    <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+    <div class="canvas-layout">
+      <div class="variables-sidebar" *ngIf="!isLoading">
+        <h4>Variables</h4>
+
+        <div *ngIf="variables.length === 0" class="empty-variables">
+          No variables yet. Add one below, or upload a CSV.
+        </div>
+
+        <div
+          *ngFor="let variable of variables"
+          class="variable-item"
+          [class.placed]="variable.positioned"
+          [class.selected]="selectedVariable?.id === variable.id"
+        >
+          <div class="variable-row">
+            <nb-checkbox [checked]="variable.positioned" (checkedChange)="toggleCanvasPlacement(variable, $event)">
+              {{ variable.label }}
+            </nb-checkbox>
+
+            <div class="variable-actions">
+              <button ghost comButton size="tiny" tabindex="-1" class="kebab-button">
+                <fa-icon [icon]="icons.faEllipsisVertical"></fa-icon>
+              </button>
+              <select
+                class="variable-actions-select"
+                (change)="onVariableAction(variable, $any($event.target).value); $any($event.target).value = ''"
+              >
+                <option value="" disabled selected>Actions</option>
+                <option value="default_value">Set Default Value</option>
+                <option value="delete">Delete</option>
+              </select>
+            </div>
+          </div>
+          <div class="default-value-subtext" *ngIf="variable.default_value">Default: {{ variable.default_value }}</div>
+        </div>
+
+        <button type="button" class="add-variable-tile" [class.active]="showAddForm" (click)="toggleAddForm()">
+          <fa-icon [icon]="icons.faPlus"></fa-icon>
+          <span>{{ showAddForm ? 'Cancel' : 'Add Variable' }}</span>
+        </button>
+
+        <form *ngIf="showAddForm" [formGroup]="addForm" (ngSubmit)="addVariable()" class="add-variable-form">
+          <input formControlName="label" nbInput fieldSize="small" fullWidth placeholder="Variable label" />
+          <button type="submit" comButton status="primary" size="small" [disabled]="addForm.invalid">Add</button>
+        </form>
+      </div>
+
+      <div class="stage-wrapper">
+        <div #stageContainer class="stage-container"></div>
+      </div>
+
+      <div class="style-panel">
+        <ng-container *ngIf="selectedVariable; else noSelection">
+          <h4>{{ selectedVariable.label }}</h4>
+
+          <div class="style-field">
+            <label>Font</label>
+            <select
+              [value]="selectedVariable.text_style?.font || 'Helvetica'"
+              [style.fontFamily]="selectedVariable.text_style?.font || 'Helvetica'"
+              (change)="updateStyle({ font: $any($event.target).value })"
+            >
+              <option *ngFor="let font of fontOptions" [value]="font" [style.fontFamily]="font">{{ font }}</option>
+            </select>
+          </div>
+
+          <div class="style-field">
+            <label>Size</label>
+            <input
+              nbInput
+              fieldSize="small"
+              type="number"
+              min="6"
+              max="200"
+              [value]="selectedVariable.text_style?.size || 16"
+              (input)="updateStyle({ size: +$any($event.target).value })"
+            />
+          </div>
+
+          <div class="style-field">
+            <label>Color</label>
+            <input
+              type="color"
+              [value]="'#' + (selectedVariable.text_style?.color || '000000')"
+              (input)="updateStyle({ color: $any($event.target).value.substring(1) })"
+            />
+          </div>
+
+          <div class="style-field">
+            <label>Align</label>
+            <select
+              [value]="selectedVariable.text_style?.align || 'left'"
+              (change)="updateStyle({ align: $any($event.target).value })"
+            >
+              <option value="left">Left</option>
+              <option value="center">Center</option>
+              <option value="right">Right</option>
+            </select>
+          </div>
+
+          <div class="style-field style-toggles">
+            <button
+              comButton
+              size="small"
+              [status]="selectedVariable.text_style?.weight === 'bold' ? 'primary' : 'basic'"
+              (click)="updateStyle({ weight: selectedVariable.text_style?.weight === 'bold' ? 'normal' : 'bold' })"
+            >
+              B
+            </button>
+            <button
+              comButton
+              size="small"
+              [status]="selectedVariable.text_style?.style === 'italic' ? 'primary' : 'basic'"
+              (click)="updateStyle({ style: selectedVariable.text_style?.style === 'italic' ? 'normal' : 'italic' })"
+            >
+              I
+            </button>
+          </div>
+        </ng-container>
+
+        <ng-template #noSelection>
+          <p class="no-selection-hint">Select a placeholder to style it here.</p>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="canvas-actions" *ngIf="!isLoading">
+      <button comButton status="primary" size="small" [disabled]="!isDirty || isSaving" (click)="saveLayout()">
+        {{ isSaving ? 'Saving...' : 'Save Layout' }}
+      </button>
+    </div>
+  </ng-container>
+</div>

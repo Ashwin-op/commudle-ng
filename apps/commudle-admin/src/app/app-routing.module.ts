@@ -92,6 +92,13 @@ const routes: Routes = [
     component: AboutComponent,
   },
   {
+    path: 'certificates/verify/:uuid',
+    loadComponent: () =>
+      import(
+        './feature-modules/certificates/components/certificate-verify-page/certificate-verify-page.component'
+      ).then((m) => m.CertificateVerifyPageComponent),
+  },
+  {
     path: 'student-non-profit-community-support',
     loadChildren: () =>
       import('./feature-modules/student-non-profit-support/student-non-profit-support.module').then(

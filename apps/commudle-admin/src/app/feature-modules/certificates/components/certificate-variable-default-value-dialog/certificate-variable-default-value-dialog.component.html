@@ -1,0 +1,25 @@
+<com-card class="certificate-variable-default-value-dialog">
+  <com-card-header class="dialog-header">
+    <span>Default Value - {{ label }}</span>
+    <button ghost comButton size="small" (click)="close()" shape="round">
+      <fa-icon [icon]="icons.faXmark"></fa-icon>
+    </button>
+  </com-card-header>
+  <com-card-body>
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="form-field-container">
+        <label class="form-field">Default Value</label>
+        <input
+          class="form-field"
+          formControlName="default_value"
+          nbInput
+          fullWidth
+          placeholder="No default - blocks a row missing this value"
+        />
+      </div>
+    </form>
+  </com-card-body>
+  <com-card-footer>
+    <button type="submit" comButton status="primary" fullWidth (click)="save()">Save</button>
+  </com-card-footer>
+</com-card>

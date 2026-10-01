@@ -19,6 +19,7 @@ import {
   faBuildingColumns,
   faUsersGear,
   faIdCardClip,
+  faAward,
 } from '@fortawesome/free-solid-svg-icons';
 import { EmailerComponent } from 'apps/commudle-admin/src/app/app-shared-components/emailer/emailer.component';
 import { NotificationsStore } from 'apps/commudle-admin/src/app/feature-modules/notifications/store/notifications.store';
@@ -68,6 +69,7 @@ export class CommunityControlPanelComponent implements OnInit, OnDestroy {
     faBuildingColumns,
     faUsersGear,
     faIdCardClip,
+    faAward,
   };
   darkMode: boolean;
   isHackathonActive = false;

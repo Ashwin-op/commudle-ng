@@ -77,6 +77,7 @@ export interface IHackathonTeamWithScoreAndSubmissions {
   score: IHackathonTeamRoundScore;
   team: IHackathonTeam;
   submission: IHackathonTeamRoundSubmission;
+  submissions: IHackathonTeamRoundSubmission[];
   evaluators: ITeamEvaluator[];
   can_submit_score: boolean;
 }

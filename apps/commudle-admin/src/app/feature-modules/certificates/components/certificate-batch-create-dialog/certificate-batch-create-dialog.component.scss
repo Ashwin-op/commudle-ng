@@ -1,0 +1,19 @@
+.certificate-batch-create-dialog {
+  @apply com-w-[30rem] com-max-w-[90vw];
+}
+
+.dialog-header {
+  @apply com-flex com-justify-between com-items-center;
+}
+
+.form-field-container {
+  @apply com-mb-4;
+
+  .form-field {
+    @apply com-block com-w-full com-mb-1;
+  }
+
+  .required {
+    @apply com-text-red-500;
+  }
+}

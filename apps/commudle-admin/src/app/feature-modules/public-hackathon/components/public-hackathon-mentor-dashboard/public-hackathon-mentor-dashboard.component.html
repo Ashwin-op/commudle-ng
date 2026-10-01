@@ -206,29 +206,6 @@
               <span class="team-mobile-label">Total Score</span>
               <span class="team-mobile-value">{{ teamData.score.total_score }}</span>
             </div>
-            <div
-              class="team-mobile-row"
-              *ngIf="teamData.submission?.file_attachment || teamData.submission?.link || teamData.team.community_build"
-            >
-              <span class="team-mobile-label">Submission</span>
-              <span class="team-mobile-value">
-                <a
-                  *ngIf="teamData.submission?.file_attachment"
-                  [href]="teamData.submission.file_attachment.url"
-                  target="_blank"
-                  class="submission-link"
-                  >{{ teamData.submission.file_attachment.name }}</a
-                >
-                <a
-                  *ngIf="teamData.submission?.link && !teamData.submission?.file_attachment"
-                  [href]="teamData.submission.link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="submission-link"
-                  >{{ teamData.submission.link }}</a
-                >
-              </span>
-            </div>
             <div class="team-mobile-row" *ngIf="teamData.team.community_build">
               <span class="team-mobile-label">Project</span>
               <a
@@ -238,11 +215,32 @@
                 >{{ teamData.team.community_build.name }}</a
               >
             </div>
+            <div class="team-mobile-row" *ngIf="teamData.submissions && teamData.submissions.length > 0">
+              <span class="team-mobile-label">Submissions</span>
+              <span class="team-mobile-value">
+                <div *ngFor="let sub of teamData.submissions" class="submission-round-item">
+                  <strong>{{ sub.round?.name }}:</strong>
+                  <a
+                    *ngIf="sub.file_attachment"
+                    [href]="sub.file_attachment.url"
+                    target="_blank"
+                    class="submission-link"
+                    >{{ sub.file_attachment.name }}</a
+                  >
+                  <a
+                    *ngIf="sub.link && !sub.file_attachment"
+                    [href]="sub.link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="submission-link"
+                    >{{ sub.link }}</a
+                  >
+                </div>
+              </span>
+            </div>
             <div
               class="team-mobile-row"
-              *ngIf="
-                !teamData.submission?.file_attachment && !teamData.submission?.link && !teamData.team.community_build
-              "
+              *ngIf="(!teamData.submissions || teamData.submissions.length === 0) && !teamData.team.community_build"
             >
               <span class="team-mobile-label">Submission</span>
               <span class="team-mobile-value no-submission">No submission</span>
@@ -423,28 +421,30 @@
             </td>
             <td>
               <div class="submission-details">
-                @if(teamData.submission?.file_attachment) {
-                <div class="ppt-link">
-                  <strong>PPT Link:</strong>
-                  <a [href]="teamData.submission.file_attachment.url" target="_blank">
-                    {{ teamData.submission.file_attachment.name }}
-                  </a>
-                  <span class="date-time">({{ teamData.submission.created_at | date : 'short' }})</span>
-                </div>
-                } @else if(teamData.submission?.link) {
-                <div class="ppt-link">
-                  <strong>Submission Link:</strong>
-                  <a [href]="teamData.submission.link" target="_blank" rel="noopener noreferrer">
-                    {{ teamData.submission.link }}
-                  </a>
-                  <span class="date-time">({{ teamData.submission.created_at | date : 'short' }})</span>
-                </div>
-                } @if(teamData.team.community_build) {
+                @if(teamData.team.community_build) {
                 <div class="project-link">
                   <strong>Project:</strong>
                   <a [routerLink]="['/builds', teamData.team.community_build.slug]" target="_blank">
                     {{ teamData.team.community_build.name }}
                   </a>
+                </div>
+                } @if(teamData.submissions && teamData.submissions.length > 0) {
+                <div class="submissions-list">
+                  @for(sub of teamData.submissions; track sub.id) {
+                  <div class="ppt-link">
+                    <strong>{{ sub.round?.name }}:</strong>
+                    @if(sub.file_attachment) {
+                    <a [href]="sub.file_attachment.url" target="_blank">
+                      {{ sub.file_attachment.name }}
+                    </a>
+                    } @else if(sub.link) {
+                    <a [href]="sub.link" target="_blank" rel="noopener noreferrer">
+                      {{ sub.link }}
+                    </a>
+                    }
+                    <span class="date-time">({{ sub.created_at | date : 'short' }})</span>
+                  </div>
+                  }
                 </div>
                 } @if(teamData.team.entity_updates && teamData.team.entity_updates.length > 0) {
                 <div class="updates-list">
@@ -480,9 +480,8 @@
                     }}
                   </button>
                 </div>
-                } @if(!teamData.submission?.file_attachment && !teamData.submission?.link &&
-                !teamData.team.community_build && (!teamData.team.entity_updates || teamData.team.entity_updates.length
-                === 0)) {
+                } @if((!teamData.submissions || teamData.submissions.length === 0) && !teamData.team.community_build &&
+                (!teamData.team.entity_updates || teamData.team.entity_updates.length === 0)) {
                 <span class="no-submission">No submission</span>
                 }
               </div>
@@ -571,6 +570,11 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <div *ngIf="isLoadingMore" class="loading-more-state">
+      <app-loading-spinner></app-loading-spinner>
+      <span>Loading more teams&hellip;</span>
     </div>
   </com-card-body>
 </com-card>

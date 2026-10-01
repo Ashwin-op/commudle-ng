@@ -1,0 +1,70 @@
+:host {
+  display: block;
+}
+
+.base-layout {
+  min-height: 0;
+}
+
+.section-container {
+  @apply com-px-4 md:com-px-6;
+}
+
+.faq-section {
+  @apply com-bg-Ghost-White com-py-12 md:com-py-16 com-overflow-hidden;
+}
+
+.faq-grid {
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-8 lg:com-gap-12;
+}
+
+.faq-rail {
+  @apply com-flex com-flex-col com-gap-3;
+
+  &__eyebrow {
+    @apply com-uppercase com-tracking-widest com-m-0;
+    @apply com-text-Caption com-font-semibold com-text-primary-600;
+  }
+
+  &__heading {
+    @apply com-m-0;
+    @apply com-text-Page-Section-Header com-font-medium com-text-Yankees-Blue;
+  }
+
+  &__sub {
+    @apply com-m-0;
+    @apply com-text-Paragraph-1 com-text-Auro-Metal-Saurus;
+  }
+
+  &__help {
+    @apply com-mt-4 com-flex com-flex-col com-gap-1;
+  }
+
+  &__help-text {
+    @apply com-text-Paragraph-2 com-text-Auro-Metal-Saurus com-m-0;
+  }
+
+  &__help-link {
+    @apply com-inline-flex com-items-center com-self-start;
+    @apply com-text-Paragraph-2 com-font-semibold com-text-primary-600 com-no-underline;
+  }
+
+  &__help-link-icon {
+    @apply com-ml-1;
+  }
+}
+
+// The shared `commudle-faq` renders its own centred "Frequently Asked
+// Questions" h2. Here the heading lives in the left rail, so hide the
+// component's built-in heading and left-align its cards.
+.faq-list {
+  @apply com-col-span-1 lg:com-col-span-2;
+
+  ::ng-deep .heading {
+    @apply com-hidden;
+  }
+
+  ::ng-deep .faq-cards {
+    @apply com-pb-0;
+  }
+}

@@ -1,0 +1,40 @@
+<div [attr.id]="config.fragmentId || null" class="feature-grid-2-section">
+  <div class="base-layout container section-container">
+    <div *ngIf="config.eyebrow || config.heading || config.subtext" class="section-header">
+      <p *ngIf="config.eyebrow" class="section-header__eyebrow">{{ config.eyebrow }}</p>
+      <h2
+        *ngIf="config.heading"
+        class="section-header__heading"
+        [ngClass]="{ 'section-heading-anchor': config.fragmentId }"
+      >
+        {{ config.heading }}
+        <a
+          *ngIf="config.fragmentId"
+          [routerLink]="'.'"
+          [fragment]="config.fragmentId"
+          class="anchor-link"
+          [attr.aria-label]="'Link to ' + config.heading + ' section'"
+        >
+          <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+        </a>
+      </h2>
+      <p *ngIf="config.subtext" class="section-header__sub">{{ config.subtext }}</p>
+    </div>
+
+    <div class="feature-grid">
+      <div *ngFor="let item of config.items" class="feature-card">
+        <div class="feature-card__icon" aria-hidden="true">
+          <fa-icon [icon]="iconFor(item.icon)"></fa-icon>
+        </div>
+
+        <h3 class="feature-card__title">
+          {{ item.title }}
+        </h3>
+
+        <p class="feature-card__description">
+          {{ item.description }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

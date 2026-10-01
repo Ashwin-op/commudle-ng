@@ -14,6 +14,7 @@ import {
   faAward,
   faTrophy,
   faGavel,
+  faCertificate,
 } from '@fortawesome/free-solid-svg-icons';
 // import { faChromecast } from '@fortawesome/free-brands-svg-icons';
 
@@ -30,7 +31,8 @@ export type MenuItemNames =
   | 'content'
   | 'attendedEvents'
   | 'hackathonsParticipated'
-  | 'hackathonsMentored';
+  | 'hackathonsMentored'
+  | 'certificates';
 // | 'feed';
 
 export type UserProfileMenuItems = Record<
@@ -134,6 +136,13 @@ export class UserProfileMenuService {
       icon: faGavel,
       active_color: 'com-text-primary-500',
       link: 'hackathons-mentor-judge',
+      active: false,
+    },
+    certificates: {
+      name: 'Certificates',
+      icon: faCertificate,
+      active_color: 'com-text-Ultramarine-Blue',
+      link: 'certificates',
       active: false,
     },
 

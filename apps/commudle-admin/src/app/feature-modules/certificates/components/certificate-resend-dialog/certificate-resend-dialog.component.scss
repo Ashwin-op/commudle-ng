@@ -1,0 +1,31 @@
+.certificate-resend-dialog {
+  @apply com-w-[30rem] com-max-w-[90vw];
+}
+
+.email-field-container {
+  @apply com-w-full com-mb-4;
+
+  &:last-child {
+    @apply com-mb-0;
+  }
+
+  .email-field-label {
+    @apply com-block com-text-sm com-font-medium com-text-Yankees-Blue com-mb-1;
+  }
+
+  .email-field {
+    @apply com-w-full;
+  }
+
+  .email-field-readonly {
+    @apply com-w-full com-text-sm com-text-Yankees-Blue com-whitespace-pre-wrap com-break-words;
+  }
+
+  .email-body-readonly {
+    @apply com-max-h-[16rem] com-overflow-y-auto;
+  }
+}
+
+.resend-footer {
+  @apply com-flex com-justify-end com-gap-2;
+}

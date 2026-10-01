@@ -1,0 +1,38 @@
+<com-card class="certificate-batch-create-dialog">
+  <com-card-header class="dialog-header">
+    <span>New Certificate Batch</span>
+    <button ghost comButton size="small" (click)="close()" shape="round">
+      <fa-icon [icon]="icons.faXmark"></fa-icon>
+    </button>
+  </com-card-header>
+  <com-card-body>
+    <form [formGroup]="batchForm" (ngSubmit)="onSubmit()">
+      <div class="form-field-container">
+        <label class="form-field"> Batch Name <span class="required">*</span> </label>
+        <input class="form-field" formControlName="name" nbInput fullWidth placeholder="e.g. Workshop 2026 Attendees" />
+        <commudle-alert
+          *ngIf="batchForm.get('name')?.touched && batchForm.get('name')?.errors?.['required']"
+          [error]="true"
+          errorMessage="Batch name is required"
+        ></commudle-alert>
+        <commudle-alert
+          *ngIf="batchForm.get('name')?.touched && batchForm.get('name')?.errors?.['maxlength']"
+          [error]="true"
+          errorMessage="Batch name cannot exceed 120 characters"
+        ></commudle-alert>
+      </div>
+    </form>
+  </com-card-body>
+  <com-card-footer>
+    <button
+      type="submit"
+      comButton
+      status="primary"
+      fullWidth
+      [disabled]="batchForm.invalid || isSaving"
+      (click)="onSubmit()"
+    >
+      Create Batch
+    </button>
+  </com-card-footer>
+</com-card>

@@ -1,0 +1,106 @@
+<com-card class="certificate-csv-upload-dialog">
+  <com-card-header class="dialog-header">
+    <span>Upload Recipients CSV</span>
+    <button ghost comButton size="small" (click)="close()" shape="round">
+      <fa-icon [icon]="icons.faXmark"></fa-icon>
+    </button>
+  </com-card-header>
+  <com-card-body>
+    <ng-container *ngIf="!selectedFile">
+      <p class="hint-text">
+        The CSV must include an <strong>email</strong> column. Any other column becomes a variable you can place on the
+        certificate - new headers create new variables automatically.
+      </p>
+
+      <div
+        class="dropzone"
+        [class.dragging]="isDragging"
+        (click)="onDropzoneClick(fileInput)"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+      >
+        <fa-icon [icon]="icons.faCloudUploadAlt"></fa-icon>
+        <span>Drag and drop a CSV file, or click to choose a file</span>
+      </div>
+      <input
+        #fileInput
+        type="file"
+        accept=".csv,text/csv"
+        class="hidden-file-input"
+        (change)="onFileSelected($event)"
+      />
+
+      <commudle-alert *ngIf="errorMessage" [error]="true" [errorMessage]="errorMessage"></commudle-alert>
+    </ng-container>
+
+    <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+    <ng-container *ngIf="preview && !isLoading">
+      <div class="preview-summary">
+        <div class="summary-row">
+          <span class="summary-value">{{ preview.rows_new }}</span>
+          <span class="summary-label">new recipients</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-value">{{ preview.rows_updated }}</span>
+          <span class="summary-label">updated recipients</span>
+        </div>
+      </div>
+
+      <div class="preview-section" *ngIf="preview.new_variables.length > 0">
+        <h4>New Variables</h4>
+        <p class="hint-text">These columns will be created as new variables:</p>
+        <ul>
+          <li *ngFor="let v of preview.new_variables">{{ v.label }}</li>
+        </ul>
+      </div>
+
+      <div class="preview-section" *ngIf="preview.missing_columns.length > 0">
+        <h4>Missing Columns</h4>
+        <ul>
+          <li *ngFor="let col of preview.missing_columns" [class.blocking]="!col.has_default">
+            {{ col.label }} -
+            {{
+              col.has_default
+                ? 'will use its default value for every row'
+                : 'has no default set - go to Variables and set one before uploading'
+            }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="preview-section" *ngIf="preview.rejected.missing_email_rows.length > 0">
+        <commudle-alert
+          [error]="true"
+          [errorMessage]="
+            preview.rejected.missing_email_rows.length +
+            ' row(s) missing an email were rejected - the whole file was still processed for the rest'
+          "
+        ></commudle-alert>
+      </div>
+
+      <div class="preview-section" *ngIf="preview.duplicate_emails_in_file.length > 0">
+        <commudle-alert
+          [info]="true"
+          [message]="
+            preview.duplicate_emails_in_file.length + ' duplicate email(s) in the file - first occurrence wins'
+          "
+        ></commudle-alert>
+      </div>
+
+      <button comButton status="basic" size="small" (click)="reset()">Choose a different file</button>
+    </ng-container>
+  </com-card-body>
+  <com-card-footer *ngIf="preview">
+    <button
+      comButton
+      status="primary"
+      fullWidth
+      [disabled]="hasBlockingMissingColumns || isCommitting"
+      (click)="confirmUpload()"
+    >
+      {{ isCommitting ? 'Uploading...' : 'Confirm & Upload' }}
+    </button>
+  </com-card-footer>
+</com-card>

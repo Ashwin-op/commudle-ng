@@ -1,0 +1,157 @@
+<div class="certificate-batch-detail">
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+  <ng-container *ngIf="!isLoading && batch">
+    <a class="back-link" routerLink="../">
+      <fa-icon [icon]="icons.faArrowLeft"></fa-icon>
+      All batches
+    </a>
+
+    <div class="detail-header">
+      <div>
+        <div class="name-row" *ngIf="!isEditingName">
+          <h1 class="page-title">{{ batch.name }}</h1>
+          <button ghost comButton size="small" shape="round" (click)="startEditName()">
+            <fa-icon [icon]="icons.faPen"></fa-icon>
+          </button>
+        </div>
+        <div class="name-row" *ngIf="isEditingName">
+          <input
+            class="name-input"
+            nbInput
+            fieldSize="medium"
+            [(ngModel)]="editedName"
+            (keydown.enter)="saveName()"
+            (keydown.escape)="cancelEditName()"
+            maxlength="120"
+            autofocus
+          />
+          <button
+            comButton
+            status="primary"
+            size="small"
+            [disabled]="!editedName?.trim() || isSavingName"
+            (click)="saveName()"
+          >
+            Save
+          </button>
+          <button ghost comButton size="small" (click)="cancelEditName()">Cancel</button>
+        </div>
+        <div class="meta-line">
+          <app-badge
+            [text]="statusLabel(batch.status) | titlecase"
+            [fontSize]="'small'"
+            [borderRadius]="'round'"
+            [color]="statusColor(batch.status)"
+            [fontColor]="statusFontColor(batch.status)"
+          ></app-badge>
+          <span class="meta-item">Created {{ moment(batch.created_at).format('DD MMM YYYY') }}</span>
+          <span class="meta-item" *ngIf="batch.locked_at"
+            >Locked {{ moment(batch.locked_at).format('DD MMM YYYY') }}</span
+          >
+          <span class="meta-item" *ngIf="batch.revoked_at"
+            >Revoked {{ moment(batch.revoked_at).format('DD MMM YYYY') }}</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <com-card class="stats-card">
+      <com-card-body>
+        <div class="stats-summary">
+          <div class="stats-numbers">
+            <div class="stat">
+              <div class="stat-value">{{ batch.recipients_count }}</div>
+              <div class="stat-label">Recipients</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">{{ batch.sent_count }}</div>
+              <div class="stat-label">Sent</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">{{ batch.blocked_count }}</div>
+              <div class="stat-label">Blocked</div>
+            </div>
+          </div>
+
+          <div class="send-progress">
+            <div class="send-progress-header">
+              <span>Send progress</span>
+              <span>{{ batch.sent_count }} / {{ batch.recipients_count }}</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-bar-fill" [style.width.%]="progressPercent"></div>
+            </div>
+          </div>
+        </div>
+      </com-card-body>
+    </com-card>
+
+    <com-card>
+      <com-card-body>
+        <div class="step-heading">
+          <div class="step-title-row">
+            <div class="step-number">1</div>
+            <h3>Choose a design</h3>
+          </div>
+          <p class="step-description">Pick the certificate every recipient will receive, or upload your own.</p>
+        </div>
+        <commudle-certificate-design-picker
+          [batch]="batch"
+          (batchUpdated)="onBatchUpdated($event)"
+        ></commudle-certificate-design-picker>
+      </com-card-body>
+    </com-card>
+
+    <com-card>
+      <com-card-body>
+        <div class="step-heading">
+          <div class="step-title-row">
+            <div class="step-number">2</div>
+            <h3>Add recipients</h3>
+          </div>
+          <p class="step-description">Add people manually, or upload a CSV of everyone who should get a certificate.</p>
+        </div>
+        <commudle-certificate-recipients-table
+          [batch]="batch"
+          (variablesChanged)="onVariablesChanged()"
+        ></commudle-certificate-recipients-table>
+      </com-card-body>
+    </com-card>
+
+    <com-card>
+      <com-card-body>
+        <div class="step-heading">
+          <div class="step-title-row">
+            <div class="step-number">3</div>
+            <h3>Position variables</h3>
+          </div>
+          <p class="step-description">Place each variable on the design and style how it looks on the certificate.</p>
+        </div>
+        <commudle-certificate-canvas
+          [batch]="batch"
+          [designId]="batch.design?.id ?? null"
+          (variablesChanged)="onVariablesChanged()"
+        ></commudle-certificate-canvas>
+      </com-card-body>
+    </com-card>
+
+    <com-card>
+      <com-card-body>
+        <div class="step-heading">
+          <div class="step-title-row">
+            <div class="step-number">4</div>
+            <h3>Send</h3>
+          </div>
+          <p class="step-description">Issue the certificates, then confirm consent and email them to recipients.</p>
+        </div>
+        <commudle-certificate-send-panel
+          [batch]="batch"
+          (batchUpdated)="onBatchUpdated($event)"
+        ></commudle-certificate-send-panel>
+      </com-card-body>
+    </com-card>
+
+    <commudle-faq [faqs]="faqs"></commudle-faq>
+  </ng-container>
+</div>

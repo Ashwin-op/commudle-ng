@@ -1,5 +1,5 @@
 .scoring-dialog {
-  @apply md:com-min-w-[500px] md:com-max-w-[600px] com-max-h-90dvh;
+  @apply com-flex md:com-min-w-[500px] md:com-max-w-[600px] com-max-h-90dvh;
 
   com-card-header {
     @apply com-px-4 com-py-2 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
@@ -29,7 +29,7 @@
   }
 
   com-card-body {
-    @apply com-p-4;
+    @apply com-overflow-y-auto com-scrollbar-hide com-p-4;
 
     .loading-section {
       @apply com-flex com-flex-col com-items-center com-justify-center com-py-8 com-gap-3;

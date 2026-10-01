@@ -1231,4 +1231,57 @@ export const API_ROUTES = {
     CREATE: 'api/v2/round_mentor_slots', //POST
     UPDATE_STATUS: 'api/v2/round_mentor_slots/update_status', //PUT
   },
+
+  CERTIFICATE_BATCHES: {
+    INDEX: 'api/v2/certificate_batches', //GET
+    SHOW: 'api/v2/certificate_batches/show', //GET
+    CREATE: 'api/v2/certificate_batches', //POST
+    UPDATE: 'api/v2/certificate_batches', //PUT
+    DELETE: 'api/v2/certificate_batches', //DELETE
+    CSV_PREVIEW: 'api/v2/certificate_batches/csv_preview', //POST
+    CSV_COMMIT: 'api/v2/certificate_batches/csv_commit', //POST
+    SAMPLE_CSV: 'api/v2/certificate_batches/sample_csv', //GET
+    SEND: 'api/v2/certificate_batches/send', //POST
+    RESEND: 'api/v2/certificate_batches/resend', //POST
+    REVOKE: 'api/v2/certificate_batches/revoke', //POST
+    UNREVOKE: 'api/v2/certificate_batches/unrevoke', //POST
+    PROGRESS: 'api/v2/certificate_batches/progress', //GET
+    ISSUE: 'api/v2/certificate_batches/issue', //POST
+    MISSING_VALUES_PREVIEW: 'api/v2/certificate_batches/missing_values_preview', //GET
+  },
+
+  CERTIFICATE_DESIGNS: {
+    INDEX: 'api/v2/certificate_designs', //GET
+    CREATE: 'api/v2/certificate_designs', //POST
+    DELETE: 'api/v2/certificate_designs', //DELETE
+  },
+
+  CERTIFICATE_VARIABLES: {
+    INDEX: 'api/v2/certificate_variables', //GET
+    CREATE: 'api/v2/certificate_variables', //POST
+    UPDATE: 'api/v2/certificate_variables', //PUT
+    UPDATE_LAYOUT: 'api/v2/certificate_variables/update_layout', //PUT
+    DELETE: 'api/v2/certificate_variables', //DELETE
+  },
+
+  CERTIFICATE_RECIPIENTS: {
+    INDEX: 'api/v2/certificate_recipients', //GET
+    CREATE: 'api/v2/certificate_recipients', //POST
+    UPDATE: 'api/v2/certificate_recipients', //PUT
+    DELETE: 'api/v2/certificate_recipients', //DELETE
+    SHOW: 'api/v2/certificate_recipients/show', //GET
+    PREVIEW: 'api/v2/certificate_recipients/preview', //GET, raw application/pdf
+    SEND_ONE: 'api/v2/certificate_recipients/send_one', //POST
+    GENERATE_ONE: 'api/v2/certificate_recipients/generate_one', //POST
+    REVOKE: 'api/v2/certificate_recipients/revoke', //POST
+    UNREVOKE: 'api/v2/certificate_recipients/unrevoke', //POST
+  },
+
+  // Public, no auth - the real, permanently-stored certificate (as opposed
+  // to certificate_recipients/preview, which re-renders a throwaway copy).
+  CERTIFICATES: {
+    INDEX: 'api/v2/certificates', //GET, ?username=&page=&count=, public no auth
+    VERIFY: 'api/v2/certificates/verify', //GET, ?uuid=
+    DOWNLOAD: 'api/v2/certificates/download', //GET, ?uuid=, raw application/pdf
+  },
 };

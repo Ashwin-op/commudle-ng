@@ -1,0 +1,36 @@
+<com-card *ngIf="!isLoading && certificates.length > 0" id="certificates">
+  <com-card-header>
+    <div class="section-heading-anchor heading">
+      <fa-icon [icon]="icons.faCertificate" class="com-text-Ultramarine-Blue icon"></fa-icon>
+      Certificates
+      <a [routerLink]="'.'" fragment="certificates" class="anchor-link" aria-label="Link to Certificates section">
+        <fa-icon [icon]="faHashtag" class="anchor-icon-small"></fa-icon>
+      </a>
+    </div>
+  </com-card-header>
+  <com-card-body>
+    <div class="grid">
+      <a
+        *ngFor="let certificate of certificates"
+        class="certificate-card"
+        [href]="certificateViewUrl(certificate)"
+        target="_blank"
+        rel="noopener"
+      >
+        <img
+          *ngIf="certificate.thumbnail_url"
+          class="certificate-thumbnail"
+          [src]="certificate.thumbnail_url"
+          [alt]="certificate.title"
+        />
+        <div class="certificate-title">{{ certificate.title }}</div>
+        <div class="certificate-issuer" *ngIf="certificate.issuer">
+          {{ certificate.issuer.name || certificate.issuer.type }}
+        </div>
+        <div class="certificate-date" *ngIf="certificate.issued_on">
+          {{ certificate.issued_on | date : 'mediumDate' }}
+        </div>
+      </a>
+    </div>
+  </com-card-body>
+</com-card>

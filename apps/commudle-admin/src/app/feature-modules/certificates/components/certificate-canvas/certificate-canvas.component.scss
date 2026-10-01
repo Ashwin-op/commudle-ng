@@ -1,0 +1,123 @@
+.certificate-canvas {
+  .empty-state {
+    @apply com-text-Auro-Metal-Saurus com-py-4;
+  }
+
+  .canvas-layout {
+    @apply com-flex com-flex-col md:com-flex-row com-items-stretch md:com-items-start;
+
+    .variables-sidebar {
+      @apply com-flex-none com-w-full md:com-w-64 com-pr-0 md:com-pr-4 com-pb-4 md:com-pb-0;
+
+      h4 {
+        @apply com-mb-2;
+      }
+
+      .empty-variables {
+        @apply com-text-sm com-text-Auro-Metal-Saurus com-mb-3;
+      }
+
+      .variable-item {
+        @apply com-block com-w-full com-mb-2 com-px-3 com-py-2 com-rounded-lg com-bg-gray-50 com-border-2 com-border-solid com-border-gray-300;
+
+        &.placed {
+          @apply com-bg-blue-50;
+        }
+
+        &.selected {
+          @apply com-bg-blue-100 com-border-Ultramarine-Blue;
+        }
+
+        .variable-row {
+          @apply com-flex com-items-center com-justify-between com-gap-2;
+
+          nb-checkbox {
+            @apply com-cursor-pointer com-overflow-hidden com-font-semibold;
+
+            ::ng-deep label {
+              @apply com-cursor-pointer com-font-semibold;
+            }
+          }
+        }
+
+        .variable-actions {
+          @apply com-relative com-inline-flex com-items-center com-flex-shrink-0;
+
+          .kebab-button {
+            @apply com-pointer-events-none;
+          }
+
+          // The visible control is just a kebab icon button - the actual
+          // native <select> sits invisibly on top of it, same size, so a
+          // real click/tap opens the browser's native dropdown directly
+          // (a <select> can't be opened by calling .click() from JS, only
+          // by a genuine user interaction on the element itself).
+          .variable-actions-select {
+            @apply com-absolute com-inset-0 com-w-full com-h-full com-opacity-0 com-cursor-pointer com-m-0 com-p-0 com-border-0;
+          }
+        }
+
+        .default-value-subtext {
+          @apply com-text-xs com-text-Auro-Metal-Saurus com-pl-6 com-truncate;
+        }
+      }
+
+      .add-variable-tile {
+        @apply com-flex com-items-center com-justify-center com-gap-2 com-w-full com-py-2 com-px-3 com-border-2 com-border-dashed com-border-gray-300 com-rounded-lg com-bg-white com-text-Auro-Metal-Saurus com-text-sm com-font-medium com-cursor-pointer;
+
+        &:hover,
+        &.active {
+          @apply com-border-Azure com-text-Azure;
+        }
+
+        &:disabled {
+          @apply com-cursor-not-allowed com-opacity-70;
+        }
+      }
+
+      .add-variable-form {
+        @apply com-flex com-gap-2 com-mt-3 com-items-center;
+      }
+    }
+
+    .stage-wrapper {
+      @apply com-flex-1 com-min-w-0 com-overflow-auto com-flex com-justify-center com-border-0 com-border-t md:com-border-t-0 md:com-border-l com-border-solid com-border-Bright-Gray com-py-4 md:com-py-0 com-px-0 md:com-px-4;
+
+      .stage-container {
+        @apply com-inline-block com-flex-none com-border com-border-solid com-border-Bright-Gray;
+      }
+    }
+
+    .style-panel {
+      @apply com-flex-none com-w-full md:com-w-72 com-border-0 com-border-t md:com-border-t-0 md:com-border-l com-border-solid com-border-Bright-Gray com-pt-4 md:com-pt-0 com-pl-0 md:com-pl-4;
+
+      .no-selection-hint {
+        @apply com-text-sm com-text-Auro-Metal-Saurus com-m-0;
+      }
+
+      h4 {
+        @apply com-mb-2 com-break-words;
+      }
+
+      .style-field {
+        @apply com-mb-3;
+
+        label {
+          @apply com-block com-text-xs com-text-Auro-Metal-Saurus com-mb-1;
+        }
+
+        select {
+          @apply com-w-full com-border com-border-solid com-border-Bright-Gray com-rounded com-px-2 com-py-1 com-text-sm com-bg-white;
+        }
+      }
+
+      .style-toggles {
+        @apply com-flex com-gap-2;
+      }
+    }
+  }
+
+  .canvas-actions {
+    @apply com-flex com-justify-between com-items-center com-mt-4;
+  }
+}

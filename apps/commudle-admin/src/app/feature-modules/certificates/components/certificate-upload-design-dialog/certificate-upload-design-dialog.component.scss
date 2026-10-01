@@ -1,0 +1,48 @@
+.certificate-upload-design-dialog {
+  @apply com-w-[28rem] com-max-w-[90vw];
+
+  .form-field-container {
+    @apply com-mb-4;
+
+    .form-field {
+      @apply com-block com-w-full com-mb-1;
+    }
+
+    .required {
+      @apply com-text-red-500;
+    }
+  }
+
+  .hidden-file-input {
+    @apply com-hidden;
+  }
+
+  .dropzone {
+    @apply com-flex com-flex-col com-items-center com-justify-center com-gap-2 com-py-6 com-px-4 com-border-2 com-border-dashed com-border-Bright-Gray com-rounded-lg com-cursor-pointer com-text-Auro-Metal-Saurus com-text-sm com-font-medium com-text-center com-overflow-hidden;
+
+    fa-icon {
+      @apply com-text-2xl;
+    }
+
+    &:hover,
+    &.dragging {
+      @apply com-border-Azure com-text-Azure;
+    }
+
+    &.has-file {
+      @apply com-py-2;
+    }
+
+    .preview-image {
+      @apply com-max-w-full com-max-h-[10rem] com-object-contain com-rounded;
+    }
+  }
+
+  .file-constraints-hint {
+    @apply com-block com-text-xs com-text-Auro-Metal-Saurus com-mt-1;
+  }
+}
+
+.dialog-footer {
+  @apply com-flex com-justify-end com-gap-2;
+}

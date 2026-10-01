@@ -1,0 +1,69 @@
+.certificate-design-picker {
+  .design-grid {
+    @apply com-flex com-gap-4 com-mb-4 com-items-start;
+
+    .design-row {
+      @apply com-flex com-gap-4 com-flex-1 com-min-w-0 com-overflow-x-auto;
+    }
+
+    .design-card {
+      @apply com-flex-none com-w-40 com-border com-border-solid com-border-Bright-Gray com-rounded-lg com-overflow-hidden com-cursor-pointer;
+
+      .design-thumb {
+        @apply com-relative;
+
+        img {
+          @apply com-w-full com-object-cover com-aspect-[4/3];
+        }
+
+        .selected-badge {
+          @apply com-absolute com-top-2 com-right-2 com-w-6 com-h-6 com-rounded-full com-bg-Azure com-flex com-items-center com-justify-center com-text-white;
+        }
+
+        .design-actions {
+          @apply com-absolute com-top-2 com-left-2 com-inline-flex com-items-center com-bg-white com-rounded-full com-shadow;
+
+          .kebab-button {
+            @apply com-pointer-events-none;
+          }
+
+          // Same invisible-native-select-over-an-icon pattern as
+          // certificate-batches-list's row actions menu - opens the
+          // browser's native dropdown directly on click/tap, no custom
+          // overlay to manage.
+          .design-actions-select {
+            @apply com-absolute com-inset-0 com-w-full com-h-full com-opacity-0 com-cursor-pointer com-m-0 com-p-0 com-border-0;
+          }
+        }
+      }
+
+      .design-card-footer {
+        @apply com-flex com-items-center com-justify-between com-p-2;
+
+        .design-name {
+          @apply com-text-sm com-truncate;
+        }
+
+        .design-type {
+          @apply com-text-xs com-text-Auro-Metal-Saurus com-flex-none;
+        }
+      }
+    }
+
+    .upload-tile {
+      @apply com-flex-none com-w-40 com-aspect-[4/3] com-flex com-flex-col com-items-center com-justify-center com-gap-2 com-border-2 com-border-dashed com-border-Bright-Gray com-rounded-lg com-cursor-pointer com-text-Auro-Metal-Saurus com-text-sm com-font-medium com-text-center com-px-2;
+
+      fa-icon {
+        @apply com-text-2xl;
+      }
+
+      &:hover {
+        @apply com-border-Azure com-text-Azure;
+      }
+    }
+  }
+
+  .design-pagination {
+    @apply com-mb-4;
+  }
+}

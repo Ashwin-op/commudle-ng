@@ -1,0 +1,56 @@
+<div class="certificate-design-picker">
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+  <ng-container *ngIf="!isLoading">
+    <div class="design-grid">
+      <div class="upload-tile" (click)="openUploadDialog()">
+        <fa-icon [icon]="icons.faPlus"></fa-icon>
+        <span>Upload a new design</span>
+      </div>
+
+      <div class="design-row">
+        <div
+          *ngFor="let design of designs"
+          class="design-card"
+          [class.selected]="design.id === batch.design?.id"
+          (click)="selectDesign(design)"
+        >
+          <div class="design-thumb">
+            <img [src]="design.background_image_url" [alt]="design.name" />
+            <div class="selected-badge" *ngIf="design.id === batch.design?.id">
+              <fa-icon [icon]="icons.faCheck"></fa-icon>
+            </div>
+            <div *ngIf="design.design_type !== ECertificateDesignType.PRESET" class="design-actions">
+              <button ghost comButton size="tiny" tabindex="-1" class="kebab-button">
+                <fa-icon [icon]="icons.faEllipsisVertical"></fa-icon>
+              </button>
+              <select
+                class="design-actions-select"
+                (click)="$event.stopPropagation()"
+                (change)="onDesignAction(design, $any($event.target).value, $event); $any($event.target).value = ''"
+              >
+                <option value="" disabled selected>Actions</option>
+                <option value="delete">Delete</option>
+              </select>
+            </div>
+          </div>
+          <div class="design-card-footer">
+            <span class="design-name">{{ design.name }}</span>
+            <span class="design-type" *ngIf="design.design_type === ECertificateDesignType.PRESET">Preset</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <app-pagination
+      class="design-pagination"
+      *ngIf="designTotal > designPageSize"
+      [current]="designPage"
+      [count]="designPageSize"
+      [total]="designTotal"
+      (goTo)="onDesignPageChange($event)"
+      (next)="onDesignPageChange($event)"
+      (previous)="onDesignPageChange($event)"
+    ></app-pagination>
+  </ng-container>
+</div>

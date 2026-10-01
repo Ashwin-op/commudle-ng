@@ -5,7 +5,7 @@ import { environment } from 'apps/commudle-admin/src/environments/environment';
 import { faCalendar, faClock } from '@fortawesome/free-regular-svg-icons';
 import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.service';
 import { IUser } from '@commudle/shared-models';
-import { EHttpContextFlag } from 'apps/shared-models/enums/http-context-tokens';
+import { EHttpContextFlag } from '@commudle/shared-models';
 
 @Component({
   selector: 'commudle-blog-card',

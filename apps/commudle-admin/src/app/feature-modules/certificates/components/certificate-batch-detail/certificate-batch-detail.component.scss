@@ -1,0 +1,101 @@
+.certificate-batch-detail {
+  @apply com-p-4 md:com-p-6 com-bg-white com-min-h-screen com-rounded-10 com-overflow-hidden com-flex com-flex-col com-gap-6;
+
+  .back-link {
+    @apply com-inline-flex com-items-center com-gap-1 com-w-fit com-text-sm com-text-Auro-Metal-Saurus com-no-underline;
+
+    fa-icon {
+      @apply com-text-base;
+    }
+
+    &:hover {
+      @apply com-text-Azure;
+    }
+  }
+
+  .detail-header {
+    @apply com-mb-0;
+
+    .page-title {
+      @apply com-text-2xl com-font-semibold com-text-Yankees-Blue com-m-0;
+    }
+
+    .name-row {
+      @apply com-flex com-items-center com-gap-2;
+
+      .name-input {
+        @apply com-text-2xl com-font-semibold com-max-w-[24rem];
+      }
+    }
+
+    .meta-line {
+      @apply com-flex com-items-center com-gap-4 com-mt-2;
+
+      .meta-item {
+        @apply com-text-Auro-Metal-Saurus com-text-sm;
+      }
+    }
+  }
+
+  .stats-card {
+    .stats-summary {
+      @apply com-flex com-flex-col md:com-flex-row com-items-start md:com-items-center com-gap-6;
+
+      .stats-numbers {
+        @apply com-flex com-gap-8 com-flex-none;
+
+        .stat {
+          @apply com-text-center;
+
+          .stat-value {
+            @apply com-text-[1.75rem] com-font-semibold;
+          }
+
+          .stat-label {
+            @apply com-text-Auro-Metal-Saurus com-text-sm;
+          }
+        }
+      }
+
+      .send-progress {
+        @apply com-flex-1 com-w-full;
+
+        .send-progress-header {
+          @apply com-flex com-justify-between com-text-sm com-text-Auro-Metal-Saurus com-mb-2;
+        }
+
+        .progress-bar {
+          @apply com-w-full com-h-2 com-rounded-full com-bg-gray-100 com-overflow-hidden;
+
+          .progress-bar-fill {
+            @apply com-h-full com-bg-Azure com-rounded-full;
+          }
+        }
+      }
+    }
+  }
+
+  .step-heading {
+    @apply com-mb-4;
+
+    .step-title-row {
+      @apply com-flex com-items-center com-gap-3;
+
+      .step-number {
+        @apply com-flex-none com-w-6 com-h-6 com-rounded-full com-bg-Azure com-text-white com-text-sm com-font-semibold com-flex com-items-center com-justify-center;
+      }
+
+      h3 {
+        @apply com-text-lg com-font-semibold com-text-Yankees-Blue com-m-0;
+      }
+    }
+
+    .step-description {
+      @apply com-text-sm com-text-Auro-Metal-Saurus com-m-0 com-mt-1 com-pl-9;
+    }
+  }
+
+  .placeholder-section {
+    @apply com-mb-4 com-text-Auro-Metal-Saurus;
+  }
+}

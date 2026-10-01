@@ -1,0 +1,110 @@
+.certificate-recipients-table {
+  // The table swaps out for a spinner on every refresh (*ngIf="isLoading")
+  // - without a floor here the whole section collapses to the spinner's
+  // height then jumps back, reading as a flicker rather than a refresh.
+  @apply com-min-h-[20rem];
+
+  .table-header {
+    @apply com-flex com-flex-col md:com-flex-row com-justify-between md:com-items-center com-gap-3 com-mb-4;
+
+    .search-form {
+      @apply com-w-full md:com-max-w-[20rem];
+
+      input {
+        @apply com-w-full;
+      }
+    }
+
+    .table-header-actions {
+      @apply com-flex com-gap-2 com-flex-none;
+    }
+  }
+
+  .empty-state {
+    @apply com-text-center com-text-Auro-Metal-Saurus com-py-4;
+  }
+
+  .no-email-banner {
+    @apply com-p-3 com-mb-4 com-bg-yellow-50 com-rounded-lg com-text-yellow-700 com-text-sm;
+  }
+
+  .recipient-list-container {
+    @apply com-w-full;
+
+    .bulk-actions {
+      @apply com-flex com-items-center com-gap-3 com-mb-3 com-p-3 com-bg-blue-50 com-rounded-lg;
+
+      .bulk-actions-count {
+        @apply com-text-sm com-font-medium com-text-Yankees-Blue;
+      }
+    }
+
+    .table-wrapper {
+      @apply com-overflow-scroll;
+
+      .recipients-table {
+        @apply com-w-full com-border-collapse com-bg-gray-50;
+
+        .table-header-row {
+          @apply com-border-0 com-border-solid com-border-b com-border-Bright-Gray com-bg-white;
+
+          th {
+            @apply com-px-4 com-py-2 com-text-left com-text-xs com-font-semibold com-text-gray-500;
+
+            &.select-column {
+              @apply com-w-8 com-px-2;
+            }
+
+            &.thumbnail-column {
+              @apply com-w-14 com-px-2;
+            }
+          }
+        }
+
+        .recipient-row {
+          @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray hover:com-bg-gray-100 com-transition-colors;
+
+          &:last-child {
+            @apply com-border-b-0;
+          }
+
+          td {
+            @apply com-px-4 com-py-2 com-text-sm com-font-medium com-text-gray-500;
+
+            &.actions {
+              @apply com-whitespace-nowrap;
+            }
+
+            &.select-column {
+              @apply com-w-8 com-px-2;
+            }
+
+            &.thumbnail-column {
+              @apply com-w-14 com-px-2;
+            }
+          }
+        }
+      }
+    }
+
+    .pagination {
+      @apply com-p-0 com-pt-6 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+    }
+  }
+}
+
+.skip-reason {
+  @apply com-text-xs com-text-red-500 com-mt-1;
+}
+
+.revoked-tag {
+  @apply com-text-xs com-font-semibold com-text-red-500 com-uppercase com-tracking-wide com-mt-1;
+}
+
+.missing-values-warning {
+  @apply com-text-yellow-600 com-ml-2 com-cursor-help com-align-middle;
+}
+
+.certificate-thumbnail {
+  @apply com-w-12 com-h-8 com-object-cover com-rounded com-border com-border-solid com-border-Bright-Gray com-bg-white;
+}

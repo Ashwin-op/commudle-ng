@@ -1,0 +1,20 @@
+<com-card class="certificate-recipient-preview-dialog">
+  <com-card-header class="dialog-header">
+    <span>Preview - {{ recipient.email }}</span>
+    <button ghost comButton size="small" (click)="close()" shape="round">
+      <fa-icon [icon]="icons.faXmark"></fa-icon>
+    </button>
+  </com-card-header>
+  <com-card-body class="dialog-body">
+    <app-skeleton-pdf-preview *ngIf="isLoading" class="pdf-object"></app-skeleton-pdf-preview>
+
+    <commudle-alert *ngIf="errorMessage" [error]="true" [errorMessage]="errorMessage"></commudle-alert>
+
+    <object
+      *ngIf="pdfObjectUrl"
+      [attr.data]="pdfObjectUrl | safe : 'resourceUrl'"
+      type="application/pdf"
+      class="pdf-object"
+    ></object>
+  </com-card-body>
+</com-card>

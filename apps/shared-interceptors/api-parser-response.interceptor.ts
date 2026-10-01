@@ -8,7 +8,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LibErrorHandlerService } from 'apps/lib-error-handler/src/public-api';
-import { EHttpContextFlag } from 'apps/shared-models/enums/http-context-tokens';
+import { EHttpContextFlag } from '@commudle/shared-models';
 import { EMPTY, Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
@@ -21,6 +21,9 @@ export class ApiParserResponseInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       map((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
+          if (req.responseType !== 'json') {
+            return event;
+          }
           event = event.clone({
             body: event.body.data,
           });
@@ -33,8 +36,10 @@ export class ApiParserResponseInterceptor implements HttpInterceptor {
             return EMPTY;
           }
 
-          // show a dialog/redirect, based on error code
-          this.errorHandleService.handleError(error.status, error.error.message);
+          if (req.context.get(EHttpContextFlag.SKIP_ERROR_TOAST) !== true) {
+            // show a dialog/redirect, based on error code
+            this.errorHandleService.handleError(error.status, error.error.message);
+          }
         }
         return throwError(error);
       }),

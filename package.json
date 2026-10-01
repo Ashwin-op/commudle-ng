@@ -77,6 +77,7 @@
     "grapesjs-preset-newsletter": "^1.0.2",
     "gsap": "^3.15.0",
     "hls.js": "^1.6.15",
+    "konva": "^10.5.0",
     "lean-qr": "^2.3.4",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
