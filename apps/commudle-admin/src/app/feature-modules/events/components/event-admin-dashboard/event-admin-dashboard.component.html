@@ -231,18 +231,27 @@
       </header>
       <div class="audience-content">
         <div class="audience-chart">
-          <div class="chart-placeholder"></div>
+          <svg *ngIf="audienceSnapshot?.experience_levels?.length" class="chart-donut" viewBox="0 0 36 36">
+            <circle class="chart-donut-track" cx="18" cy="18" r="15.9155" />
+            <circle
+              *ngFor="let segment of experienceSegments"
+              class="chart-donut-segment"
+              cx="18"
+              cy="18"
+              r="15.9155"
+              [attr.stroke]="segment.color"
+              [attr.stroke-dasharray]="segment.dashArray"
+              [attr.stroke-dashoffset]="segment.dashOffset"
+            />
+          </svg>
+          <div
+            *ngIf="!isAudienceLoading && !audienceSnapshot?.experience_levels?.length"
+            class="chart-donut-empty"
+          ></div>
           <ul class="chart-legend">
             <li *ngFor="let level of audienceSnapshot?.experience_levels; let i = index">
-              <span
-                class="legend-dot"
-                [ngClass]="{
-                  'com-bg-blue-500': i % 3 === 0,
-                  'com-bg-green-500': i % 3 === 1,
-                  'com-bg-orange-500': i % 3 === 2
-                }"
-              ></span>
-              {{ level.name }} <span class="legend-pct">{{ level.percentage }}%</span>
+              <span class="legend-dot" [style.background-color]="audienceColor(i)"></span>
+              {{ level.name | capitalizeAndRemoveUnderscore }} <span class="legend-pct">{{ level.percentage }}%</span>
             </li>
             <li *ngIf="!isAudienceLoading && !audienceSnapshot?.experience_levels?.length">No data yet</li>
           </ul>

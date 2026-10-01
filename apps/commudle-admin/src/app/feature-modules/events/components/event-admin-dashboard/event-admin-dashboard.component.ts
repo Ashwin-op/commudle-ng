@@ -9,6 +9,7 @@ import {
   IEventDashboardNeedsAttention,
   IEventDashboardPostEventSnapshot,
   IEventDashboardSnapshot,
+  IDashboardDistributionItem,
   EEventType,
 } from '@commudle/shared-models';
 import { SeoService } from '@commudle/shared-services';
@@ -422,6 +423,27 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
         },
       }),
     );
+  }
+
+  private readonly audiencePalette = ['#3b82f6', '#22c55e', '#f97316', '#a855f7', '#eab308', '#ec4899'];
+
+  audienceColor(index: number): string {
+    return this.audiencePalette[index % this.audiencePalette.length];
+  }
+
+  get experienceSegments(): { color: string; dashArray: string; dashOffset: number }[] {
+    const levels = this.audienceSnapshot?.experience_levels || [];
+    let cumulative = 0;
+    return levels.map((level: IDashboardDistributionItem, index: number) => {
+      const pct = level.percentage || 0;
+      const segment = {
+        color: this.audienceColor(index),
+        dashArray: `${pct} ${100 - pct}`,
+        dashOffset: 25 - cumulative, // 25 rotates the start to 12 o'clock
+      };
+      cumulative += pct;
+      return segment;
+    });
   }
 
   getPostEventSnapshot(): void {
