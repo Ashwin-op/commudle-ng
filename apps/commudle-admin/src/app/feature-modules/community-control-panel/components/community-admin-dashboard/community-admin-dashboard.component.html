@@ -196,7 +196,19 @@
             >{{ scheduleDateLabel(item.scheduled_at) }}</span
           >
           <p class="timeline-event">
-            <span class="timeline-event-name">{{ item.title }}</span>
+            <span class="timeline-event-name">
+              <fa-icon
+                [icon]="
+                  item.type === 'hackathon'
+                    ? icons.faTrophy
+                    : item.type === 'newsletter'
+                    ? icons.faNewspaper
+                    : icons.faCalendarPlus
+                "
+                class="timeline-event-icon"
+              ></fa-icon>
+              {{ item.title }}
+            </span>
             <time class="timeline-event-time">{{ item.scheduled_at | date : 'h:mm a' }}</time>
           </p>
         </li>

@@ -164,7 +164,14 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.dashboardCommunitiesService.upcomingSchedule(this.community.slug).subscribe({
         next: (data) => {
-          this.upcomingSchedule = Array.isArray(data?.values) ? data.values : [];
+          const payload = data as unknown as
+            | { values?: ICommunityDashboardScheduleItem[] }
+            | ICommunityDashboardScheduleItem[];
+          this.upcomingSchedule = Array.isArray(payload)
+            ? payload
+            : Array.isArray(payload?.values)
+            ? payload.values
+            : [];
           this.upcomingScheduleLoading = false;
         },
         error: () => {
