@@ -470,11 +470,24 @@
   .audience-chart {
     @apply com-flex com-flex-col com-items-center com-gap-3 com-shrink-0;
 
-    .chart-placeholder {
-      @apply com-w-28 com-h-28 com-rounded-full com-border-solid com-border-blue-500;
+    .chart-donut {
+      @apply com-w-28 com-h-28;
+
+      .chart-donut-track {
+        fill: none;
+        stroke: #e5e7eb;
+        stroke-width: 3.8;
+      }
+
+      .chart-donut-segment {
+        fill: none;
+        stroke-width: 3.8;
+      }
+    }
+
+    .chart-donut-empty {
+      @apply com-w-28 com-h-28 com-rounded-full com-border-solid com-border-gray-200;
       border-width: 12px;
-      border-right-color: #22c55e;
-      border-bottom-color: #f97316;
     }
 
     .chart-legend {
