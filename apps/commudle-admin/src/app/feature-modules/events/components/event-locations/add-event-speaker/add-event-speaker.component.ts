@@ -4,12 +4,14 @@ import { faFileImage, faUserPlus, faXmark } from '@fortawesome/free-solid-svg-ic
 import { IUser } from '@commudle/shared-models';
 import { NbDialogRef, NbDialogService } from '@commudle/theme';
 import { SearchService } from 'apps/commudle-admin/src/app/feature-modules/search/services/search.service';
+import { EmailsService } from 'apps/commudle-admin/src/app/services/emails.service';
 import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.service';
 import { DataFormEntityResponseGroupsService } from 'apps/commudle-admin/src/app/services/data-form-entity-response-groups.service';
 import {
   IDataFormEntityResponseGroup,
   IManualSpeakerFields,
 } from 'apps/shared-models/data_form_entity_response_group.model';
+import { ICommunity } from 'apps/shared-models/community.model';
 import { IEvent } from 'apps/shared-models/event.model';
 import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
 import { of, Subscription } from 'rxjs';
@@ -26,6 +28,7 @@ const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
 })
 export class AddEventSpeakerComponent implements OnInit, OnDestroy {
   @Input() event: IEvent;
+  @Input() community: ICommunity;
   @Output() speakerAdded = new EventEmitter<IDataFormEntityResponseGroup>();
   @Output() speakerUpdated = new EventEmitter<IDataFormEntityResponseGroup>();
 
@@ -42,6 +45,7 @@ export class AddEventSpeakerComponent implements OnInit, OnDestroy {
   profileExist = false;
   isSaving = false;
   showDetails = false;
+  sendEntryPass = false;
   editingSpeaker: IDataFormEntityResponseGroup = null;
 
   private dialogRef: NbDialogRef<any>;
@@ -55,6 +59,7 @@ export class AddEventSpeakerComponent implements OnInit, OnDestroy {
     private appUsersService: AppUsersService,
     private dataFormEntityResponseGroupsService: DataFormEntityResponseGroupsService,
     private toastLogService: LibToastLogService,
+    private emailsService: EmailsService,
   ) {
     this.speakerForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -265,16 +270,34 @@ export class AddEventSpeakerComponent implements OnInit, OnDestroy {
         this.isSaving = false;
         this.toastLogService.successDialog('Speaker added!');
         this.speakerAdded.emit(speaker);
+        if (this.sendEntryPass) {
+          this.sendEntryPassEmail(speaker, formData.get('email') as string);
+        }
         this.dialogRef.close();
       },
       error: () => (this.isSaving = false),
     });
   }
 
+  // Reuses the existing entry pass mailer. It must only be called with the speaker's own email: with a blank
+  // or unknown recipient the backend sends to every confirmed registration in the group.
+  private sendEntryPassEmail(speaker: IDataFormEntityResponseGroup, email: string) {
+    if (!email || !speaker.event_data_form_entity_group_id || !this.community) {
+      this.toastLogService.warningDialog(
+        'Speaker added, but the entry pass could not be sent. Send it from the responses page.',
+      );
+      return;
+    }
+    this.emailsService
+      .sendEntryPassToRecipient(this.event, this.community.id, speaker.event_data_form_entity_group_id, email, false)
+      .subscribe(() => this.toastLogService.successDialog('Entry pass is being sent!'));
+  }
+
   resetForm() {
     this.speakerForm.reset({ email: '', name: '', designation: '', company: '', about: '' });
     this.speakerForm.get('email').enable({ emitEvent: false });
     this.editingSpeaker = null;
+    this.sendEntryPass = false;
     this.showDetails = false;
     this.userSuggestions = [];
     this.imageUrl = '';

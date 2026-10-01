@@ -37,3 +37,7 @@
 .actions {
   @apply com-flex com-justify-between com-items-center;
 }
+
+.send-entry-pass {
+  @apply com-flex com-items-center com-gap-2 com-mb-3 com-text-sm com-cursor-pointer;
+}

@@ -22,6 +22,7 @@ export interface IDataFormEntityResponseGroup {
   agg_user_community_engagement: IAggUserCommunityEngagement;
   notes: INote[];
   manually_added?: boolean;
+  event_data_form_entity_group_id?: number;
   speaker_overrides?: ISpeakerOverrides;
 }
 

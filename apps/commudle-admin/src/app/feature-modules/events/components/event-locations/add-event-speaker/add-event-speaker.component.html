@@ -126,6 +126,10 @@
       </form>
     </com-card-body>
     <com-card-footer *ngIf="showDetails">
+      <label *ngIf="!editingSpeaker" class="send-entry-pass">
+        <input type="checkbox" [(ngModel)]="sendEntryPass" />
+        Send entry pass (includes the slide upload link)
+      </label>
       <button
         [disabled]="speakerForm.invalid || isSaving"
         (click)="save()"

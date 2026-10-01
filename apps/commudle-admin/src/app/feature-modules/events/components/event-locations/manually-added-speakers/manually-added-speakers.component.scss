@@ -31,13 +31,17 @@
         @apply com-text-sm com-text-gray-500;
       }
 
+      .speaker-pass {
+        @apply com-text-xs com-text-gray-500;
+      }
+
       .cancelled-tag {
         @apply com-ml-2 com-text-xs com-text-red-500;
       }
     }
 
     .speaker-actions {
-      @apply com-flex com-gap-2;
+      @apply com-flex com-flex-wrap com-justify-end com-gap-2;
     }
   }
 }

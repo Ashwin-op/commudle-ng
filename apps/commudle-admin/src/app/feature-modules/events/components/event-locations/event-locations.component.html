@@ -7,6 +7,7 @@
     <app-add-event-speaker
       #speakerDialog
       [event]="event"
+      [community]="community"
       (speakerAdded)="onSpeakerAdded($event)"
       (speakerUpdated)="onSpeakerUpdated($event)"
     ></app-add-event-speaker>
@@ -14,6 +15,8 @@
   <app-manually-added-speakers
     *ngIf="event.editable"
     [speakers]="manuallyAddedSpeakers"
+    [event]="event"
+    [community]="community"
     (editSpeaker)="speakerDialog?.openEdit($event)"
     (speakerCancelled)="onSpeakerUpdated($event)"
   ></app-manually-added-speakers>

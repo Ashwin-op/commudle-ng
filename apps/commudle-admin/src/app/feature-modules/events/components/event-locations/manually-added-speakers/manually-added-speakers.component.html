@@ -9,8 +9,25 @@
           <span *ngIf="isCancelled(speaker)" class="cancelled-tag">Cancelled</span>
         </p>
         <p *ngIf="speaker.user?.designation" class="speaker-designation">{{ speaker.user.designation }}</p>
+        <p class="speaker-pass">
+          Entry pass code:
+          <strong *ngIf="speaker.entry_pass?.unique_code; else noPass">{{ speaker.entry_pass.unique_code }}</strong>
+          <ng-template #noPass><span class="com-text-gray-500">not generated yet</span></ng-template>
+        </p>
       </div>
       <div class="speaker-actions">
+        <button
+          (click)="openEntryPassEmailWindow(speaker)"
+          [disabled]="isCancelled(speaker)"
+          nbButton
+          size="small"
+          outline
+          status="primary"
+          type="button"
+        >
+          <fa-icon [icon]="icons.faEnvelope"></fa-icon>
+          {{ speaker.entry_pass ? 'Resend entry pass' : 'Send entry pass' }}
+        </button>
         <button
           (click)="editSpeaker.emit(speaker)"
           [disabled]="isCancelled(speaker)"
