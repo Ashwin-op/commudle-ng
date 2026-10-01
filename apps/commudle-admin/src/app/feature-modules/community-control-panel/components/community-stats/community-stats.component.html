@@ -60,7 +60,7 @@
                     *ngFor="let tag of tagsDistribution.tags_distribution.top"
                     [tags]="[tag[0] + ' (' + tag[1] + ')']"
                     class="custom-tag"
-                    [inputSize]="custom"
+                    [inputSize]="'custom'"
                     backgroundColor="com-bg-Azure-opacity-10"
                   ></app-tag>
                 </div>
@@ -175,8 +175,9 @@
                   [tags]="[tag[0] + ' (' + tag[1] + ')']"
                   [removable]="false"
                   class="custom-tag"
-                  shape="rounded-2xl"
+                  shape="rounded"
                   backgroundColor="com-bg-Azure-opacity-10"
+                  [inputSize]="'custom'"
                 ></app-tag>
               </div>
             </div>
@@ -190,8 +191,9 @@
                   [tags]="[tag[0] + ' (' + tag[1] + ')']"
                   [removable]="false"
                   class="custom-tag"
-                  shape="rounded-2xl"
+                  shape="rounded"
                   backgroundColor="com-bg-Azure-opacity-10"
+                  [inputSize]="'custom'"
                 ></app-tag>
               </div>
             </div>
