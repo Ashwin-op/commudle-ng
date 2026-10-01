@@ -147,28 +147,28 @@
             [ngClass]="{ activeTag: contributor }"
             (click)="filterByTags(options[1])"
           ></nb-tag> -->
-          <span class="filter-tag" (click)="filterByTags(options[2])">
-            <app-tag
-              [inputSize]="custom"
-              [tags]="['Content Creator']"
-              [removable]="contentCreator"
-              [minTagLimit]="false"
-              [shape]="'rounded'"
-              [backgroundColor]="contentCreator ? 'com-bg-Azure' : 'com-bg-Azure-opacity-10'"
-              [fontColor]="contentCreator ? 'com-text-tWhite' : 'com-text-Azure'"
-            ></app-tag>
-          </span>
-          <span class="filter-tag" (click)="filterByTags(options[3])">
-            <app-tag
-              [inputSize]="custom"
-              [tags]="['Speaker']"
-              [removable]="speaker"
-              [minTagLimit]="false"
-              [shape]="'rounded'"
-              [backgroundColor]="speaker ? 'com-bg-Azure' : 'com-bg-Azure-opacity-10'"
-              [fontColor]="speaker ? 'com-text-tWhite' : 'com-text-Azure'"
-            ></app-tag>
-          </span>
+          <app-tag
+            class="filter-tag"
+            [tags]="['Content Creator']"
+            [removable]="contentCreator"
+            [inputSize]="'custom'"
+            [minTagLimit]="false"
+            [shape]="'rounded'"
+            [backgroundColor]="contentCreator ? 'com-bg-Azure' : 'com-bg-Azure-opacity-10'"
+            [fontColor]="contentCreator ? 'com-text-tWhite' : 'com-text-Azure'"
+            (click)="filterByTags(options[2])"
+          ></app-tag>
+          <app-tag
+            class="filter-tag"
+            [tags]="['Speaker']"
+            [removable]="speaker"
+            [inputSize]="'custom'"
+            [minTagLimit]="false"
+            [shape]="'rounded'"
+            [backgroundColor]="speaker ? 'com-bg-Azure' : 'com-bg-Azure-opacity-10'"
+            [fontColor]="speaker ? 'com-text-tWhite' : 'com-text-Azure'"
+            (click)="filterByTags(options[3])"
+          ></app-tag>
         </div>
         <button
           *ngIf="isActiveFilter"

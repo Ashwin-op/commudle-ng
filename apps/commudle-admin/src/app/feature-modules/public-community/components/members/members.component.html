@@ -102,17 +102,17 @@
 
             <!-- Active Filter Tags -->
             <div class="active-filter-tags">
-              <span class="filter-tag" (click)="filterByTags('mutuals')">
-                <app-tag
-                  [tags]="['My Mutuals']"
-                  [removable]="filterByMutuals"
-                  [minTagLimit]="false"
-                  [shape]="'rounded'"
-                  [backgroundColor]="filterByMutuals ? 'com-bg-Azure' : 'com-bg-Azure-opacity-10'"
-                  [inputSize]="custom"
-                  [fontColor]="filterByMutuals ? 'com-text-tWhite' : 'com-text-Azure'"
-                ></app-tag>
-              </span>
+              <app-tag
+                class="filter-tag"
+                [tags]="['My Mutuals']"
+                [removable]="filterByMutuals"
+                [minTagLimit]="false"
+                [shape]="'rounded'"
+                [inputSize]="'custom'"
+                [backgroundColor]="filterByMutuals ? 'com-bg-Azure' : 'com-bg-Azure-opacity-10'"
+                [fontColor]="filterByMutuals ? 'com-text-tWhite' : 'com-text-Azure'"
+                (click)="filterByTags('mutuals')"
+              ></app-tag>
               <button
                 (click)="clearAllFilters()"
                 nbButton
