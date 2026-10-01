@@ -1,5 +1,5 @@
 .user-profile-menu {
-  @apply com-sticky com-top-[var(--mobile-navbar-offset,52px)] com-z-10 com-m-0 com-mb-4 com-rounded-tl-none com-rounded-tr-none;
+  @apply com-sticky com-top-[var(--mobile-navbar-offset,52px)] com-z-0 com-m-0 com-mb-4 com-rounded-tl-none com-rounded-tr-none;
   @apply com-p-0 com-bg-white com-border com-border-solid com-border-Bright-Gray;
 
   &.sticky-active {
@@ -10,7 +10,7 @@
     -webkit-backdrop-filter: blur(10px);
   }
 
-  nb-card-body {
+  com-card-body {
     @apply com-px-0 com-py-0;
 
     nb-actions {

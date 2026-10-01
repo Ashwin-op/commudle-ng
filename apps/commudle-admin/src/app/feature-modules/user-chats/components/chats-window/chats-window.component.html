@@ -3,8 +3,8 @@
   [ngClass]="{ 'full-page-mode': fullPageMode }"
   [style.width.px]="fullPageMode ? null : chatsWindowWidth"
 >
-  <nb-card>
-    <nb-card-header class="clickable">
+  <com-card>
+    <com-card-header class="clickable">
       <div class="window-options">
         <div class="window-user">
           <app-user-profile-mini
@@ -28,8 +28,8 @@
           </button>
         </div>
       </div>
-    </nb-card-header>
-    <nb-card-body
+    </com-card-header>
+    <com-card-body
       [style.height.vh]="fullPageMode ? null : chatsWindowHeight"
       [style.maxHeight.vh]="fullPageMode ? null : chatsWindowHeight"
       [style.minHeight.vh]="fullPageMode ? null : chatsWindowHeight"
@@ -40,6 +40,6 @@
         [user]="discussionFollower.user"
         (discussionSubscribed)="getMenuBlockedTitle()"
       ></app-discussion-personal-chat>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </div>
