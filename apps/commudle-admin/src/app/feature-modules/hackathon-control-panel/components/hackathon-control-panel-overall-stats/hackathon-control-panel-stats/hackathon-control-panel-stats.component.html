@@ -67,7 +67,7 @@
         <div class="chart-container">
           <div *ngIf="hackathonUserResponsesTags" class="tag-list">
             <app-tag
-              [inputSize]="custom"
+              [inputSize]="'custom'"
               class="custom-tag"
               *ngFor="let tag of hackathonUserResponsesTags.users_tags.tags"
               [tags]="[tag[0] + ' (' + tag[1] + ')']"
