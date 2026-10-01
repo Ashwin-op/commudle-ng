@@ -68,7 +68,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     faTicket,
   };
 
-  needsAttention: { title: string; sub: string; route: string[]; done: boolean }[] = [];
+  needsAttention: IEventDashboardNeedsAttention;
 
   // Hero stats -- GET /api/v2/dashboards/events/event_briefing
   eventBriefing: IEventDashboardBriefing;
@@ -217,7 +217,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.dashboardEventsService.needsAttention(this.event.id).subscribe({
         next: (data) => {
-          this.buildNeedsAttentionFromApi(data);
+          this.needsAttention = data;
           this.isNeedsAttentionLoading = false;
         },
         error: () => {
@@ -231,84 +231,12 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
    * `agenda` and `streaming` come back as free-form status strings rather than booleans,
    * so anything in this known "not set up yet" set counts as still outstanding.
    */
-  private isStatusReady(status: string): boolean {
+  isStatusReady(status: string | undefined): boolean {
     if (!status) {
       return false;
     }
     const notReady = ['not_created', 'not_set', 'not_started', 'pending', 'missing', 'none', 'draft'];
     return !notReady.includes(status.toLowerCase());
-  }
-
-  private buildNeedsAttentionFromApi(data: IEventDashboardNeedsAttention): void {
-    const rsvp = data?.rsvp;
-    const entryPass = data?.entry_pass;
-    const registrationForm = data?.registration_form;
-
-    this.needsAttention = [
-      {
-        title: 'Agenda',
-        sub: this.isStatusReady(data?.agenda?.status) ? 'Agenda is set up' : 'Agenda needs to be created',
-        route: ['agenda'],
-        done: this.isStatusReady(data?.agenda?.status),
-      },
-      {
-        title: 'Registration form',
-        sub: !registrationForm?.created
-          ? 'Registration form needs to be created'
-          : registrationForm?.opened
-          ? 'Registrations are open'
-          : 'Registrations are not open yet',
-        route: ['registrations'],
-        done: !!registrationForm?.created && !!registrationForm?.opened,
-      },
-      {
-        title: 'Speakers',
-        sub:
-          (data?.speakers?.count || 0) > 0
-            ? `${data.speakers.count} speakers added`
-            : 'Speakers have not been added yet',
-        route: ['agenda'],
-        done: (data?.speakers?.count || 0) > 0,
-      },
-      {
-        title: 'RSVP emails',
-        sub:
-          rsvp && (rsvp.eligible_count || 0) > 0
-            ? `RSVP sent (${rsvp.sent_count || 0} out of ${rsvp.eligible_count})`
-            : 'RSVP has not been sent',
-        route: ['updates'],
-        done: !!rsvp && (rsvp.eligible_count || 0) > 0 && (rsvp.not_sent_count || 0) === 0,
-      },
-      {
-        title: 'Entry passes',
-        sub:
-          entryPass && (entryPass.eligible_count || 0) > 0
-            ? `Entry passes sent (${entryPass.sent_count || 0} out of ${entryPass.eligible_count})`
-            : 'Entry passes have not been sent',
-        route: ['updates'],
-        done: !!entryPass && (entryPass.eligible_count || 0) > 0 && (entryPass.not_sent_count || 0) === 0,
-      },
-      {
-        title: 'Speaker form',
-        sub: data?.speaker_form?.created ? 'Speaker form is created' : 'Speaker form needs to be created',
-        route: ['agenda'],
-        done: !!data?.speaker_form?.created,
-      },
-      {
-        title: 'Streaming',
-        sub: this.isStatusReady(data?.streaming?.status)
-          ? 'Online streaming is set up'
-          : 'Online streaming needs to be set up',
-        route: ['edit'],
-        done: this.isStatusReady(data?.streaming?.status),
-      },
-      {
-        title: 'Attendance',
-        sub: data?.attendance?.started ? 'Marking attendance in progress' : 'Start marking attendance',
-        route: ['scan-entry-pass'],
-        done: !!data?.attendance?.started,
-      },
-    ];
   }
 
   getEventSnapshot(): void {

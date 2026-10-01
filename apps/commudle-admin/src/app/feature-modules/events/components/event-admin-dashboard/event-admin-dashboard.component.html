@@ -126,17 +126,182 @@
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faBell" class="com-text-Azure"></fa-icon> Needs Attention
         </h3>
-        <a [routerLink]="['details']" class="view-all-link">View All →</a>
       </div>
       <div class="attention-list">
-        <a *ngFor="let item of needsAttention" [routerLink]="item.route" class="attention-item">
+        <!-- Agenda -->
+        <a [routerLink]="['agenda']" class="attention-item">
           <fa-icon
-            [icon]="item.done ? icons.faCircleCheck : icons.faCircleXmark"
-            [ngClass]="item.done ? 'attention-icon-check' : 'attention-icon-cross'"
+            [icon]="isStatusReady(needsAttention?.agenda?.status) ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="isStatusReady(needsAttention?.agenda?.status) ? 'attention-icon-check' : 'attention-icon-cross'"
           ></fa-icon>
           <div class="attention-content">
-            <span class="attention-title">{{ item.title }}</span>
-            <span class="attention-sub">{{ item.sub }}</span>
+            <span class="attention-title">Agenda</span>
+            <span class="attention-sub">
+              {{ isStatusReady(needsAttention?.agenda?.status) ? 'Agenda is set up' : 'Agenda needs to be created' }}
+            </span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+
+        <!-- Registration form -->
+        <a [routerLink]="['registrations']" class="attention-item">
+          <fa-icon
+            [icon]="
+              needsAttention?.registration_form?.created && needsAttention?.registration_form?.opened
+                ? icons.faCircleCheck
+                : icons.faCircleXmark
+            "
+            [ngClass]="
+              needsAttention?.registration_form?.created && needsAttention?.registration_form?.opened
+                ? 'attention-icon-check'
+                : 'attention-icon-cross'
+            "
+          ></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">Registration form</span>
+            <span class="attention-sub">
+              {{
+                !needsAttention?.registration_form?.created
+                  ? 'Registration form needs to be created'
+                  : needsAttention?.registration_form?.opened
+                  ? 'Registrations are open'
+                  : 'Registrations are not open yet'
+              }}
+            </span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+
+        <!-- Speakers -->
+        <a [routerLink]="['agenda']" class="attention-item">
+          <fa-icon
+            [icon]="needsAttention?.speakers?.count > 0 ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="needsAttention?.speakers?.count > 0 ? 'attention-icon-check' : 'attention-icon-cross'"
+          ></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">Speakers</span>
+            <span class="attention-sub">
+              {{
+                needsAttention?.speakers?.count > 0
+                  ? needsAttention.speakers.count + ' speakers added'
+                  : 'Speakers have not been added yet'
+              }}
+            </span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+
+        <!-- RSVP emails -->
+        <a [routerLink]="['updates']" class="attention-item">
+          <fa-icon
+            [icon]="
+              needsAttention?.rsvp?.eligible_count > 0 && needsAttention?.rsvp?.not_sent_count === 0
+                ? icons.faCircleCheck
+                : icons.faCircleXmark
+            "
+            [ngClass]="
+              needsAttention?.rsvp?.eligible_count > 0 && needsAttention?.rsvp?.not_sent_count === 0
+                ? 'attention-icon-check'
+                : 'attention-icon-cross'
+            "
+          ></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">RSVP emails</span>
+            <span class="attention-sub">
+              {{
+                needsAttention?.rsvp?.eligible_count > 0
+                  ? 'RSVP sent (' +
+                    (needsAttention.rsvp.sent_count || 0) +
+                    ' out of ' +
+                    needsAttention.rsvp.eligible_count +
+                    ')'
+                  : 'RSVP has not been sent'
+              }}
+            </span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+
+        <!-- Entry passes -->
+        <a [routerLink]="['updates']" class="attention-item">
+          <fa-icon
+            [icon]="
+              needsAttention?.entry_pass?.eligible_count > 0 && needsAttention?.entry_pass?.not_sent_count === 0
+                ? icons.faCircleCheck
+                : icons.faCircleXmark
+            "
+            [ngClass]="
+              needsAttention?.entry_pass?.eligible_count > 0 && needsAttention?.entry_pass?.not_sent_count === 0
+                ? 'attention-icon-check'
+                : 'attention-icon-cross'
+            "
+          ></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">Entry passes</span>
+            <span class="attention-sub">
+              {{
+                needsAttention?.entry_pass?.eligible_count > 0
+                  ? 'Entry passes sent (' +
+                    (needsAttention.entry_pass.sent_count || 0) +
+                    ' out of ' +
+                    needsAttention.entry_pass.eligible_count +
+                    ')'
+                  : 'Entry passes have not been sent'
+              }}
+            </span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+
+        <!-- Speaker form -->
+        <a [routerLink]="['registrations']" class="attention-item">
+          <fa-icon
+            [icon]="needsAttention?.speaker_form?.created ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="needsAttention?.speaker_form?.created ? 'attention-icon-check' : 'attention-icon-cross'"
+          ></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">Speaker form</span>
+            <span class="attention-sub">
+              {{
+                needsAttention?.speaker_form?.created ? 'Speaker form is created' : 'Speaker form needs to be created'
+              }}
+            </span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+
+        <!-- Streaming -->
+        <a [routerLink]="['edit']" class="attention-item">
+          <fa-icon
+            [icon]="isStatusReady(needsAttention?.streaming?.status) ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="
+              isStatusReady(needsAttention?.streaming?.status) ? 'attention-icon-check' : 'attention-icon-cross'
+            "
+          ></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">Streaming</span>
+            <span class="attention-sub">
+              {{
+                isStatusReady(needsAttention?.streaming?.status)
+                  ? 'Streaming is set up'
+                  : 'Streaming needs to be set up'
+              }}
+            </span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+
+        <!-- Attendance -->
+        <a [routerLink]="['scan-entry-pass']" class="attention-item">
+          <fa-icon
+            [icon]="needsAttention?.attendance?.started ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="needsAttention?.attendance?.started ? 'attention-icon-check' : 'attention-icon-cross'"
+          ></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">Attendance</span>
+            <span class="attention-sub">
+              {{ needsAttention?.attendance?.started ? 'Marking attendance in progress' : 'Start marking attendance' }}
+            </span>
           </div>
           <span class="attention-arrow">›</span>
         </a>
