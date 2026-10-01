@@ -230,9 +230,7 @@ export class CommunityEventsListComponent implements OnInit, OnDestroy {
       .subscribe((menuItem) => {
         switch (menuItem.title) {
           case 'Clone': {
-            if (this.activeContextMenuEvent?.start_time) {
-              this.openCloneEventWindow(this.cloneEvent, this.activeContextMenuEvent);
-            }
+            this.openCloneEventWindow(this.cloneEvent, this.activeContextMenuEvent);
             break;
           }
           case 'Public Page': {
