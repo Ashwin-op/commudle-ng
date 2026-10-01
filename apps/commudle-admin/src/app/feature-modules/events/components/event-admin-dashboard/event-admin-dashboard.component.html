@@ -311,40 +311,20 @@
         </div>
         <div class="post-event-stats">
           <div class="post-stat">
-            <span class="post-stat-value">{{ eventSnapshot?.registrations?.total || 0 }}</span>
+            <span class="post-stat-value">{{ eventSnapshot?.registrations?.total ?? '—' }}</span>
             <span class="post-stat-label">Registered</span>
           </div>
           <div class="post-stat">
-            <span class="post-stat-value">{{ postEventSnapshot?.speakers_count || 0 }}</span>
+            <span class="post-stat-value">{{ eventSnapshot?.registrations?.confirmed ?? '—' }}</span>
+            <span class="post-stat-label">Attended</span>
+          </div>
+          <div class="post-stat">
+            <span class="post-stat-value">{{ attendanceRate != null ? attendanceRate + '%' : '—' }}</span>
+            <span class="post-stat-label">Attendance Rate</span>
+          </div>
+          <div class="post-stat">
+            <span class="post-stat-value">{{ postEventSnapshot?.speakers_count ?? '—' }}</span>
             <span class="post-stat-label">Speakers</span>
-          </div>
-        </div>
-        <div class="audience-stats">
-          <div class="audience-col">
-            <h6 class="audience-col-heading">Experience Level (attended)</h6>
-            <ul class="audience-list">
-              <li *ngFor="let item of postEventSnapshot?.experience_distribution">
-                <span class="audience-name">{{ item.name }}</span
-                ><span class="audience-bar com-bg-green-500" [style.width.%]="item.percentage"></span
-                ><span class="audience-pct">{{ item.percentage }}%</span>
-              </li>
-              <li *ngIf="!isPostEventLoading && !postEventSnapshot?.experience_distribution?.length">
-                <span class="audience-name">No data yet</span>
-              </li>
-            </ul>
-          </div>
-          <div class="audience-col">
-            <h6 class="audience-col-heading">Domain (attended)</h6>
-            <ul class="audience-list">
-              <li *ngFor="let item of postEventSnapshot?.domain_distribution">
-                <span class="audience-name">{{ item.name }}</span
-                ><span class="audience-bar com-bg-indigo-500" [style.width.%]="item.percentage"></span
-                ><span class="audience-pct">{{ item.percentage }}%</span>
-              </li>
-              <li *ngIf="!isPostEventLoading && !postEventSnapshot?.domain_distribution?.length">
-                <span class="audience-name">No data yet</span>
-              </li>
-            </ul>
           </div>
         </div>
       </div>

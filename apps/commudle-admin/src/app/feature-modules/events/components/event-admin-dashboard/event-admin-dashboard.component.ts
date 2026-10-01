@@ -188,6 +188,15 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     return 94.2 * (1 - this.confirmedPercent / 100);
   }
 
+  /** Attended (confirmed) as a share of total registrations, for the Post-Event grid. Null until snapshot loads. */
+  get attendanceRate(): number | null {
+    const total = this.eventSnapshot?.registrations?.total;
+    if (!total) {
+      return null;
+    }
+    return Math.round(((this.eventSnapshot?.registrations?.confirmed || 0) / total) * 100);
+  }
+
   /**
    * `*ngFor` throws NG0900 the moment it is handed a plain object instead of an array.
    * The dashboards endpoints are still in development, so coerce anything list-shaped

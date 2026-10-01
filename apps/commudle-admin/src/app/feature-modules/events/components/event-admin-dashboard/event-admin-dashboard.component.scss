@@ -457,7 +457,7 @@
         }
 
         .audience-bar {
-          @apply com-h-1.5 com-rounded-full;
+          @apply com-h-1.5 com-rounded-full com-shrink com-min-w-[8px] com-max-w-[72px];
 
           &.bar-4 {
             width: 4%;
@@ -535,10 +535,10 @@
       @apply com-grid com-grid-cols-2 sm:com-grid-cols-3 com-gap-3 com-flex-1;
 
       .post-stat {
-        @apply com-flex com-flex-col com-items-center com-gap-0.5 com-p-2 com-bg-white com-rounded-lg com-border com-border-solid com-border-Bright-Gray;
+        @apply com-flex com-flex-col com-items-center com-justify-center com-gap-1 com-py-4 com-px-3 com-min-w-0 com-bg-white com-rounded-xl com-border com-border-solid com-border-Bright-Gray;
 
         .post-stat-value {
-          @apply com-text-xl com-font-medium com-text-Yankees-Blue;
+          @apply com-text-2xl com-font-semibold com-text-Yankees-Blue com-leading-none;
         }
 
         .post-stat-label {
