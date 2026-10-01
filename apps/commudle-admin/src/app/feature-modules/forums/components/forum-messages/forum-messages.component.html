@@ -6,8 +6,8 @@
   <ng-container *ngIf="userMessage$ | async as userMessage">
     <!-- Back -->
     <div class="fm-header">
-      <button nbButton ghost size="tiny" (click)="backToDiscussions()">
-        <nb-icon icon="arrow-ios-back-outline"></nb-icon>
+      <button comButton ghost size="tiny" (click)="backToDiscussions()">
+        <fa-icon [icon]="icons.faChevronLeft"></fa-icon>
       </button>
       <span class="fm-back-label">Back to discussions</span>
     </div>
@@ -23,7 +23,7 @@
           (error)="onAvatarError(userMessage.user)"
         />
         <div *ngIf="!avatarUrl(userMessage.user)" class="fm-avatar-fallback">
-          <nb-icon icon="person-outline"></nb-icon>
+          <fa-icon [icon]="icons.faUser"></fa-icon>
         </div>
         <div>
           <p class="fm-post-author">{{ userMessage.user?.name || userMessage.user?.username }}</p>
@@ -62,7 +62,7 @@
             (error)="onAvatarError(reply.user)"
           />
           <div *ngIf="!avatarUrl(reply.user)" class="fm-avatar-fallback">
-            <nb-icon icon="person-outline"></nb-icon>
+            <fa-icon [icon]="icons.faUser"></fa-icon>
           </div>
           <div class="fm-reply-line"></div>
         </div>
@@ -90,7 +90,7 @@
     <!-- Reply form -->
     <div class="fm-reply-form">
       <p class="fm-reply-form-title">
-        <nb-icon icon="corner-down-right-outline"></nb-icon>
+        <fa-icon [icon]="icons.faReply"></fa-icon>
         Reply to {{ userMessage.user?.name || userMessage.user?.username }}
       </p>
       <!-- The editor brings its own send button, emoji picker and enter-to-send, and

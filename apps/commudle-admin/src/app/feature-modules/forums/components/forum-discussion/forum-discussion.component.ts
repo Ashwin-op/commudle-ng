@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { IForum, IUser, IUserMessage } from '@commudle/shared-models';
-import { faArrowLeft, faComment, faEye, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faComment, faCommentDots, faPenToSquare, faUser } from '@fortawesome/free-solid-svg-icons';
 import { NbDialogService } from '@commudle/theme';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 import { ForumsStore, removeHtmlTags, SeoService } from '@commudle/shared-services';
@@ -26,10 +26,11 @@ export class ForumDiscussionComponent implements OnInit, OnDestroy {
   staticAssets = staticAssets;
   private readonly destroy$ = new Subject<void>();
   readonly icons = {
-    faArrowLeft,
-    faPlus,
+    faChevronLeft,
     faComment,
-    faEye,
+    faCommentDots,
+    faPenToSquare,
+    faUser,
   };
 
   readonly userMessages$ = this.forumsStore.userMessages$;

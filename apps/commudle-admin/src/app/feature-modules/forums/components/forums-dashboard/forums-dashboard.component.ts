@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ForumsStore } from '@commudle/shared-services';
 import { ForumsContextService } from 'apps/commudle-admin/src/app/feature-modules/forums/services/forums-context.service';
+import { faTableCells } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   standalone: false,
@@ -10,6 +11,10 @@ import { ForumsContextService } from 'apps/commudle-admin/src/app/feature-module
   styleUrls: ['./forums-dashboard.component.scss'],
 })
 export class ForumsDashboardComponent implements OnInit, OnDestroy {
+  readonly icons = {
+    faTableCells,
+  };
+
   readonly categories$ = this.forumStore.categories$;
   readonly isLoadingCategories$ = this.forumStore.isLoadingCategories$;
   readonly sidebarLimit = 7;

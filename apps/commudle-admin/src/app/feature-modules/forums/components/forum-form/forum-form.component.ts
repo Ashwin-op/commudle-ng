@@ -4,6 +4,7 @@ import { NbDialogRef } from '@commudle/theme';
 import { ForumService, ForumsStore, ToastrService } from '@commudle/shared-services';
 import { IChannelCategory, IForum } from '@commudle/shared-models';
 import { Subject, takeUntil } from 'rxjs';
+import { faCirclePlus, faComment, faPen, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   standalone: false,
@@ -12,6 +13,14 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrls: ['./forum-form.component.scss'],
 })
 export class ForumFormComponent implements OnInit, OnDestroy {
+  readonly icons = {
+    faCirclePlus,
+    faComment,
+    faPen,
+    faSpinner,
+    faXmark,
+  };
+
   @Input() forumId: number;
   @Input() categoryName = '';
   @Input() isAdmin = false;

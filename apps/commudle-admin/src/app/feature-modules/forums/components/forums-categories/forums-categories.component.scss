@@ -152,7 +152,7 @@
               @apply com-bg-Azureish-White com-text-primary-500;
             }
 
-            nb-icon {
+            fa-icon {
               @apply com-text-sm com-text-Cadet-Grey com-flex-shrink-0;
             }
 
@@ -200,7 +200,7 @@
       @apply hover:com-text-Yankees-Blue;
       @apply focus-visible:com-outline-none focus-visible:com-ring-2 focus-visible:com-ring-primary-500;
 
-      nb-icon {
+      fa-icon {
         @apply com-text-sm;
       }
     }

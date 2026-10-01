@@ -2,7 +2,7 @@
   <!-- ── Toolbar ── -->
   <div class="fcat-toolbar">
     <div class="fcat-search">
-      <nb-icon icon="search-outline" class="fcat-search-icon"></nb-icon>
+      <fa-icon [icon]="icons.faMagnifyingGlass" class="fcat-search-icon"></fa-icon>
       <input
         type="text"
         class="fcat-search-input"
@@ -11,8 +11,8 @@
         (ngModelChange)="onSearchChange($event)"
       />
     </div>
-    <button nbButton status="primary" shape="semi-round" size="small" *ngIf="isAdmin" (click)="openCreateDialog()">
-      <nb-icon icon="plus-outline"></nb-icon>
+    <button comButton status="primary" shape="semi-round" size="small" *ngIf="isAdmin" (click)="openCreateDialog()">
+      <fa-icon [icon]="icons.faPlus"></fa-icon>
       Create Forum
     </button>
   </div>
@@ -43,10 +43,10 @@
           <!-- Empty -->
           <div class="fcat-empty" *ngIf="forums.length === 0">
             <div class="fcat-empty-art" aria-hidden="true">
-              <nb-icon
-                [icon]="searchQuery ? 'search-outline' : 'message-square-outline'"
+              <fa-icon
+                [icon]="searchQuery ? icons.faMagnifyingGlass : icons.faCommentDots"
                 class="fcat-empty-icon"
-              ></nb-icon>
+              ></fa-icon>
             </div>
 
             <h2 class="fcat-empty-title">
@@ -61,14 +61,14 @@
             </p>
 
             <button
-              nbButton
+              comButton
               status="primary"
               shape="semi-round"
               size="large"
               *ngIf="isAdmin && !searchQuery"
               (click)="openCreateDialog()"
             >
-              <nb-icon icon="plus-outline"></nb-icon>
+              <fa-icon [icon]="icons.faPlus"></fa-icon>
               Create the first forum
             </button>
           </div>
@@ -84,7 +84,7 @@
                 [attr.aria-pressed]="sortBy === forumSort.LATEST"
                 (click)="onSortChange(forumSort.LATEST)"
               >
-                <nb-icon icon="clock-outline" aria-hidden="true"></nb-icon>
+                <fa-icon [icon]="icons.faClock" aria-hidden="true"></fa-icon>
                 Newest
               </button>
               <button
@@ -94,7 +94,7 @@
                 [attr.aria-pressed]="sortBy === forumSort.ACTIVITY"
                 (click)="onSortChange(forumSort.ACTIVITY)"
               >
-                <nb-icon icon="message-circle-outline" aria-hidden="true"></nb-icon>
+                <fa-icon [icon]="icons.faComment" aria-hidden="true"></fa-icon>
                 Latest reply
               </button>
             </div>
@@ -113,7 +113,7 @@
               class="fcat-forum-row"
             >
               <div class="fcat-forum-icon">
-                <nb-icon icon="message-circle-outline"></nb-icon>
+                <fa-icon [icon]="icons.faComment"></fa-icon>
               </div>
               <div class="fcat-forum-info">
                 <p class="fcat-forum-name">{{ forum.name }}</p>
@@ -161,7 +161,7 @@
         <commudle-loading-spinner *ngIf="isLoadingCategories$ | async"></commudle-loading-spinner>
         <div class="fcat-cat-list" *ngIf="!(isLoadingCategories$ | async)">
           <a *ngFor="let cat of categories" [routerLink]="[cat.slug]" class="fcat-cat-item">
-            <nb-icon icon="message-circle-outline"></nb-icon>
+            <fa-icon [icon]="icons.faComment"></fa-icon>
             <span class="fcat-cat-name">{{ cat.name }}</span>
             <span class="fcat-cat-count">{{ cat.channels_count }}</span>
           </a>

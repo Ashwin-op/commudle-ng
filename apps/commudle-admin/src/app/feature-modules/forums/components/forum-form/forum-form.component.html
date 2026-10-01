@@ -2,15 +2,15 @@
   <nb-card-header class="ff-header">
     <div class="ff-header-content">
       <div class="ff-header-icon">
-        <nb-icon [icon]="forumId ? 'edit-2-outline' : 'plus-circle-outline'"></nb-icon>
+        <fa-icon [icon]="forumId ? icons.faPen : icons.faCirclePlus"></fa-icon>
       </div>
       <div>
         <h4 class="ff-title">{{ forumId ? 'Edit Topic' : 'New Topic' }}</h4>
         <p class="ff-subtitle">{{ forumId ? 'Update the topic details below' : 'Create a new discussion topic' }}</p>
       </div>
     </div>
-    <button nbButton ghost size="small" shape="round" (click)="closeForm()">
-      <nb-icon icon="close-outline"></nb-icon>
+    <button comButton ghost size="small" shape="round" (click)="closeForm()">
+      <fa-icon [icon]="icons.faXmark"></fa-icon>
     </button>
   </nb-card-header>
 
@@ -66,7 +66,7 @@
             (blur)="hideSuggestions()"
           />
           <!-- New category badge -->
-          <span class="ff-new-badge" *ngIf="isNewCategory"> <nb-icon icon="plus-circle-outline"></nb-icon> New </span>
+          <span class="ff-new-badge" *ngIf="isNewCategory"> <fa-icon [icon]="icons.faCirclePlus"></fa-icon> New </span>
         </div>
 
         <!-- Suggestions dropdown -->
@@ -77,7 +77,7 @@
             *ngFor="let cat of filteredCategories"
             (mousedown)="selectCategory(cat)"
           >
-            <nb-icon icon="message-circle-outline" class="ff-suggestion-icon"></nb-icon>
+            <fa-icon [icon]="icons.faComment" class="ff-suggestion-icon"></fa-icon>
             <span>{{ cat.name }}</span>
             <span class="ff-suggestion-count">{{ cat.channels_count }} topics</span>
           </button>
@@ -121,16 +121,16 @@
   </nb-card-body>
 
   <nb-card-footer class="ff-footer">
-    <button nbButton ghost size="small" (click)="closeForm()">Cancel</button>
+    <button comButton ghost size="small" (click)="closeForm()">Cancel</button>
     <button
-      nbButton
+      comButton
       status="primary"
       shape="semi-round"
       size="small"
       [disabled]="topicForm.invalid || isSubmitting"
       (click)="onSubmit()"
     >
-      <nb-icon *ngIf="isSubmitting" icon="loader-outline" class="ff-spin"></nb-icon>
+      <fa-icon *ngIf="isSubmitting" [icon]="icons.faSpinner" class="ff-spin"></fa-icon>
       {{ isSubmitting ? 'Saving...' : forumId ? 'Save Changes' : 'Create Forum' }}
     </button>
   </nb-card-footer>

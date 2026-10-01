@@ -2,15 +2,15 @@
   <nb-card-header class="ndf-header">
     <div class="ndf-header-content">
       <div class="ndf-header-icon">
-        <nb-icon icon="edit-outline"></nb-icon>
+        <fa-icon [icon]="icons.faPenToSquare"></fa-icon>
       </div>
       <div>
         <h4 class="ndf-title">Start a Discussion</h4>
         <p class="ndf-subtitle">Share your question or idea with the community</p>
       </div>
     </div>
-    <button nbButton ghost size="small" shape="round" (click)="closeDialog()">
-      <nb-icon icon="close-outline"></nb-icon>
+    <button comButton ghost size="small" shape="round" (click)="closeDialog()">
+      <fa-icon [icon]="icons.faXmark"></fa-icon>
     </button>
   </nb-card-header>
 
@@ -59,16 +59,16 @@
   </nb-card-body>
 
   <nb-card-footer class="ndf-footer">
-    <button nbButton ghost size="small" (click)="closeDialog()">Cancel</button>
+    <button comButton ghost size="small" (click)="closeDialog()">Cancel</button>
     <button
-      nbButton
+      comButton
       status="primary"
       shape="semi-round"
       size="small"
       [disabled]="discussionForm.invalid"
       (click)="onSubmit()"
     >
-      <nb-icon icon="paper-plane-outline"></nb-icon>
+      <fa-icon [icon]="icons.faPaperPlane"></fa-icon>
       Post Discussion
     </button>
   </nb-card-footer>

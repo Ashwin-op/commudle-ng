@@ -2,12 +2,12 @@
   <!-- ── Header ── -->
   <div class="fbcat-header">
     <div class="fbcat-header-left">
-      <button class="fbcat-back" nbButton ghost size="tiny" (click)="backButton()">
-        <nb-icon icon="arrow-ios-back-outline"></nb-icon>
+      <button class="fbcat-back" comButton ghost size="tiny" (click)="backButton()">
+        <fa-icon [icon]="icons.faChevronLeft"></fa-icon>
       </button>
       <div class="fbcat-category-info" *ngIf="forumCategory">
         <div class="fbcat-category-icon">
-          <nb-icon icon="message-circle-outline"></nb-icon>
+          <fa-icon [icon]="icons.faComment"></fa-icon>
         </div>
         <div>
           <h1 class="fbcat-title">{{ forumCategory.name | titlecase }}</h1>
@@ -15,15 +15,15 @@
         </div>
       </div>
     </div>
-    <button nbButton status="primary" shape="semi-round" size="small" *ngIf="isAdmin" (click)="openCreateDialog()">
-      <nb-icon icon="plus-outline"></nb-icon>
+    <button comButton status="primary" shape="semi-round" size="small" *ngIf="isAdmin" (click)="openCreateDialog()">
+      <fa-icon [icon]="icons.faPlus"></fa-icon>
       New Forum
     </button>
   </div>
 
   <!-- ── Search ── -->
   <div class="fbcat-search">
-    <nb-icon icon="search-outline" class="fbcat-search-icon"></nb-icon>
+    <fa-icon [icon]="icons.faMagnifyingGlass" class="fbcat-search-icon"></fa-icon>
     <input
       type="text"
       class="fbcat-search-input"
@@ -46,10 +46,10 @@
           <!-- Empty -->
           <div class="fbcat-empty" *ngIf="forums.length === 0">
             <div class="fbcat-empty-art" aria-hidden="true">
-              <nb-icon
-                [icon]="searchQuery ? 'search-outline' : 'message-square-outline'"
+              <fa-icon
+                [icon]="searchQuery ? icons.faMagnifyingGlass : icons.faCommentDots"
                 class="fbcat-empty-icon"
-              ></nb-icon>
+              ></fa-icon>
             </div>
 
             <h2 class="fbcat-empty-title">
@@ -64,14 +64,14 @@
             </p>
 
             <button
-              nbButton
+              comButton
               status="primary"
               shape="semi-round"
               size="large"
               *ngIf="isAdmin && !searchQuery"
               (click)="openCreateDialog()"
             >
-              <nb-icon icon="plus-outline"></nb-icon>
+              <fa-icon [icon]="icons.faPlus"></fa-icon>
               Create the first forum
             </button>
           </div>
@@ -86,7 +86,7 @@
             <div class="fbcat-thread-row" *ngFor="let forum of forums; trackBy: trackById">
               <a [routerLink]="[forum.slug]" class="fbcat-thread-main">
                 <div class="fbcat-thread-icon">
-                  <nb-icon icon="message-circle-outline"></nb-icon>
+                  <fa-icon [icon]="icons.faComment"></fa-icon>
                 </div>
                 <div class="fbcat-thread-content">
                   <p class="fbcat-thread-name">{{ forum.name }}</p>
@@ -94,21 +94,21 @@
                 </div>
                 <div class="fbcat-thread-stats">
                   <span class="fbcat-thread-stat">
-                    <nb-icon icon="message-square-outline"></nb-icon>
+                    <fa-icon [icon]="icons.faCommentDots"></fa-icon>
                     {{ forum.total_discussions || 0 }}
                   </span>
                   <span class="fbcat-thread-stat">
-                    <nb-icon icon="corner-down-right-outline"></nb-icon>
+                    <fa-icon [icon]="icons.faReply"></fa-icon>
                     {{ forum.total_replies || 0 }}
                   </span>
                 </div>
               </a>
               <div class="fbcat-thread-actions" *ngIf="isAdmin">
-                <button nbButton ghost size="tiny" shape="round" (click)="editForum(forum)" nbTooltip="Edit">
-                  <nb-icon icon="edit-2-outline"></nb-icon>
+                <button comButton ghost size="tiny" shape="round" (click)="editForum(forum)" nbTooltip="Edit">
+                  <fa-icon [icon]="icons.faPen"></fa-icon>
                 </button>
                 <button
-                  nbButton
+                  comButton
                   ghost
                   size="tiny"
                   shape="round"
@@ -117,7 +117,7 @@
                   nbTooltip="Delete"
                   class="fbcat-delete-btn"
                 >
-                  <nb-icon icon="trash-2-outline"></nb-icon>
+                  <fa-icon [icon]="icons.faTrash"></fa-icon>
                 </button>
               </div>
             </div>
@@ -156,13 +156,13 @@
   <nb-card class="fbcat-delete-dialog">
     <nb-card-header class="fbcat-delete-dialog-header">
       <span>Delete Forum</span>
-      <button nbButton ghost size="small" shape="round" (click)="cancelDelete()">
-        <nb-icon icon="close-outline"></nb-icon>
+      <button comButton ghost size="small" shape="round" (click)="cancelDelete()">
+        <fa-icon [icon]="icons.faXmark"></fa-icon>
       </button>
     </nb-card-header>
     <nb-card-body class="fbcat-delete-dialog-body">
       <div class="fbcat-delete-icon">
-        <nb-icon icon="alert-triangle-outline"></nb-icon>
+        <fa-icon [icon]="icons.faTriangleExclamation"></fa-icon>
       </div>
       <p class="fbcat-delete-title">Are you sure?</p>
       <p class="fbcat-delete-msg">
@@ -175,9 +175,9 @@
       </label>
     </nb-card-body>
     <nb-card-footer class="fbcat-delete-dialog-footer">
-      <button nbButton ghost size="small" (click)="cancelDelete()">Cancel</button>
+      <button comButton ghost size="small" (click)="cancelDelete()">Cancel</button>
       <button
-        nbButton
+        comButton
         status="danger"
         shape="semi-round"
         size="small"

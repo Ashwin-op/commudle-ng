@@ -6,6 +6,18 @@ import { ForumService, ForumsStore, SeoService, ToastrService } from '@commudle/
 import { NbDialogRef, NbDialogService } from '@commudle/theme';
 import { ForumFormComponent } from 'apps/commudle-admin/src/app/feature-modules/forums/components/forum-form/forum-form.component';
 import {
+  faChevronLeft,
+  faComment,
+  faCommentDots,
+  faMagnifyingGlass,
+  faPen,
+  faPlus,
+  faReply,
+  faTrash,
+  faTriangleExclamation,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
+import {
   ForumsContextService,
   IForumParentContext,
 } from 'apps/commudle-admin/src/app/feature-modules/forums/services/forums-context.service';
@@ -17,6 +29,19 @@ import {
   styleUrls: ['./forums-by-category.component.scss'],
 })
 export class ForumsByCategoryComponent implements OnInit, OnDestroy {
+  readonly icons = {
+    faChevronLeft,
+    faComment,
+    faCommentDots,
+    faMagnifyingGlass,
+    faPen,
+    faPlus,
+    faReply,
+    faTrash,
+    faTriangleExclamation,
+    faXmark,
+  };
+
   @ViewChild('deleteDialog') deleteDialogTemplate: TemplateRef<unknown>;
 
   readonly forums$ = this.forumsStore.forums$;

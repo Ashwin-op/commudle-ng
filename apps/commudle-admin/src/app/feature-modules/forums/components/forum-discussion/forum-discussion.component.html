@@ -2,19 +2,19 @@
   <!-- ── Header ── -->
   <div class="fdis-header" *ngIf="forum">
     <div class="fdis-header-left">
-      <button nbButton ghost size="tiny" (click)="backToCategory()">
-        <nb-icon icon="arrow-ios-back-outline"></nb-icon>
+      <button comButton ghost size="tiny" (click)="backToCategory()">
+        <fa-icon [icon]="icons.faChevronLeft"></fa-icon>
       </button>
       <div class="fdis-forum-icon">
-        <nb-icon icon="message-circle-outline"></nb-icon>
+        <fa-icon [icon]="icons.faComment"></fa-icon>
       </div>
       <div>
         <h1 class="fdis-forum-title">{{ forum.name }}</h1>
         <p class="fdis-forum-desc" *ngIf="forum.description">{{ forum.description }}</p>
       </div>
     </div>
-    <button nbButton status="primary" shape="semi-round" size="small" (click)="startNewDiscussion()">
-      <nb-icon icon="edit-outline"></nb-icon>
+    <button comButton status="primary" shape="semi-round" size="small" (click)="startNewDiscussion()">
+      <fa-icon [icon]="icons.faPenToSquare"></fa-icon>
       New Post
     </button>
   </div>
@@ -46,14 +46,14 @@
       <!-- Empty -->
       <div class="fdis-empty" *ngIf="messages.length === 0 && !(isLoading$ | async)">
         <div class="fdis-empty-art" aria-hidden="true">
-          <nb-icon icon="message-square-outline" class="fdis-empty-icon"></nb-icon>
+          <fa-icon [icon]="icons.faCommentDots" class="fdis-empty-icon"></fa-icon>
         </div>
 
         <h2 class="fdis-empty-title">Start the conversation</h2>
         <p class="fdis-empty-sub">Be the first to post in this forum</p>
 
-        <button nbButton status="primary" shape="semi-round" size="large" (click)="startNewDiscussion()">
-          <nb-icon icon="edit-outline"></nb-icon>
+        <button comButton status="primary" shape="semi-round" size="large" (click)="startNewDiscussion()">
+          <fa-icon [icon]="icons.faPenToSquare"></fa-icon>
           Create the first post
         </button>
       </div>
@@ -75,7 +75,7 @@
               (error)="onAvatarError(msg.user)"
             />
             <div *ngIf="!avatarUrl(msg.user)" class="fdis-avatar-fallback">
-              <nb-icon icon="person-outline"></nb-icon>
+              <fa-icon [icon]="icons.faUser"></fa-icon>
             </div>
           </div>
           <div class="fdis-thread-info">
@@ -88,7 +88,7 @@
           </div>
           <div class="fdis-thread-counts">
             <span class="fdis-count-item">
-              <nb-icon icon="message-square-outline"></nb-icon>
+              <fa-icon [icon]="icons.faCommentDots"></fa-icon>
               {{ msg.replies_count || 0 }}
             </span>
           </div>
@@ -96,7 +96,7 @@
 
         <div class="fdis-load-more" *ngIf="hasNextPage$ | async">
           <button
-            nbButton
+            comButton
             outline
             status="primary"
             shape="semi-round"

@@ -5,6 +5,7 @@ import { EForumSort, IChannelCategory, IForum } from '@commudle/shared-models';
 import { ForumsStore, SeoService } from '@commudle/shared-services';
 import { NbDialogService } from '@commudle/theme';
 import { ForumFormComponent } from 'apps/commudle-admin/src/app/feature-modules/forums/components/forum-form/forum-form.component';
+import { faClock, faComment, faCommentDots, faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
   ForumsContextService,
   IForumParentContext,
@@ -17,6 +18,14 @@ import {
   styleUrls: ['./forums-categories.component.scss'],
 })
 export class ForumsCategoriesComponent implements OnInit, OnDestroy {
+  readonly icons = {
+    faClock,
+    faComment,
+    faCommentDots,
+    faMagnifyingGlass,
+    faPlus,
+  };
+
   // Observables consumed in the template
   readonly forums$ = this.forumsStore.forums$;
   readonly isLoadingForums$ = this.forumsStore.isLoadingForums$;

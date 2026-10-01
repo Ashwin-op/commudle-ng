@@ -25,14 +25,14 @@
       @apply com-transition-colors com-duration-150;
       @apply hover:com-bg-Azureish-White hover:com-text-primary-500;
 
-      nb-icon {
+      fa-icon {
         @apply com-text-base com-text-Cadet-Grey com-flex-shrink-0;
       }
 
       &.fd-nav-active {
         @apply com-bg-primary-100 com-text-primary-500 com-font-semibold;
 
-        nb-icon {
+        fa-icon {
           @apply com-text-primary-500;
         }
       }

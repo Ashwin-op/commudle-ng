@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EditorComponent, IEditorValidator } from '@commudle/editor';
 import { IForum, IUser, IUserMessage } from '@commudle/shared-models';
 import { Subject, takeUntil } from 'rxjs';
-import { faArrowLeft, faThumbsUp, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faReply, faUser } from '@fortawesome/free-solid-svg-icons';
 import { CommunityChannelHandlerService } from '@commudle/shared-components';
 import { ForumsStore, removeHtmlTags, SeoService, ToastrService } from '@commudle/shared-services';
 import {
@@ -33,9 +33,9 @@ export class ForumMessagesComponent implements OnInit, OnDestroy {
   };
 
   readonly icons = {
-    faArrowLeft,
-    faThumbsUp,
-    faEye,
+    faChevronLeft,
+    faReply,
+    faUser,
   };
 
   readonly userMessage$ = this.forumsStore.currentUserMessage$;

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDialogRef } from '@commudle/theme';
 import { CommunityChannelHandlerService } from '@commudle/shared-components';
 import { ToastrService } from '@commudle/shared-services';
+import { faPaperPlane, faPenToSquare, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   standalone: false,
@@ -11,6 +12,12 @@ import { ToastrService } from '@commudle/shared-services';
   styleUrls: ['./new-discussion-form.component.scss'],
 })
 export class NewDiscussionFormComponent {
+  readonly icons = {
+    faPaperPlane,
+    faPenToSquare,
+    faXmark,
+  };
+
   @Input() discussionId: number;
   @Input() discussionParent: string;
   discussionForm: FormGroup;
