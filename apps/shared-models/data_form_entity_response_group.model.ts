@@ -37,3 +37,13 @@ export interface IAggUserCommunityEngagement {
   total_uninvited_attended_events: number;
   total_volunteered_events: number;
 }
+
+// Organizer-entered display overrides for a manually added event speaker.
+// Stored on the response group, never written back to the user's profile.
+export interface IManualSpeakerFields {
+  email: string;
+  name: string;
+  designation: string;
+  company: string;
+  about: string;
+}

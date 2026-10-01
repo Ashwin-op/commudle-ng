@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ApiRoutesService } from 'apps/shared-services/api-routes.service';
 import { API_ROUTES } from 'apps/shared-services/api-routes.constants';
 import { IDataFormEntityResponseGroup } from 'apps/shared-models/data_form_entity_response_group.model';
@@ -151,6 +152,15 @@ export class DataFormEntityResponseGroupsService {
       this.apiRoutesService.getRoute(API_ROUTES.DATA_FORM_ENTITY_RESPONSE_GROUPS.GET_EVENT_SPEAKERS),
       { params },
     );
+  }
+
+  createManuallyAddedSpeaker(formData: FormData): Observable<IDataFormEntityResponseGroup> {
+    return this.http
+      .post<{ data_form_entity_response_group: IDataFormEntityResponseGroup }>(
+        this.apiRoutesService.getRoute(API_ROUTES.DATA_FORM_ENTITY_RESPONSE_GROUPS.CREATE_MANUALLY_ADDED_SPEAKER),
+        formData,
+      )
+      .pipe(map((data) => data.data_form_entity_response_group));
   }
 
   updateRSVPStatus(token, rsvpStatus): Observable<any> {

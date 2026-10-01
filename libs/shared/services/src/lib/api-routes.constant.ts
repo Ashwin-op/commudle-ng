@@ -316,6 +316,7 @@ export const API_ROUTES = {
     GET_EVENT_DATA_FORM_RESPONSES: 'api/v2/data_form_entity_response_groups/event_data_form_responses',
     UPDATE_EVENT_REGISTRATION_STATUS: 'api/v2/data_form_entity_response_groups/update_event_registration_status',
     GET_EVENT_SPEAKERS: 'api/v2/data_form_entity_response_groups/event_speakers',
+    CREATE_MANUALLY_ADDED_SPEAKER: 'api/v2/data_form_entity_response_groups/create_manually_added_speaker',
     UPDATE_RSVP: 'api/v2/data_form_entity_response_groups/update_rsvp',
     DATA_FORM_ENTITY_RESPONSES: 'api/v2/data_form_entity_response_groups/data_form_entity_responses',
     PUBLIC_GET_EVENT_SPEAKERS: 'api/v2/data_form_entity_response_groups/public_event_speakers',

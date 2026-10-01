@@ -1,0 +1,39 @@
+.speaker-form {
+  @apply com-w-[100dvw] com-max-h-[90dvh] md:com-w-[50dvw] com-mx-0 com-flex com-overflow-y-auto;
+
+  .speaker-fields {
+    @apply com-flex com-flex-col com-gap-3;
+
+    .form-row {
+      @apply com-grid com-grid-cols-1 md:com-grid-cols-2 com-gap-4;
+    }
+
+    .form-field {
+      @apply com-flex com-flex-col com-gap-1;
+
+      label {
+        @apply com-text-sm com-font-medium com-text-gray-700;
+      }
+    }
+
+    .image-upload {
+      @apply com-border com-rounded com-border-dashed com-border-gray-300 com-p-4 com-text-center;
+
+      &.dragging {
+        @apply com-border-primary-500 com-bg-gray-50;
+      }
+    }
+
+    .image-preview {
+      @apply com-flex com-items-center com-gap-3;
+
+      img {
+        @apply com-w-20 com-h-20 com-rounded com-object-cover com-border com-border-gray-200;
+      }
+    }
+  }
+}
+
+.actions {
+  @apply com-flex com-justify-between com-items-center;
+}

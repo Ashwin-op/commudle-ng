@@ -1,0 +1,141 @@
+<button (click)="openDialog()" nbButton status="primary" outline title="Add Speaker">
+  <fa-icon [icon]="icons.faUserPlus"></fa-icon>
+  Add Speaker
+</button>
+
+<ng-template #speakerFormTemplate let-ref="dialogRef">
+  <com-card class="speaker-form">
+    <com-card-header class="actions">
+      <span>Add Speaker</span>
+      <button (click)="ref.close()" ghost nbButton shape="round" size="small" type="button">
+        <fa-icon [icon]="icons.faXmark"></fa-icon>
+      </button>
+    </com-card-header>
+    <com-card-body>
+      <form [formGroup]="speakerForm" class="speaker-fields">
+        <div class="form-field">
+          <label for="speaker-email">Email<span class="com-text-red-500">*</span></label>
+          <input
+            id="speaker-email"
+            type="email"
+            nbInput
+            fullWidth
+            formControlName="email"
+            placeholder="Enter username or email"
+            [nbAutocomplete]="userAutocomplete"
+            (keydown.enter)="$event.preventDefault(); lookupProfile()"
+          />
+          <nb-autocomplete #userAutocomplete (selectedChange)="lookupProfile()">
+            <nb-option *ngFor="let user of userSuggestions" [value]="user.email">
+              <app-user-profile-mini [user]="user" [designation]="true" [size]="'small'"></app-user-profile-mini>
+            </nb-option>
+          </nb-autocomplete>
+          <commudle-alert
+            [error]="speakerForm.controls['email'].hasError('email')"
+            errorMessage="Email was invalid"
+          ></commudle-alert>
+        </div>
+
+        <button
+          *ngIf="!showDetails"
+          [disabled]="speakerForm.controls['email'].invalid"
+          (click)="lookupProfile()"
+          class="com-w-max"
+          nbButton
+          status="primary"
+          type="button"
+        >
+          Submit
+        </button>
+
+        <ng-container *ngIf="showDetails">
+          <small *ngIf="profileExist" class="com-text-gray-500">
+            Existing profile found. Edits below apply to this event only and do not change their profile.
+          </small>
+          <small *ngIf="!profileExist" class="com-text-gray-500">
+            No existing profile found. A new user will be created for this email.
+          </small>
+
+          <div class="form-field">
+            <label>Photo</label>
+            <div
+              *ngIf="!imageUrl"
+              class="image-upload"
+              [class.dragging]="isDragging"
+              (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave($event)"
+              (drop)="onDrop($event)"
+            >
+              <input
+                (change)="onImageChange($event)"
+                type="file"
+                [accept]="acceptedImageTypes"
+                class="com-hidden"
+                #fileInput
+              />
+              <p class="com-m-0 com-mb-2 com-text-sm com-text-gray-500">Drag and drop a photo here, or</p>
+              <button nbButton size="small" outline (click)="fileInput.click()" type="button">
+                <fa-icon [icon]="icons.faFileImage"></fa-icon> Upload
+              </button>
+              <p class="com-m-0 com-mt-2 com-text-xs com-text-gray-500">JPEG, JPG, PNG or WebP, up to 5 MB</p>
+            </div>
+            <div *ngIf="imageUrl" class="image-preview">
+              <img [src]="imageUrl" alt="Speaker photo" />
+              <button nbButton size="small" status="danger" outline (click)="removeImage()" type="button">
+                Replace
+              </button>
+            </div>
+            <commudle-alert [error]="!!imageError" [errorMessage]="imageError"></commudle-alert>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="speaker-name">Name<span class="com-text-red-500">*</span></label>
+              <input id="speaker-name" placeholder="Name" type="text" nbInput fullWidth formControlName="name" />
+            </div>
+            <div class="form-field">
+              <label for="speaker-designation">Designation</label>
+              <input
+                id="speaker-designation"
+                placeholder="Designation"
+                type="text"
+                nbInput
+                fullWidth
+                formControlName="designation"
+              />
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="speaker-company">Company</label>
+            <input id="speaker-company" placeholder="Company" type="text" nbInput fullWidth formControlName="company" />
+          </div>
+
+          <div class="form-field">
+            <label for="speaker-about">About</label>
+            <textarea
+              id="speaker-about"
+              formControlName="about"
+              nbInput
+              fullWidth
+              placeholder="About"
+              rows="3"
+            ></textarea>
+          </div>
+        </ng-container>
+      </form>
+    </com-card-body>
+    <com-card-footer *ngIf="showDetails">
+      <button
+        [disabled]="speakerForm.invalid || isSaving"
+        (click)="save()"
+        type="submit"
+        nbButton
+        fullWidth
+        status="primary"
+      >
+        Add Speaker
+      </button>
+    </com-card-footer>
+  </com-card>
+</ng-template>

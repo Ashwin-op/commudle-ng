@@ -1,9 +1,10 @@
 <div>
-  <div *ngIf="event.editable">
+  <div *ngIf="event.editable" class="agenda-actions">
     <button (click)="showAddEventLocationForm()" nbButton status="primary" title="Add Location">
       <nb-icon icon="plus-circle-outline"></nb-icon>
       Add Location
     </button>
+    <app-add-event-speaker [event]="event" (speakerAdded)="onSpeakerAdded($event)"></app-add-event-speaker>
   </div>
   <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
   <div *ngIf="eventDatesLocation">
