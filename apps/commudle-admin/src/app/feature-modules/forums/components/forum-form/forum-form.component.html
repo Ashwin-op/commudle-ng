@@ -1,5 +1,5 @@
-<nb-card class="ff-dialog">
-  <nb-card-header class="ff-header">
+<com-card class="ff-dialog">
+  <com-card-header class="ff-header">
     <div class="ff-header-content">
       <div class="ff-header-icon">
         <fa-icon [icon]="forumId ? icons.faPen : icons.faCirclePlus"></fa-icon>
@@ -12,9 +12,9 @@
     <button comButton ghost size="small" shape="round" (click)="closeForm()">
       <fa-icon [icon]="icons.faXmark"></fa-icon>
     </button>
-  </nb-card-header>
+  </com-card-header>
 
-  <nb-card-body class="ff-body">
+  <com-card-body class="ff-body">
     <form [formGroup]="topicForm" class="ff-form">
       <!-- ── Topic Name ── -->
       <div class="ff-field">
@@ -118,9 +118,9 @@
         ></commudle-alert>
       </div>
     </form>
-  </nb-card-body>
+  </com-card-body>
 
-  <nb-card-footer class="ff-footer">
+  <com-card-footer class="ff-footer">
     <button comButton ghost size="small" (click)="closeForm()">Cancel</button>
     <button
       comButton
@@ -133,5 +133,5 @@
       <fa-icon *ngIf="isSubmitting" [icon]="icons.faSpinner" class="ff-spin"></fa-icon>
       {{ isSubmitting ? 'Saving...' : forumId ? 'Save Changes' : 'Create Forum' }}
     </button>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

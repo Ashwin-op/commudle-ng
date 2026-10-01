@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ForumsRoutes } from './forums.routing';
 import { ForumsDashboardComponent } from './components/forums-dashboard/forums-dashboard.component';
-import { NbCardModule, NbInputModule, NbTooltipModule } from '@commudle/theme';
-import { CommudleButtonModule } from '@commudle/commudle-theme';
+import { NbInputModule, NbTooltipModule } from '@commudle/theme';
+import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-theme';
 import { ForumsCategoriesComponent } from './components/forums-categories/forums-categories.component';
 import { ForumFormComponent } from './components/forum-form/forum-form.component';
 import { ForumsByCategoryComponent } from './components/forums-by-category/forums-by-category.component';
@@ -38,10 +38,10 @@ import { RouterModule } from '@angular/router';
     RouterModule,
     MiniUserProfileModule,
     SidebarComponent,
-    NbCardModule,
     NbInputModule,
     NbTooltipModule,
     CommudleButtonModule,
+    CommudleCardModule,
     EditorModule,
     SharedComponentsModule,
     NewSharedComponentsModule,

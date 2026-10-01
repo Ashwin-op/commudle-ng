@@ -153,14 +153,14 @@
 
 <!-- ── Delete confirmation ── -->
 <ng-template #deleteDialog>
-  <nb-card class="fbcat-delete-dialog">
-    <nb-card-header class="fbcat-delete-dialog-header">
+  <com-card class="fbcat-delete-dialog">
+    <com-card-header class="fbcat-delete-dialog-header">
       <span>Delete Forum</span>
       <button comButton ghost size="small" shape="round" (click)="cancelDelete()">
         <fa-icon [icon]="icons.faXmark"></fa-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body class="fbcat-delete-dialog-body">
+    </com-card-header>
+    <com-card-body class="fbcat-delete-dialog-body">
       <div class="fbcat-delete-icon">
         <fa-icon [icon]="icons.faTriangleExclamation"></fa-icon>
       </div>
@@ -173,8 +173,8 @@
         <input type="checkbox" #confirmCheck />
         I understand this action cannot be undone
       </label>
-    </nb-card-body>
-    <nb-card-footer class="fbcat-delete-dialog-footer">
+    </com-card-body>
+    <com-card-footer class="fbcat-delete-dialog-footer">
       <button comButton ghost size="small" (click)="cancelDelete()">Cancel</button>
       <button
         comButton
@@ -186,6 +186,6 @@
       >
         {{ isDeletingForum ? 'Deleting...' : 'Delete Forum' }}
       </button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

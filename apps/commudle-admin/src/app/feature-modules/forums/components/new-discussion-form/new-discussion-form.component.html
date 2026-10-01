@@ -1,5 +1,5 @@
-<nb-card class="ndf-dialog">
-  <nb-card-header class="ndf-header">
+<com-card class="ndf-dialog">
+  <com-card-header class="ndf-header">
     <div class="ndf-header-content">
       <div class="ndf-header-icon">
         <fa-icon [icon]="icons.faPenToSquare"></fa-icon>
@@ -12,9 +12,9 @@
     <button comButton ghost size="small" shape="round" (click)="closeDialog()">
       <fa-icon [icon]="icons.faXmark"></fa-icon>
     </button>
-  </nb-card-header>
+  </com-card-header>
 
-  <nb-card-body class="ndf-body">
+  <com-card-body class="ndf-body">
     <form [formGroup]="discussionForm" class="ndf-form">
       <!-- Subject -->
       <div class="ndf-field">
@@ -56,9 +56,9 @@
         ></commudle-alert>
       </div>
     </form>
-  </nb-card-body>
+  </com-card-body>
 
-  <nb-card-footer class="ndf-footer">
+  <com-card-footer class="ndf-footer">
     <button comButton ghost size="small" (click)="closeDialog()">Cancel</button>
     <button
       comButton
@@ -71,5 +71,5 @@
       <fa-icon [icon]="icons.faPaperPlane"></fa-icon>
       Post Discussion
     </button>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>
