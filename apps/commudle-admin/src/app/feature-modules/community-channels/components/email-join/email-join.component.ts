@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { ICommunityChannel } from 'apps/shared-models/community-channel.model';
 import { Component, OnInit } from '@angular/core';
 import { CommunityChannelsService } from '../../services/community-channels.service';
@@ -12,10 +11,10 @@ import { Subscription } from 'rxjs';
 import { EDbModels, EDiscussionType } from '@commudle/shared-models';
 
 @Component({
-    selector: 'app-email-join',
-    templateUrl: './email-join.component.html',
-    styleUrls: ['./email-join.component.scss'],
-    standalone: false
+  selector: 'app-email-join',
+  templateUrl: './email-join.component.html',
+  styleUrls: ['./email-join.component.scss'],
+  standalone: false,
 })
 export class EmailJoinComponent implements OnInit {
   verified = false;
@@ -46,7 +45,7 @@ export class EmailJoinComponent implements OnInit {
   getChannelInfo() {
     this.subscriptions.push(
       this.communityChannelsService.showChannelForm(this.channelId).subscribe((data) => {
-        this.discussionType = data.display_type === EDiscussionType.CHANNEL ? 'channels' : 'forums';
+        this.discussionType = data.display_type === EDiscussionType.CHANNEL ? 'channels' : 'discussions';
         this.communityChannel = data;
         this.channelName = data.name;
         this.community = data.kommunity;

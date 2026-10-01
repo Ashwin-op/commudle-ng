@@ -18,10 +18,10 @@ import { SeoService } from '@commudle/shared-services';
 import { ICommunityGroup } from 'apps/shared-models/community-group.model';
 
 @Component({
-    selector: 'commudle-community-forum',
-    templateUrl: './community-forum.component.html',
-    styleUrls: ['./community-forum.component.scss'],
-    standalone: false
+  selector: 'commudle-community-forum',
+  templateUrl: './community-forum.component.html',
+  styleUrls: ['./community-forum.component.scss'],
+  standalone: false,
 })
 export class CommunityForumComponent implements OnInit, OnDestroy {
   @Input() isCommunityOrganizer = false;
@@ -57,7 +57,9 @@ export class CommunityForumComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.getCurrentUser;
+    // Was `this.getCurrentUser;` - a property read, so it never ran and currentUser
+    // stayed undefined, which kept the organizer-only block in the template hidden.
+    this.getCurrentUser();
     this.getParent();
     this.subscriptions.push(
       this.communityChannelManagerService.selectedForum$.subscribe((data) => {
@@ -82,15 +84,15 @@ export class CommunityForumComponent implements OnInit, OnDestroy {
     let urlSegments = [];
     switch (this.parentType) {
       case EDbModels.KOMMUNITY:
-        urlSegments = ['communities', this.parent.slug, 'forums', forumId];
+        urlSegments = ['communities', this.parent.slug, 'discussions', forumId];
         break;
       case EDbModels.COMMUNITY_GROUP:
-        urlSegments = ['orgs', this.parent.slug, 'forums', forumId];
+        urlSegments = ['orgs', this.parent.slug, 'discussions', forumId];
         break;
       case EDbModels.HACKATHON:
         const hackathon = this.parent as IHackathon;
         if (hackathon.community) {
-          urlSegments = ['communities', hackathon.community.slug, 'hackathons', hackathon.slug, 'forums', forumId];
+          urlSegments = ['communities', hackathon.community.slug, 'hackathons', hackathon.slug, 'discussions', forumId];
         }
         break;
       default:

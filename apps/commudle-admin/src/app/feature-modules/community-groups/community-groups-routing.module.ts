@@ -117,7 +117,7 @@ const routes = [
         },
       },
       {
-        path: 'forums',
+        path: 'discussions',
         component: CommunityGroupChannelComponent,
         canActivate: [AuthGuard],
         data: {
@@ -125,7 +125,7 @@ const routes = [
         },
       },
       {
-        path: 'forums/:community_channel_id',
+        path: 'discussions/:community_channel_id',
         component: CommunityGroupChannelComponent,
         canActivate: [AuthGuard],
         data: {
@@ -133,7 +133,7 @@ const routes = [
         },
       },
       {
-        path: 'forums/join/:token',
+        path: 'discussions/join/:token',
         component: CommunityGroupChannelComponent,
         canActivate: [AuthGuard],
         data: {

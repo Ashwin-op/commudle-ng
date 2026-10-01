@@ -223,7 +223,7 @@ export class ChannelForumDashboardComponent implements OnInit, OnDestroy {
   getQueryParamsData() {
     this.token = this.activatedRoute.snapshot.params.token;
     this.emailToken = this.activatedRoute.snapshot.params.email_token;
-    this.discussionTypeForum = this.router.url.includes('/forums');
+    this.discussionTypeForum = this.router.url.includes('/discussions');
     this.forumName = this.activatedRoute.snapshot.queryParamMap.get('category');
     this.selectedChannelOrFormId = this.activatedRoute.snapshot.params.community_channel_id;
   }
@@ -261,14 +261,15 @@ export class ChannelForumDashboardComponent implements OnInit, OnDestroy {
         this.forumsNamesList = false;
         this.forumMessage = false;
         this.forumsList = false;
-        newUrl = currentUrl.replace(/\/(forums|channels)(\/\d+)?(\?.*)?$/, '/channels');
+        // 'forums' is still matched so a URL arriving before the redirect resolves
+        newUrl = currentUrl.replace(/\/(discussions|forums|channels)(\/\d+)?(\?.*)?$/, '/channels');
         break;
       case EDiscussionType.FORUM:
         this.channelsList = false;
         this.forumsNamesList = false;
         this.forumMessage = false;
         this.forumsList = true;
-        newUrl = currentUrl.replace(/\/(forums|channels)(\/\d+)?(\?.*)?$/, '/forums');
+        newUrl = currentUrl.replace(/\/(discussions|forums|channels)(\/\d+)?(\?.*)?$/, '/discussions');
         break;
       default:
         console.error(`Unable to redirect to ${{ discussionType }}`);

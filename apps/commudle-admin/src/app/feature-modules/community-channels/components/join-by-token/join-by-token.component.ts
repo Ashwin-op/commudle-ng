@@ -14,10 +14,10 @@ import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service'
 import { ICommunityGroup } from 'apps/shared-models/community-group.model';
 
 @Component({
-    selector: 'commudle-join-by-token',
-    templateUrl: './join-by-token.component.html',
-    styleUrls: ['./join-by-token.component.scss'],
-    standalone: false
+  selector: 'commudle-join-by-token',
+  templateUrl: './join-by-token.component.html',
+  styleUrls: ['./join-by-token.component.scss'],
+  standalone: false,
 })
 export class JoinByTokenComponent implements OnInit, OnDestroy {
   @Input() parent: ICommunity | ICommunityGroup | IHackathon;
@@ -46,20 +46,24 @@ export class JoinByTokenComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscriptions.push(
       this.communityChannelsService.showByToken(this.activatedRoute.snapshot.params.token).subscribe((data) => {
-        this.discussionType = data.display_type === EDiscussionType.CHANNEL ? 'channels' : 'forums';
+        this.discussionType = data.display_type === EDiscussionType.CHANNEL ? 'channels' : 'discussions';
         this.communityName = data.kommunity.name;
         this.channelId = data.id;
         this.channelName = data.name;
       }),
-    ),
-      this.authWatchService.currentUser$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
-        this.currentUser = data;
-        if (this.currentUser) {
-          this.onAcceptRoleButton();
-        } else {
-          this.errorHandler.handleError(401, 'Login to apply');
-        }
-      });
+    );
+
+    // Previously joined to the push() above by a comma, which made this a discarded
+    // sub-expression rather than a statement. Behaviour is unchanged: it already ran,
+    // and takeUntil(destroy$) still tears it down.
+    this.authWatchService.currentUser$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      this.currentUser = data;
+      if (this.currentUser) {
+        this.onAcceptRoleButton();
+      } else {
+        this.errorHandler.handleError(401, 'Login to apply');
+      }
+    });
   }
 
   ngOnDestroy(): void {
