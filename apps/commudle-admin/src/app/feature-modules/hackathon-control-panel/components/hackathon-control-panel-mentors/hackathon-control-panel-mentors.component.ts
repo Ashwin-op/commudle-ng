@@ -308,9 +308,7 @@ export class HackathonControlPanelMentorsComponent implements OnInit, OnDestroy 
     const team = this.teamAssignmentData[this.selectedMentorId]?.[this.selectedRoundId]?.assignedTeams?.find(
       (t) => t.name === teamName,
     );
-    if (team) {
-      this.requestRemoveTeam(this.selectedMentorId, team.id, this.selectedRoundId, team.name);
-    }
+    if (team) this.requestRemoveTeam(this.selectedMentorId, team.id, this.selectedRoundId, team.name);
   }
 
   removeTeamFromMentor(mentorId: number, teamId: number, roundId: number): void {
