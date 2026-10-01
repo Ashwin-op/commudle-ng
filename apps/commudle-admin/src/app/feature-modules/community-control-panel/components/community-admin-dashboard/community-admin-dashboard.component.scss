@@ -2744,6 +2744,10 @@
 
         .timeline-event-name {
           @apply com-text-sm com-font-medium com-text-Yankees-Blue;
+
+          .timeline-event-icon {
+            @apply com-mr-1.5 com-text-xs com-text-primary-500;
+          }
         }
 
         .timeline-event-time {
