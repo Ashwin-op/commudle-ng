@@ -285,14 +285,13 @@
           No recent activity yet.
         </li>
       </ul>
-      <button
-        *ngIf="recentActivity.length < recentActivityTotal"
-        (click)="loadMoreRecentActivity()"
-        [disabled]="recentActivityLoading"
-        class="activity-load-more"
-      >
-        {{ recentActivityLoading ? 'Loading…' : 'Show more' }}
-      </button>
+      <commudle-pagination-compact
+        *ngIf="recentActivityTotal > 0"
+        [page]="recentActivityPage"
+        [count]="recentActivityCount"
+        [total]="recentActivityTotal"
+        (pageChange)="onRecentActivityPageChange($event)"
+      ></commudle-pagination-compact>
     </article>
   </section>
 

@@ -52,7 +52,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   recentActivityPage = 1;
   recentActivityTotal = 0;
   recentActivityLoading = false;
-  private readonly recentActivityCount = 10;
+  readonly recentActivityCount = 10;
 
   icons = {
     faCalendarPlus,
@@ -199,8 +199,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         .recentActivity(this.community.slug, this.recentActivityPage, this.recentActivityCount)
         .subscribe({
           next: (data) => {
-            const values = Array.isArray(data?.values) ? data.values : [];
-            this.recentActivity = this.recentActivityPage === 1 ? values : [...this.recentActivity, ...values];
+            this.recentActivity = Array.isArray(data?.values) ? data.values : [];
             this.recentActivityTotal = data?.total || 0;
             this.recentActivityLoading = false;
           },
@@ -219,8 +218,8 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  loadMoreRecentActivity(): void {
-    this.recentActivityPage += 1;
+  onRecentActivityPageChange(page: number): void {
+    this.recentActivityPage = page;
     this.loadRecentActivity();
   }
 

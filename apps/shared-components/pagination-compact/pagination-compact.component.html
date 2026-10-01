@@ -1,0 +1,29 @@
+<nav class="pagination-compact">
+  <span class="range-label">
+    <ng-container *ngIf="total > 0"> {{ rangeStart }} &ndash; {{ rangeEnd }} of {{ total }} </ng-container>
+  </span>
+  <button
+    class="nav-button"
+    nbButton
+    ghost
+    size="small"
+    shape="round"
+    [disabled]="isFirstPage"
+    (click)="onPrevious()"
+    aria-label="Previous page"
+  >
+    <nb-icon icon="chevron-left-outline"></nb-icon>
+  </button>
+  <button
+    class="nav-button"
+    nbButton
+    ghost
+    size="small"
+    shape="round"
+    [disabled]="isLastPage"
+    (click)="onNext()"
+    aria-label="Next page"
+  >
+    <nb-icon icon="chevron-right-outline"></nb-icon>
+  </button>
+</nav>

@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+
+.pagination-compact {
+  @apply com-flex com-items-center com-justify-end com-gap-1;
+
+  .range-label {
+    @apply com-text-sm com-text-Cadet-Grey com-mr-1 com-whitespace-nowrap;
+  }
+
+  .nav-button {
+    @apply com-text-Cadet-Grey;
+
+    &:hover:not([disabled]) {
+      @apply com-text-Yankees-Blue;
+    }
+  }
+}
