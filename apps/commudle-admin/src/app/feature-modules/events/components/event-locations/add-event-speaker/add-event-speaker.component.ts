@@ -27,6 +27,7 @@ const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
 export class AddEventSpeakerComponent implements OnInit, OnDestroy {
   @Input() event: IEvent;
   @Output() speakerAdded = new EventEmitter<IDataFormEntityResponseGroup>();
+  @Output() speakerUpdated = new EventEmitter<IDataFormEntityResponseGroup>();
 
   @ViewChild('speakerFormTemplate', { static: true }) speakerFormTemplate: TemplateRef<any>;
 
@@ -41,6 +42,7 @@ export class AddEventSpeakerComponent implements OnInit, OnDestroy {
   profileExist = false;
   isSaving = false;
   showDetails = false;
+  editingSpeaker: IDataFormEntityResponseGroup = null;
 
   private dialogRef: NbDialogRef<any>;
   private lookedUpEmail = '';
@@ -88,6 +90,32 @@ export class AddEventSpeakerComponent implements OnInit, OnDestroy {
 
   openDialog() {
     this.resetForm();
+    this.openDialogRef();
+  }
+
+  openEdit(speaker: IDataFormEntityResponseGroup) {
+    this.resetForm();
+    this.editingSpeaker = speaker;
+    // Email identifies the user and cannot change on an existing speaker.
+    this.speakerForm.get('email').disable({ emitEvent: false });
+    // Prefer the raw stored overrides; fall back to the displayed values.
+    const overrides = speaker.speaker_overrides;
+    this.speakerForm.patchValue(
+      {
+        name: overrides?.name ?? speaker.user?.name ?? '',
+        designation: overrides?.designation ?? speaker.user?.designation ?? '',
+        company: overrides?.company ?? '',
+        about: overrides?.about ?? '',
+      },
+      { emitEvent: false },
+    );
+    const photoUrl = (overrides?.photo ?? speaker.user?.photo)?.url;
+    this.imageUrl = photoUrl && /^https?:\/\//.test(photoUrl) ? photoUrl : '';
+    this.showDetails = true;
+    this.openDialogRef();
+  }
+
+  private openDialogRef() {
     this.dialogRef = this.dialogService.open(this.speakerFormTemplate);
     this.dialogRef.onClose.subscribe(() => this.resetForm());
   }
@@ -202,16 +230,36 @@ export class AddEventSpeakerComponent implements OnInit, OnDestroy {
       return;
     }
     const formData = new FormData();
-    formData.append('event_id', String(this.event.id));
-    Object.entries(this.speakerForm.value as IManualSpeakerFields).forEach(([key, value]) => {
-      formData.append(key, key === 'email' ? (value || '').trim().toLowerCase() : value || '');
-    });
+    if (this.editingSpeaker) {
+      formData.append('data_form_entity_response_group_id', String(this.editingSpeaker.id));
+      const { name, designation, company, about } = this.speakerForm.getRawValue() as IManualSpeakerFields;
+      Object.entries({ name, designation, company, about }).forEach(([key, value]) => {
+        formData.append(key, value || '');
+      });
+    } else {
+      formData.append('event_id', String(this.event.id));
+      Object.entries(this.speakerForm.value as IManualSpeakerFields).forEach(([key, value]) => {
+        formData.append(key, key === 'email' ? (value || '').trim().toLowerCase() : value || '');
+      });
+    }
     // Only a newly picked file is sent; a prefilled profile photo stays on the user's profile.
     if (this.imageBlob) {
       formData.append('photo', this.imageBlob);
     }
 
     this.isSaving = true;
+    if (this.editingSpeaker) {
+      this.dataFormEntityResponseGroupsService.updateManuallyAddedSpeaker(formData).subscribe({
+        next: (speaker) => {
+          this.isSaving = false;
+          this.toastLogService.successDialog('Speaker updated!');
+          this.speakerUpdated.emit(speaker);
+          this.dialogRef.close();
+        },
+        error: () => (this.isSaving = false),
+      });
+      return;
+    }
     this.dataFormEntityResponseGroupsService.createManuallyAddedSpeaker(formData).subscribe({
       next: (speaker) => {
         this.isSaving = false;
@@ -225,6 +273,9 @@ export class AddEventSpeakerComponent implements OnInit, OnDestroy {
 
   resetForm() {
     this.speakerForm.reset({ email: '', name: '', designation: '', company: '', about: '' });
+    this.speakerForm.get('email').enable({ emitEvent: false });
+    this.editingSpeaker = null;
+    this.showDetails = false;
     this.userSuggestions = [];
     this.imageUrl = '';
     this.imageBlob = null;

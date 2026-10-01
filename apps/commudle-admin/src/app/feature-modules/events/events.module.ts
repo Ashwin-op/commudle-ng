@@ -59,6 +59,7 @@ import { EventLocationTracksComponent } from './components/event-locations/event
 import { TimeBlocksComponent } from './components/event-locations/event-location-tracks/time-blocks/time-blocks.component';
 import { TrackSlotsComponent } from './components/event-locations/event-location-tracks/track-slots/track-slots.component';
 import { EventLocationsComponent } from './components/event-locations/event-locations.component';
+import { ManuallyAddedSpeakersComponent } from './components/event-locations/manually-added-speakers/manually-added-speakers.component';
 import { AddEventSpeakerComponent } from './components/event-locations/add-event-speaker/add-event-speaker.component';
 import { EventRecordingsComponent } from './components/event-recordings/event-recordings.component';
 import { EventRegistrationsComponent } from './components/event-registrations/event-registrations.component';
@@ -107,6 +108,7 @@ import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-the
     UserDetailsCellComponent,
     EventLocationsComponent,
     AddEventSpeakerComponent,
+    ManuallyAddedSpeakersComponent,
     EventLocationTracksComponent,
     EventUpdatesComponent,
     EventStatusComponent,

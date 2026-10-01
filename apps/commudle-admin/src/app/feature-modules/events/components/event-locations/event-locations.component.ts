@@ -29,6 +29,7 @@ import { IEvent } from 'apps/shared-models/event.model';
 import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
 import { GooglePlacesAutocompleteService } from 'apps/commudle-admin/src/app/services/google-places-autocomplete.service';
 import { TrackSlotsService } from 'apps/commudle-admin/src/app/services/track_slots.service';
+import { AddEventSpeakerComponent } from './add-event-speaker/add-event-speaker.component';
 import * as moment from 'moment';
 
 @Component({
@@ -39,6 +40,7 @@ import * as moment from 'moment';
 })
 export class EventLocationsComponent implements OnInit {
   @ViewChild('eventLocationFormTemplate') eventLocationFormTemplate: TemplateRef<any>;
+  @ViewChild('speakerDialog') speakerDialog: AddEventSpeakerComponent;
   @ViewChild('deleteEventLocationTemplate') deleteEventLocationTemplate: TemplateRef<any>;
 
   faLink = faLink;
@@ -57,6 +59,7 @@ export class EventLocationsComponent implements OnInit {
   @Input() community: ICommunity;
   eventLocations;
   eventSpeakers: IDataFormEntityResponseGroup[];
+  manuallyAddedSpeakers: IDataFormEntityResponseGroup[] = [];
   windowRef;
   isLoading = true;
   eventDatesLocation: IEventDatesLocation[];
@@ -110,6 +113,9 @@ export class EventLocationsComponent implements OnInit {
   ngOnInit() {
     this.getEventLocations();
     this.getEventSpeakers();
+    if (this.event.editable) {
+      this.getManuallyAddedSpeakers();
+    }
   }
 
   getEventSpeakers() {
@@ -119,8 +125,28 @@ export class EventLocationsComponent implements OnInit {
     });
   }
 
+  getManuallyAddedSpeakers() {
+    this.dataFormEntityResponseGroupsService.getManuallyAddedSpeakers(this.event.id).subscribe((data) => {
+      this.manuallyAddedSpeakers = data.data_form_entity_response_groups;
+      this.changeDetectorRef.markForCheck();
+    });
+  }
+
+  onSpeakerUpdated(updated: IDataFormEntityResponseGroup) {
+    const replace = (list: IDataFormEntityResponseGroup[]) =>
+      (list || []).map((speaker) => (speaker.id === updated.id ? updated : speaker));
+    this.manuallyAddedSpeakers = replace(this.manuallyAddedSpeakers);
+    // The agenda dropdown only lists confirmed speakers, so a cancelled one is dropped from it.
+    this.eventSpeakers =
+      updated.registration_status?.name === 'cancelled'
+        ? (this.eventSpeakers || []).filter((speaker) => speaker.id !== updated.id)
+        : replace(this.eventSpeakers);
+    this.changeDetectorRef.markForCheck();
+  }
+
   onSpeakerAdded(speaker: IDataFormEntityResponseGroup) {
     this.eventSpeakers = [...(this.eventSpeakers || []), speaker];
+    this.manuallyAddedSpeakers = [speaker, ...(this.manuallyAddedSpeakers || [])];
     this.changeDetectorRef.markForCheck();
   }
 

@@ -3,7 +3,7 @@ import { IRegistrationStatus } from './registration_status.model';
 import { IUser } from './user.model';
 import { IDataFormEntityResponseValue } from './data_form_entity_response_value.model';
 import { ITrackSlot } from 'apps/shared-models/track-slot.model';
-import { EDbModels, IEvent, IHackathon, IHackathonTeam, INote } from '@commudle/shared-models';
+import { EDbModels, IAttachedFile, IEvent, IHackathon, IHackathonTeam, INote } from '@commudle/shared-models';
 import { IEventDataFormEntityGroup } from 'apps/shared-models/event_data_form_enity_group.model';
 
 export interface IDataFormEntityResponseGroup {
@@ -21,6 +21,8 @@ export interface IDataFormEntityResponseGroup {
   event_data_form_entity_group?: IEventDataFormEntityGroup;
   agg_user_community_engagement: IAggUserCommunityEngagement;
   notes: INote[];
+  manually_added?: boolean;
+  speaker_overrides?: ISpeakerOverrides;
 }
 
 export interface IAggUserCommunityEngagement {
@@ -46,4 +48,13 @@ export interface IManualSpeakerFields {
   designation: string;
   company: string;
   about: string;
+}
+
+// Raw stored overrides (null when unset), as opposed to the display-resolved user fields.
+export interface ISpeakerOverrides {
+  name: string | null;
+  designation: string | null;
+  company: string | null;
+  about: string | null;
+  photo: IAttachedFile | null;
 }

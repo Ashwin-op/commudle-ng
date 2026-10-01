@@ -6,14 +6,14 @@
 <ng-template #speakerFormTemplate let-ref="dialogRef">
   <com-card class="speaker-form">
     <com-card-header class="actions">
-      <span>Add Speaker</span>
+      <span>{{ editingSpeaker ? 'Edit Speaker' : 'Add Speaker' }}</span>
       <button (click)="ref.close()" ghost nbButton shape="round" size="small" type="button">
         <fa-icon [icon]="icons.faXmark"></fa-icon>
       </button>
     </com-card-header>
     <com-card-body>
       <form [formGroup]="speakerForm" class="speaker-fields">
-        <div class="form-field">
+        <div *ngIf="!editingSpeaker" class="form-field">
           <label for="speaker-email">Email<span class="com-text-red-500">*</span></label>
           <input
             id="speaker-email"
@@ -37,7 +37,7 @@
         </div>
 
         <button
-          *ngIf="!showDetails"
+          *ngIf="!showDetails && !editingSpeaker"
           [disabled]="speakerForm.controls['email'].invalid"
           (click)="lookupProfile()"
           class="com-w-max"
@@ -49,10 +49,10 @@
         </button>
 
         <ng-container *ngIf="showDetails">
-          <small *ngIf="profileExist" class="com-text-gray-500">
+          <small *ngIf="profileExist && !editingSpeaker" class="com-text-gray-500">
             Existing profile found. Edits below apply to this event only and do not change their profile.
           </small>
-          <small *ngIf="!profileExist" class="com-text-gray-500">
+          <small *ngIf="!profileExist && !editingSpeaker" class="com-text-gray-500">
             No existing profile found. A new user will be created for this email.
           </small>
 
@@ -134,7 +134,7 @@
         fullWidth
         status="primary"
       >
-        Add Speaker
+        {{ editingSpeaker ? 'Update Speaker' : 'Add Speaker' }}
       </button>
     </com-card-footer>
   </com-card>

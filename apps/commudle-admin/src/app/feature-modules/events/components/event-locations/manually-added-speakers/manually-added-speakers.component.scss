@@ -1,0 +1,51 @@
+.manual-speakers {
+  @apply com-m-0 com-mt-4;
+
+  .speaker-row {
+    @apply com-flex com-items-center com-gap-3 com-py-2 com-border-b com-border-solid com-border-gray-200;
+
+    &:last-child {
+      @apply com-border-b-0;
+    }
+
+    &.cancelled {
+      @apply com-opacity-60;
+    }
+
+    .speaker-photo {
+      @apply com-w-10 com-h-10 com-rounded-full com-object-cover;
+    }
+
+    .speaker-info {
+      @apply com-flex-1 com-min-w-0;
+
+      p {
+        @apply com-m-0;
+      }
+
+      .speaker-name {
+        @apply com-font-medium com-text-Yankees-Blue;
+      }
+
+      .speaker-designation {
+        @apply com-text-sm com-text-gray-500;
+      }
+
+      .cancelled-tag {
+        @apply com-ml-2 com-text-xs com-text-red-500;
+      }
+    }
+
+    .speaker-actions {
+      @apply com-flex com-gap-2;
+    }
+  }
+}
+
+.cancel-dialog {
+  @apply com-max-h-[90dvh] com-overflow-y-auto;
+}
+
+.actions {
+  @apply com-flex com-justify-between com-items-center;
+}
