@@ -102,17 +102,17 @@
 
             <!-- Active Filter Tags -->
             <div class="active-filter-tags">
-              <nb-tag-list>
-                <nb-tag
-                  [appearance]="filterByMutuals ? 'filled' : 'outline'"
-                  [text]="'My Mutuals'"
-                  size="small"
-                  status="info"
-                  [removable]="filterByMutuals ? 'true' : 'false'"
-                  [ngClass]="{ activeTag: filterByMutuals }"
-                  (click)="filterByTags('mutuals')"
-                ></nb-tag>
-              </nb-tag-list>
+              <app-tag
+                class="filter-tag"
+                [tags]="['My Mutuals']"
+                [removable]="filterByMutuals"
+                [minTagLimit]="false"
+                [shape]="'rounded'"
+                [inputSize]="'custom'"
+                [backgroundColor]="filterByMutuals ? 'com-bg-Azure' : 'com-bg-Azure-opacity-10'"
+                [fontColor]="filterByMutuals ? 'com-text-tWhite' : 'com-text-Azure'"
+                (click)="filterByTags('mutuals')"
+              ></app-tag>
               <button
                 (click)="clearAllFilters()"
                 nbButton

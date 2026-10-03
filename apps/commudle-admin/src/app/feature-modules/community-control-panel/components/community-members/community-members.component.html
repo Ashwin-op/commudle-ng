@@ -128,7 +128,7 @@
 
       <!-- Active Filter Tags -->
       <div class="active-filter-tags">
-        <nb-tag-list>
+        <div class="filter-tag-list">
           <!-- <nb-tag
             [appearance]="mostActive ? 'filled' : 'outline'"
             [text]="'Most Active (Top 10%)'"
@@ -147,25 +147,29 @@
             [ngClass]="{ activeTag: contributor }"
             (click)="filterByTags(options[1])"
           ></nb-tag> -->
-          <nb-tag
-            [appearance]="contentCreator ? 'filled' : 'outline'"
-            [text]="'Content Creator'"
-            size="small"
-            status="info"
-            [removable]="contentCreator ? 'true' : 'false'"
-            [ngClass]="{ activeTag: contentCreator }"
+          <app-tag
+            class="filter-tag"
+            [tags]="['Content Creator']"
+            [removable]="contentCreator"
+            [inputSize]="'custom'"
+            [minTagLimit]="false"
+            [shape]="'rounded'"
+            [backgroundColor]="contentCreator ? 'com-bg-Azure' : 'com-bg-Azure-opacity-10'"
+            [fontColor]="contentCreator ? 'com-text-tWhite' : 'com-text-Azure'"
             (click)="filterByTags(options[2])"
-          ></nb-tag>
-          <nb-tag
-            [appearance]="speaker ? 'filled' : 'outline'"
-            [text]="'Speaker'"
-            size="small"
-            status="info"
-            [removable]="speaker ? 'true' : 'false'"
-            [ngClass]="{ activeTag: speaker }"
+          ></app-tag>
+          <app-tag
+            class="filter-tag"
+            [tags]="['Speaker']"
+            [removable]="speaker"
+            [inputSize]="'custom'"
+            [minTagLimit]="false"
+            [shape]="'rounded'"
+            [backgroundColor]="speaker ? 'com-bg-Azure' : 'com-bg-Azure-opacity-10'"
+            [fontColor]="speaker ? 'com-text-tWhite' : 'com-text-Azure'"
             (click)="filterByTags(options[3])"
-          ></nb-tag>
-        </nb-tag-list>
+          ></app-tag>
+        </div>
         <button
           *ngIf="isActiveFilter"
           (click)="clearAllFilters()"
