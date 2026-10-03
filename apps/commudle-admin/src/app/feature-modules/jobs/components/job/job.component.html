@@ -5,8 +5,8 @@
         <nb-icon icon="arrow-ios-back"></nb-icon>
         Back
       </a>
-      <nb-card class="job-container">
-        <nb-card-body>
+      <com-card class="job-container">
+        <com-card-body>
           <div class="posted-by" *ngIf="job; else loading">
             <app-user-profile-card-large [user]="job.user"></app-user-profile-card-large>
             <p class="last-updated">Last updated: {{ job.updated_at | date }}</p>
@@ -132,8 +132,8 @@
           <ng-template #loading>
             <app-loading-spinner></app-loading-spinner>
           </ng-template>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
 
       <router-outlet></router-outlet>
     </div>
@@ -141,14 +141,14 @@
 </div>
 
 <ng-template #createJobApplicationDialog let-ref="dialogRef">
-  <nb-card>
-    <nb-card-header class="com-flex com-items-center com-justify-between">
+  <com-card>
+    <com-card-header>
       <span>Choose resume</span>
       <button (click)="ref.close()" ghost nbButton size="small">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body class="com-max-w-[350px] com-space-y-3">
+    </com-card-header>
+    <com-card-body class="com-max-w-[350px] com-space-y-3">
       <span *ngIf="userResumes.length !== 0">Select a resume to apply with.</span>
 
       <ng-container *ngIf="!isResumeLoading; else loading">
@@ -167,10 +167,10 @@
       <ng-template #loading>
         <app-loading-spinner></app-loading-spinner>
       </ng-template>
-    </nb-card-body>
-    <nb-card-footer class="com-flex com-items-center com-justify-between">
+    </com-card-body>
+    <com-card-footer>
       <button (click)="ref.close()" ghost nbButton status="danger">Cancel</button>
       <button (click)="onAcceptRoleButton(); ref.close()" nbButton status="success">Confirm</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

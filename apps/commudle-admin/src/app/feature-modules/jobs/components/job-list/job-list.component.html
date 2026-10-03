@@ -2,8 +2,8 @@
   <div class="container">
     <div class="two-column-layout mobile-reverse">
       <div class="main-column com-mb-20">
-        <nb-card>
-          <nb-card-header class="com-relative">
+        <com-card>
+          <com-card-header class="com-relative">
             <div class="tittle">
               <nb-icon icon="briefcase" class="com-mr-1"></nb-icon>
               <p>
@@ -11,15 +11,15 @@
               </p>
               <span *ngIf="total > 0" class="com-mb-4">({{ total }})</span>
             </div>
-          </nb-card-header>
-          <nb-card-body class="com-space-y-4">
+          </com-card-header>
+          <com-card-body class="com-space-y-4">
             <app-loading-spinner *ngIf="isLoading || isFilterLoading"></app-loading-spinner>
             <app-job-list-card *ngFor="let job of jobs" [job]="job"></app-job-list-card>
-          </nb-card-body>
+          </com-card-body>
           <button (click)="getJobs()" *ngIf="page_info?.has_next_page" [nbSpinner]="isLoading" fullWidth ghost nbButton>
             Load More Jobs
           </button>
-        </nb-card>
+        </com-card>
       </div>
       <div class="right-column">
         <button
@@ -34,14 +34,14 @@
           <nb-icon icon="plus"></nb-icon>
           Post a job
         </button>
-        <nb-card class="!com-hidden md:!com-flex com-mb-10">
-          <nb-card-header class="com-py-3">
+        <com-card class="!com-hidden md:!com-flex com-mb-10">
+          <com-card-header class="com-py-3">
             <div class="com-flex com-items-center">
               <fa-icon [icon]="faFilters" class="com-mr-1"></fa-icon>
               <p>Filters</p>
             </div>
-          </nb-card-header>
-          <nb-card-body class="com-pt-0">
+          </com-card-header>
+          <com-card-body class="com-pt-0">
             <form [formGroup]="filterForm" class="">
               <div class="category filter-options">
                 <p>Category</p>
@@ -114,8 +114,8 @@
             <div class="reset-button">
               <button nbButton (click)="reset()" status="primary">Reset Filter</button>
             </div>
-          </nb-card-body>
-        </nb-card>
+          </com-card-body>
+        </com-card>
         <nb-accordion>
           <nb-accordion-item>
             <nb-accordion-item-header>

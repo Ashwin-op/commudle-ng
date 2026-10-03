@@ -7,10 +7,10 @@ import { SeoService } from 'apps/shared-services/seo.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'app-employees-list',
-    templateUrl: './employees-list.component.html',
-    styleUrls: ['./employees-list.component.scss'],
-    standalone: false
+  selector: 'app-employees-list',
+  templateUrl: './employees-list.component.html',
+  styleUrls: ['./employees-list.component.scss'],
+  standalone: false,
 })
 export class EmployeesListComponent implements OnInit, OnDestroy {
   page_info: IPageInfo;
@@ -31,6 +31,7 @@ export class EmployeesListComponent implements OnInit, OnDestroy {
   }
 
   getEmployeesList() {
+    this.isLoading = true;
     this.subscriptions.push(
       this.jobService
         .getEmployeesList({

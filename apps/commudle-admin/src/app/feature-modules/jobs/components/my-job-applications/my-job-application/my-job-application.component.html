@@ -33,17 +33,17 @@
 </div>
 
 <ng-template #deleteJobApplicationDialog let-ref="dialogRef">
-  <nb-card>
-    <nb-card-header class="com-flex com-items-center com-justify-between">
-      <span class="com-flex com-items-center com-gap-2">
+  <com-card>
+    <com-card-header>
+      <span class="delete-dialog-title">
         <nb-icon icon="alert-triangle" status="warning"></nb-icon>
         Confirmation
       </span>
       <button (click)="ref.close()" ghost nbButton size="small">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body class="com-max-w-[350px]">
+    </com-card-header>
+    <com-card-body class="delete-dialog-body">
       <p>
         Are you sure you want to <strong>withdraw</strong>
         <em> {{ jobApplication.job.position }} &#64; {{ jobApplication.job.company }}</em>
@@ -51,10 +51,10 @@
       </p>
       <br />
       <p><strong>Note:</strong>&nbsp;This action cannot be undone.</p>
-    </nb-card-body>
-    <nb-card-footer class="com-flex com-items-center com-justify-between">
+    </com-card-body>
+    <com-card-footer>
       <button (click)="ref.close()" ghost nbButton status="danger">No</button>
       <button (click)="deleteJobApplication(); ref.close()" nbButton status="success">Yes</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
