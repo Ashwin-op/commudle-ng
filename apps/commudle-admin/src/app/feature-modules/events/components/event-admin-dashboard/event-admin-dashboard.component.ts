@@ -368,19 +368,38 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     return this.audiencePalette[index % this.audiencePalette.length];
   }
 
-  get experienceSegments(): { color: string; dashArray: string; dashOffset: number }[] {
-    const levels = this.audienceSnapshot?.experience_levels || [];
+  /**
+   * Turns a {name, count, percentage} distribution into SVG donut arc segments.
+   * Ring uses r=15.9155 (circumference ~= 100) so percentage maps directly to a
+   * stroke-dasharray length; dashOffset shifts each segment to start where the
+   * previous ended (25 rotates the first segment's start to 12 o'clock).
+   */
+  private buildSegments(
+    items: IDashboardDistributionItem[] | undefined,
+  ): { color: string; dashArray: string; dashOffset: number }[] {
     let cumulative = 0;
-    return levels.map((level: IDashboardDistributionItem, index: number) => {
-      const pct = level.percentage || 0;
+    return (items || []).map((item: IDashboardDistributionItem, index: number) => {
+      const pct = item.percentage || 0;
       const segment = {
         color: this.audienceColor(index),
         dashArray: `${pct} ${100 - pct}`,
-        dashOffset: 25 - cumulative, // 25 rotates the start to 12 o'clock
+        dashOffset: 25 - cumulative,
       };
       cumulative += pct;
       return segment;
     });
+  }
+
+  get experienceSegments(): { color: string; dashArray: string; dashOffset: number }[] {
+    return this.buildSegments(this.audienceSnapshot?.experience_levels);
+  }
+
+  get postEventExperienceSegments(): { color: string; dashArray: string; dashOffset: number }[] {
+    return this.buildSegments(this.postEventSnapshot?.experience_distribution);
+  }
+
+  get postEventDomainSegments(): { color: string; dashArray: string; dashOffset: number }[] {
+    return this.buildSegments(this.postEventSnapshot?.domain_distribution);
   }
 
   getPostEventSnapshot(): void {

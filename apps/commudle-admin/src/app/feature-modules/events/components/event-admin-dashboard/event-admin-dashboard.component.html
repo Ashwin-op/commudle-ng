@@ -452,8 +452,8 @@
       </div>
     </article>
 
-    <!-- Post-Event Dashboard -->
-    <article class="post-event-card">
+    <!-- Post-Event Dashboard (only once the event has ended) -->
+    <article class="post-event-card" *ngIf="isEventPast">
       <header class="section-header">
         <h3 class="section-heading-post">
           <fa-icon [icon]="icons.faChartPie" class="com-text-green-500"></fa-icon> Post-Event Dashboard
@@ -490,6 +490,72 @@
           <div class="post-stat">
             <span class="post-stat-value">{{ postEventSnapshot?.speakers_count ?? '—' }}</span>
             <span class="post-stat-label">Speakers</span>
+          </div>
+          <div class="post-stat">
+            <span class="post-stat-value">—</span>
+            <span class="post-stat-label">Rating</span>
+          </div>
+          <div class="post-stat">
+            <span class="post-stat-value">—</span>
+            <span class="post-stat-label">Feedback Responses</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="post-event-charts">
+        <!-- Experience Level chart -->
+        <div class="post-event-chart">
+          <h6 class="audience-col-heading">Experience Level (attended)</h6>
+          <div class="audience-chart">
+            <svg *ngIf="postEventSnapshot?.experience_distribution?.length" class="chart-donut" viewBox="0 0 36 36">
+              <circle class="chart-donut-track" cx="18" cy="18" r="15.9155" />
+              <circle
+                *ngFor="let segment of postEventExperienceSegments"
+                class="chart-donut-segment"
+                cx="18"
+                cy="18"
+                r="15.9155"
+                [attr.stroke]="segment.color"
+                [attr.stroke-dasharray]="segment.dashArray"
+                [attr.stroke-dashoffset]="segment.dashOffset"
+              />
+            </svg>
+            <ul class="chart-legend">
+              <li *ngFor="let item of postEventSnapshot?.experience_distribution; let i = index">
+                <span class="legend-dot" [style.background-color]="audienceColor(i)"></span>
+                {{ item.name | capitalizeAndRemoveUnderscore }}
+                <span class="legend-pct">{{ item.percentage }}%</span>
+              </li>
+              <li *ngIf="!isPostEventLoading && !postEventSnapshot?.experience_distribution?.length">No data yet</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Domain chart -->
+        <div class="post-event-chart">
+          <h6 class="audience-col-heading">Domain (attended)</h6>
+          <div class="audience-chart">
+            <svg *ngIf="postEventSnapshot?.domain_distribution?.length" class="chart-donut" viewBox="0 0 36 36">
+              <circle class="chart-donut-track" cx="18" cy="18" r="15.9155" />
+              <circle
+                *ngFor="let segment of postEventDomainSegments"
+                class="chart-donut-segment"
+                cx="18"
+                cy="18"
+                r="15.9155"
+                [attr.stroke]="segment.color"
+                [attr.stroke-dasharray]="segment.dashArray"
+                [attr.stroke-dashoffset]="segment.dashOffset"
+              />
+            </svg>
+            <ul class="chart-legend">
+              <li *ngFor="let item of postEventSnapshot?.domain_distribution; let i = index">
+                <span class="legend-dot" [style.background-color]="audienceColor(i)"></span>
+                {{ item.name | capitalizeAndRemoveUnderscore }}
+                <span class="legend-pct">{{ item.percentage }}%</span>
+              </li>
+              <li *ngIf="!isPostEventLoading && !postEventSnapshot?.domain_distribution?.length">No data yet</li>
+            </ul>
           </div>
         </div>
       </div>
