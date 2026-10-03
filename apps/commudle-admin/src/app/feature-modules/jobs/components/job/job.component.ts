@@ -76,11 +76,9 @@ export class JobComponent implements OnInit, OnDestroy {
         this.currentUser = data;
       }),
     );
-    this.subscriptions.push(
-      this.activatedRoute.params.pipe(takeUntil(this.destroy$)).subscribe((data) => {
-        this.getJob(data.id);
-      }),
-    );
+    this.activatedRoute.params.subscribe((data) => {
+      this.getJob(data.id);
+    });
   }
 
   ngOnDestroy(): void {
