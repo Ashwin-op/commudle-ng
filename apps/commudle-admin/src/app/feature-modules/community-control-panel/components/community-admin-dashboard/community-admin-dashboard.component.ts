@@ -279,7 +279,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.dashboardCommunitiesService.topPages(this.community.slug, 'current').subscribe({
         next: (data) => {
-          this.topPages = Array.isArray(data?.values) ? data.values : [];
+          this.topPages = (Array.isArray(data) ? data : []).slice(0, this.topListLimit);
           this.topPagesLoading = false;
         },
         error: () => {
@@ -294,7 +294,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.dashboardCommunitiesService.topCities(this.community.slug).subscribe({
         next: (data) => {
-          this.topCities = Array.isArray(data?.values) ? data.values : [];
+          this.topCities = Array.isArray(data) ? data : [];
           this.topCitiesLoading = false;
         },
         error: () => {
@@ -304,6 +304,8 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
+  private readonly topListLimit = 10;
+
   /** Largest view/member count across top pages / cities, for proportional bar widths. */
   get topPagesMax(): number {
     return Math.max(...this.topPages.map((p) => p.views || 0), 1);
@@ -311,6 +313,13 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
 
   get topCitiesMax(): number {
     return Math.max(...this.topCities.map((c) => c.member_count || 0), 1);
+  }
+
+  barShare(value: number, max: number): number {
+    if (!max) {
+      return 0;
+    }
+    return Math.min(100, Math.max(0, ((value || 0) / max) * 100));
   }
 
   onRecentActivityPageChange(page: number): void {

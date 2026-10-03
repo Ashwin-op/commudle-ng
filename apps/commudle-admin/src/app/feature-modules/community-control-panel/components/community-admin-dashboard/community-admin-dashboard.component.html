@@ -427,7 +427,9 @@
           <a [href]="page.url" target="_blank" rel="noopener noreferrer" class="top-list-name" [title]="page.url">{{
             page.page_title
           }}</a>
-          <span class="top-list-bar com-bg-primary-500" [style.width.%]="(page.views / topPagesMax) * 100"></span>
+          <span class="top-list-track">
+            <span class="top-list-bar com-bg-primary-500" [style.width.%]="barShare(page.views, topPagesMax)"></span>
+          </span>
           <span class="top-list-value">{{ page.views | number }}</span>
         </li>
         <li *ngIf="!topPagesLoading && topPages.length === 0" class="top-list-empty">No page views yet.</li>
@@ -444,7 +446,12 @@
       <ul class="top-list">
         <li *ngFor="let city of topCities" class="top-list-item">
           <span class="top-list-name" [title]="city.city">{{ city.city }}</span>
-          <span class="top-list-bar com-bg-green-500" [style.width.%]="(city.member_count / topCitiesMax) * 100"></span>
+          <span class="top-list-track">
+            <span
+              class="top-list-bar com-bg-green-500"
+              [style.width.%]="barShare(city.member_count, topCitiesMax)"
+            ></span>
+          </span>
           <span class="top-list-value">{{ city.member_count | number }}</span>
         </li>
         <li *ngIf="!topCitiesLoading && topCities.length === 0" class="top-list-empty">No city data yet.</li>

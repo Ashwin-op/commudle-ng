@@ -70,20 +70,17 @@ export class DashboardCommunitiesService {
     );
   }
 
-  topPages(
-    communityId,
-    window: EDashboardTopPagesWindow = 'current',
-  ): Observable<{ values: ICommunityDashboardTopPage[] }> {
+  topPages(communityId, window: EDashboardTopPagesWindow = 'current'): Observable<ICommunityDashboardTopPage[]> {
     const params = new HttpParams().set('community_id', communityId).set('window', window);
-    return this.http.get<{ values: ICommunityDashboardTopPage[] }>(
+    return this.http.get<ICommunityDashboardTopPage[]>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITIES.TOP_PAGES),
       { params },
     );
   }
 
-  topCities(communityId): Observable<{ values: ICommunityDashboardTopCity[] }> {
+  topCities(communityId): Observable<ICommunityDashboardTopCity[]> {
     const params = new HttpParams().set('community_id', communityId);
-    return this.http.get<{ values: ICommunityDashboardTopCity[] }>(
+    return this.http.get<ICommunityDashboardTopCity[]>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITIES.TOP_CITIES),
       { params },
     );
