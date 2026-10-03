@@ -1,27 +1,30 @@
-@import './apps/commudle-admin/src/assets/styles/variables';
-
 .user-network-container {
-  @apply com-mx-0;
-  nb-card-header {
-    padding: 0;
-    border-bottom: none;
+  @apply com-mx-0 com-mb-4;
+
+  com-card-header {
+    @apply com-p-0 com-border-0;
 
     button {
-      border-radius: $border-10;
-      text-transform: inherit;
-      font-weight: $fw-500;
+      @apply com-rounded-[10px] com-font-medium com-normal-case;
     }
   }
 
-  nb-card-body {
-    padding: 0;
-    overflow: hidden;
+  com-card-body {
+    @apply com-p-0;
 
-    nb-route-tabset {
-      &::ng-deep {
-        .route-tab.responsive .tab-text {
-          display: block;
-        }
+    .route-tabs {
+      @apply com-flex;
+
+      a {
+        @apply com-flex-1 com-text-center com-no-underline;
+      }
+
+      .route-tab-option {
+        @apply com-text-sm com-font-medium com-py-3 com-cursor-pointer com-text-gray-500;
+      }
+
+      .active .route-tab-option {
+        @apply com-text-Azure com-border-0 com-border-b-4 com-border-Azure com-border-solid;
       }
     }
   }
