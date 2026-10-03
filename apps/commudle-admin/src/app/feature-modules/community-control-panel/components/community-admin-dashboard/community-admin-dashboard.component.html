@@ -385,4 +385,70 @@
       </nav>
     </article>
   </section>
+
+  <!-- Row 4: Live Visitors + Top Pages + Top Cities -->
+  <section class="live-traffic-row">
+    <!-- Live Visitors -->
+    <article class="live-visitors-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faEye" class="com-text-blue-500"></fa-icon> Live Visitors
+        </h3>
+      </header>
+      <div class="live-visitors-body">
+        <div class="live-visitors-counts">
+          <div class="live-count">
+            <span class="live-count-value">{{ liveVisitors?.live_count ?? '—' }}</span>
+            <span class="live-count-label">
+              <span class="live-dot"></span>
+              Live now
+            </span>
+          </div>
+          <div class="live-count">
+            <span class="live-count-value">{{ liveVisitors?.last_30_min_count ?? '—' }}</span>
+            <span class="live-count-label">Last 30 min</span>
+          </div>
+        </div>
+        <svg *ngIf="liveVisitorsSparkline" class="live-sparkline" viewBox="0 0 100 24" preserveAspectRatio="none">
+          <polyline [attr.points]="liveVisitorsSparkline" fill="none" stroke="#3b82f6" stroke-width="2" />
+        </svg>
+      </div>
+    </article>
+
+    <!-- Top Pages -->
+    <article class="top-list-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faFileLines" class="com-text-primary-500"></fa-icon> Top Pages
+        </h3>
+      </header>
+      <ul class="top-list">
+        <li *ngFor="let page of topPages" class="top-list-item">
+          <a [href]="page.url" target="_blank" rel="noopener noreferrer" class="top-list-name" [title]="page.url">{{
+            page.page_title
+          }}</a>
+          <span class="top-list-bar com-bg-primary-500" [style.width.%]="(page.views / topPagesMax) * 100"></span>
+          <span class="top-list-value">{{ page.views | number }}</span>
+        </li>
+        <li *ngIf="!topPagesLoading && topPages.length === 0" class="top-list-empty">No page views yet.</li>
+      </ul>
+    </article>
+
+    <!-- Top Cities -->
+    <article class="top-list-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faLocationDot" class="com-text-green-500"></fa-icon> Top Cities
+        </h3>
+      </header>
+      <ul class="top-list">
+        <li *ngFor="let city of topCities" class="top-list-item">
+          <span class="top-list-name" [title]="city.city">{{ city.city }}</span>
+          <span class="top-list-bar com-bg-green-500" [style.width.%]="(city.member_count / topCitiesMax) * 100"></span>
+          <span class="top-list-value">{{ city.member_count | number }}</span>
+        </li>
+        <li *ngIf="!topCitiesLoading && topCities.length === 0" class="top-list-empty">No city data yet.</li>
+      </ul>
+    </article>
+  </section>
 </section>

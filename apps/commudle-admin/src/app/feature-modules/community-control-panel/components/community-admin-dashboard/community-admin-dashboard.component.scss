@@ -475,3 +475,69 @@
   @apply com-mt-3 com-w-full com-py-2 com-text-sm com-font-medium com-text-primary-500 com-bg-white com-border com-border-solid com-border-Bright-Gray com-rounded-lg com-cursor-pointer;
   @apply hover:com-bg-gray-50 disabled:com-opacity-50 disabled:com-cursor-not-allowed;
 }
+
+// Row 4: Live Visitors + Top Pages + Top Cities
+.live-traffic-row {
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-4;
+
+  .live-visitors-card,
+  .top-list-card {
+    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+  }
+
+  .live-visitors-body {
+    @apply com-flex com-flex-col com-gap-3 com-mt-2;
+
+    .live-visitors-counts {
+      @apply com-flex com-gap-6;
+
+      .live-count {
+        @apply com-flex com-flex-col com-gap-1;
+
+        .live-count-value {
+          @apply com-text-2xl com-font-medium com-text-Yankees-Blue com-leading-none;
+        }
+
+        .live-count-label {
+          @apply com-flex com-items-center com-gap-1.5 com-text-xs com-text-gray-500;
+
+          .live-dot {
+            @apply com-w-2 com-h-2 com-rounded-full com-bg-green-500 com-inline-block;
+          }
+        }
+      }
+    }
+
+    .live-sparkline {
+      @apply com-w-full com-h-10;
+    }
+  }
+
+  .top-list {
+    @apply com-m-0 com-p-0 com-mt-2 com-list-none com-flex com-flex-col com-gap-2;
+
+    .top-list-item {
+      @apply com-flex com-items-center com-gap-2 com-text-xs com-text-Yankees-Blue;
+
+      .top-list-name {
+        @apply com-w-32 com-shrink-0 com-truncate com-text-sm com-text-Yankees-Blue com-no-underline;
+
+        &:hover {
+          @apply com-text-primary-600 com-underline;
+        }
+      }
+
+      .top-list-bar {
+        @apply com-h-1.5 com-rounded-full com-shrink com-min-w-[8px] com-max-w-[80px];
+      }
+
+      .top-list-value {
+        @apply com-ml-auto com-text-sm com-font-medium com-text-Cadet-Grey com-shrink-0;
+      }
+    }
+
+    .top-list-empty {
+      @apply com-py-4 com-text-sm com-text-gray-500;
+    }
+  }
+}

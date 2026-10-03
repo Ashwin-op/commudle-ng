@@ -6,12 +6,15 @@ import { AuthService, SeoService } from '@commudle/shared-services';
 import { DashboardCommunitiesService } from 'apps/commudle-admin/src/app/services/stats/dashboard-communities.service';
 import {
   ICommunityDashboardActivityItem,
+  ICommunityDashboardLiveVisitors,
   ICommunityDashboardNeedsAttention,
   ICommunityDashboardOrganizerBriefing,
   ICommunityDashboardScheduleItem,
   ICommunityDashboardSnapshot,
+  ICommunityDashboardTopCity,
+  ICommunityDashboardTopPage,
 } from '@commudle/shared-models';
-import { Subscription } from 'rxjs';
+import { Subscription, interval } from 'rxjs';
 import {
   faCalendarPlus,
   faTrophy,
@@ -28,6 +31,9 @@ import {
   faCalendarDay,
   faBolt,
   faRocket,
+  faEye,
+  faFileLines,
+  faLocationDot,
 } from '@fortawesome/free-solid-svg-icons';
 import * as moment from 'moment';
 
@@ -54,6 +60,19 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   recentActivityLoading = false;
   readonly recentActivityCount = 10;
 
+  // Live Visitors -- polled every 30s per spec (Redis-cached 30s TTL server-side)
+  liveVisitors: ICommunityDashboardLiveVisitors;
+  liveVisitorsHistory: number[] = []; // live_count accumulated across polls, for the sparkline
+  private readonly liveVisitorsMaxPoints = 20;
+
+  // Top Pages
+  topPages: ICommunityDashboardTopPage[] = [];
+  topPagesLoading = false;
+
+  // Top Cities
+  topCities: ICommunityDashboardTopCity[] = [];
+  topCitiesLoading = false;
+
   icons = {
     faCalendarPlus,
     faTrophy,
@@ -70,6 +89,9 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     faCalendarDay,
     faBolt,
     faRocket,
+    faEye,
+    faFileLines,
+    faLocationDot,
   };
 
   quickActions = [];
@@ -94,6 +116,10 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         this.loadUpcomingSchedule();
         this.loadRecentActivity();
         this.loadSnapshot();
+        this.loadLiveVisitors();
+        this.startLiveVisitorsPolling();
+        this.loadTopPages();
+        this.loadTopCities();
         this.setQuickActions();
       }),
     );
@@ -216,6 +242,75 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         this.communitySnapshot = data;
       }),
     );
+  }
+
+  loadLiveVisitors(): void {
+    this.subscriptions.push(
+      this.dashboardCommunitiesService.liveVisitors(this.community.slug).subscribe((data) => {
+        this.liveVisitors = data;
+        // Accumulate the live count across polls to drive the sparkline (real data, built up over time).
+        this.liveVisitorsHistory = [...this.liveVisitorsHistory, data?.live_count || 0].slice(
+          -this.liveVisitorsMaxPoints,
+        );
+      }),
+    );
+  }
+
+  // Poll live visitors every 30s, matching the server-side Redis TTL.
+  startLiveVisitorsPolling(): void {
+    this.subscriptions.push(interval(30000).subscribe(() => this.loadLiveVisitors()));
+  }
+
+  /** Builds an SVG polyline for the live-visitor sparkline from the accumulated history. */
+  get liveVisitorsSparkline(): string {
+    const points = this.liveVisitorsHistory;
+    if (points.length < 2) {
+      return '';
+    }
+    const width = 100;
+    const height = 24;
+    const max = Math.max(...points, 1);
+    const stepX = width / (points.length - 1);
+    return points.map((v, i) => `${(i * stepX).toFixed(1)},${(height - (v / max) * height).toFixed(1)}`).join(' ');
+  }
+
+  loadTopPages(): void {
+    this.topPagesLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunitiesService.topPages(this.community.slug, 'current').subscribe({
+        next: (data) => {
+          this.topPages = Array.isArray(data?.values) ? data.values : [];
+          this.topPagesLoading = false;
+        },
+        error: () => {
+          this.topPagesLoading = false;
+        },
+      }),
+    );
+  }
+
+  loadTopCities(): void {
+    this.topCitiesLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunitiesService.topCities(this.community.slug).subscribe({
+        next: (data) => {
+          this.topCities = Array.isArray(data?.values) ? data.values : [];
+          this.topCitiesLoading = false;
+        },
+        error: () => {
+          this.topCitiesLoading = false;
+        },
+      }),
+    );
+  }
+
+  /** Largest view/member count across top pages / cities, for proportional bar widths. */
+  get topPagesMax(): number {
+    return Math.max(...this.topPages.map((p) => p.views || 0), 1);
+  }
+
+  get topCitiesMax(): number {
+    return Math.max(...this.topCities.map((c) => c.member_count || 0), 1);
   }
 
   onRecentActivityPageChange(page: number): void {
