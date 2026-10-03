@@ -17,16 +17,20 @@
 
   form {
     @apply com-flex com-flex-col com-gap-3;
+
     div {
       @apply com-flex com-flex-col;
     }
+
     .image-preview {
       .delete-image {
         @apply com-mx-auto com-my-3;
       }
     }
+
     .editor-toggle {
       @apply com-flex com-gap-3 com-flex-row com-items-center;
+
       span {
         @apply com-font-medium com-text-Yankees-Blue;
       }
@@ -42,7 +46,7 @@ com-card {
 }
 
 .banner-image-wrapper {
-  @apply com-max-w-full md:com-max-w-[90dvw] com-mx-auto;
+  @apply com-w-full com-max-w-full md:com-max-w-[90dvw] com-mx-auto;
 }
 
 // tinymce style
