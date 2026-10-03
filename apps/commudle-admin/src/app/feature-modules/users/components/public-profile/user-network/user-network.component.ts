@@ -6,35 +6,21 @@ import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service'
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'app-user-network',
-    templateUrl: './user-network.component.html',
-    styleUrls: ['./user-network.component.scss'],
-    standalone: false
+  selector: 'app-user-network',
+  templateUrl: './user-network.component.html',
+  styleUrls: ['./user-network.component.scss'],
+  standalone: false,
 })
 export class UserNetworkComponent implements OnInit, OnDestroy {
-
   user: IUser;
-  tabs = [
-    {
-      title: 'Following',
-      responsive: true,
-      route: './following'
-    },
-    {
-      title: 'Followers',
-      responsive: true,
-      route: './followers'
-    }
-  ];
 
   subscription: Subscription;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private authWatchService: LibAuthwatchService,
-    private usersService: AppUsersService
-  ) {
-  }
+    private usersService: AppUsersService,
+  ) {}
 
   ngOnInit(): void {
     this.subscription = this.activatedRoute.params.subscribe(() => this.getUserData());
@@ -46,7 +32,8 @@ export class UserNetworkComponent implements OnInit, OnDestroy {
 
   // Get user's data
   getUserData() {
-    this.usersService.getProfile(this.activatedRoute.snapshot.params.username).subscribe(value => this.user = value);
+    this.usersService
+      .getProfile(this.activatedRoute.snapshot.params.username)
+      .subscribe((value) => (this.user = value));
   }
-
 }
