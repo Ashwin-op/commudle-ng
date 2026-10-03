@@ -121,12 +121,12 @@ export const API_ROUTES = {
   },
 
   FORUMS: {
-    INDEX: 'api/v2/forums',
-    SHOW: 'api/v2/forums/show',
-    CREATE: 'api/v2/forums',
-    UPDATE: 'api/v2/forums',
-    DELETE: 'api/v2/forums',
-    CATEGORIES: 'api/v2/forums/categories',
+    INDEX: 'api/v2/forums', // GET
+    SHOW: 'api/v2/forums/show', // GET
+    CREATE: 'api/v2/forums', // POST
+    UPDATE: 'api/v2/forums', // PUT
+    DELETE: 'api/v2/forums', // DELETE
+    CATEGORIES: 'api/v2/forums/categories', // GET
   },
 
   COMMUNITY_GROUPS: {

@@ -8,9 +8,7 @@
       @apply com-flex com-items-center com-gap-3;
 
       .ff-header-icon {
-        @apply com-w-9 com-h-9 com-rounded-lg com-flex-shrink-0;
-        @apply com-flex com-items-center com-justify-center;
-        @apply com-bg-primary-100 com-text-primary-500 com-text-base;
+        @apply com-w-9 com-h-9 com-rounded-lg com-flex-shrink-0 com-flex com-items-center com-justify-center com-bg-primary-100 com-text-primary-500 com-text-base;
       }
 
       .ff-title {
@@ -50,10 +48,7 @@
 
         // ── Dropdown (non-admin) ──────────────────────
         .ff-select {
-          @apply com-w-full com-h-10 com-px-3 com-rounded-md;
-          @apply com-border com-border-solid com-border-Bright-Gray;
-          @apply com-text-sm com-text-Yankees-Blue com-bg-white;
-          @apply com-cursor-pointer;
+          @apply com-w-full com-h-10 com-px-3 com-rounded-md com-border com-border-solid com-border-Bright-Gray com-text-sm com-text-Yankees-Blue com-bg-white com-cursor-pointer;
 
           &:focus {
             @apply com-outline-none com-border-primary-500;
@@ -68,23 +63,15 @@
             @apply com-relative;
 
             .ff-new-badge {
-              @apply com-absolute com-right-3 com-top-1/2 -com-translate-y-1/2;
-              @apply com-flex com-items-center com-gap-1 com-pointer-events-none;
-              @apply com-text-xs com-font-semibold com-text-primary-600;
-              @apply com-bg-primary-100 com-rounded-full com-px-2 com-py-0.5;
+              @apply com-absolute com-right-3 com-top-1/2 -com-translate-y-1/2 com-flex com-items-center com-gap-1 com-pointer-events-none com-text-xs com-font-semibold com-text-primary-600 com-bg-primary-100 com-rounded-full com-px-2 com-py-0.5;
             }
           }
 
           .ff-suggestions {
-            @apply com-absolute com-top-full com-left-0 com-right-0 com-z-50;
-            @apply com-bg-white com-border com-border-solid com-border-Bright-Gray;
-            @apply com-rounded-lg com-shadow-md com-mt-1 com-overflow-hidden;
-            @apply com-max-h-48 com-overflow-y-auto;
+            @apply com-absolute com-top-full com-left-0 com-right-0 com-z-50 com-bg-white com-border com-border-solid com-border-Bright-Gray com-rounded-lg com-shadow-md com-mt-1 com-overflow-hidden com-max-h-48 com-overflow-y-auto;
 
             .ff-suggestion-item {
-              @apply com-w-full com-flex com-items-center com-gap-2 com-px-3 com-py-2.5;
-              @apply com-text-sm com-text-Yankees-Blue com-bg-transparent com-border-0 com-text-left;
-              @apply com-cursor-pointer com-transition-colors com-duration-100;
+              @apply com-w-full com-flex com-items-center com-gap-2 com-px-3 com-py-2.5 com-text-sm com-text-Yankees-Blue com-bg-transparent com-border-0 com-text-left com-cursor-pointer com-transition-colors com-duration-100;
 
               &:hover {
                 @apply com-bg-primary-100 com-text-primary-600;

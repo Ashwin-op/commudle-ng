@@ -39,8 +39,7 @@
     }
 
     .fm-post-footer {
-      @apply com-flex com-items-center com-gap-3 com-mt-3 com-pt-3;
-      @apply com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+      @apply com-flex com-items-center com-gap-3 com-mt-3 com-pt-3 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
     }
   }
 
@@ -50,8 +49,7 @@
   }
 
   .fm-avatar-fallback {
-    @apply com-w-8 com-h-8 com-rounded-full com-bg-Bright-Gray com-flex-shrink-0;
-    @apply com-flex com-items-center com-justify-center com-text-Cadet-Grey com-text-sm;
+    @apply com-w-8 com-h-8 com-rounded-full com-bg-Bright-Gray com-flex-shrink-0 com-flex com-items-center com-justify-center com-text-Cadet-Grey com-text-sm;
   }
 
   // ── Replies ───────────────────────────────────────────
@@ -82,8 +80,7 @@
       // Filled, not outlined: a tinted block separates the reply from the white
       // post card without adding another border to the page.
       .fm-reply-card {
-        @apply com-flex-1 com-min-w-0 com-p-3;
-        @apply com-rounded-lg com-bg-Anti-Flash-White;
+        @apply com-flex-1 com-min-w-0 com-p-3 com-rounded-lg com-bg-Anti-Flash-White;
 
         .fm-reply-top {
           @apply com-flex com-items-center com-justify-between com-gap-2 com-mb-1;
@@ -117,8 +114,7 @@
     @apply com-bg-white;
 
     .fm-reply-form-title {
-      @apply com-flex com-items-center com-gap-2;
-      @apply com-text-Paragraph-2 com-font-semibold com-text-Yankees-Blue com-m-0 com-mb-3;
+      @apply com-flex com-items-center com-gap-2 com-text-Paragraph-2 com-font-semibold com-text-Yankees-Blue com-m-0 com-mb-3;
 
       fa-icon {
         @apply com-text-primary-500 com-text-base;

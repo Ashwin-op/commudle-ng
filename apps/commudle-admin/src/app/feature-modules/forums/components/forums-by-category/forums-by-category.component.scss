@@ -11,9 +11,7 @@
         @apply com-flex com-items-center com-gap-2;
 
         .fbcat-category-icon {
-          @apply com-w-8 com-h-8 com-rounded-lg com-flex-shrink-0;
-          @apply com-flex com-items-center com-justify-center;
-          @apply com-bg-primary-100 com-text-primary-500 com-text-base;
+          @apply com-w-8 com-h-8 com-rounded-lg com-flex-shrink-0 com-flex com-items-center com-justify-center com-bg-primary-100 com-text-primary-500 com-text-base;
         }
 
         .fbcat-title {
@@ -32,14 +30,11 @@
     @apply com-relative;
 
     .fbcat-search-icon {
-      @apply com-absolute com-left-2.5 com-top-1/2 -com-translate-y-1/2;
-      @apply com-text-Cadet-Grey com-text-sm com-pointer-events-none;
+      @apply com-absolute com-left-2.5 com-top-1/2 -com-translate-y-1/2 com-text-Cadet-Grey com-text-sm com-pointer-events-none;
     }
 
     .fbcat-search-input {
-      @apply com-w-full com-h-8 com-pl-8 com-pr-3;
-      @apply com-border com-border-solid com-border-Bright-Gray com-rounded-md;
-      @apply com-bg-white com-text-Yankees-Blue com-text-sm com-outline-none;
+      @apply com-w-full com-h-8 com-pl-8 com-pr-3 com-border com-border-solid com-border-Bright-Gray com-rounded-md com-bg-white com-text-Yankees-Blue com-text-sm com-outline-none;
 
       &::placeholder {
         @apply com-text-Cadet-Grey;
@@ -61,35 +56,24 @@
       @apply com-flex-1 com-min-w-0 com-flex com-flex-col com-gap-3;
 
       .fbcat-thread-list {
-        @apply com-rounded-lg com-overflow-hidden;
-        @apply com-border com-border-solid com-border-Bright-Gray;
-        @apply com-bg-white;
+        @apply com-rounded-lg com-overflow-hidden com-border com-border-solid com-border-Bright-Gray com-bg-white;
 
         .fbcat-list-head {
-          @apply com-flex com-items-center com-justify-between;
-          @apply com-px-4 com-py-2;
-          @apply com-bg-Anti-Flash-White;
-          @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
-          @apply com-text-xs com-font-semibold com-text-Cadet-Grey com-uppercase com-tracking-wide;
+          @apply com-flex com-items-center com-justify-between com-px-4 com-py-2 com-bg-Anti-Flash-White com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-text-xs com-font-semibold com-text-Cadet-Grey com-uppercase com-tracking-wide;
         }
 
         .fbcat-thread-row {
-          @apply com-flex com-items-center;
-          @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray last:com-border-b-0;
-          @apply com-transition-colors com-duration-150;
+          @apply com-flex com-items-center com-border-0 com-border-b com-border-solid com-border-Bright-Gray last:com-border-b-0 com-transition-colors com-duration-150;
 
           &:hover {
             @apply com-bg-Azureish-White;
           }
 
           .fbcat-thread-main {
-            @apply com-flex com-items-center com-gap-3 com-flex-1 com-no-underline com-min-w-0;
-            @apply com-px-4 com-py-3;
+            @apply com-flex com-items-center com-gap-3 com-flex-1 com-no-underline com-min-w-0 com-px-4 com-py-3;
 
             .fbcat-thread-icon {
-              @apply com-w-8 com-h-8 com-rounded-lg com-flex-shrink-0;
-              @apply com-flex com-items-center com-justify-center;
-              @apply com-bg-primary-100 com-text-primary-500 com-text-sm;
+              @apply com-w-8 com-h-8 com-rounded-lg com-flex-shrink-0 com-flex com-items-center com-justify-center com-bg-primary-100 com-text-primary-500 com-text-sm;
             }
 
             .fbcat-thread-content {
@@ -100,8 +84,7 @@
               }
 
               .fbcat-thread-desc {
-                @apply com-text-xs com-text-Cadet-Grey com-m-0 com-mt-0.5;
-                @apply com-overflow-hidden com-whitespace-nowrap com-text-ellipsis;
+                @apply com-text-xs com-text-Cadet-Grey com-m-0 com-mt-0.5 com-overflow-hidden com-whitespace-nowrap com-text-ellipsis;
               }
             }
 
@@ -119,8 +102,7 @@
           }
 
           .fbcat-thread-actions {
-            @apply com-flex com-items-center com-gap-1 com-pr-3 com-flex-shrink-0;
-            @apply com-opacity-0 com-transition-opacity com-duration-150;
+            @apply com-flex com-items-center com-gap-1 com-pr-3 com-flex-shrink-0 com-opacity-0 com-transition-opacity com-duration-150;
 
             .fbcat-delete-btn {
               @apply hover:com-text-Infra-Red;
@@ -153,14 +135,10 @@
   }
 
   .fbcat-empty {
-    @apply com-flex com-flex-col com-items-center com-justify-center com-text-center;
-    @apply com-rounded-lg com-bg-white;
-    @apply com-px-6 com-py-12;
-    @apply sm:com-px-10 sm:com-py-16;
+    @apply com-flex com-flex-col com-items-center com-justify-center com-text-center com-rounded-lg com-bg-white com-px-6 com-py-12 sm:com-px-10 sm:com-py-16;
 
     .fbcat-empty-art {
-      @apply com-flex com-items-center com-justify-center com-flex-shrink-0;
-      @apply com-w-16 com-h-16 com-mb-5 com-rounded-full com-bg-Alice-Blue;
+      @apply com-flex com-items-center com-justify-center com-flex-shrink-0 com-w-16 com-h-16 com-mb-5 com-rounded-full com-bg-Alice-Blue;
     }
 
     .fbcat-empty-icon {
@@ -189,8 +167,7 @@
     @apply com-flex com-flex-col com-items-center com-text-center com-gap-3;
 
     .fbcat-delete-icon {
-      @apply com-w-12 com-h-12 com-rounded-full com-flex com-items-center com-justify-center;
-      @apply com-bg-red-100 com-text-Infra-Red com-text-2xl;
+      @apply com-w-12 com-h-12 com-rounded-full com-flex com-items-center com-justify-center com-bg-red-100 com-text-Infra-Red com-text-2xl;
     }
 
     .fbcat-delete-title {

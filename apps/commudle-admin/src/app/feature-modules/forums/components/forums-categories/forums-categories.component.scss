@@ -9,15 +9,11 @@
       @apply com-flex-1 com-relative;
 
       .fcat-search-icon {
-        @apply com-absolute com-left-2.5 com-top-1/2 -com-translate-y-1/2;
-        @apply com-text-Cadet-Grey com-text-sm com-pointer-events-none;
+        @apply com-absolute com-left-2.5 com-top-1/2 -com-translate-y-1/2 com-text-Cadet-Grey com-text-sm com-pointer-events-none;
       }
 
       .fcat-search-input {
-        @apply com-w-full com-h-8 com-pl-8 com-pr-3;
-        @apply com-border com-border-solid com-border-Bright-Gray com-rounded-md;
-        @apply com-bg-white com-text-Yankees-Blue com-text-sm;
-        @apply com-outline-none;
+        @apply com-w-full com-h-8 com-pl-8 com-pr-3 com-border com-border-solid com-border-Bright-Gray com-rounded-md com-bg-white com-text-Yankees-Blue com-text-sm com-outline-none;
 
         &::placeholder {
           @apply com-text-Cadet-Grey;
@@ -34,10 +30,7 @@
     @apply com-flex com-items-center com-gap-2 com-flex-wrap;
 
     .fcat-pill {
-      @apply com-px-3 com-py-1 com-rounded-full com-text-xs com-font-medium;
-      @apply com-border com-border-solid com-border-Bright-Gray;
-      @apply com-bg-white com-text-Cadet-Grey com-cursor-pointer;
-      @apply com-transition-all com-duration-100;
+      @apply com-px-3 com-py-1 com-rounded-full com-text-xs com-font-medium com-border com-border-solid com-border-Bright-Gray com-bg-white com-text-Cadet-Grey com-cursor-pointer com-transition-all com-duration-100;
 
       &:hover {
         @apply com-border-primary-400 com-text-primary-500;
@@ -59,26 +52,18 @@
         @apply com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-white com-overflow-hidden;
 
         .fcat-list-head {
-          @apply com-flex com-items-center com-justify-between;
-          @apply com-px-4 com-py-2 com-bg-Anti-Flash-White;
-          @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
-          @apply com-text-xs com-font-semibold com-text-Cadet-Grey com-uppercase com-tracking-wide;
+          @apply com-flex com-items-center com-justify-between com-px-4 com-py-2 com-bg-Anti-Flash-White com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-text-xs com-font-semibold com-text-Cadet-Grey com-uppercase com-tracking-wide;
         }
 
         .fcat-forum-row {
-          @apply com-flex com-items-center com-gap-3 com-no-underline;
-          @apply com-px-4 com-py-3;
-          @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray last:com-border-b-0;
-          @apply com-transition-colors com-duration-150;
+          @apply com-flex com-items-center com-gap-3 com-no-underline com-px-4 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray last:com-border-b-0 com-transition-colors com-duration-150;
 
           &:hover {
             @apply com-bg-Azureish-White;
           }
 
           .fcat-forum-icon {
-            @apply com-w-9 com-h-9 com-rounded-lg com-flex-shrink-0;
-            @apply com-flex com-items-center com-justify-center;
-            @apply com-bg-primary-100 com-text-primary-500 com-text-lg;
+            @apply com-w-9 com-h-9 com-rounded-lg com-flex-shrink-0 com-flex com-items-center com-justify-center com-bg-primary-100 com-text-primary-500 com-text-lg;
           }
 
           .fcat-forum-info {
@@ -89,8 +74,7 @@
             }
 
             .fcat-forum-meta {
-              @apply com-flex com-items-center com-gap-1 com-m-0 com-mt-0.5;
-              @apply com-text-xs com-text-Cadet-Grey;
+              @apply com-flex com-items-center com-gap-1 com-m-0 com-mt-0.5 com-text-xs com-text-Cadet-Grey;
 
               .fcat-forum-category {
                 @apply com-text-primary-500 com-font-medium;
@@ -102,8 +86,7 @@
             }
 
             .fcat-forum-desc {
-              @apply com-text-xs com-text-Cadet-Grey com-m-0 com-mt-1;
-              @apply com-overflow-hidden com-whitespace-nowrap com-text-ellipsis;
+              @apply com-text-xs com-text-Cadet-Grey com-m-0 com-mt-1 com-overflow-hidden com-whitespace-nowrap com-text-ellipsis;
             }
           }
 
@@ -119,7 +102,6 @@
 
               .fcat-stat-lbl {
                 @apply com-text-Cadet-Grey com-text-10px com-uppercase;
-                letter-spacing: 0.04em;
               }
             }
           }
@@ -143,10 +125,7 @@
           @apply com-flex com-flex-col com-gap-0.5;
 
           .fcat-cat-item {
-            @apply com-flex com-items-center com-gap-2 com-no-underline;
-            @apply com-px-2 com-py-1.5 com-rounded-md;
-            @apply com-text-xs com-text-Yankees-Blue;
-            @apply com-transition-colors com-duration-100;
+            @apply com-flex com-items-center com-gap-2 com-no-underline com-px-2 com-py-1.5 com-rounded-md com-text-xs com-text-Yankees-Blue com-transition-colors com-duration-100;
 
             &:hover {
               @apply com-bg-Azureish-White com-text-primary-500;
@@ -161,8 +140,7 @@
             }
 
             .fcat-cat-count {
-              @apply com-text-xs com-font-semibold com-text-Cadet-Grey;
-              @apply com-bg-Anti-Flash-White com-rounded-full com-px-1.5 com-py-0.5;
+              @apply com-text-xs com-font-semibold com-text-Cadet-Grey com-bg-Anti-Flash-White com-rounded-full com-px-1.5 com-py-0.5;
             }
           }
         }
@@ -188,17 +166,11 @@
     }
 
     .fcat-sort-group {
-      @apply com-inline-flex com-items-center com-gap-1 com-p-1;
-      @apply com-rounded-md com-bg-Anti-Flash-White;
+      @apply com-inline-flex com-items-center com-gap-1 com-p-1 com-rounded-md com-bg-Anti-Flash-White;
     }
 
     .fcat-sort-btn {
-      @apply com-inline-flex com-items-center com-gap-1 com-px-3 com-py-1 com-cursor-pointer;
-      @apply com-rounded com-border-0 com-bg-transparent;
-      @apply com-text-Caption com-font-medium com-text-Auro-Metal-Saurus;
-      @apply com-transition-colors com-duration-200;
-      @apply hover:com-text-Yankees-Blue;
-      @apply focus-visible:com-outline-none focus-visible:com-ring-2 focus-visible:com-ring-primary-500;
+      @apply com-inline-flex com-items-center com-gap-1 com-px-3 com-py-1 com-cursor-pointer com-rounded com-border-0 com-bg-transparent com-text-Caption com-font-medium com-text-Auro-Metal-Saurus com-transition-colors com-duration-200 hover:com-text-Yankees-Blue focus-visible:com-outline-none focus-visible:com-ring-2 focus-visible:com-ring-primary-500;
 
       fa-icon {
         @apply com-text-sm;
@@ -206,21 +178,16 @@
     }
 
     .fcat-sort-active {
-      @apply com-bg-white com-text-primary-500 com-shadow-sm;
-      @apply hover:com-text-primary-600;
+      @apply com-bg-white com-text-primary-500 com-shadow-sm hover:com-text-primary-600;
     }
   }
 
   // ── Empty ─────────────────────────────────────────────
   .fcat-empty {
-    @apply com-flex com-flex-col com-items-center com-justify-center com-text-center;
-    @apply com-rounded-lg com-bg-white;
-    @apply com-px-6 com-py-12;
-    @apply sm:com-px-10 sm:com-py-16;
+    @apply com-flex com-flex-col com-items-center com-justify-center com-text-center com-rounded-lg com-bg-white com-px-6 com-py-12 sm:com-px-10 sm:com-py-16;
 
     .fcat-empty-art {
-      @apply com-flex com-items-center com-justify-center com-flex-shrink-0;
-      @apply com-w-16 com-h-16 com-mb-5 com-rounded-full com-bg-Alice-Blue;
+      @apply com-flex com-items-center com-justify-center com-flex-shrink-0 com-w-16 com-h-16 com-mb-5 com-rounded-full com-bg-Alice-Blue;
     }
 
     .fcat-empty-icon {
