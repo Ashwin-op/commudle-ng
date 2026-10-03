@@ -619,6 +619,29 @@
       }
     }
   }
+
+  .post-event-charts {
+    @apply com-grid com-grid-cols-1 sm:com-grid-cols-2 com-gap-4 com-mt-4;
+
+    .post-event-chart {
+      @apply com-flex com-flex-col com-gap-2;
+
+      .chart-donut {
+        @apply com-w-28 com-h-28;
+
+        .chart-donut-track {
+          fill: none;
+          stroke: #e5e7eb;
+          stroke-width: 3.8;
+        }
+
+        .chart-donut-segment {
+          fill: none;
+          stroke-width: 3.8;
+        }
+      }
+    }
+  }
 }
 
 // Row 3: Audience + Post-Event
