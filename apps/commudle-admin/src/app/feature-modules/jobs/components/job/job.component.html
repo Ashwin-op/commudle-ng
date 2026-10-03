@@ -126,8 +126,8 @@
             </div>
             <div class="tag-list">
               <app-tag
-                *ngIf="job && job.tags?.length > 0"
-                [tags]="getTagNames()"
+                *ngFor="let tag of job.tags"
+                [tags]="[tag.name]"
                 [backgroundColor]="'com-bg-tAnti-Flash'"
                 [fontColor]="'com-text-tYankees-Blue'"
               ></app-tag>

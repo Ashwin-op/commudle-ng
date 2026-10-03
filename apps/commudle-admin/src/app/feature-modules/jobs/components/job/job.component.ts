@@ -99,10 +99,6 @@ export class JobComponent implements OnInit, OnDestroy {
     );
   }
 
-  getTagNames(): string[] {
-    return this.job?.tags?.map((tag) => tag.name) || [];
-  }
-
   getResumes(): void {
     this.isResumeLoading = true;
     this.subscriptions.push(
