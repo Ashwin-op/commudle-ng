@@ -43,7 +43,7 @@
           }
         </div>
       </form>
-      <button nbButton outline status="basic" class="action" shape="semi-round" (click)="filterBottomSheet = true">
+      <button comButton outline status="basic" class="action" shape="semi-round" (click)="filterBottomSheet = true">
         <fa-icon [icon]="icons.faFilter"></fa-icon>&nbsp;<span class="text">Filters</span>
         @if (selectedStatusIds.length + selectedGenders.length + selectedUserDomains.length +
         selectedExperienceLevels.length > 0) {
@@ -452,66 +452,87 @@
         <p>Change Bulk Status?</p>
         <commudle-help-section [helpDictionaryName]="'event-bulk-status'"></commudle-help-section>
       </div>
-      <button ghost nbButton size="small" (click)="ref.close()">
-        <nb-icon icon="close"></nb-icon>
+      <button comButton ghost size="small" (click)="ref.close()" aria-label="Close">
+        <fa-icon [icon]="icons.faXmark"></fa-icon>
       </button>
     </com-card-header>
     <com-card-body>
+      <p>This changes the status of the people currently filtered in the table.</p>
+      @if (bulkHasNoFilters) {
       <commudle-alert
         [error]="true"
-        errorMessage="Bulk status does not work on the filters applied in the table below"
+        errorMessage="No filter is applied, so this applies to everyone on the form."
       ></commudle-alert>
-      <div class="com-flex com-gap-4">
-        <div class="dropdown">
-          <select
-            (change)="changeFromRegistrationStatus($event)"
-            class="com-border-0 com-text-Yankees-Blue"
-            [ngClass]="{
-              'com-text-Cadet-Grey': fromRegistrationStatus === undefined
-            }"
-          >
-            <option selected disabled>From</option>
-            @for (rs of registrationStatuses; track rs.id) {
-            <option [value]="rs.name">{{ rs.name | titlecase }}</option>
-            }
-          </select>
-        </div>
-        <div class="dropdown">
-          <select
-            class="com-border-0 com-text-Yankees-Blue"
-            (change)="changeToRegistrationStatus($event)"
-            [ngClass]="{
-              'com-text-Cadet-Grey': toRegistrationStatus === undefined
-            }"
-          >
-            <option selected disabled>To</option>
-            @for (rs of registrationStatuses; track rs.id) {
-            <option [value]="rs.name">{{ rs.name | titlecase }}</option>
-            }
-          </select>
-        </div>
-      </div>
-      @if (fromRegistrationStatus === toRegistrationStatus && toRegistrationStatus !== undefined) {
-      <div>
-        <commudle-alert [error]="true" errorMessage="From and To value can't be same"></commudle-alert>
-      </div>
       }
+      <div class="dropdown">
+        <select
+          class="com-border-0 com-text-Yankees-Blue"
+          (change)="changeToRegistrationStatus($event)"
+          [ngClass]="{
+            'com-text-Cadet-Grey': toRegistrationStatus === undefined
+          }"
+        >
+          <option selected disabled>To</option>
+          @for (rs of registrationStatuses; track rs.id) {
+          <option [value]="rs.name">{{ rs.name | titlecase }}</option>
+          }
+        </select>
+      </div>
+      @if (toRegistrationStatus) { @if (bulkPreviewLoading) {
+      <p>Counting people...</p>
+      } @else if (bulkPreviewFailed) {
+      <commudle-alert
+        [error]="true"
+        errorMessage="Could not count the people to update. Try choosing the status again."
+      ></commudle-alert>
+      } @else if (bulkPreview) { @if (bulkPreview.people_to_update === 0) {
+      <p><strong>No one to update</strong></p>
+      } @else {
       <p>
-        This will change the status of all {{ selectedRegistrationStatus }} entries and
-        <strong>cannot be undone</strong>.
+        <strong
+          >{{ bulkPreview.people_to_update }} {{ bulkPreview.people_to_update === 1 ? 'person' : 'people' }}</strong
+        >
+        will be updated.
       </p>
+      } @if (bulkPreview.passes_to_delete > 0) {
+      <commudle-alert
+        [error]="true"
+        [errorMessage]="
+          bulkPreview.passes_to_delete +
+          ' ' +
+          (bulkPreview.passes_to_delete === 1 ? 'person already has' : 'people already have') +
+          ' their entry passes generated. They will be deleted.'
+        "
+      ></commudle-alert>
+      } @if (bulkPreview.attended_passes_to_delete > 0) {
+      <commudle-alert
+        [error]="true"
+        [errorMessage]="
+          bulkPreview.attended_passes_to_delete +
+          ' ' +
+          (bulkPreview.attended_passes_to_delete === 1 ? 'person has' : 'people have') +
+          ' their attendance marked. They will be deleted.'
+        "
+      ></commudle-alert>
+      } } }
+      <p>This <strong>cannot be undone</strong>.</p>
     </com-card-body>
     <com-card-footer>
       <button
         (click)="bulkStatusChange()"
-        nbButton
-        size="medium"
+        comButton
         status="success"
-        [disabled]="toRegistrationStatus === undefined || fromRegistrationStatus === undefined"
+        [disabled]="
+          !toRegistrationStatus ||
+          bulkPreviewLoading ||
+          bulkPreviewFailed ||
+          !bulkPreview ||
+          bulkPreview.people_to_update === 0
+        "
       >
         Yes
       </button>
-      <button (click)="dialogRef.close()" ghost nbButton size="medium" status="danger">No</button>
+      <button (click)="dialogRef.close()" comButton ghost status="danger">No</button>
     </com-card-footer>
   </com-card>
 </ng-template>
@@ -1176,10 +1197,10 @@
   </div>
 
   <div class="filter-actions">
-    <button nbButton size="medium" status="primary" (click)="applyFilter()" class="apply-button" fullWidth>
+    <button comButton size="medium" status="primary" (click)="applyFilter()" class="apply-button" fullWidth>
       Apply
     </button>
-    <button nbButton size="medium" ghost (click)="closePopover(true)" fullWidth>Reset</button>
+    <button comButton size="medium" ghost (click)="closePopover(true)" fullWidth>Reset</button>
   </div>
 </ng-template>
 

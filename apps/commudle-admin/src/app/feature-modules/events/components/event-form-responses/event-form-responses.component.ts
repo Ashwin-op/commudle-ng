@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy, TemplateRef, ViewChild, AfterViewInit } f
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbDialogRef, NbDialogService, NbPopoverDirective } from '@commudle/theme';
+import { Subscription } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import {
   faXmark,
@@ -36,7 +37,11 @@ import { IEventLocationTrack } from 'apps/shared-models/event-location-track.mod
 import { EQuestionTypes } from 'apps/shared-models/enums/question_types.enum';
 import { RegistrationTypeNames } from 'apps/shared-models/registration_type.model';
 import { IEventLocation } from 'apps/shared-models/event-location.model';
-import { EventDataFormEntityGroupsService } from 'apps/commudle-admin/src/app/services/event-data-form-entity-groups.service';
+import {
+  EventDataFormEntityGroupsService,
+  IBulkStatusPreview,
+  IResponseFilterPayload,
+} from 'apps/commudle-admin/src/app/services/event-data-form-entity-groups.service';
 import { RegistrationStatusesService } from 'apps/commudle-admin/src/app/services/registration-statuses.service';
 import {
   DataFormEntityResponseGroupsService,
@@ -81,7 +86,11 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
   dataForm: IDataForm;
   questions: IQuestion[] = [];
   bulkStatus;
-  bulkStatusChangeForCanceled = false;
+  bulkPreview: IBulkStatusPreview | null = null;
+  bulkPreviewLoading = false;
+  bulkPreviewFailed = false;
+  bulkHasNoFilters = false;
+  private bulkPreviewSub: Subscription;
   windowRef;
 
   isLoading = true;
@@ -102,9 +111,7 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
 
   userRoles = [];
   EUserRoles = EUserRoles;
-  fromRegistrationStatus: string;
   toRegistrationStatus: string;
-  selectedRegistrationStatus = 0;
   selectedGenders: string[] = [];
   selectedUserDomains: string[] = [];
   selectedExperienceLevels: string[] = [];
@@ -294,20 +301,7 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
           this.page = 1;
           this.emptyMessage = 'Loading...';
 
-          return this.dataFormEntityResponseGroupsService.getEventDataFormResponses(
-            this.eventDataFormEntityGroupId,
-            this.searchForm.get('name').value.toLowerCase(),
-            this.selectedStatusIds.length > 0 ? this.selectedStatusIds : [],
-            this.page,
-            this.count,
-            this.selectedGenders.length > 0 ? this.selectedGenders : [''],
-            this.selectedEventLocationTrackId,
-            this.getFormData(),
-            Object.keys(this.community_engagement_filters).length === 0 ? null : this.community_engagement_filters,
-            this.selectedUserDomains,
-            this.selectedExperienceLevels,
-            this.event_status_filter,
-          );
+          return this.fetchResponses();
         }),
       )
       .subscribe((data) => {
@@ -379,31 +373,16 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
     this.isLoading = true;
     this.rows = [];
 
-    this.dataFormEntityResponseGroupsService
-      .getEventDataFormResponses(
-        this.eventDataFormEntityGroupId,
-        this.searchForm.get('name').value?.toLowerCase() || '',
-        this.selectedStatusIds.length > 0 ? this.selectedStatusIds : [],
-        this.page,
-        this.count,
-        this.selectedGenders.length > 0 ? this.selectedGenders : [''],
-        this.selectedEventLocationTrackId,
-        this.getFormData(),
-        Object.keys(this.community_engagement_filters).length === 0 ? null : this.community_engagement_filters,
-        this.selectedUserDomains,
-        this.selectedExperienceLevels,
-        this.event_status_filter,
-      )
-      .subscribe({
-        next: (data) => {
-          this.setResponses(data);
-        },
-        error: (error) => {
-          console.error('Error loading responses:', error);
-          this.isLoading = false;
-          this.emptyMessage = 'Error loading data';
-        },
-      });
+    this.fetchResponses().subscribe({
+      next: (data) => {
+        this.setResponses(data);
+      },
+      error: (error) => {
+        console.error('Error loading responses:', error);
+        this.isLoading = false;
+        this.emptyMessage = 'Error loading data';
+      },
+    });
   }
 
   setResponses(data) {
@@ -585,11 +564,39 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
   }
 
   bulkStatusChangeConfirmation(dialog: TemplateRef<unknown>) {
+    this.toRegistrationStatus = undefined;
+    this.bulkPreview = null;
+    this.bulkPreviewFailed = false;
+    this.bulkHasNoFilters = !this.hasActiveFilters(this.getFilterPayload());
     this.dialogRef = this.dialogService.open(dialog);
     this.dialogRef.onClose.subscribe(() => {
       this.bulkStatus = null;
-      this.bulkStatusChangeForCanceled = false;
+      this.bulkPreviewSub?.unsubscribe();
     });
+  }
+
+  // dry run: counts what the chosen status change would touch under the filters applied right now
+  loadBulkPreview() {
+    this.bulkPreviewSub?.unsubscribe();
+    this.bulkPreview = null;
+    this.bulkPreviewFailed = false;
+    if (!this.toRegistrationStatus) return;
+
+    const filters = this.getFilterPayload();
+    this.bulkHasNoFilters = !this.hasActiveFilters(filters);
+    this.bulkPreviewLoading = true;
+    this.bulkPreviewSub = this.eventDataFormEntityGroupsService
+      .changeBulkRegistrationStatus(this.toRegistrationStatus, this.eventDataFormEntityGroupId, filters, true)
+      .subscribe({
+        next: (preview) => {
+          this.bulkPreview = preview;
+          this.bulkPreviewLoading = false;
+        },
+        error: () => {
+          this.bulkPreviewFailed = true;
+          this.bulkPreviewLoading = false;
+        },
+      });
   }
 
   bulkStatusChange() {
@@ -599,34 +606,26 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
     this.toastLogService.successDialog('Status update in progress, this may take some time. Please wait...', 3000);
 
     this.eventDataFormEntityGroupsService
-      .changeBulkRegistrationStatus(
-        this.fromRegistrationStatus,
-        this.toRegistrationStatus,
-        this.eventDataFormEntityGroupId,
-        this.bulkStatusChangeForCanceled,
-        this.totalEntries,
-      )
-      .subscribe((data) => {
-        if (data) {
+      .changeBulkRegistrationStatus(this.toRegistrationStatus, this.eventDataFormEntityGroupId, this.getFilterPayload())
+      .subscribe({
+        next: (data) => {
           this.getResponses();
-          this.toastLogService.successDialog('Updated!');
-        }
-        this.isLoading = false;
-        this.bulkUpdateMessage = '';
+          this.toastLogService.successDialog(`Updated ${data.updated_count}`);
+          this.bulkUpdateMessage = '';
+        },
+        error: () => {
+          this.isLoading = false;
+          this.bulkUpdateMessage = '';
+          this.getResponses();
+        },
       });
     this.bulkStatus = null;
     this.dialogRef.close();
   }
 
-  changeFromRegistrationStatus(event) {
-    this.selectedRegistrationStatus = 0;
-    this.fromRegistrationStatus = event.target.value;
-    this.selectedRegistrationStatus =
-      this.eventDataFormEntityGroup.summary_registration_counts[this.fromRegistrationStatus] || 0;
-  }
-
   changeToRegistrationStatus(event) {
     this.toRegistrationStatus = event.target.value;
+    this.loadBulkPreview();
   }
 
   enableEditMode(question, i) {
@@ -646,20 +645,7 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
             this.rows = [];
             this.page = 1;
             this.emptyMessage = 'Loading...';
-            return this.dataFormEntityResponseGroupsService.getEventDataFormResponses(
-              this.eventDataFormEntityGroupId,
-              this.searchForm.get('name').value.toLowerCase(),
-              this.selectedStatusIds.length > 0 ? this.selectedStatusIds : [],
-              this.page,
-              this.count,
-              this.selectedGenders.length > 0 ? this.selectedGenders : [''],
-              this.selectedEventLocationTrackId,
-              this.getFormData(),
-              Object.keys(this.community_engagement_filters).length === 0 ? null : this.community_engagement_filters,
-              this.selectedUserDomains,
-              this.selectedExperienceLevels,
-              this.event_status_filter,
-            );
+            return this.fetchResponses();
           }),
         )
         .subscribe((data) => {
@@ -926,22 +912,65 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
     ]);
   }
 
-  getFormData() {
-    const uniqueEntries = new Map();
-
+  // every filter currently applied on the table, in one place. The list call and the bulk status call both use it.
+  getFilterPayload(): IResponseFilterPayload {
+    const uniqueEntries = new Map<string, string>();
     this.forms.forEach((form) => {
       if (form?.get('v')?.value) {
         uniqueEntries.set(form.get('q').value, form.get('v').value);
       }
     });
 
+    return {
+      query: this.searchForm.get('name').value?.toLowerCase() || '',
+      registrationStatusIds: this.selectedStatusIds,
+      genders: this.selectedGenders,
+      eventLocationTrackId: this.selectedEventLocationTrackId,
+      questionFilters: Array.from(uniqueEntries, ([q, v]) => ({ q, v })),
+      userDomains: this.selectedUserDomains,
+      experienceLevels: this.selectedExperienceLevels,
+      communityEngagementFilters:
+        Object.keys(this.community_engagement_filters).length > 0 ? this.community_engagement_filters : null,
+      eventStatusFilter: this.event_status_filter,
+    };
+  }
+
+  private hasActiveFilters(filters: IResponseFilterPayload): boolean {
+    return (
+      !!filters.query ||
+      filters.registrationStatusIds.length > 0 ||
+      filters.genders.length > 0 ||
+      !!filters.eventLocationTrackId ||
+      filters.questionFilters.length > 0 ||
+      filters.userDomains.length > 0 ||
+      filters.experienceLevels.length > 0 ||
+      !!filters.communityEngagementFilters ||
+      !!filters.eventStatusFilter
+    );
+  }
+
+  private fetchResponses() {
+    const filters = this.getFilterPayload();
     const formData = new FormData();
-    uniqueEntries.forEach((vValue, qValue) => {
-      formData.append('qres[]q', qValue);
-      formData.append('qres[]v', vValue);
+    filters.questionFilters.forEach(({ q, v }) => {
+      formData.append('qres[]q', q);
+      formData.append('qres[]v', v);
     });
 
-    return formData;
+    return this.dataFormEntityResponseGroupsService.getEventDataFormResponses(
+      this.eventDataFormEntityGroupId,
+      filters.query,
+      filters.registrationStatusIds,
+      this.page,
+      this.count,
+      filters.genders.length > 0 ? filters.genders : [''],
+      filters.eventLocationTrackId,
+      formData,
+      filters.communityEngagementFilters,
+      filters.userDomains,
+      filters.experienceLevels,
+      filters.eventStatusFilter,
+    );
   }
 
   openPopover() {

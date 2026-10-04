@@ -320,9 +320,7 @@
         @apply com-relative com-min-w-0 com-text-sm;
 
         summary {
-          @apply com-cursor-pointer com-whitespace-nowrap com-overflow-hidden com-text-ellipsis;
-          display: block;
-          line-height: 36px;
+          @apply com-block com-leading-[36px] com-cursor-pointer com-whitespace-nowrap com-overflow-hidden com-text-ellipsis;
 
           &.placeholder {
             @apply com-text-Cadet-Grey;
@@ -351,20 +349,15 @@
 }
 
 .filter-popover {
-  @apply com-p-4 com-w-80 com-border com-border-gray-200 com-rounded-lg com-shadow-lg com-bg-transparent com-flex com-flex-col;
-  max-height: 70vh;
-  max-height: min(70vh, calc(100dvh - 8rem));
+  @apply com-p-4 com-w-80 com-border com-border-gray-200 com-rounded-lg com-shadow-lg com-bg-transparent com-flex com-flex-col com-max-h-[min(70vh,calc(100dvh-8rem))];
 
   &.filter-sheet {
-    @apply com-w-full com-border-0 com-shadow-none com-rounded-none com-bg-white;
-    // the sheet's own handle (hr) takes ~3.5rem, so the total stays within 60dvh
-    max-height: calc(60dvh - 3.5rem);
+    // max height leaves ~3.5rem for the sheet's own handle, so the total stays within 60dvh
+    @apply com-w-full com-border-0 com-shadow-none com-rounded-none com-bg-white com-max-h-[calc(60dvh-3.5rem)];
   }
 
   .filter-body {
-    @apply com-flex-1 com-min-h-0 com-overflow-y-auto;
-    overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
+    @apply com-flex-1 com-min-h-0 com-overflow-y-auto com-overscroll-contain;
   }
 
   .filter-header {

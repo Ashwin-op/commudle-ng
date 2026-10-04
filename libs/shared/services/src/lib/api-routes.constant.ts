@@ -321,7 +321,6 @@ export const API_ROUTES = {
     PUBLIC_GET_EVENT_SPEAKERS: 'api/v2/data_form_entity_response_groups/public_event_speakers',
     PUBLIC_EVENT_INTERESTED_USERS: 'api/v2/data_form_entity_response_groups/public_event_interested_users',
     FILTERED_RESPONSE_VALUES: 'api/v2/data_form_entity_response_groups/filtered_response_values',
-    ALL_ATTENDED_EVENTS_FILTERS: 'api/v2/data_form_entity_response_groups/all_attended_events_filters',
   },
 
   // event_entry_passes

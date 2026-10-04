@@ -23,8 +23,7 @@
 
   .results {
     // overlay, so opening the list does not grow the row it sits in
-    @apply com-absolute com-left-0 com-right-0 com-top-full com-z-10 com-mt-1 com-shadow-md com-max-h-48 com-overflow-y-auto com-rounded-[4px] com-border com-border-solid com-border-[#E4E9F2] com-bg-white;
-    overscroll-behavior: contain;
+    @apply com-absolute com-left-0 com-right-0 com-top-full com-z-10 com-mt-1 com-shadow-md com-max-h-48 com-overflow-y-auto com-overscroll-contain com-rounded-[4px] com-border com-border-solid com-border-[#E4E9F2] com-bg-white;
   }
 
   .state {
