@@ -25,7 +25,7 @@ import {
   faArrowRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { AppUsersService, ToastrService } from '@commudle/shared-services';
-import { EUserRoles, ICommunity, IEvent } from '@commudle/shared-models';
+import { EDomain, EExperienceLevel, EUserRoles, ICommunity, IEvent } from '@commudle/shared-models';
 import { IEventDataFormEntityGroup } from 'apps/shared-models/event_data_form_enity_group.model';
 import { IRegistrationStatus } from 'apps/shared-models/registration_status.model';
 import { IDataForm } from 'apps/shared-models/data_form.model';
@@ -101,6 +101,10 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
   toRegistrationStatus: string;
   selectedRegistrationStatus = 0;
   selectedGenders: string[] = [];
+  selectedUserDomains: string[] = [];
+  selectedExperienceLevels: string[] = [];
+  EDomain = EDomain;
+  EExperienceLevel = EExperienceLevel;
   eventLocationTracks: IEventLocationTrack[] = [];
   selectedEventLocationTrackId = 0;
   icons = {
@@ -136,6 +140,7 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
   attendedEventList: IEvent[];
   protected isMobileView = false;
   protected actionBottomSheet = false;
+  protected filterBottomSheet = false;
   //TODO past event stats
 
   // Data table properties
@@ -278,6 +283,8 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
             this.selectedEventLocationTrackId,
             this.getFormData(),
             Object.keys(this.community_engagement_filters).length === 0 ? null : this.community_engagement_filters,
+            this.selectedUserDomains,
+            this.selectedExperienceLevels,
           );
         }),
       )
@@ -294,6 +301,8 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
       if (question.editMode === true) question.editMode = false;
     }
     this.selectedGenders = [];
+    this.selectedUserDomains = [];
+    this.selectedExperienceLevels = [];
     this.selectedStatusIds = [];
     this.selectedEventLocationTrackId = 0;
     this.community_engagement_filters = {};
@@ -358,6 +367,8 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
         this.selectedEventLocationTrackId,
         this.getFormData(),
         Object.keys(this.community_engagement_filters).length === 0 ? null : this.community_engagement_filters,
+        this.selectedUserDomains,
+        this.selectedExperienceLevels,
       )
       .subscribe({
         next: (data) => {
@@ -621,6 +632,8 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
               this.selectedEventLocationTrackId,
               this.getFormData(),
               Object.keys(this.community_engagement_filters).length === 0 ? null : this.community_engagement_filters,
+              this.selectedUserDomains,
+              this.selectedExperienceLevels,
             );
           }),
         )
@@ -851,7 +864,8 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
     if (resetFilter) {
       this.clearAllFilter();
     }
-    this.filterPopover.hide();
+    this.filterBottomSheet = false;
+    this.filterPopover?.hide();
   }
 
   closeActionsPopover() {
@@ -876,6 +890,24 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
       this.selectedGenders = this.selectedGenders.filter((g) => g !== genderValue);
     }
     this.genderFilter({ target: { value: this.selectedGenders } });
+  }
+
+  originalOrder = (): number => 0;
+
+  onUserDomainChange(event: Event, domainKey: string) {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.selectedUserDomains = checked
+      ? [...this.selectedUserDomains, domainKey]
+      : this.selectedUserDomains.filter((d) => d !== domainKey);
+    this.page = 1;
+  }
+
+  onExperienceLevelChange(event: Event, levelKey: string) {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.selectedExperienceLevels = checked
+      ? [...this.selectedExperienceLevels, levelKey]
+      : this.selectedExperienceLevels.filter((l) => l !== levelKey);
+    this.page = 1;
   }
 
   applyFilter() {

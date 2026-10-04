@@ -23,6 +23,8 @@ export class DataFormEntityResponseGroupsService {
     eventLocationTrackId?,
     formData?,
     communityEngagementFilters?,
+    userDomains?: string[],
+    experienceLevels?: string[],
   ): Observable<any> {
     let params = new HttpParams()
       .set('event_data_form_entity_group_id', eventDataFormEntityGroupId)
@@ -41,6 +43,16 @@ export class DataFormEntityResponseGroupsService {
     }
     if (eventLocationTrackId) {
       params = params.set('event_location_track_id', eventLocationTrackId);
+    }
+    if (userDomains && userDomains.length > 0) {
+      userDomains.forEach((domain) => {
+        params = params.append('user_domains[]', domain);
+      });
+    }
+    if (experienceLevels && experienceLevels.length > 0) {
+      experienceLevels.forEach((level) => {
+        params = params.append('experience_levels[]', level);
+      });
     }
     if (communityEngagementFilters) {
       formData.append('community_engagement_filters', JSON.stringify(communityEngagementFilters));
@@ -63,6 +75,8 @@ export class DataFormEntityResponseGroupsService {
     eventLocationTrackId?,
     formData?,
     communityEngagementFilters?,
+    userDomains?: string[],
+    experienceLevels?: string[],
   ): Observable<any> {
     let params = new HttpParams()
       .set('event_data_form_entity_group_id', eventDataFormEntityGroupId)
@@ -82,6 +96,16 @@ export class DataFormEntityResponseGroupsService {
     }
     if (eventLocationTrackId) {
       params = params.set('event_location_track_id', eventLocationTrackId);
+    }
+    if (userDomains && userDomains.length > 0) {
+      userDomains.forEach((domain) => {
+        params = params.append('user_domains[]', domain);
+      });
+    }
+    if (experienceLevels && experienceLevels.length > 0) {
+      experienceLevels.forEach((level) => {
+        params = params.append('experience_levels[]', level);
+      });
     }
     if (communityEngagementFilters) {
       formData.append('community_engagement_filters', JSON.stringify(communityEngagementFilters));

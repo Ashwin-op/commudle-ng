@@ -242,7 +242,21 @@
 }
 
 .filter-popover {
-  @apply com-p-4 com-w-80 com-border com-border-gray-200 com-rounded-lg com-shadow-lg com-bg-transparent;
+  @apply com-p-4 com-w-80 com-border com-border-gray-200 com-rounded-lg com-shadow-lg com-bg-transparent com-flex com-flex-col;
+  max-height: 70vh;
+  max-height: min(70vh, calc(100dvh - 8rem));
+
+  &.filter-sheet {
+    @apply com-w-full com-border-0 com-shadow-none com-rounded-none com-bg-white;
+    // the sheet's own handle (hr) takes ~3.5rem, so the total stays within 60dvh
+    max-height: calc(60dvh - 3.5rem);
+  }
+
+  .filter-body {
+    @apply com-flex-1 com-min-h-0 com-overflow-y-auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
 
   .filter-header {
     @apply com-flex com-items-center com-gap-2 com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-pb-3 com-mb-3;
@@ -292,7 +306,7 @@
   }
 
   .filter-actions {
-    @apply com-flex com-gap-3 com-border-t com-border-gray-200;
+    @apply com-flex com-gap-3 com-border-t com-border-gray-200 com-shrink-0;
 
     .apply-button {
       @apply com-bg-tYankees-Blue com-border-Yankees-Blue;

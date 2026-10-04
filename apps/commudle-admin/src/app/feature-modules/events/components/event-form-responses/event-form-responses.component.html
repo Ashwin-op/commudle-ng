@@ -43,19 +43,18 @@
           }
         </div>
       </form>
-      <button
-        nbButton
-        outline
-        status="basic"
-        class="action"
-        shape="semi-round"
-        [nbPopover]="filterPopover"
-        nbPopoverTrigger="click"
-        nbPopoverPlacement="bottom"
-      >
+      <button nbButton outline status="basic" class="action" shape="semi-round" (click)="filterBottomSheet = true">
         <fa-icon [icon]="icons.faFilter"></fa-icon>&nbsp;<span class="text">Filters</span>
-        @if (selectedStatusIds.length + selectedGenders.length > 0) {
-        <span class="filter-count">({{ selectedStatusIds.length + selectedGenders.length }})</span>
+        @if (selectedStatusIds.length + selectedGenders.length + selectedUserDomains.length +
+        selectedExperienceLevels.length > 0) {
+        <span class="filter-count"
+          >({{
+            selectedStatusIds.length +
+              selectedGenders.length +
+              selectedUserDomains.length +
+              selectedExperienceLevels.length
+          }})</span
+        >
         }
       </button>
     </div>
@@ -150,13 +149,22 @@
         </form>
         <div class="filter" [nbPopover]="filterPopover" nbPopoverTrigger="click" nbPopoverPlacement="bottom">
           <fa-icon [icon]="icons.faFilter"></fa-icon><span class="text">Filters</span>
-          @if (selectedStatusIds.length + selectedGenders.length > 0) {
-          <span class="filter-count">({{ selectedStatusIds.length + selectedGenders.length }})</span>
+          @if (selectedStatusIds.length + selectedGenders.length + selectedUserDomains.length +
+          selectedExperienceLevels.length > 0) {
+          <span class="filter-count"
+            >({{
+              selectedStatusIds.length +
+                selectedGenders.length +
+                selectedUserDomains.length +
+                selectedExperienceLevels.length
+            }})</span
+          >
           }
         </div>
         <div class="refresh" (click)="getResponses()"><fa-icon [icon]="icons.faRefresh"></fa-icon></div>
-        @if (forms.length > 0 || selectedGenders.length > 0 || searchForm.get('name').value !== '' ||
-        selectedStatusIds.length !== 0 || selectedEventLocationTrackId !== 0) {
+        @if (forms.length > 0 || selectedGenders.length > 0 || selectedUserDomains.length > 0 ||
+        selectedExperienceLevels.length > 0 || searchForm.get('name').value !== '' || selectedStatusIds.length !== 0 ||
+        selectedEventLocationTrackId !== 0) {
         <div (click)="clearAllFilter()" class="clear-filter">Clear All Filters</div>
         }
       </div>
@@ -518,6 +526,8 @@
       [page]="page"
       [count]="count"
       [selectedGenders]="selectedGenders"
+      [selectedUserDomains]="selectedUserDomains"
+      [selectedExperienceLevels]="selectedExperienceLevels"
       [selectedEventLocationTrackId]="selectedEventLocationTrackId"
       [question]="data.question"
       [showGenderGraphOnly]="data.showGenderGraph"
@@ -873,10 +883,22 @@
 
 <ng-template #filterPopover>
   <div class="filter-popover">
-    <div class="filter-header">
-      <span>Filter by</span>
-    </div>
+    <ng-container *ngTemplateOutlet="filterContent"></ng-container>
+  </div>
+</ng-template>
 
+<commudle-bottom-sheet [isOpen]="filterBottomSheet" title="Filters" (close)="filterBottomSheet = false">
+  <div class="filter-popover filter-sheet">
+    <ng-container *ngTemplateOutlet="filterContent"></ng-container>
+  </div>
+</commudle-bottom-sheet>
+
+<ng-template #filterContent>
+  <div class="filter-header">
+    <span>Filter by</span>
+  </div>
+
+  <div class="filter-body">
     <div class="filter-section">
       <span class="filter-section-header">Status</span>
       @for (rs of registrationStatuses; track rs.id) {
@@ -943,12 +965,46 @@
       </div>
     </div>
 
-    <div class="filter-actions">
-      <button nbButton size="medium" status="primary" (click)="applyFilter()" class="apply-button" fullWidth>
-        Apply
-      </button>
-      <button nbButton size="medium" ghost (click)="closePopover(true)" fullWidth>Reset</button>
+    <div class="filter-section">
+      <span class="filter-section-header">Domain</span>
+      @for (domain of EDomain | keyvalue : originalOrder; track domain.key) {
+      <div class="filter-option">
+        <input
+          type="checkbox"
+          [id]="'domain-' + domain.key"
+          [checked]="selectedUserDomains.includes(domain.key)"
+          (change)="onUserDomainChange($event, domain.key)"
+        />
+        <label [for]="'domain-' + domain.key">
+          <span class="option-name">{{ domain.value }}</span>
+        </label>
+      </div>
+      }
     </div>
+
+    <div class="filter-section">
+      <span class="filter-section-header">Experience Level</span>
+      @for (level of EExperienceLevel | keyvalue : originalOrder; track level.key) {
+      <div class="filter-option">
+        <input
+          type="checkbox"
+          [id]="'experience-' + level.key"
+          [checked]="selectedExperienceLevels.includes(level.key)"
+          (change)="onExperienceLevelChange($event, level.key)"
+        />
+        <label [for]="'experience-' + level.key">
+          <span class="option-name">{{ level.value }}</span>
+        </label>
+      </div>
+      }
+    </div>
+  </div>
+
+  <div class="filter-actions">
+    <button nbButton size="medium" status="primary" (click)="applyFilter()" class="apply-button" fullWidth>
+      Apply
+    </button>
+    <button nbButton size="medium" ghost (click)="closePopover(true)" fullWidth>Reset</button>
   </div>
 </ng-template>
 
