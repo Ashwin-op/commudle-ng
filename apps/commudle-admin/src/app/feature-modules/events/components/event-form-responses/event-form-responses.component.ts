@@ -692,32 +692,18 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
     this.dialogService.open(userEngagementFilterTemplate);
   }
 
-  // sections the user collapsed with the chevron while their checkbox is still ticked
-  private collapsedEngagementSections = new Set<string>();
-
+  // a section is open exactly when its checkbox is ticked
   isEngagementSectionOpen(controlName: string): boolean {
-    return !!this.userEngagementFilter.get(controlName).value && !this.collapsedEngagementSections.has(controlName);
+    return !!this.userEngagementFilter.get(controlName).value;
   }
 
-  expandEngagementSection(controlName: string) {
-    this.collapsedEngagementSections.delete(controlName);
-  }
-
-  // chevron: ticks and opens an untouched section, otherwise collapses / expands it
+  // header / chevron click ticks or unticks the section, which opens or closes it
   toggleEngagementSection(controlName: string) {
     const control = this.userEngagementFilter.get(controlName);
-    if (!control.value) {
-      control.setValue(true);
-      this.collapsedEngagementSections.delete(controlName);
-    } else if (this.collapsedEngagementSections.has(controlName)) {
-      this.collapsedEngagementSections.delete(controlName);
-    } else {
-      this.collapsedEngagementSections.add(controlName);
-    }
+    control.setValue(!control.value);
   }
 
   private resetUserEngagementForm() {
-    this.collapsedEngagementSections.clear();
     this.userEngagementFilter.reset();
     this.userEngagementFilter.patchValue({ event_status_match: 'any' });
   }
