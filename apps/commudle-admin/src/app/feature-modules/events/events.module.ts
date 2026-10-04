@@ -50,6 +50,8 @@ import { EventCommentsComponent } from './components/event-comments/event-commen
 import { EventDashboardComponent } from './components/event-dashboard/event-dashboard.component';
 import { EventDetailsComponent } from './components/event-details/event-details.component';
 import { EventEmbeddedVideoStreamComponent } from './components/event-embedded-video-stream/event-embedded-video-stream.component';
+import { SegmentedControlComponent } from './components/segmented-control/segmented-control.component';
+import { EventSearchMultiSelectComponent } from './components/event-search-multi-select/event-search-multi-select.component';
 import { EventFormResponsesComponent } from './components/event-form-responses/event-form-responses.component';
 import { UserDetailsCellComponent } from './components/event-form-responses/user-details-cell/user-details-cell.component';
 import { UserEngagementDataComponent } from './components/event-form-responses/user-engagement-data/user-engagement-data.component';
@@ -95,6 +97,8 @@ import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-the
     CollaboratingCommunitiesComponent,
     VolunteersComponent,
     EventFormResponsesComponent,
+    EventSearchMultiSelectComponent,
+    SegmentedControlComponent,
     EventCommentsComponent,
     EventStatsComponent,
     EventDashboardComponent,

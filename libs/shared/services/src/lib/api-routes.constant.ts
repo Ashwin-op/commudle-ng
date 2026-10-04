@@ -199,6 +199,7 @@ export const API_ROUTES = {
     GET: 'api/v2/events',
     CLONE: 'api/v2/events/clone',
     COMMUNITY_EVENTS_FOR_EMAIL: 'api/v2/events/community_events_for_email',
+    SEARCH_FOR_FILTERS: 'api/v2/events/search_for_filters',
     UPDATE_STATUS: 'api/v2/events/update_status',
     UPDATE_CUSTOM_REGISTRATION: 'api/v2/events/update_custom_registration',
     UPDATE_CUSTOM_AGENDA: 'api/v2/events/update_custom_agenda',
@@ -320,7 +321,6 @@ export const API_ROUTES = {
     PUBLIC_GET_EVENT_SPEAKERS: 'api/v2/data_form_entity_response_groups/public_event_speakers',
     PUBLIC_EVENT_INTERESTED_USERS: 'api/v2/data_form_entity_response_groups/public_event_interested_users',
     FILTERED_RESPONSE_VALUES: 'api/v2/data_form_entity_response_groups/filtered_response_values',
-    ALL_ATTENDED_EVENTS_FILTERS: 'api/v2/data_form_entity_response_groups/all_attended_events_filters',
   },
 
   // event_entry_passes

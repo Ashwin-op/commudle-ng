@@ -5,7 +5,14 @@ import { ApiRoutesService } from 'apps/shared-services/api-routes.service';
 import { API_ROUTES } from 'apps/shared-services/api-routes.constants';
 import { IDataFormEntityResponseGroup } from 'apps/shared-models/data_form_entity_response_group.model';
 import { IDataFormEntityResponseGroups } from 'apps/shared-models/data_form_entity_response_groups.model';
-import { IEvent } from '@commudle/shared-models';
+
+export interface IEventStatusFilter {
+  event_slugs: string[];
+  statuses: string[];
+  has: boolean;
+  // how the selected events combine: any = status in at least one, all = status in every selected event
+  match: 'any' | 'all';
+}
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +30,9 @@ export class DataFormEntityResponseGroupsService {
     eventLocationTrackId?,
     formData?,
     communityEngagementFilters?,
+    userDomains?: string[],
+    experienceLevels?: string[],
+    eventStatusFilter?: IEventStatusFilter | null,
   ): Observable<any> {
     let params = new HttpParams()
       .set('event_data_form_entity_group_id', eventDataFormEntityGroupId)
@@ -42,8 +52,21 @@ export class DataFormEntityResponseGroupsService {
     if (eventLocationTrackId) {
       params = params.set('event_location_track_id', eventLocationTrackId);
     }
+    if (userDomains && userDomains.length > 0) {
+      userDomains.forEach((domain) => {
+        params = params.append('user_domains[]', domain);
+      });
+    }
+    if (experienceLevels && experienceLevels.length > 0) {
+      experienceLevels.forEach((level) => {
+        params = params.append('experience_levels[]', level);
+      });
+    }
     if (communityEngagementFilters) {
       formData.append('community_engagement_filters', JSON.stringify(communityEngagementFilters));
+    }
+    if (eventStatusFilter) {
+      formData.append('event_status_filter', JSON.stringify(eventStatusFilter));
     }
     return this.http.post<any>(
       this.apiRoutesService.getRoute(API_ROUTES.DATA_FORM_ENTITY_RESPONSE_GROUPS.GET_EVENT_DATA_FORM_RESPONSES),
@@ -63,6 +86,9 @@ export class DataFormEntityResponseGroupsService {
     eventLocationTrackId?,
     formData?,
     communityEngagementFilters?,
+    userDomains?: string[],
+    experienceLevels?: string[],
+    eventStatusFilter?: IEventStatusFilter | null,
   ): Observable<any> {
     let params = new HttpParams()
       .set('event_data_form_entity_group_id', eventDataFormEntityGroupId)
@@ -83,8 +109,21 @@ export class DataFormEntityResponseGroupsService {
     if (eventLocationTrackId) {
       params = params.set('event_location_track_id', eventLocationTrackId);
     }
+    if (userDomains && userDomains.length > 0) {
+      userDomains.forEach((domain) => {
+        params = params.append('user_domains[]', domain);
+      });
+    }
+    if (experienceLevels && experienceLevels.length > 0) {
+      experienceLevels.forEach((level) => {
+        params = params.append('experience_levels[]', level);
+      });
+    }
     if (communityEngagementFilters) {
       formData.append('community_engagement_filters', JSON.stringify(communityEngagementFilters));
+    }
+    if (eventStatusFilter) {
+      formData.append('event_status_filter', JSON.stringify(eventStatusFilter));
     }
     return this.http.post<any>(
       this.apiRoutesService.getRoute(API_ROUTES.DATA_FORM_ENTITY_RESPONSE_GROUPS.FILTERED_RESPONSE_VALUES),
@@ -119,14 +158,6 @@ export class DataFormEntityResponseGroupsService {
       token,
       rsvp_status: rsvpStatus,
     });
-  }
-
-  getAttendeeEventList(eventDataFormEntityGroupId: number): Observable<IEvent[]> {
-    const params = new HttpParams().set('event_data_form_entity_group_id', eventDataFormEntityGroupId);
-    return this.http.get<IEvent[]>(
-      this.apiRoutesService.getRoute(API_ROUTES.DATA_FORM_ENTITY_RESPONSE_GROUPS.ALL_ATTENDED_EVENTS_FILTERS),
-      { params },
-    );
   }
 
   pGetEventSpeakers(eventId): Observable<IDataFormEntityResponseGroups> {

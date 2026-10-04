@@ -43,19 +43,18 @@
           }
         </div>
       </form>
-      <button
-        nbButton
-        outline
-        status="basic"
-        class="action"
-        shape="semi-round"
-        [nbPopover]="filterPopover"
-        nbPopoverTrigger="click"
-        nbPopoverPlacement="bottom"
-      >
+      <button comButton outline status="basic" class="action" shape="semi-round" (click)="filterBottomSheet = true">
         <fa-icon [icon]="icons.faFilter"></fa-icon>&nbsp;<span class="text">Filters</span>
-        @if (selectedStatusIds.length + selectedGenders.length > 0) {
-        <span class="filter-count">({{ selectedStatusIds.length + selectedGenders.length }})</span>
+        @if (selectedStatusIds.length + selectedGenders.length + selectedUserDomains.length +
+        selectedExperienceLevels.length > 0) {
+        <span class="filter-count"
+          >({{
+            selectedStatusIds.length +
+              selectedGenders.length +
+              selectedUserDomains.length +
+              selectedExperienceLevels.length
+          }})</span
+        >
         }
       </button>
     </div>
@@ -150,13 +149,22 @@
         </form>
         <div class="filter" [nbPopover]="filterPopover" nbPopoverTrigger="click" nbPopoverPlacement="bottom">
           <fa-icon [icon]="icons.faFilter"></fa-icon><span class="text">Filters</span>
-          @if (selectedStatusIds.length + selectedGenders.length > 0) {
-          <span class="filter-count">({{ selectedStatusIds.length + selectedGenders.length }})</span>
+          @if (selectedStatusIds.length + selectedGenders.length + selectedUserDomains.length +
+          selectedExperienceLevels.length > 0) {
+          <span class="filter-count"
+            >({{
+              selectedStatusIds.length +
+                selectedGenders.length +
+                selectedUserDomains.length +
+                selectedExperienceLevels.length
+            }})</span
+          >
           }
         </div>
         <div class="refresh" (click)="getResponses()"><fa-icon [icon]="icons.faRefresh"></fa-icon></div>
-        @if (forms.length > 0 || selectedGenders.length > 0 || searchForm.get('name').value !== '' ||
-        selectedStatusIds.length !== 0 || selectedEventLocationTrackId !== 0) {
+        @if (forms.length > 0 || selectedGenders.length > 0 || selectedUserDomains.length > 0 ||
+        selectedExperienceLevels.length > 0 || searchForm.get('name').value !== '' || selectedStatusIds.length !== 0 ||
+        selectedEventLocationTrackId !== 0) {
         <div (click)="clearAllFilter()" class="clear-filter">Clear All Filters</div>
         }
       </div>
@@ -444,66 +452,87 @@
         <p>Change Bulk Status?</p>
         <commudle-help-section [helpDictionaryName]="'event-bulk-status'"></commudle-help-section>
       </div>
-      <button ghost nbButton size="small" (click)="ref.close()">
-        <nb-icon icon="close"></nb-icon>
+      <button comButton ghost size="small" (click)="ref.close()" aria-label="Close">
+        <fa-icon [icon]="icons.faXmark"></fa-icon>
       </button>
     </com-card-header>
     <com-card-body>
+      <p>This changes the status of the people currently filtered in the table.</p>
+      @if (bulkHasNoFilters) {
       <commudle-alert
         [error]="true"
-        errorMessage="Bulk status does not work on the filters applied in the table below"
+        errorMessage="No filter is applied, so this applies to everyone on the form."
       ></commudle-alert>
-      <div class="com-flex com-gap-4">
-        <div class="dropdown">
-          <select
-            (change)="changeFromRegistrationStatus($event)"
-            class="com-border-0 com-text-Yankees-Blue"
-            [ngClass]="{
-              'com-text-Cadet-Grey': fromRegistrationStatus === undefined
-            }"
-          >
-            <option selected disabled>From</option>
-            @for (rs of registrationStatuses; track rs.id) {
-            <option [value]="rs.name">{{ rs.name | titlecase }}</option>
-            }
-          </select>
-        </div>
-        <div class="dropdown">
-          <select
-            class="com-border-0 com-text-Yankees-Blue"
-            (change)="changeToRegistrationStatus($event)"
-            [ngClass]="{
-              'com-text-Cadet-Grey': toRegistrationStatus === undefined
-            }"
-          >
-            <option selected disabled>To</option>
-            @for (rs of registrationStatuses; track rs.id) {
-            <option [value]="rs.name">{{ rs.name | titlecase }}</option>
-            }
-          </select>
-        </div>
-      </div>
-      @if (fromRegistrationStatus === toRegistrationStatus && toRegistrationStatus !== undefined) {
-      <div>
-        <commudle-alert [error]="true" errorMessage="From and To value can't be same"></commudle-alert>
-      </div>
       }
+      <div class="dropdown">
+        <select
+          class="com-border-0 com-text-Yankees-Blue"
+          (change)="changeToRegistrationStatus($event)"
+          [ngClass]="{
+            'com-text-Cadet-Grey': toRegistrationStatus === undefined
+          }"
+        >
+          <option selected disabled>To</option>
+          @for (rs of registrationStatuses; track rs.id) {
+          <option [value]="rs.name">{{ rs.name | titlecase }}</option>
+          }
+        </select>
+      </div>
+      @if (toRegistrationStatus) { @if (bulkPreviewLoading) {
+      <p>Counting people...</p>
+      } @else if (bulkPreviewFailed) {
+      <commudle-alert
+        [error]="true"
+        errorMessage="Could not count the people to update. Try choosing the status again."
+      ></commudle-alert>
+      } @else if (bulkPreview) { @if (bulkPreview.people_to_update === 0) {
+      <p><strong>No one to update</strong></p>
+      } @else {
       <p>
-        This will change the status of all {{ selectedRegistrationStatus }} entries and
-        <strong>cannot be undone</strong>.
+        <strong
+          >{{ bulkPreview.people_to_update }} {{ bulkPreview.people_to_update === 1 ? 'person' : 'people' }}</strong
+        >
+        will be updated.
       </p>
+      } @if (bulkPreview.passes_to_delete > 0) {
+      <commudle-alert
+        [error]="true"
+        [errorMessage]="
+          bulkPreview.passes_to_delete +
+          ' ' +
+          (bulkPreview.passes_to_delete === 1 ? 'person already has' : 'people already have') +
+          ' their entry passes generated. They will be deleted.'
+        "
+      ></commudle-alert>
+      } @if (bulkPreview.attended_passes_to_delete > 0) {
+      <commudle-alert
+        [error]="true"
+        [errorMessage]="
+          bulkPreview.attended_passes_to_delete +
+          ' ' +
+          (bulkPreview.attended_passes_to_delete === 1 ? 'person has' : 'people have') +
+          ' their attendance marked. They will be deleted.'
+        "
+      ></commudle-alert>
+      } } }
+      <p>This <strong>cannot be undone</strong>.</p>
     </com-card-body>
     <com-card-footer>
       <button
         (click)="bulkStatusChange()"
-        nbButton
-        size="medium"
+        comButton
         status="success"
-        [disabled]="toRegistrationStatus === undefined || fromRegistrationStatus === undefined"
+        [disabled]="
+          !toRegistrationStatus ||
+          bulkPreviewLoading ||
+          bulkPreviewFailed ||
+          !bulkPreview ||
+          bulkPreview.people_to_update === 0
+        "
       >
         Yes
       </button>
-      <button (click)="dialogRef.close()" ghost nbButton size="medium" status="danger">No</button>
+      <button (click)="dialogRef.close()" comButton ghost status="danger">No</button>
     </com-card-footer>
   </com-card>
 </ng-template>
@@ -518,10 +547,13 @@
       [page]="page"
       [count]="count"
       [selectedGenders]="selectedGenders"
+      [selectedUserDomains]="selectedUserDomains"
+      [selectedExperienceLevels]="selectedExperienceLevels"
       [selectedEventLocationTrackId]="selectedEventLocationTrackId"
       [question]="data.question"
       [showGenderGraphOnly]="data.showGenderGraph"
       [community_engagement_filters]="community_engagement_filters"
+      [event_status_filter]="event_status_filter"
     ></commudle-event-form-responses-graph>
   </div>
 </ng-template>
@@ -529,328 +561,499 @@
 <ng-template #userEngagementFilterTemplate let-ref="dialogRef">
   <com-card class="user-engagement-filter">
     <com-card-header>
-      <div>Community Engagement Filter</div>
-      <button ghost nbButton size="small" (click)="ref.close()">
-        <nb-icon icon="close"></nb-icon>
+      <div class="dialog-title">
+        <div class="title">Community Engagement Filter</div>
+        <div class="subtitle">Filter people by engagement activity</div>
+      </div>
+      <button comButton ghost size="small" (click)="ref.close()" aria-label="Close">
+        <fa-icon [icon]="icons.faXmark"></fa-icon>
       </button>
     </com-card-header>
+    <div class="filters-strip">
+      <span class="strip-title">Engagement filters</span>
+      <div class="strip-actions">
+        @if (activeEngagementFilterCount() > 0) {
+        <span class="active-count">{{ activeEngagementFilterCount() }} active</span>
+        }
+        <button comButton ghost size="small" status="primary" (click)="clearEngagementFormInputs()">Clear all</button>
+      </div>
+    </div>
     <com-card-body>
       <form [formGroup]="userEngagementFilter">
         <!-- show_attended_events -->
-        <div class="form-group">
-          <label>
-            <input type="checkbox" formControlName="show_attended_events" />
-            Attended Events
-          </label>
-
-          @if (userEngagementFilter.get('show_attended_events').value) {
-          <div class="attended-dropdown">
-            <div class="select">
-              <select
-                formControlName="attended_events_attendance"
-                class="com-text-Yankees-Blue"
-                [ngClass]="{
-                  'com-text-Cadet-Grey': userEngagementFilter.controls['attended_events_attendance'].value === ''
-                }"
-              >
-                <option value="" selected disabled>Select attendee type</option>
-                <option [value]="true">Has Attended</option>
-                <option [value]="false">Not Attended</option>
-              </select>
+        <div class="form-group" [class.open]="isEngagementSectionOpen('show_attended_events')">
+          <div class="section-header" (click)="toggleEngagementSection('show_attended_events')">
+            <label (click)="$event.stopPropagation()">
+              <input type="checkbox" formControlName="show_attended_events" />
+              Attended Events
+            </label>
+            <fa-icon
+              class="chevron"
+              [icon]="isEngagementSectionOpen('show_attended_events') ? icons.faChevronUp : icons.faChevronDown"
+            ></fa-icon>
+          </div>
+          @if (isEngagementSectionOpen('show_attended_events')) {
+          <div class="section-body">
+            <div class="attended-dropdown">
+              <div class="field">
+                <span class="field-label">Attendance</span>
+                <div class="select">
+                  <select
+                    formControlName="attended_events_attendance"
+                    class="com-text-Yankees-Blue"
+                    [ngClass]="{
+                      'com-text-Cadet-Grey': userEngagementFilter.controls['attended_events_attendance'].value === ''
+                    }"
+                  >
+                    <option value="" selected disabled>Select attendee type</option>
+                    @for (option of attendedOptions; track option.value) {
+                    <option [value]="option.value">{{ option.label }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <span class="field-label">Events</span>
+                <app-event-search-multi-select
+                  formControlName="attended_events_slugs"
+                  [communityId]="community.slug"
+                  placeholder="Search events"
+                ></app-event-search-multi-select>
+              </div>
             </div>
-            <div class="select">
-              <select
-                formControlName="attended_events_slugs"
-                class="com-text-Yankees-Blue"
-                [ngClass]="{
-                  'com-text-Cadet-Grey': userEngagementFilter.controls['attended_events_slugs'].value === ''
-                }"
-              >
-                <option value="" disabled>Select event slugs</option>
-                @for (event of attendedEventList | orderBy : ['name'] : ['asc']; track event.id) {
-                <option [value]="event.slug">{{ event.name }} - {{ event.kommunity.name }}</option>
-                }
-              </select>
+          </div>
+          }
+        </div>
+
+        <!-- event_status_filter -->
+        <div class="form-group" [class.open]="isEngagementSectionOpen('show_event_status_filter')">
+          <div class="section-header" (click)="toggleEngagementSection('show_event_status_filter')">
+            <label (click)="$event.stopPropagation()">
+              <input type="checkbox" formControlName="show_event_status_filter" />
+              Registration Status in Events
+            </label>
+            <fa-icon
+              class="chevron"
+              [icon]="isEngagementSectionOpen('show_event_status_filter') ? icons.faChevronUp : icons.faChevronDown"
+            ></fa-icon>
+          </div>
+          @if (isEngagementSectionOpen('show_event_status_filter')) {
+          <div class="section-body">
+            <div class="attended-dropdown event-status-dropdown">
+              <div class="field">
+                <span class="field-label">Statuses</span>
+                <details class="status-dropdown">
+                  <summary [class.placeholder]="!selectedEventStatusLabel()">
+                    {{ selectedEventStatusLabel() || 'Select statuses' }}
+                  </summary>
+                  <div class="status-options">
+                    @for (rs of registrationStatuses; track rs.id) {
+                    <label class="status-option">
+                      <input
+                        type="checkbox"
+                        [checked]="userEngagementFilter.get('event_status_statuses').value?.includes(rs.name)"
+                        (change)="onEventStatusToggle($event, rs.name)"
+                      />
+                      {{ rs.name | titlecase }}
+                    </label>
+                    }
+                  </div>
+                </details>
+              </div>
+              <div class="field">
+                <span class="field-label">Match</span>
+                <app-segmented-control
+                  formControlName="event_status_match"
+                  [options]="eventMatchOptions"
+                ></app-segmented-control>
+              </div>
+              <div class="field">
+                <span class="field-label">Events</span>
+                <app-event-search-multi-select
+                  formControlName="event_status_slugs"
+                  [communityId]="community.slug"
+                  placeholder="Search events"
+                ></app-event-search-multi-select>
+              </div>
             </div>
           </div>
           }
         </div>
 
         <!-- Show Total Channel Messages -->
-        <div class="form-group">
-          <label>
-            <input type="checkbox" formControlName="show_total_channel_messages" />
-            Total Channel Messages
-          </label>
-          @if (userEngagementFilter.get('show_total_channel_messages').value) {
-          <div>
-            <label>Min:</label>
-            <input
-              nbInput
-              fieldSize="tiny"
-              type="number"
-              formControlName="min_total_channel_messages"
-              placeholder="0"
-              min="0"
-            />
-            &nbsp;
-            <label>Max:</label>
-            <input
-              nbInput
-              fieldSize="tiny"
-              type="number"
-              formControlName="max_total_channel_messages"
-              placeholder="100"
-              min="0"
-            />
+        <div class="form-group" [class.open]="isEngagementSectionOpen('show_total_channel_messages')">
+          <div class="section-header" (click)="toggleEngagementSection('show_total_channel_messages')">
+            <label (click)="$event.stopPropagation()">
+              <input type="checkbox" formControlName="show_total_channel_messages" />
+              Total Channel Messages
+            </label>
+            <fa-icon
+              class="chevron"
+              [icon]="isEngagementSectionOpen('show_total_channel_messages') ? icons.faChevronUp : icons.faChevronDown"
+            ></fa-icon>
+          </div>
+          @if (isEngagementSectionOpen('show_total_channel_messages')) {
+          <div class="section-body">
+            <div class="min-max">
+              <div class="field">
+                <span class="field-label">Minimum</span>
+                <input
+                  class="control"
+                  type="number"
+                  formControlName="min_total_channel_messages"
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div class="field">
+                <span class="field-label">Maximum</span>
+                <input
+                  class="control"
+                  type="number"
+                  formControlName="max_total_channel_messages"
+                  placeholder="100"
+                  min="0"
+                />
+              </div>
+            </div>
           </div>
           }
         </div>
 
         <!-- Show Total Event Registrations -->
-        <div class="form-group">
-          <label>
-            <input type="checkbox" formControlName="show_total_event_registrations" />
-            Total Event Registrations
-          </label>
-          @if (userEngagementFilter.get('show_total_event_registrations').value) {
-          <div>
-            <label>Min:</label>
-            <input
-              nbInput
-              fieldSize="tiny"
-              type="number"
-              formControlName="min_total_event_registrations"
-              placeholder="0"
-              min="0"
-            />
-            &nbsp;
-            <label>Max:</label>
-            <input
-              nbInput
-              fieldSize="tiny"
-              type="number"
-              formControlName="max_total_event_registrations"
-              placeholder="100"
-              min="0"
-            />
+        <div class="form-group" [class.open]="isEngagementSectionOpen('show_total_event_registrations')">
+          <div class="section-header" (click)="toggleEngagementSection('show_total_event_registrations')">
+            <label (click)="$event.stopPropagation()">
+              <input type="checkbox" formControlName="show_total_event_registrations" />
+              Total Event Registrations
+            </label>
+            <fa-icon
+              class="chevron"
+              [icon]="
+                isEngagementSectionOpen('show_total_event_registrations') ? icons.faChevronUp : icons.faChevronDown
+              "
+            ></fa-icon>
+          </div>
+          @if (isEngagementSectionOpen('show_total_event_registrations')) {
+          <div class="section-body">
+            <div class="min-max">
+              <div class="field">
+                <span class="field-label">Minimum</span>
+                <input
+                  class="control"
+                  type="number"
+                  formControlName="min_total_event_registrations"
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div class="field">
+                <span class="field-label">Maximum</span>
+                <input
+                  class="control"
+                  type="number"
+                  formControlName="max_total_event_registrations"
+                  placeholder="100"
+                  min="0"
+                />
+              </div>
+            </div>
           </div>
           }
         </div>
 
         <!-- show_total_event_speaker_registrations -->
-        <div class="form-group">
-          <label>
-            <input type="checkbox" formControlName="show_total_event_speaker_registrations" />
-            Total Event Speaker Registrations
-          </label>
-          @if (userEngagementFilter.get('show_total_event_speaker_registrations').value) {
-          <div>
-            <label>Min:</label>
-            <input
-              nbInput
-              fieldSize="tiny"
-              type="number"
-              formControlName="min_total_event_speaker_registrations"
-              placeholder="0"
-              min="0"
-            />
-            &nbsp;
-            <label>Max:</label>
-            <input
-              nbInput
-              fieldSize="tiny"
-              type="number"
-              formControlName="max_total_event_speaker_registrations"
-              placeholder="100"
-              min="0"
-            />
+        <div class="form-group" [class.open]="isEngagementSectionOpen('show_total_event_speaker_registrations')">
+          <div class="section-header" (click)="toggleEngagementSection('show_total_event_speaker_registrations')">
+            <label (click)="$event.stopPropagation()">
+              <input type="checkbox" formControlName="show_total_event_speaker_registrations" />
+              Total Event Speaker Registrations
+            </label>
+            <fa-icon
+              class="chevron"
+              [icon]="
+                isEngagementSectionOpen('show_total_event_speaker_registrations')
+                  ? icons.faChevronUp
+                  : icons.faChevronDown
+              "
+            ></fa-icon>
+          </div>
+          @if (isEngagementSectionOpen('show_total_event_speaker_registrations')) {
+          <div class="section-body">
+            <div class="min-max">
+              <div class="field">
+                <span class="field-label">Minimum</span>
+                <input
+                  class="control"
+                  type="number"
+                  formControlName="min_total_event_speaker_registrations"
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div class="field">
+                <span class="field-label">Maximum</span>
+                <input
+                  class="control"
+                  type="number"
+                  formControlName="max_total_event_speaker_registrations"
+                  placeholder="100"
+                  min="0"
+                />
+              </div>
+            </div>
           </div>
           }
         </div>
 
         <!-- show_total_event_speaker_sessions -->
-        <div class="form-group">
-          <label>
-            <input type="checkbox" formControlName="show_total_event_speaker_sessions" />
-            Total Event Speaker Sessions
-          </label>
-          @if (userEngagementFilter.get('show_total_event_speaker_sessions').value) {
-          <div>
-            <label>Min:</label>
-            <input
-              nbInput
-              fieldSize="tiny"
-              type="number"
-              formControlName="min_total_event_speaker_sessions"
-              placeholder="0"
-              min="0"
-            />
-            &nbsp;
-            <label>Max:</label>
-            <input
-              nbInput
-              fieldSize="tiny"
-              type="number"
-              formControlName="max_total_event_speaker_sessions"
-              placeholder="100"
-              min="0"
-            />
+        <div class="form-group" [class.open]="isEngagementSectionOpen('show_total_event_speaker_sessions')">
+          <div class="section-header" (click)="toggleEngagementSection('show_total_event_speaker_sessions')">
+            <label (click)="$event.stopPropagation()">
+              <input type="checkbox" formControlName="show_total_event_speaker_sessions" />
+              Total Event Speaker Sessions
+            </label>
+            <fa-icon
+              class="chevron"
+              [icon]="
+                isEngagementSectionOpen('show_total_event_speaker_sessions') ? icons.faChevronUp : icons.faChevronDown
+              "
+            ></fa-icon>
+          </div>
+          @if (isEngagementSectionOpen('show_total_event_speaker_sessions')) {
+          <div class="section-body">
+            <div class="min-max">
+              <div class="field">
+                <span class="field-label">Minimum</span>
+                <input
+                  class="control"
+                  type="number"
+                  formControlName="min_total_event_speaker_sessions"
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div class="field">
+                <span class="field-label">Maximum</span>
+                <input
+                  class="control"
+                  type="number"
+                  formControlName="max_total_event_speaker_sessions"
+                  placeholder="100"
+                  min="0"
+                />
+              </div>
+            </div>
           </div>
           }
         </div>
 
         <!-- show_total_hackathon_registrations -->
-        <div class="form-group">
-          <label>
-            <input type="checkbox" formControlName="show_total_hackathon_registrations" />
-            Total Hackathon Registrations
-          </label>
-          @if (userEngagementFilter.get('show_total_hackathon_registrations').value) {
-          <div>
-            <label>Min:</label>
-            <input
-              nbInput
-              fieldSize="tiny"
-              type="number"
-              formControlName="min_total_hackathon_registrations"
-              placeholder="0"
-              min="0"
-            />
-            &nbsp;
-            <label>Max:</label>
-            <input
-              nbInput
-              fieldSize="tiny"
-              type="number"
-              formControlName="max_total_hackathon_registrations"
-              placeholder="100"
-              min="0"
-            />
+        <div class="form-group" [class.open]="isEngagementSectionOpen('show_total_hackathon_registrations')">
+          <div class="section-header" (click)="toggleEngagementSection('show_total_hackathon_registrations')">
+            <label (click)="$event.stopPropagation()">
+              <input type="checkbox" formControlName="show_total_hackathon_registrations" />
+              Total Hackathon Registrations
+            </label>
+            <fa-icon
+              class="chevron"
+              [icon]="
+                isEngagementSectionOpen('show_total_hackathon_registrations') ? icons.faChevronUp : icons.faChevronDown
+              "
+            ></fa-icon>
+          </div>
+          @if (isEngagementSectionOpen('show_total_hackathon_registrations')) {
+          <div class="section-body">
+            <div class="min-max">
+              <div class="field">
+                <span class="field-label">Minimum</span>
+                <input
+                  class="control"
+                  type="number"
+                  formControlName="min_total_hackathon_registrations"
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div class="field">
+                <span class="field-label">Maximum</span>
+                <input
+                  class="control"
+                  type="number"
+                  formControlName="max_total_hackathon_registrations"
+                  placeholder="100"
+                  min="0"
+                />
+              </div>
+            </div>
           </div>
           }
         </div>
 
         <!-- show_total_invited_attended_events -->
-        <div class="form-group">
-          <label>
-            <input type="checkbox" formControlName="show_total_invited_attended_events" />
-            Total Invited Attended Events
-          </label>
-          @if (userEngagementFilter.get('show_total_invited_attended_events').value) {
-          <div>
-            <label>Min:</label>
-            <input
-              nbInput
-              fieldSize="tiny"
-              type="number"
-              formControlName="min_total_invited_attended_events"
-              placeholder="0"
-              min="0"
-            />
-            &nbsp;
-            <label>Max:</label>
-            <input
-              nbInput
-              fieldSize="tiny"
-              type="number"
-              formControlName="max_total_invited_attended_events"
-              placeholder="100"
-              min="0"
-            />
+        <div class="form-group" [class.open]="isEngagementSectionOpen('show_total_invited_attended_events')">
+          <div class="section-header" (click)="toggleEngagementSection('show_total_invited_attended_events')">
+            <label (click)="$event.stopPropagation()">
+              <input type="checkbox" formControlName="show_total_invited_attended_events" />
+              Total Invited Attended Events
+            </label>
+            <fa-icon
+              class="chevron"
+              [icon]="
+                isEngagementSectionOpen('show_total_invited_attended_events') ? icons.faChevronUp : icons.faChevronDown
+              "
+            ></fa-icon>
+          </div>
+          @if (isEngagementSectionOpen('show_total_invited_attended_events')) {
+          <div class="section-body">
+            <div class="min-max">
+              <div class="field">
+                <span class="field-label">Minimum</span>
+                <input
+                  class="control"
+                  type="number"
+                  formControlName="min_total_invited_attended_events"
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div class="field">
+                <span class="field-label">Maximum</span>
+                <input
+                  class="control"
+                  type="number"
+                  formControlName="max_total_invited_attended_events"
+                  placeholder="100"
+                  min="0"
+                />
+              </div>
+            </div>
           </div>
           }
         </div>
 
         <!-- show_total_skipped_events -->
-        <div class="form-group">
-          <label>
-            <input type="checkbox" formControlName="show_total_skipped_events" />
-            Total Skipped Events
-          </label>
-          @if (userEngagementFilter.get('show_total_skipped_events').value) {
-          <div>
-            <label>Min:</label>
-            <input
-              nbInput
-              fieldSize="tiny"
-              type="number"
-              formControlName="min_total_skipped_events"
-              placeholder="0"
-              min="0"
-            />
-            &nbsp;
-            <label>Max:</label>
-            <input
-              nbInput
-              fieldSize="tiny"
-              type="number"
-              formControlName="max_total_skipped_events"
-              placeholder="100"
-              min="0"
-            />
+        <div class="form-group" [class.open]="isEngagementSectionOpen('show_total_skipped_events')">
+          <div class="section-header" (click)="toggleEngagementSection('show_total_skipped_events')">
+            <label (click)="$event.stopPropagation()">
+              <input type="checkbox" formControlName="show_total_skipped_events" />
+              Total Skipped Events
+            </label>
+            <fa-icon
+              class="chevron"
+              [icon]="isEngagementSectionOpen('show_total_skipped_events') ? icons.faChevronUp : icons.faChevronDown"
+            ></fa-icon>
+          </div>
+          @if (isEngagementSectionOpen('show_total_skipped_events')) {
+          <div class="section-body">
+            <div class="min-max">
+              <div class="field">
+                <span class="field-label">Minimum</span>
+                <input
+                  class="control"
+                  type="number"
+                  formControlName="min_total_skipped_events"
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div class="field">
+                <span class="field-label">Maximum</span>
+                <input
+                  class="control"
+                  type="number"
+                  formControlName="max_total_skipped_events"
+                  placeholder="100"
+                  min="0"
+                />
+              </div>
+            </div>
           </div>
           }
         </div>
 
         <!-- show_total_uninvited_attended_events -->
-        <div class="form-group">
-          <label>
-            <input type="checkbox" formControlName="show_total_uninvited_attended_events" />
-            Total Uninvited Attended Events
-          </label>
-          @if (userEngagementFilter.get('show_total_uninvited_attended_events').value) {
-          <div>
-            <label>Min:</label>
-            <input
-              nbInput
-              fieldSize="tiny"
-              type="number"
-              formControlName="min_total_uninvited_attended_events"
-              placeholder="0"
-              min="0"
-            />
-            &nbsp;
-            <label>Max:</label>
-            <input
-              nbInput
-              fieldSize="tiny"
-              type="number"
-              formControlName="max_total_uninvited_attended_events"
-              placeholder="100"
-              min="0"
-            />
+        <div class="form-group" [class.open]="isEngagementSectionOpen('show_total_uninvited_attended_events')">
+          <div class="section-header" (click)="toggleEngagementSection('show_total_uninvited_attended_events')">
+            <label (click)="$event.stopPropagation()">
+              <input type="checkbox" formControlName="show_total_uninvited_attended_events" />
+              Total Uninvited Attended Events
+            </label>
+            <fa-icon
+              class="chevron"
+              [icon]="
+                isEngagementSectionOpen('show_total_uninvited_attended_events')
+                  ? icons.faChevronUp
+                  : icons.faChevronDown
+              "
+            ></fa-icon>
+          </div>
+          @if (isEngagementSectionOpen('show_total_uninvited_attended_events')) {
+          <div class="section-body">
+            <div class="min-max">
+              <div class="field">
+                <span class="field-label">Minimum</span>
+                <input
+                  class="control"
+                  type="number"
+                  formControlName="min_total_uninvited_attended_events"
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div class="field">
+                <span class="field-label">Maximum</span>
+                <input
+                  class="control"
+                  type="number"
+                  formControlName="max_total_uninvited_attended_events"
+                  placeholder="100"
+                  min="0"
+                />
+              </div>
+            </div>
           </div>
           }
         </div>
 
         <!-- show_total_volunteered_events -->
-        <div class="form-group">
-          <label>
-            <input type="checkbox" formControlName="show_total_volunteered_events" />
-            Total Volunteered Events
-          </label>
-          @if (userEngagementFilter.get('show_total_volunteered_events').value) {
-          <div>
-            <label>Min:</label>
-            <input
-              nbInput
-              fieldSize="tiny"
-              type="number"
-              formControlName="min_total_volunteered_events"
-              placeholder="0"
-              min="0"
-            />
-            &nbsp;
-            <label>Max:</label>
-            <input
-              nbInput
-              fieldSize="tiny"
-              type="number"
-              formControlName="max_total_volunteered_events"
-              placeholder="100"
-              min="0"
-            />
+        <div class="form-group" [class.open]="isEngagementSectionOpen('show_total_volunteered_events')">
+          <div class="section-header" (click)="toggleEngagementSection('show_total_volunteered_events')">
+            <label (click)="$event.stopPropagation()">
+              <input type="checkbox" formControlName="show_total_volunteered_events" />
+              Total Volunteered Events
+            </label>
+            <fa-icon
+              class="chevron"
+              [icon]="
+                isEngagementSectionOpen('show_total_volunteered_events') ? icons.faChevronUp : icons.faChevronDown
+              "
+            ></fa-icon>
+          </div>
+          @if (isEngagementSectionOpen('show_total_volunteered_events')) {
+          <div class="section-body">
+            <div class="min-max">
+              <div class="field">
+                <span class="field-label">Minimum</span>
+                <input
+                  class="control"
+                  type="number"
+                  formControlName="min_total_volunteered_events"
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div class="field">
+                <span class="field-label">Maximum</span>
+                <input
+                  class="control"
+                  type="number"
+                  formControlName="max_total_volunteered_events"
+                  placeholder="100"
+                  min="0"
+                />
+              </div>
+            </div>
           </div>
           }
         </div>
@@ -858,25 +1061,40 @@
     </com-card-body>
 
     <com-card-footer>
+      <button comButton ghost status="primary" class="reset-filters" (click)="resetUserEngagementFilters(ref)">
+        Reset filters
+      </button>
+      <button comButton status="basic" outline (click)="ref.close()">Cancel</button>
       <button
-        nbButton
+        comButton
         status="primary"
         (click)="applyUserEngagementFilter(); ref.close()"
         [disabled]="isApplyDisabled()"
       >
-        Apply
+        Apply filters@if (activeEngagementFilterCount() > 0) { ({{ activeEngagementFilterCount() }}) }
       </button>
-      <button nbButton status="danger" outline (click)="ref.close()">Cancel</button>
     </com-card-footer>
   </com-card>
 </ng-template>
 
 <ng-template #filterPopover>
   <div class="filter-popover">
-    <div class="filter-header">
-      <span>Filter by</span>
-    </div>
+    <ng-container *ngTemplateOutlet="filterContent"></ng-container>
+  </div>
+</ng-template>
 
+<commudle-bottom-sheet [isOpen]="filterBottomSheet" title="Filters" (close)="filterBottomSheet = false">
+  <div class="filter-popover filter-sheet">
+    <ng-container *ngTemplateOutlet="filterContent"></ng-container>
+  </div>
+</commudle-bottom-sheet>
+
+<ng-template #filterContent>
+  <div class="filter-header">
+    <span>Filter by</span>
+  </div>
+
+  <div class="filter-body">
     <div class="filter-section">
       <span class="filter-section-header">Status</span>
       @for (rs of registrationStatuses; track rs.id) {
@@ -943,12 +1161,46 @@
       </div>
     </div>
 
-    <div class="filter-actions">
-      <button nbButton size="medium" status="primary" (click)="applyFilter()" class="apply-button" fullWidth>
-        Apply
-      </button>
-      <button nbButton size="medium" ghost (click)="closePopover(true)" fullWidth>Reset</button>
+    <div class="filter-section">
+      <span class="filter-section-header">Domain</span>
+      @for (domain of EDomain | keyvalue : originalOrder; track domain.key) {
+      <div class="filter-option">
+        <input
+          type="checkbox"
+          [id]="'domain-' + domain.key"
+          [checked]="selectedUserDomains.includes(domain.key)"
+          (change)="onUserDomainChange($event, domain.key)"
+        />
+        <label [for]="'domain-' + domain.key">
+          <span class="option-name">{{ domain.value }}</span>
+        </label>
+      </div>
+      }
     </div>
+
+    <div class="filter-section">
+      <span class="filter-section-header">Experience Level</span>
+      @for (level of EExperienceLevel | keyvalue : originalOrder; track level.key) {
+      <div class="filter-option">
+        <input
+          type="checkbox"
+          [id]="'experience-' + level.key"
+          [checked]="selectedExperienceLevels.includes(level.key)"
+          (change)="onExperienceLevelChange($event, level.key)"
+        />
+        <label [for]="'experience-' + level.key">
+          <span class="option-name">{{ level.value }}</span>
+        </label>
+      </div>
+      }
+    </div>
+  </div>
+
+  <div class="filter-actions">
+    <button comButton size="medium" status="primary" (click)="applyFilter()" class="apply-button" fullWidth>
+      Apply
+    </button>
+    <button comButton size="medium" ghost (click)="closePopover(true)" fullWidth>Reset</button>
   </div>
 </ng-template>
 
