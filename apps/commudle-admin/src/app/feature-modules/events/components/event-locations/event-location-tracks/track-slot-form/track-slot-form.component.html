@@ -9,6 +9,7 @@
   <com-card-body>
     <div>
       <form
+        id="track-slot-form"
         (ngSubmit)="operationType === 'create' ? addSlot() : editSlot(trackSlot.id)"
         [formGroup]="trackSlotForm"
         class="track-slot-form"
@@ -123,6 +124,7 @@
           </div>
 
           <app-tag
+            formControlName="tags_list"
             [tags]="tags"
             [editable]="true"
             [minTagLimit]="false"
@@ -137,8 +139,8 @@
     </div>
   </com-card-body>
   <com-card-footer>
-    <div class="save-button-bottom" (click)="operationType === 'create' ? addSlot() : editSlot(trackSlot.id)">
-      <button [disabled]="!trackSlotForm.valid" fullWidth nbButton status="info" type="submit">Save</button>
-    </div>
+    <button form="track-slot-form" [disabled]="!trackSlotForm.valid" fullWidth nbButton status="info" type="submit">
+      Save
+    </button>
   </com-card-footer>
 </com-card>
