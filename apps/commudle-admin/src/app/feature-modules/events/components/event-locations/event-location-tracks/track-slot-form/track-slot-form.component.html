@@ -122,17 +122,18 @@
             <input type="time" formControlName="end_time" fullWidth nbInput placeholder="End Time*" />
           </div>
 
-          <app-tag
-            formControlName="tags_list"
-            [tags]="tags"
-            [editable]="true"
-            [minTagLimit]="false"
-            (tagAdd)="onTagAdd($event)"
-            (tagDelete)="onTagRemove($event)"
-            [label]="'Type a tag name'"
-            [backgroundColor]="'com-bg-tAnti-Flash'"
-            [fontColor]="'com-text-tYankees-Blue'"
-          ></app-tag>
+          <nb-tag-list (tagRemove)="onTagRemove($event)">
+            <nb-tag *ngFor="let tag of tags" [text]="tag" removable></nb-tag>
+            <input
+              (tagAdd)="onTagAdd($event)"
+              [separatorKeys]="[13, 188]"
+              fullWidth
+              nbTagInput
+              placeholder="Type a tag name"
+              type="text"
+              formControlName="tags_list"
+            />
+          </nb-tag-list>
         </div>
       </form>
     </div>

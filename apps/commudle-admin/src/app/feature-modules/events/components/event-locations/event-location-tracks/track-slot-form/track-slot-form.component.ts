@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
-import { NbDialogRef } from '@commudle/theme';
+import { NbDialogRef, NbTagComponent, NbTagInputAddEvent } from '@commudle/theme';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { TrackSlotsService } from 'apps/commudle-admin/src/app/services/track_slots.service';
 import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
@@ -226,14 +226,17 @@ export class TrackSlotFormComponent implements OnInit {
     });
   }
 
-  onTagAdd(value: string): void {
-    if (value && !this.tags.includes(value)) {
-      this.tags.push(value);
+  onTagAdd({ value, input }: NbTagInputAddEvent): void {
+    if (value) {
+      if (!this.tags.includes(value)) {
+        this.tags.push(value);
+      }
     }
+    input.nativeElement.value = '';
   }
 
-  onTagRemove(value: string): void {
-    this.tags = this.tags.filter((tag) => tag !== value);
+  onTagRemove(tagToRemove: NbTagComponent): void {
+    this.tags = this.tags.filter((tag) => tag !== tagToRemove.text);
   }
 
   speakerSelected(event, index) {
