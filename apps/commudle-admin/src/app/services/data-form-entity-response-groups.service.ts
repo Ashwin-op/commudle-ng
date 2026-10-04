@@ -6,6 +6,14 @@ import { API_ROUTES } from 'apps/shared-services/api-routes.constants';
 import { IDataFormEntityResponseGroup } from 'apps/shared-models/data_form_entity_response_group.model';
 import { IDataFormEntityResponseGroups } from 'apps/shared-models/data_form_entity_response_groups.model';
 
+export interface IEventStatusFilter {
+  event_slugs: string[];
+  statuses: string[];
+  has: boolean;
+  // how the selected events combine: any = status in at least one, all = status in every selected event
+  match: 'any' | 'all';
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -24,6 +32,7 @@ export class DataFormEntityResponseGroupsService {
     communityEngagementFilters?,
     userDomains?: string[],
     experienceLevels?: string[],
+    eventStatusFilter?: IEventStatusFilter | null,
   ): Observable<any> {
     let params = new HttpParams()
       .set('event_data_form_entity_group_id', eventDataFormEntityGroupId)
@@ -56,6 +65,9 @@ export class DataFormEntityResponseGroupsService {
     if (communityEngagementFilters) {
       formData.append('community_engagement_filters', JSON.stringify(communityEngagementFilters));
     }
+    if (eventStatusFilter) {
+      formData.append('event_status_filter', JSON.stringify(eventStatusFilter));
+    }
     return this.http.post<any>(
       this.apiRoutesService.getRoute(API_ROUTES.DATA_FORM_ENTITY_RESPONSE_GROUPS.GET_EVENT_DATA_FORM_RESPONSES),
       formData,
@@ -76,6 +88,7 @@ export class DataFormEntityResponseGroupsService {
     communityEngagementFilters?,
     userDomains?: string[],
     experienceLevels?: string[],
+    eventStatusFilter?: IEventStatusFilter | null,
   ): Observable<any> {
     let params = new HttpParams()
       .set('event_data_form_entity_group_id', eventDataFormEntityGroupId)
@@ -108,6 +121,9 @@ export class DataFormEntityResponseGroupsService {
     }
     if (communityEngagementFilters) {
       formData.append('community_engagement_filters', JSON.stringify(communityEngagementFilters));
+    }
+    if (eventStatusFilter) {
+      formData.append('event_status_filter', JSON.stringify(eventStatusFilter));
     }
     return this.http.post<any>(
       this.apiRoutesService.getRoute(API_ROUTES.DATA_FORM_ENTITY_RESPONSE_GROUPS.FILTERED_RESPONSE_VALUES),

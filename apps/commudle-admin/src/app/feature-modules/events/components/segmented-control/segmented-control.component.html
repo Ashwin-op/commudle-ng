@@ -1,0 +1,16 @@
+<div class="segmented" role="radiogroup">
+  @for (option of options; track option.value) {
+  <button
+    comButton
+    size="small"
+    [status]="value === option.value ? 'primary' : 'basic'"
+    [outline]="value !== option.value"
+    [disabled]="disabled"
+    role="radio"
+    [attr.aria-checked]="value === option.value"
+    (click)="select(option)"
+  >
+    {{ option.label }}
+  </button>
+  }
+</div>

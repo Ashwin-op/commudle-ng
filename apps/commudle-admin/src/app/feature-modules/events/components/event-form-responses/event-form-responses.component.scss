@@ -203,11 +203,49 @@
 }
 
 .user-engagement-filter {
-  @apply com-w-full md:com-w-[50dvw] com-h-full md:com-max-h-[90dvh];
+  @apply com-w-full md:com-w-[50dvw] com-h-full md:com-max-h-[90dvh] com-flex com-flex-col;
 
-  com-card-header,
+  com-card-header {
+    @apply com-flex com-justify-between com-items-center com-shrink-0;
+
+    .dialog-title {
+      .title {
+        @apply com-text-lg com-font-semibold;
+      }
+
+      .subtitle {
+        @apply com-text-sm com-font-normal com-text-gray-500;
+      }
+    }
+  }
+
   com-card-footer {
-    @apply com-flex com-justify-between com-items-center;
+    @apply com-flex com-justify-end com-items-center com-gap-3 com-shrink-0;
+
+    .reset-filters {
+      @apply com-mr-auto;
+    }
+  }
+
+  .filters-strip {
+    @apply com-flex com-items-center com-justify-between com-shrink-0 com-px-4 com-py-2 com-border-0 com-border-b com-border-solid com-border-tAnti-Flash;
+
+    .strip-title {
+      @apply com-font-semibold;
+    }
+
+    .strip-actions {
+      @apply com-flex com-items-center com-gap-2;
+    }
+
+    .active-count {
+      @apply com-px-3 com-py-0.5 com-text-xs com-font-medium com-rounded-full com-bg-gray-100 com-text-Yankees-Blue;
+    }
+  }
+
+  // header and footer stay put, only the body scrolls
+  com-card-body {
+    @apply com-min-h-0 com-overflow-y-auto;
   }
 
   com-card-body {
@@ -215,19 +253,90 @@
       @apply com-flex com-flex-col com-gap-2;
 
       .form-group {
-        @apply com-flex com-items-center com-gap-4 com-justify-between;
-
-        > label {
-          @apply com-flex com-gap-3;
-        }
+        @apply com-flex com-flex-col com-rounded-lg com-border com-border-solid com-border-tAnti-Flash;
 
         label {
           @apply com-text-xs;
         }
+
+        .section-header {
+          @apply com-flex com-items-center com-justify-between com-gap-4 com-px-3 com-py-2 com-cursor-pointer;
+
+          label {
+            @apply com-flex com-items-center com-gap-3 com-text-sm com-font-medium com-cursor-pointer;
+          }
+
+          .chevron {
+            @apply com-text-gray-500;
+          }
+        }
+
+        .section-body {
+          @apply com-px-3 com-pb-3;
+        }
       }
 
       .attended-dropdown {
-        @apply com-grid com-grid-cols-2 com-w-3/5 com-gap-3;
+        @apply com-grid com-grid-cols-2 com-w-full com-gap-3 com-items-start;
+
+        // statuses and match share the first row, the event picker takes the full second row
+        &.event-status-dropdown .field:last-child {
+          @apply com-col-span-2;
+        }
+      }
+
+      .min-max {
+        @apply com-grid com-grid-cols-2 com-gap-3;
+      }
+
+      .field {
+        @apply com-flex com-flex-col com-gap-1 com-min-w-0;
+
+        .field-label {
+          @apply com-text-xs com-text-gray-500;
+        }
+      }
+
+      // one look for every control in the dialog: same height, border and radius
+      .control,
+      .select,
+      .status-dropdown summary {
+        @apply com-flex com-items-center com-w-full com-h-[38px] com-px-2 com-text-sm com-rounded-md com-bg-white com-border com-border-solid com-border-[#E4E9F2] com-text-Yankees-Blue com-box-border;
+      }
+
+      .control {
+        @apply com-outline-none;
+      }
+
+      .select {
+        @apply com-cursor-pointer;
+
+        select {
+          @apply com-bg-transparent com-cursor-pointer com-border-0 com-w-full com-text-sm;
+        }
+      }
+
+      .status-dropdown {
+        @apply com-relative com-min-w-0 com-text-sm;
+
+        summary {
+          @apply com-cursor-pointer com-whitespace-nowrap com-overflow-hidden com-text-ellipsis;
+          display: block;
+          line-height: 36px;
+
+          &.placeholder {
+            @apply com-text-Cadet-Grey;
+          }
+        }
+
+        .status-options {
+          // overlay, so opening it does not grow the row
+          @apply com-absolute com-left-0 com-right-0 com-top-full com-z-10 com-mt-1 com-p-2 com-flex com-flex-col com-gap-1 com-bg-white com-shadow-md com-rounded-[4px] com-border com-border-solid com-border-[#E4E9F2];
+
+          .status-option {
+            @apply com-flex com-items-center com-gap-2 com-cursor-pointer;
+          }
+        }
       }
 
       .select {

@@ -9,7 +9,9 @@ import {
   faFilter,
   faPieChart,
   faRefresh,
+  faChevronDown,
   faChevronLeft,
+  faChevronUp,
   faChevronRight,
   faCaretDown,
   faEnvelope,
@@ -36,7 +38,10 @@ import { RegistrationTypeNames } from 'apps/shared-models/registration_type.mode
 import { IEventLocation } from 'apps/shared-models/event-location.model';
 import { EventDataFormEntityGroupsService } from 'apps/commudle-admin/src/app/services/event-data-form-entity-groups.service';
 import { RegistrationStatusesService } from 'apps/commudle-admin/src/app/services/registration-statuses.service';
-import { DataFormEntityResponseGroupsService } from 'apps/commudle-admin/src/app/services/data-form-entity-response-groups.service';
+import {
+  DataFormEntityResponseGroupsService,
+  IEventStatusFilter,
+} from 'apps/commudle-admin/src/app/services/data-form-entity-response-groups.service';
 import { EventLocationsService } from 'apps/commudle-admin/src/app/services/event-locations.service';
 import { DataFormsService } from 'apps/commudle-admin/src/app/services/data_forms.service';
 import { EmailerComponent } from 'apps/commudle-admin/src/app/app-shared-components/emailer/emailer.component';
@@ -112,7 +117,9 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
     faFilter,
     faPieChart,
     faRefresh,
+    faChevronDown,
     faChevronLeft,
+    faChevronUp,
     faChevronRight,
     faCaretDown,
     faEnvelope,
@@ -137,6 +144,11 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
   dialogRef: NbDialogRef<unknown>;
   userEngagementFilter: FormGroup;
   community_engagement_filters: Record<string, unknown> = {};
+  event_status_filter: IEventStatusFilter | null = null;
+  readonly eventMatchOptions = [
+    { value: 'any', label: 'Any of these events' },
+    { value: 'all', label: 'All of these events' },
+  ];
   readonly attendedOptions = [
     { value: 'has_any', label: 'Has attended any', attendance: true, match: 'any' },
     { value: 'has_all', label: 'Has attended all', attendance: true, match: 'all' },
@@ -205,6 +217,10 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
       show_attended_events: [''],
       attended_events_attendance: [''],
       attended_events_slugs: [],
+      show_event_status_filter: [''],
+      event_status_match: ['any'],
+      event_status_slugs: [],
+      event_status_statuses: [],
     });
   }
 
@@ -290,6 +306,7 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
             Object.keys(this.community_engagement_filters).length === 0 ? null : this.community_engagement_filters,
             this.selectedUserDomains,
             this.selectedExperienceLevels,
+            this.event_status_filter,
           );
         }),
       )
@@ -311,6 +328,7 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
     this.selectedStatusIds = [];
     this.selectedEventLocationTrackId = 0;
     this.community_engagement_filters = {};
+    this.event_status_filter = null;
   }
 
   registrationStatusFilter(event) {
@@ -374,6 +392,7 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
         Object.keys(this.community_engagement_filters).length === 0 ? null : this.community_engagement_filters,
         this.selectedUserDomains,
         this.selectedExperienceLevels,
+        this.event_status_filter,
       )
       .subscribe({
         next: (data) => {
@@ -639,6 +658,7 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
               Object.keys(this.community_engagement_filters).length === 0 ? null : this.community_engagement_filters,
               this.selectedUserDomains,
               this.selectedExperienceLevels,
+              this.event_status_filter,
             );
           }),
         )
@@ -665,11 +685,61 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
   }
 
   openUserEngagementFilter(userEngagementFilterTemplate) {
-    if (Object.keys(this.community_engagement_filters).length === 0) {
-      this.userEngagementFilter.reset();
+    if (!this.hasCommunityEngagementFilters()) {
+      this.resetUserEngagementForm();
     }
 
     this.dialogService.open(userEngagementFilterTemplate);
+  }
+
+  // sections the user collapsed with the chevron while their checkbox is still ticked
+  private collapsedEngagementSections = new Set<string>();
+
+  isEngagementSectionOpen(controlName: string): boolean {
+    return !!this.userEngagementFilter.get(controlName).value && !this.collapsedEngagementSections.has(controlName);
+  }
+
+  expandEngagementSection(controlName: string) {
+    this.collapsedEngagementSections.delete(controlName);
+  }
+
+  // chevron: ticks and opens an untouched section, otherwise collapses / expands it
+  toggleEngagementSection(controlName: string) {
+    const control = this.userEngagementFilter.get(controlName);
+    if (!control.value) {
+      control.setValue(true);
+      this.collapsedEngagementSections.delete(controlName);
+    } else if (this.collapsedEngagementSections.has(controlName)) {
+      this.collapsedEngagementSections.delete(controlName);
+    } else {
+      this.collapsedEngagementSections.add(controlName);
+    }
+  }
+
+  private resetUserEngagementForm() {
+    this.collapsedEngagementSections.clear();
+    this.userEngagementFilter.reset();
+    this.userEngagementFilter.patchValue({ event_status_match: 'any' });
+  }
+
+  // number of filter blocks currently ticked in the dialog
+  activeEngagementFilterCount(): number {
+    const values = this.userEngagementFilter.value;
+    return Object.keys(values).filter((key) => key.startsWith('show_') && values[key]).length;
+  }
+
+  // empties the dialog form only; nothing is applied until Apply is clicked
+  clearEngagementFormInputs() {
+    this.resetUserEngagementForm();
+  }
+
+  // removes every applied insights filter and closes the dialog
+  resetUserEngagementFilters(dialogRef: { close: () => void }) {
+    this.resetUserEngagementForm();
+    if (this.hasCommunityEngagementFilters()) {
+      this.clearUserEngagementFilter();
+    }
+    dialogRef.close();
   }
 
   private readonly requiredFields = [
@@ -722,6 +792,13 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
       (!this.isValidValue(formValues['attended_events_attendance']) ||
         !Array.isArray(formValues['attended_events_slugs']) ||
         formValues['attended_events_slugs'].length === 0)
+    ) {
+      return true;
+    }
+
+    if (
+      formValues['show_event_status_filter'] &&
+      (!formValues['event_status_slugs']?.length || !formValues['event_status_statuses']?.length)
     ) {
       return true;
     }
@@ -797,6 +874,7 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
     this.isLoading = true;
     this.emptyMessage = 'Loading';
     this.community_engagement_filters = {};
+    this.event_status_filter = null;
     const formValues = this.userEngagementFilter.value;
 
     this.filterMappings.forEach((mapping) => {
@@ -814,16 +892,42 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
       };
     }
 
+    if (
+      formValues.show_event_status_filter &&
+      formValues.event_status_slugs?.length > 0 &&
+      formValues.event_status_statuses?.length > 0
+    ) {
+      this.event_status_filter = {
+        event_slugs: formValues.event_status_slugs,
+        statuses: formValues.event_status_statuses,
+        has: true,
+        match: formValues.event_status_match === 'all' ? 'all' : 'any',
+      };
+    }
+
     this.getResponses();
+  }
+
+  selectedEventStatusLabel(): string {
+    const selected: string[] = this.userEngagementFilter.get('event_status_statuses').value || [];
+    return selected.map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(', ');
+  }
+
+  onEventStatusToggle(event: Event, statusName: string) {
+    const control = this.userEngagementFilter.get('event_status_statuses');
+    const current: string[] = control.value || [];
+    const checked = (event.target as HTMLInputElement).checked;
+    control.setValue(checked ? [...current, statusName] : current.filter((s) => s !== statusName));
   }
 
   clearUserEngagementFilter() {
     this.community_engagement_filters = {};
+    this.event_status_filter = null;
     this.getResponses();
   }
 
   hasCommunityEngagementFilters(): boolean {
-    return Object.keys(this.community_engagement_filters).length > 0;
+    return Object.keys(this.community_engagement_filters).length > 0 || this.event_status_filter !== null;
   }
 
   goBack(): void {
