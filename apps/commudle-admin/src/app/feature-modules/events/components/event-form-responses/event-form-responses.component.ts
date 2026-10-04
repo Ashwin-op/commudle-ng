@@ -137,7 +137,12 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
   dialogRef: NbDialogRef<unknown>;
   userEngagementFilter: FormGroup;
   community_engagement_filters: Record<string, unknown> = {};
-  attendedEventList: IEvent[];
+  readonly attendedOptions = [
+    { value: 'has_any', label: 'Has attended any', attendance: true, match: 'any' },
+    { value: 'has_all', label: 'Has attended all', attendance: true, match: 'all' },
+    { value: 'not_any', label: 'Not attended any', attendance: false, match: 'any' },
+    { value: 'not_all', label: 'Not attended all', attendance: false, match: 'all' },
+  ];
   protected isMobileView = false;
   protected actionBottomSheet = false;
   protected filterBottomSheet = false;
@@ -660,7 +665,6 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
   }
 
   openUserEngagementFilter(userEngagementFilterTemplate) {
-    this.getAttendeeEventList();
     if (Object.keys(this.community_engagement_filters).length === 0) {
       this.userEngagementFilter.reset();
     }
@@ -716,7 +720,8 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
     if (
       formValues['show_attended_events'] &&
       (!this.isValidValue(formValues['attended_events_attendance']) ||
-        !this.isValidValue(formValues['attended_events_slugs']))
+        !Array.isArray(formValues['attended_events_slugs']) ||
+        formValues['attended_events_slugs'].length === 0)
     ) {
       return true;
     }
@@ -800,10 +805,12 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
       }
     });
 
-    if (formValues.show_attended_events && formValues.attended_events_attendance && formValues.attended_events_slugs) {
+    const attendedOption = this.attendedOptions.find((o) => o.value === formValues.attended_events_attendance);
+    if (formValues.show_attended_events && attendedOption && formValues.attended_events_slugs?.length > 0) {
       this.community_engagement_filters.attended_events = {
-        attendance: formValues.attended_events_attendance,
-        slugs: [formValues.attended_events_slugs],
+        attendance: attendedOption.attendance,
+        match: attendedOption.match,
+        slugs: formValues.attended_events_slugs,
       };
     }
 
@@ -817,16 +824,6 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
 
   hasCommunityEngagementFilters(): boolean {
     return Object.keys(this.community_engagement_filters).length > 0;
-  }
-
-  getAttendeeEventList() {
-    if (!this.attendedEventList) {
-      this.dataFormEntityResponseGroupsService
-        .getAttendeeEventList(this.eventDataFormEntityGroupId)
-        .subscribe((data) => {
-          this.attendedEventList = data;
-        });
-    }
   }
 
   goBack(): void {

@@ -1,0 +1,56 @@
+<div class="event-search">
+  <div class="chips-input" (click)="searchInput.focus()">
+    @for (slug of selectedSlugs; track slug) {
+    <span class="chip">
+      <span class="chip-label" [title]="chipLabel(slug)">{{ chipLabel(slug) }}</span>
+      <button type="button" class="chip-remove" [disabled]="disabled" (click)="remove(slug); $event.stopPropagation()">
+        <fa-icon [icon]="icons.faXmark"></fa-icon>
+      </button>
+    </span>
+    }
+    <input
+      #searchInput
+      type="text"
+      class="search-input"
+      [placeholder]="selectedSlugs.length ? 'Search more events' : placeholder"
+      [value]="query"
+      [disabled]="disabled"
+      (focus)="open()"
+      (input)="onQueryInput(searchInput.value)"
+    />
+  </div>
+
+  @if (isOpen) {
+  <div class="results" (scroll)="onResultsScroll($event)">
+    @if (isLoading) {
+    <div class="state">Loading events...</div>
+    } @else if (hasError && results.length === 0) {
+    <div class="state error">
+      Could not load events.
+      <button type="button" class="link" (click)="retry()">Retry</button>
+    </div>
+    } @else if (results.length === 0) {
+    <div class="state">{{ query ? 'No events match your search' : 'No events found' }}</div>
+    } @else { @for (event of results; track event.slug) {
+    <div class="result" [class.active]="isSelected(event)" (click)="toggle(event)">
+      <span class="check">
+        @if (isSelected(event)) {
+        <fa-icon [icon]="icons.faCheck"></fa-icon>
+        }
+      </span>
+      <span class="result-name">{{ event.name }}</span>
+      <span class="result-community">{{ event.kommunity.name }}</span>
+    </div>
+    } @if (isLoadingMore) {
+    <div class="state">Loading more...</div>
+    } @else if (hasError) {
+    <div class="state error">
+      Could not load more.
+      <button type="button" class="link" (click)="loadMore()">Retry</button>
+    </div>
+    } @else if (hasMore) {
+    <button type="button" class="link load-more" (click)="loadMore()">Load more</button>
+    } }
+  </div>
+  }
+</div>

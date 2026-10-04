@@ -564,23 +564,17 @@
                 }"
               >
                 <option value="" selected disabled>Select attendee type</option>
-                <option [value]="true">Has Attended</option>
-                <option [value]="false">Not Attended</option>
-              </select>
-            </div>
-            <div class="select">
-              <select
-                formControlName="attended_events_slugs"
-                class="com-text-Yankees-Blue"
-                [ngClass]="{
-                  'com-text-Cadet-Grey': userEngagementFilter.controls['attended_events_slugs'].value === ''
-                }"
-              >
-                <option value="" disabled>Select event slugs</option>
-                @for (event of attendedEventList | orderBy : ['name'] : ['asc']; track event.id) {
-                <option [value]="event.slug">{{ event.name }} - {{ event.kommunity.name }}</option>
+                @for (option of attendedOptions; track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
                 }
               </select>
+            </div>
+            <div class="com-min-w-0">
+              <app-event-search-multi-select
+                formControlName="attended_events_slugs"
+                [communityId]="community.slug"
+                placeholder="Search events"
+              ></app-event-search-multi-select>
             </div>
           </div>
           }

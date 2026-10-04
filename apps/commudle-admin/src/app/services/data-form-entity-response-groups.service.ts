@@ -5,7 +5,6 @@ import { ApiRoutesService } from 'apps/shared-services/api-routes.service';
 import { API_ROUTES } from 'apps/shared-services/api-routes.constants';
 import { IDataFormEntityResponseGroup } from 'apps/shared-models/data_form_entity_response_group.model';
 import { IDataFormEntityResponseGroups } from 'apps/shared-models/data_form_entity_response_groups.model';
-import { IEvent } from '@commudle/shared-models';
 
 @Injectable({
   providedIn: 'root',
@@ -143,14 +142,6 @@ export class DataFormEntityResponseGroupsService {
       token,
       rsvp_status: rsvpStatus,
     });
-  }
-
-  getAttendeeEventList(eventDataFormEntityGroupId: number): Observable<IEvent[]> {
-    const params = new HttpParams().set('event_data_form_entity_group_id', eventDataFormEntityGroupId);
-    return this.http.get<IEvent[]>(
-      this.apiRoutesService.getRoute(API_ROUTES.DATA_FORM_ENTITY_RESPONSE_GROUPS.ALL_ATTENDED_EVENTS_FILTERS),
-      { params },
-    );
   }
 
   pGetEventSpeakers(eventId): Observable<IDataFormEntityResponseGroups> {

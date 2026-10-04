@@ -1,0 +1,65 @@
+.event-search {
+  @apply com-w-full com-relative;
+
+  .chips-input {
+    @apply com-flex com-flex-wrap com-items-center com-gap-1 com-p-1 com-rounded-[4px] com-border com-border-solid com-border-[#E4E9F2] com-bg-white com-cursor-text;
+  }
+
+  .chip {
+    @apply com-flex com-items-center com-gap-1 com-max-w-full com-px-2 com-py-0.5 com-text-xs com-rounded-full com-bg-gray-100 com-text-Yankees-Blue;
+
+    .chip-label {
+      @apply com-truncate;
+    }
+
+    .chip-remove {
+      @apply com-border-0 com-bg-transparent com-p-0 com-cursor-pointer com-text-gray-500 hover:com-text-red-500;
+    }
+  }
+
+  .search-input {
+    @apply com-flex-1 com-min-w-[8rem] com-border-0 com-outline-none com-text-sm com-p-1 com-bg-transparent;
+  }
+
+  .results {
+    // overlay, so opening the list does not grow the row it sits in
+    @apply com-absolute com-left-0 com-right-0 com-top-full com-z-10 com-mt-1 com-shadow-md com-max-h-48 com-overflow-y-auto com-rounded-[4px] com-border com-border-solid com-border-[#E4E9F2] com-bg-white;
+    overscroll-behavior: contain;
+  }
+
+  .state {
+    @apply com-p-2 com-text-sm com-text-gray-500;
+
+    &.error {
+      @apply com-text-red-500;
+    }
+  }
+
+  .link {
+    @apply com-border-0 com-bg-transparent com-cursor-pointer com-text-sm com-underline com-text-Yankees-Blue;
+  }
+
+  .load-more {
+    @apply com-w-full com-p-2;
+  }
+
+  .result {
+    @apply com-flex com-items-center com-gap-2 com-px-2 com-py-1.5 com-text-sm com-cursor-pointer hover:com-bg-gray-50;
+
+    &.active {
+      @apply com-bg-gray-100;
+    }
+
+    .check {
+      @apply com-w-4 com-shrink-0 com-text-Yankees-Blue;
+    }
+
+    .result-name {
+      @apply com-min-w-0 com-text-Yankees-Blue com-truncate;
+    }
+
+    .result-community {
+      @apply com-ml-auto com-pl-2 com-text-xs com-text-gray-500 com-shrink-0 com-truncate com-max-w-[40%] com-min-w-0;
+    }
+  }
+}
