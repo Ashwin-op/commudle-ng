@@ -15,7 +15,6 @@
           <div class="hero-title-row">
             <span class="hero-title-emoji">🚀</span>
             <h1 class="hero-hackathon-name">{{ hackathon.name }}</h1>
-            <a [routerLink]="['basic']" class="hero-edit-btn"><nb-icon icon="edit-outline"></nb-icon></a>
           </div>
           <div class="hero-meta">
             <span
@@ -55,71 +54,52 @@
               <nb-icon icon="edit-outline"></nb-icon> &nbsp;Edit Hackathon
             </a>
           </div>
-          <div class="hero-prize-pool" *ngIf="hackathon.total_prize_amount">
+          <div class="hero-prize-pool" *ngIf="snapshot?.prize_pool || hackathon.total_prize_amount">
             <div class="prize-icon">
               <fa-icon [icon]="icons.faTrophy"></fa-icon>
             </div>
             <div class="prize-info">
-              <span class="prize-value">{{ hackathon.total_prize_amount }}</span>
+              <span class="prize-value">{{ snapshot?.prize_pool || hackathon.total_prize_amount }}</span>
               <span class="prize-label">Total Prize Pool</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Timeline Progress -->
+      <!-- Timeline Progress -- driven by stage_progress -->
       <div class="hero-timeline">
-        <div class="timeline-steps">
-          <div class="timeline-step completed">
+        <app-loading-spinner
+          *ngIf="isStageProgressLoading && !stageProgress"
+          class="section-loader"
+        ></app-loading-spinner>
+        <div class="timeline-steps" *ngIf="!isStageProgressLoading || stageProgress">
+          <div
+            class="timeline-step"
+            *ngFor="let stage of stageProgress?.stages"
+            [ngClass]="{ completed: isStatusReady(stage.status), active: isStatusLive(stage.status) }"
+          >
             <div class="step-dot"></div>
             <div class="step-info">
-              <span class="step-title">Registration</span>
-              <span class="step-value">{{ hackathon.number_of_participants || 0 }} Teams</span>
-              <span class="step-sub">{{ hackathon.interested_members_count || 0 }} Individuals</span>
+              <span class="step-title">{{ stage.name || (stage.type | titlecase) }}</span>
+              <span class="step-value" *ngIf="stage.teams_count != null">{{ stage.teams_count }} Teams</span>
+              <span class="step-value" *ngIf="stage.submissions_count != null"
+                >{{ stage.submissions_count }} Submissions</span
+              >
+              <span class="step-sub">{{ stage.status | capitalizeAndRemoveUnderscore }}</span>
             </div>
           </div>
-          <div class="timeline-step completed">
-            <div class="step-dot"></div>
+          <div class="timeline-step" *ngIf="!stageProgress?.stages?.length">
             <div class="step-info">
-              <span class="step-title">Registration End</span>
-              <span class="step-value" *ngIf="hackathon.application_end_date">{{
-                hackathon.application_end_date | date : 'd MMM, yyyy'
-              }}</span>
-            </div>
-          </div>
-          <div class="timeline-step" [ngClass]="{ active: isHackathonOpen }">
-            <div class="step-dot"></div>
-            <div class="step-info">
-              <span class="step-title">Round 1</span>
-              <span class="step-value">{{ hackathon.projects_count || 0 }} Submissions</span>
-            </div>
-          </div>
-          <div class="timeline-step">
-            <div class="step-dot"></div>
-            <div class="step-info">
-              <span class="step-title">Round 2</span>
-              <span class="step-value">–</span>
-            </div>
-          </div>
-          <div class="timeline-step">
-            <div class="step-dot"></div>
-            <div class="step-info">
-              <span class="step-title">Round N</span>
-              <span class="step-value">–</span>
-            </div>
-          </div>
-          <div class="timeline-step" [ngClass]="{ completed: isHackathonCompleted }">
-            <div class="step-dot"></div>
-            <div class="step-info">
-              <span class="step-title">Hackathon End</span>
-              <span class="step-value">{{ isHackathonCompleted ? 'Winners Announced' : '–' }}</span>
+              <span class="step-value">No stage data yet</span>
             </div>
           </div>
         </div>
         <div class="timeline-progress-bar">
-          <div class="progress-fill"></div>
+          <div class="progress-fill" [style.width.%]="stageProgress?.overall_progress_percent || 0"></div>
         </div>
-        <span class="timeline-progress-label">Overall Progress 42%</span>
+        <span class="timeline-progress-label"
+          >Overall Progress {{ stageProgress?.overall_progress_percent || 0 }}%</span
+        >
       </div>
     </div>
   </section>
@@ -133,15 +113,155 @@
           <fa-icon [icon]="icons.faBell" class="com-text-Azure"></fa-icon> Needs Attention
         </h3>
       </div>
-      <div class="attention-list">
-        <a *ngFor="let item of needsAttention" [routerLink]="item.route" class="attention-item">
+      <app-loading-spinner
+        *ngIf="isNeedsAttentionLoading && !needsAttention"
+        class="section-loader"
+      ></app-loading-spinner>
+      <div class="attention-list" *ngIf="!isNeedsAttentionLoading || needsAttention">
+        <!-- Judges -->
+        <a [routerLink]="['speakers']" class="attention-item">
           <fa-icon
-            [icon]="item.done ? icons.faCircleCheck : icons.faCircleXmark"
-            [ngClass]="item.done ? 'attention-icon-check' : 'attention-icon-cross'"
+            [icon]="isStatusReady(needsAttention?.judges?.status) ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="isStatusReady(needsAttention?.judges?.status) ? 'attention-icon-check' : 'attention-icon-cross'"
           ></fa-icon>
           <div class="attention-content">
-            <span class="attention-title">{{ item.title }}</span>
-            <span class="attention-sub">{{ item.sub }}</span>
+            <span class="attention-title">Judges</span>
+            <span class="attention-sub">
+              {{
+                isStatusReady(needsAttention?.judges?.status)
+                  ? 'Judges assigned to rounds'
+                  : 'Assign judges to evaluation rounds'
+              }}
+            </span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+
+        <!-- Round criteria -->
+        <a [routerLink]="['rounds']" class="attention-item">
+          <fa-icon
+            [icon]="isStatusReady(needsAttention?.round_criteria?.status) ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="
+              isStatusReady(needsAttention?.round_criteria?.status) ? 'attention-icon-check' : 'attention-icon-cross'
+            "
+          ></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">Round Criteria</span>
+            <span class="attention-sub">
+              {{
+                isStatusReady(needsAttention?.round_criteria?.status)
+                  ? 'Scoring criteria configured'
+                  : 'Set up scoring criteria for rounds'
+              }}
+            </span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+
+        <!-- Tracks / problem statements -->
+        <a [routerLink]="['tracks']" class="attention-item">
+          <fa-icon
+            [icon]="needsAttention?.tracks?.track_count > 0 ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="needsAttention?.tracks?.track_count > 0 ? 'attention-icon-check' : 'attention-icon-cross'"
+          ></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">Tracks &amp; Problem Statements</span>
+            <span class="attention-sub">
+              {{
+                needsAttention?.tracks?.track_count > 0
+                  ? (needsAttention.tracks.track_count | number) +
+                    ' tracks, ' +
+                    (needsAttention.tracks.problem_statement_count | number) +
+                    ' problem statements'
+                  : 'Define tracks for participants'
+              }}
+            </span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+
+        <!-- Sponsor logo -->
+        <a [routerLink]="['sponsors']" class="attention-item">
+          <fa-icon
+            [icon]="isStatusReady(needsAttention?.sponsor_logo?.status) ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="
+              isStatusReady(needsAttention?.sponsor_logo?.status) ? 'attention-icon-check' : 'attention-icon-cross'
+            "
+          ></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">Sponsor Logos</span>
+            <span class="attention-sub">
+              {{
+                isStatusReady(needsAttention?.sponsor_logo?.status)
+                  ? 'Sponsor logos added'
+                  : 'Add sponsor logos & details'
+              }}
+            </span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+
+        <!-- Registration -->
+        <a [routerLink]="['basic']" class="attention-item">
+          <fa-icon
+            [icon]="isStatusReady(needsAttention?.registration?.status) ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="
+              isStatusReady(needsAttention?.registration?.status) ? 'attention-icon-check' : 'attention-icon-cross'
+            "
+          ></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">Registration</span>
+            <span class="attention-sub">
+              {{
+                isStatusReady(needsAttention?.registration?.status)
+                  ? 'Registration is set up'
+                  : 'Configure registration settings'
+              }}
+            </span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+
+        <!-- Pending applications -->
+        <a [routerLink]="['applications-dashboard']" class="attention-item">
+          <fa-icon
+            [icon]="!needsAttention?.pending_applications?.count ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="!needsAttention?.pending_applications?.count ? 'attention-icon-check' : 'attention-icon-cross'"
+          ></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">Pending Applications</span>
+            <span class="attention-sub">
+              {{
+                needsAttention?.pending_applications?.count
+                  ? (needsAttention.pending_applications.count | number) + ' applications awaiting review'
+                  : 'No applications pending review'
+              }}
+            </span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+
+        <!-- Mentor / judge slots -->
+        <a [routerLink]="['mentor-slots']" class="attention-item">
+          <fa-icon
+            [icon]="
+              isStatusReady(needsAttention?.mentor_judge_slots?.status) ? icons.faCircleCheck : icons.faCircleXmark
+            "
+            [ngClass]="
+              isStatusReady(needsAttention?.mentor_judge_slots?.status)
+                ? 'attention-icon-check'
+                : 'attention-icon-cross'
+            "
+          ></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">Mentor &amp; Judge Slots</span>
+            <span class="attention-sub">
+              {{
+                isStatusReady(needsAttention?.mentor_judge_slots?.status)
+                  ? 'Slots are open for teams'
+                  : 'Open mentor & judge slots for teams'
+              }}
+            </span>
           </div>
           <span class="attention-arrow">›</span>
         </a>
@@ -155,36 +275,37 @@
           <fa-icon [icon]="icons.faChartPie" class="com-text-primary-500"></fa-icon> Hackathon Snapshot
         </h3>
       </div>
-      <div class="snapshot-grid">
+      <app-loading-spinner *ngIf="isSnapshotLoading && !snapshot" class="section-loader"></app-loading-spinner>
+      <div class="snapshot-grid" *ngIf="!isSnapshotLoading || snapshot">
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faUsers" class="snapshot-stat-icon registrations-icon"></fa-icon>
           <span class="snapshot-stat-label">Applications</span>
-          <span class="snapshot-stat-value">{{ hackathon.number_of_participants || 0 }}</span>
+          <span class="snapshot-stat-value">{{ snapshot?.applications?.count ?? 0 | number }}</span>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faUserGroup" class="snapshot-stat-icon team-icon"></fa-icon>
           <span class="snapshot-stat-label">Teams</span>
-          <span class="snapshot-stat-value">{{ hackathon.number_of_participants || 0 }}</span>
+          <span class="snapshot-stat-value">{{ snapshot?.teams?.count ?? 0 | number }}</span>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faCode" class="snapshot-stat-icon tracks-icon"></fa-icon>
           <span class="snapshot-stat-label">Projects Submitted</span>
-          <span class="snapshot-stat-value">{{ hackathon.projects_count || 0 }}</span>
+          <span class="snapshot-stat-value">{{ snapshot?.projects_submitted?.count ?? 0 | number }}</span>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faMicrophone" class="snapshot-stat-icon judges-icon"></fa-icon>
           <span class="snapshot-stat-label">Judges</span>
-          <span class="snapshot-stat-value">{{ hackathon.judges_count || 0 }}</span>
+          <span class="snapshot-stat-value">{{ snapshot?.judges?.count ?? snapshot?.judges ?? 0 | number }}</span>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faHandshakeSimple" class="snapshot-stat-icon sponsors-icon"></fa-icon>
           <span class="snapshot-stat-label">Sponsors</span>
-          <span class="snapshot-stat-value">{{ hackathon.sponsors_count || 0 }}</span>
+          <span class="snapshot-stat-value">{{ snapshot?.sponsors?.count ?? 0 | number }}</span>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faTrophy" class="snapshot-stat-icon prize-icon"></fa-icon>
           <span class="snapshot-stat-label">Prize Pool</span>
-          <span class="snapshot-stat-value">{{ hackathon.total_prize_amount || '–' }}</span>
+          <span class="snapshot-stat-value">{{ snapshot?.prize_pool || '–' }}</span>
         </div>
       </div>
     </div>
@@ -195,66 +316,41 @@
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faBolt" class="com-text-yellow-500"></fa-icon> Recent Activity
         </h3>
+        <a *ngIf="hasMoreActivity" class="view-all-link" (click)="loadMoreActivity()">View All →</a>
       </div>
       <ul class="activity-list">
-        <li class="activity-item">
-          <span class="activity-avatar submission-avatar">
-            <fa-icon [icon]="icons.faTrophy"></fa-icon>
+        <li *ngFor="let item of recentActivity" class="activity-item">
+          <span class="activity-avatar" [ngClass]="activityAvatarClass(item.type)">
+            <fa-icon [icon]="activityIcon(item.type)"></fa-icon>
           </span>
           <p class="activity-content com-m-0">
-            <span class="activity-text" title="Team Alpha submitted project">
-              <span class="activity-name-avatar">T</span><strong>Team Alpha</strong> submitted project
+            <span class="activity-text" [title]="activityActorName(item) + ' ' + activityLabel(item.type)">
+              <ng-container *ngIf="activityActorName(item)">
+                <span class="activity-name-avatar">{{ activityInitial(item) }}</span
+                ><strong>{{ activityActorName(item) }}</strong>
+                {{ activityLabel(item.type) }}
+              </ng-container>
+              <ng-container *ngIf="!activityActorName(item)">
+                <ng-container *ngIf="item.count != null">{{ item.count | number }} </ng-container
+                >{{ activityLabel(item.type) }}
+              </ng-container>
             </span>
           </p>
-          <time class="activity-time">10m ago</time>
+          <time class="activity-time">{{ activityTime(item) }}</time>
         </li>
-        <li class="activity-item">
-          <span class="activity-avatar speaker-avatar">
-            <fa-icon [icon]="icons.faMicrophone"></fa-icon>
-          </span>
+        <li *ngIf="!isActivityLoading && recentActivity.length === 0" class="activity-item">
           <p class="activity-content com-m-0">
-            <span class="activity-text" title="Judge Sarah accepted invitation">
-              <span class="activity-name-avatar">S</span><strong>Judge Sarah</strong> accepted invitation
-            </span>
+            <span class="activity-text">No recent activity yet</span>
           </p>
-          <time class="activity-time">1h ago</time>
-        </li>
-        <li class="activity-item">
-          <span class="activity-avatar sponsors-avatar">
-            <fa-icon [icon]="icons.faHandshakeSimple"></fa-icon>
-          </span>
-          <p class="activity-content com-m-0">
-            <span class="activity-text" title="Google became sponsor">
-              <span class="activity-name-avatar">G</span><strong>Google</strong> became sponsor
-            </span>
-          </p>
-          <time class="activity-time">3h ago</time>
-        </li>
-        <li class="activity-item">
-          <span class="activity-avatar tracks-avatar">
-            <fa-icon [icon]="icons.faCode"></fa-icon>
-          </span>
-          <p class="activity-content com-m-0">
-            <span class="activity-text" title="Track AI Agents added">Track <strong>"AI Agents"</strong> added</span>
-          </p>
-          <time class="activity-time">5h ago</time>
-        </li>
-        <li class="activity-item">
-          <span class="activity-avatar members-avatar">
-            <fa-icon [icon]="icons.faUsers"></fa-icon>
-          </span>
-          <p class="activity-content com-m-0">
-            <span class="activity-text" title="25 new registrations">25 new registrations</span>
-          </p>
-          <time class="activity-time">1d ago</time>
         </li>
       </ul>
+      <app-loading-spinner *ngIf="isActivityLoading" class="section-loader"></app-loading-spinner>
     </div>
   </section>
 
   <!-- Row 3: Competition Progress + People & Judging -->
   <section class="progress-people-row">
-    <!-- Competition Progress -->
+    <!-- Competition Progress -- driven by stage_progress -->
     <article class="competition-progress-card">
       <div class="section-header">
         <h3 class="section-heading">
@@ -262,25 +358,20 @@
         </h3>
         <a [routerLink]="['rounds']" class="view-all-link">Manage Rounds →</a>
       </div>
-      <div class="progress-cards">
-        <div class="progress-card">
-          <span class="progress-card-label">Round 1</span>
-          <span class="progress-card-value">✅ Completed</span>
-        </div>
-        <span class="progress-arrow">→</span>
-        <div class="progress-card active">
-          <span class="progress-card-label">Round 2</span>
-          <span class="progress-card-value">🟢 Live</span>
-        </div>
-        <span class="progress-arrow">→</span>
-        <div class="progress-card">
-          <span class="progress-card-label">Judging</span>
-          <span class="progress-card-value">42%</span>
-        </div>
-        <span class="progress-arrow">→</span>
-        <div class="progress-card">
-          <span class="progress-card-label">Finalists</span>
-          <span class="progress-card-value">12 Selected</span>
+      <app-loading-spinner
+        *ngIf="isStageProgressLoading && !stageProgress"
+        class="section-loader"
+      ></app-loading-spinner>
+      <div class="progress-cards" *ngIf="!isStageProgressLoading || stageProgress">
+        <ng-container *ngFor="let stage of stageProgress?.stages; let last = last">
+          <div class="progress-card" [ngClass]="{ active: isStatusLive(stage.status) }">
+            <span class="progress-card-label">{{ stage.name || (stage.type | titlecase) }}</span>
+            <span class="progress-card-value">{{ stage.status | capitalizeAndRemoveUnderscore }}</span>
+          </div>
+          <span class="progress-arrow" *ngIf="!last">→</span>
+        </ng-container>
+        <div class="progress-card" *ngIf="!stageProgress?.stages?.length">
+          <span class="progress-card-value">No rounds yet</span>
         </div>
       </div>
     </article>
@@ -289,67 +380,91 @@
     <article class="people-judging-card">
       <div class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faUserGroup" class="com-text-indigo-500"></fa-icon> People & Judging
+          <fa-icon [icon]="icons.faUserGroup" class="com-text-indigo-500"></fa-icon> People &amp; Judging
         </h3>
         <a [routerLink]="['speakers']" class="view-all-link">Manage →</a>
       </div>
-      <div class="people-stats">
-        <div class="people-stat">
-          <fa-icon [icon]="icons.faUsers" class="people-stat-icon com-text-indigo-500"></fa-icon>
-          <span class="people-stat-value">{{ hackathon.judges_count || 0 }}</span>
-          <span class="people-stat-label">Judges</span>
+      <app-loading-spinner
+        *ngIf="isPeopleJudgingLoading && !peopleJudging"
+        class="section-loader"
+      ></app-loading-spinner>
+      <ng-container *ngIf="!isPeopleJudgingLoading || peopleJudging">
+        <div class="people-stats">
+          <div class="people-stat">
+            <fa-icon [icon]="icons.faUsers" class="people-stat-icon com-text-indigo-500"></fa-icon>
+            <span class="people-stat-value">{{ peopleJudging?.judges_count ?? 0 | number }}</span>
+            <span class="people-stat-label">Judges</span>
+          </div>
+          <div class="people-stat">
+            <fa-icon [icon]="icons.faUserGroup" class="people-stat-icon com-text-blue-500"></fa-icon>
+            <span class="people-stat-value">{{ peopleJudging?.mentors_count ?? 0 | number }}</span>
+            <span class="people-stat-label">Mentors</span>
+          </div>
+          <div class="people-stat">
+            <fa-icon [icon]="icons.faEnvelope" class="people-stat-icon com-text-green-500"></fa-icon>
+            <span class="people-stat-value">{{ peopleJudging?.pending_invitations_count ?? 0 | number }}</span>
+            <span class="people-stat-label">Pending Invitations</span>
+          </div>
+          <div class="people-stat">
+            <fa-icon [icon]="icons.faCode" class="people-stat-icon com-text-orange-500"></fa-icon>
+            <span class="people-stat-value">{{ peopleJudging?.unassigned_projects_count ?? 0 | number }}</span>
+            <span class="people-stat-label">Unassigned Projects</span>
+          </div>
         </div>
-        <div class="people-stat">
-          <fa-icon [icon]="icons.faUserGroup" class="people-stat-icon com-text-blue-500"></fa-icon>
-          <span class="people-stat-value">24</span>
-          <span class="people-stat-label">Mentors</span>
+        <div class="mentor-session-banner" *ngIf="nextMentorSession">
+          <fa-icon [icon]="icons.faCalendarDay" class="mentor-session-icon"></fa-icon>
+          <div class="mentor-session-info">
+            <span class="mentor-session-label">Next Mentor Session</span>
+            <span class="mentor-session-value">{{ nextMentorSession }}</span>
+          </div>
         </div>
-        <div class="people-stat">
-          <fa-icon [icon]="icons.faEnvelope" class="people-stat-icon com-text-green-500"></fa-icon>
-          <span class="people-stat-value">3</span>
-          <span class="people-stat-label">Pending Invitations</span>
-        </div>
-        <div class="people-stat">
-          <fa-icon [icon]="icons.faCode" class="people-stat-icon com-text-orange-500"></fa-icon>
-          <span class="people-stat-value">8</span>
-          <span class="people-stat-label">Unassigned Projects</span>
-        </div>
-      </div>
-      <div class="mentor-session-banner">
-        <fa-icon [icon]="icons.faCalendarDay" class="mentor-session-icon"></fa-icon>
-        <div class="mentor-session-info">
-          <span class="mentor-session-label">Next Mentor Session</span>
-          <span class="mentor-session-value">Tomorrow, 6:00 PM</span>
-        </div>
-      </div>
+      </ng-container>
     </article>
   </section>
 
-  <!-- Row 5: Setup Progress + Quick Actions -->
+  <!-- Row 4: Setup Progress + Quick Actions -->
   <section class="actions-setup-row">
-    <article class="setup-progress-card" *ngIf="hackathon.status === 'draft'">
+    <article class="setup-progress-card" *ngIf="setupProgress?.visible || isHackathonDraft">
       <div class="section-header">
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faChartPie" class="com-text-green-500"></fa-icon> Setup Progress
         </h3>
         <span class="setup-note">Only visible until published</span>
       </div>
-      <div class="setup-content">
+      <app-loading-spinner
+        *ngIf="isSetupProgressLoading && !setupProgress"
+        class="section-loader"
+      ></app-loading-spinner>
+      <div class="setup-content" *ngIf="!isSetupProgressLoading || setupProgress">
         <div class="setup-bar-row">
           <span class="setup-bar-label">Hackathon Readiness</span>
-          <span class="setup-bar-pct">80%</span>
+          <span class="setup-bar-pct">{{ setupProgress?.readiness_percent || 0 }}%</span>
         </div>
         <div class="setup-bar">
-          <div class="setup-bar-fill"></div>
+          <div class="setup-bar-fill" [style.width.%]="setupProgress?.readiness_percent || 0"></div>
         </div>
         <div class="setup-checklist">
-          <span class="setup-item done">✔ Basic Information</span>
-          <span class="setup-item done">✔ Dates</span>
-          <span class="setup-item done">✔ Registration</span>
-          <span class="setup-item done">✔ Tracks</span>
-          <span class="setup-item pending">⚠ Sponsors</span>
-          <span class="setup-item pending">⚠ Judges</span>
-          <span class="setup-item pending">⚠ FAQs</span>
+          <span class="setup-item" [ngClass]="setupProgress?.basic_information ? 'done' : 'pending'">
+            {{ setupProgress?.basic_information ? '✔' : '⚠' }} Basic Information
+          </span>
+          <span class="setup-item" [ngClass]="setupProgress?.dates ? 'done' : 'pending'">
+            {{ setupProgress?.dates ? '✔' : '⚠' }} Dates
+          </span>
+          <span class="setup-item" [ngClass]="setupProgress?.registration ? 'done' : 'pending'">
+            {{ setupProgress?.registration ? '✔' : '⚠' }} Registration
+          </span>
+          <span class="setup-item" [ngClass]="setupProgress?.tracks ? 'done' : 'pending'">
+            {{ setupProgress?.tracks ? '✔' : '⚠' }} Tracks
+          </span>
+          <span class="setup-item" [ngClass]="setupProgress?.sponsors ? 'done' : 'pending'">
+            {{ setupProgress?.sponsors ? '✔' : '⚠' }} Sponsors
+          </span>
+          <span class="setup-item" [ngClass]="setupProgress?.judges ? 'done' : 'pending'">
+            {{ setupProgress?.judges ? '✔' : '⚠' }} Judges
+          </span>
+          <span class="setup-item" [ngClass]="setupProgress?.faqs ? 'done' : 'pending'">
+            {{ setupProgress?.faqs ? '✔' : '⚠' }} FAQs
+          </span>
         </div>
       </div>
     </article>

@@ -77,9 +77,14 @@ export interface IEventDashboardAudienceSnapshot {
   experience_levels: IDashboardDistributionItem[];
 }
 
-// post_event_snapsho
+// post_event_snapshot
 export interface IEventDashboardPostEventSnapshot {
   speakers_count: number;
+  registered_count: number;
+  attended_count: number;
+  attendance_rate: number;
+  entry_passes_count: number;
+  feedback_responses_count: number;
   experience_distribution: IDashboardDistributionItem[];
   domain_distribution: IDashboardDistributionItem[];
 }

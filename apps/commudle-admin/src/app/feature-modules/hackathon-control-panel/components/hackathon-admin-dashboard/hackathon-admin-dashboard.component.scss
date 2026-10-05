@@ -2,6 +2,10 @@
   @apply com-flex com-flex-col com-gap-4;
 }
 
+.section-loader {
+  @apply com-flex com-justify-center com-w-full com-py-4;
+}
+
 .section-heading {
   @apply com-m-0 com-text-base com-font-medium com-text-Yankees-Blue com-flex com-items-center com-gap-2;
 }
@@ -189,7 +193,6 @@
 
         .progress-fill {
           @apply com-h-full com-rounded-full com-bg-primary-500;
-          width: 42%;
         }
       }
 
@@ -495,7 +498,6 @@
 
         .setup-bar-fill {
           @apply com-h-full com-rounded-full com-bg-primary-500;
-          width: 80%;
         }
       }
 

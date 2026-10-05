@@ -1,6 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IHackathon, ICommunity, EHackathonStatus } from '@commudle/shared-models';
+import {
+  IHackathon,
+  ICommunity,
+  EHackathonStatus,
+  IHackathonDashboardActivityItem,
+  IHackathonDashboardNeedsAttention,
+  IHackathonDashboardPeopleJudging,
+  IHackathonDashboardSetupProgress,
+  IHackathonDashboardSnapshot,
+  IHackathonDashboardStage,
+  IHackathonDashboardStageProgress,
+} from '@commudle/shared-models';
 import { SeoService } from '@commudle/shared-services';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
@@ -19,9 +30,12 @@ import {
   faTrophy,
   faCode,
   faMicrophone,
+  faFileLines,
 } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
+import { DashboardHackathonsService } from 'apps/commudle-admin/src/app/services/stats/dashboard-hackathons.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
 import { NavigatorShareService } from 'apps/shared-services/navigator-share.service';
@@ -37,6 +51,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
   hackathon: IHackathon;
   community: ICommunity;
   subscriptions: Subscription[] = [];
+  moment = moment;
 
   icons = {
     faCalendarDay,
@@ -53,15 +68,42 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     faTrophy,
     faCode,
     faMicrophone,
+    faFileLines,
   };
 
-  needsAttention: { title: string; sub: string; route: string[]; done: boolean }[] = [];
+  // Stage Progress -- GET /api/v2/dashboards/hackathons/stage_progress
+  stageProgress: IHackathonDashboardStageProgress;
+  isStageProgressLoading = false;
+
+  // Needs Attention -- GET /api/v2/dashboards/hackathons/needs_attention
+  needsAttention: IHackathonDashboardNeedsAttention;
+  isNeedsAttentionLoading = false;
+
+  // Hackathon Snapshot -- GET /api/v2/dashboards/hackathons/snapshot
+  snapshot: IHackathonDashboardSnapshot;
+  isSnapshotLoading = false;
+
+  // Recent Activity -- GET /api/v2/dashboards/hackathons/recent_activity (paginated)
+  recentActivity: IHackathonDashboardActivityItem[] = [];
+  activityPage = 1;
+  activityCount = 6;
+  activityTotal = 0;
+  isActivityLoading = false;
+
+  // People & Judging -- GET /api/v2/dashboards/hackathons/people_judging
+  peopleJudging: IHackathonDashboardPeopleJudging;
+  isPeopleJudgingLoading = false;
+
+  // Setup Progress -- GET /api/v2/dashboards/hackathons/setup_progress
+  setupProgress: IHackathonDashboardSetupProgress;
+  isSetupProgressLoading = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private seoService: SeoService,
     private communitiesService: CommunitiesService,
     private hackathonService: HackathonService,
+    private dashboardHackathonsService: DashboardHackathonsService,
     private clipboard: Clipboard,
     private libToastLogService: LibToastLogService,
     private navigatorShareService: NavigatorShareService,
@@ -79,7 +121,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
           this.hackathon = data;
           this.seoService.setTitle(`Overview | ${this.hackathon.name}`);
           this.seoService.noIndex(true);
-          this.buildNeedsAttention();
+          this.loadDashboard();
         });
       }),
     );
@@ -89,12 +131,25 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
+  loadDashboard(): void {
+    this.getStageProgress();
+    this.getNeedsAttention();
+    this.getSnapshot();
+    this.getRecentActivity();
+    this.getPeopleJudging();
+    this.getSetupProgress();
+  }
+
   get isHackathonOpen(): boolean {
     return this.hackathon?.status === EHackathonStatus.OPEN;
   }
 
   get isHackathonCompleted(): boolean {
     return this.hackathon?.status === EHackathonStatus.COMPLETED;
+  }
+
+  get isHackathonDraft(): boolean {
+    return this.hackathon?.status === EHackathonStatus.DRAFT;
   }
 
   get daysUntilHackathon(): string {
@@ -125,34 +180,205 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     return moment(this.hackathon.end_date).format('D MMM, YYYY');
   }
 
-  buildNeedsAttention(): void {
-    this.needsAttention = [
-      {
-        title: 'Judges not assigned',
-        sub: 'Assign judges to evaluation rounds',
-        route: ['speakers'],
-        done: this.hackathon.judges_count > 0,
-      },
-      {
-        title: 'Tracks / Problem statements not added',
-        sub: 'Define tracks for participants',
-        route: ['tracks'],
-        done: this.hackathon.tracks_count > 0,
-      },
-      {
-        title: 'Pending applications to review',
-        sub: 'Shortlist or reject applicants',
-        route: ['applications-dashboard'],
-        done: false,
-      },
-      { title: 'Allocate teams to mentors', sub: 'Open mentor slots for teams', route: ['mentor-slots'], done: false },
-      {
-        title: 'Sponsor logo missing',
-        sub: 'Add sponsor logos & details',
-        route: ['sponsors'],
-        done: this.hackathon.sponsors_count > 0,
-      },
-    ];
+  isStatusReady(status: string | undefined): boolean {
+    if (!status) {
+      return false;
+    }
+    const notReady = ['not_created', 'not_set', 'not_started', 'pending', 'missing', 'none', 'draft', 'upcoming'];
+    return !notReady.includes(status.toLowerCase());
+  }
+
+  isStatusLive(status: string | undefined): boolean {
+    if (!status) {
+      return false;
+    }
+    return ['live', 'in_progress', 'ongoing', 'active'].includes(status.toLowerCase());
+  }
+
+  getStageProgress(): void {
+    this.isStageProgressLoading = true;
+    this.subscriptions.push(
+      this.dashboardHackathonsService.stageProgress(this.hackathon.id).subscribe({
+        next: (data) => {
+          this.stageProgress = {
+            stages: this.toArray<IHackathonDashboardStage>(data?.stages),
+            overall_progress_percent: data?.overall_progress_percent || 0,
+          };
+          this.isStageProgressLoading = false;
+        },
+        error: () => {
+          this.isStageProgressLoading = false;
+        },
+      }),
+    );
+  }
+
+  getNeedsAttention(): void {
+    this.isNeedsAttentionLoading = true;
+    this.subscriptions.push(
+      this.dashboardHackathonsService.needsAttention(this.hackathon.id).subscribe({
+        next: (data) => {
+          this.needsAttention = data;
+          this.isNeedsAttentionLoading = false;
+        },
+        error: () => {
+          this.isNeedsAttentionLoading = false;
+        },
+      }),
+    );
+  }
+
+  getSnapshot(): void {
+    this.isSnapshotLoading = true;
+    this.subscriptions.push(
+      this.dashboardHackathonsService.snapshot(this.hackathon.id).subscribe({
+        next: (data) => {
+          this.snapshot = data;
+          this.isSnapshotLoading = false;
+        },
+        error: () => {
+          this.isSnapshotLoading = false;
+        },
+      }),
+    );
+  }
+
+  getRecentActivity(): void {
+    this.isActivityLoading = true;
+    this.subscriptions.push(
+      this.dashboardHackathonsService
+        .recentActivity(this.hackathon.id, this.activityPage, this.activityCount)
+        .subscribe({
+          next: (data) => {
+            this.recentActivity = [
+              ...this.recentActivity,
+              ...this.toArray<IHackathonDashboardActivityItem>(data?.values),
+            ];
+            this.activityTotal = data?.total || 0;
+            this.isActivityLoading = false;
+          },
+          error: () => {
+            this.isActivityLoading = false;
+          },
+        }),
+    );
+  }
+
+  get hasMoreActivity(): boolean {
+    return this.recentActivity.length < this.activityTotal;
+  }
+
+  loadMoreActivity(): void {
+    if (this.isActivityLoading || !this.hasMoreActivity) {
+      return;
+    }
+    this.activityPage += 1;
+    this.getRecentActivity();
+  }
+
+  activityIcon(type: string): IconDefinition {
+    switch (type) {
+      case 'project_submitted':
+        return this.icons.faTrophy;
+      case 'judge_accepted':
+        return this.icons.faMicrophone;
+      case 'sponsor_added':
+        return this.icons.faHandshakeSimple;
+      case 'track_added':
+        return this.icons.faCode;
+      case 'registrations_received':
+        return this.icons.faUsers;
+      default:
+        return this.icons.faBolt;
+    }
+  }
+
+  activityAvatarClass(type: string): string {
+    switch (type) {
+      case 'project_submitted':
+        return 'submission-avatar';
+      case 'judge_accepted':
+        return 'speaker-avatar';
+      case 'sponsor_added':
+        return 'sponsors-avatar';
+      case 'track_added':
+        return 'tracks-avatar';
+      case 'registrations_received':
+        return 'members-avatar';
+      default:
+        return 'submission-avatar';
+    }
+  }
+
+  activityLabel(type: string): string {
+    switch (type) {
+      case 'project_submitted':
+        return 'submitted a project';
+      case 'judge_accepted':
+        return 'accepted judging invitation';
+      case 'sponsor_added':
+        return 'became a sponsor';
+      case 'track_added':
+        return 'added a track';
+      case 'registrations_received':
+        return 'new registrations';
+      default:
+        return type;
+    }
+  }
+
+  /** The feed items carry the actor under a few possible keys; fall back to no name. */
+  activityActorName(item: IHackathonDashboardActivityItem): string {
+    return item?.user?.name || item?.user_name || item?.name || item?.title || '';
+  }
+
+  activityInitial(item: IHackathonDashboardActivityItem): string {
+    const name = this.activityActorName(item);
+    return name ? name.charAt(0).toUpperCase() : '';
+  }
+
+  activityTime(item: IHackathonDashboardActivityItem): string {
+    return item?.created_at ? moment(item.created_at).fromNow() : '';
+  }
+
+  getPeopleJudging(): void {
+    this.isPeopleJudgingLoading = true;
+    this.subscriptions.push(
+      this.dashboardHackathonsService.peopleJudging(this.hackathon.id).subscribe({
+        next: (data) => {
+          this.peopleJudging = data;
+          this.isPeopleJudgingLoading = false;
+        },
+        error: () => {
+          this.isPeopleJudgingLoading = false;
+        },
+      }),
+    );
+  }
+
+  getSetupProgress(): void {
+    this.isSetupProgressLoading = true;
+    this.subscriptions.push(
+      this.dashboardHackathonsService.setupProgress(this.hackathon.id).subscribe({
+        next: (data) => {
+          this.setupProgress = data;
+          this.isSetupProgressLoading = false;
+        },
+        error: () => {
+          this.isSetupProgressLoading = false;
+        },
+      }),
+    );
+  }
+
+  /** Next mentor session time, formatted; empty when none scheduled. */
+  get nextMentorSession(): string {
+    const session = this.peopleJudging?.next_mentor_session;
+    if (!session) {
+      return '';
+    }
+    const start = typeof session === 'string' ? session : session.start_time || session.scheduled_at;
+    return start ? moment(start).format('D MMM, h:mm A') : '';
   }
 
   copyTextToClipboard(): void {
