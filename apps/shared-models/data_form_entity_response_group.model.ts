@@ -12,6 +12,8 @@ export interface IDataFormEntityResponseGroup {
   user: IUser;
   created_at?: Date;
   entry_pass: IEventEntryPass;
+  // true when the user is Confirmed on another attendee / speaker registration form of the same event
+  confirmed_on_other_form?: boolean;
   data_form_entity_response_values: IDataFormEntityResponseValue[];
   track_slots: ITrackSlot[];
   registration_for?: EDbModels;

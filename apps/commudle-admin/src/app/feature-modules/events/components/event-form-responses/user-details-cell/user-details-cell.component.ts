@@ -85,11 +85,10 @@ export class UserDetailsCellComponent implements OnInit, OnChanges {
     this.dataFormEntityResponseGroupsService
       .updateEventRegistrationStatus(registrationStatusId, this.userResponse.id)
       .subscribe((data) => {
-        if (data.entry_pass) {
-          this.userResponse.entry_pass = data.entry_pass;
-        }
+        // the response carries the pass that still exists after the change, null when it was deleted or never existed
+        this.userResponse.entry_pass = data.entry_pass ?? null;
         this.updatedRegistrationStatus.emit(data.registration_status);
-        this.updateEntryPass.emit(data.entry_pass);
+        this.updateEntryPass.emit(data.entry_pass ?? null);
         this.toastLogService.successDialog('Updated!');
       });
   }
@@ -159,7 +158,14 @@ export class UserDetailsCellComponent implements OnInit, OnChanges {
   }
 
   openConfirmationDialogBox(registrationStatusId) {
-    if (registrationStatusId !== 4 && this.userResponse.entry_pass) {
+    const confirmedStatusId = this.registrationStatuses?.find((rs) => rs.name === 'confirmed')?.id;
+    // the pass belongs to the event, so it is only deleted when nothing else keeps this person confirmed
+    if (
+      // the mobile select passes the id as a string
+      Number(registrationStatusId) !== confirmedStatusId &&
+      this.userResponse.entry_pass &&
+      !this.userResponse.confirmed_on_other_form
+    ) {
       this.dialogService.open(this.confirmDeleteEntryPassDialog, {
         context: {
           registrationStatusId: registrationStatusId,
