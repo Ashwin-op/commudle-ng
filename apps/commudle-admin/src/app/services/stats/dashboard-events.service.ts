@@ -9,6 +9,7 @@ import {
   IEventDashboardActivityItem,
   IEventDashboardAudienceSnapshot,
   IEventDashboardBriefing,
+  IEventDashboardHeader,
   IEventDashboardNeedsAttention,
   IEventDashboardPostEventSnapshot,
   IEventDashboardSnapshot,
@@ -20,6 +21,14 @@ import {
 })
 export class DashboardEventsService {
   constructor(private http: HttpClient, private apiRoutesService: BaseApiService) {}
+
+  eventHeader(eventId): Observable<IEventDashboardHeader> {
+    const params = new HttpParams().set('event_id', eventId);
+    return this.http.get<IEventDashboardHeader>(
+      this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.EVENTS.EVENT_HEADER),
+      { params },
+    );
+  }
 
   eventBriefing(eventId): Observable<IEventDashboardBriefing> {
     const params = new HttpParams().set('event_id', eventId);

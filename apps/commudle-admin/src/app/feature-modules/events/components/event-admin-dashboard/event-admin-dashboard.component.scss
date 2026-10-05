@@ -99,7 +99,7 @@
           @apply com-flex com-flex-wrap com-items-center com-gap-2 com-text-xs com-text-gray-800;
 
           .hero-location-item {
-            @apply com-inline-flex com-items-center com-gap-1;
+            @apply com-inline-flex com-items-center com-gap-1 com-no-underline com-font-medium;
 
             nb-icon {
               @apply com-text-sm;
@@ -111,7 +111,7 @@
           }
 
           .hero-public-link {
-            @apply com-inline-flex com-items-center com-gap-1 com-text-sm com-font-medium com-text-primary-500 com-no-underline;
+            @apply com-inline-flex com-items-center com-gap-1 com-text-xs com-font-medium com-text-primary-500 com-no-underline;
             @apply hover:com-text-primary-700;
 
             nb-icon {

@@ -767,6 +767,7 @@ export const API_ROUTES = {
       TOP_CITIES: 'api/v2/dashboards/communities/top_cities', //GET
     },
     EVENTS: {
+      EVENT_HEADER: 'api/v2/dashboards/events/event_header', //GET
       EVENT_BRIEFING: 'api/v2/dashboards/events/event_briefing', //GET
       NEEDS_ATTENTION: 'api/v2/dashboards/events/needs_attention', //GET
       SNAPSHOT: 'api/v2/dashboards/events/snapshot', //GET

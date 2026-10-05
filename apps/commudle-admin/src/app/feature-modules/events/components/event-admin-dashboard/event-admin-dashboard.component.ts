@@ -6,13 +6,13 @@ import {
   IEventDashboardActivityItem,
   IEventDashboardAudienceSnapshot,
   IEventDashboardBriefing,
+  IEventDashboardHeader,
   IEventDashboardNeedsAttention,
   IEventDashboardPostEventSnapshot,
   IEventDashboardSnapshot,
   IDashboardDistributionItem,
   IDashboardLiveVisitors,
   IDashboardTopPage,
-  EEventType,
 } from '@commudle/shared-models';
 import { SeoService } from '@commudle/shared-services';
 import { DashboardEventsService } from 'apps/commudle-admin/src/app/services/stats/dashboard-events.service';
@@ -53,7 +53,6 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   community: ICommunity;
   subscriptions: Subscription[] = [];
   moment = moment;
-  EEventType = EEventType;
 
   icons = {
     faCalendarDay,
@@ -79,6 +78,10 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   topPages: IDashboardTopPage[] = [];
   topPagesLoading = false;
   private readonly topPagesLimit = 10;
+
+  // Hero metadata -- GET /api/v2/dashboards/events/event_header
+  eventHeader: IEventDashboardHeader;
+  isHeaderLoading = false;
 
   // Hero stats -- GET /api/v2/dashboards/events/event_briefing
   eventBriefing: IEventDashboardBriefing;
@@ -122,6 +125,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
         if (data.event) {
           this.event = data.event;
           this.seoService.setTitle(`Overview | ${this.event.name}`);
+          this.getEventHeader();
           this.getEventBriefing();
           this.getNeedsAttention();
           this.getEventSnapshot();
@@ -144,25 +148,25 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   get isEventLive(): boolean {
-    if (!this.eventBriefing?.start_time || !this.eventBriefing?.end_time) {
+    if (!this.eventHeader?.start_time || !this.eventHeader?.end_time) {
       return false;
     }
     const now = moment();
-    return now.isBetween(moment(this.eventBriefing.start_time), moment(this.eventBriefing.end_time));
+    return now.isBetween(moment(this.eventHeader.start_time), moment(this.eventHeader.end_time));
   }
 
   get isEventPast(): boolean {
-    if (!this.eventBriefing?.end_time) {
+    if (!this.eventHeader?.end_time) {
       return false;
     }
-    return moment().isAfter(moment(this.eventBriefing.end_time));
+    return moment().isAfter(moment(this.eventHeader.end_time));
   }
 
   get daysUntilEvent(): string {
-    if (!this.eventBriefing?.start_time) {
+    if (!this.eventHeader?.start_time) {
       return '';
     }
-    const days = moment(this.eventBriefing.start_time).diff(moment(), 'days');
+    const days = moment(this.eventHeader.start_time).diff(moment(), 'days');
     if (days < 0) {
       return '';
     }
@@ -170,6 +174,21 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
       return 'Today';
     }
     return `Starts in ${days} day${days > 1 ? 's' : ''}`;
+  }
+
+  getEventHeader(): void {
+    this.isHeaderLoading = true;
+    this.subscriptions.push(
+      this.dashboardEventsService.eventHeader(this.event.id).subscribe({
+        next: (data) => {
+          this.eventHeader = data;
+          this.isHeaderLoading = false;
+        },
+        error: () => {
+          this.isHeaderLoading = false;
+        },
+      }),
+    );
   }
 
   getEventBriefing(): void {

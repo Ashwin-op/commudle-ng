@@ -3,8 +3,8 @@
   <section class="event-hero">
     <div class="hero-banner">
       <commudle-banner-image
-        [headerImagePath]="eventBriefing?.header_image_path"
-        [name]="eventBriefing?.event_name"
+        [headerImagePath]="eventHeader?.banner"
+        [name]="eventHeader?.name"
         aspectRatio="11/10"
       ></commudle-banner-image>
     </div>
@@ -12,31 +12,42 @@
       <div class="hero-top-row">
         <div class="hero-info">
           <div class="hero-title-row">
-            <h1 class="hero-event-name">{{ eventBriefing?.event_name }}</h1>
+            <h1 class="hero-event-name">{{ eventHeader?.name }}</h1>
           </div>
           <div class="hero-meta">
-            <span class="hero-status-badge" [ngClass]="{ 'status-live': isEventLive }">
+            <span class="hero-status-badge" *ngIf="isEventLive" [ngClass]="{ 'status-live': isEventLive }">
               <span class="status-dot"></span>
-              {{ eventBriefing?.event_status | capitalizeAndRemoveUnderscore }}
+              Live
             </span>
             <span class="hero-meta-item" *ngIf="daysUntilEvent">{{ daysUntilEvent }}</span>
-            <span class="hero-meta-dot" *ngIf="eventBriefing?.start_time">·</span>
-            <span class="hero-meta-item" *ngIf="eventBriefing?.start_time">{{
-              moment(eventBriefing.start_time).format('D MMM, YYYY')
+            <span class="hero-meta-dot" *ngIf="eventHeader?.start_time">·</span>
+            <span class="hero-meta-item" *ngIf="eventHeader?.start_time">{{
+              moment(eventHeader.start_time).format('D MMM, YYYY')
             }}</span>
-            <span class="hero-meta-dot" *ngIf="eventBriefing?.start_time">·</span>
-            <span class="hero-meta-item" *ngIf="eventBriefing?.start_time">{{
-              moment(eventBriefing.start_time).format('h:mm A z')
+            <span class="hero-meta-dot" *ngIf="eventHeader?.start_time">·</span>
+            <span class="hero-meta-item" *ngIf="eventHeader?.start_time">{{
+              moment(eventHeader.start_time).format('h:mm A z')
             }}</span>
           </div>
           <div class="hero-location">
-            <span class="hero-location-item" *ngIf="eventBriefing?.event_type">
-              <nb-icon icon="pin-outline"></nb-icon>
-              {{ eventBriefing.event_type === EEventType.ONLINE ? 'Online Event' : eventBriefing.location }}
-            </span>
-            <span class="hero-divider" *ngIf="eventBriefing?.event_type">|</span>
             <a
-              [routerLink]="['/communities', community.slug, 'events', eventBriefing?.slug]"
+              *ngIf="eventHeader?.location?.map_link; else locationName"
+              [href]="eventHeader.location.map_link"
+              target="_blank"
+              class="hero-location-item"
+            >
+              <nb-icon icon="pin-outline"></nb-icon>
+              {{ eventHeader.location.name }}
+            </a>
+            <ng-template #locationName>
+              <span class="hero-location-item" *ngIf="eventHeader?.location?.name">
+                <nb-icon icon="pin-outline"></nb-icon>
+                {{ eventHeader.location.name }}
+              </span>
+            </ng-template>
+            <span class="hero-divider" *ngIf="eventHeader?.location?.name">|</span>
+            <a
+              [routerLink]="['/communities', community.slug, 'events', eventHeader?.slug]"
               target="_blank"
               class="hero-public-link"
             >
