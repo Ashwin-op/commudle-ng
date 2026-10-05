@@ -62,8 +62,6 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
 
   // Live Visitors -- polled every 30s per spec (Redis-cached 30s TTL server-side)
   liveVisitors: ICommunityDashboardLiveVisitors;
-  liveVisitorsHistory: number[] = []; // live_count accumulated across polls, for the sparkline
-  private readonly liveVisitorsMaxPoints = 20;
 
   // Top Pages
   topPages: ICommunityDashboardTopPage[] = [];
@@ -248,10 +246,6 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.dashboardCommunitiesService.liveVisitors(this.community.slug).subscribe((data) => {
         this.liveVisitors = data;
-        // Accumulate the live count across polls to drive the sparkline (real data, built up over time).
-        this.liveVisitorsHistory = [...this.liveVisitorsHistory, data?.live_count || 0].slice(
-          -this.liveVisitorsMaxPoints,
-        );
       }),
     );
   }
@@ -259,19 +253,6 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   // Poll live visitors every 30s, matching the server-side Redis TTL.
   startLiveVisitorsPolling(): void {
     this.subscriptions.push(interval(30000).subscribe(() => this.loadLiveVisitors()));
-  }
-
-  /** Builds an SVG polyline for the live-visitor sparkline from the accumulated history. */
-  get liveVisitorsSparkline(): string {
-    const points = this.liveVisitorsHistory;
-    if (points.length < 2) {
-      return '';
-    }
-    const width = 100;
-    const height = 24;
-    const max = Math.max(...points, 1);
-    const stepX = width / (points.length - 1);
-    return points.map((v, i) => `${(i * stepX).toFixed(1)},${(height - (v / max) * height).toFixed(1)}`).join(' ');
   }
 
   loadTopPages(): void {
