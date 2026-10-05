@@ -621,7 +621,10 @@
         </h3>
       </header>
       <ul class="top-list">
-        <li *ngFor="let page of topPages" class="top-list-item">
+        <li *ngIf="topPagesLoading" class="section-loader">
+          <app-loading-spinner></app-loading-spinner>
+        </li>
+        <li *ngFor="let page of topPages" class="top-list-item" [hidden]="topPagesLoading">
           <a [href]="page.url" target="_blank" rel="noopener noreferrer" class="top-list-name" [title]="page.url">{{
             page.page_title
             }}</a>
