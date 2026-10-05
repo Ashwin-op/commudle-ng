@@ -209,15 +209,11 @@
           <div class="attention-content">
             <span class="attention-title">RSVP emails</span>
             <span class="attention-sub">
-              {{
-                needsAttention?.rsvp?.eligible_count > 0
-                  ? 'RSVP sent (' +
-                    (needsAttention.rsvp.sent_count || 0) +
-                    ' out of ' +
-                    needsAttention.rsvp.eligible_count +
-                    ')'
-                  : 'RSVP has not been sent'
-              }}
+              <ng-container *ngIf="needsAttention?.rsvp?.eligible_count > 0; else rsvpNotSent">
+                RSVP sent ({{ needsAttention.rsvp.sent_count || 0 | number }} out of
+                {{ needsAttention.rsvp.eligible_count | number }})
+              </ng-container>
+              <ng-template #rsvpNotSent>RSVP has not been sent</ng-template>
             </span>
           </div>
           <span class="attention-arrow">›</span>
@@ -240,15 +236,11 @@
           <div class="attention-content">
             <span class="attention-title">Entry passes</span>
             <span class="attention-sub">
-              {{
-                needsAttention?.entry_pass?.eligible_count > 0
-                  ? 'Entry passes sent (' +
-                    (needsAttention.entry_pass.sent_count || 0) +
-                    ' out of ' +
-                    needsAttention.entry_pass.eligible_count +
-                    ')'
-                  : 'Entry passes have not been sent'
-              }}
+              <ng-container *ngIf="needsAttention?.entry_pass?.eligible_count > 0; else entryPassNotSent">
+                Entry passes sent ({{ needsAttention.entry_pass.sent_count || 0 | number }} out of
+                {{ needsAttention.entry_pass.eligible_count | number }})
+              </ng-container>
+              <ng-template #entryPassNotSent>Entry passes have not been sent</ng-template>
             </span>
           </div>
           <span class="attention-arrow">›</span>
