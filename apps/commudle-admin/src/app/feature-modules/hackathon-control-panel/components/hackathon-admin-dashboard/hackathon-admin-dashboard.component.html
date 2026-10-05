@@ -312,6 +312,7 @@
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faBolt" class="heading-icon-activity"></fa-icon> Recent Activity
         </h3>
+        <a *ngIf="hasMoreActivity" class="view-all-link" (click)="loadMoreActivity()">View All →</a>
       </div>
       <app-loading-spinner *ngIf="isActivityLoading" class="section-loader"></app-loading-spinner>
       <ul class="activity-list" *ngIf="!isActivityLoading">

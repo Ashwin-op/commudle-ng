@@ -43,7 +43,10 @@ export class DashboardHackathonsService {
   }
 
   recentActivity(hackathonId, page = 1, count = 10): Observable<IPaginationCount<IHackathonDashboardActivityItem>> {
-    const params = new HttpParams().set('hackathon_id', hackathonId).set('page', page).set('count', count);
+    const params = new HttpParams()
+      .set('hackathon_id', hackathonId)
+      .set('page_no', page)
+      .set('page_items_count', count);
     return this.http.get<IPaginationCount<IHackathonDashboardActivityItem>>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.HACKATHONS.RECENT_ACTIVITY),
       { params },
