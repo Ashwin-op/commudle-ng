@@ -518,7 +518,7 @@
       @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-bg-gray-50 com-rounded-lg com-p-3;
 
       .audience-col-heading {
-        @apply com-m-0 com-text-xs com-font-medium com-text-Cadet-Grey com-mb-2;
+        @apply com-m-0 com-text-xs com-font-medium com-text-tYankees-Blue com-mb-2;
       }
 
       .audience-list {
@@ -625,10 +625,14 @@
   }
 
   .post-event-charts {
-    @apply com-grid com-grid-cols-1 sm:com-grid-cols-2 com-gap-4 com-mt-4;
+    @apply com-grid com-grid-cols-1 sm:com-grid-cols-2 md:com-gap-9 com-gap-4 com-mt-4;
 
     .post-event-chart {
       @apply com-flex com-flex-col com-gap-2;
+
+      .audience-col-heading {
+        @apply com-m-0 com-text-xs com-font-medium com-text-Cadet-Grey com-mb-1;
+      }
 
       .chart-donut {
         @apply com-w-28 com-h-28;
@@ -642,6 +646,22 @@
         .chart-donut-segment {
           fill: none;
           stroke-width: 3.8;
+        }
+      }
+
+      .chart-legend {
+        @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-1;
+
+        li {
+          @apply com-flex com-items-center com-gap-2 com-text-xs com-text-Yankees-Blue;
+        }
+
+        .legend-dot {
+          @apply com-w-2.5 com-h-2.5 com-rounded-full com-shrink-0;
+        }
+
+        .legend-pct {
+          @apply com-ml-auto com-text-xs com-text-Cadet-Grey;
         }
       }
     }
