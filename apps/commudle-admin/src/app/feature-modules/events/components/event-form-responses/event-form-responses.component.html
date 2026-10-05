@@ -542,7 +542,7 @@
     <commudle-event-form-responses-graph
       [forms]="forms"
       [eventDataFormEntityGroupId]="eventDataFormEntityGroupId"
-      [filterValue]="filterValue"
+      [filterValue]="searchForm.get('name').value?.toLowerCase() || ''"
       [selectedStatusIds]="selectedStatusIds"
       [page]="page"
       [count]="count"

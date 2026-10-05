@@ -102,7 +102,6 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
   page = 1;
   totalEntries: number;
   count = 10;
-  filterValue = '';
   selectedStatusIds: number[] = [];
 
   searchForm;
