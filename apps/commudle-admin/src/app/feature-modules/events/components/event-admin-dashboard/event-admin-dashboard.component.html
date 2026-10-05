@@ -485,27 +485,27 @@
         </div>
         <div class="post-event-stats">
           <div class="post-stat">
-            <span class="post-stat-value">{{ eventSnapshot?.registrations?.total ?? '—' }}</span>
+            <span class="post-stat-value">{{ postEventSnapshot?.registered_count ?? 0 | number }}</span>
             <span class="post-stat-label">Registered</span>
           </div>
           <div class="post-stat">
-            <span class="post-stat-value">{{ eventSnapshot?.registrations?.confirmed ?? '—' }}</span>
+            <span class="post-stat-value">{{ postEventSnapshot?.attended_count ?? 0 | number }}</span>
             <span class="post-stat-label">Attended</span>
           </div>
           <div class="post-stat">
-            <span class="post-stat-value">{{ attendanceRate != null ? attendanceRate + '%' : '—' }}</span>
+            <span class="post-stat-value">{{ (postEventSnapshot?.attendance_rate ?? 0) + '%' }}</span>
             <span class="post-stat-label">Attendance Rate</span>
           </div>
           <div class="post-stat">
-            <span class="post-stat-value">{{ postEventSnapshot?.speakers_count ?? '—' }}</span>
+            <span class="post-stat-value">{{ postEventSnapshot?.speakers_count ?? 0 | number }}</span>
             <span class="post-stat-label">Speakers</span>
           </div>
           <div class="post-stat">
-            <span class="post-stat-value">—</span>
-            <span class="post-stat-label">Rating</span>
+            <span class="post-stat-value">{{ postEventSnapshot?.entry_passes_count ?? 0 | number }}</span>
+            <span class="post-stat-label">Entry Passes</span>
           </div>
           <div class="post-stat">
-            <span class="post-stat-value">—</span>
+            <span class="post-stat-value">{{ postEventSnapshot?.feedback_responses_count ?? 0 | number }}</span>
             <span class="post-stat-label">Feedback Responses</span>
           </div>
         </div>

@@ -220,15 +220,6 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     return 94.2 * (1 - this.confirmedPercent / 100);
   }
 
-  /** Attended (confirmed) as a share of total registrations, for the Post-Event grid. Null until snapshot loads. */
-  get attendanceRate(): number | null {
-    const total = this.eventSnapshot?.registrations?.total;
-    if (!total) {
-      return null;
-    }
-    return Math.round(((this.eventSnapshot?.registrations?.confirmed || 0) / total) * 100);
-  }
-
   /**
    * `*ngFor` throws NG0900 the moment it is handed a plain object instead of an array.
    * The dashboards endpoints are still in development, so coerce anything list-shaped
@@ -441,6 +432,11 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
         next: (data) => {
           this.postEventSnapshot = {
             speakers_count: data?.speakers_count || 0,
+            registered_count: data?.registered_count || 0,
+            attended_count: data?.attended_count || 0,
+            attendance_rate: data?.attendance_rate || 0,
+            entry_passes_count: data?.entry_passes_count || 0,
+            feedback_responses_count: data?.feedback_responses_count || 0,
             experience_distribution: this.toArray(data?.experience_distribution),
             domain_distribution: this.toArray(data?.domain_distribution),
           };
