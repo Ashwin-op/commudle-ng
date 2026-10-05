@@ -3,8 +3,8 @@
   <section class="event-hero">
     <div class="hero-banner">
       <commudle-banner-image
-        [headerImagePath]="event.header_image_path"
-        [name]="event.name"
+        [headerImagePath]="eventBriefing?.header_image_path"
+        [name]="eventBriefing?.event_name"
         aspectRatio="11/10"
       ></commudle-banner-image>
     </div>
@@ -12,34 +12,31 @@
       <div class="hero-top-row">
         <div class="hero-info">
           <div class="hero-title-row">
-            <h1 class="hero-event-name">{{ event.name }}</h1>
-            <a [routerLink]="['edit']" class="hero-edit-btn">
-              <nb-icon icon="edit-outline"></nb-icon>
-            </a>
+            <h1 class="hero-event-name">{{ eventBriefing?.event_name }}</h1>
           </div>
           <div class="hero-meta">
             <span class="hero-status-badge" [ngClass]="{ 'status-live': isEventLive }">
               <span class="status-dot"></span>
-              {{ event.event_status?.name | capitalizeAndRemoveUnderscore }}
+              {{ eventBriefing?.event_status | capitalizeAndRemoveUnderscore }}
             </span>
             <span class="hero-meta-item" *ngIf="daysUntilEvent">{{ daysUntilEvent }}</span>
-            <span class="hero-meta-dot" *ngIf="event.start_time">·</span>
-            <span class="hero-meta-item" *ngIf="event.start_time">{{
-              moment(event.start_time).format('D MMM, YYYY')
+            <span class="hero-meta-dot" *ngIf="eventBriefing?.start_time">·</span>
+            <span class="hero-meta-item" *ngIf="eventBriefing?.start_time">{{
+              moment(eventBriefing.start_time).format('D MMM, YYYY')
             }}</span>
-            <span class="hero-meta-dot" *ngIf="event.start_time">·</span>
-            <span class="hero-meta-item" *ngIf="event.start_time">{{
-              moment(event.start_time).format('h:mm A z')
+            <span class="hero-meta-dot" *ngIf="eventBriefing?.start_time">·</span>
+            <span class="hero-meta-item" *ngIf="eventBriefing?.start_time">{{
+              moment(eventBriefing.start_time).format('h:mm A z')
             }}</span>
           </div>
           <div class="hero-location">
-            <span class="hero-location-item" *ngIf="event.event_type">
+            <span class="hero-location-item" *ngIf="eventBriefing?.event_type">
               <nb-icon icon="pin-outline"></nb-icon>
-              {{ event.event_type === EEventType.ONLINE ? 'Online Event' : event.location }}
+              {{ eventBriefing.event_type === EEventType.ONLINE ? 'Online Event' : eventBriefing.location }}
             </span>
-            <span class="hero-divider" *ngIf="event.event_type">|</span>
+            <span class="hero-divider" *ngIf="eventBriefing?.event_type">|</span>
             <a
-              [routerLink]="['/communities', community.slug, 'events', event.slug]"
+              [routerLink]="['/communities', community.slug, 'events', eventBriefing?.slug]"
               target="_blank"
               class="hero-public-link"
             >
@@ -65,7 +62,7 @@
             <fa-icon [icon]="icons.faUsers"></fa-icon>
           </div>
           <div class="highlight-stat-info">
-            <span class="highlight-stat-value">{{ eventBriefing?.registrations_count || 0 }}</span>
+            <span class="highlight-stat-value">{{ eventBriefing?.registrations_count ?? 0 | number }}</span>
             <span class="highlight-stat-label">Registrations</span>
           </div>
           <div class="highlight-stat-visual" *ngIf="eventBriefing?.registrations_count">
@@ -79,7 +76,7 @@
             <fa-icon [icon]="icons.faCircleCheck"></fa-icon>
           </div>
           <div class="highlight-stat-info">
-            <span class="highlight-stat-value">{{ eventBriefing?.confirmed_count || 0 }}</span>
+            <span class="highlight-stat-value">{{ eventBriefing?.confirmed_count ?? 0 | number }}</span>
             <span class="highlight-stat-label">Confirmed ({{ confirmedPercent }}%)</span>
           </div>
           <div class="highlight-stat-visual">
@@ -101,7 +98,7 @@
             <fa-icon [icon]="icons.faEnvelope"></fa-icon>
           </div>
           <div class="highlight-stat-info">
-            <span class="highlight-stat-value">{{ eventBriefing?.emails_sent_count || 0 }}</span>
+            <span class="highlight-stat-value">{{ eventBriefing?.emails_sent_count ?? 0 | number }}</span>
             <span class="highlight-stat-label">Emails sent</span>
           </div>
         </div>
@@ -110,7 +107,7 @@
             <fa-icon [icon]="icons.faTicket"></fa-icon>
           </div>
           <div class="highlight-stat-info">
-            <span class="highlight-stat-value">{{ eventBriefing?.entry_passes_sent_count || 0 }}</span>
+            <span class="highlight-stat-value">{{ eventBriefing?.entry_passes_sent_count ?? 0 | number }}</span>
             <span class="highlight-stat-label">Entry passes sent</span>
           </div>
         </div>
@@ -128,6 +125,10 @@
         </h3>
       </div>
       <div class="attention-list">
+        <app-loading-spinner
+          *ngIf="isNeedsAttentionLoading && !needsAttention"
+          class="section-loader"
+        ></app-loading-spinner>
         <!-- Agenda -->
         <a [routerLink]="['agenda']" class="attention-item">
           <fa-icon
@@ -345,7 +346,7 @@
       </div>
       <ng-template #snapshotEmpty>
         <p class="snapshot-empty" *ngIf="!isSnapshotLoading">No snapshot data yet.</p>
-        <app-loading-spinner *ngIf="isSnapshotLoading"></app-loading-spinner>
+        <app-loading-spinner *ngIf="isSnapshotLoading" class="section-loader"></app-loading-spinner>
       </ng-template>
     </div>
 
@@ -380,7 +381,7 @@
           </p>
         </li>
       </ul>
-      <app-loading-spinner *ngIf="isActivityLoading"></app-loading-spinner>
+      <app-loading-spinner *ngIf="isActivityLoading" class="section-loader"></app-loading-spinner>
     </div>
   </section>
 
@@ -394,7 +395,8 @@
         </h3>
         <a [routerLink]="['stats']" class="view-all-link">View Analytics →</a>
       </header>
-      <div class="audience-content">
+      <app-loading-spinner *ngIf="isAudienceLoading && !audienceSnapshot" class="section-loader"></app-loading-spinner>
+      <div class="audience-content" *ngIf="!isAudienceLoading || audienceSnapshot">
         <div class="audience-chart">
           <svg *ngIf="audienceSnapshot?.experience_levels?.length" class="chart-donut" viewBox="0 0 36 36">
             <circle class="chart-donut-track" cx="18" cy="18" r="15.9155" />
@@ -468,6 +470,10 @@
           }}</span
         >
       </header>
+      <app-loading-spinner
+        *ngIf="isPostEventLoading && !postEventSnapshot"
+        class="section-loader"
+      ></app-loading-spinner>
       <div class="post-event-content">
         <div class="post-event-hero">
           <p class="post-event-title">🎉 Event Completed!</p>
@@ -596,7 +602,10 @@
         </h3>
       </header>
       <ul class="top-list">
-        <li *ngFor="let page of topPages" class="top-list-item">
+        <li *ngIf="topPagesLoading" class="section-loader">
+          <app-loading-spinner></app-loading-spinner>
+        </li>
+        <li *ngFor="let page of topPages" class="top-list-item" [hidden]="topPagesLoading">
           <a [href]="page.url" target="_blank" rel="noopener noreferrer" class="top-list-name" [title]="page.url">{{
             page.page_title
           }}</a>

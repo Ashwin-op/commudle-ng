@@ -144,25 +144,25 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   get isEventLive(): boolean {
-    if (!this.event?.start_time || !this.event?.end_time) {
+    if (!this.eventBriefing?.start_time || !this.eventBriefing?.end_time) {
       return false;
     }
     const now = moment();
-    return now.isBetween(moment(this.event.start_time), moment(this.event.end_time));
+    return now.isBetween(moment(this.eventBriefing.start_time), moment(this.eventBriefing.end_time));
   }
 
   get isEventPast(): boolean {
-    if (!this.event?.end_time) {
+    if (!this.eventBriefing?.end_time) {
       return false;
     }
-    return moment().isAfter(moment(this.event.end_time));
+    return moment().isAfter(moment(this.eventBriefing.end_time));
   }
 
   get daysUntilEvent(): string {
-    if (!this.event?.start_time) {
+    if (!this.eventBriefing?.start_time) {
       return '';
     }
-    const days = moment(this.event.start_time).diff(moment(), 'days');
+    const days = moment(this.eventBriefing.start_time).diff(moment(), 'days');
     if (days < 0) {
       return '';
     }

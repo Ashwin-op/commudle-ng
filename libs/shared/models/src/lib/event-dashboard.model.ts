@@ -6,6 +6,14 @@ export interface IEventDashboardBriefing {
   emails_sent_count: number;
   confirmed_count: number;
   entry_passes_sent_count: number;
+  event_name?: string;
+  event_status?: string;
+  start_time?: string;
+  end_time?: string;
+  event_type?: string;
+  location?: string;
+  header_image_path?: string;
+  slug?: string;
 }
 
 // needs_attention
