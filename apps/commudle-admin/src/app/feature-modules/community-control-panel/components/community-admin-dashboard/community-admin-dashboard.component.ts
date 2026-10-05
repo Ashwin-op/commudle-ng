@@ -51,6 +51,11 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   organizerBriefing: ICommunityDashboardOrganizerBriefing;
   needsAttention: ICommunityDashboardNeedsAttention;
   needsAttentionLoading = false;
+  // Per-category page tracking for the paginated needs-attention lists.
+  collaborationRequestsPage = 1;
+  surveysPage = 1;
+  newslettersPage = 1;
+  bankAccountPage = 1;
   upcomingSchedule: ICommunityDashboardScheduleItem[] = [];
   upcomingScheduleLoading = false;
   communitySnapshot: ICommunityDashboardSnapshot;
@@ -171,16 +176,43 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   loadNeedsAttention(): void {
     this.needsAttentionLoading = true;
     this.subscriptions.push(
-      this.dashboardCommunitiesService.needsAttention(this.community.slug).subscribe({
-        next: (data) => {
-          this.needsAttention = data;
-          this.needsAttentionLoading = false;
-        },
-        error: () => {
-          this.needsAttentionLoading = false;
-        },
-      }),
+      this.dashboardCommunitiesService
+        .needsAttention(this.community.slug, {
+          collaboration_requests_page: this.collaborationRequestsPage,
+          surveys_page: this.surveysPage,
+          newsletters_page: this.newslettersPage,
+          bank_account_page: this.bankAccountPage,
+        })
+        .subscribe({
+          next: (data) => {
+            this.needsAttention = data;
+            this.needsAttentionLoading = false;
+          },
+          error: () => {
+            this.needsAttentionLoading = false;
+          },
+        }),
     );
+  }
+
+  onCollaborationRequestsPageChange(page: number): void {
+    this.collaborationRequestsPage = page;
+    this.loadNeedsAttention();
+  }
+
+  onSurveysPageChange(page: number): void {
+    this.surveysPage = page;
+    this.loadNeedsAttention();
+  }
+
+  onNewslettersPageChange(page: number): void {
+    this.newslettersPage = page;
+    this.loadNeedsAttention();
+  }
+
+  onBankAccountPageChange(page: number): void {
+    this.bankAccountPage = page;
+    this.loadNeedsAttention();
   }
 
   loadUpcomingSchedule(): void {

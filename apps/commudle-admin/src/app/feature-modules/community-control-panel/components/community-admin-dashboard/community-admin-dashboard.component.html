@@ -89,7 +89,7 @@
       <nav class="attention-list">
         <a
           *ngIf="needsAttention?.profile && !needsAttention.profile.is_complete"
-          [routerLink]="['edit']"
+          [routerLink]="['/admin', 'communities', community.slug, 'edit']"
           class="attention-item"
         >
           <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
@@ -109,8 +109,12 @@
           <span class="attention-arrow">›</span>
         </a>
         <a
-          *ngFor="let request of needsAttention?.collaboration_requests"
-          [routerLink]="[request.type === 'hackathon' ? 'hackathons' : 'events']"
+          *ngFor="let request of needsAttention?.collaboration_requests?.values"
+          [routerLink]="
+            request.type === 'hackathon'
+              ? ['/admin/communities', community.slug, 'hackathon-dashboard', request.slug, 'collaboration']
+              : ['/admin/communities', community.slug, 'events', 'event-dashboard', request.slug, 'collaborations']
+          "
           class="attention-item"
         >
           <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
@@ -126,15 +130,41 @@
           </p>
           <span class="attention-arrow">›</span>
         </a>
-        <a *ngFor="let newsletter of needsAttention?.newsletters" [routerLink]="['newsletters']" class="attention-item">
+        <commudle-pagination-compact
+          *ngIf="needsAttention?.collaboration_requests?.total > needsAttention?.collaboration_requests?.count"
+          [page]="collaborationRequestsPage"
+          [count]="needsAttention.collaboration_requests.count"
+          [total]="needsAttention.collaboration_requests.total"
+          (pageChange)="onCollaborationRequestsPageChange($event)"
+        ></commudle-pagination-compact>
+
+        <a
+          *ngFor="let newsletter of needsAttention?.newsletters?.values"
+          [routerLink]="['/admin/communities', community.slug, 'newsletters', 'edit', newsletter.slug]"
+          class="attention-item"
+        >
           <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
           <p class="attention-content">
-            <span class="attention-title">Newsletter needs attention</span>
-            <span class="attention-sub">Engage your members</span>
+            <span class="attention-title">{{ newsletter.title }}</span>
+            <span class="attention-sub">
+              {{ newsletter.status | capitalizeAndRemoveUnderscore }} newsletter · Engage your members
+            </span>
           </p>
           <span class="attention-arrow">›</span>
         </a>
-        <a *ngFor="let survey of needsAttention?.surveys" [routerLink]="['surveys']" class="attention-item">
+        <commudle-pagination-compact
+          *ngIf="needsAttention?.newsletters?.total > needsAttention?.newsletters?.count"
+          [page]="newslettersPage"
+          [count]="needsAttention.newsletters.count"
+          [total]="needsAttention.newsletters.total"
+          (pageChange)="onNewslettersPageChange($event)"
+        ></commudle-pagination-compact>
+
+        <a
+          *ngFor="let survey of needsAttention?.surveys?.values"
+          [routerLink]="['/admin/communities', community.slug, 'surveys']"
+          class="attention-item"
+        >
           <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
           <p class="attention-content">
             <span class="attention-title">Survey needs attention</span>
@@ -142,7 +172,19 @@
           </p>
           <span class="attention-arrow">›</span>
         </a>
-        <a *ngIf="needsAttention?.refund_policy" [routerLink]="['edit']" class="attention-item">
+        <commudle-pagination-compact
+          *ngIf="needsAttention?.surveys?.total > needsAttention?.surveys?.count"
+          [page]="surveysPage"
+          [count]="needsAttention.surveys.count"
+          [total]="needsAttention.surveys.total"
+          (pageChange)="onSurveysPageChange($event)"
+        ></commudle-pagination-compact>
+
+        <a
+          *ngIf="needsAttention?.refund_policy"
+          [routerLink]="['/admin/communities', community.slug, 'edit']"
+          class="attention-item"
+        >
           <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
           <p class="attention-content">
             <span class="attention-title">Refund policy needs attention</span>
@@ -150,7 +192,12 @@
           </p>
           <span class="attention-arrow">›</span>
         </a>
-        <a *ngFor="let account of needsAttention?.bank_account" [routerLink]="['payments']" class="attention-item">
+
+        <a
+          *ngFor="let account of needsAttention?.bank_account?.values"
+          [routerLink]="['/admin/communities', community.slug, 'payments']"
+          class="attention-item"
+        >
           <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
           <p class="attention-content">
             <span class="attention-title">Set up bank details</span>
@@ -158,16 +205,23 @@
           </p>
           <span class="attention-arrow">›</span>
         </a>
+        <commudle-pagination-compact
+          *ngIf="needsAttention?.bank_account?.total > needsAttention?.bank_account?.count"
+          [page]="bankAccountPage"
+          [count]="needsAttention.bank_account.count"
+          [total]="needsAttention.bank_account.total"
+          (pageChange)="onBankAccountPageChange($event)"
+        ></commudle-pagination-compact>
+
         <p
           *ngIf="
             !needsAttentionLoading &&
-            !needsAttentionError &&
             !(
               needsAttention?.profile?.is_complete === false ||
-              needsAttention?.collaboration_requests?.length > 0 ||
-              needsAttention?.surveys?.length > 0 ||
-              needsAttention?.newsletters?.length > 0 ||
-              needsAttention?.bank_account?.length > 0 ||
+              needsAttention?.collaboration_requests?.total > 0 ||
+              needsAttention?.surveys?.total > 0 ||
+              needsAttention?.newsletters?.total > 0 ||
+              needsAttention?.bank_account?.total > 0 ||
               needsAttention?.refund_policy
             )
           "

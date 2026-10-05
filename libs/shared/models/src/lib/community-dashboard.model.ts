@@ -1,3 +1,5 @@
+import { IPaginationCount } from './pagination.model';
+
 export interface IDashboardEventBrief {
   id: number;
   name: string;
@@ -37,6 +39,7 @@ export interface ICommunityDashboardOrganizerBriefing {
 export interface IDashboardCollaborationRequest {
   id: number;
   type: string;
+  slug: string;
   requester: string;
   direction: 'incoming' | 'outgoing';
   status: string;
@@ -46,20 +49,23 @@ export interface IDashboardCollaborationRequest {
 export interface IDashboardNewsletterBrief {
   id: number;
   title: string;
+  slug: string;
   status: string;
   scheduled_for: string | null;
 }
 
+export interface ICommunityDashboardProfileAttention {
+  is_complete: boolean;
+  missing_fields: string[];
+}
+
 export interface ICommunityDashboardNeedsAttention {
-  collaboration_requests: IDashboardCollaborationRequest[];
-  surveys: any[];
-  newsletters: IDashboardNewsletterBrief[];
-  profile: {
-    is_complete: boolean;
-    missing_fields: string[];
-  };
+  collaboration_requests: IPaginationCount<IDashboardCollaborationRequest>;
+  surveys: IPaginationCount<any>;
+  newsletters: IPaginationCount<IDashboardNewsletterBrief>;
+  profile: ICommunityDashboardProfileAttention;
   refund_policy: any | null;
-  bank_account: any[];
+  bank_account: IPaginationCount<any>;
 }
 
 // snapshot
