@@ -1,6 +1,9 @@
 .dashboard {
   @apply com-flex com-flex-col com-gap-4;
 }
+.section-loader {
+  @apply com-flex com-justify-center com-w-full com-py-4;
+}
 
 .section-loader {
   @apply com-flex com-justify-center com-w-full com-py-3;
