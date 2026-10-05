@@ -61,12 +61,11 @@ export class DashboardEventsService {
     );
   }
 
-  topPages(eventId, window: EDashboardTopPagesWindow = 'current'): Observable<{ values: IDashboardTopPage[] }> {
+  topPages(eventId, window: EDashboardTopPagesWindow = 'current'): Observable<IDashboardTopPage[]> {
     const params = new HttpParams().set('event_id', eventId).set('window', window);
-    return this.http.get<{ values: IDashboardTopPage[] }>(
-      this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.EVENTS.TOP_PAGES),
-      { params },
-    );
+    return this.http.get<IDashboardTopPage[]>(this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.EVENTS.TOP_PAGES), {
+      params,
+    });
   }
 
   audienceSnapshot(eventId): Observable<IEventDashboardAudienceSnapshot> {

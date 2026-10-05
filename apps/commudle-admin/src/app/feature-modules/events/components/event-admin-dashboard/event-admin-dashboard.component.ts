@@ -10,11 +10,13 @@ import {
   IEventDashboardPostEventSnapshot,
   IEventDashboardSnapshot,
   IDashboardDistributionItem,
+  IDashboardLiveVisitors,
+  IDashboardTopPage,
   EEventType,
 } from '@commudle/shared-models';
 import { SeoService } from '@commudle/shared-services';
 import { DashboardEventsService } from 'apps/commudle-admin/src/app/services/stats/dashboard-events.service';
-import { Subscription } from 'rxjs';
+import { Subscription, interval } from 'rxjs';
 import * as moment from 'moment';
 import {
   faCalendarDay,
@@ -31,6 +33,8 @@ import {
   faBell,
   faBolt,
   faTicket,
+  faEye,
+  faFileLines,
 } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -66,9 +70,15 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     faBell,
     faBolt,
     faTicket,
+    faEye,
+    faFileLines,
   };
 
   needsAttention: IEventDashboardNeedsAttention;
+  liveVisitors: IDashboardLiveVisitors;
+  topPages: IDashboardTopPage[] = [];
+  topPagesLoading = false;
+  private readonly topPagesLimit = 10;
 
   // Hero stats -- GET /api/v2/dashboards/events/event_briefing
   eventBriefing: IEventDashboardBriefing;
@@ -118,6 +128,9 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
           this.getRecentActivity();
           this.getAudienceSnapshot();
           this.getPostEventSnapshot();
+          this.getLiveVisitors();
+          this.startLiveVisitorsPolling();
+          this.getTopPages();
         } else {
           this.seoService.setTitle(`Event Dashboard | ${this.community?.name || ''}`);
         }
@@ -419,6 +432,45 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
         },
       }),
     );
+  }
+
+  getLiveVisitors(): void {
+    this.subscriptions.push(
+      this.dashboardEventsService.liveVisitors(this.event.id).subscribe((data) => {
+        this.liveVisitors = data;
+      }),
+    );
+  }
+
+  // Poll live visitors every 30s, matching the server-side Redis TTL.
+  startLiveVisitorsPolling(): void {
+    this.subscriptions.push(interval(30000).subscribe(() => this.getLiveVisitors()));
+  }
+
+  getTopPages(): void {
+    this.topPagesLoading = true;
+    this.subscriptions.push(
+      this.dashboardEventsService.topPages(this.event.id, 'current').subscribe({
+        next: (data) => {
+          this.topPages = (Array.isArray(data) ? data : []).slice(0, this.topPagesLimit);
+          this.topPagesLoading = false;
+        },
+        error: () => {
+          this.topPagesLoading = false;
+        },
+      }),
+    );
+  }
+
+  get topPagesMax(): number {
+    return Math.max(...this.topPages.map((p) => p.views || 0), 1);
+  }
+
+  barShare(value: number, max: number): number {
+    if (!max) {
+      return 0;
+    }
+    return (value / max) * 100;
   }
 
   copyTextToClipboard(): void {
