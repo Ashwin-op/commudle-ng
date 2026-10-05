@@ -21,20 +21,28 @@ export interface IEventDashboardHeader {
   location: IEventDashboardHeaderLocation | null;
 }
 
+// event_header
+export interface IEventDashboardHeaderLocation {
+  name: string;
+  address: string;
+  map_link: string;
+}
+
+export interface IEventDashboardHeader {
+  name: string;
+  slug: string;
+  start_time: string;
+  end_time: string;
+  banner: string;
+  location: IEventDashboardHeaderLocation | null;
+}
+
 // event_briefing
 export interface IEventDashboardBriefing {
   registrations_count: number;
   emails_sent_count: number;
   confirmed_count: number;
   entry_passes_sent_count: number;
-  event_name?: string;
-  event_status?: string;
-  start_time?: string;
-  end_time?: string;
-  event_type?: string;
-  location?: string;
-  header_image_path?: string;
-  slug?: string;
 }
 
 // needs_attention
