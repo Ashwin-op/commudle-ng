@@ -6,6 +6,29 @@
         {{ moment(userResponse.created_at).fromNow() }}
       </p>
     </div>
+    @if (userResponse.manually_added && event.editable) {
+    <button
+      (click)="editSpeaker.emit(userResponse)"
+      nbButton
+      outline
+      size="small"
+      shape="semi-round"
+      type="button"
+      class="com-mb-2"
+    >
+      <fa-icon [icon]="faPen"></fa-icon> Edit speaker details
+    </button>
+    } @if (userResponse.manually_added) {
+    <p class="user-domain">
+      <small>
+        Added by @if (userResponse.added_by) {
+        <a [routerLink]="['/users', userResponse.added_by.username]" target="_blank">{{
+          userResponse.added_by.name
+        }}</a>
+        } @else { unknown }
+      </small>
+    </p>
+    }
     <p class="contact-details">
       <small>{{ user.email === 'Not Visible' ? 'Email: Not Visible' : user.email }}</small>
       <small *ngIf="user.phone"> / {{ user.phone === 'Not Visible' ? 'Phone: Not Visible' : user.phone }}</small>

@@ -50,6 +50,8 @@ import {
 import { EventLocationsService } from 'apps/commudle-admin/src/app/services/event-locations.service';
 import { DataFormsService } from 'apps/commudle-admin/src/app/services/data_forms.service';
 import { EmailerComponent } from 'apps/commudle-admin/src/app/app-shared-components/emailer/emailer.component';
+import { AddEventSpeakerComponent } from '../event-locations/add-event-speaker/add-event-speaker.component';
+import { IDataFormEntityResponseGroup } from 'apps/shared-models/data_form_entity_response_group.model';
 import { EemailTypes } from 'apps/shared-models/enums/email_types.enum';
 import {
   DataTableColumn,
@@ -65,6 +67,7 @@ import {
 })
 export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('confirmStatusChange', { read: TemplateRef }) confirmStatusChange: TemplateRef<HTMLElement>;
+  @ViewChild(AddEventSpeakerComponent) speakerDialog: AddEventSpeakerComponent;
   @ViewChild(NbPopoverDirective) filterPopover: NbPopoverDirective;
   @ViewChild('actionsPopoverDirective') actionsPopover: NbPopoverDirective;
   @ViewChild('userDetailsHeaderTemplate') userDetailsHeaderTemplate!: TemplateRef<unknown>;
@@ -248,13 +251,14 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
       this.registrationStatuses = data.registration_statuses;
     });
 
-    // get the dataform associated
-    this.dataFormsService
-      .getDataFormDetails(this.activatedRoute.snapshot.queryParamMap['params']['data_form_id'])
-      .subscribe((data) => {
+    // get the dataform associated (the manually added speakers group has no form, so no question columns)
+    const dataFormId = this.activatedRoute.snapshot.queryParamMap['params']['data_form_id'];
+    if (dataFormId) {
+      this.dataFormsService.getDataFormDetails(dataFormId).subscribe((data) => {
         this.dataForm = data;
         this.questions = this.dataForm.questions;
       });
+    }
 
     this.getResponses();
     this.updateFilter();
@@ -511,6 +515,24 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
 
   updateRegistrationStatus(registrationStatus, userResponseId) {
     this.rows.find((k) => k.id === userResponseId).registration_status = registrationStatus;
+  }
+
+  openEditSpeaker(speaker: IDataFormEntityResponseGroup) {
+    this.speakerDialog?.openEdit(speaker);
+  }
+
+  onSpeakerUpdated(updated: IDataFormEntityResponseGroup) {
+    const row = this.rows.find((k) => k.id === updated.id);
+    if (!row) {
+      return;
+    }
+    // Update in place: the response row carries more than the speaker payload does (notes, track slots, etc.).
+    Object.assign(row.user, {
+      name: updated.user.name,
+      designation: updated.user.designation,
+      photo: updated.user.photo,
+    });
+    row.speaker_overrides = updated.speaker_overrides;
   }
 
   updateEntryPass(entryPass, userResponseId) {

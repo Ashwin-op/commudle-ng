@@ -29,6 +29,8 @@ const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
 export class AddEventSpeakerComponent implements OnInit, OnDestroy {
   @Input() event: IEvent;
   @Input() community: ICommunity;
+  // Hide the Add Speaker button when the dialog is opened from elsewhere (e.g. editing a row).
+  @Input() showTrigger = true;
   @Output() speakerAdded = new EventEmitter<IDataFormEntityResponseGroup>();
   @Output() speakerUpdated = new EventEmitter<IDataFormEntityResponseGroup>();
 

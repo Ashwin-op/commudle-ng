@@ -24,6 +24,7 @@ export interface IDataFormEntityResponseGroup {
   manually_added?: boolean;
   event_data_form_entity_group_id?: number;
   speaker_overrides?: ISpeakerOverrides;
+  added_by?: { id: number; name: string; username: string } | null;
 }
 
 export interface IAggUserCommunityEngagement {

@@ -74,6 +74,7 @@
       } @for ( dferg of rows; track dferg.id) {
       <div class="response">
         <app-user-details-cell
+          (editSpeaker)="openEditSpeaker($event)"
           (updateEntryPass)="updateEntryPass($event, dferg.id)"
           (updatedRegistrationStatus)="updateRegistrationStatus($event, dferg.id)"
           [community]="community"
@@ -218,6 +219,7 @@
         <ng-template #userDetailsCellTemplate let-row="row" let-value="value">
           <div class="row-header user-details">
             <app-user-details-cell
+              (editSpeaker)="openEditSpeaker($event)"
               (updateEntryPass)="updateEntryPass($event, value.id)"
               (updatedRegistrationStatus)="updateRegistrationStatus($event, value.id)"
               [community]="community"
@@ -1371,3 +1373,12 @@
     </div>
   </div>
 </commudle-bottom-sheet>
+
+<!-- Dialog host for editing a manually added speaker's details (no visible trigger button). -->
+<app-add-event-speaker
+  *ngIf="eventDataFormEntityGroup?.manually_added && event"
+  [event]="event"
+  [community]="community"
+  [showTrigger]="false"
+  (speakerUpdated)="onSpeakerUpdated($event)"
+></app-add-event-speaker>

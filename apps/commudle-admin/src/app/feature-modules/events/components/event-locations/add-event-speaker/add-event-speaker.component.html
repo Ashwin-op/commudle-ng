@@ -1,4 +1,4 @@
-<button (click)="openDialog()" nbButton status="primary" outline title="Add Speaker">
+<button *ngIf="showTrigger" (click)="openDialog()" nbButton status="primary" outline title="Add Speaker">
   <fa-icon [icon]="icons.faUserPlus"></fa-icon>
   Add Speaker
 </button>
