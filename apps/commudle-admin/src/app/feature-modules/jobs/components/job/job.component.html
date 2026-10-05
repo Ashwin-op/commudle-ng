@@ -124,7 +124,7 @@
                 </p>
               </div>
             </div>
-            <div class="tag-list" *ngIf="job.tags?.length > 0">
+            <div class="tag-list" *ngIf="job">
               <app-tag
                 *ngFor="let tag of job.tags"
                 [tags]="[tag.name]"
