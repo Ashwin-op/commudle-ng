@@ -1,6 +1,9 @@
 .dashboard {
   @apply com-flex com-flex-col com-gap-4;
 }
+.section-loader {
+  @apply com-flex com-justify-center com-w-full com-py-4;
+}
 
 .section-heading {
   @apply com-m-0 com-text-base com-font-medium com-text-Yankees-Blue com-flex md:com-items-center com-items-start com-gap-2;

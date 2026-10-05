@@ -59,6 +59,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   upcomingSchedule: ICommunityDashboardScheduleItem[] = [];
   upcomingScheduleLoading = false;
   communitySnapshot: ICommunityDashboardSnapshot;
+  snapshotLoading = false;
   recentActivity: ICommunityDashboardActivityItem[] = [];
   recentActivityPage = 1;
   recentActivityTotal = 0;
@@ -267,9 +268,16 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   loadSnapshot(): void {
+    this.snapshotLoading = true;
     this.subscriptions.push(
-      this.dashboardCommunitiesService.snapshot(this.community.slug).subscribe((data) => {
-        this.communitySnapshot = data;
+      this.dashboardCommunitiesService.snapshot(this.community.slug).subscribe({
+        next: (data) => {
+          this.communitySnapshot = data;
+          this.snapshotLoading = false;
+        },
+        error: () => {
+          this.snapshotLoading = false;
+        },
       }),
     );
   }

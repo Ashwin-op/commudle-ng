@@ -87,6 +87,7 @@
         </h3>
       </header>
       <nav class="attention-list">
+        <app-loading-spinner *ngIf="needsAttentionLoading" class="section-loader"></app-loading-spinner>
         <a
           *ngIf="needsAttention?.profile && !needsAttention.profile.is_complete"
           [routerLink]="['/admin', 'communities', community.slug, 'edit']"
@@ -242,6 +243,10 @@
         <a [routerLink]="['events']" class="view-all-link">View All Events & Hackathons →</a>
       </header>
       <ol class="schedule-timeline">
+        <app-loading-spinner
+          *ngIf="upcomingScheduleLoading && upcomingSchedule.length === 0"
+          class="section-loader"
+        ></app-loading-spinner>
         <li *ngFor="let item of upcomingSchedule" class="timeline-item">
           <span
             class="timeline-date"
@@ -281,7 +286,10 @@
         <a [routerLink]="['notifications']" class="view-all-link">View All →</a>
       </header>
       <ul class="activity-list">
-        <li *ngFor="let activity of recentActivity" class="activity-item">
+        <li *ngIf="recentActivityLoading" class="section-loader">
+          <app-loading-spinner></app-loading-spinner>
+        </li>
+        <li *ngFor="let activity of recentActivity" class="activity-item" [hidden]="recentActivityLoading">
           <span
             class="activity-avatar"
             [class.members-avatar]="
@@ -355,7 +363,8 @@
       <h3 class="section-heading">
         <fa-icon [icon]="icons.faChartPie" class="com-text-green-500"></fa-icon> Community Snapshot
       </h3>
-      <ul class="snapshot-cards">
+      <app-loading-spinner *ngIf="snapshotLoading && !communitySnapshot" class="section-loader"></app-loading-spinner>
+      <ul class="snapshot-cards" *ngIf="communitySnapshot">
         <li class="snapshot-card">
           <header class="snapshot-card-header">
             <fa-icon [icon]="icons.faUsers" class="snapshot-icon members-icon"></fa-icon>
@@ -474,7 +483,10 @@
         </h3>
       </header>
       <ul class="top-list">
-        <li *ngFor="let page of topPages" class="top-list-item">
+        <li *ngIf="topPagesLoading" class="section-loader">
+          <app-loading-spinner></app-loading-spinner>
+        </li>
+        <li *ngFor="let page of topPages" class="top-list-item" [hidden]="topPagesLoading">
           <a [href]="page.url" target="_blank" rel="noopener noreferrer" class="top-list-name" [title]="page.url">{{
             page.page_title
           }}</a>
@@ -495,7 +507,10 @@
         </h3>
       </header>
       <ul class="top-list">
-        <li *ngFor="let city of topCities" class="top-list-item">
+        <li *ngIf="topCitiesLoading" class="section-loader">
+          <app-loading-spinner></app-loading-spinner>
+        </li>
+        <li *ngFor="let city of topCities" class="top-list-item" [hidden]="topCitiesLoading">
           <span class="top-list-name" [title]="city.city">{{ city.city }}</span>
           <span class="top-list-track">
             <span
