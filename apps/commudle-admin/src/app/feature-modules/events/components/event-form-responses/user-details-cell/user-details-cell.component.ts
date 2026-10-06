@@ -1,6 +1,17 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { faGithub, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { faInfo, faEnvelope, faStickyNote, faXmark, faCheck } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBehance,
+  faDribbble,
+  faFacebook,
+  faGithub,
+  faGitlab,
+  faInstagram,
+  faLinkedin,
+  faMedium,
+  faTwitter,
+  faYoutube,
+} from '@fortawesome/free-brands-svg-icons';
+import { faInfo, faEnvelope, faPen, faStickyNote, faXmark, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { NbDialogService } from '@commudle/theme';
 import { EmailerComponent } from 'apps/commudle-admin/src/app/app-shared-components/emailer/emailer.component';
 import { DataFormEntityResponseGroupsService } from 'apps/commudle-admin/src/app/services/data-form-entity-response-groups.service';
@@ -28,8 +39,16 @@ export class UserDetailsCellComponent implements OnInit, OnChanges {
   faGithub = faGithub;
   faTwitter = faTwitter;
   faLinkedin = faLinkedin;
+  faDribbble = faDribbble;
+  faBehance = faBehance;
+  faMedium = faMedium;
+  faGitlab = faGitlab;
+  faFacebook = faFacebook;
+  faYoutube = faYoutube;
+  faInstagram = faInstagram;
   faInfo = faInfo;
   faEnvelope = faEnvelope;
+  faPen = faPen;
   faStickyNote = faStickyNote;
   EExperienceLevel = EExperienceLevel;
   EDomain = EDomain;
@@ -49,6 +68,7 @@ export class UserDetailsCellComponent implements OnInit, OnChanges {
 
   @Output() updatedRegistrationStatus = new EventEmitter();
   @Output() updateEntryPass = new EventEmitter();
+  @Output() editSpeaker = new EventEmitter<IDataFormEntityResponseGroup>();
   moment = moment;
 
   @ViewChild('confirmDeleteEntryPassDialog') confirmDeleteEntryPassDialog: TemplateRef<any>;

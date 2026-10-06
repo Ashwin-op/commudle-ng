@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ApiRoutesService } from 'apps/shared-services/api-routes.service';
 import { API_ROUTES } from 'apps/shared-services/api-routes.constants';
 import { IDataFormEntityResponseGroup } from 'apps/shared-models/data_form_entity_response_group.model';
@@ -151,6 +152,36 @@ export class DataFormEntityResponseGroupsService {
       this.apiRoutesService.getRoute(API_ROUTES.DATA_FORM_ENTITY_RESPONSE_GROUPS.GET_EVENT_SPEAKERS),
       { params },
     );
+  }
+
+  // Tells whether the email already has a real speaker form submission, or is already a manually added speaker.
+  speakerLookup(
+    eventId: number | string,
+    email: string,
+  ): Observable<{ has_speaker_submission: boolean; already_manually_added?: boolean }> {
+    const params = new HttpParams().set('event_id', eventId).set('email', email);
+    return this.http.get<{ has_speaker_submission: boolean; already_manually_added?: boolean }>(
+      this.apiRoutesService.getRoute(API_ROUTES.DATA_FORM_ENTITY_RESPONSE_GROUPS.SPEAKER_SUBMISSION_LOOKUP),
+      { params },
+    );
+  }
+
+  createManuallyAddedSpeaker(formData: FormData): Observable<IDataFormEntityResponseGroup> {
+    return this.http
+      .post<{ data_form_entity_response_group: IDataFormEntityResponseGroup }>(
+        this.apiRoutesService.getRoute(API_ROUTES.DATA_FORM_ENTITY_RESPONSE_GROUPS.CREATE_MANUALLY_ADDED_SPEAKER),
+        formData,
+      )
+      .pipe(map((data) => data.data_form_entity_response_group));
+  }
+
+  updateManuallyAddedSpeaker(formData: FormData): Observable<IDataFormEntityResponseGroup> {
+    return this.http
+      .put<{ data_form_entity_response_group: IDataFormEntityResponseGroup }>(
+        this.apiRoutesService.getRoute(API_ROUTES.DATA_FORM_ENTITY_RESPONSE_GROUPS.UPDATE_MANUALLY_ADDED_SPEAKER),
+        formData,
+      )
+      .pipe(map((data) => data.data_form_entity_response_group));
   }
 
   updateRSVPStatus(token, rsvpStatus): Observable<any> {

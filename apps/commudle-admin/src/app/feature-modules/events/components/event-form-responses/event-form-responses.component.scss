@@ -31,6 +31,10 @@
       @apply com-m-0;
     }
 
+    .header-title {
+      @apply com-flex com-items-center com-gap-3;
+    }
+
     .header-actions {
       @apply com-flex com-items-center com-gap-2;
 

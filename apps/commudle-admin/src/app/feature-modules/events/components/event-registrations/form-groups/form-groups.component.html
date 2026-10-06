@@ -15,20 +15,24 @@
         *ngFor="let edfeg of eventDataFormEntityGroups | orderBy : ['registration_type.id'] : ['asc']; let i = index"
         [ngStyle]="{ 'background-color': RegistrationTypeBackgroundColor[edfeg.registration_type.name] }"
       >
-        <com-card-body *ngIf="edfeg.data_form_entity" class="edfeg-details">
+        <com-card-body
+          *ngIf="edfeg.data_form_entity || edfeg.manually_added"
+          class="edfeg-details"
+          [class.manual-group]="edfeg.manually_added"
+        >
           <!-- form details -->
           <div class="form-details">
             <p class="name">
               {{ edfeg.name }}
               <fa-icon
-                *ngIf="event.editable"
+                *ngIf="event.editable && !edfeg.manually_added"
                 [icon]="faPenToSquare"
                 (click)="openUpdateEventDataFormGroup(edfeg)"
                 class="clickable"
               ></fa-icon>
             </p>
             <p class="type">Form type: {{ edfeg.registration_type.name | titlecase }}</p>
-            <div *ngIf="event.editable">
+            <div *ngIf="event.editable && !edfeg.manually_added">
               <a
                 [routerLink]="['/fill-form', edfeg.data_form_entity.id]"
                 target="_blank"
@@ -41,7 +45,7 @@
                 <nb-icon icon="external-link"></nb-icon>
               </a>
             </div>
-            <div *ngIf="event.editable" class="send-email">
+            <div *ngIf="event.editable && !edfeg.manually_added" class="send-email">
               <button (click)="openEmailWindow(edfeg)" nbButton outline size="small" class="send-email-btn">
                 <fa-icon [icon]="faEnvelope"></fa-icon>
                 Send By Email
@@ -49,8 +53,8 @@
             </div>
           </div>
 
-          <!-- edfeg status and rsvp toggle -->
-          <div>
+          <!-- edfeg status and rsvp toggle (not applicable to the manually added speakers group, which has no form) -->
+          <div *ngIf="!edfeg.manually_added">
             <!-- edfeg status dropdown -->
             <div class="edfeg-status-dropdown">
               <select (change)="changeVisibility($event, edfeg)" class="com-border-0">
@@ -168,6 +172,9 @@
             </div>
           </div>
 
+          <!-- keeps the responses column aligned with the other group cards -->
+          <div *ngIf="edfeg.manually_added" class="manual-placeholder"></div>
+
           <!-- show Response -->
           <div>
             <div class="show-response">
@@ -175,7 +182,7 @@
                 [queryParams]="{
                   parent_type: 'EventDataFormEntityGroup',
                   parent_id: edfeg.id,
-                  data_form_id: edfeg.data_form_entity.data_form_id
+                  data_form_id: edfeg.data_form_entity?.data_form_id
                 }"
                 [routerLink]="['/admin/communities', community.slug, 'event-dashboard', event.slug, 'form-responses']"
                 nbButton
@@ -229,7 +236,7 @@
           </div>
 
           <!-- payment Details -->
-          <div *ngIf="community.payments_enabled">
+          <div *ngIf="community.payments_enabled && !edfeg.manually_added">
             <div
               *ngIf="edfeg.registration_type.name !== ERegistrationTypeNames.FEEDBACK && event.editable"
               class="paid-ticketing-toggle"
@@ -251,7 +258,7 @@
           </div>
 
           <!-- Delete Button -->
-          <div class="delete-section">
+          <div *ngIf="!edfeg.manually_added" class="delete-section">
             <button
               (click)="deleteEventDataFormEntityGroup(edfeg.id, i)"
               nbButton

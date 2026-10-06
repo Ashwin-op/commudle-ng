@@ -1,3 +1,7 @@
+.agenda-actions {
+  @apply com-flex com-flex-wrap com-gap-2;
+}
+
 .event-locations-list {
   @apply com-m-0 com-mt-4 com-p-0;
   display: flex;

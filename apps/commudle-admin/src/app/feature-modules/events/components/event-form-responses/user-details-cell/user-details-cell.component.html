@@ -6,6 +6,29 @@
         {{ moment(userResponse.created_at).fromNow() }}
       </p>
     </div>
+    @if (userResponse.manually_added && event.editable) {
+    <button
+      (click)="editSpeaker.emit(userResponse)"
+      nbButton
+      outline
+      size="small"
+      shape="semi-round"
+      type="button"
+      class="com-mb-2"
+    >
+      <fa-icon [icon]="faPen"></fa-icon> Edit speaker details
+    </button>
+    } @if (userResponse.manually_added) {
+    <p class="user-domain">
+      <small>
+        Added by @if (userResponse.added_by) {
+        <a [routerLink]="['/users', userResponse.added_by.username]" target="_blank">{{
+          userResponse.added_by.name
+        }}</a>
+        } @else { unknown }
+      </small>
+    </p>
+    }
     <p class="contact-details">
       <small>{{ user.email === 'Not Visible' ? 'Email: Not Visible' : user.email }}</small>
       <small *ngIf="user.phone"> / {{ user.phone === 'Not Visible' ? 'Phone: Not Visible' : user.phone }}</small>
@@ -28,6 +51,32 @@
       </a>
       <a *ngIf="user.personal_website" href="{{ user.personal_website | completeurl }}" target="_blank">
         <fa-icon [icon]="faInfo"></fa-icon>
+      </a>
+      <a *ngIf="user.dribbble" href="{{ user.dribbble | completeurl : 'dribbble' }}" target="_blank" title="Dribbble">
+        <fa-icon [icon]="faDribbble"></fa-icon>
+      </a>
+      <a *ngIf="user.behance" href="{{ user.behance | completeurl : 'behance' }}" target="_blank" title="Behance">
+        <fa-icon [icon]="faBehance"></fa-icon>
+      </a>
+      <a *ngIf="user.medium" href="{{ user.medium | completeurl : 'medium' }}" target="_blank" title="Medium">
+        <fa-icon [icon]="faMedium"></fa-icon>
+      </a>
+      <a *ngIf="user.gitlab" href="{{ user.gitlab | completeurl : 'gitlab' }}" target="_blank" title="GitLab">
+        <fa-icon [icon]="faGitlab"></fa-icon>
+      </a>
+      <a *ngIf="user.facebook" href="{{ user.facebook | completeurl : 'facebook' }}" target="_blank" title="Facebook">
+        <fa-icon [icon]="faFacebook"></fa-icon>
+      </a>
+      <a *ngIf="user.youtube" href="{{ user.youtube | completeurl : 'youtube' }}" target="_blank" title="YouTube">
+        <fa-icon [icon]="faYoutube"></fa-icon>
+      </a>
+      <a
+        *ngIf="user.instagram"
+        href="{{ user.instagram | completeurl : 'instagram' }}"
+        target="_blank"
+        title="Instagram"
+      >
+        <fa-icon [icon]="faInstagram"></fa-icon>
       </a>
     </div>
   </div>
