@@ -1,6 +1,6 @@
 <div class="chats-list-container" [ngClass]="{ 'page-mode': isPersonalChatsPage }">
   <com-card [ngClass]="{ active: showChat }" class="chats-list">
-    <com-card-header class="d-flex align-items-center justify-content-space-between">
+    <com-card-header>
       <h4>Personal Inbox</h4>
       <button *ngIf="!isPersonalChatsPage" (click)="showChat = !showChat" ghost nbButton shape="round" size="small">
         <nb-icon icon="close"></nb-icon>
