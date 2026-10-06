@@ -44,7 +44,21 @@ export interface IAggUserCommunityEngagement {
 
 // Organizer-entered display overrides for a manually added event speaker.
 // Stored on the response group, never written back to the user's profile.
-export interface IManualSpeakerFields {
+export interface ISpeakerSocialLinks {
+  personal_website: string;
+  linkedin: string;
+  github: string;
+  twitter: string;
+  dribbble: string;
+  behance: string;
+  medium: string;
+  gitlab: string;
+  facebook: string;
+  youtube: string;
+  instagram: string;
+}
+
+export interface IManualSpeakerFields extends ISpeakerSocialLinks {
   email: string;
   name: string;
   designation: string;
@@ -53,7 +67,7 @@ export interface IManualSpeakerFields {
 }
 
 // Raw stored overrides (null when unset), as opposed to the display-resolved user fields.
-export interface ISpeakerOverrides {
+export interface ISpeakerOverrides extends Partial<{ [K in keyof ISpeakerSocialLinks]: string | null }> {
   name: string | null;
   designation: string | null;
   company: string | null;

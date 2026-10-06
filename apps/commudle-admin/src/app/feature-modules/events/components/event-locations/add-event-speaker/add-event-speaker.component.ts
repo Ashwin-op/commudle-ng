@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { faFileImage, faUserPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { IUser } from '@commudle/shared-models';
 import { NbDialogRef, NbDialogService } from '@commudle/theme';
@@ -10,12 +10,28 @@ import { DataFormEntityResponseGroupsService } from 'apps/commudle-admin/src/app
 import {
   IDataFormEntityResponseGroup,
   IManualSpeakerFields,
+  ISpeakerSocialLinks,
 } from 'apps/shared-models/data_form_entity_response_group.model';
 import { ICommunity } from 'apps/shared-models/community.model';
 import { IEvent } from 'apps/shared-models/event.model';
 import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
-import { of, Subscription } from 'rxjs';
+import { forkJoin, of, Subscription } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
+// Same links as the user profile; stored as overrides on the speaker, never written to the profile.
+export const SPEAKER_SOCIAL_FIELDS: { key: keyof ISpeakerSocialLinks; label: string }[] = [
+  { key: 'personal_website', label: 'Website' },
+  { key: 'linkedin', label: 'LinkedIn' },
+  { key: 'github', label: 'GitHub' },
+  { key: 'twitter', label: 'Twitter' },
+  { key: 'dribbble', label: 'Dribbble' },
+  { key: 'behance', label: 'Behance' },
+  { key: 'medium', label: 'Medium' },
+  { key: 'gitlab', label: 'GitLab' },
+  { key: 'facebook', label: 'Facebook' },
+  { key: 'youtube', label: 'YouTube' },
+  { key: 'instagram', label: 'Instagram' },
+];
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
@@ -42,9 +58,11 @@ export class AddEventSpeakerComponent implements OnInit, OnDestroy {
   imageUrl = '';
   imageBlob: Blob;
   imageError = '';
+  socialFields = SPEAKER_SOCIAL_FIELDS;
   isDragging = false;
   readonly acceptedImageTypes = ALLOWED_IMAGE_TYPES.join(',');
   profileExist = false;
+  hasSpeakerSubmission = false;
   isSaving = false;
   showDetails = false;
   sendEntryPass = false;
@@ -70,6 +88,19 @@ export class AddEventSpeakerComponent implements OnInit, OnDestroy {
       company: [''],
       about: [''],
     });
+    SPEAKER_SOCIAL_FIELDS.forEach(({ key }) => {
+      this.speakerForm.addControl(key, this.fb.control('', this.urlValidator));
+    });
+  }
+
+  urlValidator(control: AbstractControl) {
+    return control.value && !/^https?:\/\//.test(control.value) ? { invalidUrl: true } : null;
+  }
+
+  private emptyDetails() {
+    const socials = {} as ISpeakerSocialLinks;
+    SPEAKER_SOCIAL_FIELDS.forEach(({ key }) => (socials[key] = ''));
+    return { name: '', designation: '', company: '', about: '', ...socials };
   }
 
   ngOnInit() {
@@ -113,6 +144,7 @@ export class AddEventSpeakerComponent implements OnInit, OnDestroy {
         designation: overrides?.designation ?? speaker.user?.designation ?? '',
         company: overrides?.company ?? '',
         about: overrides?.about ?? '',
+        ...this.socialLinksFrom(overrides),
       },
       { emitEvent: false },
     );
@@ -144,24 +176,34 @@ export class AddEventSpeakerComponent implements OnInit, OnDestroy {
     this.lookedUpEmail = email;
     this.userSuggestions = [];
 
-    this.appUsersService
-      .getProfileByEmail(email)
-      .pipe(catchError(() => of(null)))
-      .subscribe((userData: IUser) => {
-        if (email !== this.lookedUpEmail) {
-          return;
-        }
-        if (userData) {
-          this.prefillFromProfile(userData);
-        }
-        this.showDetails = true;
-      });
+    // The lookup is only a guard and a hint: the popup carries on as usual if it fails.
+    forkJoin({
+      lookup: this.dataFormEntityResponseGroupsService
+        .speakerLookup(this.event.id, email)
+        .pipe(catchError(() => of({ has_speaker_submission: false, already_manually_added: false }))),
+      userData: this.appUsersService.getProfileByEmail(email).pipe(catchError(() => of(null as IUser))),
+    }).subscribe(({ lookup, userData }) => {
+      if (email !== this.lookedUpEmail) {
+        return;
+      }
+      if (lookup?.already_manually_added) {
+        this.toastLogService.warningDialog(`${email} is already added as a speaker for this event.`, 4000);
+        this.dialogRef?.close();
+        return;
+      }
+      this.hasSpeakerSubmission = !!lookup?.has_speaker_submission;
+      if (userData) {
+        this.prefillFromProfile(userData);
+      }
+      this.showDetails = true;
+    });
   }
 
   hideDetails() {
     this.showDetails = false;
     this.profileExist = false;
-    this.speakerForm.patchValue({ name: '', designation: '', company: '', about: '' }, { emitEvent: false });
+    this.hasSpeakerSubmission = false;
+    this.speakerForm.patchValue(this.emptyDetails(), { emitEvent: false });
     this.imageUrl = '';
     this.imageBlob = null;
     this.lookedUpEmail = '';
@@ -178,11 +220,18 @@ export class AddEventSpeakerComponent implements OnInit, OnDestroy {
       designation: userData.designation || '',
       company: userData.company_name || '',
       about: userData.about_me || '',
+      ...this.socialLinksFrom(userData),
     });
 
     this.imageBlob = null;
     const photoUrl = userData.photo?.url;
     this.imageUrl = photoUrl && /^https?:\/\//.test(photoUrl) ? photoUrl : '';
+  }
+
+  private socialLinksFrom(source: Partial<Record<keyof ISpeakerSocialLinks, string | null>>) {
+    const socials = {} as ISpeakerSocialLinks;
+    SPEAKER_SOCIAL_FIELDS.forEach(({ key }) => (socials[key] = source?.[key] || ''));
+    return socials;
   }
 
   onImageChange(event: any) {
@@ -239,8 +288,8 @@ export class AddEventSpeakerComponent implements OnInit, OnDestroy {
     const formData = new FormData();
     if (this.editingSpeaker) {
       formData.append('data_form_entity_response_group_id', String(this.editingSpeaker.id));
-      const { name, designation, company, about } = this.speakerForm.getRawValue() as IManualSpeakerFields;
-      Object.entries({ name, designation, company, about }).forEach(([key, value]) => {
+      const { email, ...details } = this.speakerForm.getRawValue() as IManualSpeakerFields;
+      Object.entries(details).forEach(([key, value]) => {
         formData.append(key, value || '');
       });
     } else {
@@ -296,7 +345,7 @@ export class AddEventSpeakerComponent implements OnInit, OnDestroy {
   }
 
   resetForm() {
-    this.speakerForm.reset({ email: '', name: '', designation: '', company: '', about: '' });
+    this.speakerForm.reset({ email: '', ...this.emptyDetails() });
     this.speakerForm.get('email').enable({ emitEvent: false });
     this.editingSpeaker = null;
     this.sendEntryPass = false;
@@ -307,6 +356,7 @@ export class AddEventSpeakerComponent implements OnInit, OnDestroy {
     this.imageError = '';
     this.isDragging = false;
     this.profileExist = false;
+    this.hasSpeakerSubmission = false;
     this.lookedUpEmail = '';
   }
 }

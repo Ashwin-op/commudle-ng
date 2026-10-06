@@ -154,6 +154,18 @@ export class DataFormEntityResponseGroupsService {
     );
   }
 
+  // Tells whether the email already has a real speaker form submission, or is already a manually added speaker.
+  speakerLookup(
+    eventId: number | string,
+    email: string,
+  ): Observable<{ has_speaker_submission: boolean; already_manually_added?: boolean }> {
+    const params = new HttpParams().set('event_id', eventId).set('email', email);
+    return this.http.get<{ has_speaker_submission: boolean; already_manually_added?: boolean }>(
+      this.apiRoutesService.getRoute(API_ROUTES.DATA_FORM_ENTITY_RESPONSE_GROUPS.SPEAKER_SUBMISSION_LOOKUP),
+      { params },
+    );
+  }
+
   createManuallyAddedSpeaker(formData: FormData): Observable<IDataFormEntityResponseGroup> {
     return this.http
       .post<{ data_form_entity_response_group: IDataFormEntityResponseGroup }>(

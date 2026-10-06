@@ -16,6 +16,14 @@
       }
     }
 
+    .social-fields {
+      @apply com-flex com-flex-col com-gap-2;
+
+      .social-heading {
+        @apply com-text-sm com-font-medium com-text-gray-700;
+      }
+    }
+
     .image-upload {
       @apply com-border com-rounded com-border-dashed com-border-gray-300 com-p-4 com-text-center;
 

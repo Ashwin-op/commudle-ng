@@ -25,6 +25,7 @@ import {
   faCompress,
   faAngleDown,
   faUser,
+  faUserPlus,
   faArrowRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { AppUsersService, ToastrService } from '@commudle/shared-services';
@@ -50,7 +51,10 @@ import {
 import { EventLocationsService } from 'apps/commudle-admin/src/app/services/event-locations.service';
 import { DataFormsService } from 'apps/commudle-admin/src/app/services/data_forms.service';
 import { EmailerComponent } from 'apps/commudle-admin/src/app/app-shared-components/emailer/emailer.component';
-import { AddEventSpeakerComponent } from '../event-locations/add-event-speaker/add-event-speaker.component';
+import {
+  AddEventSpeakerComponent,
+  SPEAKER_SOCIAL_FIELDS,
+} from '../event-locations/add-event-speaker/add-event-speaker.component';
 import { IDataFormEntityResponseGroup } from 'apps/shared-models/data_form_entity_response_group.model';
 import { EemailTypes } from 'apps/shared-models/enums/email_types.enum';
 import {
@@ -142,6 +146,7 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
     faCompress,
     faAngleDown,
     faUser,
+    faUserPlus,
     faArrowRight,
   };
   editMode = false;
@@ -521,16 +526,27 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
     this.speakerDialog?.openEdit(speaker);
   }
 
+  onSpeakerAdded(speaker: IDataFormEntityResponseGroup) {
+    // The create response has only the speaker fields, so fill in what the response rows expect.
+    const row = { notes: [], track_slots: [], data_form_entity_response_values: [], ...speaker };
+    this.rows = [row, ...this.rows];
+    this.tableRows = this.convertRowsToTableFormat(this.rows);
+    this.totalEntries++;
+    this.emptyMessage = '';
+  }
+
   onSpeakerUpdated(updated: IDataFormEntityResponseGroup) {
     const row = this.rows.find((k) => k.id === updated.id);
     if (!row) {
       return;
     }
     // Update in place: the response row carries more than the speaker payload does (notes, track slots, etc.).
-    Object.assign(row.user, {
-      name: updated.user.name,
-      designation: updated.user.designation,
-      photo: updated.user.photo,
+    // Only the fields a speaker edit can change are copied over, social links included.
+    const editable = ['name', 'designation', 'photo', ...SPEAKER_SOCIAL_FIELDS.map((field) => field.key)];
+    editable.forEach((key) => {
+      if (updated.user[key] !== undefined) {
+        row.user[key] = updated.user[key];
+      }
     });
     row.speaker_overrides = updated.speaker_overrides;
   }

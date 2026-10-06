@@ -52,6 +52,32 @@
       <a *ngIf="user.personal_website" href="{{ user.personal_website | completeurl }}" target="_blank">
         <fa-icon [icon]="faInfo"></fa-icon>
       </a>
+      <a *ngIf="user.dribbble" href="{{ user.dribbble | completeurl : 'dribbble' }}" target="_blank" title="Dribbble">
+        <fa-icon [icon]="faDribbble"></fa-icon>
+      </a>
+      <a *ngIf="user.behance" href="{{ user.behance | completeurl : 'behance' }}" target="_blank" title="Behance">
+        <fa-icon [icon]="faBehance"></fa-icon>
+      </a>
+      <a *ngIf="user.medium" href="{{ user.medium | completeurl : 'medium' }}" target="_blank" title="Medium">
+        <fa-icon [icon]="faMedium"></fa-icon>
+      </a>
+      <a *ngIf="user.gitlab" href="{{ user.gitlab | completeurl : 'gitlab' }}" target="_blank" title="GitLab">
+        <fa-icon [icon]="faGitlab"></fa-icon>
+      </a>
+      <a *ngIf="user.facebook" href="{{ user.facebook | completeurl : 'facebook' }}" target="_blank" title="Facebook">
+        <fa-icon [icon]="faFacebook"></fa-icon>
+      </a>
+      <a *ngIf="user.youtube" href="{{ user.youtube | completeurl : 'youtube' }}" target="_blank" title="YouTube">
+        <fa-icon [icon]="faYoutube"></fa-icon>
+      </a>
+      <a
+        *ngIf="user.instagram"
+        href="{{ user.instagram | completeurl : 'instagram' }}"
+        target="_blank"
+        title="Instagram"
+      >
+        <fa-icon [icon]="faInstagram"></fa-icon>
+      </a>
     </div>
   </div>
   <div class="registration-status-details mobile-hidden">

@@ -13,6 +13,11 @@
   >
   <com-card-body>
     <div class="action-button">
+      @if (eventDataFormEntityGroup?.manually_added && event.editable) {
+      <button comButton status="primary" outline shape="semi-round" type="button" (click)="speakerDialog?.openDialog()">
+        <fa-icon [icon]="icons.faUserPlus"></fa-icon> &nbsp; Add Speaker
+      </button>
+      }
       <button nbButton outline status="basic" class="action" shape="semi-round" (click)="actionBottomSheet = true">
         Actions &nbsp; <fa-icon [icon]="icons.faAngleDown"></fa-icon>
       </button>
@@ -109,13 +114,20 @@
 <com-card class="data-table-responses" [class.fullscreen]="isFullscreen">
   <com-card-header>
     @if (eventDataFormEntityGroup) {
-    <p>
-      <a (click)="goBack()" style="cursor: pointer">
-        <fa-icon [icon]="icons.faChevronLeft" class="com-mr-1"></fa-icon>
-      </a>
-      &nbsp;
-      <span>{{ eventDataFormEntityGroup.name }}</span>
-    </p>
+    <div class="header-title">
+      <p>
+        <a (click)="goBack()" style="cursor: pointer">
+          <fa-icon [icon]="icons.faChevronLeft" class="com-mr-1"></fa-icon>
+        </a>
+        &nbsp;
+        <span>{{ eventDataFormEntityGroup.name }}</span>
+      </p>
+      @if (eventDataFormEntityGroup?.manually_added && event.editable) {
+      <button comButton status="primary" outline size="small" type="button" (click)="speakerDialog?.openDialog()">
+        <fa-icon [icon]="icons.faUserPlus"></fa-icon> Add Speaker
+      </button>
+      }
+    </div>
     }
     <div class="header-actions">
       <button
@@ -1380,5 +1392,6 @@
   [event]="event"
   [community]="community"
   [showTrigger]="false"
+  (speakerAdded)="onSpeakerAdded($event)"
   (speakerUpdated)="onSpeakerUpdated($event)"
 ></app-add-event-speaker>

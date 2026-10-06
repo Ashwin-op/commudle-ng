@@ -59,6 +59,11 @@
           <small *ngIf="profileExist && !editingSpeaker" class="com-text-gray-500">
             Existing profile found. Edits below apply to this event only and do not change their profile.
           </small>
+          <commudle-alert
+            *ngIf="hasSpeakerSubmission && !editingSpeaker"
+            [info]="true"
+            message="This person has already submitted a speaker form for this event. Adding them manually creates a separate entry."
+          ></commudle-alert>
           <small *ngIf="!profileExist && !editingSpeaker" class="com-text-gray-500">
             No existing profile found. A new user will be created for this email.
           </small>
@@ -128,6 +133,28 @@
               placeholder="About"
               rows="3"
             ></textarea>
+          </div>
+
+          <div class="social-fields">
+            <label class="social-heading">Social profiles</label>
+            <div class="form-row">
+              <div *ngFor="let field of socialFields" class="form-field">
+                <label [for]="'speaker-' + field.key">{{ field.label }}</label>
+                <input
+                  [id]="'speaker-' + field.key"
+                  [placeholder]="field.label + ' URL'"
+                  type="text"
+                  nbInput
+                  fullWidth
+                  [formControlName]="field.key"
+                />
+                <commudle-alert
+                  *ngIf="speakerForm.get(field.key).hasError('invalidUrl')"
+                  [error]="true"
+                  errorMessage="Enter complete URL (https://...)"
+                ></commudle-alert>
+              </div>
+            </div>
           </div>
         </ng-container>
       </form>
