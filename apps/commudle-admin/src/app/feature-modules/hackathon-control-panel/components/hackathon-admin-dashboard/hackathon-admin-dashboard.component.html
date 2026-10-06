@@ -120,17 +120,19 @@
         <!-- Judges -->
         <a [routerLink]="['speakers']" class="attention-item">
           <fa-icon
-            [icon]="isStatusReady(needsAttention?.judges?.status) ? icons.faCircleCheck : icons.faCircleXmark"
-            [ngClass]="isStatusReady(needsAttention?.judges?.status) ? 'attention-icon-check' : 'attention-icon-cross'"
+            [icon]="needsAttention?.judges?.pending_count === 0 ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="needsAttention?.judges?.pending_count === 0 ? 'attention-icon-check' : 'attention-icon-cross'"
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Judges</span>
             <span class="attention-sub">
-              {{
-                isStatusReady(needsAttention?.judges?.status)
-                  ? 'Judges assigned to rounds'
-                  : 'Assign judges to evaluation rounds'
-              }}
+              <ng-container *ngIf="needsAttention?.judges?.pending_count === 0; else judgesPending">
+                All {{ needsAttention.judges.total_teams_count | number }} teams have judges assigned
+              </ng-container>
+              <ng-template #judgesPending>
+                {{ needsAttention?.judges?.pending_count | number }} of
+                {{ needsAttention?.judges?.total_teams_count | number }} teams still need judges
+              </ng-template>
             </span>
           </div>
           <span class="attention-arrow">›</span>
@@ -139,19 +141,19 @@
         <!-- Round criteria -->
         <a [routerLink]="['rounds']" class="attention-item">
           <fa-icon
-            [icon]="isStatusReady(needsAttention?.round_criteria?.status) ? icons.faCircleCheck : icons.faCircleXmark"
-            [ngClass]="
-              isStatusReady(needsAttention?.round_criteria?.status) ? 'attention-icon-check' : 'attention-icon-cross'
-            "
+            [icon]="needsAttention?.round_criteria?.is_complete ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="needsAttention?.round_criteria?.is_complete ? 'attention-icon-check' : 'attention-icon-cross'"
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Round Criteria</span>
             <span class="attention-sub">
-              {{
-                isStatusReady(needsAttention?.round_criteria?.status)
-                  ? 'Scoring criteria configured'
-                  : 'Set up scoring criteria for rounds'
-              }}
+              <ng-container *ngIf="needsAttention?.round_criteria?.is_complete; else roundCriteriaIncomplete">
+                {{ needsAttention?.round_criteria?.round_name || 'Current round' }} criteria configured
+              </ng-container>
+              <ng-template #roundCriteriaIncomplete>
+                Set up scoring criteria for
+                {{ needsAttention?.round_criteria?.round_name || 'the current round' }}
+              </ng-template>
             </span>
           </div>
           <span class="attention-arrow">›</span>
@@ -182,19 +184,21 @@
         <!-- Sponsor logo -->
         <a [routerLink]="['sponsors']" class="attention-item">
           <fa-icon
-            [icon]="isStatusReady(needsAttention?.sponsor_logo?.status) ? icons.faCircleCheck : icons.faCircleXmark"
+            [icon]="needsAttention?.sponsor_logo?.missing_count === 0 ? icons.faCircleCheck : icons.faCircleXmark"
             [ngClass]="
-              isStatusReady(needsAttention?.sponsor_logo?.status) ? 'attention-icon-check' : 'attention-icon-cross'
+              needsAttention?.sponsor_logo?.missing_count === 0 ? 'attention-icon-check' : 'attention-icon-cross'
             "
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Sponsor Logos</span>
             <span class="attention-sub">
-              {{
-                isStatusReady(needsAttention?.sponsor_logo?.status)
-                  ? 'Sponsor logos added'
-                  : 'Add sponsor logos & details'
-              }}
+              <ng-container *ngIf="needsAttention?.sponsor_logo?.missing_count === 0; else sponsorLogoMissing">
+                All {{ needsAttention?.sponsor_logo?.total_count | number }} sponsors have logos
+              </ng-container>
+              <ng-template #sponsorLogoMissing>
+                {{ needsAttention?.sponsor_logo?.missing_count | number }} of
+                {{ needsAttention?.sponsor_logo?.total_count | number }} sponsors missing a logo
+              </ng-template>
             </span>
           </div>
           <span class="attention-arrow">›</span>
@@ -203,19 +207,26 @@
         <!-- Registration -->
         <a [routerLink]="['basic']" class="attention-item">
           <fa-icon
-            [icon]="isStatusReady(needsAttention?.registration?.status) ? icons.faCircleCheck : icons.faCircleXmark"
+            [icon]="needsAttention?.registration?.registration_closes_at ? icons.faCircleCheck : icons.faCircleXmark"
             [ngClass]="
-              isStatusReady(needsAttention?.registration?.status) ? 'attention-icon-check' : 'attention-icon-cross'
+              needsAttention?.registration?.registration_closes_at ? 'attention-icon-check' : 'attention-icon-cross'
             "
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Registration</span>
             <span class="attention-sub">
-              {{
-                isStatusReady(needsAttention?.registration?.status)
-                  ? 'Registration is set up'
-                  : 'Configure registration settings'
-              }}
+              <ng-container *ngIf="needsAttention?.registration?.registration_closes_at; else registrationNotSet">
+                <ng-container *ngIf="needsAttention.registration.days_remaining > 0">
+                  Registration closes in {{ needsAttention.registration.days_remaining | number }} day{{
+                    needsAttention.registration.days_remaining === 1 ? '' : 's'
+                  }}
+                </ng-container>
+                <ng-container *ngIf="needsAttention.registration.days_remaining <= 0">
+                  Registration closed on
+                  {{ moment(needsAttention.registration.registration_closes_at).format('D MMM, YYYY') }}
+                </ng-container>
+              </ng-container>
+              <ng-template #registrationNotSet>Configure registration settings</ng-template>
             </span>
           </div>
           <span class="attention-arrow">›</span>
@@ -243,23 +254,21 @@
         <!-- Mentor / judge slots -->
         <a [routerLink]="['mentor-slots']" class="attention-item">
           <fa-icon
-            [icon]="
-              isStatusReady(needsAttention?.mentor_judge_slots?.status) ? icons.faCircleCheck : icons.faCircleXmark
-            "
+            [icon]="needsAttention?.mentor_judge_slots?.open_slots > 0 ? icons.faCircleCheck : icons.faCircleXmark"
             [ngClass]="
-              isStatusReady(needsAttention?.mentor_judge_slots?.status)
-                ? 'attention-icon-check'
-                : 'attention-icon-cross'
+              needsAttention?.mentor_judge_slots?.open_slots > 0 ? 'attention-icon-check' : 'attention-icon-cross'
             "
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Mentor &amp; Judge Slots</span>
             <span class="attention-sub">
-              {{
-                isStatusReady(needsAttention?.mentor_judge_slots?.status)
-                  ? 'Slots are open for teams'
-                  : 'Open mentor & judge slots for teams'
-              }}
+              <ng-container *ngIf="needsAttention?.mentor_judge_slots?.open_slots > 0; else noOpenSlots">
+                {{ needsAttention.mentor_judge_slots.open_slots | number }} slot{{
+                  needsAttention.mentor_judge_slots.open_slots === 1 ? '' : 's'
+                }}
+                open for teams
+              </ng-container>
+              <ng-template #noOpenSlots>Open mentor &amp; judge slots for teams</ng-template>
             </span>
           </div>
           <span class="attention-arrow">›</span>

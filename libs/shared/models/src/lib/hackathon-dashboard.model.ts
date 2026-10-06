@@ -15,16 +15,32 @@ export interface IHackathonDashboardStageProgress {
 
 // needs_attention
 export interface IHackathonDashboardNeedsAttention {
-  judges: any;
-  round_criteria: any;
+  judges: {
+    assigned_count: number;
+    total_teams_count: number;
+    pending_count: number;
+  };
+  round_criteria: {
+    round_id: number;
+    round_name: string;
+    is_complete: boolean;
+    missing_fields: string[];
+  };
   tracks: {
     track_count: number;
     problem_statement_count: number;
   };
-  sponsor_logo: any;
-  registration: any;
+  sponsor_logo: {
+    missing_count: number;
+    total_count: number;
+    missing_sponsor_ids: number[];
+  };
+  registration: {
+    registration_closes_at: string | null;
+    days_remaining: number;
+  };
   pending_applications: { count: number };
-  mentor_judge_slots: any;
+  mentor_judge_slots: { open_slots: number };
 }
 
 // snapshot
