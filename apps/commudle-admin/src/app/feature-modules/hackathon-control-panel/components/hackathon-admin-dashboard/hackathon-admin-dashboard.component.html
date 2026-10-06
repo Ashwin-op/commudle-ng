@@ -327,23 +327,22 @@
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faBolt" class="com-text-yellow-500"></fa-icon> Recent Activity
         </h3>
-        <a *ngIf="hasMoreActivity" class="view-all-link" (click)="loadMoreActivity()">View All →</a>
       </div>
-      <ul class="activity-list">
+      <ul class="activity-list" [hidden]="isActivityLoading && recentActivity.length === 0">
         <li *ngFor="let item of recentActivity" class="activity-item">
           <span class="activity-avatar" [ngClass]="activityAvatarClass(item.type)">
             <fa-icon [icon]="activityIcon(item.type)"></fa-icon>
           </span>
           <p class="activity-content com-m-0">
-            <span class="activity-text" [title]="activityActorName(item) + ' ' + activityLabel(item.type)">
+            <span class="activity-text" [title]="activityActorName(item) + ' ' + activityLabel(item.type, item)">
               <ng-container *ngIf="activityActorName(item)">
                 <span class="activity-name-avatar">{{ activityInitial(item) }}</span
                 ><strong>{{ activityActorName(item) }}</strong>
-                {{ activityLabel(item.type) }}
+                {{ activityLabel(item.type, item) }}
               </ng-container>
               <ng-container *ngIf="!activityActorName(item)">
                 <ng-container *ngIf="item.count != null">{{ item.count | number }} </ng-container
-                >{{ activityLabel(item.type) }}
+                >{{ activityLabel(item.type, item) }}
               </ng-container>
             </span>
           </p>
@@ -356,6 +355,13 @@
         </li>
       </ul>
       <app-loading-spinner *ngIf="isActivityLoading" class="section-loader"></app-loading-spinner>
+      <commudle-pagination-compact
+        *ngIf="activityTotal > activityCount"
+        [page]="activityPage"
+        [count]="activityCount"
+        [total]="activityTotal"
+        (pageChange)="onActivityPageChange($event)"
+      ></commudle-pagination-compact>
     </div>
   </section>
 

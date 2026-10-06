@@ -5,6 +5,7 @@ import { HackathonControlPanelRoutes } from './hackathon-control-panel.routing';
 import { HackathonControlPanelDashboardComponent } from './components/hackathon-control-panel-dashboard/hackathon-control-panel-dashboard.component';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
 import { SidebarComponent } from 'apps/shared-components/sidebar/sidebar.component';
+import { PaginationCompactComponent } from 'apps/shared-components/pagination-compact/pagination-compact.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CommudleButtonModule } from '@commudle/commudle-theme';
 import { HackathonControlPanelBasicFormComponent } from './components/hackathon-control-panel-basic-form/hackathon-control-panel-basic-form.component';
@@ -150,6 +151,7 @@ import { HackathonAdminDashboardComponent } from 'apps/commudle-admin/src/app/fe
     //components
     SidebarComponent,
     HelpSectionComponent,
+    PaginationCompactComponent,
     DataTableComponent,
     //nebular
     NbButtonModule,

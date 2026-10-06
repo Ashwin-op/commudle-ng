@@ -342,7 +342,7 @@
       }
 
       .activity-content {
-        @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-line-clamp-2;
+        @apply com-flex com-flex-col com-flex-1 com-min-w-0;
 
         .activity-text {
           @apply com-text-sm com-text-Yankees-Blue com-line-clamp-2 com-cursor-default;
@@ -350,6 +350,10 @@
           strong {
             @apply com-font-medium;
           }
+        }
+
+        .activity-sub {
+          @apply com-text-xs com-text-gray-500 com-line-clamp-1;
         }
       }
 

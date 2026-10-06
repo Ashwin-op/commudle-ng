@@ -261,10 +261,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
         .recentActivity(this.hackathon.id, this.activityPage, this.activityCount)
         .subscribe({
           next: (data) => {
-            this.recentActivity = [
-              ...this.recentActivity,
-              ...this.toArray<IHackathonDashboardActivityItem>(data?.values),
-            ];
+            this.recentActivity = this.toArray<IHackathonDashboardActivityItem>(data?.values);
             this.activityTotal = data?.total || 0;
             this.isActivityLoading = false;
           },
@@ -275,15 +272,8 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  get hasMoreActivity(): boolean {
-    return this.recentActivity.length < this.activityTotal;
-  }
-
-  loadMoreActivity(): void {
-    if (this.isActivityLoading || !this.hasMoreActivity) {
-      return;
-    }
-    this.activityPage += 1;
+  onActivityPageChange(page: number): void {
+    this.activityPage = page;
     this.getRecentActivity();
   }
 
@@ -326,7 +316,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
       case 'project_submitted':
         return 'submitted a project';
       case 'judge_accepted':
-        return 'accepted judging invitation';
+        return 'accepted invitation';
       case 'sponsor_added':
         return 'became a sponsor';
       case 'track_added':
@@ -338,9 +328,35 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  /** The feed items carry the actor under a few possible keys; fall back to no name. */
+  /** Secondary line below the main activity text, showing contextual details. */
+  activitySubtext(item: IHackathonDashboardActivityItem): string {
+    switch (item?.type) {
+      case 'project_submitted':
+        return item?.round_name || '';
+      case 'judge_accepted': {
+        const jt = item?.judge?.judge_type;
+        return jt ? jt.charAt(0).toUpperCase() + jt.slice(1) : '';
+      }
+      case 'registrations_received':
+        return item?.count != null ? `${item.count} registrations` : '';
+      default:
+        return '';
+    }
+  }
+
+  /** The feed items carry the actor under different keys depending on the type. */
   activityActorName(item: IHackathonDashboardActivityItem): string {
-    return item?.user?.name || item?.user_name || item?.name || item?.title || '';
+    return (
+      item?.team?.name ||
+      item?.judge?.name ||
+      item?.sponsor?.name ||
+      item?.track?.name ||
+      item?.user?.name ||
+      item?.user_name ||
+      item?.name ||
+      item?.title ||
+      ''
+    );
   }
 
   activityInitial(item: IHackathonDashboardActivityItem): string {
