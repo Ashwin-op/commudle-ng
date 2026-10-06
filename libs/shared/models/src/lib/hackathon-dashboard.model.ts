@@ -49,11 +49,22 @@ export interface IHackathonDashboardCountWithToday {
   today: number;
 }
 
+export interface IHackathonDashboardApplicationsCount {
+  total: number;
+  today: number;
+}
+
+export interface IHackathonDashboardJudgesSnapshot {
+  assigned_count: number;
+  total_teams_count: number;
+  pending_count: number;
+}
+
 export interface IHackathonDashboardSnapshot {
-  applications: IHackathonDashboardCountWithToday;
+  applications: IHackathonDashboardApplicationsCount;
   teams: IHackathonDashboardCountWithToday;
   projects_submitted: IHackathonDashboardCountWithToday;
-  judges: any;
+  judges: IHackathonDashboardJudgesSnapshot;
   sponsors: { count: number };
   prize_pool: Record<string, number> | null;
 }

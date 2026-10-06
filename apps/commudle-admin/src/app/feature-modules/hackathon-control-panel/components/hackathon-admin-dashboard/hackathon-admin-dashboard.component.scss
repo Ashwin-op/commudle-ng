@@ -289,11 +289,15 @@
       }
 
       .snapshot-stat-label {
-        @apply com-text-xs com-text-Cadet-Grey com-font-medium;
+        @apply com-text-xs com-text-Cadet-Grey com-font-medium com-h-8;
       }
 
       .snapshot-stat-value {
         @apply com-text-2xl com-font-medium com-text-Yankees-Blue;
+      }
+
+      .snapshot-stat-sub {
+        @apply com-text-xs com-text-orange-500 com-font-medium;
       }
     }
   }

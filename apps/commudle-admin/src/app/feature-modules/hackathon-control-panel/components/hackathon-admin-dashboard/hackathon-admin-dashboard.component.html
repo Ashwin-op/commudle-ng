@@ -288,7 +288,7 @@
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faUsers" class="snapshot-stat-icon registrations-icon"></fa-icon>
           <span class="snapshot-stat-label">Applications</span>
-          <span class="snapshot-stat-value">{{ snapshot?.applications?.count ?? 0 | number }}</span>
+          <span class="snapshot-stat-value">{{ snapshot?.applications?.total ?? 0 | number }}</span>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faUserGroup" class="snapshot-stat-icon team-icon"></fa-icon>
@@ -302,8 +302,11 @@
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faMicrophone" class="snapshot-stat-icon judges-icon"></fa-icon>
-          <span class="snapshot-stat-label">Judges</span>
-          <span class="snapshot-stat-value">{{ snapshot?.judges?.count ?? snapshot?.judges ?? 0 | number }}</span>
+          <span class="snapshot-stat-label">Judges Assigned</span>
+          <span class="snapshot-stat-value">{{ snapshot?.judges?.assigned_count ?? 0 | number }}</span>
+          <span class="snapshot-stat-sub" *ngIf="snapshot?.judges?.pending_count">
+            {{ snapshot.judges.pending_count | number }} pending
+          </span>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faHandshakeSimple" class="snapshot-stat-icon sponsors-icon"></fa-icon>
@@ -313,7 +316,7 @@
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faTrophy" class="snapshot-stat-icon prize-icon"></fa-icon>
           <span class="snapshot-stat-label">Prize Pool</span>
-          <span class="snapshot-stat-value">{{ snapshot?.prize_pool || '–' }}</span>
+          <span class="snapshot-stat-value">{{ prizePoolDisplay || '–' }}</span>
         </div>
       </div>
     </div>
