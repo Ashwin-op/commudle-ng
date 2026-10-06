@@ -133,7 +133,15 @@
   @apply com-w-full com-gap-4 com-flex;
 }
 
-.confirm-delete-entry-pass,
+.confirm-delete-entry-pass {
+  @apply com-max-h-[90dvh];
+
+  com-card-header,
+  com-card-footer {
+    @apply com-flex com-justify-between com-items-center com-gap-3;
+  }
+}
+
 .confirm-delete-note {
   nb-card-header,
   nb-card-footer {
