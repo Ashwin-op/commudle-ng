@@ -23,6 +23,7 @@ import { IHackathon } from 'apps/shared-models/hackathon.model';
 import { IHackathonResponseGroup } from 'apps/shared-models/hackathon-response-group.model';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
 import { Subject, Subscription, takeUntil } from 'rxjs';
+import { getAccessibleTeams } from '../../utils/hackathon-team-access';
 @Component({
   selector: 'commudle-public-hackathon-user-dashboard',
   templateUrl: './public-hackathon-user-dashboard.component.html',
@@ -42,6 +43,7 @@ export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy 
   hackathon: IHackathon;
   community: ICommunity;
   subscriptions: Subscription[] = [];
+  allTeams: IHackathonTeam[];
   userTeamDetails: IHackathonTeam[];
   hackathonTracks: IHackathonTrack[] = [];
   hrgId: number;
@@ -127,7 +129,8 @@ export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy 
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: IHackathonTeam[]) => {
         if (data) {
-          this.userTeamDetails = data;
+          this.allTeams = data;
+          this.userTeamDetails = getAccessibleTeams(data, this.currentUser?.id);
           this.categorizeTeams();
           this.syncSelectedTeam();
         }
@@ -135,9 +138,9 @@ export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy 
   }
 
   categorizeTeams() {
-    if (!this.userTeamDetails || !this.currentUser) return;
-    this.ownTeams = this.userTeamDetails.filter((team) => team.user_id === this.currentUser.id);
-    this.pendingInvites = this.userTeamDetails.filter((team) => {
+    if (!this.allTeams || !this.currentUser) return;
+    this.ownTeams = this.allTeams.filter((team) => team.user_id === this.currentUser.id);
+    this.pendingInvites = this.allTeams.filter((team) => {
       const myHur = team.hackathon_user_responses?.find((hur) => hur.user_id === this.currentUser.id);
       return myHur && myHur.invite_status === EInvitationStatus.INVITED && team.user_id !== this.currentUser.id;
     });

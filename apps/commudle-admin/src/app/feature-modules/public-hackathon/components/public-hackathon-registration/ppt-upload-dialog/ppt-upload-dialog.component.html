@@ -11,6 +11,16 @@
 
   <com-card-body>
     <form [formGroup]="uploadForm">
+      <!-- File or link notice -->
+      <commudle-alert
+        [info]="true"
+        [message]="
+          existingSubmission
+            ? 'Submit either a file or a link, not both. Switching tabs and submitting will replace your current submission.'
+            : 'Submit either a file or a link, not both.'
+        "
+      ></commudle-alert>
+
       <!-- Mode Toggle -->
       <div class="mode-toggle">
         <button

@@ -39,6 +39,8 @@ export class PublicHackathonTeammateFormComponent implements OnInit, AfterViewIn
   @Output() submitTeammateDetailsEvent = new EventEmitter<any>();
   @Output() previousButtonEvent = new EventEmitter<any>();
   showEmailError = false;
+  // rows added by the user in this session; these stay editable even in viewMode
+  private newTeammateGroups = new WeakSet<AbstractControl>();
   teammateForm: FormGroup;
   currentUser: ICurrentUser;
 
@@ -105,7 +107,7 @@ export class PublicHackathonTeammateFormComponent implements OnInit, AfterViewIn
     return null;
   }
 
-  addTeammate(email = '', tshirt_size = '') {
+  addTeammate(email = '', tshirt_size = '', isNew = false) {
     let teammateGroup;
     if (this.hackathonResponseGroup.user_details.tshirt_size) {
       teammateGroup = this.fb.group({
@@ -118,6 +120,7 @@ export class PublicHackathonTeammateFormComponent implements OnInit, AfterViewIn
       });
     }
 
+    if (isNew) this.newTeammateGroups.add(teammateGroup);
     this.teammatesArray.push(teammateGroup);
 
     setTimeout(() => {
@@ -135,6 +138,10 @@ export class PublicHackathonTeammateFormComponent implements OnInit, AfterViewIn
 
   get teammatesArray() {
     return this.teammateForm.get('teammates') as FormArray;
+  }
+
+  isNewTeammate(index: number): boolean {
+    return this.newTeammateGroups.has(this.teammatesArray.at(index));
   }
 
   getEmailControl(index: number) {
