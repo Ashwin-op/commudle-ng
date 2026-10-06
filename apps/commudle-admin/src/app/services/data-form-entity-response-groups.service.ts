@@ -154,14 +154,6 @@ export class DataFormEntityResponseGroupsService {
     );
   }
 
-  getManuallyAddedSpeakers(eventId: number | string): Observable<IDataFormEntityResponseGroups> {
-    const params = new HttpParams().set('event_id', eventId);
-    return this.http.get<IDataFormEntityResponseGroups>(
-      this.apiRoutesService.getRoute(API_ROUTES.DATA_FORM_ENTITY_RESPONSE_GROUPS.GET_MANUALLY_ADDED_SPEAKERS),
-      { params },
-    );
-  }
-
   createManuallyAddedSpeaker(formData: FormData): Observable<IDataFormEntityResponseGroup> {
     return this.http
       .post<{ data_form_entity_response_group: IDataFormEntityResponseGroup }>(
@@ -176,15 +168,6 @@ export class DataFormEntityResponseGroupsService {
       .put<{ data_form_entity_response_group: IDataFormEntityResponseGroup }>(
         this.apiRoutesService.getRoute(API_ROUTES.DATA_FORM_ENTITY_RESPONSE_GROUPS.UPDATE_MANUALLY_ADDED_SPEAKER),
         formData,
-      )
-      .pipe(map((data) => data.data_form_entity_response_group));
-  }
-
-  cancelManuallyAddedSpeaker(dataFormEntityResponseGroupId: number): Observable<IDataFormEntityResponseGroup> {
-    return this.http
-      .put<{ data_form_entity_response_group: IDataFormEntityResponseGroup }>(
-        this.apiRoutesService.getRoute(API_ROUTES.DATA_FORM_ENTITY_RESPONSE_GROUPS.CANCEL_MANUALLY_ADDED_SPEAKER),
-        { data_form_entity_response_group_id: dataFormEntityResponseGroupId },
       )
       .pipe(map((data) => data.data_form_entity_response_group));
   }

@@ -15,7 +15,11 @@
         *ngFor="let edfeg of eventDataFormEntityGroups | orderBy : ['registration_type.id'] : ['asc']; let i = index"
         [ngStyle]="{ 'background-color': RegistrationTypeBackgroundColor[edfeg.registration_type.name] }"
       >
-        <com-card-body *ngIf="edfeg.data_form_entity || edfeg.manually_added" class="edfeg-details">
+        <com-card-body
+          *ngIf="edfeg.data_form_entity || edfeg.manually_added"
+          class="edfeg-details"
+          [class.manual-group]="edfeg.manually_added"
+        >
           <!-- form details -->
           <div class="form-details">
             <p class="name">
@@ -167,6 +171,9 @@
               </div>
             </div>
           </div>
+
+          <!-- keeps the responses column aligned with the other group cards -->
+          <div *ngIf="edfeg.manually_added" class="manual-placeholder"></div>
 
           <!-- show Response -->
           <div>

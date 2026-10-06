@@ -1,13 +1,20 @@
-<button *ngIf="showTrigger" (click)="openDialog()" nbButton status="primary" outline title="Add Speaker">
+<button *ngIf="showTrigger" (click)="openDialog()" comButton status="primary" outline title="Manually Add Speaker">
   <fa-icon [icon]="icons.faUserPlus"></fa-icon>
-  Add Speaker
+  Manually Add Speaker
+  <app-badge
+    [text]="'New'"
+    [fontSize]="'xx-small'"
+    [borderRadius]="'round'"
+    [color]="'com-bg-primary-500'"
+    [fontColor]="'com-text-tWhite'"
+  ></app-badge>
 </button>
 
 <ng-template #speakerFormTemplate let-ref="dialogRef">
   <com-card class="speaker-form">
     <com-card-header class="actions">
       <span>{{ editingSpeaker ? 'Edit Speaker' : 'Add Speaker' }}</span>
-      <button (click)="ref.close()" ghost nbButton shape="round" size="small" type="button">
+      <button (click)="ref.close()" ghost comButton shape="round" size="small" type="button">
         <fa-icon [icon]="icons.faXmark"></fa-icon>
       </button>
     </com-card-header>
@@ -41,7 +48,7 @@
           [disabled]="speakerForm.controls['email'].invalid"
           (click)="lookupProfile()"
           class="com-w-max"
-          nbButton
+          comButton
           status="primary"
           type="button"
         >
@@ -74,14 +81,14 @@
                 #fileInput
               />
               <p class="com-m-0 com-mb-2 com-text-sm com-text-gray-500">Drag and drop a photo here, or</p>
-              <button nbButton size="small" outline (click)="fileInput.click()" type="button">
+              <button comButton size="small" outline (click)="fileInput.click()" type="button">
                 <fa-icon [icon]="icons.faFileImage"></fa-icon> Upload
               </button>
               <p class="com-m-0 com-mt-2 com-text-xs com-text-gray-500">JPEG, JPG, PNG or WebP, up to 5 MB</p>
             </div>
             <div *ngIf="imageUrl" class="image-preview">
               <img [src]="imageUrl" alt="Speaker photo" />
-              <button nbButton size="small" status="danger" outline (click)="removeImage()" type="button">
+              <button comButton size="small" status="danger" outline (click)="removeImage()" type="button">
                 Replace
               </button>
             </div>
@@ -134,7 +141,7 @@
         [disabled]="speakerForm.invalid || isSaving"
         (click)="save()"
         type="submit"
-        nbButton
+        comButton
         fullWidth
         status="primary"
       >

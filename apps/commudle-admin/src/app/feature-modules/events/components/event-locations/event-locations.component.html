@@ -5,21 +5,11 @@
       Add Location
     </button>
     <app-add-event-speaker
-      #speakerDialog
       [event]="event"
       [community]="community"
       (speakerAdded)="onSpeakerAdded($event)"
-      (speakerUpdated)="onSpeakerUpdated($event)"
     ></app-add-event-speaker>
   </div>
-  <app-manually-added-speakers
-    *ngIf="event.editable"
-    [speakers]="manuallyAddedSpeakers"
-    [event]="event"
-    [community]="community"
-    (editSpeaker)="speakerDialog?.openEdit($event)"
-    (speakerCancelled)="onSpeakerUpdated($event)"
-  ></app-manually-added-speakers>
   <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
   <div *ngIf="eventDatesLocation">
     <com-card *ngIf="eventDatesLocation.length > 0" class="event-locations-list">
