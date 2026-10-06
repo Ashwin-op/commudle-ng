@@ -12,7 +12,7 @@ import {
   IHackathonDashboardStage,
   IHackathonDashboardStageProgress,
 } from '@commudle/shared-models';
-import { SeoService } from '@commudle/shared-services';
+import { SeoService, countries_details } from '@commudle/shared-services';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
 import {
@@ -52,6 +52,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
   community: ICommunity;
   subscriptions: Subscription[] = [];
   moment = moment;
+  countryDetails = countries_details;
 
   icons = {
     faCalendarDay,
@@ -178,6 +179,16 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
       return '';
     }
     return moment(this.hackathon.end_date).format('D MMM, YYYY');
+  }
+
+  private toArray<T>(value: unknown): T[] {
+    if (Array.isArray(value)) {
+      return value as T[];
+    }
+    if (value && typeof value === 'object') {
+      return Object.values(value as Record<string, T>);
+    }
+    return [];
   }
 
   isStatusReady(status: string | undefined): boolean {
@@ -379,6 +390,23 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     }
     const start = typeof session === 'string' ? session : session.start_time || session.scheduled_at;
     return start ? moment(start).format('D MMM, h:mm A') : '';
+  }
+
+  get prizePoolDisplay(): string {
+    const pool = this.snapshot?.prize_pool;
+    if (!pool || typeof pool !== 'object') {
+      return typeof pool === 'string' || typeof pool === 'number' ? `${pool}` : '';
+    }
+    const parts = Object.keys(pool)
+      .filter((currency) => pool[currency] != null)
+      .map((currency) => {
+        // Resolve the symbol from the shared countries dataset, same lookup other
+        // hackathon prize components use; fall back to the raw currency code.
+        const symbol = this.countryDetails.find((detail) => detail.currency === currency)?.symbol || currency;
+        const amount = Number(pool[currency]).toLocaleString('en-IN');
+        return `${symbol}${amount}`;
+      });
+    return parts.join(' + ');
   }
 
   copyTextToClipboard(): void {

@@ -39,7 +39,7 @@ export interface IHackathonDashboardSnapshot {
   projects_submitted: IHackathonDashboardCountWithToday;
   judges: any;
   sponsors: { count: number };
-  prize_pool: any;
+  prize_pool: Record<string, number> | null;
 }
 
 // recent_activity

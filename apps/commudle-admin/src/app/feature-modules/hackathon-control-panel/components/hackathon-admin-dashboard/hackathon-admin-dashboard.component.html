@@ -1,13 +1,12 @@
 <div class="hackathon-overview" *ngIf="hackathon">
   <!-- Row 1: Hackathon Hero -->
   <section class="hackathon-hero">
-    <div class="hero-banner" [ngClass]="{ 'no-image': !hackathon.banner_image?.url }">
-      <img *ngIf="hackathon.banner_image?.url" [src]="hackathon.banner_image.url" [alt]="hackathon.name" />
-      <img
-        *ngIf="!hackathon.banner_image?.url"
-        src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400&h=300&fit=crop"
-        alt="Hackathon placeholder"
-      />
+    <div class="hero-banner">
+      <commudle-banner-image
+        [headerImagePath]="hackathon.banner_image?.url"
+        [name]="hackathon.name"
+        aspectRatio="11/10"
+      ></commudle-banner-image>
     </div>
     <div class="hero-content">
       <div class="hero-top-row">
@@ -54,12 +53,12 @@
               <nb-icon icon="edit-outline"></nb-icon> &nbsp;Edit Hackathon
             </a>
           </div>
-          <div class="hero-prize-pool" *ngIf="snapshot?.prize_pool || hackathon.total_prize_amount">
+          <div class="hero-prize-pool" *ngIf="prizePoolDisplay">
             <div class="prize-icon">
               <fa-icon [icon]="icons.faTrophy"></fa-icon>
             </div>
             <div class="prize-info">
-              <span class="prize-value">{{ snapshot?.prize_pool || hackathon.total_prize_amount }}</span>
+              <span class="prize-value">{{ prizePoolDisplay }}</span>
               <span class="prize-label">Total Prize Pool</span>
             </div>
           </div>
