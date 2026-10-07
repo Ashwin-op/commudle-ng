@@ -12,12 +12,6 @@ p {
       @apply com-text-base com-font-semibold com-line-clamp-1;
     }
 
-    .tags {
-      nb-tag {
-        @apply com-text-sm com-font-medium com-border-none;
-      }
-    }
-
     .location {
       @apply com-text-sm;
     }

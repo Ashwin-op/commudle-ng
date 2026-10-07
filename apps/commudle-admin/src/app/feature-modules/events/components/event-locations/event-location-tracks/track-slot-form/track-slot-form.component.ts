@@ -12,10 +12,10 @@ import { ICommunity, IEvent } from '@commudle/shared-models';
 import { DataFormEntityResponseGroupsService } from 'apps/commudle-admin/src/app/services/data-form-entity-response-groups.service';
 
 @Component({
-    selector: 'commudle-track-slot-form',
-    templateUrl: './track-slot-form.component.html',
-    styleUrls: ['./track-slot-form.component.scss'],
-    standalone: false
+  selector: 'commudle-track-slot-form',
+  templateUrl: './track-slot-form.component.html',
+  styleUrls: ['./track-slot-form.component.scss'],
+  standalone: false,
 })
 export class TrackSlotFormComponent implements OnInit {
   @Input() operationType: 'create' | 'edit';
@@ -188,7 +188,7 @@ export class TrackSlotFormComponent implements OnInit {
 
   sortTrackSlots(track_slots) {
     const sortedTrackSlots = _.sortBy(track_slots, (slot) => {
-      // @ts-ignore
+      // @ts-expect-error moment constructor typing rejects this legacy call
       return new moment(slot.start_time);
     });
     return sortedTrackSlots;
