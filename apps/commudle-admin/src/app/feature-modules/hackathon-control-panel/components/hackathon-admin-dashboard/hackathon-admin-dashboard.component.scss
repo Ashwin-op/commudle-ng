@@ -396,12 +396,20 @@
         @apply com-border-primary-300 com-bg-blue-50;
       }
 
+      &.completed {
+        @apply com-border-green-200 com-bg-green-50;
+      }
+
       .progress-card-label {
         @apply com-text-xs com-font-medium com-text-Cadet-Grey;
       }
 
       .progress-card-value {
         @apply com-text-sm com-font-medium com-text-Yankees-Blue com-whitespace-nowrap;
+      }
+
+      .progress-card-status {
+        @apply com-text-xs com-text-Cadet-Grey com-whitespace-nowrap;
       }
     }
 

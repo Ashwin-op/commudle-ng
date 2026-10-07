@@ -381,9 +381,13 @@
       ></app-loading-spinner>
       <div class="progress-cards" *ngIf="!isStageProgressLoading || stageProgress">
         <ng-container *ngFor="let stage of stageProgress?.stages; let last = last">
-          <div class="progress-card" [ngClass]="{ active: isStatusLive(stage.status) }">
+          <div
+            class="progress-card"
+            [ngClass]="{ active: isStatusLive(stage.status), completed: isStatusReady(stage.status) }"
+          >
             <span class="progress-card-label">{{ stage.name || (stage.type | titlecase) }}</span>
-            <span class="progress-card-value">{{ stage.status | capitalizeAndRemoveUnderscore }}</span>
+            <span class="progress-card-value" *ngIf="stageMetric(stage)">{{ stageMetric(stage) }}</span>
+            <span class="progress-card-status">{{ stage.status | capitalizeAndRemoveUnderscore }}</span>
           </div>
           <span class="progress-arrow" *ngIf="!last">→</span>
         </ng-container>

@@ -5,6 +5,17 @@ export interface IHackathonDashboardStage {
   type: EHackathonDashboardStageType;
   name: string;
   status: string;
+  starts_at?: string;
+  ends_at?: string;
+  // registration + round stages
+  teams_count?: number;
+  // registration stage
+  individuals_count?: number;
+  // round stages
+  round_id?: number;
+  submissions_count?: number;
+  // winners stage
+  winners_announced_count?: number;
   [key: string]: any;
 }
 
