@@ -26,3 +26,9 @@
     @apply com-bg-[#F6F9FC] hover:com-bg-[#eef2f7]/50 com-cursor-pointer com-border-0 com-w-full;
   }
 }
+.cancel-dialog-box {
+  @apply com-flex;
+  com-card-footer {
+    @apply com-flex com-justify-between;
+  }
+}
