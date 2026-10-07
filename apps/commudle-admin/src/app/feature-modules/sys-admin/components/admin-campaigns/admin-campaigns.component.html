@@ -1,5 +1,23 @@
 <com-card>
   <com-card-body>
-    <nb-route-tabset [tabs]="tabs" [activeLinkOptions]="tabActiveLinkOptions"></nb-route-tabset>
+    <div class="route-tabs">
+      <a
+        routerLink="./"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="tabActiveLinkOptions"
+        [queryParamsHandling]="'preserve'"
+      >
+        <div class="route-tab-option">
+          <span>All Campaigns</span>
+        </div>
+      </a>
+      <a routerLink="purchase-orders" routerLinkActive="active" [routerLinkActiveOptions]="tabActiveLinkOptions">
+        <div class="route-tab-option">
+          <span>Purchase Orders</span>
+        </div>
+      </a>
+    </div>
+
+    <router-outlet></router-outlet>
   </com-card-body>
 </com-card>
