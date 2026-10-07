@@ -20,7 +20,7 @@
             <p class="title">
               {{ badge.name }}
               ({{ badge.id }})
-              <app-tag [tags]="[badge.badge_type]" [size]="'tiny'"></app-tag>
+              <app-tag [tags]="[badge.badge_type]" [size]="'tiny'"> </app-tag>
             </p>
             <div *ngIf="badge.image" class="badge-image">
               <img alt="{{ badge.name }}" src="{{ badge.image.url }}" title="{{ badge.name }}" />
