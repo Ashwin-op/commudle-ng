@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ICommunity } from '@commudle/shared-models';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
 import { AuthService, SeoService } from '@commudle/shared-services';
@@ -104,7 +104,6 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private seoService: SeoService,
-    private router: Router,
     private dashboardCommunitiesService: DashboardCommunitiesService,
   ) {}
 
@@ -160,10 +159,6 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
       return { period: 'evening', emoji: '🌆' };
     }
     return { period: 'night', emoji: '🌙' };
-  }
-
-  navigateTo(route: string[]): void {
-    this.router.navigate(route, { relativeTo: this.activatedRoute });
   }
 
   loadOrganizerBriefing(): void {
@@ -300,7 +295,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.dashboardCommunitiesService.topPages(this.community.slug, 'current').subscribe({
         next: (data) => {
-          this.topPages = (Array.isArray(data) ? data : []).slice(0, this.topListLimit);
+          this.topPages = Array.isArray(data) ? data : [];
           this.topPagesLoading = false;
         },
         error: () => {
@@ -325,8 +320,6 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  private readonly topListLimit = 10;
-
   /** Largest view/member count across top pages / cities, for proportional bar widths. */
   get topPagesMax(): number {
     return Math.max(...this.topPages.map((p) => p.views || 0), 1);
@@ -346,22 +339,6 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   onRecentActivityPageChange(page: number): void {
     this.recentActivityPage = page;
     this.loadRecentActivity();
-  }
-
-  // Maps an activity type to its avatar icon; falls back to the bolt icon.
-  activityIcon(type: string) {
-    switch (type) {
-      case 'new_member':
-        return this.icons.faUsers;
-      case 'channel_message':
-        return this.icons.faHashtag;
-      case 'forum_message':
-        return this.icons.faMessage;
-      case 'survey_response_milestone':
-        return this.icons.faChartPie;
-      default:
-        return this.icons.faBolt;
-    }
   }
 
   setQuickActions(): void {

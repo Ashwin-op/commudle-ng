@@ -88,149 +88,154 @@
       </header>
       <nav class="attention-list">
         <app-loading-spinner *ngIf="needsAttentionLoading" class="section-loader"></app-loading-spinner>
-        <a
-          *ngIf="needsAttention?.profile && !needsAttention.profile.is_complete"
-          [routerLink]="['/admin', 'communities', community.slug, 'edit']"
-          class="attention-item"
-        >
-          <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
-          <p class="attention-content">
-            <span class="attention-title">Community profile incomplete</span>
-            <span *ngIf="needsAttention.profile.missing_fields?.length; else genericProfileHint" class="attention-sub">
-              Add
-              <ng-container *ngFor="let field of needsAttention.profile.missing_fields; let last = last"
-                >{{ field | capitalizeAndRemoveUnderscore }}<span *ngIf="!last">,&nbsp;</span></ng-container
+        <ng-container *ngIf="!needsAttentionLoading">
+          <a
+            *ngIf="needsAttention?.profile && !needsAttention.profile.is_complete"
+            [routerLink]="['/admin', 'communities', community.slug, 'edit']"
+            class="attention-item"
+          >
+            <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
+            <p class="attention-content">
+              <span class="attention-title">Community profile incomplete</span>
+              <span
+                *ngIf="needsAttention.profile.missing_fields?.length; else genericProfileHint"
+                class="attention-sub"
               >
-            </span>
-            <ng-template #genericProfileHint>
-              <span class="attention-sub">Add a few details</span>
-            </ng-template>
-          </p>
-          <span class="attention-action">Complete Now</span>
-          <span class="attention-arrow">›</span>
-        </a>
-        <a
-          *ngFor="let request of needsAttention?.collaboration_requests?.values"
-          [routerLink]="
-            request.type === 'hackathon'
-              ? ['/admin/communities', community.slug, 'hackathon-dashboard', request.slug, 'collaboration']
-              : ['/admin/communities', community.slug, 'events', 'event-dashboard', request.slug, 'collaborations']
-          "
-          class="attention-item"
-        >
-          <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
-          <p class="attention-content">
-            <span class="attention-title">
-              {{ request.direction === 'incoming' ? 'Collaboration request from' : 'Collaboration request to' }}
-              {{ request.requester }}
-            </span>
-            <span class="attention-sub">
-              {{ request.type | capitalizeAndRemoveUnderscore }} ·
-              {{ request.direction === 'incoming' ? 'Review and respond' : 'Awaiting response' }}
-            </span>
-          </p>
-          <span class="attention-arrow">›</span>
-        </a>
-        <commudle-pagination-compact
-          *ngIf="needsAttention?.collaboration_requests?.total > needsAttention?.collaboration_requests?.count"
-          [page]="collaborationRequestsPage"
-          [count]="needsAttention.collaboration_requests.count"
-          [total]="needsAttention.collaboration_requests.total"
-          (pageChange)="onCollaborationRequestsPageChange($event)"
-        ></commudle-pagination-compact>
+                Add
+                <ng-container *ngFor="let field of needsAttention.profile.missing_fields; let last = last"
+                  >{{ field | capitalizeAndRemoveUnderscore }}<span *ngIf="!last">,&nbsp;</span></ng-container
+                >
+              </span>
+              <ng-template #genericProfileHint>
+                <span class="attention-sub">Add a few details</span>
+              </ng-template>
+            </p>
+            <span class="attention-action">Complete Now</span>
+            <span class="attention-arrow">›</span>
+          </a>
+          <a
+            *ngFor="let request of needsAttention?.collaboration_requests?.values"
+            [routerLink]="
+              request.type === 'hackathon'
+                ? ['/admin/communities', community.slug, 'hackathon-dashboard', request.slug, 'collaboration']
+                : ['/admin/communities', community.slug, 'events', 'event-dashboard', request.slug, 'collaborations']
+            "
+            class="attention-item"
+          >
+            <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
+            <p class="attention-content">
+              <span class="attention-title">
+                {{ request.direction === 'incoming' ? 'Collaboration request from' : 'Collaboration request to' }}
+                {{ request.requester }}
+              </span>
+              <span class="attention-sub">
+                {{ request.type | capitalizeAndRemoveUnderscore }} ·
+                {{ request.direction === 'incoming' ? 'Review and respond' : 'Awaiting response' }}
+              </span>
+            </p>
+            <span class="attention-arrow">›</span>
+          </a>
+          <commudle-pagination-compact
+            *ngIf="needsAttention?.collaboration_requests?.total > needsAttention?.collaboration_requests?.count"
+            [page]="collaborationRequestsPage"
+            [count]="needsAttention.collaboration_requests.count"
+            [total]="needsAttention.collaboration_requests.total"
+            (pageChange)="onCollaborationRequestsPageChange($event)"
+          ></commudle-pagination-compact>
 
-        <a
-          *ngFor="let newsletter of needsAttention?.newsletters?.values"
-          [routerLink]="['/admin/communities', community.slug, 'newsletters', 'edit', newsletter.slug]"
-          class="attention-item"
-        >
-          <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
-          <p class="attention-content">
-            <span class="attention-title">{{ newsletter.title }}</span>
-            <span class="attention-sub">
-              {{ newsletter.status | capitalizeAndRemoveUnderscore }} newsletter · Engage your members
-            </span>
-          </p>
-          <span class="attention-arrow">›</span>
-        </a>
-        <commudle-pagination-compact
-          *ngIf="needsAttention?.newsletters?.total > needsAttention?.newsletters?.count"
-          [page]="newslettersPage"
-          [count]="needsAttention.newsletters.count"
-          [total]="needsAttention.newsletters.total"
-          (pageChange)="onNewslettersPageChange($event)"
-        ></commudle-pagination-compact>
+          <a
+            *ngFor="let newsletter of needsAttention?.newsletters?.values"
+            [routerLink]="['/admin/communities', community.slug, 'newsletters', 'edit', newsletter.slug]"
+            class="attention-item"
+          >
+            <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
+            <p class="attention-content">
+              <span class="attention-title">{{ newsletter.title }}</span>
+              <span class="attention-sub">
+                {{ newsletter.status | capitalizeAndRemoveUnderscore }} newsletter · Engage your members
+              </span>
+            </p>
+            <span class="attention-arrow">›</span>
+          </a>
+          <commudle-pagination-compact
+            *ngIf="needsAttention?.newsletters?.total > needsAttention?.newsletters?.count"
+            [page]="newslettersPage"
+            [count]="needsAttention.newsletters.count"
+            [total]="needsAttention.newsletters.total"
+            (pageChange)="onNewslettersPageChange($event)"
+          ></commudle-pagination-compact>
 
-        <a
-          *ngFor="let survey of needsAttention?.surveys?.values"
-          [routerLink]="['/admin/communities', community.slug, 'surveys']"
-          class="attention-item"
-        >
-          <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
-          <p class="attention-content">
-            <span class="attention-title">Survey needs attention</span>
-            <span class="attention-sub">Check responses</span>
-          </p>
-          <span class="attention-arrow">›</span>
-        </a>
-        <commudle-pagination-compact
-          *ngIf="needsAttention?.surveys?.total > needsAttention?.surveys?.count"
-          [page]="surveysPage"
-          [count]="needsAttention.surveys.count"
-          [total]="needsAttention.surveys.total"
-          (pageChange)="onSurveysPageChange($event)"
-        ></commudle-pagination-compact>
+          <a
+            *ngFor="let survey of needsAttention?.surveys?.values"
+            [routerLink]="['/admin/communities', community.slug, 'surveys']"
+            class="attention-item"
+          >
+            <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
+            <p class="attention-content">
+              <span class="attention-title">Survey needs attention</span>
+              <span class="attention-sub">Check responses</span>
+            </p>
+            <span class="attention-arrow">›</span>
+          </a>
+          <commudle-pagination-compact
+            *ngIf="needsAttention?.surveys?.total > needsAttention?.surveys?.count"
+            [page]="surveysPage"
+            [count]="needsAttention.surveys.count"
+            [total]="needsAttention.surveys.total"
+            (pageChange)="onSurveysPageChange($event)"
+          ></commudle-pagination-compact>
 
-        <a
-          *ngIf="needsAttention?.refund_policy"
-          [routerLink]="['/admin/communities', community.slug, 'edit']"
-          class="attention-item"
-        >
-          <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
-          <p class="attention-content">
-            <span class="attention-title">Refund policy needs attention</span>
-            <span class="attention-sub">Required for paid events</span>
-          </p>
-          <span class="attention-arrow">›</span>
-        </a>
+          <a
+            *ngIf="needsAttention?.refund_policy"
+            [routerLink]="['/admin/communities', community.slug, 'edit']"
+            class="attention-item"
+          >
+            <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
+            <p class="attention-content">
+              <span class="attention-title">Refund policy needs attention</span>
+              <span class="attention-sub">Required for paid events</span>
+            </p>
+            <span class="attention-arrow">›</span>
+          </a>
 
-        <a
-          *ngFor="let account of needsAttention?.bank_account?.values"
-          [routerLink]="['/admin/communities', community.slug, 'payments']"
-          class="attention-item"
-        >
-          <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
-          <p class="attention-content">
-            <span class="attention-title">Set up bank details</span>
-            <span class="attention-sub">Required for paid events</span>
-          </p>
-          <span class="attention-arrow">›</span>
-        </a>
-        <commudle-pagination-compact
-          *ngIf="needsAttention?.bank_account?.total > needsAttention?.bank_account?.count"
-          [page]="bankAccountPage"
-          [count]="needsAttention.bank_account.count"
-          [total]="needsAttention.bank_account.total"
-          (pageChange)="onBankAccountPageChange($event)"
-        ></commudle-pagination-compact>
+          <a
+            *ngFor="let account of needsAttention?.bank_account?.values"
+            [routerLink]="['/admin/communities', community.slug, 'payments']"
+            class="attention-item"
+          >
+            <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
+            <p class="attention-content">
+              <span class="attention-title">Set up bank details</span>
+              <span class="attention-sub">Required for paid events</span>
+            </p>
+            <span class="attention-arrow">›</span>
+          </a>
+          <commudle-pagination-compact
+            *ngIf="needsAttention?.bank_account?.total > needsAttention?.bank_account?.count"
+            [page]="bankAccountPage"
+            [count]="needsAttention.bank_account.count"
+            [total]="needsAttention.bank_account.total"
+            (pageChange)="onBankAccountPageChange($event)"
+          ></commudle-pagination-compact>
 
-        <p
-          *ngIf="
-            !needsAttentionLoading &&
-            !(
-              needsAttention?.profile?.is_complete === false ||
-              needsAttention?.collaboration_requests?.total > 0 ||
-              needsAttention?.surveys?.total > 0 ||
-              needsAttention?.newsletters?.total > 0 ||
-              needsAttention?.bank_account?.total > 0 ||
-              needsAttention?.refund_policy
-            )
-          "
-          class="attention-empty"
-        >
-          <fa-icon [icon]="icons.faCircleCheck" class="com-text-green-500"></fa-icon>
-          No attention needed right now.
-        </p>
+          <p
+            *ngIf="
+              !needsAttentionLoading &&
+              !(
+                needsAttention?.profile?.is_complete === false ||
+                needsAttention?.collaboration_requests?.total > 0 ||
+                needsAttention?.surveys?.total > 0 ||
+                needsAttention?.newsletters?.total > 0 ||
+                needsAttention?.bank_account?.total > 0 ||
+                needsAttention?.refund_policy
+              )
+            "
+            class="attention-empty"
+          >
+            <fa-icon [icon]="icons.faCircleCheck" class="com-text-green-500"></fa-icon>
+            No attention needed right now.
+          </p>
+        </ng-container>
       </nav>
     </article>
 
@@ -243,37 +248,34 @@
         <a [routerLink]="['events']" class="view-all-link">View All Events & Hackathons →</a>
       </header>
       <ol class="schedule-timeline">
-        <app-loading-spinner
-          *ngIf="upcomingScheduleLoading && upcomingSchedule.length === 0"
-          class="section-loader"
-        ></app-loading-spinner>
-        <li *ngFor="let item of upcomingSchedule" class="timeline-item">
-          <span
-            class="timeline-date"
-            [class.today]="scheduleDateLabel(item.scheduled_at) === 'Today'"
-            [class.tomorrow]="scheduleDateLabel(item.scheduled_at) === 'Tomorrow'"
-            >{{ scheduleDateLabel(item.scheduled_at) }}</span
-          >
-          <p class="timeline-event">
-            <span class="timeline-event-name">
-              <fa-icon
-                [icon]="
-                  item.type === 'hackathon'
-                    ? icons.faTrophy
-                    : item.type === 'newsletter'
-                    ? icons.faNewspaper
-                    : icons.faCalendarPlus
-                "
-                class="timeline-event-icon"
-              ></fa-icon>
-              {{ item.title }}
-            </span>
-            <time class="timeline-event-time">{{ item.scheduled_at | date : 'h:mm a' }}</time>
-          </p>
-        </li>
-        <li *ngIf="!upcomingScheduleLoading && upcomingSchedule.length === 0" class="timeline-empty">
-          Nothing scheduled yet.
-        </li>
+        <app-loading-spinner *ngIf="upcomingScheduleLoading" class="section-loader"></app-loading-spinner>
+        <ng-container *ngIf="!upcomingScheduleLoading">
+          <li *ngFor="let item of upcomingSchedule" class="timeline-item">
+            <span
+              class="timeline-date"
+              [class.today]="scheduleDateLabel(item.scheduled_at) === 'Today'"
+              [class.tomorrow]="scheduleDateLabel(item.scheduled_at) === 'Tomorrow'"
+              >{{ scheduleDateLabel(item.scheduled_at) }}</span
+            >
+            <p class="timeline-event">
+              <span class="timeline-event-name">
+                <fa-icon
+                  [icon]="
+                    item.type === 'hackathon'
+                      ? icons.faTrophy
+                      : item.type === 'newsletter'
+                      ? icons.faNewspaper
+                      : icons.faCalendarPlus
+                  "
+                  class="timeline-event-icon"
+                ></fa-icon>
+                {{ item.title }}
+              </span>
+              <time class="timeline-event-time">{{ item.scheduled_at | date : 'h:mm a' }}</time>
+            </p>
+          </li>
+          <li *ngIf="upcomingSchedule.length === 0" class="timeline-empty">Nothing scheduled yet.</li>
+        </ng-container>
       </ol>
     </article>
 
@@ -283,69 +285,68 @@
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faBolt" class="com-text-yellow-500"></fa-icon> Recent Activity
         </h3>
-        <a [routerLink]="['notifications']" class="view-all-link">View All →</a>
       </header>
       <ul class="activity-list">
         <li *ngIf="recentActivityLoading" class="section-loader">
           <app-loading-spinner></app-loading-spinner>
         </li>
-        <li *ngFor="let activity of recentActivity" class="activity-item" [hidden]="recentActivityLoading">
-          <span
-            class="activity-avatar"
-            [class.members-avatar]="
-              activity.type === 'new_member' ||
-              (activity.type !== 'channel_message' &&
-                activity.type !== 'forum_message' &&
-                activity.type !== 'survey_response_milestone')
-            "
-            [class.channel-avatar]="activity.type === 'channel_message' || activity.type === 'forum_message'"
-            [class.survey-avatar]="activity.type === 'survey_response_milestone'"
-          >
-            <fa-icon
-              [icon]="
-                activity.type === 'new_member'
-                  ? icons.faUsers
-                  : activity.type === 'channel_message'
-                  ? icons.faHashtag
-                  : activity.type === 'forum_message'
-                  ? icons.faMessage
-                  : activity.type === 'survey_response_milestone'
-                  ? icons.faChartPie
-                  : icons.faBolt
-              "
-            ></fa-icon>
-          </span>
-          <p class="activity-content">
-            <span class="activity-text">
-              <ng-container [ngSwitch]="activity.type">
-                <ng-container *ngSwitchCase="'channel_message'"
-                  >{{ activity.user?.name || 'Someone' }} posted in #{{ activity.channel }}</ng-container
-                >
-                <ng-container *ngSwitchCase="'forum_message'"
-                  >{{ activity.user?.name || 'Someone' }} posted in {{ activity.forum }}</ng-container
-                >
-                <ng-container *ngSwitchCase="'survey_response_milestone'"
-                  >{{ activity.survey }} reached {{ activity.response_count }} response{{
-                    activity.response_count === 1 ? '' : 's'
-                  }}</ng-container
-                >
-                <ng-container *ngSwitchCase="'new_member'"
-                  >{{ activity.user?.name || 'A new member' }} joined the community</ng-container
-                >
-                <ng-container *ngSwitchDefault>New activity</ng-container>
-              </ng-container>
-            </span>
+        <ng-container *ngIf="!recentActivityLoading">
+          <li *ngFor="let activity of recentActivity" class="activity-item">
             <span
-              *ngIf="(activity.type === 'channel_message' || activity.type === 'forum_message') && activity.message"
-              class="activity-sub"
-              [innerHTML]="activity.message | stripHtmlExceptLinks"
-            ></span>
-          </p>
-          <p class="activity-time">{{ activity.created_at | date : 'short' }}</p>
-        </li>
-        <li *ngIf="!recentActivityLoading && recentActivity.length === 0" class="activity-empty">
-          No recent activity yet.
-        </li>
+              class="activity-avatar"
+              [class.members-avatar]="
+                activity.type === 'new_member' ||
+                (activity.type !== 'channel_message' &&
+                  activity.type !== 'forum_message' &&
+                  activity.type !== 'survey_response_milestone')
+              "
+              [class.channel-avatar]="activity.type === 'channel_message' || activity.type === 'forum_message'"
+              [class.survey-avatar]="activity.type === 'survey_response_milestone'"
+            >
+              <fa-icon
+                [icon]="
+                  activity.type === 'new_member'
+                    ? icons.faUsers
+                    : activity.type === 'channel_message'
+                    ? icons.faHashtag
+                    : activity.type === 'forum_message'
+                    ? icons.faMessage
+                    : activity.type === 'survey_response_milestone'
+                    ? icons.faChartPie
+                    : icons.faBolt
+                "
+              ></fa-icon>
+            </span>
+            <p class="activity-content">
+              <span class="activity-text">
+                <ng-container [ngSwitch]="activity.type">
+                  <ng-container *ngSwitchCase="'channel_message'"
+                    >{{ activity.user?.name || 'Someone' }} posted in #{{ activity.channel }}</ng-container
+                  >
+                  <ng-container *ngSwitchCase="'forum_message'"
+                    >{{ activity.user?.name || 'Someone' }} posted in {{ activity.forum }}</ng-container
+                  >
+                  <ng-container *ngSwitchCase="'survey_response_milestone'"
+                    >{{ activity.survey }} reached {{ activity.response_count }} response{{
+                      activity.response_count === 1 ? '' : 's'
+                    }}</ng-container
+                  >
+                  <ng-container *ngSwitchCase="'new_member'"
+                    >{{ activity.user?.name || 'A new member' }} joined the community</ng-container
+                  >
+                  <ng-container *ngSwitchDefault>New activity</ng-container>
+                </ng-container>
+              </span>
+              <span
+                *ngIf="(activity.type === 'channel_message' || activity.type === 'forum_message') && activity.message"
+                class="activity-sub"
+                [innerHTML]="activity.message | stripHtmlExceptLinks"
+              ></span>
+            </p>
+            <p class="activity-time">{{ activity.created_at | date : 'short' }}</p>
+          </li>
+          <li *ngIf="recentActivity.length === 0" class="activity-empty">No recent activity yet.</li>
+        </ng-container>
       </ul>
       <commudle-pagination-compact
         *ngIf="recentActivityTotal > 0"
@@ -486,16 +487,18 @@
         <li *ngIf="topPagesLoading" class="section-loader">
           <app-loading-spinner></app-loading-spinner>
         </li>
-        <li *ngFor="let page of topPages" class="top-list-item" [hidden]="topPagesLoading">
-          <a [href]="page.url" target="_blank" rel="noopener noreferrer" class="top-list-name" [title]="page.url">{{
-            page.page_title
-          }}</a>
-          <span class="top-list-track">
-            <span class="top-list-bar com-bg-primary-500" [style.width.%]="barShare(page.views, topPagesMax)"></span>
-          </span>
-          <span class="top-list-value">{{ page.views | number }}</span>
-        </li>
-        <li *ngIf="!topPagesLoading && topPages.length === 0" class="top-list-empty">No page views yet.</li>
+        <ng-container *ngIf="!topPagesLoading">
+          <li *ngFor="let page of topPages" class="top-list-item">
+            <a [href]="page.url" target="_blank" rel="noopener noreferrer" class="top-list-name" [title]="page.url">{{
+              page.page_title
+            }}</a>
+            <span class="top-list-track">
+              <span class="top-list-bar com-bg-primary-500" [style.width.%]="barShare(page.views, topPagesMax)"></span>
+            </span>
+            <span class="top-list-value">{{ page.views | number }}</span>
+          </li>
+          <li *ngIf="topPages.length === 0" class="top-list-empty">No page views yet.</li>
+        </ng-container>
       </ul>
     </article>
 
@@ -510,17 +513,19 @@
         <li *ngIf="topCitiesLoading" class="section-loader">
           <app-loading-spinner></app-loading-spinner>
         </li>
-        <li *ngFor="let city of topCities" class="top-list-item" [hidden]="topCitiesLoading">
-          <span class="top-list-name" [title]="city.city">{{ city.city }}</span>
-          <span class="top-list-track">
-            <span
-              class="top-list-bar com-bg-green-500"
-              [style.width.%]="barShare(city.member_count, topCitiesMax)"
-            ></span>
-          </span>
-          <span class="top-list-value">{{ city.member_count | number }}</span>
-        </li>
-        <li *ngIf="!topCitiesLoading && topCities.length === 0" class="top-list-empty">No city data yet.</li>
+        <ng-container *ngIf="!topCitiesLoading">
+          <li *ngFor="let city of topCities" class="top-list-item">
+            <span class="top-list-name" [title]="city.city">{{ city.city }}</span>
+            <span class="top-list-track">
+              <span
+                class="top-list-bar com-bg-green-500"
+                [style.width.%]="barShare(city.member_count, topCitiesMax)"
+              ></span>
+            </span>
+            <span class="top-list-value">{{ city.member_count | number }}</span>
+          </li>
+          <li *ngIf="topCities.length === 0" class="top-list-empty">No city data yet.</li>
+        </ng-container>
       </ul>
     </article>
   </section>
