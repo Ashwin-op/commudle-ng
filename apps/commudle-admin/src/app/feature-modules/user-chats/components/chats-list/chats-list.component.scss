@@ -9,15 +9,15 @@
       @apply com-flex;
     }
 
-    nb-card-header {
-      @apply com-p-3;
+    com-card-header {
+      @apply com-p-3 com-flex com-items-center com-justify-between;
 
       h4 {
-        @apply com-text-base com-font-medium com-text-Yankees-Blue;
+        @apply com-text-base com-font-medium com-text-Yankees-Blue com-m-0;
       }
     }
 
-    nb-card-body {
+    com-card-body {
       @apply com-p-0 com-w-full com-max-h-[60vh];
       min-height: 0;
     }
@@ -67,7 +67,7 @@
   .chats-list {
     @apply com-relative com-flex com-right-0 com-bottom-0 com-shadow-none com-w-[100dvw] com-min-h-dvh;
 
-    nb-card-body {
+    com-card-body {
       @apply com-w-full;
       @apply com-overflow-y-auto com-max-h-[100vh] #{!important};
     }

@@ -7,12 +7,12 @@
           [noMenuItems]="(activeMenuItems | numkeys) === 0"
         ></app-user-basic-details>
         <div #stickySentinel class="sticky-sentinel"></div>
-        <nb-card
+        <com-card
           *ngIf="(activeMenuItems | numkeys) > 0"
           class="user-profile-menu"
           [ngClass]="{ 'sticky-active': isMenuSticky }"
         >
-          <nb-card-body class="com-scrollbar-hide">
+          <com-card-body class="com-scrollbar-hide">
             <nb-actions>
               <nb-action *ngFor="let item of activeMenuItems | keyvalue : originalOrder" class="com-flex-col">
                 <a class="item" fragment="{{ item.value.link }}" routerLink=".">
@@ -27,8 +27,8 @@
                 <div *ngIf="highlight === item.value.link" class="highlight"></div>
               </nb-action>
             </nb-actions>
-          </nb-card-body>
-        </nb-card>
+          </com-card-body>
+        </com-card>
         <div *appBreakpoints="'<=md'">
           <div class="user-stats">
             <commudle-public-profile-campaign></commudle-public-profile-campaign>

@@ -19,6 +19,7 @@ import { UserPersonalChatListComponent } from './components/user-personal-chat-l
 import { EditorModule } from '@commudle/editor';
 import { InfiniteScrollModule } from '@commudle/infinite-scroll';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 
 @NgModule({
   declarations: [ChatsContainerComponent, ChatsListComponent, ChatsWindowComponent, UserPersonalChatListComponent],
@@ -39,6 +40,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     NbMenuModule.forRoot(),
     EditorModule,
     FontAwesomeModule,
+    CommudleCardModule,
   ],
 })
 export class UserChatsModule {}
