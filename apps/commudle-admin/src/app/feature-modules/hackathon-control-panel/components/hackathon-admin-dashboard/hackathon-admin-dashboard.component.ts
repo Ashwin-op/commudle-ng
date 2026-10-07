@@ -197,6 +197,24 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  stageMetric(stage: IHackathonDashboardStage): string {
+    if (!stage) {
+      return '';
+    }
+    switch (stage.type) {
+      case 'registration':
+        return `${(stage.teams_count || 0).toLocaleString('en-IN')} teams`;
+      case 'round':
+        return stage.submissions_count
+          ? `${stage.submissions_count.toLocaleString('en-IN')} submissions`
+          : `${(stage.teams_count || 0).toLocaleString('en-IN')} teams`;
+      case 'winners':
+        return `${(stage.winners_announced_count || 0).toLocaleString('en-IN')} winners`;
+      default:
+        return '';
+    }
+  }
+
   getStageProgress(): void {
     this.isStageProgressLoading = true;
     this.subscriptions.push(
