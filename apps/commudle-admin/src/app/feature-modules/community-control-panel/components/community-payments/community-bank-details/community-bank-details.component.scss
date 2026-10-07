@@ -45,3 +45,7 @@ input[formControlName='pan'],
 input[formControlName='ifsc_code'] {
   @apply com-uppercase;
 }
+
+.country-selection-card {
+  @apply com-flex com-max-h-[90dvh] com-w-[50dvw];
+}
