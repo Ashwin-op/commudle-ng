@@ -1,3 +1,6 @@
+.table-wrapper {
+  @apply com-overflow-x-auto;
+}
 table {
   @apply com-w-full com-border-collapse;
 }
