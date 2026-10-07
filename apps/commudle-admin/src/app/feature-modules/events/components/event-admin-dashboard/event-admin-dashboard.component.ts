@@ -81,7 +81,6 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
 
   // Hero metadata -- GET /api/v2/dashboards/events/event_header
   eventHeader: IEventDashboardHeader;
-  isHeaderLoading = false;
 
   // Hero stats -- GET /api/v2/dashboards/events/event_briefing
   eventBriefing: IEventDashboardBriefing;
@@ -177,15 +176,10 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   getEventHeader(): void {
-    this.isHeaderLoading = true;
     this.subscriptions.push(
       this.dashboardEventsService.eventHeader(this.event.id).subscribe({
         next: (data) => {
           this.eventHeader = data;
-          this.isHeaderLoading = false;
-        },
-        error: () => {
-          this.isHeaderLoading = false;
         },
       }),
     );
