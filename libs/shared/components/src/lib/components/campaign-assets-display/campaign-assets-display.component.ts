@@ -30,6 +30,7 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
   @Input() campaignPreview: ICampaign;
 
   campaign: ICampaign;
+  private serveToken: string | null = null;
   currentSlide = 0;
   slidesCount = 0;
   private intervalId: any;
@@ -41,6 +42,7 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
   private defaultImageObserver!: IntersectionObserver;
   faCircleQuestion = faCircleQuestion;
 
+  private viewInitialized = false;
   private hasTrackedCampaignView = false;
   private hasTrackedDefaultImageView = false;
   private isBrowser: boolean;
@@ -66,7 +68,7 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
     if (this.campaignPreview && this.campaignType === 'preview') {
       this.applyCampaignPreview();
     } else if (!this.campaign && this.campaignType === 'live') {
-      // this.fetchCampaign();
+      this.fetchCampaign();
     }
   }
 
@@ -90,14 +92,21 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
 
   private fetchCampaign(): void {
     this.campaignService.serveCampaign().subscribe((data) => {
-      if (data && data.campaign_assets && data.campaign_assets.length > 0) {
-        this.campaign = data;
+      const served = data?.campaign;
+      if (served && served.campaign_assets && served.campaign_assets.length > 0) {
+        this.campaign = served;
+        this.serveToken = data.serve_token || null;
         this.slidesCount = this.campaign.campaign_assets.length;
         this.startAutoSlide();
         this.userEngagementRecordForm.patchValue({
           parent_id: this.campaign.id,
           parent_type: EDbModels.CAMPAIGN,
         });
+        // the 500ms check in ngAfterViewInit may have already run before serve responded
+        if (this.viewInitialized) {
+          this.defaultImageObserver?.disconnect();
+          setTimeout(() => this.observeCampaignImage());
+        }
       }
     });
   }
@@ -106,6 +115,7 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
     if (!this.isBrowser || typeof IntersectionObserver === 'undefined') {
       return;
     }
+    this.viewInitialized = true;
     if (this.campaignType === 'live') {
       this.campaignObserver = new IntersectionObserver(
         (entries) => {
@@ -143,6 +153,14 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
           this.checkAndTriggerIfVisible(defaultEl, this.defaultImageObserver);
         }
       }, 500);
+    }
+  }
+
+  private observeCampaignImage(): void {
+    const campaignEl = this.campaignImageContainerDiv?.nativeElement;
+    if (campaignEl && this.campaignObserver && !this.hasTrackedCampaignView) {
+      this.campaignObserver.observe(campaignEl);
+      this.checkAndTriggerIfVisible(campaignEl, this.campaignObserver);
     }
   }
 
@@ -202,6 +220,9 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
       const formData = new FormData();
       formData.append('campaign_engagement[event_type]', eventType);
       formData.append('campaign_engagement[url]', currentUrl);
+      if (this.serveToken) {
+        formData.append('campaign_engagement[serve_token]', this.serveToken);
+      }
 
       if (!this.seoService.isBot) {
         this.campaignService.recordImpression(formData, this.campaign.id).subscribe(() => {
