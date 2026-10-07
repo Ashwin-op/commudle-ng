@@ -91,9 +91,12 @@ export class DashboardCommunitiesService {
     );
   }
 
-  topCities(communityId): Observable<ICommunityDashboardTopCity[]> {
-    const params = new HttpParams().set('community_id', communityId);
-    return this.http.get<ICommunityDashboardTopCity[]>(
+  topCities(communityId, page = 1, count = 10): Observable<IPaginationCount<ICommunityDashboardTopCity>> {
+    const params = new HttpParams()
+      .set('community_id', communityId)
+      .set('page_no', page)
+      .set('page_items_count', count);
+    return this.http.get<IPaginationCount<ICommunityDashboardTopCity>>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITIES.TOP_CITIES),
       { params },
     );

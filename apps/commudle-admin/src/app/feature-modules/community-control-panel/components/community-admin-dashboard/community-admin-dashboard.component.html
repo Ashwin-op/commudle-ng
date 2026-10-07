@@ -527,6 +527,13 @@
           <li *ngIf="topCities.length === 0" class="top-list-empty">No city data yet.</li>
         </ng-container>
       </ul>
+      <commudle-pagination-compact
+        *ngIf="topCitiesTotal > topCitiesCount"
+        [page]="topCitiesPage"
+        [count]="topCitiesCount"
+        [total]="topCitiesTotal"
+        (pageChange)="onTopCitiesPageChange($event)"
+      ></commudle-pagination-compact>
     </article>
   </section>
 </section>

@@ -73,8 +73,11 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   topPages: ICommunityDashboardTopPage[] = [];
   topPagesLoading = false;
 
-  // Top Cities
+  // Top Cities (paginated)
   topCities: ICommunityDashboardTopCity[] = [];
+  topCitiesPage = 1;
+  topCitiesTotal = 0;
+  readonly topCitiesCount = 10;
   topCitiesLoading = false;
 
   icons = {
@@ -308,16 +311,24 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   loadTopCities(): void {
     this.topCitiesLoading = true;
     this.subscriptions.push(
-      this.dashboardCommunitiesService.topCities(this.community.slug).subscribe({
-        next: (data) => {
-          this.topCities = Array.isArray(data) ? data : [];
-          this.topCitiesLoading = false;
-        },
-        error: () => {
-          this.topCitiesLoading = false;
-        },
-      }),
+      this.dashboardCommunitiesService
+        .topCities(this.community.slug, this.topCitiesPage, this.topCitiesCount)
+        .subscribe({
+          next: (data) => {
+            this.topCities = Array.isArray(data?.values) ? data.values : [];
+            this.topCitiesTotal = data?.total || 0;
+            this.topCitiesLoading = false;
+          },
+          error: () => {
+            this.topCitiesLoading = false;
+          },
+        }),
     );
+  }
+
+  onTopCitiesPageChange(page: number): void {
+    this.topCitiesPage = page;
+    this.loadTopCities();
   }
 
   /** Largest view/member count across top pages / cities, for proportional bar widths. */
