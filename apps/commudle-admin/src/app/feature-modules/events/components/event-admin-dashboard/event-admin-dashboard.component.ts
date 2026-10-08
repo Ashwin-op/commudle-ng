@@ -77,7 +77,6 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   liveVisitors: IDashboardLiveVisitors;
   topPages: IDashboardTopPage[] = [];
   topPagesLoading = false;
-  private readonly topPagesLimit = 10;
 
   // Hero metadata -- GET /api/v2/dashboards/events/event_header
   eventHeader: IEventDashboardHeader;
@@ -359,7 +358,6 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
       this.dashboardEventsService.audienceSnapshot(this.event.id).subscribe({
         next: (data) => {
           this.audienceSnapshot = {
-            designations: this.toArray(data?.designations),
             companies: this.toArray(data?.companies),
             experience_levels: this.toArray(data?.experience_levels),
           };
@@ -454,7 +452,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.dashboardEventsService.topPages(this.event.id, 'current').subscribe({
         next: (data) => {
-          this.topPages = (Array.isArray(data) ? data : []).slice(0, this.topPagesLimit);
+          this.topPages = Array.isArray(data) ? data : [];
           this.topPagesLoading = false;
         },
         error: () => {

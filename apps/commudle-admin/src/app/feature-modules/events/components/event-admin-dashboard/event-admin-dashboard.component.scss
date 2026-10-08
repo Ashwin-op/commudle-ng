@@ -249,6 +249,10 @@
   .attention-list {
     @apply com-m-0;
 
+    .attention-empty {
+      @apply com-py-4 com-text-center com-text-sm com-text-gray-500 com-m-0;
+    }
+
     .attention-item {
       @apply com-flex com-items-center com-gap-3 com-py-2 com-px-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
 
@@ -405,10 +409,10 @@
 }
 
 .audience-content {
-  @apply com-flex com-flex-col md:com-flex-row com-gap-4 com-mt-3;
+  @apply com-grid com-grid-cols-1 md:com-grid-cols-2 md:com-gap-8 com-gap-6 com-mt-3 com-items-start;
 
   .audience-chart {
-    @apply com-flex com-flex-col com-items-center com-gap-3 com-shrink-0;
+    @apply com-flex com-flex-col com-items-center com-gap-3;
 
     .chart-donut {
       @apply com-w-28 com-h-28;
@@ -431,7 +435,7 @@
     }
 
     .chart-legend {
-      @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-1;
+      @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-1 com-w-full;
 
       li {
         @apply com-flex com-items-center com-gap-2 com-text-xs com-text-Yankees-Blue;
@@ -448,24 +452,24 @@
   }
 
   .audience-stats {
-    @apply com-flex com-flex-col sm:com-flex-row com-gap-4 com-flex-1 com-min-w-0;
+    @apply com-flex com-flex-col com-gap-4 com-min-w-0;
 
     .audience-col {
-      @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-bg-gray-50 com-rounded-lg com-p-3;
+      @apply com-flex com-flex-col com-min-w-0 com-bg-gray-50 com-rounded-lg com-p-3;
 
       .audience-col-heading {
-        @apply com-m-0 com-text-xs com-font-medium com-text-tYankees-Blue com-mb-2;
+        @apply com-m-0 com-text-xs com-font-medium com-text-Yankees-Blue com-mb-2;
       }
 
       .audience-list {
         @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-1.5;
 
         li {
-          @apply com-flex com-items-center com-gap-2 com-text-xs com-text-Yankees-Blue;
+          @apply com-flex com-items-center com-justify-between com-gap-2 com-text-xs com-text-Yankees-Blue;
         }
 
         .audience-name {
-          @apply com-w-24 com-shrink-0 com-truncate com-text-xs;
+          @apply com-flex-1 com-min-w-0 com-truncate com-text-xs;
         }
 
         .audience-bar {
@@ -567,7 +571,7 @@
       @apply com-flex com-flex-col com-gap-2;
 
       .audience-col-heading {
-        @apply com-m-0 com-text-xs com-font-medium com-text-Cadet-Grey com-mb-1;
+        @apply com-m-0 com-text-xs com-font-medium com-text-tYankees-Blue com-mb-1;
       }
 
       .chart-donut {
@@ -589,7 +593,7 @@
         @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-1;
 
         li {
-          @apply com-flex com-items-center com-gap-2 com-text-xs com-text-Yankees-Blue;
+          @apply com-flex com-items-center com-gap-2 com-text-xs com-text-tYankees-Blue;
         }
 
         .legend-dot {
@@ -597,7 +601,7 @@
         }
 
         .legend-pct {
-          @apply com-ml-auto com-text-xs com-text-Cadet-Grey;
+          @apply com-ml-auto com-text-xs com-text-tYankees-Blue;
         }
       }
     }

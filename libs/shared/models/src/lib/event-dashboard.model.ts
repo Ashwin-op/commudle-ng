@@ -72,7 +72,6 @@ export interface IEventDashboardActivityItem {
 
 // audience_snapshot
 export interface IEventDashboardAudienceSnapshot {
-  designations: IDashboardDistributionItem[];
   companies: IDashboardDistributionItem[];
   experience_levels: IDashboardDistributionItem[];
 }
