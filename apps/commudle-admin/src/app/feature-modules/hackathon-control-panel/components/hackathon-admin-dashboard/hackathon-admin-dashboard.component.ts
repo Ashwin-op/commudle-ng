@@ -433,7 +433,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     if (!session) {
       return '';
     }
-    const start = typeof session === 'string' ? session : session.start_time || session.scheduled_at;
+    const start = typeof session === 'string' ? session : session.starts_at;
     return start ? moment(start).format('D MMM, h:mm A') : '';
   }
 

@@ -328,33 +328,34 @@
           <fa-icon [icon]="icons.faBolt" class="com-text-yellow-500"></fa-icon> Recent Activity
         </h3>
       </div>
-      <ul class="activity-list" [hidden]="isActivityLoading && recentActivity.length === 0">
+      <app-loading-spinner *ngIf="isActivityLoading" class="section-loader"></app-loading-spinner>
+      <ul class="activity-list" *ngIf="!isActivityLoading">
         <li *ngFor="let item of recentActivity" class="activity-item">
           <span class="activity-avatar" [ngClass]="activityAvatarClass(item.type)">
             <fa-icon [icon]="activityIcon(item.type)"></fa-icon>
           </span>
           <p class="activity-content com-m-0">
-            <span class="activity-text" [title]="activityActorName(item) + ' ' + activityLabel(item.type, item)">
+            <span class="activity-text" [title]="activityActorName(item) + ' ' + activityLabel(item.type)">
               <ng-container *ngIf="activityActorName(item)">
                 <span class="activity-name-avatar">{{ activityInitial(item) }}</span
                 ><strong>{{ activityActorName(item) }}</strong>
-                {{ activityLabel(item.type, item) }}
+                {{ activityLabel(item.type) }}
               </ng-container>
               <ng-container *ngIf="!activityActorName(item)">
                 <ng-container *ngIf="item.count != null">{{ item.count | number }} </ng-container
-                >{{ activityLabel(item.type, item) }}
+                >{{ activityLabel(item.type) }}
               </ng-container>
             </span>
+            <span class="activity-sub" *ngIf="activitySubtext(item)">{{ activitySubtext(item) }}</span>
           </p>
           <time class="activity-time">{{ activityTime(item) }}</time>
         </li>
-        <li *ngIf="!isActivityLoading && recentActivity.length === 0" class="activity-item">
+        <li *ngIf="recentActivity.length === 0" class="activity-item">
           <p class="activity-content com-m-0">
             <span class="activity-text">No recent activity yet</span>
           </p>
         </li>
       </ul>
-      <app-loading-spinner *ngIf="isActivityLoading" class="section-loader"></app-loading-spinner>
       <commudle-pagination-compact
         *ngIf="activityTotal > activityCount"
         [page]="activityPage"
