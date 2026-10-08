@@ -18,6 +18,10 @@
   @apply com-flex com-items-center com-justify-between com-mb-2 com-m-0;
 }
 
+.section-header-post {
+  @apply com-flex md:com-flex-row com-flex-col md:com-items-center com-justify-between com-mb-2 com-m-0;
+}
+
 .view-all-link {
   @apply com-text-xs com-font-medium com-text-primary-500 com-no-underline com-flex-shrink-0;
 
@@ -548,7 +552,7 @@
     }
 
     .post-event-stats {
-      @apply com-grid com-grid-cols-2 sm:com-grid-cols-3 com-gap-3 com-flex-1;
+      @apply com-grid com-grid-cols-2 sm:com-grid-cols-3 com-gap-3 com-flex-1 com-w-full;
 
       .post-stat {
         @apply com-flex com-flex-col com-items-center com-justify-center com-gap-1 com-py-4 com-px-3 com-min-w-0 com-bg-white com-rounded-xl com-border com-border-solid com-border-Bright-Gray;
