@@ -2562,21 +2562,21 @@
     z-index: 1;
 
     .greeting-eyebrow {
-      @apply com-self-start com-text-sm com-font-semibold com-text-white com-opacity-90;
+      @apply com-self-start com-text-sm com-font-semibold com-text-tWhite com-opacity-90;
       animation: heroFadeUp 0.6s ease-out 0.05s both;
     }
 
     .greeting-text {
-      @apply com-m-0 com-text-2xl sm:com-text-3xl com-font-bold com-text-white;
+      @apply com-m-0 com-text-2xl sm:com-text-3xl com-font-bold com-text-tWhite;
       animation: heroFadeUp 0.6s ease-out 0.12s both;
 
       .greeting-name {
-        @apply com-font-extrabold com-text-white;
+        @apply com-font-extrabold com-text-tWhite;
       }
     }
 
     .greeting-sub {
-      @apply com-m-0 com-text-sm com-text-white com-opacity-90;
+      @apply com-m-0 com-text-sm com-text-tWhite com-opacity-90;
       animation: heroFadeUp 0.6s ease-out 0.18s both;
     }
   }
@@ -2605,7 +2605,7 @@
       }
 
       .highlight-icon {
-        @apply com-w-9 com-h-9 com-rounded-lg com-flex com-items-center com-justify-center com-text-sm com-shrink-0 com-text-white;
+        @apply com-w-9 com-h-9 com-rounded-lg com-flex com-items-center com-justify-center com-text-sm com-shrink-0 com-text-tWhite;
         background: rgba(255, 255, 255, 0.2);
       }
 
@@ -2613,11 +2613,11 @@
         @apply com-m-0;
 
         .highlight-primary {
-          @apply com-text-sm com-font-medium com-text-white;
+          @apply com-text-sm com-font-medium com-text-tWhite;
         }
 
         .highlight-secondary {
-          @apply com-text-xs com-text-white com-opacity-75 com-mt-0.5 com-block;
+          @apply com-text-xs com-text-tWhite com-opacity-75 com-mt-0.5 com-block;
         }
       }
     }
