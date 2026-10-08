@@ -359,9 +359,9 @@
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faBolt" class="com-text-yellow-500"></fa-icon> Recent Activity
         </h3>
-        <a *ngIf="hasMoreActivity" class="view-all-link" (click)="loadMoreActivity()">View All →</a>
       </div>
-      <ul class="activity-list">
+      <app-loading-spinner *ngIf="isActivityLoading" class="section-loader"></app-loading-spinner>
+      <ul class="activity-list" *ngIf="!isActivityLoading">
         <li *ngFor="let item of recentActivity" class="activity-item">
           <span class="activity-avatar" [ngClass]="activityAvatarClass(item.type)">
             <fa-icon [icon]="activityIcon(item.type)"></fa-icon>
@@ -378,13 +378,19 @@
           </p>
           <time class="activity-time">{{ activityTime(item) }}</time>
         </li>
-        <li *ngIf="!isActivityLoading && recentActivity.length === 0" class="activity-item">
+        <li *ngIf="recentActivity.length === 0" class="activity-item">
           <p class="activity-content com-m-0">
             <span class="activity-text">No recent activity yet</span>
           </p>
         </li>
       </ul>
-      <app-loading-spinner *ngIf="isActivityLoading" class="section-loader"></app-loading-spinner>
+      <commudle-pagination-compact
+        *ngIf="activityTotal > activityCount"
+        [page]="activityPage"
+        [count]="activityCount"
+        [total]="activityTotal"
+        (pageChange)="onActivityPageChange($event)"
+      ></commudle-pagination-compact>
     </div>
   </section>
 

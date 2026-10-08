@@ -36,6 +36,7 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { BackButtonComponent } from 'apps/shared-components/back-button/back-button.component';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
 import { SidebarComponent } from 'apps/shared-components/sidebar/sidebar.component';
+import { PaginationCompactComponent } from 'apps/shared-components/pagination-compact/pagination-compact.component';
 import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives.module';
 import { MiniUserProfileModule } from 'apps/shared-modules/mini-user-profile/mini-user-profile.module';
 import { SharedPipesModule } from 'apps/shared-pipes/pipes.module';
@@ -164,6 +165,7 @@ import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-the
     BackButtonComponent,
     HelpSectionComponent,
     BadgeComponent,
+    PaginationCompactComponent,
     DataTableComponent,
     EventStreamingComponent,
 

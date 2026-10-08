@@ -96,7 +96,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   // Recent Activity -- GET /api/v2/dashboards/events/recent_activity (paginated)
   recentActivity: IEventDashboardActivityItem[] = [];
   activityPage = 1;
-  activityCount = 6;
+  readonly activityCount = 10;
   activityTotal = 0;
   isActivityLoading = false;
 
@@ -276,7 +276,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.dashboardEventsService.recentActivity(this.event.id, this.activityPage, this.activityCount).subscribe({
         next: (data) => {
-          this.recentActivity = [...this.recentActivity, ...this.toArray<IEventDashboardActivityItem>(data?.values)];
+          this.recentActivity = this.toArray<IEventDashboardActivityItem>(data?.values);
           this.activityTotal = data?.total || 0;
           this.isActivityLoading = false;
         },
@@ -287,15 +287,8 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  get hasMoreActivity(): boolean {
-    return this.recentActivity.length < this.activityTotal;
-  }
-
-  loadMoreActivity(): void {
-    if (this.isActivityLoading || !this.hasMoreActivity) {
-      return;
-    }
-    this.activityPage += 1;
+  onActivityPageChange(page: number): void {
+    this.activityPage = page;
     this.getRecentActivity();
   }
 
