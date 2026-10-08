@@ -386,22 +386,25 @@
   }
 
   .progress-cards {
-    @apply com-flex com-items-center com-gap-2 com-mt-3 com-overflow-x-auto com-scrollbar-hide com-pb-2;
+    @apply com-flex com-items-stretch com-gap-2 com-mt-3 com-overflow-x-auto com-scrollbar-hide com-pb-2;
 
     .progress-card {
-      @apply com-flex com-flex-col com-items-center com-text-center com-gap-1.5 com-p-4 com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-flex-1 com-shrink-0;
-      min-width: 100px;
+      @apply com-flex com-flex-col com-items-center com-text-center com-gap-1.5 com-p-4 com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-flex-1 com-shrink-0 com-self-stretch;
+      min-width: 130px;
 
       &.active {
         @apply com-border-primary-300 com-bg-blue-50;
       }
 
-      &.completed {
-        @apply com-border-green-200 com-bg-green-50;
-      }
-
+      // Reserve 3 lines for the name so the count below always starts on the
+      // same line across all cards.
       .progress-card-label {
         @apply com-text-xs com-font-medium com-text-Cadet-Grey;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        min-height: 3rem;
       }
 
       .progress-card-value {
@@ -409,12 +412,24 @@
       }
 
       .progress-card-status {
-        @apply com-text-xs com-text-Cadet-Grey com-whitespace-nowrap;
+        @apply com-text-xs com-whitespace-nowrap com-mt-auto;
+
+        &.status-completed {
+          @apply com-text-green-600;
+        }
+
+        &.status-ongoing {
+          @apply com-text-Cadet-Grey;
+        }
+
+        &.status-upcoming {
+          @apply com-text-yellow-600;
+        }
       }
     }
 
     .progress-arrow {
-      @apply com-text-sm com-text-gray-400 com-shrink-0;
+      @apply com-text-sm com-text-gray-400 com-shrink-0 com-self-center;
     }
   }
 

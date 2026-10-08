@@ -206,6 +206,17 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     return ['live', 'in_progress', 'ongoing', 'active'].includes(status.toLowerCase());
   }
 
+  /** CSS class for a stage status: ongoing -> gray, completed -> green, upcoming -> yellow. */
+  stageStatusClass(status: string | undefined): string {
+    if (this.isStatusLive(status)) {
+      return 'status-ongoing';
+    }
+    if (this.isStatusReady(status)) {
+      return 'status-completed';
+    }
+    return 'status-upcoming';
+  }
+
   stageMetric(stage: IHackathonDashboardStage): string {
     if (!stage) {
       return '';
