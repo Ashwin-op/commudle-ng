@@ -294,6 +294,14 @@
     }
   }
 
+  .activity-card {
+    @apply com-flex com-flex-col;
+
+    commudle-pagination-compact {
+      @apply com-mt-auto;
+    }
+  }
+
   .attention-list {
     @apply com-m-0;
 
