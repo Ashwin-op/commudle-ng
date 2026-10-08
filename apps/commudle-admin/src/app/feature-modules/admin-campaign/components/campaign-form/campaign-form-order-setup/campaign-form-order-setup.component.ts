@@ -40,7 +40,7 @@ import { GooglePlacesAutocompleteService } from 'apps/commudle-admin/src/app/ser
 import { SearchService } from 'apps/commudle-admin/src/app/feature-modules/search/services/search.service';
 import { ISearch } from 'apps/shared-models/search.model';
 import { faArrowRight, faFileImage, faRectangleAd, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { debounceTime, distinctUntilChanged, EMPTY, Subscription, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, EMPTY, Observable, of, Subscription, switchMap, tap } from 'rxjs';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 import { environment } from '@commudle/shared-environments';
 
@@ -79,6 +79,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
   imagePreview = [];
   staticAssets = staticAssets;
   defaultUrl = environment.app_url + '/campaigns/new';
+  savingAsset = false;
   minStartLeadHours = 1;
   readonly maxActiveAssets = 5;
   changeLog: ICampaignChangeLogEntry[] = [];
@@ -320,7 +321,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     return new Date(control.value) < this.minStartDate() ? { startAtTooSoon: true } : null;
   }
 
-  createCampaign() {
+  private createCampaignRequest(): Observable<ICampaign> {
     const formData = new FormData();
     formData.append('campaign[name]', this.campaignForm.value.name);
     formData.append('campaign[start_at]', this.campaignForm.value.start_at || null);
@@ -329,14 +330,23 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
       formData.append('campaign[end_at]', this.campaignForm.value.end_at || null);
     }
 
-    this.campaignService.createCampaign(formData).subscribe((res: ICampaign) => {
+    return this.campaignService.createCampaign(formData).pipe(
+      tap((res: ICampaign) => {
+        if (res) {
+          this.campaign = res;
+          this.getFundStatus();
+          this.gtmDataLayerPushEvent('new-campaign-step-1-created', {
+            com_campaign_id: res.id,
+          });
+        }
+      }),
+    );
+  }
+
+  createCampaign() {
+    this.createCampaignRequest().subscribe((res: ICampaign) => {
       if (res) {
-        this.campaign = res;
-        this.getFundStatus();
         this.router.navigate(['campaigns', 'edit', res.id], { replaceUrl: true });
-        this.gtmDataLayerPushEvent('new-campaign-step-1-created', {
-          com_campaign_id: res.id,
-        });
       }
     });
   }
@@ -370,12 +380,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
   }
 
   addAsset(index: number) {
-    if (!this.campaign?.id) {
-      this.toasterService.warningDialog(
-        'Fill in the Campaign Details and open the Budget section first, so the campaign is created before adding assets.',
-      );
-      return;
-    }
+    if (this.savingAsset) return;
     if (this.activeAssetsCount >= this.maxActiveAssets) {
       this.toasterService.warningDialog(
         `Maximum ${this.maxActiveAssets} active creatives allowed. Deactivate or remove one to add a new one.`,
@@ -389,7 +394,31 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
       return;
     }
 
-    const formData = new FormData();
+    // all sections are open, so the campaign may not exist yet - create it first from the details above
+    if (!this.campaign?.id && this.isForm1Invalid()) {
+      this.toasterService.warningDialog('Fill in the campaign name and start date first.');
+      return;
+    }
+
+    this.savingAsset = true;
+    const wasNew = !this.campaign?.id;
+    const created$ = wasNew ? this.createCampaignRequest() : of(this.campaign);
+    created$.subscribe({
+      next: (campaign) => {
+        if (!campaign?.id) {
+          this.savingAsset = false;
+          return;
+        }
+        this.saveAssetWithCampaign(currentGroup, wasNew);
+      },
+      error: () => (this.savingAsset = false),
+    });
+  }
+
+  // Saves the campaign's other fields together with the new asset, so the campaign is up to date when the asset lands
+  private saveAssetWithCampaign(currentGroup: FormGroup, wasNew: boolean) {
+    // once launched the server rejects everything except end date and creatives
+    const formData = this.isLaunched ? new FormData() : this.buildCampaignFormData();
     const assetData = currentGroup.value;
     const url = (currentGroup.get('url')?.value ?? assetData.url ?? '') as string;
     const existingAssets = this.campaign?.campaign_assets ?? [];
@@ -406,14 +435,22 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
       formData.append(`campaign[campaign_assets][${nextIndex}][image]`, assetData.image);
     }
 
-    this.campaignService.updateCampaign(formData, this.campaign.id).subscribe((updatedCampaign: ICampaign) => {
-      this.campaign = {
-        ...updatedCampaign,
-        campaign_assets: updatedCampaign.campaign_assets ? [...updatedCampaign.campaign_assets] : [],
-      };
-      this.loadCampaignAssetsFromApi();
-      this.resetAssetForm();
-      this.cdr.detectChanges();
+    this.campaignService.updateCampaign(formData, this.campaign.id).subscribe({
+      next: (updatedCampaign: ICampaign) => {
+        this.savingAsset = false;
+        if (!updatedCampaign) return;
+        this.campaign = {
+          ...updatedCampaign,
+          campaign_assets: updatedCampaign.campaign_assets ? [...updatedCampaign.campaign_assets] : [],
+        };
+        this.loadCampaignAssetsFromApi();
+        this.resetAssetForm();
+        this.cdr.detectChanges();
+        if (wasNew) {
+          this.router.navigate(['campaigns', 'edit', this.campaign.id], { replaceUrl: true });
+        }
+      },
+      error: () => (this.savingAsset = false),
     });
   }
 
@@ -604,15 +641,8 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     }
   }
 
-  updateCampaign(callSubmitButton = false) {
-    // the live-edit form never sends the full campaign - the server rejects locked fields
-    if (this.isLaunched) return;
-    // Validation
-    if (!this.campaign?.id) {
-      this.toasterService.warningDialog('Campaign ID is missing.');
-      return;
-    }
-
+  // campaign fields only (no assets) - what a full draft save sends
+  private buildCampaignFormData(): FormData {
     const formData = new FormData();
     const formValue = this.campaignForm.value;
 
@@ -635,6 +665,19 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
 
     const communitySlugs = this.selectedCommunities.map((c) => c.slug);
     communitySlugs.forEach((slug) => formData.append('campaign[communities][]', slug));
+    return formData;
+  }
+
+  updateCampaign(callSubmitButton = false) {
+    // the live-edit form never sends the full campaign - the server rejects locked fields
+    if (this.isLaunched) return;
+    // Validation
+    if (!this.campaign?.id) {
+      this.toasterService.warningDialog('Campaign ID is missing.');
+      return;
+    }
+
+    const formData = this.buildCampaignFormData();
 
     // Send saved assets from API
     if (this.campaign?.campaign_assets) {

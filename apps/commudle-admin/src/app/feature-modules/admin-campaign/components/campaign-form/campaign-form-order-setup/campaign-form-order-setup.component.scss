@@ -238,14 +238,14 @@ nb-accordion {
     }
 
     .saved-asset-details {
-      @apply com-flex com-flex-col com-gap-2;
+      @apply com-flex com-flex-col com-gap-2 com-min-w-0 com-flex-1;
 
       .saved-headline {
         @apply com-m-0 com-text-sm com-font-medium com-text-Yankees-Blue;
       }
 
       .saved-url {
-        @apply com-m-0 com-text-xs com-font-medium com-text-gray-custom-1;
+        @apply com-m-0 com-text-xs com-font-medium com-text-gray-custom-1 com-truncate;
       }
     }
   }

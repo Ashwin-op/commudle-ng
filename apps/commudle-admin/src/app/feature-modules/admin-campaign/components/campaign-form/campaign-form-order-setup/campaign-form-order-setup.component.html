@@ -359,7 +359,7 @@
                         <img [src]="asset.image.url" alt="Asset preview" />
                       </div>
                       <div class="saved-asset-details">
-                        <p class="saved-url"><strong>URL:</strong> {{ asset.url }}</p>
+                        <p class="saved-url" [title]="asset.url"><strong>URL:</strong> {{ asset.url }}</p>
                         <p class="small-info-text" *ngIf="asset.active === false">Inactive - not being served</p>
                       </div>
                       <button
@@ -368,6 +368,7 @@
                         outline
                         size="small"
                         shape="semi-round"
+                        class="com-shrink-0"
                         (click)="toggleAssetActive(asset)"
                       >
                         {{ asset.active === false ? 'Activate' : 'Deactivate' }}
@@ -486,7 +487,7 @@
                           status="primary"
                           shape="semi-round"
                           (click)="addAsset(campaignAssets.length - 1)"
-                          [disabled]="campaignAssets.at(campaignAssets.length - 1).invalid"
+                          [disabled]="campaignAssets.at(campaignAssets.length - 1).invalid || savingAsset"
                         >
                           Save Asset
                         </button>
