@@ -12,6 +12,7 @@ export class InputComponent {
   @Input() id: string;
   @Input() name: string;
   @Input() min: string | number;
+  @Input() max: string | number;
   @Input() inputValue: string | number = '';
   @Output() valueChange = new EventEmitter<string | number>();
   @Output() blurEvent = new EventEmitter<void>(); // Added for blur event

@@ -200,3 +200,15 @@
     @apply com-h-8 com-min-w-[140px] com-text-sm com-rounded com-border com-border-solid com-border-Bright-Gray com-bg-white com-text-Yankees-Blue com-cursor-pointer com-px-2 com-py-1;
   }
 }
+
+.stop-campaign-dialog {
+  @apply com-max-w-md;
+
+  .stop-campaign-dialog-body {
+    @apply com-max-h-[60vh] com-overflow-y-auto;
+  }
+
+  .stop-campaign-dialog-footer {
+    @apply com-flex com-justify-end com-gap-2;
+  }
+}

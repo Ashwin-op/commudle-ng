@@ -6,8 +6,58 @@
 
         <!-- Campaign Form Accordion -->
         <nb-accordion [multi]="true">
+          <!-- Live campaign: read-only summary + the only editable schedule field -->
+          <nb-accordion-item *ngIf="isLaunched" [expanded]="true">
+            <nb-accordion-item-header>
+              <div class="accordion-header-content">
+                <span class="accordion-title">Campaign: {{ campaign?.name }}</span>
+              </div>
+            </nb-accordion-item-header>
+            <nb-accordion-item-body>
+              <div class="form live-summary">
+                <p class="small-info-text">
+                  Budget, targeting and start time cannot be changed once a campaign is live. You can shorten the end
+                  date and manage creatives.
+                </p>
+                <dl class="live-summary-list">
+                  <dt>Status</dt>
+                  <dd>{{ campaign?.status | titlecase }}</dd>
+                  <dt>Budget</dt>
+                  <dd>{{ campaign?.budget | currency : campaign?.currency_type }}</dd>
+                  <dt>Starts</dt>
+                  <dd>{{ campaign?.start_at | date : 'medium' }}</dd>
+                  <dt>Locations</dt>
+                  <dd>{{ selectedLocations.join(' | ') || '-' }}</dd>
+                  <dt>Communities</dt>
+                  <dd>{{ selectedCommunityNames() || '-' }}</dd>
+                </dl>
+                <p class="small-info-text" *ngIf="campaign?.status === 'paused'">
+                  Reserved budget stays on hold while the campaign is paused. It is released when you stop the campaign
+                  or its end date passes.
+                </p>
+                <div *ngIf="!isLocked">
+                  <label>End Date & Time</label>
+                  <div class="input">
+                    <commudle-input
+                      placeholder="Select End Date & Time"
+                      [inputValue]="liveEndAt"
+                      [type]="'datetime-local'"
+                      [min]="minEndAt"
+                      [max]="maxEndAt"
+                      (valueChange)="liveEndAt = $any($event)"
+                    ></commudle-input>
+                    <p class="small-info-text">The end date can only be shortened, not extended.</p>
+                  </div>
+                  <button comButton status="primary" size="small" shape="semi-round" (click)="saveLiveEndDate()">
+                    Save end date
+                  </button>
+                </div>
+              </div>
+            </nb-accordion-item-body>
+          </nb-accordion-item>
+
           <!-- Campaign Details Section -->
-          <nb-accordion-item [expanded]="true">
+          <nb-accordion-item *ngIf="!isLaunched" [expanded]="true">
             <nb-accordion-item-header>
               <div class="accordion-header-content">
                 <span class="accordion-number">1</span>
@@ -115,7 +165,12 @@
           </nb-accordion-item>
 
           <!-- Budget Section -->
-          <nb-accordion-item [disabled]="form1Invalid" [expanded]="true" (click)="onAccordion2Click($event)">
+          <nb-accordion-item
+            *ngIf="!isLaunched"
+            [disabled]="form1Invalid"
+            [expanded]="true"
+            (click)="onAccordion2Click($event)"
+          >
             <nb-accordion-item-header>
               <div class="accordion-header-content">
                 <span class="accordion-number">2</span>
@@ -284,7 +339,7 @@
           </nb-accordion-item>
 
           <!-- Creatives and Destination URL Section -->
-          <nb-accordion-item [disabled]="form1Invalid || form2Invalid" [expanded]="true">
+          <nb-accordion-item [disabled]="!isLaunched && (form1Invalid || form2Invalid)" [expanded]="true">
             <nb-accordion-item-header (click)="onAccordion3Click($event)">
               <div class="accordion-header-content">
                 <span class="accordion-number">3</span>
@@ -305,12 +360,23 @@
                       </div>
                       <div class="saved-asset-details">
                         <p class="saved-url"><strong>URL:</strong> {{ asset.url }}</p>
+                        <p class="small-info-text" *ngIf="asset.active === false">Inactive - not being served</p>
                       </div>
                       <button
+                        *ngIf="isLaunched && !isLocked"
+                        comButton
+                        outline
+                        size="small"
+                        shape="semi-round"
+                        (click)="toggleAssetActive(asset)"
+                      >
+                        {{ asset.active === false ? 'Activate' : 'Deactivate' }}
+                      </button>
+                      <button
+                        *ngIf="!isLaunched"
                         class="action-btn"
-                        nbButton
+                        comButton
                         ghost
-                        status="basic"
                         size="small"
                         (click)="removeCampaignAsset(i)"
                       >
@@ -321,7 +387,7 @@
                 </div>
 
                 <!-- Single form container for adding new asset -->
-                <form [formGroup]="campaignForm">
+                <form *ngIf="!isLocked" [formGroup]="campaignForm">
                   <div formArrayName="campaign_assets">
                     <div
                       class="creative-assets-controller"
@@ -431,9 +497,35 @@
               </div>
             </nb-accordion-item-body>
           </nb-accordion-item>
+
+          <!-- Change log (live campaigns only) -->
+          <nb-accordion-item *ngIf="isLaunched" [expanded]="true">
+            <nb-accordion-item-header>
+              <div class="accordion-header-content">
+                <span class="accordion-title">Change log</span>
+              </div>
+            </nb-accordion-item-header>
+            <nb-accordion-item-body>
+              <div class="form">
+                <p class="small-info-text" *ngIf="changeLog.length === 0">No changes made since launch.</p>
+                <ul class="change-log-list" *ngIf="changeLog.length > 0">
+                  <li *ngFor="let entry of changeLog">
+                    <strong>{{ changeLogLabel(entry) }}</strong
+                    >: {{ changeLogValue(entry, entry.old_value) }} &rarr; {{ changeLogValue(entry, entry.new_value) }}
+                    <span class="small-info-text">
+                      - {{ entry.changed_at | date : 'medium'
+                      }}<ng-container *ngIf="entry.changed_by_name || entry.changed_by_username">
+                        by {{ entry.changed_by_name || entry.changed_by_username }}</ng-container
+                      ></span
+                    >
+                  </li>
+                </ul>
+              </div>
+            </nb-accordion-item-body>
+          </nb-accordion-item>
         </nb-accordion>
 
-        <div class="sticky-footer">
+        <div *ngIf="!isLaunched" class="sticky-footer">
           <div *ngIf="wallet" class="wallet-details-section">
             <h4 class="wallet-details-heading">Wallet</h4>
             <table class="wallet-details-table">

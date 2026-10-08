@@ -19,7 +19,15 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbDialogRef, NbDialogService } from '@commudle/theme';
-import { ICampaign, ICampaignAsset, ICampaignEstimate, EDbModels, IWallet } from '@commudle/shared-models';
+import {
+  ECampaignStatus,
+  ICampaign,
+  ICampaignAsset,
+  ICampaignChangeLogEntry,
+  ICampaignEstimate,
+  EDbModels,
+  IWallet,
+} from '@commudle/shared-models';
 import {
   CampaignService,
   ConfettiService,
@@ -72,6 +80,11 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
   staticAssets = staticAssets;
   defaultUrl = environment.app_url + '/campaigns/new';
   minStartLeadHours = 1;
+  readonly maxActiveAssets = 5;
+  changeLog: ICampaignChangeLogEntry[] = [];
+  liveEndAt = '';
+  maxEndAt: string | null = null;
+  minEndAt = '';
   minStartAt = this.toDateTimeLocal(this.minStartDate());
   private subscriptions = new Subscription();
 
@@ -118,6 +131,13 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
           this.campaign = campaign;
           this.patchCampaignForm();
           this.getFundStatus();
+          if (this.isLaunched) {
+            this.liveEndAt = this.formatDateTimeForInput(this.campaign.end_at);
+            // the end date can only be shortened, never extended past what it was at launch
+            this.maxEndAt = this.liveEndAt || null;
+            this.minEndAt = this.toDateTimeLocal(new Date());
+            this.loadChangeLog();
+          }
           setTimeout(() => {
             if (this.campaignForm.get('set_end_date')?.value) {
               this.onSetEndDateChange();
@@ -150,13 +170,122 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     this.observeCommunitiesInput();
   }
 
+  // Once launched, only the end date (shorten only) and creatives can change; everything else is locked server-side
+  get isLaunched(): boolean {
+    return [ECampaignStatus.LIVE, ECampaignStatus.PAUSED, ECampaignStatus.COMPLETE, ECampaignStatus.STOPPED].includes(
+      this.campaign?.status,
+    );
+  }
+
+  // complete / stopped campaigns are read-only
+  get isLocked(): boolean {
+    return [ECampaignStatus.COMPLETE, ECampaignStatus.STOPPED].includes(this.campaign?.status);
+  }
+
+  get activeAssetsCount(): number {
+    return (this.campaign?.campaign_assets ?? []).filter((asset) => asset.active !== false).length;
+  }
+
+  selectedCommunityNames(): string {
+    return this.selectedCommunities.map((community) => community.name).join(' | ');
+  }
+
+  private appendAssets(formData: FormData, assets: ICampaignAsset[]): number {
+    assets.forEach((asset, idx) => {
+      formData.append(`campaign[campaign_assets][${idx}][url]`, asset.url ?? '');
+      if (asset.id != null) {
+        formData.append(`campaign[campaign_assets][${idx}][id]`, asset.id.toString());
+      }
+      // every saved asset has to be sent (inactive ones too) or the API deletes the ones left out
+      if (asset.active !== undefined) {
+        formData.append(`campaign[campaign_assets][${idx}][active]`, String(asset.active));
+      }
+    });
+    return assets.length;
+  }
+
+  toggleAssetActive(asset: ICampaignAsset) {
+    const makeActive = asset.active === false;
+    if (makeActive && this.activeAssetsCount >= this.maxActiveAssets) {
+      this.toasterService.warningDialog(
+        `Maximum ${this.maxActiveAssets} active creatives allowed. Deactivate one first.`,
+      );
+      return;
+    }
+    const formData = new FormData();
+    this.appendAssets(
+      formData,
+      this.campaign.campaign_assets.map((a) => (a.id === asset.id ? { ...a, active: makeActive } : a)),
+    );
+    this.campaignService.updateCampaign(formData, this.campaign.id).subscribe((updated: ICampaign) => {
+      if (updated) {
+        this.applyUpdatedCampaign(updated);
+        this.toasterService.successDialog(makeActive ? 'Creative activated.' : 'Creative deactivated.');
+        this.loadChangeLog();
+      }
+    });
+  }
+
+  saveLiveEndDate() {
+    if (!this.liveEndAt) {
+      this.toasterService.warningDialog('Select an end date.');
+      return;
+    }
+    const end = new Date(this.liveEndAt);
+    if (end <= new Date()) {
+      this.toasterService.warningDialog('End date must be in the future. To end the campaign now, use Stop.');
+      return;
+    }
+    if (this.maxEndAt && end > new Date(this.maxEndAt)) {
+      this.toasterService.warningDialog('The end date can only be shortened, not extended.');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('campaign[end_at]', this.liveEndAt);
+    this.campaignService.updateCampaign(formData, this.campaign.id).subscribe((updated: ICampaign) => {
+      if (updated) {
+        this.applyUpdatedCampaign(updated);
+        this.maxEndAt = this.formatDateTimeForInput(updated.end_at);
+        this.toasterService.successDialog('End date updated.');
+        this.loadChangeLog();
+      }
+    });
+  }
+
+  private applyUpdatedCampaign(updated: ICampaign) {
+    this.campaign = { ...updated, campaign_assets: updated.campaign_assets ? [...updated.campaign_assets] : [] };
+    this.loadCampaignAssetsFromApi();
+    this.cdr.detectChanges();
+  }
+
+  loadChangeLog() {
+    if (!this.campaign?.id) return;
+    this.campaignService.getChangeLog(this.campaign.id).subscribe((entries) => {
+      this.changeLog = entries ?? [];
+      this.cdr.detectChanges();
+    });
+  }
+
+  changeLogLabel(entry: ICampaignChangeLogEntry): string {
+    if (entry.item_type === 'Campaign') return 'End date';
+    const asset = this.campaign?.campaign_assets?.find((a) => a.id === entry.item_id);
+    const name = asset?.url ? ` (${asset.url})` : '';
+    return (entry.field === 'active' ? 'Creative status' : 'Creative ' + entry.field) + name;
+  }
+
+  changeLogValue(entry: ICampaignChangeLogEntry, value: string | boolean | null): string {
+    if (value === null || value === undefined || value === '') return 'none';
+    if (entry.field === 'active') return value === false || value === 'false' ? 'Inactive' : 'Active';
+    return String(value);
+  }
+
   ngOnDestroy() {
     // placeChanged lives on a root singleton service, so a stale subscription would fire for a destroyed form
     this.subscriptions.unsubscribe();
   }
 
   private refreshPreview(): void {
-    const saved = this.campaign?.campaign_assets ?? [];
+    const saved = (this.campaign?.campaign_assets ?? []).filter((asset) => asset.active !== false);
     const assets = [...saved];
     // the last form row is the draft asset still being filled in
     const draftIndex = this.campaignAssets.length - 1;
@@ -247,9 +376,10 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
       );
       return;
     }
-    const savedCount = this.campaign?.campaign_assets?.length ?? 0;
-    if (savedCount >= 5) {
-      this.toasterService.warningDialog(`Maximum 5 campaign assets allowed. Remove an asset to add a new one.`);
+    if (this.activeAssetsCount >= this.maxActiveAssets) {
+      this.toasterService.warningDialog(
+        `Maximum ${this.maxActiveAssets} active creatives allowed. Deactivate or remove one to add a new one.`,
+      );
       return;
     }
 
@@ -263,16 +393,9 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     const assetData = currentGroup.value;
     const url = (currentGroup.get('url')?.value ?? assetData.url ?? '') as string;
     const existingAssets = this.campaign?.campaign_assets ?? [];
-    let nextIndex = 0;
 
     // Include all existing assets so the API replaces the array with existing + new, not just the new one
-    existingAssets.forEach((asset, idx) => {
-      formData.append(`campaign[campaign_assets][${idx}][url]`, asset.url ?? '');
-      if (asset.id) {
-        formData.append(`campaign[campaign_assets][${idx}][id]`, asset.id.toString());
-      }
-      nextIndex = idx + 1;
-    });
+    const nextIndex = this.appendAssets(formData, existingAssets);
 
     // Append the new asset at the next index
     formData.append(`campaign[campaign_assets][${nextIndex}][url]`, url);
@@ -355,12 +478,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     const remainingAssets = this.campaign.campaign_assets.filter((asset) => asset.id !== assetId);
 
     // Rebuild FormData: all remaining assets, or explicitly empty so backend clears the list
-    remainingAssets.forEach((asset, idx) => {
-      formData.append(`campaign[campaign_assets][${idx}][url]`, asset.url ?? '');
-      if (asset.id != null) {
-        formData.append(`campaign[campaign_assets][${idx}][id]`, asset.id.toString());
-      }
-    });
+    this.appendAssets(formData, remainingAssets);
 
     this.campaignService.updateCampaign(formData, this.campaign.id).subscribe((updatedCampaign: ICampaign) => {
       // Create a new object reference with a new array reference to ensure change detection
@@ -487,6 +605,8 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
   }
 
   updateCampaign(callSubmitButton = false) {
+    // the live-edit form never sends the full campaign - the server rejects locked fields
+    if (this.isLaunched) return;
     // Validation
     if (!this.campaign?.id) {
       this.toasterService.warningDialog('Campaign ID is missing.');
@@ -518,14 +638,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
 
     // Send saved assets from API
     if (this.campaign?.campaign_assets) {
-      this.campaign.campaign_assets.forEach((asset, index) => {
-        if (asset.url) {
-          formData.append(`campaign[campaign_assets][${index}][url]`, asset.url ?? '');
-          if (asset.id) {
-            formData.append(`campaign[campaign_assets][${index}][id]`, asset.id.toString());
-          }
-        }
-      });
+      this.appendAssets(formData, this.campaign.campaign_assets);
     }
 
     this.campaignService.updateCampaign(formData, this.campaign.id).subscribe((data) => {
@@ -629,6 +742,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
   }
 
   onAccordion2Click(event: MouseEvent) {
+    if (this.isLaunched) return;
     if (this.router.url.includes('/edit/')) {
       return;
     }
@@ -658,6 +772,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
   }
 
   onAccordion3Click(event: MouseEvent) {
+    if (this.isLaunched) return;
     if (this.isForm1Invalid() || this.isForm2Invalid()) {
       if (this.isForm1Invalid()) {
         this.form1Invalid = true;

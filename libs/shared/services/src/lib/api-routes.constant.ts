@@ -1115,6 +1115,7 @@ export const API_ROUTES = {
     CAMPAIGN_ADMIN_STATUS_UPDATE_PAUSE: 'api/v2/campaigns/pause', //PUT
     CAMPAIGN_ADMIN_STATUS_UPDATE_RESUME: 'api/v2/campaigns/resume', //PUT
     CAMPAIGN_SERVE: 'api/v2/campaigns/serve', //GET
+    CHANGE_LOG: 'api/v2/campaigns/change_log', //GET
     USER_CAMPAIGNS_STATS: 'api/v2/campaigns/stats/user_campaigns', //GET
     STATS_USER_DISTRIBUTION: 'api/v2/campaigns/stats/user_distribution', //GET
 

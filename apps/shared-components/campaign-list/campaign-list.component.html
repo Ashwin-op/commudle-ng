@@ -292,11 +292,7 @@
             </td>
             <td class="action-buttons">
               <a
-                *ngIf="
-                  !isCampaignAdmin &&
-                  campaign.status !== ECampaignStatus.LIVE &&
-                  campaign.status !== ECampaignStatus.COMPLETE
-                "
+                *ngIf="!isCampaignAdmin && canCompleteSetup(campaign)"
                 [routerLink]="['/campaigns/edit', campaign.id]"
                 (click)="$event.stopPropagation()"
               >
@@ -311,11 +307,51 @@
                 </button>
               </a>
               <a
-                *ngIf="campaign.status === ECampaignStatus.LIVE || campaign.status === ECampaignStatus.COMPLETE"
-                [routerLink]="['stats', campaign.id]"
+                *ngIf="!isCampaignAdmin && canEditLive(campaign)"
+                [routerLink]="['/campaigns/edit', campaign.id]"
                 (click)="$event.stopPropagation()"
               >
-                <button nbButton status="success" size="small" class="action-btn-icon" outline>
+                <button comButton outline size="small" shape="semi-round" class="action-btn-icon">
+                  Edit &nbsp;<fa-icon [icon]="icons.faEdit"></fa-icon>
+                </button>
+              </a>
+              <button
+                *ngIf="!isCampaignAdmin && canPause(campaign)"
+                comButton
+                outline
+                size="small"
+                shape="semi-round"
+                class="action-btn-icon"
+                (click)="$event.stopPropagation(); updateStatus(ECampaignStatus.PAUSED, campaign.id, i)"
+              >
+                Pause
+              </button>
+              <button
+                *ngIf="!isCampaignAdmin && canResume(campaign)"
+                comButton
+                outline
+                status="success"
+                size="small"
+                shape="semi-round"
+                class="action-btn-icon"
+                (click)="$event.stopPropagation(); updateStatus(ECampaignStatus.RESUMED, campaign.id, i)"
+              >
+                Resume
+              </button>
+              <button
+                *ngIf="!isCampaignAdmin && canStop(campaign)"
+                comButton
+                outline
+                status="danger"
+                size="small"
+                shape="semi-round"
+                class="action-btn-icon"
+                (click)="$event.stopPropagation(); openStopConfirmation(stopCampaignDialog, campaign)"
+              >
+                Stop
+              </button>
+              <a *ngIf="hasStats(campaign)" [routerLink]="['stats', campaign.id]" (click)="$event.stopPropagation()">
+                <button comButton status="success" size="small" shape="semi-round" class="action-btn-icon" outline>
                   Stats &nbsp;<fa-icon [icon]="icons.faArrowRight"></fa-icon>
                 </button>
               </a>
@@ -382,3 +418,27 @@
     </nb-card-footer>
   </nb-card>
 </ng-template> -->
+
+<ng-template #stopCampaignDialog let-data let-ref="dialogRef">
+  <com-card class="stop-campaign-dialog">
+    <com-card-header>
+      <h3>Stop this campaign?</h3>
+    </com-card-header>
+    <com-card-body class="stop-campaign-dialog-body">
+      <p>
+        Stopping is permanent. Your unspent budget returns to your wallet's available balance, and the campaign stops
+        serving. To run it again you will need to create a new campaign.
+      </p>
+      <p>
+        If you only want a break, use Pause instead. The budget stays reserved while a campaign is paused, and is
+        released only when you stop it or its end date passes.
+      </p>
+    </com-card-body>
+    <com-card-footer class="stop-campaign-dialog-footer">
+      <button comButton ghost size="small" shape="semi-round" (click)="ref.close()">Cancel</button>
+      <button comButton status="danger" size="small" shape="semi-round" (click)="confirmStop(ref, data.campaign)">
+        Yes, stop campaign
+      </button>
+    </com-card-footer>
+  </com-card>
+</ng-template>

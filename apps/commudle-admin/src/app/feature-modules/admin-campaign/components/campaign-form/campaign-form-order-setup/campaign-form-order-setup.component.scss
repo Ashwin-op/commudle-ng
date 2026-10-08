@@ -266,3 +266,19 @@ nb-accordion {
     @apply com-flex com-justify-end com-gap-2;
   }
 }
+
+.live-summary-list {
+  @apply com-grid com-grid-cols-[120px_1fr] com-gap-x-4 com-gap-y-1 com-my-3 com-text-sm;
+
+  dt {
+    @apply com-font-medium;
+  }
+
+  dd {
+    @apply com-m-0 com-break-words;
+  }
+}
+
+.change-log-list {
+  @apply com-list-none com-m-0 com-p-0 com-flex com-flex-col com-gap-2 com-text-sm;
+}

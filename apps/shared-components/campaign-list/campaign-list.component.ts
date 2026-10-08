@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges, TemplateRef } from '@angular/core';
 import { ICampaign, ECampaignStatus, EDbModels, ICampaignStats } from '@commudle/shared-models';
 import { CampaignService, NoteService, ToastrService } from '@commudle/shared-services';
 import { faEdit, faArrowRight, faSync, faTrash, faFilter } from '@fortawesome/free-solid-svg-icons';
-import { NbDialogService } from '@commudle/theme';
+import { NbDialogRef, NbDialogService } from '@commudle/theme';
 import * as moment from 'moment';
 
 @Component({
@@ -83,11 +83,52 @@ export class CampaignListComponent implements OnChanges {
     } else if (value === ECampaignStatus.RESUMED) {
       this.campaignService.campaignAdminUpdateStatusResume(campaignId).subscribe((res) => {
         if (res) {
-          this.campaigns[index] = { ...this.campaigns[index], status: ECampaignStatus.RESUMED };
+          this.campaigns[index] = { ...this.campaigns[index], status: ECampaignStatus.LIVE };
           this.toasterService.successDialog('Campaign status updated successfully');
         }
       });
     }
+  }
+
+  // Owner lifecycle actions (pause / resume / stop) - available to the campaign's owner, not just admins
+  canPause(campaign: ICampaign): boolean {
+    return campaign.status === ECampaignStatus.LIVE;
+  }
+
+  canResume(campaign: ICampaign): boolean {
+    return campaign.status === ECampaignStatus.PAUSED;
+  }
+
+  canStop(campaign: ICampaign): boolean {
+    return campaign.status === ECampaignStatus.LIVE || campaign.status === ECampaignStatus.PAUSED;
+  }
+
+  // live and paused campaigns are edited through the restricted live-edit form
+  canEditLive(campaign: ICampaign): boolean {
+    return this.canStop(campaign);
+  }
+
+  canCompleteSetup(campaign: ICampaign): boolean {
+    return ![ECampaignStatus.LIVE, ECampaignStatus.PAUSED, ECampaignStatus.COMPLETE, ECampaignStatus.STOPPED].includes(
+      campaign.status,
+    );
+  }
+
+  hasStats(campaign: ICampaign): boolean {
+    return !this.canCompleteSetup(campaign);
+  }
+
+  openStopConfirmation(dialog: TemplateRef<unknown>, campaign: ICampaign) {
+    this.dialogService.open(dialog, { context: { campaign } });
+  }
+
+  confirmStop(ref: NbDialogRef<unknown>, campaign: ICampaign) {
+    ref.close();
+    this.updateStatus(
+      ECampaignStatus.STOPPED,
+      campaign.id,
+      this.campaigns.findIndex((c) => c.id === campaign.id),
+    );
   }
 
   openPopup(dialog, campaign) {

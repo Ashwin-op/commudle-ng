@@ -5,4 +5,5 @@ export interface ICampaignAsset {
   headline: string;
   url: string;
   image: IAttachedFile;
+  active?: boolean; // missing means active
 }

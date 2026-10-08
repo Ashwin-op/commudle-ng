@@ -50,3 +50,15 @@ export enum ECampaignStatus {
   STOPPED = 'stopped',
   RESUMED = 'resumed',
 }
+
+export interface ICampaignChangeLogEntry {
+  item_type: 'Campaign' | 'CampaignAsset';
+  item_id: number;
+  field: string;
+  old_value: string | boolean | null;
+  new_value: string | boolean | null;
+  changed_at: string;
+  changed_by: string;
+  changed_by_name?: string;
+  changed_by_username?: string;
+}

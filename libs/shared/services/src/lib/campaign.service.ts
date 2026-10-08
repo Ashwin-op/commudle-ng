@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import {
   ECampaignStatus,
   ICampaign,
+  ICampaignChangeLogEntry,
   ICampaignEstimate,
   ICampaignStats,
   IPaginationCount,
@@ -171,6 +172,13 @@ export class CampaignService {
   recordImpression(formData: any, campaignId: string): Observable<any> {
     const params = new HttpParams().set('campaign_id', campaignId);
     return this.http.post<any>(this.baseApiService.getRoute(API_ROUTES.CAMPAIGNS.RECORD_IMPRESSION), formData, {
+      params,
+    });
+  }
+
+  getChangeLog(campaignId: string): Observable<ICampaignChangeLogEntry[]> {
+    const params = new HttpParams().set('campaign_id', campaignId);
+    return this.http.get<ICampaignChangeLogEntry[]>(this.baseApiService.getRoute(API_ROUTES.CAMPAIGNS.CHANGE_LOG), {
       params,
     });
   }
