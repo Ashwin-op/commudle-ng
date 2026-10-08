@@ -83,6 +83,9 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
     this.campaign = source;
     if (source && source.campaign_assets && source.campaign_assets.length > 0) {
       this.slidesCount = source.campaign_assets.length;
+      if (this.currentSlide >= this.slidesCount) {
+        this.currentSlide = 0;
+      }
       this.startAutoSlide();
     } else {
       this.slidesCount = 0;
@@ -194,6 +197,11 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
     if (this.slidesCount > 0) {
       this.currentSlide = (this.currentSlide + 1) % this.slidesCount; // Loop back to first slide
     }
+  }
+
+  goToSlide(index: number) {
+    this.currentSlide = index;
+    this.startAutoSlide(); // restart the timer so the chosen slide isn't skipped right away
   }
 
   private startAutoSlide() {

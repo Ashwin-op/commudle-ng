@@ -217,7 +217,7 @@ nb-accordion {
 }
 
 .right-column-container {
-  @apply com-aspect-1 com-rounded-md;
+  @apply com-rounded-md;
 }
 
 .saved-assets-container {
@@ -253,4 +253,16 @@ nb-accordion {
 
 .action-btn {
   @apply com-ml-auto;
+}
+
+.go-live-dialog {
+  @apply com-max-w-md;
+
+  .go-live-dialog-body {
+    @apply com-max-h-[60vh] com-overflow-y-auto;
+  }
+
+  .go-live-dialog-footer {
+    @apply com-flex com-justify-end com-gap-2;
+  }
 }

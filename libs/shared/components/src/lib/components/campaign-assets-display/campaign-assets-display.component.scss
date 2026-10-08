@@ -30,6 +30,51 @@
   }
 }
 
+.carousel .slide-dots {
+  @apply com-flex com-justify-center com-gap-2 com-py-2;
+
+  .slide-dot {
+    @apply com-h-2 com-w-2 com-rounded-full com-border-0 com-p-0 com-cursor-pointer com-bg-gray-300;
+
+    &.active {
+      @apply com-bg-primary-500;
+    }
+  }
+}
+
+// Preview-only dark styling: the ad card stays a light card in dark mode, which looks harsh in the form
+:host-context([data-theme='dark']) .carousel.preview {
+  .component-container-wrapper {
+    background-color: #1e1e1e;
+  }
+
+  .promoted-badge {
+    background-color: #374151;
+    color: #ffffff;
+
+    fa-icon {
+      color: #d1d5db;
+    }
+  }
+
+  .campaign-url {
+    color: #e5e7eb;
+  }
+
+  .learn-more-button {
+    border-color: #ffffff !important;
+    color: #ffffff !important;
+  }
+
+  .slide-dots .slide-dot {
+    background-color: #4b5563;
+
+    &.active {
+      background-color: #ffffff;
+    }
+  }
+}
+
 .header-image {
   @apply com-flex com-items-center com-m-0 com-w-full com-h-full;
 

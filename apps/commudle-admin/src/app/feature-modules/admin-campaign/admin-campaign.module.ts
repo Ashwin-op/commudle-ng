@@ -25,7 +25,7 @@ import { SharedComponentsModule } from 'apps/shared-components/shared-components
 import { SharedPipesModule } from 'apps/shared-pipes/pipes.module';
 import { LinkyModule } from 'ngx-linky';
 import { AdminCampaignStatsComponent } from 'apps/commudle-admin/src/app/feature-modules/admin-campaign/components/admin-campaign-stats/admin-campaign-stats.component';
-import { CommudleCardModule } from '@commudle/commudle-theme';
+import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-theme';
 @NgModule({
   imports: [
     CommonModule,
@@ -40,6 +40,7 @@ import { CommudleCardModule } from '@commudle/commudle-theme';
     //Standalone components
     SidebarComponent,
     CommudleCardModule,
+    CommudleButtonModule,
     //nebular
     NbCardModule,
     NbButtonModule,

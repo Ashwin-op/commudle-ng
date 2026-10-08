@@ -5,7 +5,7 @@
         <h3 class="heading"><fa-icon [icon]="icons.faRectangleAd"></fa-icon> Build your Ad campaign</h3>
 
         <!-- Campaign Form Accordion -->
-        <nb-accordion>
+        <nb-accordion [multi]="true">
           <!-- Campaign Details Section -->
           <nb-accordion-item [expanded]="true">
             <nb-accordion-item-header>
@@ -52,6 +52,7 @@
                         placeholder="Select Start Date & Time"
                         [inputValue]="campaignForm.get('start_at').value"
                         [type]="'datetime-local'"
+                        [min]="minStartAt"
                         (blurEvent)="campaignForm.get('start_at').markAsTouched()"
                         (valueChange)="handleInput($event, 'start_at')"
                       ></commudle-input>
@@ -64,6 +65,12 @@
                         class="alert-container"
                       >
                         <commudle-alert [error]="true" errorMessage="Start date is required"></commudle-alert>
+                      </div>
+                      <div *ngIf="campaignForm.get('start_at')?.hasError('startAtTooSoon')" class="alert-container">
+                        <commudle-alert
+                          [error]="true"
+                          errorMessage="Start time must be at least 1 hour from now."
+                        ></commudle-alert>
                       </div>
                     </div>
                   </div>
@@ -108,7 +115,7 @@
           </nb-accordion-item>
 
           <!-- Budget Section -->
-          <nb-accordion-item [disabled]="form1Invalid" [expanded]="!form1Invalid" (click)="onAccordion2Click($event)">
+          <nb-accordion-item [disabled]="form1Invalid" [expanded]="true" (click)="onAccordion2Click($event)">
             <nb-accordion-item-header>
               <div class="accordion-header-content">
                 <span class="accordion-number">2</span>
@@ -277,7 +284,7 @@
           </nb-accordion-item>
 
           <!-- Creatives and Destination URL Section -->
-          <nb-accordion-item [disabled]="form1Invalid || form2Invalid" [expanded]="!form1Invalid && !form2Invalid">
+          <nb-accordion-item [disabled]="form1Invalid || form2Invalid" [expanded]="true">
             <nb-accordion-item-header (click)="onAccordion3Click($event)">
               <div class="accordion-header-content">
                 <span class="accordion-number">3</span>
@@ -326,7 +333,7 @@
                           <span class="image-text">
                             <fa-icon class="image-icon" [icon]="icons.faFileImage"></fa-icon>
                             <p class="image-text-content">
-                              <span>Drag and drop images</span><span class="browse-text"> or Browse</span>
+                              <span>Drag and drop image</span><span class="browse-text"> or Browse</span>
                             </p>
                           </span>
                           <input
@@ -452,10 +459,11 @@
           </div>
           <div class="next-button">
             <button
-              nbButton
+              comButton
+              status="primary"
               [disabled]="!isSubmitForApprovalEnabled()"
               shape="semi-round"
-              (click)="updateCampaign(true)"
+              (click)="openGoLiveConfirmation(goLiveDialog)"
             >
               {{
                 wallet && wallet.available_balance >= campaignForm.get('budget').value ? 'Go live' : 'Pay and Go live'
@@ -471,7 +479,7 @@
           <commudle-campaign-assets-display
             [defaultImageUrl]="defaultUrl"
             [defaultImage]="staticAssets.campaign_default_image"
-            [campaignPreview]="campaign"
+            [campaignPreview]="previewCampaign"
             [campaignType]="'preview'"
           ></commudle-campaign-assets-display>
         </div>
@@ -479,3 +487,18 @@
     </div>
   </div>
 </div>
+
+<ng-template #goLiveDialog let-data let-ref="dialogRef">
+  <com-card class="go-live-dialog">
+    <com-card-header>
+      <h3>Go live?</h3>
+    </com-card-header>
+    <com-card-body class="go-live-dialog-body">
+      <p>Are you sure you will be able to stop, pause, or resume the campaign at any point in time?</p>
+    </com-card-body>
+    <com-card-footer class="go-live-dialog-footer">
+      <button comButton ghost size="small" shape="semi-round" (click)="ref.close()">Cancel</button>
+      <button comButton status="primary" size="small" shape="semi-round" (click)="confirmGoLive(ref)">Yes</button>
+    </com-card-footer>
+  </com-card>
+</ng-template>

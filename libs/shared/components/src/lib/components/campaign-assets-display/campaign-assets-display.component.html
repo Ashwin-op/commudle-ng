@@ -1,5 +1,6 @@
 <div
   class="carousel"
+  [class.preview]="campaignType === 'preview'"
   *ngIf="campaign && campaign.campaign_assets && campaign.campaign_assets.length > 0"
   #campaignImageContainer
 >
@@ -24,6 +25,17 @@
         </div>
       </a>
     </div>
+  </div>
+
+  <div class="slide-dots" *ngIf="campaignType === 'preview' && slidesCount > 1">
+    <button
+      type="button"
+      class="slide-dot"
+      *ngFor="let ca of campaign.campaign_assets; let i = index"
+      [class.active]="i === currentSlide"
+      [attr.aria-label]="'Show asset ' + (i + 1)"
+      (click)="goToSlide(i)"
+    ></button>
   </div>
 </div>
 

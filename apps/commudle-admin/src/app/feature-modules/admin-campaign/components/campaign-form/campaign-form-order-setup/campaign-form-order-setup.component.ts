@@ -1,4 +1,13 @@
-import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  TemplateRef,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  AfterViewInit,
+  ChangeDetectorRef,
+} from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -9,9 +18,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NbDialogRef, NbDialogService } from '@commudle/theme';
 import { ICampaign, ICampaignAsset, ICampaignEstimate, EDbModels, IWallet } from '@commudle/shared-models';
 import {
   CampaignService,
+  ConfettiService,
   GoogleTagManagerService,
   SeoService,
   ToastrService,
@@ -21,7 +32,7 @@ import { GooglePlacesAutocompleteService } from 'apps/commudle-admin/src/app/ser
 import { SearchService } from 'apps/commudle-admin/src/app/feature-modules/search/services/search.service';
 import { ISearch } from 'apps/shared-models/search.model';
 import { faArrowRight, faFileImage, faRectangleAd, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { debounceTime, distinctUntilChanged, EMPTY, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, EMPTY, Subscription, switchMap } from 'rxjs';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 import { environment } from '@commudle/shared-environments';
 
@@ -31,7 +42,7 @@ import { environment } from '@commudle/shared-environments';
   styleUrls: ['./campaign-form-order-setup.component.scss'],
   standalone: false,
 })
-export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
+export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('locationSearchInput', { read: ElementRef }) locationSearchInput: ElementRef;
   campaignForm: FormGroup;
   icons = {
@@ -41,6 +52,8 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
     faTrash,
   };
   campaign: ICampaign;
+  // built from the form (not the saved campaign) so the preview updates as the user types
+  previewCampaign: ICampaign;
   wallet: IWallet;
   estimate: ICampaignEstimate;
   form1Invalid = true;
@@ -58,6 +71,9 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
   imagePreview = [];
   staticAssets = staticAssets;
   defaultUrl = environment.app_url + '/campaigns/new';
+  minStartLeadHours = 1;
+  minStartAt = this.toDateTimeLocal(this.minStartDate());
+  private subscriptions = new Subscription();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -71,11 +87,13 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
     private googlePlacesAutocompleteService: GooglePlacesAutocompleteService,
     private searchService: SearchService,
     private cdr: ChangeDetectorRef,
+    private dialogService: NbDialogService,
+    private confettiService: ConfettiService,
   ) {
     this.campaignForm = this._fb.group(
       {
         name: ['', Validators.required],
-        start_at: ['', Validators.required],
+        start_at: ['', [Validators.required, (c: AbstractControl) => this.startAtValidator(c)]],
         end_at: [''],
         set_end_date: [false],
         cta_label: [''],
@@ -91,6 +109,8 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.subscriptions.add(this.campaignForm.valueChanges.subscribe(() => this.refreshPreview()));
+    this.refreshPreview();
     if (this.router.url.includes('/edit/')) {
       const campaignId = this.activatedRoute.parent?.snapshot?.paramMap?.get('campaign_id');
       this.campaignService.fetchCampaign(campaignId).subscribe((campaign) => {
@@ -128,6 +148,47 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.initAutocomplete();
     this.observeCommunitiesInput();
+  }
+
+  ngOnDestroy() {
+    // placeChanged lives on a root singleton service, so a stale subscription would fire for a destroyed form
+    this.subscriptions.unsubscribe();
+  }
+
+  private refreshPreview(): void {
+    const saved = this.campaign?.campaign_assets ?? [];
+    const assets = [...saved];
+    // the last form row is the draft asset still being filled in
+    const draftIndex = this.campaignAssets.length - 1;
+    const draftPreviewUrl = this.imagePreview[draftIndex];
+    const draftUrl = this.campaignAssets.at(draftIndex)?.get('url')?.value;
+    if (draftPreviewUrl) {
+      assets.push({ id: null, headline: '', url: draftUrl || '', image: { url: draftPreviewUrl } } as ICampaignAsset);
+    }
+    this.previewCampaign = {
+      ...this.campaign,
+      cta_label: this.campaignForm.get('cta_label')?.value || 'Learn more',
+      campaign_assets: assets,
+    } as ICampaign;
+  }
+
+  private minStartDate(): Date {
+    return new Date(Date.now() + this.minStartLeadHours * 60 * 60 * 1000);
+  }
+
+  private toDateTimeLocal(date: Date): string {
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(
+      date.getMinutes(),
+    )}`;
+  }
+
+  // Start must be at least minStartLeadHours from now so there is time for a manual review.
+  // An unchanged start on an existing campaign is left alone, so already-started campaigns stay editable.
+  startAtValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+    if (this.campaign?.start_at && control.value === this.formatDateTimeForInput(this.campaign.start_at)) return null;
+    return new Date(control.value) < this.minStartDate() ? { startAtTooSoon: true } : null;
   }
 
   createCampaign() {
@@ -180,6 +241,12 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
   }
 
   addAsset(index: number) {
+    if (!this.campaign?.id) {
+      this.toasterService.warningDialog(
+        'Fill in the Campaign Details and open the Budget section first, so the campaign is created before adding assets.',
+      );
+      return;
+    }
     const savedCount = this.campaign?.campaign_assets?.length ?? 0;
     if (savedCount >= 5) {
       this.toasterService.warningDialog(`Maximum 5 campaign assets allowed. Remove an asset to add a new one.`);
@@ -250,6 +317,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
     campaignAssetsFormArray.push(this.createCampaignAsset());
     this.imagePreview.push(null);
 
+    this.refreshPreview();
     this.cdr.detectChanges();
   }
 
@@ -261,6 +329,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
       // Reset the last form (the empty one)
       campaignAssetsFormArray.at(lastIndex).reset();
       this.imagePreview[lastIndex] = null;
+      this.refreshPreview();
     } else {
       // If no forms exist, create one
       campaignAssetsFormArray.push(this.createCampaignAsset());
@@ -396,6 +465,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
     const reader = new FileReader();
     reader.onload = () => {
       this.imagePreview[i] = reader.result as string;
+      this.refreshPreview();
       this.cdr.detectChanges();
     };
     reader.readAsDataURL(file);
@@ -471,11 +541,21 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
     });
   }
 
+  openGoLiveConfirmation(dialog: TemplateRef<unknown>) {
+    this.dialogService.open(dialog);
+  }
+
+  confirmGoLive(dialogRef: NbDialogRef<unknown>) {
+    dialogRef.close();
+    this.updateCampaign(true);
+  }
+
   callSubmitForApproval() {
     if (this.wallet && this.wallet.available_balance >= this.campaignForm?.get('budget')?.value) {
       this.campaignService.submitForApproval(this.campaign.id).subscribe((data) => {
         if (data) {
           this.toasterService.successDialog('Campaign submitted');
+          this.confettiService.celebrate();
           this.router.navigate(['/campaigns']);
         }
       });
@@ -500,7 +580,8 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
     const startAt = this.campaignForm.get('start_at')?.valid;
     const budget = this.campaignForm.get('budget')?.valid;
     const locations = this.campaignForm.get('locations')?.valid;
-    const campaignAssets = (this.campaignForm.get('campaign_assets') as FormArray).length > 0;
+    // the form array always holds an empty draft row, so only assets already saved to the campaign count
+    const campaignAssets = (this.campaign?.campaign_assets?.length ?? 0) > 0;
     const setEndDate = this.campaignForm.get('set_end_date')?.value;
     const communities = this.campaignForm.get('communities')?.valid;
     const endAt = this.campaignForm.get('end_at');
@@ -603,9 +684,11 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
         types: ['locality', 'administrative_area_level_1', 'country'],
       });
 
-      this.googlePlacesAutocompleteService.placeChanged.subscribe((place: google.maps.places.PlaceResult) => {
-        this.onLocationPlaceSelected(place);
-      });
+      this.subscriptions.add(
+        this.googlePlacesAutocompleteService.placeChanged.subscribe((place: google.maps.places.PlaceResult) => {
+          this.onLocationPlaceSelected(place);
+        }),
+      );
     }
   }
 
@@ -637,7 +720,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
   }
 
   observeCommunitiesInput() {
-    this.communitiesFormControl.valueChanges
+    const communitiesSub = this.communitiesFormControl.valueChanges
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
@@ -659,6 +742,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
         this.searchingCommunities = false;
         this.cdr.detectChanges();
       });
+    this.subscriptions.add(communitiesSub);
   }
 
   onCommunitySelected(communityId: number, communityName: string, communitySlug: string) {
