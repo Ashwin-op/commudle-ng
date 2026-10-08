@@ -428,10 +428,8 @@
         @apply com-border-primary-300 com-bg-blue-50;
       }
 
-      &.completed {
-        @apply com-border-green-200 com-bg-green-50;
-      }
-
+      // Reserve 3 lines for the name so the count below always starts on the
+      // same line across all cards.
       .progress-card-label {
         @apply com-text-xs com-font-medium com-text-Cadet-Grey com-line-clamp-2 com-min-h-8;
       }
