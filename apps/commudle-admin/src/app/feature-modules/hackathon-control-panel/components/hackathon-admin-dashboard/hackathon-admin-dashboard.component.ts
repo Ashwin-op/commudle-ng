@@ -53,6 +53,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   moment = moment;
   countryDetails = countries_details;
+  EHackathonStatus = EHackathonStatus;
 
   icons = {
     faCalendarDay,
@@ -141,18 +142,6 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     this.getSetupProgress();
   }
 
-  get isHackathonOpen(): boolean {
-    return this.hackathon?.status === EHackathonStatus.OPEN;
-  }
-
-  get isHackathonCompleted(): boolean {
-    return this.hackathon?.status === EHackathonStatus.COMPLETED;
-  }
-
-  get isHackathonDraft(): boolean {
-    return this.hackathon?.status === EHackathonStatus.DRAFT;
-  }
-
   get daysUntilHackathon(): string {
     if (!this.hackathon?.start_date) {
       return '';
@@ -179,16 +168,6 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
       return '';
     }
     return moment(this.hackathon.end_date).format('D MMM, YYYY');
-  }
-
-  private toArray<T>(value: unknown): T[] {
-    if (Array.isArray(value)) {
-      return value as T[];
-    }
-    if (value && typeof value === 'object') {
-      return Object.values(value as Record<string, T>);
-    }
-    return [];
   }
 
   isStatusReady(status: string | undefined): boolean {
@@ -241,8 +220,8 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
       this.dashboardHackathonsService.stageProgress(this.hackathon.id).subscribe({
         next: (data) => {
           this.stageProgress = {
-            stages: this.toArray<IHackathonDashboardStage>(data?.stages),
-            overall_progress_percent: data?.overall_progress_percent || 0,
+            stages: data.stages,
+            overall_progress_percent: data.overall_progress_percent,
           };
           this.isStageProgressLoading = false;
         },
@@ -290,8 +269,8 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
         .recentActivity(this.hackathon.id, this.activityPage, this.activityCount)
         .subscribe({
           next: (data) => {
-            this.recentActivity = this.toArray<IHackathonDashboardActivityItem>(data?.values);
-            this.activityTotal = data?.total || 0;
+            this.recentActivity = data.values;
+            this.activityTotal = data.total;
             this.isActivityLoading = false;
           },
           error: () => {

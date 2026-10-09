@@ -58,8 +58,7 @@
   background: linear-gradient(135deg, #e8f0fe 0%, #f0e6ff 30%, #ffffff 60%, #e8f4ff 100%);
 
   .hero-banner {
-    @apply com-w-full md:com-w-44 com-h-40 md:com-h-auto com-rounded-xl com-overflow-hidden com-flex-shrink-0 md:com-self-stretch;
-    min-height: 120px;
+    @apply com-w-full md:com-w-44 com-h-40 md:com-h-auto com-rounded-xl com-overflow-hidden com-flex-shrink-0 md:com-self-stretch com-min-h-[120px];
 
     img {
       @apply com-w-full com-h-full com-object-cover;
@@ -214,8 +213,7 @@
           @apply com-ml-auto com-shrink-0 com-hidden md:com-block;
 
           .sparkline {
-            width: 50px;
-            height: 20px;
+            @apply com-w-[50px] com-h-[20px];
           }
 
           .progress-ring {

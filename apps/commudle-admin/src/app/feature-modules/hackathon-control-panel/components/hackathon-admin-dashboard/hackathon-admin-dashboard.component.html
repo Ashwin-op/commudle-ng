@@ -19,8 +19,8 @@
             <span
               class="hero-status-badge"
               [ngClass]="{
-                'status-open': isHackathonOpen,
-                'status-completed': isHackathonCompleted
+                'status-open': hackathon.status === EHackathonStatus.OPEN,
+                'status-completed': hackathon.status === EHackathonStatus.COMPLETED
               }"
             >
               <span class="status-dot"></span>
@@ -94,7 +94,7 @@
           </div>
         </div>
         <div class="timeline-progress-bar">
-          <div class="progress-fill" [style.width.%]="stageProgress?.overall_progress_percent || 0"></div>
+          <div class="progress-fill" [style.--bar-share.%]="stageProgress?.overall_progress_percent || 0"></div>
         </div>
         <span class="timeline-progress-label"
           >Overall Progress {{ stageProgress?.overall_progress_percent || 0 }}%</span
@@ -109,7 +109,7 @@
     <div class="attention-card">
       <div class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faBell" class="com-text-Azure"></fa-icon> Needs Attention
+          <fa-icon [icon]="icons.faBell" class="heading-icon-attention"></fa-icon> Needs Attention
         </h3>
       </div>
       <app-loading-spinner
@@ -280,7 +280,7 @@
     <div class="snapshot-card">
       <div class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faChartPie" class="com-text-primary-500"></fa-icon> Hackathon Snapshot
+          <fa-icon [icon]="icons.faChartPie" class="heading-icon-snapshot"></fa-icon> Hackathon Snapshot
         </h3>
       </div>
       <app-loading-spinner *ngIf="isSnapshotLoading && !snapshot" class="section-loader"></app-loading-spinner>
@@ -325,7 +325,7 @@
     <div class="activity-card">
       <div class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faBolt" class="com-text-yellow-500"></fa-icon> Recent Activity
+          <fa-icon [icon]="icons.faBolt" class="heading-icon-activity"></fa-icon> Recent Activity
         </h3>
       </div>
       <app-loading-spinner *ngIf="isActivityLoading" class="section-loader"></app-loading-spinner>
@@ -334,7 +334,7 @@
           <span class="activity-avatar" [ngClass]="activityAvatarClass(item.type)">
             <fa-icon [icon]="activityIcon(item.type)"></fa-icon>
           </span>
-          <p class="activity-content com-m-0">
+          <p class="activity-content">
             <span class="activity-text" [title]="activityActorName(item) + ' ' + activityLabel(item.type)">
               <ng-container *ngIf="activityActorName(item)">
                 <span class="activity-name-avatar">{{ activityInitial(item) }}</span
@@ -351,7 +351,7 @@
           <time class="activity-time">{{ activityTime(item) }}</time>
         </li>
         <li *ngIf="recentActivity.length === 0" class="activity-item">
-          <p class="activity-content com-m-0">
+          <p class="activity-content">
             <span class="activity-text">No recent activity yet</span>
           </p>
         </li>
@@ -372,7 +372,7 @@
     <article class="competition-progress-card">
       <div class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faTrophy" class="com-text-purple-500"></fa-icon> Competition Progress
+          <fa-icon [icon]="icons.faTrophy" class="heading-icon-competition"></fa-icon> Competition Progress
         </h3>
         <a [routerLink]="['rounds']" class="view-all-link">Manage Rounds →</a>
       </div>
@@ -401,7 +401,7 @@
     <article class="people-judging-card">
       <div class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faUserGroup" class="com-text-indigo-500"></fa-icon> People &amp; Judging
+          <fa-icon [icon]="icons.faUserGroup" class="heading-icon-people"></fa-icon> People &amp; Judging
         </h3>
         <a [routerLink]="['speakers']" class="view-all-link">Manage →</a>
       </div>
@@ -412,22 +412,22 @@
       <ng-container *ngIf="!isPeopleJudgingLoading || peopleJudging">
         <div class="people-stats">
           <div class="people-stat">
-            <fa-icon [icon]="icons.faUsers" class="people-stat-icon com-text-indigo-500"></fa-icon>
+            <fa-icon [icon]="icons.faUsers" class="people-stat-icon judges-icon"></fa-icon>
             <span class="people-stat-value">{{ peopleJudging?.judges_count ?? 0 | number }}</span>
             <span class="people-stat-label">Judges</span>
           </div>
           <div class="people-stat">
-            <fa-icon [icon]="icons.faUserGroup" class="people-stat-icon com-text-blue-500"></fa-icon>
+            <fa-icon [icon]="icons.faUserGroup" class="people-stat-icon mentors-icon"></fa-icon>
             <span class="people-stat-value">{{ peopleJudging?.mentors_count ?? 0 | number }}</span>
             <span class="people-stat-label">Mentors</span>
           </div>
           <div class="people-stat">
-            <fa-icon [icon]="icons.faEnvelope" class="people-stat-icon com-text-green-500"></fa-icon>
+            <fa-icon [icon]="icons.faEnvelope" class="people-stat-icon invitations-icon"></fa-icon>
             <span class="people-stat-value">{{ peopleJudging?.pending_invitations_count ?? 0 | number }}</span>
             <span class="people-stat-label">Pending Invitations</span>
           </div>
           <div class="people-stat">
-            <fa-icon [icon]="icons.faCode" class="people-stat-icon com-text-orange-500"></fa-icon>
+            <fa-icon [icon]="icons.faCode" class="people-stat-icon projects-icon"></fa-icon>
             <span class="people-stat-value">{{ peopleJudging?.unassigned_projects_count ?? 0 | number }}</span>
             <span class="people-stat-label">Unassigned Projects</span>
           </div>
@@ -445,10 +445,10 @@
 
   <!-- Row 4: Setup Progress + Quick Actions -->
   <section class="actions-setup-row">
-    <article class="setup-progress-card" *ngIf="setupProgress?.visible || isHackathonDraft">
+    <article class="setup-progress-card" *ngIf="setupProgress?.visible || hackathon.status === EHackathonStatus.DRAFT">
       <div class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faChartPie" class="com-text-green-500"></fa-icon> Setup Progress
+          <fa-icon [icon]="icons.faChartPie" class="heading-icon-setup"></fa-icon> Setup Progress
         </h3>
         <span class="setup-note">Only visible until published</span>
       </div>
@@ -462,7 +462,7 @@
           <span class="setup-bar-pct">{{ setupProgress?.readiness_percent || 0 }}%</span>
         </div>
         <div class="setup-bar">
-          <div class="setup-bar-fill" [style.width.%]="setupProgress?.readiness_percent || 0"></div>
+          <div class="setup-bar-fill" [style.--bar-share.%]="setupProgress?.readiness_percent || 0"></div>
         </div>
         <div class="setup-checklist">
           <span class="setup-item" [ngClass]="setupProgress?.basic_information ? 'done' : 'pending'">
@@ -493,7 +493,7 @@
     <article class="quick-actions-card">
       <div class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faBolt" class="com-text-orange-500"></fa-icon> Quick Actions
+          <fa-icon [icon]="icons.faBolt" class="heading-icon-actions"></fa-icon> Quick Actions
         </h3>
       </div>
       <div class="actions-grid">

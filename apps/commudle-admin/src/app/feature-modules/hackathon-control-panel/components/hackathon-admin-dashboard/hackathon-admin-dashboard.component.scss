@@ -8,6 +8,34 @@
 
 .section-heading {
   @apply com-m-0 com-text-base com-font-medium com-text-Yankees-Blue com-flex com-items-center com-gap-2;
+
+  .heading-icon-attention {
+    @apply com-text-Azure;
+  }
+
+  .heading-icon-snapshot {
+    @apply com-text-primary-500;
+  }
+
+  .heading-icon-activity {
+    @apply com-text-yellow-500;
+  }
+
+  .heading-icon-competition {
+    @apply com-text-purple-500;
+  }
+
+  .heading-icon-people {
+    @apply com-text-indigo-500;
+  }
+
+  .heading-icon-setup {
+    @apply com-text-green-500;
+  }
+
+  .heading-icon-actions {
+    @apply com-text-orange-500;
+  }
 }
 
 .section-header {
@@ -20,8 +48,7 @@
   background: linear-gradient(135deg, #e8f0fe 0%, #eae6ff 30%, #ffffff 60%, #e8f4ff 100%);
 
   .hero-banner {
-    @apply com-w-full md:com-w-44 com-h-40 md:com-h-auto com-rounded-xl com-overflow-hidden com-flex-shrink-0 md:com-self-stretch;
-    min-height: 140px;
+    @apply com-w-full md:com-w-44 com-h-40 md:com-h-auto com-rounded-xl com-overflow-hidden com-flex-shrink-0 md:com-self-stretch com-min-h-[140px];
 
     img {
       @apply com-w-full com-h-full com-object-cover;
@@ -139,8 +166,7 @@
         @apply com-flex com-items-start com-justify-between com-overflow-x-auto com-scrollbar-hide com-pb-2;
 
         .timeline-step {
-          @apply com-flex com-flex-col com-items-center com-gap-1.5 com-flex-1 com-relative;
-          min-width: 90px;
+          @apply com-flex com-flex-col com-items-center com-gap-1.5 com-flex-1 com-relative com-min-w-[90px];
 
           .step-dot {
             @apply com-w-6 com-h-6 com-rounded-full com-border-2 com-border-solid com-border-gray-300 com-bg-white com-flex-shrink-0 com-relative com-z-10;
@@ -149,13 +175,7 @@
           // Connector line between dots
           &:not(:last-child)::before {
             content: '';
-            position: absolute;
-            top: 11px;
-            left: calc(50% + 12px);
-            right: calc(-50% + 12px);
-            height: 2px;
-            z-index: 0;
-            @apply com-bg-gray-300;
+            @apply com-absolute com-top-[11px] com-left-[calc(50%+12px)] com-right-[calc(-50%+12px)] com-h-0.5 com-z-0 com-bg-gray-300;
           }
 
           .step-info {
@@ -193,6 +213,7 @@
 
         .progress-fill {
           @apply com-h-full com-rounded-full com-bg-primary-500;
+          width: var(--bar-share, 0%);
         }
       }
 
@@ -342,7 +363,7 @@
       }
 
       .activity-content {
-        @apply com-flex com-flex-col com-flex-1 com-min-w-0;
+        @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-m-0;
 
         .activity-text {
           @apply com-text-sm com-text-Yankees-Blue com-line-clamp-2 com-cursor-default;
@@ -389,8 +410,7 @@
     @apply com-flex com-items-stretch com-gap-2 com-mt-3 com-overflow-x-auto com-scrollbar-hide com-pb-2;
 
     .progress-card {
-      @apply com-flex com-flex-col com-items-center com-text-center com-gap-1.5 com-p-4 com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-flex-1 com-shrink-0 com-self-stretch;
-      min-width: 130px;
+      @apply com-flex com-flex-col com-items-center com-text-center com-gap-1.5 com-p-4 com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-flex-1 com-shrink-0 com-self-stretch com-min-w-[130px];
 
       &.active {
         @apply com-border-primary-300 com-bg-blue-50;
@@ -399,12 +419,7 @@
       // Reserve 3 lines for the name so the count below always starts on the
       // same line across all cards.
       .progress-card-label {
-        @apply com-text-xs com-font-medium com-text-Cadet-Grey;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        min-height: 3rem;
+        @apply com-text-xs com-font-medium com-text-Cadet-Grey com-line-clamp-3 com-min-h-12;
       }
 
       .progress-card-value {
@@ -441,6 +456,22 @@
 
       .people-stat-icon {
         @apply com-text-lg;
+
+        &.judges-icon {
+          @apply com-text-indigo-500;
+        }
+
+        &.mentors-icon {
+          @apply com-text-blue-500;
+        }
+
+        &.invitations-icon {
+          @apply com-text-green-500;
+        }
+
+        &.projects-icon {
+          @apply com-text-orange-500;
+        }
       }
 
       .people-stat-value {
@@ -529,6 +560,7 @@
 
         .setup-bar-fill {
           @apply com-h-full com-rounded-full com-bg-primary-500;
+          width: var(--bar-share, 0%);
         }
       }
 
