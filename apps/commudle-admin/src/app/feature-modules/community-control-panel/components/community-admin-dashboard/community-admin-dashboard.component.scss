@@ -544,9 +544,6 @@
     }
   }
 
-  // Lay the top-list cards out as a column so the pagination can be pushed to
-  // the bottom; the grid already stretches cards to equal height, so the
-  // pagination stays anchored instead of jumping up when rows reload.
   .top-list-card {
     @apply com-flex com-flex-col;
 
