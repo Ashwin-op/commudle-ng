@@ -480,7 +480,6 @@
 
       .activity-text {
         @apply com-text-sm com-text-Yankees-Blue com-line-clamp-2 com-cursor-default;
-        title: attr(data-full-text);
 
         strong {
           @apply com-font-medium;
@@ -522,6 +521,17 @@
   .live-visitors-card,
   .top-list-card {
     @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+  }
+
+  // Lay the top-list cards out as a column so the pagination can be pushed to
+  // the bottom; the grid already stretches cards to equal height, so the
+  // pagination stays anchored instead of jumping up when rows reload.
+  .top-list-card {
+    @apply com-flex com-flex-col;
+
+    commudle-pagination-compact {
+      @apply com-mt-auto;
+    }
   }
 
   .live-visitors-body {

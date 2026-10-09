@@ -59,9 +59,9 @@ export class DashboardCommunitiesService {
     );
   }
 
-  upcomingSchedule(communityId): Observable<{ values: ICommunityDashboardScheduleItem[] }> {
+  upcomingSchedule(communityId): Observable<ICommunityDashboardScheduleItem[]> {
     const params = new HttpParams().set('community_id', communityId);
-    return this.http.get<{ values: ICommunityDashboardScheduleItem[] }>(
+    return this.http.get<ICommunityDashboardScheduleItem[]>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITIES.UPCOMING_SCHEDULE),
       { params },
     );

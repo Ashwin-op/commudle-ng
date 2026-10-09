@@ -219,14 +219,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.dashboardCommunitiesService.upcomingSchedule(this.community.slug).subscribe({
         next: (data) => {
-          const payload = data as unknown as
-            | { values?: ICommunityDashboardScheduleItem[] }
-            | ICommunityDashboardScheduleItem[];
-          this.upcomingSchedule = Array.isArray(payload)
-            ? payload
-            : Array.isArray(payload?.values)
-            ? payload.values
-            : [];
+          this.upcomingSchedule = data;
           this.upcomingScheduleLoading = false;
         },
         error: () => {
@@ -254,8 +247,8 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         .recentActivity(this.community.slug, this.recentActivityPage, this.recentActivityCount)
         .subscribe({
           next: (data) => {
-            this.recentActivity = Array.isArray(data?.values) ? data.values : [];
-            this.recentActivityTotal = data?.total || 0;
+            this.recentActivity = data.values;
+            this.recentActivityTotal = data.total;
             this.recentActivityLoading = false;
           },
           error: () => {
@@ -298,7 +291,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.dashboardCommunitiesService.topPages(this.community.slug, 'current').subscribe({
         next: (data) => {
-          this.topPages = Array.isArray(data) ? data : [];
+          this.topPages = data;
           this.topPagesLoading = false;
         },
         error: () => {
@@ -315,8 +308,8 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         .topCities(this.community.slug, this.topCitiesPage, this.topCitiesCount)
         .subscribe({
           next: (data) => {
-            this.topCities = Array.isArray(data?.values) ? data.values : [];
-            this.topCitiesTotal = data?.total || 0;
+            this.topCities = data.values;
+            this.topCitiesTotal = data.total;
             this.topCitiesLoading = false;
           },
           error: () => {
