@@ -187,7 +187,15 @@
               <div *ngIf="sidebarExpanded" class="heading">Attendees</div>
             </a>
             <a
-              [routerLink]="['/admin', 'communities', community.slug, 'event-dashboard', event.slug, 'scan-entry-pass']"
+              [routerLink]="[
+                '/admin',
+                'communities',
+                community.slug,
+                'events',
+                'event-dashboard',
+                event.slug,
+                'scan-entry-pass'
+              ]"
               target="_blank"
               class="action-button public-event-page"
             >
@@ -281,7 +289,15 @@
               <div class="heading">Attendees</div>
             </a>
             <a
-              [routerLink]="['/admin', 'communities', community.slug, 'event-dashboard', event.slug, 'scan-entry-pass']"
+              [routerLink]="[
+                '/admin',
+                'communities',
+                community.slug,
+                'events',
+                'event-dashboard',
+                event.slug,
+                'scan-entry-pass'
+              ]"
               target="_blank"
               class="action-button"
             >
