@@ -213,21 +213,6 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     return 94.2 * (1 - this.confirmedPercent / 100);
   }
 
-  /**
-   * `*ngFor` throws NG0900 the moment it is handed a plain object instead of an array.
-   * The dashboards endpoints are still in development, so coerce anything list-shaped
-   * rather than letting one unexpected payload take the whole dashboard down.
-   */
-  private toArray<T>(value: unknown): T[] {
-    if (Array.isArray(value)) {
-      return value as T[];
-    }
-    if (value && typeof value === 'object') {
-      return Object.values(value as Record<string, T>);
-    }
-    return [];
-  }
-
   getNeedsAttention(): void {
     this.isNeedsAttentionLoading = true;
     this.subscriptions.push(
@@ -275,8 +260,8 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.dashboardEventsService.recentActivity(this.event.id, this.activityPage, this.activityCount).subscribe({
         next: (data) => {
-          this.recentActivity = this.toArray<IEventDashboardActivityItem>(data?.values);
-          this.activityTotal = data?.total || 0;
+          this.recentActivity = data.values;
+          this.activityTotal = data.total;
           this.isActivityLoading = false;
         },
         error: () => {
@@ -358,8 +343,8 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
       this.dashboardEventsService.audienceSnapshot(this.event.id).subscribe({
         next: (data) => {
           this.audienceSnapshot = {
-            companies: this.toArray(data?.companies),
-            experience_levels: this.toArray(data?.experience_levels),
+            companies: data.companies,
+            experience_levels: data.experience_levels,
           };
           this.isAudienceLoading = false;
         },
@@ -422,8 +407,8 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
             attendance_rate: data?.attendance_rate || 0,
             entry_passes_count: data?.entry_passes_count || 0,
             feedback_responses_count: data?.feedback_responses_count || 0,
-            experience_distribution: this.toArray(data?.experience_distribution),
-            domain_distribution: this.toArray(data?.domain_distribution),
+            experience_distribution: data.experience_distribution,
+            domain_distribution: data.domain_distribution,
           };
           this.isPostEventLoading = false;
         },
@@ -452,7 +437,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.dashboardEventsService.topPages(this.event.id, 'current').subscribe({
         next: (data) => {
-          this.topPages = Array.isArray(data) ? data : [];
+          this.topPages = data;
           this.topPagesLoading = false;
         },
         error: () => {

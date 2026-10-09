@@ -8,10 +8,32 @@
 
 .section-heading {
   @apply com-m-0 com-text-base com-font-medium com-text-Yankees-Blue com-flex com-items-center com-gap-2;
+
+  .heading-icon-attention {
+    @apply com-text-Azure;
+  }
+
+  .heading-icon-snapshot,
+  .heading-icon-pages,
+  .heading-icon-audience {
+    @apply com-text-primary-500;
+  }
+
+  .heading-icon-activity {
+    @apply com-text-yellow-500;
+  }
+
+  .heading-icon-visitors {
+    @apply com-text-blue-500;
+  }
 }
 
 .section-heading-post {
   @apply com-m-0 com-text-base com-font-medium com-text-tYankees-Blue com-flex com-items-center com-gap-2;
+
+  .heading-icon-postevent {
+    @apply com-text-green-500;
+  }
 }
 
 .section-header {
@@ -197,8 +219,7 @@
           }
 
           .progress-ring {
-            width: 28px;
-            height: 28px;
+            @apply com-w-7 com-h-7;
 
             .progress-ring-bg {
               fill: none;
@@ -207,12 +228,11 @@
             }
 
             .progress-ring-fill {
+              @apply -com-rotate-90 com-origin-center;
               fill: none;
               stroke: #3b82f6;
               stroke-width: 3.5;
               stroke-linecap: round;
-              transform: rotate(-90deg);
-              transform-origin: center;
             }
           }
         }
@@ -375,7 +395,7 @@
       }
 
       .activity-content {
-        @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-line-clamp-2;
+        @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-line-clamp-2 com-m-0;
 
         .activity-text {
           @apply com-text-sm com-text-Yankees-Blue com-line-clamp-2 com-cursor-default;
@@ -447,6 +467,7 @@
 
       .legend-dot {
         @apply com-w-2.5 com-h-2.5 com-rounded-full com-shrink-0;
+        background-color: var(--dot-color);
       }
 
       .legend-pct {
@@ -477,43 +498,8 @@
         }
 
         .audience-bar {
-          @apply com-h-1.5 com-rounded-full com-shrink com-min-w-[8px] com-max-w-[72px];
-
-          &.bar-4 {
-            width: 4%;
-          }
-
-          &.bar-8 {
-            width: 8%;
-          }
-
-          &.bar-10 {
-            width: 10%;
-          }
-
-          &.bar-12 {
-            width: 12%;
-          }
-
-          &.bar-14 {
-            width: 14%;
-          }
-
-          &.bar-18 {
-            width: 18%;
-          }
-
-          &.bar-34 {
-            width: 34%;
-          }
-
-          &.bar-42 {
-            width: 42%;
-          }
-
-          &.bar-50 {
-            width: 50%;
-          }
+          @apply com-h-1.5 com-rounded-full com-shrink com-min-w-[8px] com-max-w-[72px] com-bg-indigo-500;
+          width: var(--bar-share, 0%);
         }
 
         .audience-pct {
@@ -602,6 +588,7 @@
 
         .legend-dot {
           @apply com-w-2.5 com-h-2.5 com-rounded-full com-shrink-0;
+          background-color: var(--dot-color);
         }
 
         .legend-pct {
@@ -665,6 +652,11 @@
 
       .top-list-bar {
         @apply com-block com-h-full com-rounded-full com-min-w-1;
+        width: var(--bar-share, 0%);
+
+        &.top-list-bar-pages {
+          @apply com-bg-primary-500;
+        }
       }
 
       .top-list-value {

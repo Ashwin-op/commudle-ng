@@ -132,7 +132,7 @@
     <div class="attention-card">
       <div class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faBell" class="com-text-Azure"></fa-icon> Needs Attention
+          <fa-icon [icon]="icons.faBell" class="heading-icon-attention"></fa-icon> Needs Attention
         </h3>
       </div>
       <div class="attention-list">
@@ -322,7 +322,7 @@
     <div class="snapshot-card">
       <div class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faChartPie" class="com-text-primary-500"></fa-icon> Event Snapshot
+          <fa-icon [icon]="icons.faChartPie" class="heading-icon-snapshot"></fa-icon> Event Snapshot
         </h3>
       </div>
       <div class="snapshot-grid" *ngIf="eventSnapshot; else snapshotEmpty">
@@ -363,7 +363,7 @@
     <div class="activity-card">
       <div class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faBolt" class="com-text-yellow-500"></fa-icon> Recent Activity
+          <fa-icon [icon]="icons.faBolt" class="heading-icon-activity"></fa-icon> Recent Activity
         </h3>
       </div>
       <app-loading-spinner *ngIf="isActivityLoading" class="section-loader"></app-loading-spinner>
@@ -372,7 +372,7 @@
           <span class="activity-avatar" [ngClass]="activityAvatarClass(item.type)">
             <fa-icon [icon]="activityIcon(item.type)"></fa-icon>
           </span>
-          <p class="activity-content com-m-0">
+          <p class="activity-content">
             <span class="activity-text" [title]="activityActorName(item) + ' ' + activityLabel(item.type)">
               <ng-container *ngIf="activityActorName(item)">
                 <span class="activity-name-avatar">{{ activityInitial(item) }}</span
@@ -385,7 +385,7 @@
           <time class="activity-time">{{ activityTime(item) }}</time>
         </li>
         <li *ngIf="recentActivity.length === 0" class="activity-item">
-          <p class="activity-content com-m-0">
+          <p class="activity-content">
             <span class="activity-text">No recent activity yet</span>
           </p>
         </li>
@@ -406,7 +406,7 @@
     <article class="live-visitors-card">
       <header class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faEye" class="com-text-blue-500"></fa-icon> Live Visitors
+          <fa-icon [icon]="icons.faEye" class="heading-icon-visitors"></fa-icon> Live Visitors
         </h3>
       </header>
       <div class="live-visitors-body">
@@ -430,7 +430,7 @@
     <article class="top-list-card">
       <header class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faFileLines" class="com-text-primary-500"></fa-icon> Top Pages
+          <fa-icon [icon]="icons.faFileLines" class="heading-icon-pages"></fa-icon> Top Pages
         </h3>
       </header>
       <ul class="top-list">
@@ -443,7 +443,10 @@
               page.page_title
             }}</a>
             <span class="top-list-track">
-              <span class="top-list-bar com-bg-primary-500" [style.width.%]="barShare(page.views, topPagesMax)"></span>
+              <span
+                class="top-list-bar top-list-bar-pages"
+                [style.--bar-share.%]="barShare(page.views, topPagesMax)"
+              ></span>
             </span>
             <span class="top-list-value">{{ page.views | number }}</span>
           </li>
@@ -459,7 +462,7 @@
     <article class="audience-card">
       <header class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faChartPie" class="com-text-primary-500"></fa-icon> Audience Snapshot
+          <fa-icon [icon]="icons.faChartPie" class="heading-icon-audience"></fa-icon> Audience Snapshot
         </h3>
         <a [routerLink]="['stats']" class="view-all-link">View Analytics →</a>
       </header>
@@ -490,7 +493,7 @@
           ></div>
           <ul class="chart-legend">
             <li *ngFor="let level of audienceSnapshot?.experience_levels; let i = index">
-              <span class="legend-dot" [style.background-color]="audienceColor(i)"></span>
+              <span class="legend-dot" [style.--dot-color]="audienceColor(i)"></span>
               {{ level.name | capitalizeAndRemoveUnderscore }} <span class="legend-pct">{{ level.percentage }}%</span>
             </li>
             <li *ngIf="!isAudienceLoading && !audienceSnapshot?.experience_levels?.length">No data yet</li>
@@ -502,7 +505,7 @@
             <ul class="audience-list">
               <li *ngFor="let item of audienceSnapshot?.companies">
                 <span class="audience-name">{{ item.name }}</span
-                ><span class="audience-bar com-bg-indigo-500" [style.width.%]="item.percentage"></span
+                ><span class="audience-bar" [style.--bar-share.%]="item.percentage"></span
                 ><span class="audience-pct">{{ item.percentage }}%</span>
               </li>
               <li *ngIf="!isAudienceLoading && !audienceSnapshot?.companies?.length">
@@ -518,7 +521,7 @@
     <article class="post-event-card" *ngIf="isEventPast">
       <header class="section-header-post">
         <h3 class="section-heading-post">
-          <fa-icon [icon]="icons.faChartPie" class="com-text-green-500"></fa-icon> Post-Event Dashboard
+          <fa-icon [icon]="icons.faChartPie" class="heading-icon-postevent"></fa-icon> Post-Event Dashboard
         </h3>
         <span class="post-event-date" *ngIf="event.end_time"
           >Completed on
@@ -593,7 +596,7 @@
             </svg>
             <ul class="chart-legend">
               <li *ngFor="let item of postEventSnapshot?.experience_distribution; let i = index">
-                <span class="legend-dot" [style.background-color]="audienceColor(i)"></span>
+                <span class="legend-dot" [style.--dot-color]="audienceColor(i)"></span>
                 {{ item.name | capitalizeAndRemoveUnderscore }}
                 <span class="legend-pct">{{ item.percentage }}%</span>
               </li>
@@ -621,7 +624,7 @@
             </svg>
             <ul class="chart-legend">
               <li *ngFor="let item of postEventSnapshot?.domain_distribution; let i = index">
-                <span class="legend-dot" [style.background-color]="audienceColor(i)"></span>
+                <span class="legend-dot" [style.--dot-color]="audienceColor(i)"></span>
                 {{ item.name | capitalizeAndRemoveUnderscore }}
                 <span class="legend-pct">{{ item.percentage }}%</span>
               </li>
