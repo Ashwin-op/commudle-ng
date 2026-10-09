@@ -83,7 +83,7 @@
     <article class="attention-card">
       <header class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faBell" class="com-text-Azure"></fa-icon> Needs Attention
+          <fa-icon [icon]="icons.faBell" class="heading-icon-attention"></fa-icon> Needs Attention
         </h3>
       </header>
       <nav class="attention-list">
@@ -232,7 +232,7 @@
             "
             class="attention-empty"
           >
-            <fa-icon [icon]="icons.faCircleCheck" class="com-text-green-500"></fa-icon>
+            <fa-icon [icon]="icons.faCircleCheck" class="attention-empty-icon"></fa-icon>
             No attention needed right now.
           </p>
         </ng-container>
@@ -243,7 +243,7 @@
     <article class="schedule-card">
       <header class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faCalendarDay" class="com-text-primary-500"></fa-icon> Upcoming Schedule
+          <fa-icon [icon]="icons.faCalendarDay" class="heading-icon-schedule"></fa-icon> Upcoming Schedule
         </h3>
         <a [routerLink]="['events']" class="view-all-link">View All Events & Hackathons →</a>
       </header>
@@ -283,7 +283,7 @@
     <article class="activity-card">
       <header class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faBolt" class="com-text-yellow-500"></fa-icon> Recent Activity
+          <fa-icon [icon]="icons.faBolt" class="heading-icon-activity"></fa-icon> Recent Activity
         </h3>
       </header>
       <ul class="activity-list">
@@ -362,7 +362,7 @@
   <section class="snapshot-actions-row">
     <article class="snapshot-section">
       <h3 class="section-heading">
-        <fa-icon [icon]="icons.faChartPie" class="com-text-green-500"></fa-icon> Community Snapshot
+        <fa-icon [icon]="icons.faChartPie" class="heading-icon-snapshot"></fa-icon> Community Snapshot
       </h3>
       <app-loading-spinner *ngIf="snapshotLoading && !communitySnapshot" class="section-loader"></app-loading-spinner>
       <ul class="snapshot-cards" *ngIf="communitySnapshot">
@@ -439,7 +439,7 @@
 
     <article class="actions-section">
       <h3 class="section-heading">
-        <fa-icon [icon]="icons.faRocket" class="com-text-purple-500"></fa-icon> Quick Actions
+        <fa-icon [icon]="icons.faRocket" class="heading-icon-actions"></fa-icon> Quick Actions
       </h3>
       <nav class="actions-grid">
         <a *ngFor="let action of quickActions" class="action-card" [routerLink]="action.route">
@@ -456,7 +456,7 @@
     <article class="live-visitors-card">
       <header class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faEye" class="com-text-blue-500"></fa-icon> Live Visitors
+          <fa-icon [icon]="icons.faEye" class="heading-icon-visitors"></fa-icon> Live Visitors
         </h3>
       </header>
       <div class="live-visitors-body">
@@ -480,7 +480,7 @@
     <article class="top-list-card">
       <header class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faFileLines" class="com-text-primary-500"></fa-icon> Top Pages
+          <fa-icon [icon]="icons.faFileLines" class="heading-icon-pages"></fa-icon> Top Pages
         </h3>
       </header>
       <ul class="top-list">
@@ -493,7 +493,10 @@
               page.page_title
             }}</a>
             <span class="top-list-track">
-              <span class="top-list-bar com-bg-primary-500" [style.width.%]="barShare(page.views, topPagesMax)"></span>
+              <span
+                class="top-list-bar com-bg-primary-500"
+                [style.--bar-share.%]="barShare(page.views, topPagesMax)"
+              ></span>
             </span>
             <span class="top-list-value">{{ page.views | number }}</span>
           </li>
@@ -506,7 +509,7 @@
     <article class="top-list-card">
       <header class="section-header">
         <h3 class="section-heading">
-          <fa-icon [icon]="icons.faLocationDot" class="com-text-green-500"></fa-icon> Top Cities
+          <fa-icon [icon]="icons.faLocationDot" class="heading-icon-cities"></fa-icon> Top Cities
         </h3>
       </header>
       <ul class="top-list">
@@ -519,7 +522,7 @@
             <span class="top-list-track">
               <span
                 class="top-list-bar com-bg-green-500"
-                [style.width.%]="barShare(city.member_count, topCitiesMax)"
+                [style.--bar-share.%]="barShare(city.member_count, topCitiesMax)"
               ></span>
             </span>
             <span class="top-list-value">{{ city.member_count | number }}</span>

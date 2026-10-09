@@ -8,6 +8,35 @@
 
 .section-heading {
   @apply com-m-0 com-text-base com-font-medium com-text-Yankees-Blue com-flex md:com-items-center com-items-start com-gap-2;
+
+  .heading-icon-attention {
+    @apply com-text-Azure;
+  }
+
+  .heading-icon-schedule {
+    @apply com-text-primary-500;
+  }
+
+  .heading-icon-activity {
+    @apply com-text-yellow-500;
+  }
+
+  .heading-icon-snapshot,
+  .heading-icon-cities {
+    @apply com-text-green-500;
+  }
+
+  .heading-icon-actions {
+    @apply com-text-purple-500;
+  }
+
+  .heading-icon-visitors {
+    @apply com-text-blue-500;
+  }
+
+  .heading-icon-pages {
+    @apply com-text-primary-500;
+  }
 }
 
 .section-header {
@@ -299,6 +328,10 @@
 
     .attention-empty {
       @apply com-flex com-items-center com-gap-2 com-m-0 com-py-4 com-text-sm com-text-gray-500;
+
+      .attention-empty-icon {
+        @apply com-text-green-500;
+      }
     }
   }
 
@@ -544,6 +577,7 @@
 
       .top-list-bar {
         @apply com-block com-h-full com-rounded-full com-min-w-1;
+        width: var(--bar-share, 0%);
       }
 
       .top-list-value {
