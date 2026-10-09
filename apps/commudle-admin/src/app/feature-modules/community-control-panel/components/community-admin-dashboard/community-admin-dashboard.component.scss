@@ -130,25 +130,17 @@
     filter: blur(2px);
 
     &.hero-blob-1 {
-      width: 16rem;
-      height: 16rem;
-      top: -6rem;
-      right: -4rem;
+      @apply com-w-64 com-h-64 -com-top-24 -com-right-16;
       animation: blobFloat 9s ease-in-out infinite;
     }
 
     &.hero-blob-2 {
-      width: 10rem;
-      height: 10rem;
-      bottom: -5rem;
-      right: 8rem;
+      @apply com-w-40 com-h-40 -com-bottom-20 com-right-32;
       animation: blobFloat 11s ease-in-out infinite reverse;
     }
 
     &.hero-blob-3 {
-      width: 6rem;
-      height: 6rem;
-      top: 1.5rem;
+      @apply com-w-24 com-h-24 com-top-6;
       right: 30%;
       animation: blobFloat 13s ease-in-out infinite;
     }
@@ -190,7 +182,7 @@
 
       &::before {
         content: '';
-        @apply com-absolute com-inset-[-1px] com-rounded-xl com-pointer-events-none;
+        @apply com-absolute com-inset-[-1px] com-rounded-xl com-pointer-events-none com-p-px;
         background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.8) 50%, transparent 100%);
         background-size: 200% 100%;
         animation: borderShimmer 3s linear infinite;
@@ -198,7 +190,6 @@
         mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
         -webkit-mask-composite: xor;
         mask-composite: exclude;
-        padding: 1px;
       }
 
       .highlight-icon {
@@ -578,6 +569,14 @@
       .top-list-bar {
         @apply com-block com-h-full com-rounded-full com-min-w-1;
         width: var(--bar-share, 0%);
+
+        &.top-list-bar-pages {
+          @apply com-bg-primary-500;
+        }
+
+        &.top-list-bar-cities {
+          @apply com-bg-green-500;
+        }
       }
 
       .top-list-value {
