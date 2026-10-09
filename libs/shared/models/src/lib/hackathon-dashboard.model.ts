@@ -1,10 +1,16 @@
 // stage_progress
 export type EHackathonDashboardStageType = 'registration' | 'round' | 'winners';
 
+export enum EHackathonDashboardStageStatus {
+  COMPLETED = 'completed',
+  ONGOING = 'ongoing',
+  UPCOMING = 'upcoming',
+}
+
 export interface IHackathonDashboardStage {
   type: EHackathonDashboardStageType;
   name: string;
-  status: string;
+  status: EHackathonDashboardStageStatus;
   starts_at?: string;
   ends_at?: string;
   // registration + round stages

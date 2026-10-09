@@ -11,6 +11,7 @@ import {
   IHackathonDashboardSnapshot,
   IHackathonDashboardStage,
   IHackathonDashboardStageProgress,
+  EHackathonDashboardStageStatus,
 } from '@commudle/shared-models';
 import { SeoService, countries_details } from '@commudle/shared-services';
 import { Subscription } from 'rxjs';
@@ -54,6 +55,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
   moment = moment;
   countryDetails = countries_details;
   EHackathonStatus = EHackathonStatus;
+  EHackathonDashboardStageStatus = EHackathonDashboardStageStatus;
 
   icons = {
     faCalendarDay,
@@ -156,44 +158,16 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     return `Starts in ${days} day${days > 1 ? 's' : ''}`;
   }
 
-  get formattedStartDate(): string {
-    if (!this.hackathon?.start_date) {
-      return '';
-    }
-    return moment(this.hackathon.start_date).format('D MMM, YYYY');
-  }
-
-  get formattedEndDate(): string {
-    if (!this.hackathon?.end_date) {
-      return '';
-    }
-    return moment(this.hackathon.end_date).format('D MMM, YYYY');
-  }
-
-  isStatusReady(status: string | undefined): boolean {
-    if (!status) {
-      return false;
-    }
-    const notReady = ['not_created', 'not_set', 'not_started', 'pending', 'missing', 'none', 'draft', 'upcoming'];
-    return !notReady.includes(status.toLowerCase());
-  }
-
-  isStatusLive(status: string | undefined): boolean {
-    if (!status) {
-      return false;
-    }
-    return ['live', 'in_progress', 'ongoing', 'active'].includes(status.toLowerCase());
-  }
-
   /** CSS class for a stage status: ongoing -> gray, completed -> green, upcoming -> yellow. */
-  stageStatusClass(status: string | undefined): string {
-    if (this.isStatusLive(status)) {
-      return 'status-ongoing';
+  stageStatusClass(status: EHackathonDashboardStageStatus | undefined): string {
+    switch (status) {
+      case EHackathonDashboardStageStatus.ONGOING:
+        return 'status-ongoing';
+      case EHackathonDashboardStageStatus.COMPLETED:
+        return 'status-completed';
+      default:
+        return 'status-upcoming';
     }
-    if (this.isStatusReady(status)) {
-      return 'status-completed';
-    }
-    return 'status-upcoming';
   }
 
   stageMetric(stage: IHackathonDashboardStage): string {

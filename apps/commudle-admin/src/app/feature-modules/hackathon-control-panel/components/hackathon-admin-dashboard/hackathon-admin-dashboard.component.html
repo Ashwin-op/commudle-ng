@@ -27,9 +27,12 @@
               {{ hackathon.status | titlecase }}
             </span>
             <span class="hero-meta-item" *ngIf="daysUntilHackathon">{{ daysUntilHackathon }}</span>
-            <span class="hero-meta-dot" *ngIf="formattedStartDate">·</span>
-            <span class="hero-meta-item" *ngIf="formattedStartDate"
-              >{{ formattedStartDate }} – {{ formattedEndDate }}</span
+            <span class="hero-meta-dot" *ngIf="hackathon.start_date">·</span>
+            <span class="hero-meta-item" *ngIf="hackathon.start_date"
+              >{{ hackathon.start_date | date : 'd MMM, y' }}
+              <ng-container *ngIf="hackathon.end_date"
+                >– {{ hackathon.end_date | date : 'd MMM, y' }}</ng-container
+              ></span
             >
             <span class="hero-meta-dot" *ngIf="hackathon.location_name">·</span>
             <span class="hero-meta-item" *ngIf="hackathon.location_name">{{ hackathon.location_name }}</span>
@@ -75,7 +78,10 @@
           <div
             class="timeline-step"
             *ngFor="let stage of stageProgress?.stages"
-            [ngClass]="{ completed: isStatusReady(stage.status), active: isStatusLive(stage.status) }"
+            [ngClass]="{
+              completed: stage.status === EHackathonDashboardStageStatus.COMPLETED,
+              active: stage.status === EHackathonDashboardStageStatus.ONGOING
+            }"
           >
             <div class="step-dot"></div>
             <div class="step-info">
@@ -382,7 +388,7 @@
       ></app-loading-spinner>
       <div class="progress-cards" *ngIf="!isStageProgressLoading || stageProgress">
         <ng-container *ngFor="let stage of stageProgress?.stages; let last = last">
-          <div class="progress-card" [ngClass]="{ active: isStatusLive(stage.status) }">
+          <div class="progress-card" [ngClass]="{ active: stage.status === EHackathonDashboardStageStatus.ONGOING }">
             <span class="progress-card-label">{{ stage.name || (stage.type | titlecase) }}</span>
             <span class="progress-card-value">{{ stageMetric(stage) }}</span>
             <span class="progress-card-status" [ngClass]="stageStatusClass(stage.status)">{{
