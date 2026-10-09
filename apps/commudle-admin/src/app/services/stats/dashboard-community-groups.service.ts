@@ -38,9 +38,9 @@ export class DashboardCommunityGroupsService {
     );
   }
 
-  upcomingSchedule(communityGroupId): Observable<{ values: ICommunityDashboardScheduleItem[] }> {
+  upcomingSchedule(communityGroupId): Observable<ICommunityDashboardScheduleItem[]> {
     const params = new HttpParams().set('community_group_id', communityGroupId);
-    return this.http.get<{ values: ICommunityDashboardScheduleItem[] }>(
+    return this.http.get<ICommunityDashboardScheduleItem[]>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITY_GROUPS.UPCOMING_SCHEDULE),
       { params },
     );
@@ -82,17 +82,17 @@ export class DashboardCommunityGroupsService {
     );
   }
 
-  latestChannelActivity(communityGroupId): Observable<{ values: ICommunityGroupDashboardChannelActivityItem[] }> {
+  latestChannelActivity(communityGroupId): Observable<IPaginationCount<ICommunityGroupDashboardChannelActivityItem>> {
     const params = new HttpParams().set('community_group_id', communityGroupId);
-    return this.http.get<{ values: ICommunityGroupDashboardChannelActivityItem[] }>(
+    return this.http.get<IPaginationCount<ICommunityGroupDashboardChannelActivityItem>>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITY_GROUPS.LATEST_CHANNEL_ACTIVITY),
       { params },
     );
   }
 
-  latestForumActivity(communityGroupId): Observable<{ values: ICommunityGroupDashboardChannelActivityItem[] }> {
+  latestForumActivity(communityGroupId): Observable<IPaginationCount<ICommunityGroupDashboardChannelActivityItem>> {
     const params = new HttpParams().set('community_group_id', communityGroupId);
-    return this.http.get<{ values: ICommunityGroupDashboardChannelActivityItem[] }>(
+    return this.http.get<IPaginationCount<ICommunityGroupDashboardChannelActivityItem>>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITY_GROUPS.LATEST_FORUM_ACTIVITY),
       { params },
     );
