@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { BreakpointsDirective } from './breakpoints.directive';
 import { ClickOutsideDirective } from './click-outside.directive';
 import { HighlightLinksDirective } from './highlight-links.directive';
@@ -7,7 +8,7 @@ import { LazyLoadImagesDirective } from './lazy-load-images.directive';
 import { TextareaAutoresizeDirective } from './textarea-autoresize.directive';
 import { LongPressDirective } from './longpress.directive';
 import { ActivityFeedDirective } from './activity-feed.directive';
-import { TooltipModule } from './tooltip/tooltip.module';
+import { TooltipDirective } from './tooltip.directive';
 @NgModule({
   declarations: [
     ClickOutsideDirective,
@@ -17,8 +18,9 @@ import { TooltipModule } from './tooltip/tooltip.module';
     TextareaAutoresizeDirective,
     LongPressDirective,
     ActivityFeedDirective,
+    TooltipDirective,
   ],
-  imports: [CommonModule, TooltipModule],
+  imports: [CommonModule, OverlayModule],
   exports: [
     ClickOutsideDirective,
     HighlightLinksDirective,
@@ -27,7 +29,7 @@ import { TooltipModule } from './tooltip/tooltip.module';
     TextareaAutoresizeDirective,
     LongPressDirective,
     ActivityFeedDirective,
-    TooltipModule,
+    TooltipDirective,
   ],
 })
 export class SharedDirectivesModule {}
