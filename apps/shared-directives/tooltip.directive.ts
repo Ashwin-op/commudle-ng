@@ -30,6 +30,8 @@ export type TooltipContent = string | TemplateRef<unknown>;
 const SIZES = { sm: 160, md: 240, lg: 360 }; // max width in px
 const DELAYS = { instant: 0, short: 300, long: 700 }; // ms before showing
 const HIDE_DELAY = 100;
+const ANIM_MS = 300; // fade/slide duration, same 0.3s as the template
+const SLIDE_PX = 8; // how far it slides in from the trigger side
 const VIEWPORT_MARGIN = 8;
 const DOT_SIZE = 8;
 const DOT_GAP = 4;
@@ -105,7 +107,29 @@ class TooltipContainerComponent {
 
   @Output() hoverChange = new EventEmitter<boolean>();
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  shown = false; // false = hidden state: faded out and nudged toward the trigger
+
+  constructor(private cdr: ChangeDetectorRef, private el: ElementRef<HTMLElement>) {}
+
+  enter(): void {
+    void this.el.nativeElement.offsetWidth; // flush hidden styles so the transition plays
+    this.setShown(true);
+  }
+
+  setShown(shown: boolean): void {
+    this.shown = shown;
+    this.refresh();
+  }
+
+  private hiddenTransform(): string {
+    const d = SLIDE_PX;
+    return {
+      top: `translate(0, ${d}px)`,
+      bottom: `translate(0, -${d}px)`,
+      left: `translate(${d}px, 0)`,
+      right: `translate(-${d}px, 0)`,
+    }[this.side];
+  }
 
   get template(): TemplateRef<unknown> | null {
     return this.content instanceof TemplateRef ? this.content : null;
@@ -126,6 +150,9 @@ class TooltipContainerComponent {
       'font-size': '13px',
       'line-height': '1.45',
       'word-break': 'break-word',
+      opacity: this.shown ? '1' : '0',
+      transform: this.shown ? 'translate(0, 0)' : this.hiddenTransform(),
+      transition: `opacity ${ANIM_MS}ms ease, transform ${ANIM_MS}ms ease`,
     };
 
     this.boxStyle =
@@ -199,6 +226,8 @@ export class TooltipDirective implements OnChanges, OnDestroy {
   private subs = new Subscription();
   private showTimer?: ReturnType<typeof setTimeout>;
   private hideTimer?: ReturnType<typeof setTimeout>;
+  private tip?: TooltipContainerComponent;
+  private leaveTimer?: ReturnType<typeof setTimeout>;
 
   constructor(private overlay: Overlay, private host: ElementRef<HTMLElement>) {}
 
@@ -206,6 +235,9 @@ export class TooltipDirective implements OnChanges, OnDestroy {
   @HostListener('focusin')
   onEnter(): void {
     this.clearTimers();
+    if (this.cancelLeave()) {
+      return;
+    }
     if (this.appTooltipDisabled || !this.appTooltip || this.overlayRef) {
       return;
     }
@@ -232,12 +264,12 @@ export class TooltipDirective implements OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     // content or disabled changed while open: close it, the next hover shows the fresh one
     if (this.overlayRef && (changes['appTooltip'] || changes['appTooltipDisabled'])) {
-      this.hide();
+      this.hide(true);
     }
   }
 
   ngOnDestroy(): void {
-    this.hide();
+    this.hide(true);
   }
 
   private show(): void {
@@ -268,6 +300,7 @@ export class TooltipDirective implements OnChanges, OnDestroy {
     tip.variant = this.appTooltipVariant;
     tip.dot = this.appTooltipDot;
     tip.id = this.id;
+    this.tip = tip;
     this.describedBy = this.id;
 
     this.subs.add(
@@ -278,16 +311,45 @@ export class TooltipDirective implements OnChanges, OnDestroy {
       }),
     );
     // keep it open while the mouse is on the tooltip itself (needed for cards with links/buttons)
-    this.subs.add(tip.hoverChange.subscribe((hovered) => (hovered ? this.clearTimers() : this.onLeave())));
+    this.subs.add(tip.hoverChange.subscribe((hovered) => (hovered ? this.keepOpen() : this.onLeave())));
     tip.refresh();
+    tip.enter();
   }
 
-  private hide(): void {
+  private hide(immediate = false): void {
     this.clearTimers();
+    if (!this.overlayRef) return;
+    if (immediate || !this.tip) {
+      this.dispose();
+      return;
+    }
+    if (this.leaveTimer) return; // already fading out
+    this.tip.setShown(false);
+    this.leaveTimer = setTimeout(() => this.dispose(), ANIM_MS);
+  }
+
+  // mouse came back to the trigger or tooltip while it was fading out
+  private cancelLeave(): boolean {
+    if (!this.leaveTimer) return false;
+    clearTimeout(this.leaveTimer);
+    this.leaveTimer = undefined;
+    this.tip?.setShown(true);
+    return true;
+  }
+
+  private keepOpen(): void {
+    this.clearTimers();
+    this.cancelLeave();
+  }
+
+  private dispose(): void {
+    clearTimeout(this.leaveTimer);
+    this.leaveTimer = undefined;
     this.subs.unsubscribe();
     this.subs = new Subscription();
     this.overlayRef?.dispose();
     this.overlayRef = undefined;
+    this.tip = undefined;
     this.describedBy = null;
   }
 
