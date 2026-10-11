@@ -21,17 +21,17 @@ import { Subscription } from 'rxjs';
 import { CommudleCardModule } from '@commudle/commudle-theme';
 
 type Side = 'top' | 'bottom' | 'left' | 'right';
-export type TooltipPlacement = Side | 'start' | 'end'; // start/end = left/right (same values as Nebular)
+export type TooltipPlacement = Side | 'start' | 'end';
 export type TooltipDelay = 'instant' | 'short' | 'long';
 export type TooltipSize = 'sm' | 'md' | 'lg';
 export type TooltipVariant = 'default' | 'card';
 export type TooltipContent = string | TemplateRef<unknown>;
 
-const SIZES = { sm: 160, md: 240, lg: 360 }; // max width in px
-const DELAYS = { instant: 0, short: 300, long: 700 }; // ms before showing
+const SIZES = { sm: 160, md: 240, lg: 360 };
+const DELAYS = { instant: 0, short: 300, long: 700 };
 const HIDE_DELAY = 100;
-const ANIM_MS = 300; // fade/slide duration, same 0.3s as the template
-const SLIDE_PX = 8; // how far it slides in from the trigger side
+const ANIM_MS = 300;
+const SLIDE_PX = 8;
 const VIEWPORT_MARGIN = 8;
 const DOT_SIZE = 8;
 const DOT_GAP = 4;
@@ -48,10 +48,8 @@ const COLORS: Record<string, { from: string; to: string; edge: string; glow: str
   danger: { from: '#ff6b81', to: '#e5304f', edge: '#b01e38', glow: 'rgba(229, 48, 79, 0.40)' },
 };
 
-// small soft highlight in the top-left corner only (sits behind the text)
 const SHINE = 'radial-gradient(ellipse 80px 50px at 0% 0%, rgba(255,255,255,0.35), transparent)';
 
-/* ---------------- internal box, created by the directive (never used in templates) ---------------- */
 @Component({
   selector: 'app-tooltip-container',
   standalone: true,
@@ -94,12 +92,12 @@ const SHINE = 'radial-gradient(ellipse 80px 50px at 0% 0%, rgba(255,255,255,0.35
 })
 class TooltipContainerComponent {
   content: TooltipContent | null = null;
-  side: Side = 'top'; // side of the trigger the box actually sits on (after any flip)
+  side: Side = 'top';
   size: TooltipSize = 'md';
   status = 'primary';
   variant: TooltipVariant = 'default';
   dot = true;
-  dotOffset = 0; // px from the box's start edge, keeps the dot on the trigger after flip/push
+  dotOffset = 0;
   id = '';
   shine = SHINE;
   boxStyle: Record<string, string> = {};
@@ -112,7 +110,7 @@ class TooltipContainerComponent {
   constructor(private cdr: ChangeDetectorRef, private el: ElementRef<HTMLElement>) {}
 
   enter(): void {
-    void this.el.nativeElement.offsetWidth; // flush hidden styles so the transition plays
+    void this.el.nativeElement.offsetWidth;
     this.setShown(true);
   }
 
@@ -164,7 +162,7 @@ class TooltipContainerComponent {
             padding: this.template ? '0' : '10px 14px',
             'border-radius': '14px',
             background: `linear-gradient(135deg, ${c.from}, ${c.to})`,
-            // light top edge + soft coloured glow + small contact shadow
+
             'box-shadow': `inset 0 1px 0 rgba(255,255,255,0.35), 0 10px 28px -6px ${c.glow}, 0 3px 8px rgba(0,0,0,0.12)`,
           };
 
@@ -172,7 +170,7 @@ class TooltipContainerComponent {
       width: `${DOT_SIZE}px`,
       height: `${DOT_SIZE}px`,
       'border-radius': '9999px',
-      // glossy ball: white highlight on top-left over the same gradient
+
       background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0) 45%), linear-gradient(135deg, ${c.from}, ${c.to})`,
       'box-shadow': `0 2px 0 ${c.edge}, 0 3px 4px rgba(0,0,0,0.2)`,
       ...this.dotPosition(),
@@ -206,12 +204,9 @@ let nextId = 0;
   standalone: false,
 })
 export class TooltipDirective implements OnChanges, OnDestroy {
-  // --- same names as Nebular, so a find/replace of nbTooltip -> appTooltip just works ---
-  @Input() appTooltip: TooltipContent | null | undefined; // text or <ng-template>
+  @Input() appTooltip: TooltipContent | null | undefined;
   @Input() appTooltipPlacement: TooltipPlacement = 'top'; // top | bottom | left | right | start | end
   @Input() appTooltipStatus = 'primary'; // primary | basic | info | success | warning | danger
-
-  // --- extras (all optional) ---
   @Input() appTooltipDot = true; // [appTooltipDot]="false" to hide the dot
   @Input() appTooltipVariant: TooltipVariant = 'default'; // 'card' wraps the content in com-card
   @Input() appTooltipDelay: TooltipDelay = 'short'; // instant (0ms) | short (300ms) | long (700ms)
@@ -288,7 +283,7 @@ export class TooltipDirective implements OnChanges, OnDestroy {
 
     this.overlayRef = this.overlay.create({
       positionStrategy: strategy,
-      scrollStrategy: this.overlay.scrollStrategies.reposition(), // re-flips while scrolling
+      scrollStrategy: this.overlay.scrollStrategies.reposition(),
       panelClass: this.appTooltipClass.split(' ').filter(Boolean),
     });
 
@@ -310,7 +305,7 @@ export class TooltipDirective implements OnChanges, OnDestroy {
         tip.refresh();
       }),
     );
-    // keep it open while the mouse is on the tooltip itself (needed for cards with links/buttons)
+
     this.subs.add(tip.hoverChange.subscribe((hovered) => (hovered ? this.keepOpen() : this.onLeave())));
     tip.refresh();
     tip.enter();
@@ -328,7 +323,6 @@ export class TooltipDirective implements OnChanges, OnDestroy {
     this.leaveTimer = setTimeout(() => this.dispose(), ANIM_MS);
   }
 
-  // mouse came back to the trigger or tooltip while it was fading out
   private cancelLeave(): boolean {
     if (!this.leaveTimer) return false;
     clearTimeout(this.leaveTimer);
@@ -383,7 +377,6 @@ export class TooltipDirective implements OnChanges, OnDestroy {
     return pair.overlayX === 'end' ? 'left' : 'right';
   }
 
-  // after a flip/push the box may not be centred on the trigger, so line the dot up with the trigger's centre
   private alignDot(tip: TooltipContainerComponent): void {
     if (!this.overlayRef) return;
     const trigger = this.host.nativeElement.getBoundingClientRect();
