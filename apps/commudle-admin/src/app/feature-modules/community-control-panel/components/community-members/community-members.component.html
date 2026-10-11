@@ -401,7 +401,7 @@
                 *ngIf="userRole.community_activeness === 'dormant' && !isMobileView"
                 class="dormant"
                 [icon]="faSkull"
-                [nbTooltip]="
+                [appTooltip]="
                   'Has very little recent activity. More active than only ' +
                   Math.round(activityScoreThresholds.dormant.min * 100) +
                   '-' +
@@ -418,7 +418,7 @@
                 *ngIf="userRole.community_activeness === 'low_active' && !isMobileView"
                 class="low_active"
                 [icon]="faHourglassHalf"
-                [nbTooltip]="
+                [appTooltip]="
                   'Occasionally active with limited recent engagement. More active than ' +
                   Math.round(activityScoreThresholds.low_active.min * 100) +
                   '-' +
@@ -435,7 +435,7 @@
                 *ngIf="userRole.community_activeness === 'moderately_active' && !isMobileView"
                 class="moderately_active"
                 [icon]="faFire"
-                [nbTooltip]="
+                [appTooltip]="
                   'Regular, recent participation. More active than ' +
                   Math.round(activityScoreThresholds.moderately_active.min * 100) +
                   '-' +
@@ -452,7 +452,7 @@
                 *ngIf="userRole.community_activeness === 'highly_active' && !isMobileView"
                 class="highly_active"
                 [icon]="faBolt"
-                [nbTooltip]="
+                [appTooltip]="
                   'Very frequent recent engagement. More active than ' +
                   Math.round(activityScoreThresholds.highly_active.min * 100) +
                   '-' +
@@ -467,7 +467,7 @@
               ></fa-icon>
               <span
                 *ngIf="userRole.community_activeness && !isMobileView"
-                [nbTooltip]="
+                [appTooltip]="
                   userRole.community_activeness === 'dormant'
                     ? 'Has very little recent activity. More active than only ' +
                       Math.round(activityScoreThresholds.dormant.min * 100) +
