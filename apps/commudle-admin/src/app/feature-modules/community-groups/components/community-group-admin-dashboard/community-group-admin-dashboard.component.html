@@ -1,0 +1,479 @@
+<div class="org-overview" *ngIf="communityGroup">
+  <!-- Row 1: Organization Hero + Pulse stats -->
+  <section class="org-hero">
+    <div class="hero-top">
+      <div class="hero-identity">
+        <div class="hero-logo">
+          <commudle-banner-image
+            [headerImagePath]="communityGroup.logo?.url"
+            [name]="communityGroup.name"
+            aspectRatio="1/1"
+          ></commudle-banner-image>
+        </div>
+        <div class="hero-info">
+          <h1 class="hero-name">{{ communityGroup.name }}</h1>
+          <p class="hero-sub" *ngIf="communityGroup.mini_description">{{ communityGroup.mini_description }}</p>
+        </div>
+      </div>
+      <a
+        [routerLink]="['/orgs', communityGroup.slug]"
+        target="_blank"
+        class="hero-public-link"
+        comButton
+        status="info"
+        size="small"
+        shape="semi-round"
+        outline
+      >
+        View Public Page
+        <nb-icon icon="external-link-outline" class="hero-external-icon"></nb-icon>
+      </a>
+    </div>
+
+    <app-loading-spinner *ngIf="isPulseLoading && !pulse" class="section-loader"></app-loading-spinner>
+    <ul class="pulse-stats" *ngIf="!isPulseLoading || pulse">
+      <li class="pulse-stat">
+        <span class="pulse-icon communities-icon"><fa-icon [icon]="icons.faUsers"></fa-icon></span>
+        <div class="pulse-body">
+          <span class="pulse-label">Communities</span>
+          <span class="pulse-value">{{ pulse?.communities?.count ?? 0 | number }}</span>
+          <span class="pulse-growth" *ngIf="pulse?.communities?.growth">+{{ pulse.communities.growth | number }}</span>
+        </div>
+      </li>
+      <li class="pulse-stat">
+        <span class="pulse-icon members-icon"><fa-icon [icon]="icons.faUserGroup"></fa-icon></span>
+        <div class="pulse-body">
+          <span class="pulse-label">Members</span>
+          <span class="pulse-value">{{ pulse?.members?.count ?? 0 | number }}</span>
+          <span class="pulse-growth" *ngIf="pulse?.members?.growth">+{{ pulse.members.growth | number }}</span>
+        </div>
+      </li>
+      <li class="pulse-stat">
+        <span class="pulse-icon events-icon"><fa-icon [icon]="icons.faCalendarPlus"></fa-icon></span>
+        <div class="pulse-body">
+          <span class="pulse-label">Upcoming Events</span>
+          <span class="pulse-value">{{ pulse?.upcoming_events?.total ?? 0 | number }}</span>
+          <span class="pulse-sub">
+            {{
+              pulse?.upcoming_events?.happening_soon
+                ? (pulse.upcoming_events.happening_soon | number) + ' happening soon'
+                : 'Next 30 days'
+            }}
+          </span>
+        </div>
+      </li>
+      <li class="pulse-stat">
+        <span class="pulse-icon hackathons-icon"><fa-icon [icon]="icons.faTrophy"></fa-icon></span>
+        <div class="pulse-body">
+          <span class="pulse-label">Hackathons</span>
+          <span class="pulse-value">{{ pulse?.upcoming_hackathons?.total ?? 0 | number }}</span>
+          <span class="pulse-sub" *ngIf="pulse?.upcoming_hackathons?.live_now">
+            {{ pulse.upcoming_hackathons.live_now | number }} live now
+          </span>
+        </div>
+      </li>
+      <li class="pulse-stat">
+        <span class="pulse-icon engagement-icon"><fa-icon [icon]="icons.faArrowTrendUp"></fa-icon></span>
+        <div class="pulse-body">
+          <span class="pulse-label">Engagement</span>
+          <span class="pulse-value">{{ pulse?.engagement?.value ?? 0 | number }}</span>
+          <span class="pulse-growth" *ngIf="pulse?.engagement?.growth_percent">
+            ↑ {{ pulse.engagement.growth_percent | number }}%
+          </span>
+        </div>
+      </li>
+      <li class="pulse-stat">
+        <span class="pulse-icon reach-icon"><fa-icon [icon]="icons.faBullseye"></fa-icon></span>
+        <div class="pulse-body">
+          <span class="pulse-label">Total Reach</span>
+          <span class="pulse-value">{{ pulse?.reach?.value ?? 0 | number }}</span>
+          <span class="pulse-growth" *ngIf="pulse?.reach?.growth_percent">
+            ↑ {{ pulse.reach.growth_percent | number }}%
+          </span>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Row 2: Needs Attention + Upcoming Schedule + Organization Activity -->
+  <section class="three-col-row">
+    <!-- Needs Attention -->
+    <article class="attention-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faBell" class="heading-icon-attention"></fa-icon> Needs Attention
+        </h3>
+      </header>
+      <app-loading-spinner
+        *ngIf="isNeedsAttentionLoading && !needsAttention"
+        class="section-loader"
+      ></app-loading-spinner>
+      <div class="attention-list" *ngIf="!isNeedsAttentionLoading || needsAttention">
+        <a
+          *ngFor="let profile of needsAttention?.community_profiles"
+          [routerLink]="['/admin', 'orgs', communityGroup.slug, 'communities']"
+          class="attention-item"
+        >
+          <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">{{ profile.name || 'Community' }}</span>
+            <span class="attention-sub">Community profile is incomplete</span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+
+        <a
+          *ngIf="needsAttention?.pending_admin_invitations?.count"
+          [routerLink]="['/admin', 'orgs', communityGroup.slug, 'admin-team']"
+          class="attention-item"
+        >
+          <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">Organization</span>
+            <span class="attention-sub">
+              {{ needsAttention.pending_admin_invitations.count | number }} admin invitation{{
+                needsAttention.pending_admin_invitations.count === 1 ? '' : 's'
+              }}
+              pending
+            </span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+
+        <a
+          *ngFor="let survey of needsAttention?.surveys"
+          [routerLink]="['/admin', 'orgs', communityGroup.slug, 'surveys']"
+          class="attention-item"
+        >
+          <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">{{ survey.name || 'Survey' }}</span>
+            <span class="attention-sub">Response threshold reached</span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+
+        <p
+          *ngIf="
+            !isNeedsAttentionLoading &&
+            !needsAttention?.community_profiles?.length &&
+            !needsAttention?.pending_admin_invitations?.count &&
+            !needsAttention?.surveys?.length
+          "
+          class="attention-empty"
+        >
+          No attention needed right now.
+        </p>
+      </div>
+    </article>
+
+    <!-- Upcoming Schedule -->
+    <article class="schedule-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faCalendarDay" class="heading-icon-schedule"></fa-icon> Upcoming Schedule
+        </h3>
+      </header>
+      <ol class="schedule-timeline">
+        <app-loading-spinner *ngIf="isUpcomingScheduleLoading" class="section-loader"></app-loading-spinner>
+        <ng-container *ngIf="!isUpcomingScheduleLoading">
+          <li *ngFor="let item of upcomingSchedule" class="timeline-item">
+            <span
+              class="timeline-date"
+              [class.today]="isScheduleToday(item.scheduled_at)"
+              [class.tomorrow]="isScheduleTomorrow(item.scheduled_at)"
+              >{{ scheduleDateLabel(item.scheduled_at) }}</span
+            >
+            <p class="timeline-event">
+              <span class="timeline-event-name">
+                <fa-icon
+                  [icon]="
+                    item.type === 'hackathon'
+                      ? icons.faTrophy
+                      : item.type === 'newsletter'
+                      ? icons.faNewspaper
+                      : icons.faCalendarPlus
+                  "
+                  class="timeline-event-icon"
+                ></fa-icon>
+                {{ item.title }}
+              </span>
+              <span class="timeline-event-sub" *ngIf="item.community_name">{{ item.community_name }}</span>
+            </p>
+          </li>
+          <li *ngIf="upcomingSchedule.length === 0" class="timeline-empty">Nothing scheduled yet.</li>
+        </ng-container>
+      </ol>
+    </article>
+
+    <!-- Organization Activity -->
+    <article class="activity-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faBolt" class="heading-icon-activity"></fa-icon> Organization Activity
+        </h3>
+      </header>
+      <app-loading-spinner *ngIf="isActivityLoading" class="section-loader"></app-loading-spinner>
+      <ul class="activity-list" *ngIf="!isActivityLoading">
+        <li *ngFor="let item of recentActivity" class="activity-item">
+          <span class="activity-avatar" [ngClass]="activityAvatarClass(item.type)">
+            <fa-icon [icon]="activityIcon(item.type)"></fa-icon>
+          </span>
+          <p class="activity-content">
+            <span class="activity-text">{{ activityLabel(item) }}</span>
+          </p>
+          <time class="activity-time">{{ item.created_at | date : 'd MMM y' }}</time>
+        </li>
+        <li *ngIf="recentActivity.length === 0" class="activity-empty">No recent activity yet.</li>
+      </ul>
+      <commudle-pagination-compact
+        *ngIf="activityTotal > activityCount"
+        [page]="activityPage"
+        [count]="activityCount"
+        [total]="activityTotal"
+        (pageChange)="onActivityPageChange($event)"
+      ></commudle-pagination-compact>
+    </article>
+  </section>
+
+  <!-- Row 3: Community Footprint + Audience & Demographics + Email & Communication -->
+  <section class="insights-row">
+    <!-- Community Footprint -->
+    <article class="footprint-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faEarthAmericas" class="heading-icon-footprint"></fa-icon> Community Footprint
+        </h3>
+      </header>
+      <app-loading-spinner *ngIf="isFootprintLoading && !footprint" class="section-loader"></app-loading-spinner>
+      <div class="footprint-content" *ngIf="!isFootprintLoading || footprint">
+        <ul class="footprint-stats">
+          <li class="footprint-stat">
+            <span class="footprint-value">{{ footprint?.countries_count ?? 0 | number }}</span>
+            <span class="footprint-label">Countries</span>
+          </li>
+          <li class="footprint-stat">
+            <span class="footprint-value">{{ footprint?.cities_count ?? 0 | number }}</span>
+            <span class="footprint-label">Cities</span>
+          </li>
+          <li class="footprint-stat">
+            <span class="footprint-value">{{ footprint?.communities_count ?? 0 | number }}</span>
+            <span class="footprint-label">Communities</span>
+          </li>
+          <li class="footprint-stat">
+            <span class="footprint-value">{{ footprint?.members_count ?? 0 | number }}</span>
+            <span class="footprint-label">Members</span>
+          </li>
+        </ul>
+
+        <h6 class="footprint-map-heading" *ngIf="footprint?.top_locations?.length">Map Wise Member Distribution</h6>
+        <div class="footprint-map" *ngIf="footprint?.top_locations?.length">
+          <div id="footprint_map"></div>
+        </div>
+        <p *ngIf="!isFootprintLoading && !footprint?.top_locations?.length" class="footprint-location-empty">
+          No location data yet.
+        </p>
+      </div>
+    </article>
+
+    <!-- Audience & Demographics -->
+    <article class="demographics-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faChartPie" class="heading-icon-demographics"></fa-icon> Audience &amp; Demographics
+        </h3>
+      </header>
+      <app-loading-spinner
+        *ngIf="isAudienceLoading && !audienceDemographics"
+        class="section-loader"
+      ></app-loading-spinner>
+      <div class="demographics-content" *ngIf="!isAudienceLoading || audienceDemographics">
+        <div class="demographics-col">
+          <h6 class="demographics-col-heading">Top Locations</h6>
+          <ul class="demographics-list">
+            <li *ngFor="let loc of pagedTopLocations">
+              <span class="demographics-name" [title]="loc.name">{{ loc.name }}</span>
+              <span class="demographics-pct">{{ loc.percentage }}%</span>
+            </li>
+            <li *ngIf="!isAudienceLoading && !audienceDemographics?.top_locations?.length" class="demographics-empty">
+              No data yet
+            </li>
+          </ul>
+          <commudle-pagination-compact
+            *ngIf="topLocationsTotal > topLocationsCount"
+            [page]="topLocationsPage"
+            [count]="topLocationsCount"
+            [total]="topLocationsTotal"
+            (pageChange)="onTopLocationsPageChange($event)"
+          ></commudle-pagination-compact>
+        </div>
+        <div class="demographics-col">
+          <h6 class="demographics-col-heading">Gender</h6>
+          <div class="gender-chart">
+            <svg *ngIf="audienceDemographics?.gender_distribution?.length" class="chart-donut" viewBox="0 0 36 36">
+              <circle class="chart-donut-track" cx="18" cy="18" r="15.9155" />
+              <circle
+                *ngFor="let segment of genderSegments"
+                class="chart-donut-segment"
+                cx="18"
+                cy="18"
+                r="15.9155"
+                [attr.stroke]="segment.color"
+                [attr.stroke-dasharray]="segment.dashArray"
+                [attr.stroke-dashoffset]="segment.dashOffset"
+              />
+            </svg>
+            <ul class="chart-legend">
+              <li *ngFor="let g of audienceDemographics?.gender_distribution; let i = index">
+                <span class="legend-dot" [style.--dot-color]="paletteColor(i)"></span>
+                {{ g.name | capitalizeAndRemoveUnderscore }} <span class="legend-pct">{{ g.percentage }}%</span>
+              </li>
+              <li *ngIf="!isAudienceLoading && !audienceDemographics?.gender_distribution?.length">No data yet</li>
+            </ul>
+          </div>
+        </div>
+        <div class="demographics-col demographics-col-full">
+          <h6 class="demographics-col-heading">Top Skills</h6>
+          <ul class="skills-list">
+            <li *ngFor="let skill of audienceDemographics?.top_skills?.tags" class="skill-chip">{{ skill.name }}</li>
+            <li
+              *ngIf="!isAudienceLoading && !audienceDemographics?.top_skills?.tags?.length"
+              class="demographics-empty"
+            >
+              No data yet
+            </li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- Email & Communication -->
+    <article class="email-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faEnvelope" class="heading-icon-email"></fa-icon> Email &amp; Communication
+        </h3>
+      </header>
+      <app-loading-spinner *ngIf="isEmailLoading && !emailCommunication" class="section-loader"></app-loading-spinner>
+      <ul class="email-stats" *ngIf="!isEmailLoading || emailCommunication">
+        <li class="email-stat">
+          <span class="email-value">{{ emailCommunication?.emails_sent?.value ?? 0 | number }}</span>
+          <span class="email-label">Emails Sent</span>
+          <span
+            class="email-growth"
+            [ngClass]="{
+              'growth-up': emailCommunication.emails_sent.growth_percent > 0,
+              'growth-down': emailCommunication.emails_sent.growth_percent < 0
+            }"
+            *ngIf="emailCommunication?.emails_sent?.growth_percent"
+          >
+            {{ emailCommunication.emails_sent.growth_percent > 0 ? '↑' : '↓' }}
+            {{ Math.abs(emailCommunication.emails_sent.growth_percent) }}%
+          </span>
+        </li>
+        <li class="email-stat">
+          <span class="email-value">{{ emailCommunication?.open_rate?.value ?? 0 | number }}%</span>
+          <span class="email-label">Open Rate</span>
+          <span
+            class="email-growth"
+            [ngClass]="{
+              'growth-up': emailCommunication.open_rate.growth_percent > 0,
+              'growth-down': emailCommunication.open_rate.growth_percent < 0
+            }"
+            *ngIf="emailCommunication?.open_rate?.growth_percent"
+          >
+            {{ emailCommunication.open_rate.growth_percent > 0 ? '↑' : '↓' }}
+            {{ Math.abs(emailCommunication.open_rate.growth_percent) }}%
+          </span>
+        </li>
+        <li class="email-stat">
+          <span class="email-value">{{ emailCommunication?.click_rate?.value ?? 0 | number }}%</span>
+          <span class="email-label">Click Rate</span>
+          <span
+            class="email-growth"
+            [ngClass]="{
+              'growth-up': emailCommunication.click_rate.growth_percent > 0,
+              'growth-down': emailCommunication.click_rate.growth_percent < 0
+            }"
+            *ngIf="emailCommunication?.click_rate?.growth_percent"
+          >
+            {{ emailCommunication.click_rate.growth_percent > 0 ? '↑' : '↓' }}
+            {{ Math.abs(emailCommunication.click_rate.growth_percent) }}%
+          </span>
+        </li>
+        <li class="email-stat">
+          <span class="email-value">{{ emailCommunication?.newsletters_this_month ?? 0 | number }}</span>
+          <span class="email-label">Newsletters This Month</span>
+        </li>
+      </ul>
+    </article>
+  </section>
+
+  <!-- Row 4: Latest Channel Activity + Latest Forum Activity + Quick Actions -->
+  <section class="activity-actions-row">
+    <!-- Latest Channel Activity -->
+    <article class="channel-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faHashtag" class="heading-icon-channel"></fa-icon> Latest Channel Activity
+        </h3>
+      </header>
+      <app-loading-spinner *ngIf="isChannelActivityLoading" class="section-loader"></app-loading-spinner>
+      <ul class="channel-list" *ngIf="!isChannelActivityLoading">
+        <li *ngFor="let msg of latestChannelActivity" class="channel-item">
+          <span class="channel-name"
+            ><fa-icon [icon]="icons.faHashtag"></fa-icon> {{ msg.channel_name || 'channel' }}</span
+          >
+          <span class="channel-message" [innerHTML]="msg.message | stripHtmlExceptLinks"></span>
+          <span class="channel-meta">
+            <span class="channel-author">{{ msg.user?.name }}</span>
+            <span class="channel-sep" *ngIf="msg.community_name">·</span>
+            <span class="channel-community" *ngIf="msg.community_name">{{ msg.community_name }}</span>
+            <time class="channel-time">{{ channelActivityTime(msg) }}</time>
+          </span>
+        </li>
+        <li *ngIf="latestChannelActivity.length === 0" class="channel-empty">No channel activity yet.</li>
+      </ul>
+    </article>
+
+    <!-- Latest Forum Activity -->
+    <article class="channel-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faMessage" class="heading-icon-forum"></fa-icon> Latest Forum Activity
+        </h3>
+      </header>
+      <app-loading-spinner *ngIf="isForumActivityLoading" class="section-loader"></app-loading-spinner>
+      <ul class="channel-list" *ngIf="!isForumActivityLoading">
+        <li *ngFor="let msg of latestForumActivity" class="channel-item">
+          <span class="channel-name"
+            ><fa-icon [icon]="icons.faMessage"></fa-icon> {{ msg.channel_name || 'forum' }}</span
+          >
+          <span class="channel-message" [innerHTML]="msg.message | stripHtmlExceptLinks"></span>
+          <span class="channel-meta">
+            <span class="channel-author">{{ msg.user?.name }}</span>
+            <span class="channel-sep" *ngIf="msg.community_name">·</span>
+            <span class="channel-community" *ngIf="msg.community_name">{{ msg.community_name }}</span>
+            <time class="channel-time">{{ channelActivityTime(msg) }}</time>
+          </span>
+        </li>
+        <li *ngIf="latestForumActivity.length === 0" class="channel-empty">No forum activity yet.</li>
+      </ul>
+    </article>
+
+    <!-- Quick Actions -->
+    <article class="quick-actions-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faBolt" class="heading-icon-actions"></fa-icon> Quick Actions
+        </h3>
+      </header>
+      <nav class="actions-grid">
+        <a *ngFor="let action of quickActions" class="action-card" [routerLink]="action.route">
+          <fa-icon [icon]="action.icon" class="action-icon"></fa-icon>
+          <span class="action-label">{{ action.label }}</span>
+        </a>
+      </nav>
+    </article>
+  </section>
+</div>

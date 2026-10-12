@@ -16,6 +16,7 @@ import { CommunityGroupsSurveysComponent } from 'apps/commudle-admin/src/app/fea
 import { CommunityGroupCustomPagesComponent } from 'apps/commudle-admin/src/app/feature-modules/community-groups/components/community-group-custom-pages/community-group-custom-pages.component';
 import { CustomPageFormComponent } from 'apps/commudle-admin/src/app/app-shared-components/custom-page/custom-page-form/custom-page-form.component';
 import { CommunityGroupChannelComponent } from 'apps/commudle-admin/src/app/feature-modules/community-groups/components/community-group-channel/community-group-channel.component';
+import { CommunityGroupAdminDashboardComponent } from 'apps/commudle-admin/src/app/feature-modules/community-groups/components/community-group-admin-dashboard/community-group-admin-dashboard.component';
 
 const routes = [
   {
@@ -39,10 +40,14 @@ const routes = [
     children: [
       {
         path: '',
+        component: CommunityGroupAdminDashboardComponent,
+      },
+      {
+        path: '',
         component: CommunitiesComponent,
         children: [
           {
-            path: '',
+            path: 'communities',
             component: CommunityComponent,
           },
           {
@@ -53,10 +58,6 @@ const routes = [
             path: 'hackathons',
             component: HackathonsComponent,
           },
-          // {
-          //   path: 'channels',
-          //   component: ChannelsComponent,
-          // },
         ],
       },
       {

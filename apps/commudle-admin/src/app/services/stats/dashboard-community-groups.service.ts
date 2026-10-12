@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { API_ROUTES, BaseApiService } from '@commudle/shared-services';
 import {
-  ICommunityDashboardScheduleItem,
+  ICommunityGroupDashboardScheduleItem,
   ICommunityGroupDashboardActivityItem,
   ICommunityGroupDashboardAudienceDemographics,
   ICommunityGroupDashboardChannelActivityItem,
@@ -38,9 +38,9 @@ export class DashboardCommunityGroupsService {
     );
   }
 
-  upcomingSchedule(communityGroupId): Observable<ICommunityDashboardScheduleItem[]> {
+  upcomingSchedule(communityGroupId): Observable<ICommunityGroupDashboardScheduleItem[]> {
     const params = new HttpParams().set('community_group_id', communityGroupId);
-    return this.http.get<ICommunityDashboardScheduleItem[]>(
+    return this.http.get<ICommunityGroupDashboardScheduleItem[]>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITY_GROUPS.UPCOMING_SCHEDULE),
       { params },
     );
@@ -82,17 +82,17 @@ export class DashboardCommunityGroupsService {
     );
   }
 
-  latestChannelActivity(communityGroupId): Observable<IPaginationCount<ICommunityGroupDashboardChannelActivityItem>> {
+  latestChannelActivity(communityGroupId): Observable<ICommunityGroupDashboardChannelActivityItem[]> {
     const params = new HttpParams().set('community_group_id', communityGroupId);
-    return this.http.get<IPaginationCount<ICommunityGroupDashboardChannelActivityItem>>(
+    return this.http.get<ICommunityGroupDashboardChannelActivityItem[]>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITY_GROUPS.LATEST_CHANNEL_ACTIVITY),
       { params },
     );
   }
 
-  latestForumActivity(communityGroupId): Observable<IPaginationCount<ICommunityGroupDashboardChannelActivityItem>> {
+  latestForumActivity(communityGroupId): Observable<ICommunityGroupDashboardChannelActivityItem[]> {
     const params = new HttpParams().set('community_group_id', communityGroupId);
-    return this.http.get<IPaginationCount<ICommunityGroupDashboardChannelActivityItem>>(
+    return this.http.get<ICommunityGroupDashboardChannelActivityItem[]>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITY_GROUPS.LATEST_FORUM_ACTIVITY),
       { params },
     );

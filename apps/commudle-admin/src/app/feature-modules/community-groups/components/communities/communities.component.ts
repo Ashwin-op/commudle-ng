@@ -15,39 +15,28 @@ export class CommunitiesComponent implements OnInit, OnDestroy {
   communityGroup: ICommunityGroup;
 
   subscriptions: Subscription[] = [];
-  tabs = [
-    {
-      route: './',
-      title: 'Communities',
-      icon: faUsers,
-    },
-    {
-      route: 'events',
-      title: 'Events',
-      icon: faCalendarDays,
-    },
-    {
-      route: 'hackathons',
-      title: 'Hackathons',
-      icon: faTrophy,
-    },
-    // {
-    //   route: 'channels',
-    //   title: 'Channels',
-    //   icon: 'hash',
-    // },
-  ];
+  tabs: { route: any[]; title: string; icon: typeof faUsers }[] = [];
 
   constructor(private activatedRoute: ActivatedRoute, private seoService: SeoService) {}
 
   ngOnInit(): void {
     this.seoService.noIndex(true);
     this.subscriptions.push(
-      this.activatedRoute.data.subscribe((data) => {
+      this.activatedRoute.parent.data.subscribe((data) => {
         this.communityGroup = data.community_group;
+        this.setTabs();
         this.setMeta();
       }),
     );
+  }
+
+  setTabs(): void {
+    const base = ['/admin', 'orgs', this.communityGroup.slug];
+    this.tabs = [
+      { route: [...base, 'communities'], title: 'Communities', icon: faUsers },
+      { route: [...base, 'events'], title: 'Events', icon: faCalendarDays },
+      { route: [...base, 'hackathons'], title: 'Hackathons', icon: faTrophy },
+    ];
   }
 
   ngOnDestroy(): void {

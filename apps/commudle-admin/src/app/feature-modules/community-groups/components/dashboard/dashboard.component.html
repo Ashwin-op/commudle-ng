@@ -27,6 +27,10 @@
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
           >
+            <div class="icon"><nb-icon icon="grid-outline"></nb-icon></div>
+            <span *ngIf="sidebarExpanded" class="heading">Overview</span>
+          </a>
+          <a class="action-button" [routerLink]="['communities']" routerLinkActive="active">
             <div class="icon"><nb-icon icon="info-outline"></nb-icon></div>
             <span *ngIf="sidebarExpanded" class="heading">Communities</span>
           </a>

@@ -4,14 +4,24 @@ import {
   IDashboardMetricWithGrowth,
 } from './dashboard-common.model';
 
-// pulse -- each count carries its 30-day growth
+// pulse
 export interface ICommunityGroupDashboardPulse {
   communities: IDashboardCountWithGrowth;
   members: IDashboardCountWithGrowth;
-  upcoming_events: IDashboardCountWithGrowth;
-  upcoming_hackathons: IDashboardCountWithGrowth;
+  upcoming_events: { total: number; happening_soon: number };
+  upcoming_hackathons: { total: number; live_now: number };
   engagement: IDashboardMetricWithGrowth;
   reach: IDashboardMetricWithGrowth;
+}
+
+export type ECommunityGroupDashboardScheduleType = 'newsletter' | 'event' | 'hackathon';
+
+export interface ICommunityGroupDashboardScheduleItem {
+  type: ECommunityGroupDashboardScheduleType;
+  id: number;
+  title: string;
+  community_name: string;
+  scheduled_at: string;
 }
 
 // needs_attention
@@ -33,25 +43,40 @@ export type ECommunityGroupDashboardActivityType =
 
 export interface ICommunityGroupDashboardActivityItem {
   type: ECommunityGroupDashboardActivityType;
-  id: number;
   created_at: string;
+  // per-type fields vary: count, community_ids, survey_name, response_count, hackathon_name, etc.
   [key: string]: any;
 }
 
 // community_footprint
+export interface ICommunityGroupDashboardFootprintLocation {
+  city: string;
+  member_count: number;
+}
+
 export interface ICommunityGroupDashboardFootprint {
   countries_count: number;
   cities_count: number;
   communities_count: number;
   members_count: number;
-  top_locations: IDashboardDistributionItem[];
+  top_locations: ICommunityGroupDashboardFootprintLocation[];
 }
 
 // audience_demographics
+export interface ICommunityGroupDashboardSkillTag {
+  name: string;
+  count: number;
+}
+
+export interface ICommunityGroupDashboardTopSkills {
+  total: number;
+  tags: ICommunityGroupDashboardSkillTag[];
+}
+
 export interface ICommunityGroupDashboardAudienceDemographics {
   top_locations: IDashboardDistributionItem[];
   gender_distribution: IDashboardDistributionItem[];
-  top_skills: IDashboardDistributionItem[];
+  top_skills: ICommunityGroupDashboardTopSkills;
 }
 
 // email_communication
@@ -73,10 +98,13 @@ export interface ICommunityGroupDashboardEmailCommunication {
 export type ECommunityGroupDashboardChannelOwner = 'community' | 'organization';
 
 export interface ICommunityGroupDashboardChannelActivityItem {
-  id: number;
-  content: string;
-  created_at: string;
+  type: string;
+  user: { id: number; name: string };
+  channel_name: string;
+  community_name: string;
   owned_by: ECommunityGroupDashboardChannelOwner;
+  message: string;
+  created_at: string;
   [key: string]: any;
 }
 
