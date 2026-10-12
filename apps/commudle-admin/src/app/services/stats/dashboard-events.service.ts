@@ -63,7 +63,7 @@ export class DashboardEventsService {
   }
 
   recentActivity(eventId, page = 1, count = 10): Observable<IPaginationCount<IEventDashboardActivityItem>> {
-    const params = new HttpParams().set('event_id', eventId).set('page_no', page).set('page_items_count', count);
+    const params = new HttpParams().set('event_id', eventId).set('page', page).set('count', count);
     return this.http.get<IPaginationCount<IEventDashboardActivityItem>>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.EVENTS.RECENT_ACTIVITY),
       { params },
