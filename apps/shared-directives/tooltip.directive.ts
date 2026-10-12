@@ -59,23 +59,22 @@ const COLORS: Record<string, { from: string; to: string; edge: string; glow: str
       role="tooltip"
       [id]="id"
       class="com-relative com-w-max com-text-xs com-leading-snug com-break-words"
-      [class]="boxClass"
       [style]="boxStyle"
       (mouseenter)="hoverChange.emit(true)"
       (mouseleave)="hoverChange.emit(false)"
     >
       <div class="com-relative">
         @if (variant === 'card') {
-        <com-card><ng-container *ngTemplateOutlet="content"></ng-container></com-card>
+        <com-card><ng-container *ngTemplateOutlet="contentTpl"></ng-container></com-card>
         } @else {
-        <ng-container *ngTemplateOutlet="content"></ng-container>
+        <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
         }
 
-        <ng-template #content>
+        <ng-template #contentTpl>
           @if (template) {
           <ng-container *ngTemplateOutlet="template"></ng-container>
           } @else {
-          <span [style]="variant === 'card' ? { display: 'block', padding: '6px 10px' } : null">{{ text }}</span>
+          <span [style]="variant === 'card' ? { display: 'block', padding: '6px 10px' } : null">{{ content }}</span>
           }
         </ng-template>
       </div>
@@ -105,15 +104,6 @@ class TooltipContainerComponent {
 
   get template(): TemplateRef<unknown> | null {
     return this.content instanceof TemplateRef ? this.content : null;
-  }
-
-  get text(): string {
-    return this.template || this.content == null ? '' : String(this.content);
-  }
-
-  get boxClass(): string {
-    if (this.variant === 'card') return '';
-    return 'com-text-white';
   }
 
   enter(): void {
