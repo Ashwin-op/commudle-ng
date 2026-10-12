@@ -21,16 +21,26 @@ export class CommunitiesComponent implements OnInit, OnDestroy {
     { route: 'hackathons', title: 'Hackathons', icon: faTrophy },
   ];
 
-  constructor(public activatedRoute: ActivatedRoute, private seoService: SeoService) {}
+  constructor(public activatedRoute: ActivatedRoute, private seoService: SeoService) { }
 
   ngOnInit(): void {
     this.seoService.noIndex(true);
     this.subscriptions.push(
       this.activatedRoute.parent.data.subscribe((data) => {
         this.communityGroup = data.community_group;
+        this.setTabs();
         this.setMeta();
       }),
     );
+  }
+
+  setTabs(): void {
+    const base = ['/admin', 'orgs', this.communityGroup.slug];
+    this.tabs = [
+      { route: [...base, 'communities'], title: 'Communities', icon: faUsers },
+      { route: [...base, 'events'], title: 'Events', icon: faCalendarDays },
+      { route: [...base, 'hackathons'], title: 'Hackathons', icon: faTrophy },
+    ];
   }
 
   ngOnDestroy(): void {

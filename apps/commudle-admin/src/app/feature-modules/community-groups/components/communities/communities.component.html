@@ -3,13 +3,8 @@
   <com-card class="tabs-section">
     <div class="cg-tabs">
       <nav class="tab-nav">
-        <a
-          *ngFor="let tab of tabs"
-          [routerLink]="[tab.route]"
-          [relativeTo]="activatedRoute.parent"
-          routerLinkActive="active"
-          class="tab-link"
-        >
+        <a *ngFor="let tab of tabs" [routerLink]="[tab.route]" [relativeTo]="activatedRoute.parent"
+          routerLinkActive="active" class="tab-link">
           <fa-icon [icon]="tab.icon"></fa-icon>
           {{ tab.title }}
         </a>

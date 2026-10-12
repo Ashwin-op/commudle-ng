@@ -123,7 +123,7 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     private activatedRoute: ActivatedRoute,
     private seoService: SeoService,
     private dashboardCommunityGroupsService: DashboardCommunityGroupsService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.subscriptions.push(
@@ -473,9 +473,8 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
       case 'forum_discussions':
         return `${count} new forum discussion${count === 1 ? '' : 's'}`;
       case 'survey_responses':
-        return `${item.response_count || 0} response${item.response_count === 1 ? '' : 's'} on ${
-          item.survey_name || 'a survey'
-        }`;
+        return `${item.response_count || 0} response${item.response_count === 1 ? '' : 's'} on ${item.survey_name || 'a survey'
+          }`;
       case 'new_admins':
         return `${count} new admin${count === 1 ? '' : 's'} added`;
       default:
