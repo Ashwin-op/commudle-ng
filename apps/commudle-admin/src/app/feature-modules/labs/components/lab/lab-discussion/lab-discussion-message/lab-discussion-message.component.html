@@ -30,8 +30,8 @@
         >
           <p
             [ngClass]="{ 'error-text': message.flags_count > 0 }"
-            nbTooltip="Report this message. (3 reports will delete it)"
-            nbTooltipStatus="warning"
+            comTooltip="Report this message. (3 reports will delete it)"
+            tooltipStatus="warning"
           >
             <span *ngIf="message.flags_count > 0">{{ message.flags_count }}</span>
             <nb-icon icon="flag"></nb-icon>
@@ -44,8 +44,8 @@
             (permittedActions.includes(allActions.DELETE_SELF) && message.user.id === currentUser.id)
           "
           class="clickable"
-          nbTooltip="Delete"
-          nbTooltipStatus="warning"
+          comTooltip="Delete"
+          tooltipStatus="warning"
         >
           <p>
             <nb-icon icon="close-circle"></nb-icon>

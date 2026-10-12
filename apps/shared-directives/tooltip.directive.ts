@@ -1,5 +1,6 @@
-import { NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -33,14 +34,13 @@ const HIDE_DELAY = 100;
 const ANIM_MS = 300;
 const SLIDE_PX = 8;
 const VIEWPORT_MARGIN = 8;
-const DOT_SIZE = 8;
-const DOT_GAP = 4;
-const SPACE_WITH_DOT = DOT_SIZE + DOT_GAP * 2; // trigger -> box distance when the dot is shown
+const DOT_SIZE = 6;
+const DOT_GAP = 3;
+const SPACE_WITH_DOT = DOT_SIZE + DOT_GAP * 2;
 const SPACE_WITHOUT_DOT = 4;
 
-// primary = Commudle logo blue (default). Same status names as Nebular; unknown names fall back to primary.
 const COLORS: Record<string, { from: string; to: string; edge: string; glow: string }> = {
-  primary: { from: '#5070fc', to: '#24a8fc', edge: '#2b5fd0', glow: 'rgba(60, 120, 252, 0.40)' },
+  primary: { from: '#5270ff', to: '#3495ff', edge: '#5270ff', glow: 'rgba(60, 120, 252, 0.40)' },
   basic: { from: '#5b6478', to: '#3b4254', edge: '#262b38', glow: 'rgba(59, 66, 84, 0.40)' },
   info: { from: '#4cc9ff', to: '#0095ff', edge: '#0072c6', glow: 'rgba(0, 149, 255, 0.40)' },
   success: { from: '#3ddc84', to: '#00b86b', edge: '#008a4e', glow: 'rgba(0, 184, 107, 0.40)' },
@@ -48,45 +48,41 @@ const COLORS: Record<string, { from: string; to: string; edge: string; glow: str
   danger: { from: '#ff6b81', to: '#e5304f', edge: '#b01e38', glow: 'rgba(229, 48, 79, 0.40)' },
 };
 
-const SHINE = 'radial-gradient(ellipse 80px 50px at 0% 0%, rgba(255,255,255,0.35), transparent)';
-
 @Component({
-  selector: 'app-tooltip-container',
+  selector: 'com-tooltip-container',
   standalone: true,
-  imports: [NgIf, NgStyle, NgTemplateOutlet, CommudleCardModule],
+  imports: [NgTemplateOutlet, CommudleCardModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { style: 'display: block' },
+  host: { class: 'com-block' },
   template: `
     <div
       role="tooltip"
       [id]="id"
-      [ngStyle]="boxStyle"
+      class="com-relative com-w-max com-text-xs com-leading-snug com-break-words"
+      [class]="boxClass"
+      [style]="boxStyle"
       (mouseenter)="hoverChange.emit(true)"
       (mouseleave)="hoverChange.emit(false)"
     >
-      <!-- corner shine: behind the text, only in the top-left corner -->
-      <span
-        *ngIf="variant !== 'card'"
-        [style.background]="shine"
-        style="position: absolute; inset: 0; border-radius: inherit; pointer-events: none"
-      ></span>
-
-      <div style="position: relative">
-        <com-card *ngIf="variant === 'card'; else content">
-          <ng-container *ngTemplateOutlet="content"></ng-container>
-        </com-card>
+      <div class="com-relative">
+        @if (variant === 'card') {
+        <com-card><ng-container *ngTemplateOutlet="content"></ng-container></com-card>
+        } @else {
+        <ng-container *ngTemplateOutlet="content"></ng-container>
+        }
 
         <ng-template #content>
-          <ng-container *ngIf="template; else plainText">
-            <ng-container *ngTemplateOutlet="template"></ng-container>
-          </ng-container>
-        </ng-template>
-        <ng-template #plainText>
-          <span [ngStyle]="variant === 'card' ? { display: 'block', padding: '8px 12px' } : null">{{ text }}</span>
+          @if (template) {
+          <ng-container *ngTemplateOutlet="template"></ng-container>
+          } @else {
+          <span [style]="variant === 'card' ? { display: 'block', padding: '6px 10px' } : null">{{ text }}</span>
+          }
         </ng-template>
       </div>
 
-      <span *ngIf="dot" style="position: absolute; pointer-events: none" [ngStyle]="dotStyle"></span>
+      @if (dot) {
+      <span class="com-absolute com-pointer-events-none" [style]="dotStyle"></span>
+      }
     </div>
   `,
 })
@@ -99,15 +95,26 @@ class TooltipContainerComponent {
   dot = true;
   dotOffset = 0;
   id = '';
-  shine = SHINE;
   boxStyle: Record<string, string> = {};
   dotStyle: Record<string, string> = {};
+  shown = false;
 
   @Output() hoverChange = new EventEmitter<boolean>();
 
-  shown = false; // false = hidden state: faded out and nudged toward the trigger
-
   constructor(private cdr: ChangeDetectorRef, private el: ElementRef<HTMLElement>) {}
+
+  get template(): TemplateRef<unknown> | null {
+    return this.content instanceof TemplateRef ? this.content : null;
+  }
+
+  get text(): string {
+    return this.template || this.content == null ? '' : String(this.content);
+  }
+
+  get boxClass(): string {
+    if (this.variant === 'card') return '';
+    return 'com-text-white';
+  }
 
   enter(): void {
     void this.el.nativeElement.offsetWidth;
@@ -119,6 +126,40 @@ class TooltipContainerComponent {
     this.refresh();
   }
 
+  refresh(): void {
+    const c = COLORS[this.status] || COLORS.primary;
+
+    const base = {
+      'max-width': `${SIZES[this.size] || SIZES.md}px`,
+      opacity: this.shown ? '1' : '0',
+      transform: this.shown ? 'translate(0, 0)' : this.hiddenTransform(),
+      transition: `opacity ${ANIM_MS}ms ease, transform ${ANIM_MS}ms ease`,
+    };
+
+    this.boxStyle =
+      this.variant === 'card'
+        ? { ...base, filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.14))' }
+        : {
+            ...base,
+            color: '#fff',
+            padding: this.template ? '0' : '6px 10px',
+            'border-radius': '10px',
+            background: `linear-gradient(135deg, ${c.from}, ${c.to})`,
+            'box-shadow': `inset 0 1px 0 rgba(255,255,255,0.35), 0 10px 28px -6px ${c.glow}, 0 3px 8px rgba(0,0,0,0.12)`,
+          };
+
+    this.dotStyle = {
+      width: `${DOT_SIZE}px`,
+      height: `${DOT_SIZE}px`,
+      'border-radius': '9999px',
+      background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0) 45%), linear-gradient(135deg, ${c.from}, ${c.to})`,
+      'box-shadow': `0 2px 0 ${c.edge}, 0 3px 4px rgba(0,0,0,0.2)`,
+      ...this.dotPosition(),
+    };
+
+    this.cdr.detectChanges();
+  }
+
   private hiddenTransform(): string {
     const d = SLIDE_PX;
     return {
@@ -127,56 +168,6 @@ class TooltipContainerComponent {
       left: `translate(${d}px, 0)`,
       right: `translate(-${d}px, 0)`,
     }[this.side];
-  }
-
-  get template(): TemplateRef<unknown> | null {
-    return this.content instanceof TemplateRef ? this.content : null;
-  }
-
-  get text(): string {
-    return this.template || this.content == null ? '' : String(this.content);
-  }
-
-  refresh(): void {
-    const c = COLORS[this.status] || COLORS.primary;
-    const maxWidth = `${SIZES[this.size] || SIZES.md}px`;
-
-    const base = {
-      position: 'relative',
-      width: 'max-content',
-      'max-width': maxWidth,
-      'font-size': '13px',
-      'line-height': '1.45',
-      'word-break': 'break-word',
-      opacity: this.shown ? '1' : '0',
-      transform: this.shown ? 'translate(0, 0)' : this.hiddenTransform(),
-      transition: `opacity ${ANIM_MS}ms ease, transform ${ANIM_MS}ms ease`,
-    };
-
-    this.boxStyle =
-      this.variant === 'card'
-        ? { ...base, background: 'transparent', filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.14))' }
-        : {
-            ...base,
-            color: '#fff',
-            padding: this.template ? '0' : '10px 14px',
-            'border-radius': '14px',
-            background: `linear-gradient(135deg, ${c.from}, ${c.to})`,
-
-            'box-shadow': `inset 0 1px 0 rgba(255,255,255,0.35), 0 10px 28px -6px ${c.glow}, 0 3px 8px rgba(0,0,0,0.12)`,
-          };
-
-    this.dotStyle = {
-      width: `${DOT_SIZE}px`,
-      height: `${DOT_SIZE}px`,
-      'border-radius': '9999px',
-
-      background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0) 45%), linear-gradient(135deg, ${c.from}, ${c.to})`,
-      'box-shadow': `0 2px 0 ${c.edge}, 0 3px 4px rgba(0,0,0,0.2)`,
-      ...this.dotPosition(),
-    };
-
-    this.cdr.detectChanges();
   }
 
   private dotPosition(): Record<string, string> {
@@ -196,33 +187,32 @@ class TooltipContainerComponent {
   }
 }
 
-/* ---------------- public API: [appTooltip] ---------------- */
 let nextId = 0;
 
 @Directive({
-  selector: '[appTooltip]',
+  selector: '[comTooltip]',
   standalone: false,
 })
 export class TooltipDirective implements OnChanges, OnDestroy {
-  @Input() appTooltip: TooltipContent | null | undefined;
-  @Input() appTooltipPlacement: TooltipPlacement = 'top'; // top | bottom | left | right | start | end
-  @Input() appTooltipStatus = 'primary'; // primary | basic | info | success | warning | danger
-  @Input() appTooltipDot = true; // [appTooltipDot]="false" to hide the dot
-  @Input() appTooltipVariant: TooltipVariant = 'default'; // 'card' wraps the content in com-card
-  @Input() appTooltipDelay: TooltipDelay = 'short'; // instant (0ms) | short (300ms) | long (700ms)
-  @Input() appTooltipSize: TooltipSize = 'md'; // max width: sm 160px | md 240px | lg 360px
-  @Input() appTooltipDisabled = false;
-  @Input() appTooltipClass = ''; // extra class(es) on the overlay
+  @Input('comTooltip') content: TooltipContent | null | undefined;
+  @Input() tooltipPlacement: TooltipPlacement = 'top';
+  @Input() tooltipStatus = 'primary'; // primary | basic | info | success | warning | danger
+  @Input() tooltipVariant: TooltipVariant = 'default';
+  @Input() tooltipDelay: TooltipDelay = 'short';
+  @Input() tooltipSize: TooltipSize = 'md';
+  @Input() tooltipClass = '';
+  @Input({ transform: booleanAttribute }) tooltipDot = true;
+  @Input({ transform: booleanAttribute }) tooltipDisabled = false;
 
   @HostBinding('attr.aria-describedby') describedBy: string | null = null;
 
-  private readonly id = `app-tooltip-${nextId++}`;
+  private readonly id = `com-tooltip-${nextId++}`;
   private overlayRef?: OverlayRef;
   private subs = new Subscription();
   private showTimer?: ReturnType<typeof setTimeout>;
   private hideTimer?: ReturnType<typeof setTimeout>;
-  private tip?: TooltipContainerComponent;
   private leaveTimer?: ReturnType<typeof setTimeout>;
+  private tip?: TooltipContainerComponent;
 
   constructor(private overlay: Overlay, private host: ElementRef<HTMLElement>) {}
 
@@ -233,10 +223,10 @@ export class TooltipDirective implements OnChanges, OnDestroy {
     if (this.cancelLeave()) {
       return;
     }
-    if (this.appTooltipDisabled || !this.appTooltip || this.overlayRef) {
+    if (this.tooltipDisabled || !this.content || this.overlayRef) {
       return;
     }
-    const delay = DELAYS[this.appTooltipDelay] ?? DELAYS.short;
+    const delay = DELAYS[this.tooltipDelay] ?? DELAYS.short;
     if (delay === 0) {
       this.show();
     } else {
@@ -257,8 +247,7 @@ export class TooltipDirective implements OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // content or disabled changed while open: close it, the next hover shows the fresh one
-    if (this.overlayRef && (changes['appTooltip'] || changes['appTooltipDisabled'])) {
+    if (this.overlayRef && (changes['content'] || changes['tooltipDisabled'])) {
       this.hide(true);
     }
   }
@@ -268,15 +257,15 @@ export class TooltipDirective implements OnChanges, OnDestroy {
   }
 
   private show(): void {
-    if (this.overlayRef || this.appTooltipDisabled || !this.appTooltip) {
+    if (this.overlayRef || this.tooltipDisabled || !this.content) {
       return;
     }
 
-    const space = this.appTooltipDot ? SPACE_WITH_DOT : SPACE_WITHOUT_DOT;
+    const space = this.tooltipDot ? SPACE_WITH_DOT : SPACE_WITHOUT_DOT;
     const strategy = this.overlay
       .position()
       .flexibleConnectedTo(this.host)
-      .withPositions(this.positions(space)) // preferred side first, then it flips to fit the screen
+      .withPositions(this.positions(space))
       .withPush(true)
       .withFlexibleDimensions(false)
       .withViewportMargin(VIEWPORT_MARGIN);
@@ -284,16 +273,16 @@ export class TooltipDirective implements OnChanges, OnDestroy {
     this.overlayRef = this.overlay.create({
       positionStrategy: strategy,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
-      panelClass: this.appTooltipClass.split(' ').filter(Boolean),
+      panelClass: this.tooltipClass.split(' ').filter(Boolean),
     });
 
     const tip = this.overlayRef.attach(new ComponentPortal(TooltipContainerComponent)).instance;
-    tip.content = this.appTooltip;
+    tip.content = this.content;
     tip.side = this.preferredSide();
-    tip.size = this.appTooltipSize;
-    tip.status = this.appTooltipStatus;
-    tip.variant = this.appTooltipVariant;
-    tip.dot = this.appTooltipDot;
+    tip.size = this.tooltipSize;
+    tip.status = this.tooltipStatus;
+    tip.variant = this.tooltipVariant;
+    tip.dot = this.tooltipDot;
     tip.id = this.id;
     this.tip = tip;
     this.describedBy = this.id;
@@ -305,7 +294,6 @@ export class TooltipDirective implements OnChanges, OnDestroy {
         tip.refresh();
       }),
     );
-
     this.subs.add(tip.hoverChange.subscribe((hovered) => (hovered ? this.keepOpen() : this.onLeave())));
     tip.refresh();
     tip.enter();
@@ -318,7 +306,7 @@ export class TooltipDirective implements OnChanges, OnDestroy {
       this.dispose();
       return;
     }
-    if (this.leaveTimer) return; // already fading out
+    if (this.leaveTimer) return;
     this.tip.setShown(false);
     this.leaveTimer = setTimeout(() => this.dispose(), ANIM_MS);
   }
@@ -353,7 +341,7 @@ export class TooltipDirective implements OnChanges, OnDestroy {
   }
 
   private preferredSide(): Side {
-    const p = this.appTooltipPlacement;
+    const p = this.tooltipPlacement;
     return p === 'start' ? 'left' : p === 'end' ? 'right' : p || 'top';
   }
 

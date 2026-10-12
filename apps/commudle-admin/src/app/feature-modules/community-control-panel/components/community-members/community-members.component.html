@@ -401,13 +401,14 @@
                 *ngIf="userRole.community_activeness === 'dormant' && !isMobileView"
                 class="dormant"
                 [icon]="faSkull"
-                [appTooltip]="
+                [comTooltip]="
                   'Has very little recent activity. More active than only ' +
                   Math.round(activityScoreThresholds.dormant.min * 100) +
                   '-' +
                   Math.round(activityScoreThresholds.dormant.max * 100) +
                   '% of members.'
                 "
+                tooltipSize="sm"
               ></fa-icon>
               <fa-icon
                 *ngIf="userRole.community_activeness === 'dormant' && isMobileView"
@@ -418,7 +419,7 @@
                 *ngIf="userRole.community_activeness === 'low_active' && !isMobileView"
                 class="low_active"
                 [icon]="faHourglassHalf"
-                [appTooltip]="
+                [comTooltip]="
                   'Occasionally active with limited recent engagement. More active than ' +
                   Math.round(activityScoreThresholds.low_active.min * 100) +
                   '-' +
@@ -435,7 +436,7 @@
                 *ngIf="userRole.community_activeness === 'moderately_active' && !isMobileView"
                 class="moderately_active"
                 [icon]="faFire"
-                [appTooltip]="
+                [comTooltip]="
                   'Regular, recent participation. More active than ' +
                   Math.round(activityScoreThresholds.moderately_active.min * 100) +
                   '-' +
@@ -452,7 +453,7 @@
                 *ngIf="userRole.community_activeness === 'highly_active' && !isMobileView"
                 class="highly_active"
                 [icon]="faBolt"
-                [appTooltip]="
+                [comTooltip]="
                   'Very frequent recent engagement. More active than ' +
                   Math.round(activityScoreThresholds.highly_active.min * 100) +
                   '-' +
@@ -467,7 +468,7 @@
               ></fa-icon>
               <span
                 *ngIf="userRole.community_activeness && !isMobileView"
-                [appTooltip]="
+                [comTooltip]="
                   userRole.community_activeness === 'dormant'
                     ? 'Has very little recent activity. More active than only ' +
                       Math.round(activityScoreThresholds.dormant.min * 100) +
