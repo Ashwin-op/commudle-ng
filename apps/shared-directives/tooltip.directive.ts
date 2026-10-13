@@ -23,13 +23,12 @@ import { CommudleCardModule } from '@commudle/commudle-theme';
 
 type Side = 'top' | 'bottom' | 'left' | 'right';
 export type TooltipPlacement = Side | 'start' | 'end';
-export type TooltipDelay = 'instant' | 'short' | 'long';
 export type TooltipSize = 'sm' | 'md' | 'lg';
 export type TooltipVariant = 'default' | 'card';
 export type TooltipContent = string | TemplateRef<unknown>;
 
 const SIZES = { sm: 160, md: 240, lg: 360 };
-const DELAYS = { instant: 0, short: 300, long: 700 };
+const SHOW_DELAY = 300;
 const HIDE_DELAY = 100;
 const ANIM_MS = 300;
 const SLIDE_PX = 8;
@@ -133,7 +132,7 @@ class TooltipContainerComponent {
             ...base,
             color: '#fff',
             padding: this.template ? '0' : '6px 10px',
-            'border-radius': '10px',
+            'border-radius': '8px',
             background: `linear-gradient(135deg, ${c.from}, ${c.to})`,
             'box-shadow': `inset 0 1px 0 rgba(255,255,255,0.35), 0 10px 28px -6px ${c.glow}, 0 3px 8px rgba(0,0,0,0.12)`,
           };
@@ -188,7 +187,6 @@ export class TooltipDirective implements OnChanges, OnDestroy {
   @Input() tooltipPlacement: TooltipPlacement = 'top';
   @Input() tooltipStatus = 'primary'; // primary | basic | info | success | warning | danger
   @Input() tooltipVariant: TooltipVariant = 'default';
-  @Input() tooltipDelay: TooltipDelay = 'short';
   @Input() tooltipSize: TooltipSize = 'md';
   @Input() tooltipClass = '';
   @Input({ transform: booleanAttribute }) tooltipDot = true;
@@ -216,12 +214,7 @@ export class TooltipDirective implements OnChanges, OnDestroy {
     if (this.tooltipDisabled || !this.content || this.overlayRef) {
       return;
     }
-    const delay = DELAYS[this.tooltipDelay] ?? DELAYS.short;
-    if (delay === 0) {
-      this.show();
-    } else {
-      this.showTimer = setTimeout(() => this.show(), delay);
-    }
+    this.showTimer = setTimeout(() => this.show(), SHOW_DELAY);
   }
 
   @HostListener('mouseleave')
