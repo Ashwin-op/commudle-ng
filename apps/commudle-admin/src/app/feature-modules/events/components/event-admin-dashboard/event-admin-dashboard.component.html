@@ -159,15 +159,13 @@
           <!-- Agenda -->
           <a [routerLink]="['agenda']" class="attention-item">
             <fa-icon
-              [icon]="isStatusReady(needsAttention?.agenda?.status) ? icons.faCircleCheck : icons.faCircleXmark"
-              [ngClass]="
-                isStatusReady(needsAttention?.agenda?.status) ? 'attention-icon-check' : 'attention-icon-cross'
-              "
+              [icon]="needsAttention?.agenda?.status !== 'missing' ? icons.faCircleCheck : icons.faCircleXmark"
+              [ngClass]="needsAttention?.agenda?.status !== 'missing' ? 'attention-icon-check' : 'attention-icon-cross'"
             ></fa-icon>
             <div class="attention-content">
               <span class="attention-title">Agenda</span>
               <span class="attention-sub">
-                {{ isStatusReady(needsAttention?.agenda?.status) ? 'Agenda is set up' : 'Agenda needs to be created' }}
+                {{ needsAttention?.agenda?.status !== 'missing' ? 'Agenda is set up' : 'Agenda needs to be created' }}
               </span>
             </div>
             <span class="attention-arrow">›</span>
@@ -295,16 +293,16 @@
           <!-- Streaming -->
           <a [routerLink]="['edit']" class="attention-item">
             <fa-icon
-              [icon]="isStatusReady(needsAttention?.streaming?.status) ? icons.faCircleCheck : icons.faCircleXmark"
+              [icon]="needsAttention?.streaming?.status !== 'missing' ? icons.faCircleCheck : icons.faCircleXmark"
               [ngClass]="
-                isStatusReady(needsAttention?.streaming?.status) ? 'attention-icon-check' : 'attention-icon-cross'
+                needsAttention?.streaming?.status !== 'missing' ? 'attention-icon-check' : 'attention-icon-cross'
               "
             ></fa-icon>
             <div class="attention-content">
               <span class="attention-title">Streaming</span>
               <span class="attention-sub">
                 {{
-                  isStatusReady(needsAttention?.streaming?.status)
+                  needsAttention?.streaming?.status !== 'missing'
                     ? 'Streaming is set up'
                     : 'Streaming needs to be set up'
                 }}

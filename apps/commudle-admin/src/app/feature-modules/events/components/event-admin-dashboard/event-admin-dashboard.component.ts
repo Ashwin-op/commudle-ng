@@ -215,18 +215,6 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  /**
-   * `agenda` and `streaming` come back as free-form status strings rather than booleans,
-   * so anything in this known "not set up yet" set counts as still outstanding.
-   */
-  isStatusReady(status: string | undefined): boolean {
-    if (!status) {
-      return false;
-    }
-    const notReady = ['not_created', 'not_set', 'not_started', 'pending', 'missing', 'none', 'draft'];
-    return !notReady.includes(status.toLowerCase());
-  }
-
   getEventSnapshot(): void {
     this.isSnapshotLoading = true;
     this.subscriptions.push(
