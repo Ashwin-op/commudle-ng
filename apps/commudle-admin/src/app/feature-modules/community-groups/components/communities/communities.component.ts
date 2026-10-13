@@ -15,8 +15,6 @@ export class CommunitiesComponent implements OnInit, OnDestroy {
   communityGroup: ICommunityGroup;
 
   subscriptions: Subscription[] = [];
-  // Routes are relative to the parent (:community_group_id) route via [relativeTo] in the
-  // template, so the slug doesn't need to be hardcoded here.
   tabs: { route: string; title: string; icon: IconDefinition }[] = [
     { route: 'communities', title: 'Communities', icon: faUsers },
     { route: 'events', title: 'Events', icon: faCalendarDays },
