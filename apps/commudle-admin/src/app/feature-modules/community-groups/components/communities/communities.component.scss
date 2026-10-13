@@ -6,49 +6,6 @@
   @apply com-flex com-flex-col com-gap-4;
 }
 
-// ── Themed org header ──
-.cg-header {
-  @apply com-relative com-flex com-flex-col com-gap-4 com-p-6 com-rounded-none com-text-white com-overflow-hidden com-justify-between;
-  @apply md:com-flex-row md:com-items-center md:com-rounded-md;
-
-  .cg-identity {
-    @apply com-flex com-items-center com-gap-4 com-min-w-0;
-
-    .cg-logo {
-      @apply com-flex com-items-center com-justify-center com-flex-shrink-0 com-w-16 com-h-16 com-bg-tWhite;
-      @apply com-rounded-xl com-overflow-hidden com-bg-white com-shadow-md;
-
-      img {
-        @apply com-w-full com-h-full com-object-contain;
-      }
-
-      nb-icon {
-        @apply com-text-2xl com-text-gray-400;
-      }
-    }
-
-    .cg-meta {
-      @apply com-flex com-flex-col com-gap-0.5 com-min-w-0;
-
-      .cg-eyebrow {
-        @apply com-text-xs com-text-tWhite com-font-semibold com-uppercase com-tracking-widest com-opacity-80;
-      }
-
-      .cg-name {
-        @apply com-text-2xl com-font-bold com-m-0 com-truncate com-text-tWhite;
-      }
-
-      .cg-tagline {
-        @apply com-text-sm com-opacity-90 com-m-0 com-truncate com-text-tWhite;
-      }
-    }
-  }
-
-  .cg-public-btn {
-    @apply com-flex-shrink-0;
-  }
-}
-
 // ── Section tabs ──
 .cg-tabs {
   @apply com-m-0 com-scrollbar-hide com-overflow-x-auto;
