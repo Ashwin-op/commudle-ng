@@ -43,8 +43,7 @@
 
 // Row 1: Organization Hero
 .org-hero {
-  @apply com-relative com-overflow-hidden com-rounded-2xl com-border com-border-solid com-border-Bright-Gray com-p-4 sm:com-p-6 com-flex com-flex-col com-gap-5;
-  background: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 35%, #ffffff 65%, #eef2ff 100%);
+  @apply com-relative com-overflow-hidden com-rounded-2xl com-p-4 sm:com-p-6 com-flex com-flex-col com-gap-5 com-text-tWhite;
 
   .hero-top {
     @apply com-flex com-flex-col sm:com-flex-row com-items-start sm:com-items-center com-justify-between com-gap-3;
@@ -53,7 +52,7 @@
       @apply com-flex com-items-center com-gap-3 com-min-w-0;
 
       .hero-logo {
-        @apply com-w-[80px] com-h-[80px] com-rounded-xl com-overflow-hidden com-flex-shrink-0 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+        @apply com-w-[80px] com-h-[80px] com-rounded-xl com-overflow-hidden com-flex-shrink-0 com-bg-white com-shadow-md;
 
         commudle-banner-image,
         img {
@@ -62,14 +61,18 @@
       }
 
       .hero-info {
-        @apply com-flex com-flex-col com-min-w-0;
+        @apply com-flex com-flex-col com-gap-0.5 com-min-w-0;
+
+        .hero-eyebrow {
+          @apply com-text-xs com-text-tWhite com-font-semibold com-uppercase com-tracking-widest com-opacity-80;
+        }
 
         .hero-name {
-          @apply com-m-0 com-text-xl com-font-bold com-text-Yankees-Blue com-truncate;
+          @apply com-m-0 com-text-2xl com-font-bold com-text-tWhite com-truncate;
         }
 
         .hero-sub {
-          @apply com-m-0 com-text-sm com-text-gray-600 com-line-clamp-1;
+          @apply com-m-0 com-text-sm com-text-tWhite com-opacity-90 com-line-clamp-1;
         }
       }
     }

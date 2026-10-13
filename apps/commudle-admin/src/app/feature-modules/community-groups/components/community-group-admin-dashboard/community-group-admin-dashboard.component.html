@@ -1,6 +1,6 @@
 <div class="org-overview" *ngIf="communityGroup">
   <!-- Row 1: Organization Hero + Pulse stats -->
-  <section class="org-hero">
+  <section class="org-hero" [style.background-color]="communityGroup.theme_color || '#3366ff'">
     <div class="hero-top">
       <div class="hero-identity">
         <div class="hero-logo">
@@ -11,22 +11,22 @@
           ></commudle-banner-image>
         </div>
         <div class="hero-info">
+          <span class="hero-eyebrow">Organization Dashboard</span>
           <h1 class="hero-name">{{ communityGroup.name }}</h1>
           <p class="hero-sub" *ngIf="communityGroup.mini_description">{{ communityGroup.mini_description }}</p>
         </div>
       </div>
       <a
+        nbButton
+        status="control"
+        shape="semi-round"
+        size="small"
+        class="hero-public-link"
         [routerLink]="['/orgs', communityGroup.slug]"
         target="_blank"
-        class="hero-public-link"
-        comButton
-        status="info"
-        size="small"
-        shape="semi-round"
-        outline
       >
-        View Public Page
         <nb-icon icon="external-link-outline" class="hero-external-icon"></nb-icon>
+        View Public Page
       </a>
     </div>
 
