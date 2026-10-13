@@ -592,8 +592,31 @@
             <span class="post-stat-label">Entry Passes</span>
           </div>
           <div class="post-stat">
-            <span class="post-stat-value">{{ postEventSnapshot?.feedback_responses_count ?? 0 | number }}</span>
-            <span class="post-stat-label">Feedback Responses</span>
+            <ng-container
+              *ngIf="
+                postEventSnapshot &&
+                  !postEventSnapshot.feedback_responses_count &&
+                  !postEventSnapshot.feedback_form_created;
+                else feedbackCount
+              "
+            >
+              <a
+                [routerLink]="['registrations']"
+                class="post-stat-action"
+                comButton
+                status="basic"
+                size="tiny"
+                shape="semi-round"
+              >
+                <nb-icon icon="plus-outline"></nb-icon>
+                Add Form
+              </a>
+              <span class="post-stat-label">Feedback</span>
+            </ng-container>
+            <ng-template #feedbackCount>
+              <span class="post-stat-value">{{ postEventSnapshot?.feedback_responses_count ?? 0 | number }}</span>
+              <span class="post-stat-label">Feedback Responses</span>
+            </ng-template>
           </div>
         </div>
       </div>

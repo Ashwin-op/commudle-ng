@@ -395,6 +395,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
             attended_count: data?.attended_count || 0,
             attendance_rate: data?.attendance_rate || 0,
             entry_passes_count: data?.entry_passes_count || 0,
+            feedback_form_created: data?.feedback_form_created || false,
             feedback_responses_count: data?.feedback_responses_count || 0,
             experience_distribution: data.experience_distribution,
             domain_distribution: data.domain_distribution,

@@ -565,6 +565,14 @@
         .post-stat-label {
           @apply com-text-xs com-text-Cadet-Grey com-text-center;
         }
+
+        .post-stat-action {
+          @apply com-inline-flex com-items-center com-justify-center com-gap-1 com-no-underline com-text-center com-max-w-full com-whitespace-normal com-leading-tight;
+
+          nb-icon {
+            @apply com-text-xs com-w-4 com-h-4 com-shrink-0;
+          }
+        }
       }
     }
   }

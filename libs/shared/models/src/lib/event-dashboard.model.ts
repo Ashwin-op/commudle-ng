@@ -88,6 +88,7 @@ export interface IEventDashboardPostEventSnapshot {
   attended_count: number;
   attendance_rate: number;
   entry_passes_count: number;
+  feedback_form_created: boolean;
   feedback_responses_count: number;
   experience_distribution: IDashboardDistributionItem[];
   domain_distribution: IDashboardDistributionItem[];
