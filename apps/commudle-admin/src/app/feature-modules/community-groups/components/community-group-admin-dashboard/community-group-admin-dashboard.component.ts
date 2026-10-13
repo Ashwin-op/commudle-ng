@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ICommunityGroup } from '@commudle/shared-models';
 import { SeoService } from '@commudle/shared-services';
 import { DashboardCommunityGroupsService } from 'apps/commudle-admin/src/app/services/stats/dashboard-community-groups.service';
 import {
+  ICommunityGroup,
   ICommunityGroupDashboardScheduleItem,
   ICommunityGroupDashboardActivityItem,
   ICommunityGroupDashboardAudienceDemographics,
@@ -34,10 +34,9 @@ import {
   faNewspaper,
   faScroll,
   faCircleXmark,
-  faBuilding,
   faUserPlus,
+  IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
-import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 declare let google: any;
 
@@ -50,7 +49,6 @@ declare let google: any;
 export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy {
   communityGroup: ICommunityGroup;
   subscriptions: Subscription[] = [];
-  moment = moment;
   Math = Math;
 
   icons = {
@@ -71,7 +69,6 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     faNewspaper,
     faScroll,
     faCircleXmark,
-    faBuilding,
     faUserPlus,
   };
 

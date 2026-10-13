@@ -17,8 +17,8 @@
         </div>
       </div>
       <a
-        nbButton
-        status="control"
+        comButton
+        status="basic"
         shape="semi-round"
         size="small"
         class="hero-public-link"
@@ -30,8 +30,8 @@
       </a>
     </div>
 
-    <app-loading-spinner *ngIf="isPulseLoading && !pulse" class="section-loader"></app-loading-spinner>
-    <ul class="pulse-stats" *ngIf="!isPulseLoading || pulse">
+    <app-loading-spinner *ngIf="isPulseLoading" class="section-loader"></app-loading-spinner>
+    <ul class="pulse-stats" *ngIf="!isPulseLoading">
       <li class="pulse-stat">
         <span class="pulse-icon communities-icon"><fa-icon [icon]="icons.faUsers"></fa-icon></span>
         <div class="pulse-body">
@@ -104,11 +104,8 @@
           <fa-icon [icon]="icons.faBell" class="heading-icon-attention"></fa-icon> Needs Attention
         </h3>
       </header>
-      <app-loading-spinner
-        *ngIf="isNeedsAttentionLoading && !needsAttention"
-        class="section-loader"
-      ></app-loading-spinner>
-      <div class="attention-list" *ngIf="!isNeedsAttentionLoading || needsAttention">
+      <app-loading-spinner *ngIf="isNeedsAttentionLoading" class="section-loader"></app-loading-spinner>
+      <div class="attention-list" *ngIf="!isNeedsAttentionLoading">
         <a
           *ngFor="let profile of needsAttention?.community_profiles"
           [routerLink]="['/admin', 'orgs', communityGroup.slug, 'communities']"
@@ -155,7 +152,6 @@
 
         <p
           *ngIf="
-            !isNeedsAttentionLoading &&
             !needsAttention?.community_profiles?.length &&
             !needsAttention?.pending_admin_invitations?.count &&
             !needsAttention?.surveys?.length
@@ -245,8 +241,8 @@
           <fa-icon [icon]="icons.faEarthAmericas" class="heading-icon-footprint"></fa-icon> Community Footprint
         </h3>
       </header>
-      <app-loading-spinner *ngIf="isFootprintLoading && !footprint" class="section-loader"></app-loading-spinner>
-      <div class="footprint-content" *ngIf="!isFootprintLoading || footprint">
+      <app-loading-spinner *ngIf="isFootprintLoading" class="section-loader"></app-loading-spinner>
+      <div class="footprint-content" *ngIf="!isFootprintLoading">
         <ul class="footprint-stats">
           <li class="footprint-stat">
             <span class="footprint-value">{{ footprint?.countries_count ?? 0 | number }}</span>
@@ -270,9 +266,7 @@
         <div class="footprint-map" *ngIf="footprint?.top_locations?.length">
           <div id="footprint_map"></div>
         </div>
-        <p *ngIf="!isFootprintLoading && !footprint?.top_locations?.length" class="footprint-location-empty">
-          No location data yet.
-        </p>
+        <p *ngIf="!footprint?.top_locations?.length" class="footprint-location-empty">No location data yet.</p>
       </div>
     </article>
 
@@ -283,11 +277,8 @@
           <fa-icon [icon]="icons.faChartPie" class="heading-icon-demographics"></fa-icon> Audience &amp; Demographics
         </h3>
       </header>
-      <app-loading-spinner
-        *ngIf="isAudienceLoading && !audienceDemographics"
-        class="section-loader"
-      ></app-loading-spinner>
-      <div class="demographics-content" *ngIf="!isAudienceLoading || audienceDemographics">
+      <app-loading-spinner *ngIf="isAudienceLoading" class="section-loader"></app-loading-spinner>
+      <div class="demographics-content" *ngIf="!isAudienceLoading">
         <div class="demographics-col">
           <h6 class="demographics-col-heading">Top Locations</h6>
           <ul class="demographics-list">
@@ -295,9 +286,7 @@
               <span class="demographics-name" [title]="loc.name">{{ loc.name }}</span>
               <span class="demographics-pct">{{ loc.percentage }}%</span>
             </li>
-            <li *ngIf="!isAudienceLoading && !audienceDemographics?.top_locations?.length" class="demographics-empty">
-              No data yet
-            </li>
+            <li *ngIf="!audienceDemographics?.top_locations?.length" class="demographics-empty">No data yet</li>
           </ul>
           <commudle-pagination-compact
             *ngIf="topLocationsTotal > topLocationsCount"
@@ -328,7 +317,7 @@
                 <span class="legend-dot" [style.--dot-color]="paletteColor(i)"></span>
                 {{ g.name | capitalizeAndRemoveUnderscore }} <span class="legend-pct">{{ g.percentage }}%</span>
               </li>
-              <li *ngIf="!isAudienceLoading && !audienceDemographics?.gender_distribution?.length">No data yet</li>
+              <li *ngIf="!audienceDemographics?.gender_distribution?.length">No data yet</li>
             </ul>
           </div>
         </div>
@@ -336,12 +325,7 @@
           <h6 class="demographics-col-heading">Top Skills</h6>
           <ul class="skills-list">
             <li *ngFor="let skill of audienceDemographics?.top_skills?.tags" class="skill-chip">{{ skill.name }}</li>
-            <li
-              *ngIf="!isAudienceLoading && !audienceDemographics?.top_skills?.tags?.length"
-              class="demographics-empty"
-            >
-              No data yet
-            </li>
+            <li *ngIf="!audienceDemographics?.top_skills?.tags?.length" class="demographics-empty">No data yet</li>
           </ul>
         </div>
       </div>
@@ -354,8 +338,8 @@
           <fa-icon [icon]="icons.faEnvelope" class="heading-icon-email"></fa-icon> Email &amp; Communication
         </h3>
       </header>
-      <app-loading-spinner *ngIf="isEmailLoading && !emailCommunication" class="section-loader"></app-loading-spinner>
-      <ul class="email-stats" *ngIf="!isEmailLoading || emailCommunication">
+      <app-loading-spinner *ngIf="isEmailLoading" class="section-loader"></app-loading-spinner>
+      <ul class="email-stats" *ngIf="!isEmailLoading">
         <li class="email-stat">
           <span class="email-value">{{ emailCommunication?.emails_sent?.value ?? 0 | number }}</span>
           <span class="email-label">Emails Sent</span>
