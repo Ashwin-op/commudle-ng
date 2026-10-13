@@ -27,7 +27,10 @@
               {{ eventHeader.event_status | titlecase }}
             </span>
             <span class="hero-meta-item hero-type-item" *ngIf="eventHeader?.event_type">
-              <nb-icon [icon]="eventHeader.event_type === 'online' ? 'monitor-outline' : 'pin-outline'"></nb-icon>
+              <nb-icon
+                [icon]="eventHeader.event_type === 'online' ? 'monitor-outline' : 'pin-outline'"
+                class="location-icon"
+              ></nb-icon>
               {{ eventHeader.event_type | titlecase }}
             </span>
             <span class="hero-meta-dot" *ngIf="eventHeader?.event_type && daysUntilEvent">·</span>
@@ -515,15 +518,22 @@
           <div class="audience-col">
             <h6 class="audience-col-heading">Top Companies / Colleges</h6>
             <ul class="audience-list">
-              <li *ngFor="let item of audienceSnapshot?.companies">
+              <li *ngFor="let item of audienceSnapshot?.companies?.values">
                 <span class="audience-name">{{ item.name }}</span
                 ><span class="audience-bar" [style.--bar-share.%]="item.percentage"></span
                 ><span class="audience-pct">{{ item.percentage }}%</span>
               </li>
-              <li *ngIf="!isAudienceLoading && !audienceSnapshot?.companies?.length">
+              <li *ngIf="!isAudienceLoading && !audienceSnapshot?.companies?.values?.length">
                 <span class="audience-name">No data yet</span>
               </li>
             </ul>
+            <commudle-pagination-compact
+              *ngIf="audienceSnapshot?.companies?.total > companiesCount"
+              [page]="companiesPage"
+              [count]="companiesCount"
+              [total]="audienceSnapshot.companies.total"
+              (pageChange)="onCompaniesPageChange($event)"
+            ></commudle-pagination-compact>
           </div>
         </div>
       </div>

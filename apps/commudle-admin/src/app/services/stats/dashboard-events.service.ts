@@ -77,8 +77,8 @@ export class DashboardEventsService {
     });
   }
 
-  audienceSnapshot(eventId): Observable<IEventDashboardAudienceSnapshot> {
-    const params = new HttpParams().set('event_id', eventId);
+  audienceSnapshot(eventId, page = 1, count = 10): Observable<IEventDashboardAudienceSnapshot> {
+    const params = new HttpParams().set('event_id', eventId).set('page', page).set('count', count);
     return this.http.get<IEventDashboardAudienceSnapshot>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.EVENTS.AUDIENCE_SNAPSHOT),
       { params },

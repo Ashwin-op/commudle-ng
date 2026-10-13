@@ -1,4 +1,5 @@
 import { IDashboardDistributionItem } from './dashboard-common.model';
+import { IPaginationCount } from './pagination.model';
 
 // event_header
 export interface IEventDashboardHeaderLocation {
@@ -76,7 +77,7 @@ export interface IEventDashboardActivityItem {
 
 // audience_snapshot
 export interface IEventDashboardAudienceSnapshot {
-  companies: IDashboardDistributionItem[];
+  companies: IPaginationCount<IDashboardDistributionItem>;
   experience_levels: IDashboardDistributionItem[];
 }
 

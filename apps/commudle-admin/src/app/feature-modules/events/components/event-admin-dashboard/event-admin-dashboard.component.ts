@@ -102,6 +102,8 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   // Audience Snapshot -- GET /api/v2/dashboards/events/audience_snapshot
   audienceSnapshot: IEventDashboardAudienceSnapshot;
   isAudienceLoading = false;
+  companiesPage = 1;
+  readonly companiesCount = 10;
 
   // Post-Event Snapshot -- GET /api/v2/dashboards/events/post_event_snapshot
   postEventSnapshot: IEventDashboardPostEventSnapshot;
@@ -325,12 +327,9 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   getAudienceSnapshot(): void {
     this.isAudienceLoading = true;
     this.subscriptions.push(
-      this.dashboardEventsService.audienceSnapshot(this.event.id).subscribe({
+      this.dashboardEventsService.audienceSnapshot(this.event.id, this.companiesPage, this.companiesCount).subscribe({
         next: (data) => {
-          this.audienceSnapshot = {
-            companies: data.companies,
-            experience_levels: data.experience_levels,
-          };
+          this.audienceSnapshot = data;
           this.isAudienceLoading = false;
         },
         error: () => {
@@ -338,6 +337,11 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
         },
       }),
     );
+  }
+
+  onCompaniesPageChange(page: number): void {
+    this.companiesPage = page;
+    this.getAudienceSnapshot();
   }
 
   private readonly audiencePalette = ['#3b82f6', '#22c55e', '#f97316', '#a855f7', '#eab308', '#ec4899'];
