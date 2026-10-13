@@ -145,21 +145,6 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
-  get isEventLive(): boolean {
-    if (!this.eventHeader?.start_time || !this.eventHeader?.end_time) {
-      return false;
-    }
-    const now = moment();
-    return now.isBetween(moment(this.eventHeader.start_time), moment(this.eventHeader.end_time));
-  }
-
-  get isEventPast(): boolean {
-    if (!this.eventHeader?.end_time) {
-      return false;
-    }
-    return moment().isAfter(moment(this.eventHeader.end_time));
-  }
-
   get daysUntilEvent(): string {
     if (!this.eventHeader?.start_time) {
       return '';

@@ -7,12 +7,16 @@ export interface IEventDashboardHeaderLocation {
   map_link: string;
 }
 
+export type EEventDashboardEventType = 'online' | 'offline' | 'hybrid';
+
 export interface IEventDashboardHeader {
   name: string;
   slug: string;
   start_time: string;
   end_time: string;
   banner: string;
+  event_status: string;
+  event_type: EEventDashboardEventType;
   location: IEventDashboardHeaderLocation | null;
 }
 

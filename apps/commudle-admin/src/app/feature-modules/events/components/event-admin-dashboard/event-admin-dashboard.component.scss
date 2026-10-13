@@ -101,13 +101,26 @@
               @apply com-w-1.5 com-h-1.5 com-rounded-full com-bg-green-500;
             }
 
-            &.status-live {
+            &.status-live,
+            &.status-ongoing {
               @apply com-bg-red-100 com-text-red-600;
 
               .status-dot {
                 @apply com-bg-red-500;
                 animation: pulse 2s infinite;
               }
+            }
+
+            &.status-completed {
+              @apply com-bg-green-100 com-text-green-600;
+            }
+          }
+
+          .hero-type-item {
+            @apply com-inline-flex com-items-center com-gap-1;
+
+            nb-icon {
+              @apply com-text-sm com-w-3 com-h-3;
             }
           }
 
@@ -120,6 +133,10 @@
           }
         }
 
+        .location-icon {
+          @apply com-text-xs;
+        }
+
         .hero-location {
           @apply com-flex com-flex-wrap com-items-center com-gap-2 com-text-xs com-text-gray-800;
 
@@ -127,7 +144,7 @@
             @apply com-inline-flex com-items-center com-gap-1 com-no-underline com-font-medium;
 
             nb-icon {
-              @apply com-text-sm;
+              @apply com-text-sm com-w-3 com-h-3;
             }
           }
 

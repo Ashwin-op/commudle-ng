@@ -15,10 +15,22 @@
             <h1 class="hero-event-name">{{ eventHeader?.name }}</h1>
           </div>
           <div class="hero-meta">
-            <span class="hero-status-badge" *ngIf="isEventLive" [ngClass]="{ 'status-live': isEventLive }">
-              <span class="status-dot"></span>
-              Live
+            <span
+              class="hero-status-badge"
+              *ngIf="eventHeader?.event_status"
+              [ngClass]="'status-' + eventHeader.event_status"
+            >
+              <span
+                class="status-dot"
+                *ngIf="eventHeader.event_status === 'live' || eventHeader.event_status === 'ongoing'"
+              ></span>
+              {{ eventHeader.event_status | titlecase }}
             </span>
+            <span class="hero-meta-item hero-type-item" *ngIf="eventHeader?.event_type">
+              <nb-icon [icon]="eventHeader.event_type === 'online' ? 'monitor-outline' : 'pin-outline'"></nb-icon>
+              {{ eventHeader.event_type | titlecase }}
+            </span>
+            <span class="hero-meta-dot" *ngIf="eventHeader?.event_type && daysUntilEvent">·</span>
             <span class="hero-meta-item" *ngIf="daysUntilEvent">{{ daysUntilEvent }}</span>
             <span class="hero-meta-dot" *ngIf="eventHeader?.start_time">·</span>
             <span class="hero-meta-item" *ngIf="eventHeader?.start_time">{{
@@ -518,7 +530,7 @@
     </article>
 
     <!-- Post-Event Dashboard (only once the event has ended) -->
-    <article class="post-event-card" *ngIf="isEventPast">
+    <article class="post-event-card" *ngIf="eventHeader?.event_status === 'completed'">
       <header class="section-header-post">
         <h3 class="section-heading-post">
           <fa-icon [icon]="icons.faChartPie" class="heading-icon-postevent"></fa-icon> Post-Event Dashboard
