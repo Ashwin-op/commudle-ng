@@ -21,8 +21,7 @@ import { ComponentPortal } from '@angular/cdk/portal';
 import { Subscription } from 'rxjs';
 import { CommudleCardModule } from '@commudle/commudle-theme';
 
-type Side = 'top' | 'bottom' | 'left' | 'right';
-export type TooltipPlacement = Side | 'start' | 'end';
+export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 export type TooltipSize = 'sm' | 'md' | 'lg';
 export type TooltipVariant = 'default' | 'card';
 export type TooltipContent = string | TemplateRef<unknown>;
@@ -69,7 +68,7 @@ const COLORS: Record<string, { from: string; to: string; edge: string; glow: str
           @if (template) {
           <ng-container *ngTemplateOutlet="template"></ng-container>
           } @else {
-          <span [style]="variant === 'card' ? { display: 'block', padding: '6px 10px' } : null">{{ content }}</span>
+          <span [style]="variant === 'card' ? { display: 'block', padding: '4px' } : null">{{ content }}</span>
           }
         </ng-template>
       </div>
@@ -82,7 +81,7 @@ const COLORS: Record<string, { from: string; to: string; edge: string; glow: str
 })
 class TooltipContainerComponent {
   content: TooltipContent | null = null;
-  side: Side = 'top';
+  side: TooltipPlacement = 'top';
   size: TooltipSize = 'md';
   status = 'primary';
   variant: TooltipVariant = 'default';
@@ -127,7 +126,7 @@ class TooltipContainerComponent {
         : {
             ...base,
             color: c.text || '#fff',
-            padding: this.template ? '0' : '6px 10px',
+            padding: this.template ? '0' : '4px',
             'border-radius': '8px',
             background: `linear-gradient(135deg, ${c.from}, ${c.to})`,
             'box-shadow': `inset 0 1px 0 rgba(255,255,255,0.35), 0 10px 28px -6px ${c.glow}, 0 3px 8px rgba(0,0,0,0.12)`,
@@ -307,9 +306,8 @@ export class TooltipDirective implements OnChanges, OnDestroy {
     this.describedBy = null;
   }
 
-  private preferredSide(): Side {
-    const p = this.tooltipPlacement;
-    return p === 'start' ? 'left' : p === 'end' ? 'right' : p || 'top';
+  private preferredSide(): TooltipPlacement {
+    return this.tooltipPlacement;
   }
 
   private positions(space: number): ConnectedPosition[] {
@@ -318,15 +316,17 @@ export class TooltipDirective implements OnChanges, OnDestroy {
       bottom: { originX: 'center', originY: 'bottom', overlayX: 'center', overlayY: 'top', offsetY: space },
       left: { originX: 'start', originY: 'center', overlayX: 'end', overlayY: 'center', offsetX: -space },
       right: { originX: 'end', originY: 'center', overlayX: 'start', overlayY: 'center', offsetX: space },
-    } as Record<Side, ConnectedPosition>;
+    } as Record<TooltipPlacement, ConnectedPosition>;
 
     const first = this.preferredSide();
-    const opposite = { top: 'bottom', bottom: 'top', left: 'right', right: 'left' }[first] as Side;
-    const rest = (['top', 'bottom', 'left', 'right'] as Side[]).filter((s) => s !== first && s !== opposite);
+    const opposite = { top: 'bottom', bottom: 'top', left: 'right', right: 'left' }[first];
+    const rest = (['top', 'bottom', 'left', 'right'] as TooltipPlacement[]).filter(
+      (s) => s !== first && s !== opposite,
+    );
     return [first, opposite, ...rest].map((s) => all[s]);
   }
 
-  private sideOf(pair: ConnectedPosition): Side {
+  private sideOf(pair: ConnectedPosition): TooltipPlacement {
     if (pair.overlayY === 'bottom') return 'top';
     if (pair.overlayY === 'top') return 'bottom';
     return pair.overlayX === 'end' ? 'left' : 'right';
