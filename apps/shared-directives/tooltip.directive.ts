@@ -90,7 +90,7 @@ class TooltipContainerComponent {
   id = '';
   boxStyle: Record<string, string> = {};
   dotStyle: Record<string, string> = {};
-  tooltipVisible = false;
+  isTooltipVisible = false;
 
   @Output() hoverChange = new EventEmitter<boolean>();
 
@@ -105,8 +105,8 @@ class TooltipContainerComponent {
     this.setTooltipVisible(true);
   }
 
-  setTooltipVisible(tooltipVisible: boolean): void {
-    this.tooltipVisible = tooltipVisible;
+  setTooltipVisible(isTooltipVisible: boolean): void {
+    this.isTooltipVisible = isTooltipVisible;
     this.refresh();
   }
 
@@ -115,8 +115,8 @@ class TooltipContainerComponent {
 
     const base = {
       'max-width': `${SIZES[this.size] || SIZES.md}px`,
-      opacity: this.tooltipVisible ? '1' : '0',
-      transform: this.tooltipVisible ? 'translate(0, 0)' : this.hiddenTransform(),
+      opacity: this.isTooltipVisible ? '1' : '0',
+      transform: this.isTooltipVisible ? 'translate(0, 0)' : this.hiddenTransform(),
       transition: `opacity ${ANIM_MS}ms ease, transform ${ANIM_MS}ms ease`,
     };
 
