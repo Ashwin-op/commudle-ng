@@ -1,9 +1,13 @@
 .dashboard {
-  @apply com-flex com-flex-col com-gap-4;
+  @apply com-flex com-flex-col com-gap-3;
 }
 
 .section-loader {
-  @apply com-flex com-justify-center com-w-full com-py-4;
+  @apply com-flex com-justify-center com-w-full com-py-3;
+}
+
+.section-loader {
+  @apply com-flex com-justify-center com-w-full com-py-3;
 }
 
 .section-loader {
@@ -44,7 +48,7 @@
 }
 
 .section-header {
-  @apply com-flex com-items-center com-justify-between com-mb-2 com-m-0;
+  @apply com-flex com-items-center com-justify-between com-mb-1.5 com-m-0;
 }
 
 .view-all-link {
@@ -562,7 +566,7 @@
         @apply com-flex com-flex-col com-gap-1;
 
         .live-count-value {
-          @apply com-text-lg com-font-semibold com-text-Yankees-Blue com-leading-none;
+          @apply com-text-2xl com-font-medium com-text-Yankees-Blue com-leading-none;
         }
 
         .live-count-label {
