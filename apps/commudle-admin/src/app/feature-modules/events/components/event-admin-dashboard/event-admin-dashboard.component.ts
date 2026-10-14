@@ -95,7 +95,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   // Recent Activity -- GET /api/v2/dashboards/events/recent_activity (paginated)
   recentActivity: IEventDashboardActivityItem[] = [];
   activityPage = 1;
-  readonly activityCount = 10;
+  readonly activityCount = 8;
   activityTotal = 0;
   isActivityLoading = false;
 
@@ -103,7 +103,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   audienceSnapshot: IEventDashboardAudienceSnapshot;
   isAudienceLoading = false;
   companiesPage = 1;
-  readonly companiesCount = 10;
+  readonly companiesCount = 5;
 
   // Post-Event Snapshot -- GET /api/v2/dashboards/events/post_event_snapshot
   postEventSnapshot: IEventDashboardPostEventSnapshot;
@@ -213,6 +213,10 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
         },
       }),
     );
+  }
+
+  get speakerNames(): string {
+    return (this.needsAttention?.speakers?.values || []).map((speaker) => speaker.user?.name).join(', ');
   }
 
   getEventSnapshot(): void {

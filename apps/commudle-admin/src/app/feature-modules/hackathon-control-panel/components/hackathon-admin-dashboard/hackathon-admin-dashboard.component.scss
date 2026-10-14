@@ -1,9 +1,9 @@
 .hackathon-overview {
-  @apply com-flex com-flex-col com-gap-4;
+  @apply com-flex com-flex-col com-gap-3;
 }
 
 .section-loader {
-  @apply com-flex com-justify-center com-w-full com-py-4;
+  @apply com-flex com-justify-center com-w-full com-py-3;
 }
 
 .section-heading {
@@ -39,12 +39,12 @@
 }
 
 .section-header {
-  @apply com-flex com-items-center com-justify-between com-mb-2 com-m-0;
+  @apply com-flex com-items-center com-justify-between com-mb-1.5 com-m-0;
 }
 
 // Row 1: Hackathon Hero
 .hackathon-hero {
-  @apply com-relative com-flex com-flex-col md:com-flex-row com-items-stretch com-overflow-hidden com-rounded-2xl com-border com-border-solid com-border-Bright-Gray com-bg-white com-p-4 com-gap-4 md:com-gap-5;
+  @apply com-relative com-flex com-flex-col md:com-flex-row com-items-stretch com-overflow-hidden com-rounded-2xl com-border com-border-solid com-border-Bright-Gray com-bg-white com-p-3 com-gap-3 md:com-gap-4;
   background: linear-gradient(135deg, #e8f0fe 0%, #eae6ff 30%, #ffffff 60%, #e8f4ff 100%);
 
   .hero-banner {
@@ -56,13 +56,13 @@
   }
 
   .hero-content {
-    @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-gap-4;
+    @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-gap-3;
 
     .hero-top-row {
-      @apply com-flex com-flex-col sm:com-flex-row com-items-start sm:com-items-center com-justify-between com-gap-3 sm:com-gap-4;
+      @apply com-flex com-flex-col sm:com-flex-row com-items-start sm:com-items-center com-justify-between com-gap-2 sm:com-gap-3;
 
       .hero-info {
-        @apply com-flex com-flex-col com-gap-2 com-flex-1 com-min-w-0;
+        @apply com-flex com-flex-col com-gap-1.5 com-flex-1 com-min-w-0;
 
         .hero-title-row {
           .hero-title-emoji {
@@ -226,19 +226,19 @@
 
 // Row 2: Three-column
 .three-col-row {
-  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-4;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-3;
 
   .attention-card,
   .snapshot-card,
   .activity-card {
-    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+    @apply com-rounded-xl com-p-3 com-bg-white com-border com-border-solid com-border-Bright-Gray;
   }
 
   .attention-list {
     @apply com-m-0;
 
     .attention-item {
-      @apply com-flex com-items-center com-gap-3 com-py-2 com-px-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+      @apply com-flex com-items-center com-gap-3 com-p-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
 
       &:last-child {
         @apply com-border-b-0;
@@ -279,10 +279,10 @@
     @apply com-grid com-grid-cols-2 sm:com-grid-cols-3 com-gap-3 com-m-0;
 
     .snapshot-stat {
-      @apply com-flex com-flex-col com-items-center com-text-center com-gap-1.5 com-p-4 com-rounded-xl com-border com-border-solid com-border-Bright-Gray;
+      @apply com-flex com-flex-col com-items-center com-text-center com-gap-1 com-p-3 com-rounded-xl com-border com-border-solid com-border-Bright-Gray;
 
       .snapshot-stat-icon {
-        @apply com-text-2xl;
+        @apply com-text-xl;
 
         &.registrations-icon {
           @apply com-text-blue-500;
@@ -310,11 +310,11 @@
       }
 
       .snapshot-stat-label {
-        @apply com-text-xs com-text-Cadet-Grey com-font-medium com-h-8;
+        @apply com-text-xs com-text-Cadet-Grey com-font-medium;
       }
 
       .snapshot-stat-value {
-        @apply com-text-2xl com-font-medium com-text-Yankees-Blue;
+        @apply com-text-xl com-font-medium com-text-Yankees-Blue;
       }
 
       .snapshot-stat-sub {
@@ -328,7 +328,7 @@
     @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col;
 
     .activity-item {
-      @apply com-flex com-items-start com-gap-3 com-py-2 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+      @apply com-flex com-items-start com-gap-3 com-py-1 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
       &:last-child {
         @apply com-border-b-0;
@@ -391,11 +391,11 @@
 
 // Row 3: Competition Progress + People & Judging (2-col grid)
 .progress-people-row {
-  @apply com-grid com-grid-cols-1 lg:com-grid-cols-2 com-gap-4;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-2 com-gap-3;
 
   .competition-progress-card,
   .people-judging-card {
-    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+    @apply com-rounded-xl com-p-3 com-bg-white com-border com-border-solid com-border-Bright-Gray;
   }
 
   .view-all-link {
@@ -407,10 +407,10 @@
   }
 
   .progress-cards {
-    @apply com-flex com-items-stretch com-gap-2 com-mt-3 com-overflow-x-auto com-scrollbar-hide com-pb-2;
+    @apply com-flex com-items-stretch com-gap-2 com-mt-2 com-overflow-x-auto com-scrollbar-hide com-pb-2;
 
     .progress-card {
-      @apply com-flex com-flex-col com-items-center com-text-center com-gap-1.5 com-p-4 com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-flex-1 com-shrink-0 com-self-stretch com-min-w-[130px];
+      @apply com-flex com-flex-col com-items-center com-text-center com-gap-1 com-p-3 com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-flex-1 com-shrink-0 com-self-stretch com-min-w-[130px];
 
       &.active {
         @apply com-border-primary-300 com-bg-blue-50;
@@ -449,10 +449,10 @@
   }
 
   .people-stats {
-    @apply com-grid com-grid-cols-4 com-gap-3 com-mt-3;
+    @apply com-grid com-grid-cols-4 com-gap-3 com-mt-2;
 
     .people-stat {
-      @apply com-flex com-flex-col com-items-center com-gap-1.5 com-p-3 com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-bg-white;
+      @apply com-flex com-flex-col com-items-center com-gap-1 com-p-3 com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-bg-white;
 
       .people-stat-icon {
         @apply com-text-lg;
@@ -485,7 +485,7 @@
   }
 
   .mentor-session-banner {
-    @apply com-flex com-items-center com-gap-3 com-mt-3 com-p-3 com-rounded-xl com-bg-blue-50 com-border com-border-solid com-border-blue-200;
+    @apply com-flex com-items-center com-gap-3 com-mt-2 com-p-3 com-rounded-xl com-bg-blue-50 com-border com-border-solid com-border-blue-200;
 
     .mentor-session-icon {
       @apply com-text-primary-500 com-text-lg;
@@ -507,16 +507,16 @@
 
 // Row 5: Quick Actions + Setup Progress
 .actions-setup-row {
-  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-4;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-3;
 
   .quick-actions-card {
-    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+    @apply com-rounded-xl com-p-3 com-bg-white com-border com-border-solid com-border-Bright-Gray;
 
     .actions-grid {
-      @apply com-grid com-grid-cols-2 lg:com-grid-cols-3 com-gap-2 com-mt-3;
+      @apply com-grid com-grid-cols-2 lg:com-grid-cols-3 com-gap-2 com-mt-2;
 
       .action-card {
-        @apply com-flex com-flex-col com-items-center com-gap-2 com-p-3 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-no-underline com-transition-all com-duration-200 com-cursor-pointer;
+        @apply com-flex com-flex-col com-items-center com-gap-1.5 com-p-2.5 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-no-underline com-transition-all com-duration-200 com-cursor-pointer;
 
         &:hover {
           @apply com-border-primary-300 com-bg-blue-50;
@@ -534,14 +534,14 @@
   }
 
   .setup-progress-card {
-    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray lg:com-col-span-2;
+    @apply com-rounded-xl com-p-3 com-bg-white com-border com-border-solid com-border-Bright-Gray lg:com-col-span-2;
 
     .setup-note {
       @apply com-text-xs com-text-Cadet-Grey;
     }
 
     .setup-content {
-      @apply com-mt-3 com-flex com-flex-col com-gap-3;
+      @apply com-mt-2 com-flex com-flex-col com-gap-3;
 
       .setup-bar-row {
         @apply com-flex com-items-center com-justify-between;

@@ -203,17 +203,24 @@
           <!-- Speakers -->
           <a [routerLink]="['agenda']" class="attention-item">
             <fa-icon
-              [icon]="needsAttention?.speakers?.count > 0 ? icons.faCircleCheck : icons.faCircleXmark"
-              [ngClass]="needsAttention?.speakers?.count > 0 ? 'attention-icon-check' : 'attention-icon-cross'"
+              [icon]="needsAttention?.speakers?.total > 0 ? icons.faCircleCheck : icons.faCircleXmark"
+              [ngClass]="needsAttention?.speakers?.total > 0 ? 'attention-icon-check' : 'attention-icon-cross'"
             ></fa-icon>
             <div class="attention-content">
               <span class="attention-title">Speakers</span>
               <span class="attention-sub">
                 {{
-                  needsAttention?.speakers?.count > 0
-                    ? needsAttention.speakers.count + ' speakers added'
+                  needsAttention?.speakers?.total > 0
+                    ? needsAttention.speakers.values.length + '/' + needsAttention.speakers.total + ' speakers added'
                     : 'Speakers have not been added yet'
                 }}
+              </span>
+              <span
+                class="attention-sub speaker-names"
+                *ngIf="needsAttention?.speakers?.total > 0"
+                [title]="speakerNames"
+              >
+                {{ speakerNames }}
               </span>
             </div>
             <span class="attention-arrow">›</span>

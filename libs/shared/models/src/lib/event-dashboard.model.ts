@@ -36,10 +36,19 @@ export interface IEventDashboardEmailBreakdown {
   not_sent_count: number;
 }
 
+export interface IEventDashboardSpeaker {
+  id: number;
+  user: {
+    id: number;
+    name: string;
+  };
+  created_at: string;
+}
+
 export interface IEventDashboardNeedsAttention {
   agenda: { status: string };
   streaming: { status: string };
-  speakers: { count: number };
+  speakers: IPaginationCount<IEventDashboardSpeaker>;
   speaker_form: { created: boolean };
   registration_form: { created: boolean; opened: boolean };
   rsvp: IEventDashboardEmailBreakdown;
