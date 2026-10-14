@@ -37,6 +37,10 @@ export class DashboardCommunitiesService {
       surveys_page?: number;
       newsletters_page?: number;
       bank_account_page?: number;
+      collaboration_requests_count?: number;
+      surveys_count?: number;
+      newsletters_count?: number;
+      bank_account_count?: number;
     } = {},
   ): Observable<ICommunityDashboardNeedsAttention> {
     let params = new HttpParams().set('community_id', communityId);

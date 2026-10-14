@@ -1,9 +1,9 @@
 .dashboard {
-  @apply com-flex com-flex-col com-gap-4;
+  @apply com-flex com-flex-col com-gap-3;
 }
 
 .section-loader {
-  @apply com-flex com-justify-center com-w-full com-py-4;
+  @apply com-flex com-justify-center com-w-full com-py-3;
 }
 
 .section-heading {
@@ -40,7 +40,7 @@
 }
 
 .section-header {
-  @apply com-flex com-items-center com-justify-between com-mb-2 com-m-0;
+  @apply com-flex com-items-center com-justify-between com-mb-1.5 com-m-0;
 }
 
 .view-all-link {
@@ -53,7 +53,7 @@
 
 // Row 1: Greeting
 .greeting-section {
-  @apply com-relative com-overflow-hidden com-pt-6 com-p-6 sm:com-p-8 md:com-rounded-xl com-rounded-none;
+  @apply com-relative com-overflow-hidden com-pt-4 com-p-3 md:com-rounded-xl com-rounded-none;
   background: linear-gradient(135deg, #4a90d9, #2c5f9e);
   animation: heroFadeUp 0.6s ease-out both;
 
@@ -147,7 +147,7 @@
   }
 
   .greeting-content {
-    @apply com-relative com-flex com-flex-col com-gap-1 com-mb-5;
+    @apply com-relative com-flex com-flex-col com-gap-0.5 com-mb-3;
     z-index: 1;
 
     .greeting-eyebrow {
@@ -156,7 +156,7 @@
     }
 
     .greeting-text {
-      @apply com-m-0 com-text-2xl sm:com-text-3xl com-font-bold com-text-tWhite;
+      @apply com-m-0 com-text-xl sm:com-text-2xl com-font-bold com-text-tWhite;
       animation: heroFadeUp 0.6s ease-out 0.12s both;
 
       .greeting-name {
@@ -171,11 +171,11 @@
   }
 
   .greeting-highlights {
-    @apply com-relative com-flex com-flex-col md:com-flex-row com-gap-3 com-flex-wrap com-m-0 com-p-0 com-list-none;
+    @apply com-relative com-flex com-flex-col md:com-flex-row com-gap-2 com-flex-wrap com-m-0 com-p-0 com-list-none;
     z-index: 1;
 
     .highlight-card {
-      @apply com-flex com-items-center com-gap-3 com-flex-1 com-rounded-xl com-p-3 com-relative;
+      @apply com-flex com-items-center com-gap-3 com-flex-1 com-rounded-xl com-p-2 com-relative;
       border: 1px solid rgba(255, 255, 255, 0.3);
       background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(8px);
@@ -255,12 +255,12 @@
 
 // Row 2: Three-column
 .three-col-row {
-  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-4;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-3;
 
   .attention-card,
   .schedule-card,
   .activity-card {
-    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+    @apply com-rounded-xl com-p-3 com-bg-white com-border com-border-solid com-border-Bright-Gray;
   }
 
   // Lay the activity card out as a column so the pagination can be pushed to
@@ -278,7 +278,7 @@
     @apply com-m-0;
 
     .attention-item {
-      @apply com-flex com-gap-3 com-py-2 com-px-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+      @apply com-flex com-gap-3 com-p-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
 
       &:last-child {
         @apply com-border-b-0;
@@ -327,13 +327,13 @@
   }
 
   .schedule-timeline {
-    @apply com-mt-3 com-flex com-flex-col com-m-0 com-p-0 com-list-none;
+    @apply com-mt-2 com-flex com-flex-col com-m-0 com-p-0 com-list-none;
 
     .timeline-item {
       @apply com-flex com-items-start com-gap-3;
 
       .timeline-date {
-        @apply com-text-xs com-font-medium com-text-gray-500 com-w-20 com-shrink-0 com-py-2 com-whitespace-nowrap;
+        @apply com-text-xs com-font-medium com-text-gray-500 com-w-20 com-shrink-0 com-py-1.5 com-whitespace-nowrap;
 
         &.today {
           @apply com-text-primary-500;
@@ -345,7 +345,7 @@
       }
 
       .timeline-event {
-        @apply com-flex com-flex-col com-flex-1 com-pl-3 com-py-2 com-border-0 com-border-l-2 com-border-solid com-border-Bright-Gray com-m-0;
+        @apply com-flex com-flex-col com-flex-1 com-pl-3 com-py-1.5 com-border-0 com-border-l-2 com-border-solid com-border-Bright-Gray com-m-0;
 
         .timeline-event-name {
           @apply com-text-sm com-font-medium com-text-Yankees-Blue;
@@ -369,20 +369,20 @@
 
 // Row 3: Snapshot + Quick Actions
 .snapshot-actions-row {
-  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-4;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-3;
 }
 
 .snapshot-section {
-  @apply com-bg-white com-rounded-xl com-p-4 com-border com-border-solid com-border-Bright-Gray lg:com-col-span-2;
+  @apply com-bg-white com-rounded-xl com-p-3 com-border com-border-solid com-border-Bright-Gray lg:com-col-span-2;
 
   .snapshot-cards {
-    @apply com-grid com-grid-cols-2 md:com-grid-cols-4 com-gap-3 com-mt-3 com-m-0 com-p-0 com-list-none;
+    @apply com-grid com-grid-cols-2 md:com-grid-cols-5 com-gap-3 com-mt-2 com-m-0 com-p-0 com-list-none;
 
     .snapshot-card {
-      @apply com-bg-white com-rounded-xl com-p-4 com-border com-border-solid com-border-Bright-Gray;
+      @apply com-bg-white com-rounded-xl com-p-3 com-border com-border-solid com-border-Bright-Gray;
 
       .snapshot-card-header {
-        @apply com-flex com-gap-2 com-mb-2;
+        @apply com-flex com-gap-2 com-mb-1.5;
 
         .snapshot-icon {
           @apply com-flex com-text-sm;
@@ -410,7 +410,7 @@
       }
 
       .snapshot-value {
-        @apply com-text-2xl com-font-medium com-text-Yankees-Blue com-m-0;
+        @apply com-text-xl com-font-medium com-text-Yankees-Blue com-m-0;
 
         .snapshot-delta {
           @apply com-block com-text-xs com-font-medium com-text-green-600;
@@ -425,13 +425,13 @@
 }
 
 .actions-section {
-  @apply com-bg-white com-rounded-xl com-p-4 com-border com-border-solid com-border-Bright-Gray md:com-mb-0 com-mb-4;
+  @apply com-bg-white com-rounded-xl com-p-3 com-border com-border-solid com-border-Bright-Gray md:com-mb-0 com-mb-3;
 
   .actions-grid {
-    @apply com-grid com-grid-cols-2 lg:com-grid-cols-4 com-gap-2 com-mt-3;
+    @apply com-grid com-grid-cols-2 lg:com-grid-cols-4 com-gap-2 com-mt-2;
 
     .action-card {
-      @apply com-flex com-flex-col com-items-center com-gap-2 com-p-3 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-no-underline com-transition-all com-duration-200 com-cursor-pointer;
+      @apply com-flex com-flex-col com-items-center com-gap-1.5 com-p-2.5 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-no-underline com-transition-all com-duration-200 com-cursor-pointer;
 
       &:hover {
         @apply com-border-primary-300 com-bg-blue-50;
@@ -453,7 +453,7 @@
   @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col;
 
   .activity-item {
-    @apply com-flex com-items-center com-gap-3 com-py-2 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    @apply com-flex com-items-center com-gap-3 com-py-1 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
     &:last-child {
       @apply com-border-b-0;
@@ -516,11 +516,11 @@
 
 // Row 4: Live Visitors + Top Pages + Top Cities
 .live-traffic-row {
-  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-4;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-3;
 
   .live-visitors-card,
   .top-list-card {
-    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+    @apply com-rounded-xl com-p-3 com-bg-white com-border com-border-solid com-border-Bright-Gray;
   }
 
   .top-list-card {
@@ -541,7 +541,7 @@
         @apply com-flex com-flex-col com-gap-1;
 
         .live-count-value {
-          @apply com-text-2xl com-font-medium com-text-Yankees-Blue com-leading-none;
+          @apply com-text-xl com-font-medium com-text-Yankees-Blue com-leading-none;
         }
 
         .live-count-label {

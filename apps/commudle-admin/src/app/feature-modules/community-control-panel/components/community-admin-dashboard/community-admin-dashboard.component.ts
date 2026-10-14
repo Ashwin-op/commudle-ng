@@ -56,6 +56,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   surveysPage = 1;
   newslettersPage = 1;
   bankAccountPage = 1;
+  readonly needsAttentionCount = 5;
   upcomingSchedule: ICommunityDashboardScheduleItem[] = [];
   upcomingScheduleLoading = false;
   communitySnapshot: ICommunityDashboardSnapshot;
@@ -64,7 +65,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   recentActivityPage = 1;
   recentActivityTotal = 0;
   recentActivityLoading = false;
-  readonly recentActivityCount = 10;
+  readonly recentActivityCount = 5;
 
   // Live Visitors -- polled every 30s per spec (Redis-cached 30s TTL server-side)
   liveVisitors: ICommunityDashboardLiveVisitors;
@@ -77,7 +78,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   topCities: ICommunityDashboardTopCity[] = [];
   topCitiesPage = 1;
   topCitiesTotal = 0;
-  readonly topCitiesCount = 10;
+  readonly topCitiesCount = 5;
   topCitiesLoading = false;
 
   icons = {
@@ -181,6 +182,10 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
           surveys_page: this.surveysPage,
           newsletters_page: this.newslettersPage,
           bank_account_page: this.bankAccountPage,
+          collaboration_requests_count: this.needsAttentionCount,
+          surveys_count: this.needsAttentionCount,
+          newsletters_count: this.needsAttentionCount,
+          bank_account_count: this.needsAttentionCount,
         })
         .subscribe({
           next: (data) => {
