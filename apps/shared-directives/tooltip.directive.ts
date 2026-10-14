@@ -90,7 +90,7 @@ class TooltipContainerComponent {
   id = '';
   boxStyle: Record<string, string> = {};
   dotStyle: Record<string, string> = {};
-  shown = false;
+  tooltipVisible = false;
 
   @Output() hoverChange = new EventEmitter<boolean>();
 
@@ -102,11 +102,11 @@ class TooltipContainerComponent {
 
   enter(): void {
     void this.el.nativeElement.offsetWidth;
-    this.setShown(true);
+    this.setTooltipVisible(true);
   }
 
-  setShown(shown: boolean): void {
-    this.shown = shown;
+  setTooltipVisible(tooltipVisible: boolean): void {
+    this.tooltipVisible = tooltipVisible;
     this.refresh();
   }
 
@@ -115,8 +115,8 @@ class TooltipContainerComponent {
 
     const base = {
       'max-width': `${SIZES[this.size] || SIZES.md}px`,
-      opacity: this.shown ? '1' : '0',
-      transform: this.shown ? 'translate(0, 0)' : this.hiddenTransform(),
+      opacity: this.tooltipVisible ? '1' : '0',
+      transform: this.tooltipVisible ? 'translate(0, 0)' : this.hiddenTransform(),
       transition: `opacity ${ANIM_MS}ms ease, transform ${ANIM_MS}ms ease`,
     };
 
@@ -279,7 +279,7 @@ export class TooltipDirective implements OnChanges, OnDestroy {
       return;
     }
     if (this.leaveTimer) return;
-    this.tip.setShown(false);
+    this.tip.setTooltipVisible(false);
     this.leaveTimer = setTimeout(() => this.dispose(), ANIM_MS);
   }
 
@@ -287,7 +287,7 @@ export class TooltipDirective implements OnChanges, OnDestroy {
     if (!this.leaveTimer) return false;
     clearTimeout(this.leaveTimer);
     this.leaveTimer = undefined;
-    this.tip?.setShown(true);
+    this.tip?.setTooltipVisible(true);
     return true;
   }
 
