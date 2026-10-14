@@ -262,7 +262,7 @@
                 [class.decision-spam]="spamDetector.is_spam_decision === true"
                 [class.decision-safe]="spamDetector.is_spam_decision === false"
                 [value]="spamDetector.is_spam_decision"
-                (change)="openDialog($any($event.target).value, spamDetector, spamDetectorFormDialog)"
+                (change)="updateSpamDetector($any($event.target).value, spamDetector.id)"
               >
                 <option value="null" disabled>— Take Action —</option>
                 <option value="true">🚫 Mark as Spam</option>
@@ -345,7 +345,7 @@
             [class.decision-spam]="spamDetector.is_spam_decision === true"
             [class.decision-safe]="spamDetector.is_spam_decision === false"
             [value]="spamDetector.is_spam_decision"
-            (change)="openDialog($any($event.target).value, spamDetector, spamDetectorFormDialog)"
+            (change)="updateSpamDetector($any($event.target).value, spamDetector.id)"
           >
             <option value="null" disabled>— Take Action —</option>
             <option value="true">🚫 Mark as Spam</option>
@@ -378,45 +378,49 @@
   </div>
 </div>
 
-<!-- Confirmation Dialog -->
-<ng-template #spamDetectorFormDialog let-data let-ref="dialogRef">
-  <com-card class="confirm-dialog-card">
-    <com-card-header class="confirm-dialog-header">
-      <span>Confirm Decision</span>
-      <button ghost nbButton size="small" (click)="ref.close(false)" shape="round">
-        <nb-icon icon="close"></nb-icon>
-      </button>
-    </com-card-header>
-    <com-card-body class="confirm-dialog-body">
-      <div class="confirm-dialog-icon-row">
-        <div
-          class="confirm-icon-circle"
-          [class.confirm-spam]="data.selectedValue === 'true'"
-          [class.confirm-safe]="data.selectedValue === 'false'"
-        >
-          <fa-icon [icon]="data.selectedValue === 'true' ? icons.faTriangleExclamation : icons.faCircleCheck"></fa-icon>
+<!--
+  Confirmation popup removed: the decision dropdown now calls updateSpamDetector directly.
+  Kept commented in case the confirmation flow needs to be restored.
+
+  <ng-template #spamDetectorFormDialog let-data let-ref="dialogRef">
+    <com-card class="confirm-dialog-card">
+      <com-card-header class="confirm-dialog-header">
+        <span>Confirm Decision</span>
+        <button ghost nbButton size="small" (click)="ref.close(false)" shape="round">
+          <nb-icon icon="close"></nb-icon>
+        </button>
+      </com-card-header>
+      <com-card-body class="confirm-dialog-body">
+        <div class="confirm-dialog-icon-row">
+          <div
+            class="confirm-icon-circle"
+            [class.confirm-spam]="data.selectedValue === 'true'"
+            [class.confirm-safe]="data.selectedValue === 'false'"
+          >
+            <fa-icon [icon]="data.selectedValue === 'true' ? icons.faTriangleExclamation : icons.faCircleCheck"></fa-icon>
+          </div>
         </div>
-      </div>
-      <p class="confirm-message">
-        <ng-container *ngIf="data.selectedValue === 'true'">
-          Mark <strong>{{ data.spamDetector.community_build.name }}</strong> as <span class="text-spam">spam</span>?
-        </ng-container>
-        <ng-container *ngIf="data.selectedValue === 'false'">
-          Mark <strong>{{ data.spamDetector.community_build.name }}</strong> as <span class="text-safe">safe</span>?
-        </ng-container>
-      </p>
-      <p class="confirm-sub">This action will update the spam decision for this content.</p>
-    </com-card-body>
-    <com-card-footer class="confirm-dialog-footer">
-      <button nbButton status="basic" size="small" (click)="ref.close(false)">Cancel</button>
-      <button
-        nbButton
-        [status]="data.selectedValue === 'true' ? 'danger' : 'success'"
-        size="small"
-        (click)="updateSpamDetector(data.selectedValue, data.spamDetector.id); ref.close(true)"
-      >
-        {{ data.selectedValue === 'true' ? 'Confirm Spam' : 'Confirm Safe' }}
-      </button>
-    </com-card-footer>
-  </com-card>
-</ng-template>
+        <p class="confirm-message">
+          <ng-container *ngIf="data.selectedValue === 'true'">
+            Mark <strong>{{ data.spamDetector.community_build.name }}</strong> as <span class="text-spam">spam</span>?
+          </ng-container>
+          <ng-container *ngIf="data.selectedValue === 'false'">
+            Mark <strong>{{ data.spamDetector.community_build.name }}</strong> as <span class="text-safe">safe</span>?
+          </ng-container>
+        </p>
+        <p class="confirm-sub">This action will update the spam decision for this content.</p>
+      </com-card-body>
+      <com-card-footer class="confirm-dialog-footer">
+        <button nbButton status="basic" size="small" (click)="ref.close(false)">Cancel</button>
+        <button
+          nbButton
+          [status]="data.selectedValue === 'true' ? 'danger' : 'success'"
+          size="small"
+          (click)="updateSpamDetector(data.selectedValue, data.spamDetector.id); ref.close(true)"
+        >
+          {{ data.selectedValue === 'true' ? 'Confirm Spam' : 'Confirm Safe' }}
+        </button>
+      </com-card-footer>
+    </com-card>
+  </ng-template>
+-->

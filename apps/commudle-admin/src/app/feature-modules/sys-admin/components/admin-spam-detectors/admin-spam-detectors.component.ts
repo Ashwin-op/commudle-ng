@@ -128,30 +128,32 @@ export class AdminSpamDetectorsComponent implements OnInit, OnDestroy {
     this.getSpamDetectorsData();
   }
 
-  openDialog(selectedValue: string, spamDetector: ISpamDetector, dialog: any) {
-    const previousValue = spamDetector.is_spam_decision;
-    spamDetector.is_spam_decision = selectedValue === 'true' ? true : selectedValue === 'false' ? false : null;
-    this.changeDetectorRef.detectChanges();
-
-    this.dialogService
-      .open(dialog, {
-        context: {
-          selectedValue: selectedValue,
-          spamDetector: spamDetector,
-        },
-      })
-      .onClose.subscribe((result) => {
-        if (result === false) {
-          spamDetector.is_spam_decision = previousValue;
-          this.changeDetectorRef.detectChanges();
-          this.changeDetectorRef.markForCheck();
-        } else {
-          spamDetector.is_spam_decision = selectedValue === 'true' ? true : false;
-          this.changeDetectorRef.detectChanges();
-          this.changeDetectorRef.markForCheck();
-        }
-      });
-  }
+  // Confirmation popup removed: the decision dropdown now calls updateSpamDetector directly.
+  // Kept commented in case the confirmation flow needs to be restored.
+  // openDialog(selectedValue: string, spamDetector: ISpamDetector, dialog: any) {
+  //   const previousValue = spamDetector.is_spam_decision;
+  //   spamDetector.is_spam_decision = selectedValue === 'true' ? true : selectedValue === 'false' ? false : null;
+  //   this.changeDetectorRef.detectChanges();
+  //
+  //   this.dialogService
+  //     .open(dialog, {
+  //       context: {
+  //         selectedValue: selectedValue,
+  //         spamDetector: spamDetector,
+  //       },
+  //     })
+  //     .onClose.subscribe((result) => {
+  //       if (result === false) {
+  //         spamDetector.is_spam_decision = previousValue;
+  //         this.changeDetectorRef.detectChanges();
+  //         this.changeDetectorRef.markForCheck();
+  //       } else {
+  //         spamDetector.is_spam_decision = selectedValue === 'true' ? true : false;
+  //         this.changeDetectorRef.detectChanges();
+  //         this.changeDetectorRef.markForCheck();
+  //       }
+  //     });
+  // }
 
   ngOnDestroy() {
     this.seoService.noIndex(false);
