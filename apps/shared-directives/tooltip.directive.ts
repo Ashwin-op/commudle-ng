@@ -28,23 +28,19 @@ export type TooltipVariant = 'default' | 'card';
 export type TooltipContent = string | TemplateRef<unknown>;
 
 const SIZES = { sm: 160, md: 240, lg: 360 };
-const SHOW_DELAY = 300;
-const HIDE_DELAY = 100;
 const ANIM_MS = 300;
 const SLIDE_PX = 8;
-const VIEWPORT_MARGIN = 8;
 const DOT_SIZE = 6;
 const DOT_GAP = 3;
-const SPACE_WITH_DOT = DOT_SIZE + DOT_GAP * 2;
-const SPACE_WITHOUT_DOT = 4;
 
-const COLORS: Record<string, { from: string; to: string; edge: string; glow: string }> = {
+const COLORS: Record<string, { from: string; to: string; edge: string; glow: string; text?: string }> = {
   primary: { from: '#5270ff', to: '#3495ff', edge: '#5270ff', glow: 'rgba(60, 120, 252, 0.40)' },
   basic: { from: '#5b6478', to: '#3b4254', edge: '#262b38', glow: 'rgba(59, 66, 84, 0.40)' },
   info: { from: '#4cc9ff', to: '#0095ff', edge: '#0072c6', glow: 'rgba(0, 149, 255, 0.40)' },
   success: { from: '#3ddc84', to: '#00b86b', edge: '#008a4e', glow: 'rgba(0, 184, 107, 0.40)' },
   warning: { from: '#ffc65c', to: '#ff9f00', edge: '#c77800', glow: 'rgba(255, 159, 0, 0.40)' },
   danger: { from: '#ff6b81', to: '#e5304f', edge: '#b01e38', glow: 'rgba(229, 48, 79, 0.40)' },
+  white: { from: '#ffffff', to: '#eef2f7', edge: '#d5dbe5', glow: 'rgba(15, 23, 42, 0.15)', text: '#1f2937' },
 };
 
 @Component({
@@ -57,7 +53,7 @@ const COLORS: Record<string, { from: string; to: string; edge: string; glow: str
     <div
       role="tooltip"
       [id]="id"
-      class="com-relative com-w-max com-text-xs com-leading-snug com-break-words"
+      class="com-relative com-w-max com-text-xs com-break-words"
       [style]="boxStyle"
       (mouseenter)="hoverChange.emit(true)"
       (mouseleave)="hoverChange.emit(false)"
@@ -130,7 +126,7 @@ class TooltipContainerComponent {
         ? { ...base, filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.14))' }
         : {
             ...base,
-            color: '#fff',
+            color: c.text || '#fff',
             padding: this.template ? '0' : '6px 10px',
             'border-radius': '8px',
             background: `linear-gradient(135deg, ${c.from}, ${c.to})`,
@@ -197,8 +193,6 @@ export class TooltipDirective implements OnChanges, OnDestroy {
   private readonly id = `com-tooltip-${nextId++}`;
   private overlayRef?: OverlayRef;
   private subs = new Subscription();
-  private showTimer?: ReturnType<typeof setTimeout>;
-  private hideTimer?: ReturnType<typeof setTimeout>;
   private leaveTimer?: ReturnType<typeof setTimeout>;
   private tip?: TooltipContainerComponent;
 
@@ -207,21 +201,19 @@ export class TooltipDirective implements OnChanges, OnDestroy {
   @HostListener('mouseenter')
   @HostListener('focusin')
   onEnter(): void {
-    this.clearTimers();
     if (this.cancelLeave()) {
       return;
     }
     if (this.tooltipDisabled || !this.content || this.overlayRef) {
       return;
     }
-    this.showTimer = setTimeout(() => this.show(), SHOW_DELAY);
+    this.show();
   }
 
   @HostListener('mouseleave')
   @HostListener('focusout')
   onLeave(): void {
-    this.clearTimers();
-    this.hideTimer = setTimeout(() => this.hide(), HIDE_DELAY);
+    this.hide();
   }
 
   @HostListener('document:keydown.escape')
@@ -244,14 +236,13 @@ export class TooltipDirective implements OnChanges, OnDestroy {
       return;
     }
 
-    const space = this.tooltipDot ? SPACE_WITH_DOT : SPACE_WITHOUT_DOT;
+    const space = this.tooltipDot ? DOT_SIZE + DOT_GAP * 2 : 4;
     const strategy = this.overlay
       .position()
       .flexibleConnectedTo(this.host)
       .withPositions(this.positions(space))
       .withPush(true)
-      .withFlexibleDimensions(false)
-      .withViewportMargin(VIEWPORT_MARGIN);
+      .withFlexibleDimensions(false);
 
     this.overlayRef = this.overlay.create({
       positionStrategy: strategy,
@@ -283,7 +274,6 @@ export class TooltipDirective implements OnChanges, OnDestroy {
   }
 
   private hide(immediate = false): void {
-    this.clearTimers();
     if (!this.overlayRef) return;
     if (immediate || !this.tip) {
       this.dispose();
@@ -303,7 +293,6 @@ export class TooltipDirective implements OnChanges, OnDestroy {
   }
 
   private keepOpen(): void {
-    this.clearTimers();
     this.cancelLeave();
   }
 
@@ -316,11 +305,6 @@ export class TooltipDirective implements OnChanges, OnDestroy {
     this.overlayRef = undefined;
     this.tip = undefined;
     this.describedBy = null;
-  }
-
-  private clearTimers(): void {
-    clearTimeout(this.showTimer);
-    clearTimeout(this.hideTimer);
   }
 
   private preferredSide(): Side {
