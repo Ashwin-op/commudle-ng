@@ -22,10 +22,6 @@
   }
 }
 
-.tooltip-content {
-  @apply com-relative;
-}
-
 .tooltip-dot {
   @apply com-absolute com-rounded-full com-pointer-events-none;
 }

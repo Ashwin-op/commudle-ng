@@ -22,15 +22,14 @@ import type {
   IComTooltipVariant,
 } from '@commudle/commudle-theme';
 
-let nextId = 0;
-const TOOLTIP_SIDES: IComTooltipPlacement[] = ['top', 'bottom', 'left', 'right'];
-const OPPOSITE_SIDE: Record<IComTooltipPlacement, IComTooltipPlacement> = {
-  top: 'bottom',
-  bottom: 'top',
-  left: 'right',
-  right: 'left',
+const FLIP_ORDER: Record<IComTooltipPlacement, IComTooltipPlacement[]> = {
+  top: ['top', 'bottom', 'left', 'right'],
+  bottom: ['bottom', 'top', 'left', 'right'],
+  left: ['left', 'right', 'top', 'bottom'],
+  right: ['right', 'left', 'top', 'bottom'],
 };
 
+let nextId = 0;
 @Directive({
   selector: '[comTooltip]',
   standalone: false,
@@ -41,7 +40,6 @@ export class TooltipDirective implements OnChanges, OnDestroy {
   @Input() tooltipStatus: IComTooltipStatus = 'primary';
   @Input() tooltipVariant: IComTooltipVariant = 'default';
   @Input() tooltipSize: IComTooltipSize = 'md';
-  @Input() tooltipClass = '';
   @Input({ transform: booleanAttribute }) tooltipDot = true;
   @Input({ transform: booleanAttribute }) tooltipDisabled = false;
 
@@ -95,11 +93,10 @@ export class TooltipDirective implements OnChanges, OnDestroy {
     this.overlayRef = this.overlay.create({
       positionStrategy: strategy,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
-      panelClass: this.tooltipClass.trim().split(/\s+/).filter(Boolean),
     });
 
     const tip = this.overlayRef.attach(new ComponentPortal(ComTooltipComponent)).instance;
-    tip.content = this.content;
+    tip.content = this.content ?? null;
     tip.side = this.tooltipPlacement;
     tip.size = this.tooltipSize;
     tip.status = this.tooltipStatus;
@@ -159,11 +156,7 @@ export class TooltipDirective implements OnChanges, OnDestroy {
       right: { originX: 'end', originY: 'center', overlayX: 'start', overlayY: 'center', offsetX: space },
     };
 
-    const first = this.tooltipPlacement;
-    const opposite = OPPOSITE_SIDE[first];
-    return [first, opposite, ...TOOLTIP_SIDES.filter((side) => side !== first && side !== opposite)].map(
-      (side) => positions[side],
-    );
+    return FLIP_ORDER[this.tooltipPlacement].map((side) => positions[side]);
   }
 
   private sideOf(pair: ConnectedPosition): IComTooltipPlacement {
