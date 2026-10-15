@@ -1,0 +1,31 @@
+:host {
+  display: block;
+}
+
+.tooltip-box {
+  @apply com-relative com-w-max com-text-xs com-break-words;
+
+  &:not(.tooltip-card) {
+    @apply com-p-1 com-rounded-lg;
+  }
+
+  &.tooltip-rich {
+    @apply com-p-0;
+  }
+
+  &.tooltip-card {
+    filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.14));
+
+    .tooltip-text {
+      @apply com-block com-p-1;
+    }
+  }
+}
+
+.tooltip-content {
+  @apply com-relative;
+}
+
+.tooltip-dot {
+  @apply com-absolute com-rounded-full com-pointer-events-none;
+}

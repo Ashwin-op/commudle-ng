@@ -8,3 +8,5 @@ export * from './lib/components/commudle-button/commudle-button.module';
 export * from './lib/components/commudle-button/com-button.component';
 export * from './lib/components/commudle-input/commudle-input.module';
 export * from './lib/components/commudle-input/com-input.component';
+export * from './lib/components/commudle-tooltip/com-tooltip.component';
+export * from './lib/components/commudle-tooltip/models/com-tooltip.types';
