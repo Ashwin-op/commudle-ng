@@ -162,3 +162,13 @@
     @apply com-rounded-lg;
   }
 }
+
+.create-survey-card {
+  @apply com-h-[90dvh] md:com-w-[50dvw] com-overflow-y-auto com-flex com-h-full;
+  .create-survey-header {
+    @apply com-flex com-items-center com-justify-between com-flex;
+  }
+  .create-survey-body {
+    @apply com-p-0 com-bg-zinc-100 com-scrollbar-hide;
+  }
+}
