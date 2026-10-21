@@ -1,5 +1,5 @@
 .community-edit-details {
-  @apply com-p-5 com-bg-white com-rounded-lg;
+  @apply com-p-4 md:com-p-6 com-bg-white com-min-h-screen com-rounded-10 com-overflow-hidden;
 
   .cf-section-label {
     @apply com-text-xs com-font-bold com-uppercase com-tracking-widest com-text-gray-400;

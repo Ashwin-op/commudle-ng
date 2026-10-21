@@ -1,5 +1,5 @@
 .routes {
-  @apply com-px-6;
+  @apply com-p-4 md:com-p-6 com-bg-white com-min-h-screen com-rounded-10 com-overflow-hidden;
 
   .route-tabs {
     @apply com-relative com-top-0 com-flex com-items-center com-gap-3 com-mb-4 com-border-0 com-border-b com-border-Bright-Gray com-border-solid;
