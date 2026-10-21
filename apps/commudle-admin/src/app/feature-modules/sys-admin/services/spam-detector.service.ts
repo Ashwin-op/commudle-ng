@@ -24,9 +24,10 @@ export class SpamDetectorService {
   getSpamResult(
     page: number,
     count: number,
-    isSpam: boolean | string,
-    isSpamDecision: boolean | string,
+    isSpam: boolean | string | null,
+    isSpamDecision: boolean | string | null,
     search?: string,
+    contentType?: string | null,
   ): Observable<IPaginationCount<ISpamDetector>> {
     let params = new HttpParams().set('page', page).set('count', count.toString());
 
@@ -39,6 +40,9 @@ export class SpamDetectorService {
     if (search && search.trim().length > 0) {
       params = params.set('search', search.trim());
     }
+    if (contentType) {
+      params = params.set('content_type', contentType);
+    }
 
     return this.http.get<IPaginationCount<ISpamDetector>>(
       this.apiRoutesService.getRoute(API_ROUTES.SPAM_DETECTOR.INDEX),
@@ -48,7 +52,7 @@ export class SpamDetectorService {
     );
   }
 
-  updateSpamDetector(value, id): Observable<ISpamDetector> {
+  updateSpamDetector(value: boolean, id: number): Observable<ISpamDetector> {
     return this.http.put<ISpamDetector>(this.apiRoutesService.getRoute(API_ROUTES.SPAM_DETECTOR.UPDATE), {
       is_spam_decision: value,
       spam_detector_id: id,

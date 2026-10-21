@@ -93,11 +93,19 @@
         </div>
       </div>
       <div class="filter-field">
+        <label>Content Type</label>
+        <select [ngModel]="contentType" (ngModelChange)="changeContentType($event)">
+          <option [ngValue]="null">All Types</option>
+          <option value="CommunityBuild">Community Build</option>
+          <option value="User">User</option>
+        </select>
+      </div>
+      <div class="filter-field">
         <label>Spam Detection</label>
         <select [ngModel]="isSpam" (ngModelChange)="changeSpamDetectorType($event)">
           <option [ngValue]="null">All Results</option>
           <option [ngValue]="true">Flagged as Spam</option>
-          <option [ngValue]="false">Not Spam</option>
+          <option [ngValue]="false">Not Spam / Review</option>
         </select>
       </div>
       <div class="filter-field">
@@ -309,10 +317,19 @@
               <div
                 class="detection-status"
                 [class.is-spam]="spamDetector.is_spam"
-                [class.is-safe]="!spamDetector.is_spam"
+                [class.is-review]="isReviewDecision(spamDetector)"
+                [class.is-safe]="!spamDetector.is_spam && !isReviewDecision(spamDetector)"
               >
-                <fa-icon [icon]="spamDetector.is_spam ? icons.faTriangleExclamation : icons.faCircleCheck"></fa-icon>
-                <span>{{ spamDetector.is_spam ? 'Spam Detected' : 'Clean' }}</span>
+                <fa-icon
+                  [icon]="
+                    spamDetector.is_spam || isReviewDecision(spamDetector)
+                      ? icons.faTriangleExclamation
+                      : icons.faCircleCheck
+                  "
+                ></fa-icon>
+                <span>{{
+                  spamDetector.is_spam ? 'Spam Detected' : isReviewDecision(spamDetector) ? 'Needs Review' : 'Clean'
+                }}</span>
               </div>
             </td>
 
@@ -323,16 +340,16 @@
                   <div
                     class="score-bar-fill"
                     [class.score-critical]="spamDetector.score >= 0.7"
-                    [class.score-warning]="spamDetector.score >= 0.4 && spamDetector.score < 0.7"
-                    [class.score-ok]="spamDetector.score < 0.4"
+                    [class.score-warning]="spamDetector.score >= 0.3 && spamDetector.score < 0.7"
+                    [class.score-ok]="spamDetector.score < 0.3"
                     [style.width.%]="getScorePercent(spamDetector.score)"
                   ></div>
                 </div>
                 <span
                   class="score-value"
                   [class.score-critical-text]="spamDetector.score >= 0.7"
-                  [class.score-warning-text]="spamDetector.score >= 0.4 && spamDetector.score < 0.7"
-                  [class.score-ok-text]="spamDetector.score < 0.4"
+                  [class.score-warning-text]="spamDetector.score >= 0.3 && spamDetector.score < 0.7"
+                  [class.score-ok-text]="spamDetector.score < 0.3"
                 >
                   {{ getScorePercent(spamDetector.score) }}%
                 </span>
@@ -403,17 +420,24 @@
             <div
               class="detection-status"
               [class.is-spam]="spamDetector.is_spam"
-              [class.is-safe]="!spamDetector.is_spam"
+              [class.is-review]="isReviewDecision(spamDetector)"
+              [class.is-safe]="!spamDetector.is_spam && !isReviewDecision(spamDetector)"
             >
-              <fa-icon [icon]="spamDetector.is_spam ? icons.faTriangleExclamation : icons.faCircleCheck"></fa-icon>
-              <span>{{ spamDetector.is_spam ? 'Spam' : 'Clean' }}</span>
+              <fa-icon
+                [icon]="
+                  spamDetector.is_spam || isReviewDecision(spamDetector)
+                    ? icons.faTriangleExclamation
+                    : icons.faCircleCheck
+                "
+              ></fa-icon>
+              <span>{{ spamDetector.is_spam ? 'Spam' : isReviewDecision(spamDetector) ? 'Review' : 'Clean' }}</span>
             </div>
           </div>
           <span
             class="score-value"
             [class.score-critical-text]="spamDetector.score >= 0.7"
-            [class.score-warning-text]="spamDetector.score >= 0.4 && spamDetector.score < 0.7"
-            [class.score-ok-text]="spamDetector.score < 0.4"
+            [class.score-warning-text]="spamDetector.score >= 0.3 && spamDetector.score < 0.7"
+            [class.score-ok-text]="spamDetector.score < 0.3"
           >
             {{ getScorePercent(spamDetector.score) }}%
           </span>
