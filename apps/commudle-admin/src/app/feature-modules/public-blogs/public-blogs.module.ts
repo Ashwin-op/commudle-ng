@@ -11,6 +11,7 @@ import { BlogCardComponent } from './components/blog-card/blog-card.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives.module';
 import { AiAssistantSelectorComponent } from '@commudle/shared-components';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 
 @NgModule({
   declarations: [BlogsListComponent, BlogComponent, BlogCardComponent],
@@ -28,6 +29,7 @@ import { AiAssistantSelectorComponent } from '@commudle/shared-components';
     FontAwesomeModule,
     SharedDirectivesModule,
     AiAssistantSelectorComponent,
+    CommudleCardModule,
   ],
 })
 export class PublicBlogsModule {}

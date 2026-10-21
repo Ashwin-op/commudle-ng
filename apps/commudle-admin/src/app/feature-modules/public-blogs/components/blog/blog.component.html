@@ -57,27 +57,27 @@
         </div>
 
         <div class="right-column" *appBreakpoints="'>lg'">
-          <nb-card class="latest-blog">
+          <com-card class="latest-blog">
             <h1 class="heading">Latest Blogs</h1>
             <div class="latest-blog-cards">
-              <nb-card *ngFor="let latestBlog of latestBlogs" class="latest-blog-card">
+              <com-card *ngFor="let latestBlog of latestBlogs" class="latest-blog-card">
                 <a [routerLink]="['/blogs', latestBlog?.slug.current]">
-                  <nb-card-body class="blog-card">
+                  <com-card-body class="blog-card">
                     <h2 class="latest-blog-title">{{ latestBlog.title }}</h2>
                     <p class="published-on">
                       Published on <span>{{ latestBlog.publishedAt | date }}</span>
                     </p>
-                  </nb-card-body>
+                  </com-card-body>
                 </a>
-              </nb-card>
+              </com-card>
             </div>
-          </nb-card>
+          </com-card>
         </div>
       </div>
 
       <!-- blogFAQ's section -->
-      <nb-card *ngIf="blog?.faq" class="blog-faq">
-        <nb-card-body>
+      <com-card *ngIf="blog?.faq" class="blog-faq">
+        <com-card-body>
           <h2>FAQ's</h2>
           <div>
             <ul *ngFor="let item of blog?.faq">
@@ -87,8 +87,8 @@
               </li>
             </ul>
           </div>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
 
       <!-- similarBlogs Section -->
       <div *ngIf="blog?.similarBlogs" class="similar-blogs">
