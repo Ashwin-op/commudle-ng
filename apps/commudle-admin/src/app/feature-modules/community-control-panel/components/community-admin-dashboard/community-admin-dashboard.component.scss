@@ -1,5 +1,5 @@
 .dashboard {
-  @apply com-flex com-flex-col com-gap-3;
+  @apply com-flex com-flex-col com-gap-2;
 }
 
 .section-loader {
@@ -40,7 +40,7 @@
 }
 
 .section-header {
-  @apply com-flex com-items-center com-justify-between com-mb-1.5 com-m-0;
+  @apply com-flex com-items-center com-justify-between com-mb-2 com-m-0;
 }
 
 .view-all-link {
@@ -53,7 +53,7 @@
 
 // Row 1: Greeting
 .greeting-section {
-  @apply com-relative com-overflow-hidden com-pt-4 com-p-3 md:com-rounded-xl com-rounded-none;
+  @apply com-relative com-overflow-hidden com-p-3 md:com-rounded-xl com-rounded-none;
   background: linear-gradient(135deg, #4a90d9, #2c5f9e);
   animation: heroFadeUp 0.6s ease-out both;
 
@@ -147,7 +147,7 @@
   }
 
   .greeting-content {
-    @apply com-relative com-flex com-flex-col com-gap-0.5 com-mb-3;
+    @apply com-relative com-flex com-flex-col com-gap-0 com-mb-2;
     z-index: 1;
 
     .greeting-eyebrow {
@@ -156,7 +156,7 @@
     }
 
     .greeting-text {
-      @apply com-m-0 com-text-xl sm:com-text-2xl com-font-bold com-text-tWhite;
+      @apply com-m-0 com-text-lg sm:com-text-xl com-font-bold com-text-tWhite;
       animation: heroFadeUp 0.6s ease-out 0.12s both;
 
       .greeting-name {
@@ -175,7 +175,7 @@
     z-index: 1;
 
     .highlight-card {
-      @apply com-flex com-items-center com-gap-3 com-flex-1 com-rounded-xl com-p-2 com-relative;
+      @apply com-flex com-items-center com-gap-2 com-flex-1 com-rounded-lg com-px-2 com-py-1.5 com-relative;
       border: 1px solid rgba(255, 255, 255, 0.3);
       background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(8px);
@@ -193,7 +193,7 @@
       }
 
       .highlight-icon {
-        @apply com-w-9 com-h-9 com-rounded-lg com-flex com-items-center com-justify-center com-text-sm com-shrink-0 com-text-tWhite;
+        @apply com-w-7 com-h-7 com-rounded-md com-flex com-items-center com-justify-center com-text-sm com-shrink-0 com-text-tWhite;
         background: rgba(255, 255, 255, 0.2);
       }
 
@@ -255,12 +255,12 @@
 
 // Row 2: Three-column
 .three-col-row {
-  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-3;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-2;
 
   .attention-card,
   .schedule-card,
   .activity-card {
-    @apply com-rounded-xl com-p-3 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+    @apply com-rounded-xl com-p-2.5 com-bg-white com-border com-border-solid com-border-Bright-Gray;
   }
 
   // Lay the activity card out as a column so the pagination can be pushed to
@@ -278,7 +278,7 @@
     @apply com-m-0;
 
     .attention-item {
-      @apply com-flex com-gap-3 com-p-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+      @apply com-flex com-items-center com-gap-2 com-p-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
 
       &:last-child {
         @apply com-border-b-0;
@@ -318,7 +318,7 @@
     }
 
     .attention-empty {
-      @apply com-flex com-items-center com-gap-2 com-m-0 com-py-4 com-text-sm com-text-gray-500;
+      @apply com-flex com-items-center com-gap-2 com-m-0 com-py-2 com-text-xs com-text-gray-500;
 
       .attention-empty-icon {
         @apply com-text-green-500;
@@ -327,13 +327,13 @@
   }
 
   .schedule-timeline {
-    @apply com-mt-2 com-flex com-flex-col com-m-0 com-p-0 com-list-none;
+    @apply com-flex com-flex-col com-m-0 com-p-0 com-list-none;
 
     .timeline-item {
       @apply com-flex com-items-start com-gap-3;
 
       .timeline-date {
-        @apply com-text-xs com-font-medium com-text-gray-500 com-w-20 com-shrink-0 com-py-1.5 com-whitespace-nowrap;
+        @apply com-text-xs com-font-medium com-text-gray-500 com-w-16 com-shrink-0 com-py-1 com-whitespace-nowrap;
 
         &.today {
           @apply com-text-primary-500;
@@ -345,7 +345,7 @@
       }
 
       .timeline-event {
-        @apply com-flex com-flex-col com-flex-1 com-pl-3 com-py-1.5 com-border-0 com-border-l-2 com-border-solid com-border-Bright-Gray com-m-0;
+        @apply com-flex com-flex-col com-flex-1 com-pl-2 com-py-1 com-border-0 com-border-l-2 com-border-solid com-border-Bright-Gray com-m-0;
 
         .timeline-event-name {
           @apply com-text-sm com-font-medium com-text-Yankees-Blue;
@@ -362,27 +362,34 @@
     }
 
     .timeline-empty {
-      @apply com-py-4 com-text-sm com-text-gray-500;
+      @apply com-py-2 com-text-xs com-text-gray-500;
     }
   }
 }
 
 // Row 3: Snapshot + Quick Actions
 .snapshot-actions-row {
-  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-3;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-2;
+}
+
+.snapshot-section,
+.actions-section {
+  .section-heading {
+    @apply com-mb-1.5;
+  }
 }
 
 .snapshot-section {
-  @apply com-bg-white com-rounded-xl com-p-3 com-border com-border-solid com-border-Bright-Gray lg:com-col-span-2;
+  @apply com-bg-white com-rounded-xl com-p-2.5 com-border com-border-solid com-border-Bright-Gray lg:com-col-span-2;
 
   .snapshot-cards {
-    @apply com-grid com-grid-cols-2 md:com-grid-cols-5 com-gap-3 com-mt-2 com-m-0 com-p-0 com-list-none;
+    @apply com-grid com-grid-cols-2 md:com-grid-cols-3 com-gap-2 com-m-0 com-p-0 com-list-none;
 
     .snapshot-card {
-      @apply com-bg-white com-rounded-xl com-p-3 com-border com-border-solid com-border-Bright-Gray;
+      @apply com-bg-white com-rounded-lg com-p-2.5 com-border com-border-solid com-border-Bright-Gray;
 
       .snapshot-card-header {
-        @apply com-flex com-gap-2 com-mb-1.5;
+        @apply com-flex com-items-center com-gap-1.5 com-mb-2;
 
         .snapshot-icon {
           @apply com-flex com-text-sm;
@@ -405,15 +412,15 @@
         }
 
         .snapshot-label {
-          @apply com-text-xs com-font-medium com-text-gray-600 com-h-8;
+          @apply com-text-xs com-font-medium com-text-gray-600 com-truncate;
         }
       }
 
       .snapshot-value {
-        @apply com-text-xl com-font-medium com-text-Yankees-Blue com-m-0;
+        @apply com-flex com-items-baseline com-flex-wrap com-gap-x-1.5 com-text-lg com-font-semibold com-leading-tight com-text-Yankees-Blue com-m-0;
 
         .snapshot-delta {
-          @apply com-block com-text-xs com-font-medium com-text-green-600;
+          @apply com-text-10px com-font-medium com-text-green-600;
 
           &.negative {
             @apply com-text-red-500;
@@ -425,24 +432,24 @@
 }
 
 .actions-section {
-  @apply com-bg-white com-rounded-xl com-p-3 com-border com-border-solid com-border-Bright-Gray md:com-mb-0 com-mb-3;
+  @apply com-bg-white com-rounded-xl com-p-2.5 com-border com-border-solid com-border-Bright-Gray;
 
   .actions-grid {
-    @apply com-grid com-grid-cols-2 lg:com-grid-cols-4 com-gap-2 com-mt-2;
+    @apply com-grid com-grid-cols-2 com-gap-2;
 
     .action-card {
-      @apply com-flex com-flex-col com-items-center com-gap-1.5 com-p-2.5 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-no-underline com-transition-all com-duration-200 com-cursor-pointer;
+      @apply com-flex com-items-center com-gap-1.5 com-px-2 com-py-1.5 com-rounded-md com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-no-underline com-transition-all com-duration-200 com-cursor-pointer;
 
       &:hover {
         @apply com-border-primary-300 com-bg-blue-50;
       }
 
       .action-icon {
-        @apply com-text-lg com-text-indigo-500;
+        @apply com-text-sm com-text-indigo-500;
       }
 
       .action-label {
-        @apply com-text-xs com-font-normal com-text-Yankees-Blue com-text-center;
+        @apply com-text-sm com-font-normal com-text-Yankees-Blue com-truncate;
       }
     }
   }
@@ -453,14 +460,14 @@
   @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col;
 
   .activity-item {
-    @apply com-flex com-items-center com-gap-3 com-py-1 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    @apply com-flex com-items-center com-gap-2 com-py-1 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
     &:last-child {
       @apply com-border-b-0;
     }
 
     .activity-avatar {
-      @apply com-w-8 com-h-8 com-rounded-full com-flex com-items-center com-justify-center com-text-xs com-font-medium com-shrink-0 com-text-white;
+      @apply com-w-6 com-h-6 com-rounded-full com-flex com-items-center com-justify-center com-text-10px com-font-medium com-shrink-0 com-text-white;
 
       &.members-avatar {
         @apply com-bg-blue-500;
@@ -505,7 +512,7 @@
   }
 
   .activity-empty {
-    @apply com-py-4 com-text-sm com-text-gray-500;
+    @apply com-py-2 com-text-xs com-text-gray-500;
   }
 }
 
@@ -516,11 +523,11 @@
 
 // Row 4: Live Visitors + Top Pages + Top Cities
 .live-traffic-row {
-  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-3;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-2;
 
   .live-visitors-card,
   .top-list-card {
-    @apply com-rounded-xl com-p-3 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+    @apply com-rounded-xl com-p-2.5 com-bg-white com-border com-border-solid com-border-Bright-Gray;
   }
 
   .top-list-card {
@@ -532,7 +539,7 @@
   }
 
   .live-visitors-body {
-    @apply com-flex com-flex-col com-gap-3 com-mt-2;
+    @apply com-flex com-flex-col com-gap-3;
 
     .live-visitors-counts {
       @apply com-flex com-gap-6;
@@ -541,7 +548,7 @@
         @apply com-flex com-flex-col com-gap-1;
 
         .live-count-value {
-          @apply com-text-xl com-font-medium com-text-Yankees-Blue com-leading-none;
+          @apply com-text-lg com-font-semibold com-text-Yankees-Blue com-leading-none;
         }
 
         .live-count-label {
@@ -556,13 +563,13 @@
   }
 
   .top-list {
-    @apply com-m-0 com-p-0 com-mt-2 com-list-none com-flex com-flex-col com-gap-2;
+    @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-2;
 
     .top-list-item {
       @apply com-flex com-items-center com-gap-2 com-text-xs com-text-Yankees-Blue;
 
       .top-list-name {
-        @apply com-w-32 com-shrink-0 com-truncate com-text-sm com-text-Yankees-Blue com-no-underline;
+        @apply com-w-28 com-shrink-0 com-truncate com-text-xs com-text-Yankees-Blue com-no-underline;
 
         &:hover {
           @apply com-text-primary-600 com-underline;
@@ -570,7 +577,7 @@
       }
 
       .top-list-track {
-        @apply com-h-1.5 com-w-20 com-shrink-0 com-rounded-full com-bg-gray-100 com-overflow-hidden;
+        @apply com-h-1 com-flex-1 com-shrink-0 com-rounded-full com-bg-gray-100 com-overflow-hidden;
       }
 
       .top-list-bar {
@@ -587,12 +594,12 @@
       }
 
       .top-list-value {
-        @apply com-ml-auto com-text-sm com-font-medium com-text-Cadet-Grey com-shrink-0;
+        @apply com-ml-auto com-text-xs com-font-medium com-text-Cadet-Grey com-shrink-0;
       }
     }
 
     .top-list-empty {
-      @apply com-py-4 com-text-sm com-text-gray-500;
+      @apply com-py-2 com-text-xs com-text-gray-500;
     }
   }
 }
