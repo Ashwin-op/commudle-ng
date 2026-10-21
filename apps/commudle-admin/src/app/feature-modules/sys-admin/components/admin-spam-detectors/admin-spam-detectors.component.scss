@@ -468,6 +468,10 @@
       @apply com-text-red-700 com-bg-red-100;
     }
 
+    &.is-review {
+      @apply com-text-yellow-700 com-bg-yellow-100;
+    }
+
     &.is-safe {
       @apply com-text-green-700 com-bg-green-100;
     }
@@ -590,67 +594,6 @@
     &:hover {
       @apply com-bg-primary-500 com-text-white com-border-primary-500;
     }
-  }
-}
-
-// ── Confirmation Dialog ──
-.confirm-dialog-card {
-  @apply com-min-w-[400px] com-flex;
-
-  .confirm-dialog-header {
-    @apply com-flex com-justify-between com-items-center;
-
-    span {
-      @apply com-text-Paragraph-1 com-font-bold com-text-Yankees-Blue;
-    }
-  }
-
-  .confirm-dialog-body {
-    @apply com-flex com-flex-col com-items-center com-text-center com-py-4;
-
-    .confirm-dialog-icon-row {
-      @apply com-mb-4;
-
-      .confirm-icon-circle {
-        @apply com-flex com-items-center com-justify-center com-w-14 com-h-14 com-rounded-full;
-
-        fa-icon {
-          @apply com-text-Page-Section-Header;
-        }
-
-        &.confirm-spam {
-          @apply com-bg-red-100 com-text-red-500;
-        }
-
-        &.confirm-safe {
-          @apply com-bg-green-100 com-text-green-500;
-        }
-      }
-    }
-
-    .confirm-message {
-      @apply com-text-Paragraph-1 com-text-gray-700 com-m-0;
-
-      strong {
-        @apply com-text-Yankees-Blue;
-      }
-
-      .text-spam {
-        @apply com-font-bold com-text-red-600;
-      }
-
-      .text-safe {
-        @apply com-font-bold com-text-green-600;
-      }
-    }
-
-    .confirm-sub {
-      @apply com-text-Caption com-text-gray-500 com-m-0 com-mt-2;
-    }
-  }
-
-  .confirm-dialog-footer {
-    @apply com-flex com-justify-end com-gap-3;
   }
 }
 

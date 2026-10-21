@@ -1,6 +1,5 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SeoService, ToastrService } from '@commudle/shared-services';
-import { NbDialogService } from '@commudle/theme';
 import { SpamDetectorService } from '../../services/spam-detector.service';
 import { ISpamDetector } from '@commudle/shared-models';
 import {
@@ -28,6 +27,7 @@ export class AdminSpamDetectorsComponent implements OnInit, OnDestroy {
   total = 0;
   isSpam: boolean | null = null;
   isSpamDecision: boolean | null = null;
+  contentType: string | null = null;
   moment = moment;
 
   isLoading = false;
@@ -50,10 +50,8 @@ export class AdminSpamDetectorsComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private dialogService: NbDialogService,
     private seoService: SeoService,
     private spamDetectorService: SpamDetectorService,
-    private changeDetectorRef: ChangeDetectorRef,
     private toastrService: ToastrService,
   ) {}
 
@@ -73,18 +71,6 @@ export class AdminSpamDetectorsComponent implements OnInit, OnDestroy {
     });
   }
 
-  get spamCount(): number {
-    return this.spamDetectors.filter((s) => s.is_spam).length;
-  }
-
-  get safeCount(): number {
-    return this.spamDetectors.filter((s) => !s.is_spam).length;
-  }
-
-  get pendingDecisionCount(): number {
-    return this.spamDetectors.filter((s) => s.is_spam_decision === null || s.is_spam_decision === undefined).length;
-  }
-
   getScorePercent(score: number): number {
     return parseFloat(((score || 0) * 100).toFixed(2));
   }
@@ -97,18 +83,14 @@ export class AdminSpamDetectorsComponent implements OnInit, OnDestroy {
     return spamDetector.content_type === 'CommunityBuild';
   }
 
-  getContentDisplayName(spamDetector: ISpamDetector): string {
-    if (this.isCommunityBuildContent(spamDetector)) {
-      return spamDetector.community_build?.name || 'Unknown Build';
-    }
-
-    return spamDetector.content_user_preview?.name || spamDetector.user?.name || 'Unknown User';
+  isReviewDecision(spamDetector: ISpamDetector): boolean {
+    return !spamDetector.is_spam && spamDetector.decision === 'review';
   }
 
   getSpamDetectorsData() {
     this.isLoading = true;
     this.spamDetectorService
-      .getSpamResult(this.page, this.count, this.isSpam, this.isSpamDecision)
+      .getSpamResult(this.page, this.count, this.isSpam, this.isSpamDecision, this.contentType)
       .subscribe((data) => {
         this.spamDetectors = data.values;
         this.total = data.total;
@@ -120,56 +102,44 @@ export class AdminSpamDetectorsComponent implements OnInit, OnDestroy {
 
   updateSpamDetector(selectedValue: string, id: number) {
     const isSpam = selectedValue === 'true';
-    this.spamDetectorService.updateSpamDetector(isSpam, id).subscribe(() => {
+    this.spamDetectorService.updateSpamDetector(isSpam, id).subscribe((updated) => {
+      const idx = this.spamDetectors.findIndex((item) => item.id === id);
+      if (idx !== -1) {
+        this.spamDetectors[idx] = { ...this.spamDetectors[idx], ...updated, is_spam_decision: isSpam };
+      }
+      this.loadGlobalStats();
       this.toastrService.successDialog('Spam Detector Updated');
     });
   }
 
   changeSpamDetectorType(data: EventTarget) {
     this.page = 1;
-    this.isSpam = (data as HTMLSelectElement).value === 'true';
+    const val = (data as HTMLSelectElement).value;
+    this.isSpam = val === 'true' ? true : val === 'false' ? false : null;
     this.getSpamDetectorsData();
   }
 
   changeSpamDecisionType(data: EventTarget) {
     this.page = 1;
-    this.isSpamDecision = (data as HTMLSelectElement).value === 'true';
+    const val = (data as HTMLSelectElement).value;
+    this.isSpamDecision = val === 'true' ? true : val === 'false' ? false : null;
+    this.getSpamDetectorsData();
+  }
+
+  changeContentType(data: EventTarget) {
+    this.page = 1;
+    const val = (data as HTMLSelectElement).value;
+    this.contentType = val === 'null' || !val ? null : val;
     this.getSpamDetectorsData();
   }
 
   clearFilters() {
     this.isSpam = null;
     this.isSpamDecision = null;
+    this.contentType = null;
     this.page = 1;
     this.getSpamDetectorsData();
   }
-
-  // Confirmation popup removed: the decision dropdown now calls updateSpamDetector directly.
-  // Kept commented in case the confirmation flow needs to be restored.
-  // openDialog(selectedValue: string, spamDetector: ISpamDetector, dialog: any) {
-  //   const previousValue = spamDetector.is_spam_decision;
-  //   spamDetector.is_spam_decision = selectedValue === 'true' ? true : selectedValue === 'false' ? false : null;
-  //   this.changeDetectorRef.detectChanges();
-  //
-  //   this.dialogService
-  //     .open(dialog, {
-  //       context: {
-  //         selectedValue: selectedValue,
-  //         spamDetector: spamDetector,
-  //       },
-  //     })
-  //     .onClose.subscribe((result) => {
-  //       if (result === false) {
-  //         spamDetector.is_spam_decision = previousValue;
-  //         this.changeDetectorRef.detectChanges();
-  //         this.changeDetectorRef.markForCheck();
-  //       } else {
-  //         spamDetector.is_spam_decision = selectedValue === 'true' ? true : false;
-  //         this.changeDetectorRef.detectChanges();
-  //         this.changeDetectorRef.markForCheck();
-  //       }
-  //     });
-  // }
 
   ngOnDestroy() {
     this.seoService.noIndex(false);

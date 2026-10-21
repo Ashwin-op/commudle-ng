@@ -15,6 +15,11 @@ export interface ISpamDetector {
   response_received_at: string;
   is_spam: boolean;
   score: number;
+  confidence?: number | null;
+  decision?: 'allow' | 'review' | 'block' | null;
+  reason?: string | null;
+  spam_signals?: string[] | null;
+  llm_model?: string | null;
   is_spam_decision: boolean | null;
   created_at: string;
   updated_at: string;

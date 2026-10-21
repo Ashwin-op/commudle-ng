@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { SeoService, ToastrService } from '@commudle/shared-services';
-import { NbDialogService } from '@commudle/theme';
 import { SpamDetectorService } from '../../services/spam-detector.service';
 import { AdminSpamDetectorsComponent } from './admin-spam-detectors.component';
 import { ISpamDetector } from '@commudle/shared-models';
@@ -16,6 +15,11 @@ const buildSpamDetectorFixture: ISpamDetector = {
   response_received_at: '2026-07-08T10:01:00Z',
   is_spam: true,
   score: 0.88,
+  confidence: 0.95,
+  decision: 'block',
+  reason: 'Commercial link spam',
+  spam_signals: ['affiliate link'],
+  llm_model: 'gpt-4o-mini',
   is_spam_decision: null,
   created_at: '2026-07-08T10:00:00Z',
   updated_at: '2026-07-08T10:01:00Z',
@@ -39,8 +43,13 @@ const userSpamDetectorFixture: ISpamDetector = {
   id: 2,
   request_sent_at: '2026-07-08T10:00:00Z',
   response_received_at: '2026-07-08T10:01:00Z',
-  is_spam: true,
-  score: 0.92,
+  is_spam: false,
+  score: 0.45,
+  confidence: 0.72,
+  decision: 'review',
+  reason: 'Suspicious domain',
+  spam_signals: ['disposable_email'],
+  llm_model: 'gpt-4o-mini',
   is_spam_decision: null,
   created_at: '2026-07-08T10:00:00Z',
   updated_at: '2026-07-08T10:01:00Z',
@@ -69,14 +78,13 @@ describe('AdminSpamDetectorsComponent', () => {
   let fixture: ComponentFixture<AdminSpamDetectorsComponent>;
 
   const spamDetectorServiceStub = {
+    getSpamStats: jasmine
+      .createSpy('getSpamStats')
+      .and.returnValue(of({ total: 2, spam_count: 1, safe_count: 1, pending_decision_count: 2 })),
     getSpamResult: jasmine
       .createSpy('getSpamResult')
       .and.returnValue(of({ values: [buildSpamDetectorFixture], total: 1, page: 1, count: 10 })),
-    updateSpamDetector: jasmine.createSpy('updateSpamDetector').and.returnValue(of({})),
-  };
-
-  const dialogServiceStub = {
-    open: jasmine.createSpy('open').and.returnValue({ onClose: of(false) }),
+    updateSpamDetector: jasmine.createSpy('updateSpamDetector').and.returnValue(of(buildSpamDetectorFixture)),
   };
 
   const seoServiceStub = {
@@ -94,10 +102,8 @@ describe('AdminSpamDetectorsComponent', () => {
       imports: [CommonModule, FormsModule, RouterTestingModule],
       providers: [
         { provide: SpamDetectorService, useValue: spamDetectorServiceStub },
-        { provide: NbDialogService, useValue: dialogServiceStub },
         { provide: SeoService, useValue: seoServiceStub },
         { provide: ToastrService, useValue: toastrServiceStub },
-        ChangeDetectorRef,
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
@@ -111,16 +117,14 @@ describe('AdminSpamDetectorsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should detect user and build content types correctly', () => {
+  it('should detect user, build, and review decision states correctly', () => {
     expect(component.isCommunityBuildContent(buildSpamDetectorFixture)).toBeTrue();
     expect(component.isUserContent(buildSpamDetectorFixture)).toBeFalse();
+    expect(component.isReviewDecision(buildSpamDetectorFixture)).toBeFalse();
+
     expect(component.isUserContent(userSpamDetectorFixture)).toBeTrue();
     expect(component.isCommunityBuildContent(userSpamDetectorFixture)).toBeFalse();
-  });
-
-  it('should return the correct display name for both content types', () => {
-    expect(component.getContentDisplayName(buildSpamDetectorFixture)).toBe('Demo Build');
-    expect(component.getContentDisplayName(userSpamDetectorFixture)).toBe('Alice Example');
+    expect(component.isReviewDecision(userSpamDetectorFixture)).toBeTrue();
   });
 
   it('should render community build rows as before', () => {
