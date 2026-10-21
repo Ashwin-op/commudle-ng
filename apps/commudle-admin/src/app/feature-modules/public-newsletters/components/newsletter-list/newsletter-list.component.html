@@ -1,11 +1,11 @@
 <div class="base-layout">
   <div class="container">
     <div class="one-column-layout">
-      <nb-card [nbSpinner]="newsletters.length === 0" class="newsletter-list-container">
-        <nb-card-header>
+      <com-card [nbSpinner]="newsletters.length === 0" class="newsletter-list-container">
+        <com-card-header>
           <h1>Commudle IDE: Newsletters from the Community</h1>
-        </nb-card-header>
-        <nb-card-body>
+        </com-card-header>
+        <com-card-body>
           <div class="newsletter-cards">
             <div *ngFor="let newsletter of newsletters" class="newsletter-card">
               <img
@@ -27,8 +27,8 @@
               </div>
             </div>
           </div>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
     </div>
   </div>
 </div>
