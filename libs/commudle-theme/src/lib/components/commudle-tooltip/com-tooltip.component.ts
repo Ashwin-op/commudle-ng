@@ -62,6 +62,7 @@ export class ComTooltipComponent {
   }
 
   enter(): void {
+    this.refresh();
     void this.el.nativeElement.offsetWidth;
     this.setTooltipVisible(true);
   }
@@ -76,7 +77,7 @@ export class ComTooltipComponent {
     const base = {
       'max-width': `${TOOLTIP_SIZES[this.size] || TOOLTIP_SIZES.md}px`,
       opacity: this.isTooltipVisible ? '1' : '0',
-      transform: this.isTooltipVisible ? 'translate(0, 0)' : this.hiddenTransform(),
+      transform: this.isTooltipVisible ? 'translate(0, 0)' : HIDDEN_TRANSFORMS[this.side],
       transition: `opacity ${TOOLTIP_ANIM_MS}ms ease, transform ${TOOLTIP_ANIM_MS}ms ease`,
     };
 
@@ -99,10 +100,6 @@ export class ComTooltipComponent {
     };
 
     this.cdr.detectChanges();
-  }
-
-  private hiddenTransform(): string {
-    return HIDDEN_TRANSFORMS[this.side];
   }
 
   private dotPosition(): Record<string, string> {

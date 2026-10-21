@@ -23,7 +23,14 @@ import type {
 
 const SPACE_WITH_DOT = 12;
 const SPACE_WITHOUT_DOT = 4;
+const DOT_EDGE = 12;
 const OPPOSITE = { top: 'bottom', bottom: 'top', left: 'right', right: 'left' } as const;
+const positionsFor = (space: number): Record<IComTooltipPlacement, ConnectedPosition> => ({
+  top: { originX: 'center', originY: 'top', overlayX: 'center', overlayY: 'bottom', offsetY: -space },
+  bottom: { originX: 'center', originY: 'bottom', overlayX: 'center', overlayY: 'top', offsetY: space },
+  left: { originX: 'start', originY: 'center', overlayX: 'end', overlayY: 'center', offsetX: -space },
+  right: { originX: 'end', originY: 'center', overlayX: 'start', overlayY: 'center', offsetX: space },
+});
 
 let nextId = 0;
 
@@ -52,8 +59,13 @@ export class TooltipDirective implements OnChanges, OnDestroy {
   @HostListener('mouseenter')
   @HostListener('focusin')
   onEnter(): void {
-    if (this.cancelLeave() || this.tooltipDisabled || !this.content || this.overlayRef) return;
-    this.show();
+    if (!this.overlayRef) {
+      if (!this.tooltipDisabled && this.content) this.show();
+    } else if (this.leaveTimer) {
+      clearTimeout(this.leaveTimer);
+      this.leaveTimer = undefined;
+      this.tip?.setTooltipVisible(true);
+    }
   }
 
   @HostListener('mouseleave')
@@ -66,9 +78,7 @@ export class TooltipDirective implements OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.overlayRef && (changes['content'] || changes['tooltipDisabled'])) {
-      this.dispose();
-    }
+    if (changes['content'] || changes['tooltipDisabled']) this.dispose();
   }
 
   ngOnDestroy(): void {
@@ -77,14 +87,8 @@ export class TooltipDirective implements OnChanges, OnDestroy {
 
   private show(): void {
     const placement = this.tooltipPlacement;
+    const positions = positionsFor(this.tooltipDot ? SPACE_WITH_DOT : SPACE_WITHOUT_DOT);
     const sides = new Set<IComTooltipPlacement>([placement, OPPOSITE[placement], 'top', 'bottom', 'left', 'right']);
-    const space = this.tooltipDot ? SPACE_WITH_DOT : SPACE_WITHOUT_DOT;
-    const positions: Record<IComTooltipPlacement, ConnectedPosition> = {
-      top: { originX: 'center', originY: 'top', overlayX: 'center', overlayY: 'bottom', offsetY: -space },
-      bottom: { originX: 'center', originY: 'bottom', overlayX: 'center', overlayY: 'top', offsetY: space },
-      left: { originX: 'start', originY: 'center', overlayX: 'end', overlayY: 'center', offsetX: -space },
-      right: { originX: 'end', originY: 'center', overlayX: 'start', overlayY: 'center', offsetX: space },
-    };
 
     const strategy = this.overlay
       .position()
@@ -109,22 +113,13 @@ export class TooltipDirective implements OnChanges, OnDestroy {
     this.tip = tip;
     this.describedBy = this.id;
 
-    strategy.positionChanges.subscribe(({ connectionPair }) => {
-      tip.side = this.sideOf(connectionPair);
+    strategy.positionChanges.subscribe(({ connectionPair: { overlayX, overlayY } }) => {
+      tip.side = overlayY !== 'center' ? OPPOSITE[overlayY] : overlayX === 'end' ? 'left' : 'right';
       this.alignDot(tip);
       tip.refresh();
     });
-    tip.hoverChange.subscribe((hovered) => (hovered ? this.cancelLeave() : this.onLeave()));
-    tip.refresh();
+    tip.hoverChange.subscribe((hovered) => (hovered ? this.onEnter() : this.onLeave()));
     tip.enter();
-  }
-
-  private cancelLeave(): boolean {
-    if (!this.leaveTimer) return false;
-    clearTimeout(this.leaveTimer);
-    this.leaveTimer = undefined;
-    this.tip?.setTooltipVisible(true);
-    return true;
   }
 
   private dispose(): void {
@@ -135,11 +130,6 @@ export class TooltipDirective implements OnChanges, OnDestroy {
     this.tip = undefined;
     this.describedBy = null;
   }
-  private sideOf({ overlayX, overlayY }: ConnectedPosition): IComTooltipPlacement {
-    if (overlayY === 'bottom') return 'top';
-    if (overlayY === 'top') return 'bottom';
-    return overlayX === 'end' ? 'left' : 'right';
-  }
 
   private alignDot(tip: ComTooltipComponent): void {
     if (!this.overlayRef) return;
@@ -147,7 +137,7 @@ export class TooltipDirective implements OnChanges, OnDestroy {
     const box = this.overlayRef.overlayElement.getBoundingClientRect();
     const vertical = tip.side === 'top' || tip.side === 'bottom';
     const center = vertical ? trigger.left + trigger.width / 2 - box.left : trigger.top + trigger.height / 2 - box.top;
-    const length = vertical ? box.width : box.height;
-    tip.dotOffset = Math.min(Math.max(center, 12), Math.max(length - 12, 12));
+    const max = (vertical ? box.width : box.height) - DOT_EDGE;
+    tip.dotOffset = Math.max(DOT_EDGE, Math.min(center, max));
   }
 }
