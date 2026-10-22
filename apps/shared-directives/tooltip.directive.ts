@@ -75,15 +75,15 @@ export class TooltipDirective implements OnChanges, OnDestroy {
   onLeave(): void {
     if (!this.overlayRef || this.leaveTimer) return;
     this.tip?.setTooltipVisible(false);
-    this.leaveTimer = setTimeout(() => this.dispose(), TOOLTIP_ANIM_MS);
+    this.leaveTimer = setTimeout(() => this.hideTooltip(), TOOLTIP_ANIM_MS);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['content'] || changes['tooltipDisabled']) this.dispose();
+    if (changes['content'] || changes['tooltipDisabled']) this.hideTooltip();
   }
 
   ngOnDestroy(): void {
-    this.dispose();
+    this.hideTooltip();
   }
 
   private show(): void {
@@ -123,7 +123,7 @@ export class TooltipDirective implements OnChanges, OnDestroy {
     tip.enter();
   }
 
-  private dispose(): void {
+  private hideTooltip(): void {
     clearTimeout(this.leaveTimer);
     this.leaveTimer = undefined;
     this.overlayRef?.dispose();
