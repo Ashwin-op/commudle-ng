@@ -90,10 +90,9 @@
     @apply com-grid com-grid-cols-2 md:com-grid-cols-3 lg:com-grid-cols-6 com-gap-3 com-m-0 com-p-0 com-list-none;
 
     .pulse-stat {
-      <<<<<<< HEAD @apply com-flex com-items-start com-gap-1.5 com-p-2 com-rounded-lg com-bg-white com-border com-border-solid com-border-Bright-Gray;
-      =======@apply com-flex com-items-start com-gap-3 com-p-3 com-rounded-xl com-bg-white com-border com-border-solid com-border-Bright-Gray;
+      @apply com-flex com-items-start com-gap-1.5 com-p-2 com-rounded-lg com-bg-white com-border com-border-solid com-border-Bright-Gray;
 
-      >>>>>>>334e1f0cb (fix: orgs-dashboard-admin-header-fix) .pulse-icon {
+      .pulse-icon {
         @apply com-w-7 com-h-7 com-rounded-md com-flex com-items-center com-justify-center com-text-sm com-shrink-0;
 
         &.communities-icon {
