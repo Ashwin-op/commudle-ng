@@ -13,12 +13,18 @@
         @apply com-mb-2;
       }
 
+      // Only the variable cards scroll; the heading and the Add Variable
+      // tile stay put. Height tracks the viewport so the step fits a screen.
+      .variables-list {
+        @apply com-max-h-[calc(100vh-22rem)] com-min-h-[10rem] com-overflow-y-auto com-pr-1 com-mb-2;
+      }
+
       .empty-variables {
         @apply com-text-sm com-text-Auro-Metal-Saurus com-mb-3;
       }
 
       .variable-item {
-        @apply com-block com-w-full com-mb-2 com-px-3 com-py-2 com-rounded-lg com-bg-gray-50 com-border-2 com-border-solid com-border-gray-300;
+        @apply com-block com-w-full com-mb-1 com-px-2 com-py-1 com-rounded-lg com-bg-gray-50 com-border-2 com-border-solid com-border-gray-300;
 
         &.placed {
           @apply com-bg-blue-50;
@@ -32,10 +38,14 @@
           @apply com-flex com-items-center com-justify-between com-gap-2;
 
           nb-checkbox {
-            @apply com-cursor-pointer com-overflow-hidden com-font-semibold;
+            @apply com-cursor-pointer com-min-w-0 com-overflow-hidden com-font-semibold;
 
             ::ng-deep label {
-              @apply com-cursor-pointer com-font-semibold;
+              @apply com-cursor-pointer com-font-semibold com-min-w-0;
+            }
+
+            ::ng-deep .text {
+              @apply com-truncate;
             }
           }
         }
@@ -81,7 +91,7 @@
     }
 
     .stage-wrapper {
-      @apply com-flex-1 com-min-w-0 com-overflow-auto com-flex com-justify-center com-border-0 com-border-t md:com-border-t-0 md:com-border-l com-border-solid com-border-Bright-Gray com-py-4 md:com-py-0 com-px-0 md:com-px-4;
+      @apply com-flex-1 com-min-w-0 com-overflow-auto com-flex com-justify-center md:com-sticky md:com-top-20 com-border-0 com-border-t md:com-border-t-0 md:com-border-l com-border-solid com-border-Bright-Gray com-py-4 md:com-py-0 com-px-0 md:com-px-4;
 
       .stage-container {
         @apply com-inline-block com-flex-none com-border com-border-solid com-border-Bright-Gray;
@@ -89,7 +99,7 @@
     }
 
     .style-panel {
-      @apply com-flex-none com-w-full md:com-w-72 com-border-0 com-border-t md:com-border-t-0 md:com-border-l com-border-solid com-border-Bright-Gray com-pt-4 md:com-pt-0 com-pl-0 md:com-pl-4;
+      @apply com-flex-none com-w-full md:com-w-72 md:com-sticky md:com-top-20 com-border-0 com-border-t md:com-border-t-0 md:com-border-l com-border-solid com-border-Bright-Gray com-pt-4 md:com-pt-0 com-pl-0 md:com-pl-4;
 
       .no-selection-hint {
         @apply com-text-sm com-text-Auro-Metal-Saurus com-m-0;
