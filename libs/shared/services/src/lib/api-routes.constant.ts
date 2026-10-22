@@ -1097,6 +1097,7 @@ export const API_ROUTES = {
     INDEX: 'api/v2/spam_detectors', //GET
     STATS: 'api/v2/spam_detectors/stats', //GET
     UPDATE: 'api/v2/spam_detectors', //PUT
+    BULK_UPDATE: 'api/v2/spam_detectors/bulk', //PUT
   },
 
   CAMPAIGNS: {

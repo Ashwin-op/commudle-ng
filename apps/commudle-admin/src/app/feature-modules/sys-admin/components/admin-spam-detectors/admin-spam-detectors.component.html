@@ -68,6 +68,30 @@
       </button>
     </div>
     <div class="filter-controls">
+      <div class="filter-field filter-field-search">
+        <label for="spam-search">Search</label>
+        <div class="search-input-wrapper">
+          <fa-icon class="search-icon" [icon]="icons.faMagnifyingGlass"></fa-icon>
+          <input
+            id="spam-search"
+            type="text"
+            autocomplete="off"
+            placeholder="Search by build name or user name"
+            aria-label="Search spam records by build name or user name"
+            [ngModel]="searchTerm"
+            (ngModelChange)="onSearchChange($event)"
+          />
+          <button
+            type="button"
+            class="search-clear"
+            *ngIf="searchTerm"
+            aria-label="Clear search"
+            (click)="clearSearch()"
+          >
+            <fa-icon [icon]="icons.faXmark"></fa-icon>
+          </button>
+        </div>
+      </div>
       <div class="filter-field">
         <label>Spam Detection</label>
         <select [(ngModel)]="isSpam" (change)="changeSpamDetectorType($event.target)">
@@ -87,6 +111,36 @@
     </div>
   </div>
 
+  <!-- Bulk Action Bar -->
+  <div class="bulk-bar" *ngIf="selectedCount > 0" role="region" aria-label="Bulk actions">
+    <div class="bulk-bar-info">
+      <span class="bulk-count">{{ selectedCount }} selected</span>
+      <button type="button" class="bulk-clear" (click)="clearSelection()">Clear selection</button>
+    </div>
+    <div class="bulk-bar-actions">
+      <button
+        nbButton
+        status="danger"
+        size="small"
+        [disabled]="isBulkUpdating"
+        (click)="openBulkDialog(true, bulkConfirmDialog)"
+      >
+        <fa-icon [icon]="icons.faTriangleExclamation"></fa-icon>
+        <span>Mark as Spam</span>
+      </button>
+      <button
+        nbButton
+        status="success"
+        size="small"
+        [disabled]="isBulkUpdating"
+        (click)="openBulkDialog(false, bulkConfirmDialog)"
+      >
+        <fa-icon [icon]="icons.faCircleCheck"></fa-icon>
+        <span>Mark as Safe</span>
+      </button>
+    </div>
+  </div>
+
   <!-- Data Table -->
   <div class="table-panel">
     <!-- Skeleton loader -->
@@ -100,8 +154,10 @@
           <div class="skeleton-th"></div>
           <div class="skeleton-th"></div>
           <div class="skeleton-th"></div>
+          <div class="skeleton-th"></div>
         </div>
         <div class="skeleton-row" *ngFor="let i of [1, 2, 3, 4, 5]">
+          <div class="skeleton-cell"><div class="skeleton-box"></div></div>
           <div class="skeleton-cell">
             <div class="skeleton-chip"></div>
             <div class="skeleton-line lg"></div>
@@ -151,6 +207,16 @@
       <table *ngIf="spamDetectors.length > 0">
         <thead>
           <tr>
+            <th class="select-col">
+              <input
+                type="checkbox"
+                class="row-checkbox"
+                aria-label="Select all records on this page"
+                [checked]="allOnPageSelected"
+                [indeterminate]="someOnPageSelected"
+                (change)="toggleSelectAll()"
+              />
+            </th>
             <th>Content</th>
             <th>Author</th>
             <th>Detection</th>
@@ -160,7 +226,22 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let spamDetector of spamDetectors" [class.row-flagged]="spamDetector.is_spam">
+          <tr
+            *ngFor="let spamDetector of spamDetectors"
+            [class.row-flagged]="spamDetector.is_spam"
+            [class.row-selected]="isSelected(spamDetector.id)"
+          >
+            <!-- Selection -->
+            <td class="select-col">
+              <input
+                type="checkbox"
+                class="row-checkbox"
+                [attr.aria-label]="'Select ' + spamDetector.community_build.name"
+                [checked]="isSelected(spamDetector.id)"
+                (change)="toggleSelection(spamDetector.id)"
+              />
+            </td>
+
             <!-- Content -->
             <td>
               <div class="content-info">
@@ -280,9 +361,17 @@
         class="mobile-card"
         *ngFor="let spamDetector of spamDetectors"
         [class.mobile-card-flagged]="spamDetector.is_spam"
+        [class.mobile-card-selected]="isSelected(spamDetector.id)"
       >
         <div class="mobile-card-header">
           <div class="mobile-card-meta">
+            <input
+              type="checkbox"
+              class="row-checkbox"
+              [attr.aria-label]="'Select ' + spamDetector.community_build.name"
+              [checked]="isSelected(spamDetector.id)"
+              (change)="toggleSelection(spamDetector.id)"
+            />
             <span class="content-type-chip">{{ spamDetector.content_type }}</span>
             <div
               class="detection-status"
@@ -377,6 +466,56 @@
     ></app-pagination>
   </div>
 </div>
+
+<!-- Bulk action confirmation -->
+<ng-template #bulkConfirmDialog let-data let-ref="dialogRef">
+  <com-card class="confirm-dialog-card">
+    <com-card-header class="confirm-dialog-header">
+      <span>Confirm Bulk Decision</span>
+      <button ghost nbButton size="small" shape="round" (click)="ref.close(false)">
+        <nb-icon icon="close"></nb-icon>
+      </button>
+    </com-card-header>
+    <com-card-body class="confirm-dialog-body">
+      <div class="confirm-dialog-icon-row">
+        <div
+          class="confirm-icon-circle"
+          [class.confirm-spam]="data.isSpamDecision"
+          [class.confirm-safe]="!data.isSpamDecision"
+        >
+          <fa-icon [icon]="data.isSpamDecision ? icons.faTriangleExclamation : icons.faCircleCheck"></fa-icon>
+        </div>
+      </div>
+      <p class="confirm-message">
+        <ng-container *ngIf="data.isSpamDecision">
+          Mark <strong>{{ data.count }}</strong> {{ data.count === 1 ? 'record' : 'records' }} as
+          <span class="text-spam">spam</span>?
+        </ng-container>
+        <ng-container *ngIf="!data.isSpamDecision">
+          Mark <strong>{{ data.count }}</strong> {{ data.count === 1 ? 'record' : 'records' }} as
+          <span class="text-safe">safe</span>?
+        </ng-container>
+      </p>
+      <p class="confirm-sub" *ngIf="data.isSpamDecision">
+        Every selected author will be blocked and their build taken down.
+      </p>
+      <p class="confirm-sub" *ngIf="!data.isSpamDecision">
+        Authors blocked by a previous spam decision will be unblocked and their builds restored.
+      </p>
+    </com-card-body>
+    <com-card-footer class="confirm-dialog-footer">
+      <button nbButton status="basic" size="small" (click)="ref.close(false)">Cancel</button>
+      <button
+        nbButton
+        [status]="data.isSpamDecision ? 'danger' : 'success'"
+        size="small"
+        (click)="bulkUpdateSpamDetectors(data.isSpamDecision); ref.close(true)"
+      >
+        {{ data.isSpamDecision ? 'Confirm Spam' : 'Confirm Safe' }}
+      </button>
+    </com-card-footer>
+  </com-card>
+</ng-template>
 
 <!--
   Confirmation popup removed: the decision dropdown now calls updateSpamDetector directly.

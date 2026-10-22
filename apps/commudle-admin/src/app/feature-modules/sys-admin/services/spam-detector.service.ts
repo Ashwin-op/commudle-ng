@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IPaginationCount, ISpamDetector } from '@commudle/shared-models';
+import { IPaginationCount, ISpamDetector, ISpamDetectorBulkUpdateResult } from '@commudle/shared-models';
 import { API_ROUTES, BaseApiService } from '@commudle/shared-services';
 import { Observable } from 'rxjs';
 
@@ -26,6 +26,7 @@ export class SpamDetectorService {
     count: number,
     isSpam: boolean | string,
     isSpamDecision: boolean | string,
+    search?: string,
   ): Observable<IPaginationCount<ISpamDetector>> {
     let params = new HttpParams().set('page', page).set('count', count.toString());
 
@@ -34,6 +35,9 @@ export class SpamDetectorService {
     }
     if (isSpamDecision === true || isSpamDecision === false) {
       params = params.set('is_spam_decision', isSpamDecision.toString());
+    }
+    if (search && search.trim().length > 0) {
+      params = params.set('search', search.trim());
     }
 
     return this.http.get<IPaginationCount<ISpamDetector>>(
@@ -49,5 +53,15 @@ export class SpamDetectorService {
       is_spam_decision: value,
       spam_detector_id: id,
     });
+  }
+
+  bulkUpdateSpamDetectors(isSpamDecision: boolean, ids: number[]): Observable<ISpamDetectorBulkUpdateResult> {
+    return this.http.put<ISpamDetectorBulkUpdateResult>(
+      this.apiRoutesService.getRoute(API_ROUTES.SPAM_DETECTOR.BULK_UPDATE),
+      {
+        is_spam_decision: isSpamDecision,
+        spam_detector_ids: ids,
+      },
+    );
   }
 }

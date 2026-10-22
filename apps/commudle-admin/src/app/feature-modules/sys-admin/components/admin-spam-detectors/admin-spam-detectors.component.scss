@@ -153,24 +153,116 @@
       @apply com-flex com-flex-col sm:com-flex-row com-gap-4 com-p-5;
 
       .filter-field {
-        @apply com-flex com-flex-col com-gap-1.5 com-w-full sm:com-min-w-[200px];
+        @apply com-flex com-flex-col com-gap-1.5 com-w-full sm:com-w-[168px] sm:com-flex-none;
 
         label {
           @apply com-text-Caption com-font-semibold com-text-gray-600 com-uppercase com-tracking-wider;
         }
 
+        &.filter-field-search {
+          @apply sm:com-w-auto sm:com-flex-1 sm:com-min-w-[260px];
+
+          .search-input-wrapper {
+            @apply com-relative com-flex com-items-center;
+
+            .search-icon {
+              @apply com-absolute com-left-3 com-text-gray-400 com-text-Caption com-pointer-events-none;
+            }
+
+            input {
+              @apply com-w-full com-text-Paragraph-2 com-text-Yankees-Blue com-pl-9 com-pr-9 com-py-2 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-Custom-Select-Background com-transition-colors com-duration-150;
+
+              &::placeholder {
+                @apply com-text-gray-500;
+              }
+
+              &:hover {
+                @apply com-border-gray-500;
+              }
+
+              &:focus {
+                @apply com-outline-none com-border-primary-400 com-ring-2 com-ring-primary-100;
+              }
+            }
+
+            .search-clear {
+              @apply com-absolute com-right-2 com-flex com-items-center com-justify-center com-w-6 com-h-6 com-rounded-full com-border-0 com-bg-transparent com-text-gray-400 com-cursor-pointer com-transition-colors com-duration-150;
+
+              &:hover {
+                @apply com-bg-gray-200 com-text-gray-600;
+              }
+
+              &:focus-visible {
+                @apply com-outline-none com-ring-2 com-ring-primary-200;
+              }
+            }
+          }
+        }
+
         select {
-          @apply com-text-Paragraph-2 com-px-3 com-py-2 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-cursor-pointer com-transition-colors com-duration-150;
+          @apply com-w-full com-text-Paragraph-2 com-text-Yankees-Blue com-px-3 com-py-2 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-Custom-Select-Background com-cursor-pointer com-transition-colors com-duration-150;
+
+          option {
+            @apply com-bg-Custom-Select-Background com-text-Yankees-Blue;
+          }
 
           &:hover {
             @apply com-border-gray-500;
           }
 
           &:focus {
-            @apply com-outline-none com-border-primary-400 com-bg-white com-ring-2 com-ring-primary-100;
+            @apply com-outline-none com-border-primary-400 com-ring-2 com-ring-primary-100;
           }
         }
       }
+    }
+  }
+
+  // ── Bulk Action Bar ──
+  .bulk-bar {
+    @apply com-flex com-flex-col sm:com-flex-row sm:com-items-center sm:com-justify-between com-gap-3 com-px-5 com-py-3 com-rounded-lg com-border com-border-solid com-border-primary-200 com-bg-primary-100;
+
+    .bulk-bar-info {
+      @apply com-flex com-items-center com-gap-3;
+
+      .bulk-count {
+        @apply com-text-Paragraph-2 com-font-semibold com-text-primary-700;
+      }
+
+      .bulk-clear {
+        @apply com-text-Caption com-font-medium com-text-primary-600 com-underline com-border-0 com-bg-transparent com-cursor-pointer com-p-0;
+
+        &:hover {
+          @apply com-text-primary-700;
+        }
+
+        &:focus-visible {
+          @apply com-outline-none com-ring-2 com-ring-primary-200;
+        }
+      }
+    }
+
+    .bulk-bar-actions {
+      @apply com-flex com-items-center com-gap-2;
+
+      button {
+        fa-icon {
+          @apply com-mr-1;
+        }
+      }
+    }
+  }
+
+  // ── Row selection ──
+  .select-col {
+    @apply com-w-8;
+  }
+
+  .row-checkbox {
+    @apply com-w-4 com-h-4 com-cursor-pointer com-align-middle com-flex-shrink-0 com-accent-primary-600;
+
+    &:focus-visible {
+      @apply com-outline-none com-ring-2 com-ring-primary-200;
     }
   }
 
@@ -207,6 +299,14 @@
             @apply com-border-l-4 com-border-l-red-400;
           }
 
+          &.row-selected {
+            @apply com-bg-primary-100;
+
+            &:hover {
+              @apply com-bg-primary-100;
+            }
+          }
+
           td {
             @apply com-px-5 com-py-4 com-align-middle;
           }
@@ -224,7 +324,7 @@
 
       .skeleton-header-row {
         @apply com-grid com-gap-4 com-px-5 com-py-3.5 com-bg-gray-50 com-border-0 com-border-b-2 com-border-solid com-border-Bright-Gray;
-        grid-template-columns: 2fr 1.5fr 1fr 1fr 1.5fr 1.2fr;
+        grid-template-columns: 32px 2fr 1.5fr 1fr 1fr 1.5fr 1.2fr;
 
         .skeleton-th {
           @apply com-h-3 com-rounded com-bg-gray-200;
@@ -234,7 +334,7 @@
 
       .skeleton-row {
         @apply com-grid com-gap-4 com-px-5 com-py-4 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
-        grid-template-columns: 2fr 1.5fr 1fr 1fr 1.5fr 1.2fr;
+        grid-template-columns: 32px 2fr 1.5fr 1fr 1fr 1.5fr 1.2fr;
         align-items: center;
 
         &:last-child {
@@ -244,8 +344,13 @@
         .skeleton-cell {
           @apply com-flex com-flex-col com-gap-2;
 
-          &:nth-child(2) {
+          &:nth-child(3) {
             @apply com-flex-row com-items-center com-gap-3;
+          }
+
+          .skeleton-box {
+            @apply com-w-4 com-h-4 com-rounded com-bg-gray-200;
+            animation: skeleton-pulse 1.6s ease-in-out infinite;
           }
 
           .skeleton-lines {
@@ -351,6 +456,10 @@
 
         &.mobile-card-flagged {
           @apply com-border-l-4 com-border-l-red-400;
+        }
+
+        &.mobile-card-selected {
+          @apply com-border-primary-400 com-ring-2 com-ring-primary-100;
         }
 
         .mobile-card-header {
@@ -537,10 +646,15 @@
 
   // ── Decision Dropdown ──
   .decision-dropdown {
-    @apply com-text-Paragraph-2 com-font-medium com-px-3 com-py-2 com-rounded-lg com-border-2 com-border-solid com-border-Bright-Gray com-bg-gray-50 com-cursor-pointer com-transition-all com-duration-150 com-min-w-[160px];
+    @apply com-text-Paragraph-2 com-text-Yankees-Blue com-font-medium com-px-3 com-py-2 com-rounded-lg com-border-2 com-border-solid com-border-Bright-Gray com-bg-Custom-Select-Background com-cursor-pointer com-transition-all com-duration-150 com-min-w-[160px];
+    color-scheme: light;
+
+    option {
+      @apply com-bg-Custom-Select-Background com-text-Yankees-Blue;
+    }
 
     &:hover {
-      @apply com-border-gray-500 com-bg-white;
+      @apply com-border-gray-500;
     }
 
     &:focus {
@@ -548,11 +662,19 @@
     }
 
     &.decision-spam {
-      @apply com-border-red-300 com-bg-red-100 com-text-red-700;
+      @apply com-border-red-300 com-bg-red-100 com-text-red-700 dark:com-border-red-800 dark:com-bg-red-950 dark:com-text-red-200;
+
+      option {
+        @apply com-text-red-700 dark:com-text-red-200;
+      }
     }
 
     &.decision-safe {
-      @apply com-border-green-300 com-bg-green-100 com-text-green-700;
+      @apply com-border-green-300 com-bg-green-100 com-text-green-700 dark:com-border-green-800 dark:com-bg-green-950 dark:com-text-green-200;
+
+      option {
+        @apply com-text-green-700 dark:com-text-green-200;
+      }
     }
   }
 
