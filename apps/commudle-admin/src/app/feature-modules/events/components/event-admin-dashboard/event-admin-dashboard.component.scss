@@ -1,5 +1,5 @@
 .event-overview {
-  @apply com-flex com-flex-col com-gap-3;
+  @apply com-flex com-flex-col com-gap-2;
 }
 
 .section-loader {
@@ -37,11 +37,11 @@
 }
 
 .section-header {
-  @apply com-flex com-items-center com-justify-between com-mb-1.5 com-m-0;
+  @apply com-flex com-items-center com-justify-between com-mb-2 com-m-0;
 }
 
 .section-header-post {
-  @apply com-flex md:com-flex-row com-flex-col md:com-items-center com-justify-between com-mb-1.5 com-m-0;
+  @apply com-flex md:com-flex-row com-flex-col md:com-items-center com-justify-between com-mb-2 com-m-0;
 }
 
 .view-all-link {
@@ -54,11 +54,11 @@
 
 // Row 1: Event Hero
 .event-hero {
-  @apply com-relative com-flex com-flex-col md:com-flex-row com-items-stretch com-overflow-hidden com-rounded-2xl com-border com-border-solid com-border-Bright-Gray com-bg-white com-p-3 com-gap-3 md:com-gap-4;
+  @apply com-relative com-flex com-flex-col md:com-flex-row com-items-stretch com-overflow-hidden com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-bg-white com-p-2.5 com-gap-2 md:com-gap-3;
   background: linear-gradient(135deg, #e8f0fe 0%, #f0e6ff 30%, #ffffff 60%, #e8f4ff 100%);
 
   .hero-banner {
-    @apply com-w-full md:com-w-44 com-h-40 md:com-h-auto com-rounded-xl com-overflow-hidden com-flex-shrink-0 md:com-self-stretch com-min-h-[120px];
+    @apply com-w-full md:com-w-32 com-h-28 md:com-h-auto com-rounded-xl com-overflow-hidden com-flex-shrink-0 md:com-self-stretch com-min-h-[120px];
 
     img {
       @apply com-w-full com-h-full com-object-cover;
@@ -66,13 +66,13 @@
   }
 
   .hero-content {
-    @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-gap-3;
+    @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-gap-2;
 
     .hero-top-row {
       @apply com-flex com-flex-col sm:com-flex-row com-items-start sm:com-items-center com-justify-between com-gap-2 sm:com-gap-3;
 
       .hero-info {
-        @apply com-flex com-flex-col com-gap-1.5 com-flex-1 com-min-w-0;
+        @apply com-flex com-flex-col com-gap-1 com-flex-1 com-min-w-0;
 
         .hero-title-row {
           @apply com-flex com-items-center com-gap-2;
@@ -176,7 +176,7 @@
       @apply com-grid com-grid-cols-2 md:com-flex md:com-flex-wrap com-gap-0 com-border-0 com-border-t com-border-solid com-border-Bright-Gray com-pt-2;
 
       .highlight-stat {
-        @apply com-flex com-items-center com-gap-2.5 com-flex-1 com-py-2 md:com-py-1 com-px-2 md:com-px-3 com-border-0 md:com-border-r com-border-solid com-border-Bright-Gray;
+        @apply com-flex com-items-center com-gap-2 com-flex-1 com-py-1 com-px-2 md:com-px-3 com-border-0 md:com-border-r com-border-solid com-border-Bright-Gray;
 
         &:first-child {
           @apply com-pl-0;
@@ -187,7 +187,7 @@
         }
 
         .highlight-stat-icon {
-          @apply com-w-8 com-h-8 com-rounded-full com-flex com-items-center com-justify-center com-text-xs com-shrink-0;
+          @apply com-w-7 com-h-7 com-rounded-full com-flex com-items-center com-justify-center com-text-xs com-shrink-0;
 
           &.registrations-icon {
             @apply com-bg-blue-100 com-text-blue-600;
@@ -269,12 +269,12 @@
 
 // Row 2: Three-column
 .three-col-row {
-  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-3;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-2;
 
   .attention-card,
   .snapshot-card,
   .activity-card {
-    @apply com-rounded-xl com-p-3 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+    @apply com-rounded-xl com-p-2.5 com-bg-white com-border com-border-solid com-border-Bright-Gray;
   }
 
   .activity-card {
@@ -289,11 +289,11 @@
     @apply com-m-0;
 
     .attention-empty {
-      @apply com-py-4 com-text-center com-text-sm com-text-gray-500 com-m-0;
+      @apply com-py-2 com-text-center com-text-xs com-text-gray-500 com-m-0;
     }
 
     .attention-item {
-      @apply com-flex com-items-center com-gap-3 com-py-1.5 com-px-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+      @apply com-flex com-items-center com-gap-2 com-py-1 com-px-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
 
       &:last-child {
         @apply com-border-b-0;
@@ -335,13 +335,13 @@
 
   // Event Snapshot
   .snapshot-grid {
-    @apply com-grid com-grid-cols-2 com-gap-3 com-m-0;
+    @apply com-grid com-grid-cols-2 com-gap-2 com-m-0;
 
     .snapshot-stat {
-      @apply com-flex com-flex-col com-items-center com-gap-1 com-p-3 com-rounded-xl com-border com-border-solid com-border-Bright-Gray;
+      @apply com-flex com-flex-col com-items-center com-gap-1 com-p-3 com-rounded-lg com-border com-border-solid com-border-Bright-Gray;
 
       .snapshot-stat-icon {
-        @apply com-text-xl;
+        @apply com-text-sm;
 
         &.registrations-icon {
           @apply com-text-blue-500;
@@ -361,21 +361,21 @@
       }
 
       .snapshot-stat-label {
-        @apply com-text-xs com-text-Cadet-Grey com-font-medium;
+        @apply com-text-sm com-text-Cadet-Grey com-font-medium;
       }
 
       .snapshot-stat-value {
-        @apply com-text-xl com-font-medium com-text-Yankees-Blue;
+        @apply com-text-lg com-font-semibold com-leading-tight com-text-Yankees-Blue;
       }
 
       .snapshot-stat-sub {
-        @apply com-text-xs com-text-Cadet-Grey com-text-center;
+        @apply com-text-xs com-text-Cadet-Grey;
       }
     }
   }
 
   .snapshot-empty {
-    @apply com-py-4 com-text-center com-text-sm com-text-gray-500 com-m-0;
+    @apply com-py-2 com-text-center com-text-xs com-text-gray-500 com-m-0;
   }
 
   // Recent Activity
@@ -383,14 +383,14 @@
     @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col;
 
     .activity-item {
-      @apply com-flex com-items-start com-gap-3 com-py-1.5 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+      @apply com-flex com-items-start com-gap-2 com-py-1 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
       &:last-child {
         @apply com-border-b-0;
       }
 
       .activity-avatar {
-        @apply com-w-8 com-h-8 com-rounded-full com-flex com-items-center com-justify-center com-text-xs com-font-medium com-shrink-0 com-text-white;
+        @apply com-w-6 com-h-6 com-rounded-full com-flex com-items-center com-justify-center com-text-10px com-font-medium com-shrink-0 com-text-white;
 
         &.members-avatar {
           @apply com-bg-blue-500;
@@ -438,11 +438,11 @@
 
 // Row 3: Audience + Post-Event
 .two-col-row {
-  @apply com-grid com-grid-cols-1 lg:com-grid-cols-2 com-gap-3;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-2 com-gap-2;
 
   .audience-card,
   .post-event-card {
-    @apply com-rounded-xl com-p-3 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+    @apply com-rounded-xl com-p-2.5 com-bg-white com-border com-border-solid com-border-Bright-Gray;
   }
 
   .post-event-card {
@@ -452,13 +452,13 @@
 }
 
 .audience-content {
-  @apply com-grid com-grid-cols-1 md:com-grid-cols-2 md:com-gap-6 com-gap-4 com-mt-2 com-items-start;
+  @apply com-grid com-grid-cols-1 md:com-grid-cols-2 md:com-gap-6 com-gap-3 com-mt-3 com-items-start;
 
   .audience-chart {
     @apply com-flex com-flex-col com-items-center com-gap-3;
 
     .chart-donut {
-      @apply com-w-24 com-h-24;
+      @apply com-w-20 com-h-20;
 
       .chart-donut-track {
         fill: none;
@@ -496,10 +496,10 @@
   }
 
   .audience-stats {
-    @apply com-flex com-flex-col com-gap-3 com-min-w-0;
+    @apply com-flex com-flex-col com-gap-2 com-min-w-0;
 
     .audience-col {
-      @apply com-flex com-flex-col com-min-w-0 com-bg-gray-50 com-rounded-lg com-p-2.5;
+      @apply com-flex com-flex-col com-min-w-0 com-bg-gray-50 com-rounded-lg com-p-2;
 
       .audience-col-heading {
         @apply com-m-0 com-text-xs com-font-medium com-text-Yankees-Blue com-mb-2;
@@ -537,7 +537,7 @@
   }
 
   .post-event-content {
-    @apply com-flex com-flex-col sm:com-flex-row com-gap-3 com-mt-2 com-items-start;
+    @apply com-flex com-flex-col sm:com-flex-row com-gap-2 com-mt-3 com-items-start;
 
     .post-event-hero {
       @apply com-flex com-flex-col com-gap-1 com-shrink-0 com-p-2.5;
@@ -551,19 +551,19 @@
       }
 
       .post-event-link {
-        @apply com-text-xs com-font-medium com-text-primary-500 com-mt-2 com-cursor-pointer com-no-underline;
+        @apply com-text-xs com-font-medium com-text-primary-500 com-mt-1 com-cursor-pointer com-no-underline;
         @apply hover:com-text-primary-700;
       }
     }
 
     .post-event-stats {
-      @apply com-grid com-grid-cols-2 sm:com-grid-cols-3 com-gap-3 com-flex-1 com-w-full;
+      @apply com-grid com-grid-cols-2 sm:com-grid-cols-3 com-gap-2 com-flex-1 com-w-full;
 
       .post-stat {
-        @apply com-flex com-flex-col com-items-center com-justify-center com-gap-1 com-py-3 com-px-2.5 com-min-w-0 com-bg-white com-rounded-xl com-border com-border-solid com-border-Bright-Gray;
+        @apply com-flex com-flex-col com-items-center com-justify-center com-gap-0.5 com-py-2 com-px-2 com-min-w-0 com-bg-white com-rounded-lg com-border com-border-solid com-border-Bright-Gray;
 
         .post-stat-value {
-          @apply com-text-xl com-font-semibold com-text-Yankees-Blue com-leading-none;
+          @apply com-text-lg com-font-semibold com-text-Yankees-Blue com-leading-none;
         }
 
         .post-stat-label {
@@ -582,7 +582,7 @@
   }
 
   .post-event-charts {
-    @apply com-grid com-grid-cols-1 sm:com-grid-cols-2 md:com-gap-6 com-gap-4 com-mt-3;
+    @apply com-grid com-grid-cols-1 sm:com-grid-cols-2 md:com-gap-6 com-gap-3 com-mt-3;
 
     .post-event-chart {
       @apply com-flex com-flex-col com-gap-2;
@@ -628,24 +628,24 @@
 
 // Row 4: Live Visitors + Top Pages
 .live-traffic-row {
-  @apply com-grid com-grid-cols-1 lg:com-grid-cols-2 com-gap-3;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-2 com-gap-2;
 
   .live-visitors-card,
   .top-list-card {
-    @apply com-rounded-xl com-p-3 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+    @apply com-rounded-xl com-p-2.5 com-bg-white com-border com-border-solid com-border-Bright-Gray;
   }
 
   .live-visitors-body {
-    @apply com-flex com-flex-col com-gap-3 com-mt-2;
+    @apply com-flex com-flex-col com-gap-3;
 
     .live-visitors-counts {
-      @apply com-flex com-gap-6;
+      @apply com-flex com-gap-4;
 
       .live-count {
         @apply com-flex com-flex-col com-gap-1;
 
         .live-count-value {
-          @apply com-text-2xl com-font-medium com-text-Yankees-Blue com-leading-none;
+          @apply com-text-lg com-font-semibold com-text-Yankees-Blue com-leading-none;
         }
 
         .live-count-label {
@@ -660,13 +660,13 @@
   }
 
   .top-list {
-    @apply com-m-0 com-p-0 com-mt-2 com-list-none com-flex com-flex-col com-gap-2;
+    @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-2;
 
     .top-list-item {
       @apply com-flex com-items-center com-gap-2 com-text-xs com-text-Yankees-Blue;
 
       .top-list-name {
-        @apply com-w-32 com-shrink-0 com-truncate com-text-sm com-text-Yankees-Blue com-no-underline;
+        @apply com-w-28 com-shrink-0 com-truncate com-text-sm com-text-Yankees-Blue com-no-underline;
 
         &:hover {
           @apply com-text-primary-600 com-underline;
@@ -674,7 +674,7 @@
       }
 
       .top-list-track {
-        @apply com-h-1.5 com-w-20 com-shrink-0 com-rounded-full com-bg-gray-100 com-overflow-hidden;
+        @apply com-h-1 com-flex-1 com-shrink-0 com-rounded-full com-bg-gray-100 com-overflow-hidden;
       }
 
       .top-list-bar {
@@ -692,7 +692,7 @@
     }
 
     .top-list-empty {
-      @apply com-py-4 com-text-sm com-text-gray-500;
+      @apply com-py-2 com-text-xs com-text-gray-500;
     }
   }
 }
