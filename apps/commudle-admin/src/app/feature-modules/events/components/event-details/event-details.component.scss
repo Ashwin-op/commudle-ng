@@ -1,7 +1,10 @@
 com-card {
   @apply com-mx-0;
-}
 
+  h6 {
+    @apply com-m-0;
+  }
+}
 .event-stats {
   @apply com-min-h-[120px];
   .stats {
