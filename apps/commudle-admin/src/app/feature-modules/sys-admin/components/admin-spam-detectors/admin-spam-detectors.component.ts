@@ -221,15 +221,15 @@ export class AdminSpamDetectorsComponent implements OnInit, OnDestroy {
     });
   }
 
-  changeSpamDetectorType(data: EventTarget) {
+  changeSpamDetectorType(value: boolean | null) {
     this.page = 1;
-    this.isSpam = (data as HTMLSelectElement).value === 'true';
+    this.isSpam = value ?? null;
     this.getSpamDetectorsData();
   }
 
-  changeSpamDecisionType(data: EventTarget) {
+  changeSpamDecisionType(value: boolean | null) {
     this.page = 1;
-    this.isSpamDecision = (data as HTMLSelectElement).value === 'true';
+    this.isSpamDecision = value ?? null;
     this.getSpamDetectorsData();
   }
 
