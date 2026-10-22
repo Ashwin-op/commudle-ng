@@ -79,6 +79,9 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   // Needs Attention -- GET .../needs_attention
   needsAttention: ICommunityGroupDashboardNeedsAttention;
   isNeedsAttentionLoading = false;
+  readonly needsAttentionCount = 10;
+  communityProfilesPage = 1;
+  surveysPage = 1;
 
   // Upcoming Schedule -- GET .../upcoming_schedule (non-paginated array)
   upcomingSchedule: ICommunityGroupDashboardScheduleItem[] = [];
@@ -165,16 +168,33 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   loadNeedsAttention(): void {
     this.isNeedsAttentionLoading = true;
     this.subscriptions.push(
-      this.dashboardCommunityGroupsService.needsAttention(this.communityGroup.id).subscribe({
-        next: (data) => {
-          this.needsAttention = data;
-          this.isNeedsAttentionLoading = false;
-        },
-        error: () => {
-          this.isNeedsAttentionLoading = false;
-        },
-      }),
+      this.dashboardCommunityGroupsService
+        .needsAttention(this.communityGroup.id, {
+          community_profiles_page: this.communityProfilesPage,
+          community_profiles_count: this.needsAttentionCount,
+          surveys_page: this.surveysPage,
+          surveys_count: this.needsAttentionCount,
+        })
+        .subscribe({
+          next: (data) => {
+            this.needsAttention = data;
+            this.isNeedsAttentionLoading = false;
+          },
+          error: () => {
+            this.isNeedsAttentionLoading = false;
+          },
+        }),
     );
+  }
+
+  onCommunityProfilesPageChange(page: number): void {
+    this.communityProfilesPage = page;
+    this.loadNeedsAttention();
+  }
+
+  onSurveysPageChange(page: number): void {
+    this.surveysPage = page;
+    this.loadNeedsAttention();
   }
 
   loadUpcomingSchedule(): void {

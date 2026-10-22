@@ -107,17 +107,29 @@
       <app-loading-spinner *ngIf="isNeedsAttentionLoading" class="section-loader"></app-loading-spinner>
       <div class="attention-list" *ngIf="!isNeedsAttentionLoading">
         <a
-          *ngFor="let profile of needsAttention?.community_profiles"
+          *ngFor="let profile of needsAttention?.community_profiles?.values"
           [routerLink]="['/admin', 'orgs', communityGroup.slug, 'communities']"
           class="attention-item"
         >
           <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
           <div class="attention-content">
-            <span class="attention-title">{{ profile.name || 'Community' }}</span>
-            <span class="attention-sub">Community profile is incomplete</span>
+            <span class="attention-title">{{ profile.community_name }}</span>
+            <span class="attention-sub">
+              Missing
+              <ng-container *ngFor="let field of profile.missing_fields; let last = last"
+                >{{ field | capitalizeAndRemoveUnderscore }}<span *ngIf="!last">,&nbsp;</span></ng-container
+              >
+            </span>
           </div>
           <span class="attention-arrow">›</span>
         </a>
+        <commudle-pagination-compact
+          *ngIf="needsAttention?.community_profiles?.total > needsAttention?.community_profiles?.count"
+          [page]="communityProfilesPage"
+          [count]="needsAttention.community_profiles.count"
+          [total]="needsAttention.community_profiles.total"
+          (pageChange)="onCommunityProfilesPageChange($event)"
+        ></commudle-pagination-compact>
 
         <a
           *ngIf="needsAttention?.pending_admin_invitations?.count"
@@ -138,23 +150,30 @@
         </a>
 
         <a
-          *ngFor="let survey of needsAttention?.surveys"
+          *ngFor="let survey of needsAttention?.surveys?.values"
           [routerLink]="['/admin', 'orgs', communityGroup.slug, 'surveys']"
           class="attention-item"
         >
           <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
           <div class="attention-content">
-            <span class="attention-title">{{ survey.name || 'Survey' }}</span>
+            <span class="attention-title">Survey needs attention</span>
             <span class="attention-sub">Response threshold reached</span>
           </div>
           <span class="attention-arrow">›</span>
         </a>
+        <commudle-pagination-compact
+          *ngIf="needsAttention?.surveys?.total > needsAttention?.surveys?.count"
+          [page]="surveysPage"
+          [count]="needsAttention.surveys.count"
+          [total]="needsAttention.surveys.total"
+          (pageChange)="onSurveysPageChange($event)"
+        ></commudle-pagination-compact>
 
         <p
           *ngIf="
-            !needsAttention?.community_profiles?.length &&
+            !needsAttention?.community_profiles?.total &&
             !needsAttention?.pending_admin_invitations?.count &&
-            !needsAttention?.surveys?.length
+            !needsAttention?.surveys?.total
           "
           class="attention-empty"
         >

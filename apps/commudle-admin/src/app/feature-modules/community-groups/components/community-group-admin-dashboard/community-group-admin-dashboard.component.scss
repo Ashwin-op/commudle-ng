@@ -1,9 +1,9 @@
 .org-overview {
-  @apply com-flex com-flex-col com-gap-4;
+  @apply com-flex com-flex-col com-gap-2;
 }
 
 .section-loader {
-  @apply com-flex com-justify-center com-w-full com-py-4;
+  @apply com-flex com-justify-center com-w-full com-py-3;
 }
 
 .section-heading {
@@ -43,16 +43,16 @@
 
 // Row 1: Organization Hero
 .org-hero {
-  @apply com-relative com-overflow-hidden com-rounded-2xl com-p-4 sm:com-p-6 com-flex com-flex-col com-gap-5 com-text-tWhite;
+  @apply com-relative com-overflow-hidden com-rounded-xl com-p-3 com-flex com-flex-col com-gap-2 com-text-tWhite;
 
   .hero-top {
-    @apply com-flex com-flex-col sm:com-flex-row com-items-start sm:com-items-center com-justify-between com-gap-3;
+    @apply com-flex com-flex-col sm:com-flex-row com-items-start sm:com-items-center com-justify-between com-gap-1.5;
 
     .hero-identity {
-      @apply com-flex com-items-center com-gap-3 com-min-w-0;
+      @apply com-flex com-items-center com-gap-2 com-min-w-0;
 
       .hero-logo {
-        @apply com-w-[80px] com-h-[80px] com-rounded-xl com-overflow-hidden com-flex-shrink-0 com-bg-white com-shadow-md;
+        @apply com-w-12 com-h-12 com-rounded-lg com-overflow-hidden com-flex-shrink-0 com-bg-white com-shadow-md;
 
         commudle-banner-image,
         img {
@@ -61,24 +61,24 @@
       }
 
       .hero-info {
-        @apply com-flex com-flex-col com-gap-0.5 com-min-w-0;
+        @apply com-flex com-flex-col com-gap-0 com-min-w-0;
 
         .hero-eyebrow {
-          @apply com-text-xs com-text-tWhite com-font-semibold com-uppercase com-tracking-widest com-opacity-80;
+          @apply com-text-10px com-text-tWhite com-font-semibold com-uppercase com-tracking-widest com-opacity-80;
         }
 
         .hero-name {
-          @apply com-m-0 com-text-2xl com-font-bold com-text-tWhite com-truncate;
+          @apply com-m-0 com-text-lg com-font-bold com-text-tWhite com-truncate;
         }
 
         .hero-sub {
-          @apply com-m-0 com-text-sm com-text-tWhite com-opacity-90 com-line-clamp-1;
+          @apply com-m-0 com-text-xs com-text-tWhite com-opacity-90 com-line-clamp-1;
         }
       }
     }
 
     .hero-public-link {
-      @apply com-inline-flex com-items-center com-gap-1 com-flex-shrink-0 com-no-underline;
+      @apply com-inline-flex com-items-center com-gap-1 com-flex-shrink-0 com-no-underline com-text-xs;
 
       .hero-external-icon {
         @apply com-text-xs;
@@ -90,10 +90,10 @@
     @apply com-grid com-grid-cols-2 md:com-grid-cols-3 lg:com-grid-cols-6 com-gap-3 com-m-0 com-p-0 com-list-none;
 
     .pulse-stat {
-      @apply com-flex com-items-start com-gap-3 com-p-3 com-rounded-xl com-bg-white com-border com-border-solid com-border-Bright-Gray;
+      @apply com-flex com-items-start com-gap-1.5 com-p-2 com-rounded-lg com-bg-white com-border com-border-solid com-border-Bright-Gray;
 
       .pulse-icon {
-        @apply com-w-11 com-h-11 com-rounded-xl com-flex com-items-center com-justify-center com-text-lg com-shrink-0;
+        @apply com-w-7 com-h-7 com-rounded-md com-flex com-items-center com-justify-center com-text-sm com-shrink-0;
 
         &.communities-icon {
           @apply com-bg-blue-100 com-text-blue-600;
@@ -128,7 +128,7 @@
         }
 
         .pulse-value {
-          @apply com-text-2xl com-font-semibold com-text-Yankees-Blue com-leading-tight;
+          @apply com-text-base com-font-semibold com-text-Yankees-Blue com-leading-tight;
         }
 
         .pulse-growth {
@@ -152,12 +152,12 @@
 .email-card,
 .channel-card,
 .quick-actions-card {
-  @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+  @apply com-rounded-xl com-p-2.5 com-bg-white com-border com-border-solid com-border-Bright-Gray;
 }
 
 // Row 2: Three-column
 .three-col-row {
-  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-4;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-2;
 
   .activity-card {
     @apply com-flex com-flex-col;
@@ -171,7 +171,7 @@
     @apply com-m-0;
 
     .attention-item {
-      @apply com-flex com-items-center com-gap-3 com-py-2 com-px-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+      @apply com-flex com-items-center com-gap-2 com-p-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
 
       &:last-child {
         @apply com-border-b-0;
@@ -193,7 +193,7 @@
         }
 
         .attention-sub {
-          @apply com-text-xs com-text-gray-500;
+          @apply com-text-xs com-text-gray-500 com-line-clamp-2;
         }
       }
 
@@ -203,12 +203,12 @@
     }
 
     .attention-empty {
-      @apply com-py-4 com-text-sm com-text-gray-500 com-m-0;
+      @apply com-py-2 com-text-xs com-text-gray-500 com-m-0;
     }
   }
 
   .schedule-timeline {
-    @apply com-mt-3 com-flex com-flex-col com-gap-2 com-m-0 com-p-0 com-list-none;
+    @apply com-flex com-flex-col com-gap-2 com-m-0 com-p-0 com-list-none;
 
     .timeline-item {
       @apply com-flex com-items-center com-gap-3;
@@ -243,7 +243,7 @@
     }
 
     .timeline-empty {
-      @apply com-py-4 com-text-sm com-text-gray-500;
+      @apply com-py-2 com-text-xs com-text-gray-500;
     }
   }
 
@@ -251,14 +251,14 @@
     @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col;
 
     .activity-item {
-      @apply com-flex com-items-start com-gap-3 com-py-2 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+      @apply com-flex com-items-start com-gap-2 com-py-1 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
       &:last-child {
         @apply com-border-b-0;
       }
 
       .activity-avatar {
-        @apply com-w-8 com-h-8 com-rounded-full com-flex com-items-center com-justify-center com-text-xs com-font-medium com-shrink-0 com-text-white;
+        @apply com-w-6 com-h-6 com-rounded-full com-flex com-items-center com-justify-center com-text-10px com-font-medium com-shrink-0 com-text-white;
 
         &.members-avatar {
           @apply com-bg-blue-500;
@@ -303,26 +303,26 @@
     }
 
     .activity-empty {
-      @apply com-py-4 com-text-sm com-text-gray-500;
+      @apply com-py-2 com-text-xs com-text-gray-500;
     }
   }
 }
 
 // Row 3: Insights
 .insights-row {
-  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-4;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-2;
 
   .footprint-content {
-    @apply com-mt-3;
+    @apply com-mt-2;
 
     .footprint-stats {
-      @apply com-grid com-grid-cols-2 com-gap-3 com-m-0 com-p-0 com-list-none;
+      @apply com-grid com-grid-cols-2 com-gap-2 com-m-0 com-p-0 com-list-none;
 
       .footprint-stat {
-        @apply com-flex com-flex-col com-gap-1 com-p-3 com-rounded-xl com-border com-border-solid com-border-Bright-Gray;
+        @apply com-flex com-flex-col com-gap-0.5 com-p-2.5 com-rounded-lg com-border com-border-solid com-border-Bright-Gray;
 
         .footprint-value {
-          @apply com-text-2xl com-font-medium com-text-Yankees-Blue com-leading-none;
+          @apply com-text-lg com-font-semibold com-text-Yankees-Blue com-leading-none;
         }
 
         .footprint-label {
@@ -332,7 +332,7 @@
     }
 
     .footprint-map-heading {
-      @apply com-m-0 com-mt-4 com-mb-2 com-text-xs com-font-medium com-text-Yankees-Blue;
+      @apply com-m-0 com-mt-3 com-mb-1.5 com-text-xs com-font-medium com-text-Yankees-Blue;
     }
 
     .footprint-map {
@@ -344,12 +344,12 @@
     }
 
     .footprint-location-empty {
-      @apply com-py-4 com-text-sm com-text-gray-500;
+      @apply com-py-2 com-text-xs com-text-gray-500;
     }
   }
 
   .demographics-content {
-    @apply com-grid com-grid-cols-2 com-gap-4 com-mt-3;
+    @apply com-grid com-grid-cols-2 com-gap-3 com-mt-2;
 
     .demographics-col {
       @apply com-flex com-flex-col com-min-w-0;
@@ -433,13 +433,13 @@
   }
 
   .email-stats {
-    @apply com-grid com-grid-cols-2 com-gap-3 com-mt-3 com-m-0 com-p-0 com-list-none;
+    @apply com-grid com-grid-cols-2 com-gap-2 com-mt-2 com-m-0 com-p-0 com-list-none;
 
     .email-stat {
-      @apply com-flex com-flex-col com-gap-1 com-p-3 com-rounded-xl com-border com-border-solid com-border-Bright-Gray;
+      @apply com-flex com-flex-col com-gap-0.5 com-p-2.5 com-rounded-lg com-border com-border-solid com-border-Bright-Gray;
 
       .email-value {
-        @apply com-text-xl com-font-semibold com-text-Yankees-Blue com-leading-none;
+        @apply com-text-lg com-font-semibold com-text-Yankees-Blue com-leading-none;
       }
 
       .email-label {
@@ -463,13 +463,13 @@
 
 // Row 4: Latest activity + Quick actions
 .activity-actions-row {
-  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-4;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-2;
 
   .channel-list {
     @apply com-m-0 com-p-0 com-mt-2 com-list-none com-flex com-flex-col;
 
     .channel-item {
-      @apply com-flex com-flex-col com-gap-0.5 com-py-2 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+      @apply com-flex com-flex-col com-gap-0.5 com-py-1 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
       &:last-child {
         @apply com-border-b-0;
@@ -501,15 +501,15 @@
     }
 
     .channel-empty {
-      @apply com-py-4 com-text-sm com-text-gray-500;
+      @apply com-py-2 com-text-xs com-text-gray-500;
     }
   }
 
   .actions-grid {
-    @apply com-grid com-grid-cols-2 com-gap-2 com-mt-3;
+    @apply com-grid com-grid-cols-2 com-gap-2 com-mt-2;
 
     .action-card {
-      @apply com-flex com-flex-col com-items-center com-gap-2 com-p-3 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-no-underline com-transition-all com-duration-200 com-cursor-pointer;
+      @apply com-flex com-flex-col com-items-center com-gap-1.5 com-p-2.5 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-no-underline com-transition-all com-duration-200 com-cursor-pointer;
 
       &:hover {
         @apply com-border-primary-300 com-bg-blue-50;

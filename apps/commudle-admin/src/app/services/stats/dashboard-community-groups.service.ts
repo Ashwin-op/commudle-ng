@@ -30,8 +30,21 @@ export class DashboardCommunityGroupsService {
     );
   }
 
-  needsAttention(communityGroupId): Observable<ICommunityGroupDashboardNeedsAttention> {
-    const params = new HttpParams().set('community_group_id', communityGroupId);
+  needsAttention(
+    communityGroupId,
+    pages: {
+      community_profiles_page?: number;
+      community_profiles_count?: number;
+      surveys_page?: number;
+      surveys_count?: number;
+    } = {},
+  ): Observable<ICommunityGroupDashboardNeedsAttention> {
+    let params = new HttpParams().set('community_group_id', communityGroupId);
+    Object.entries(pages).forEach(([key, value]) => {
+      if (value != null) {
+        params = params.set(key, value);
+      }
+    });
     return this.http.get<ICommunityGroupDashboardNeedsAttention>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITY_GROUPS.NEEDS_ATTENTION),
       { params },

@@ -3,6 +3,7 @@ import {
   IDashboardDistributionItem,
   IDashboardMetricWithGrowth,
 } from './dashboard-common.model';
+import { IPaginationCount } from './pagination.model';
 
 // pulse
 export interface ICommunityGroupDashboardPulse {
@@ -25,10 +26,18 @@ export interface ICommunityGroupDashboardScheduleItem {
 }
 
 // needs_attention
+export interface ICommunityGroupDashboardIncompleteProfile {
+  community_id: number;
+  community_name: string;
+  missing_fields: string[];
+}
+
 export interface ICommunityGroupDashboardNeedsAttention {
-  community_profiles: any[];
+  community_profiles: IPaginationCount<ICommunityGroupDashboardIncompleteProfile>;
   pending_admin_invitations: { count: number };
-  surveys: any[];
+  // Shape unconfirmed -- the sample payload's surveys list was empty. The community
+  // dashboard's equivalent needs_attention.surveys is `any` for the same reason.
+  surveys: IPaginationCount<any>;
 }
 
 // recent_activity -> data.values (paginated)
