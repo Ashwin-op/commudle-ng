@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import {
   faCircleInfo,
   faArrowLeft,
+  faGauge,
   faPenNib,
   faCalendarDay,
   faStar,
@@ -53,6 +54,7 @@ export class EventDashboardComponent implements OnInit, OnDestroy {
   icons = {
     faCircleInfo,
     faArrowLeft,
+    faGauge,
     faPenNib,
     faCalendarDay,
     faStar,

@@ -1,5 +1,5 @@
 .dashboard {
-  @apply com-flex com-flex-col com-gap-5 com-p-4 lg:com-p-0;
+  @apply com-flex com-flex-col com-gap-5;
 }
 
 .section-heading {
@@ -175,7 +175,7 @@
   .attention-card,
   .schedule-card,
   .activity-card {
-    @apply com-bg-white com-rounded-xl com-p-4 com-border com-border-solid com-border-Bright-Gray;
+    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray;
   }
 
   .attention-list {
@@ -213,7 +213,7 @@
       }
 
       .attention-action {
-        @apply com-text-xs com-font-medium com-text-primary-500 com-shrink-0 com-px-2 com-py-1 com-rounded com-bg-primary-50;
+        @apply com-text-xs com-font-medium com-text-primary-500 com-shrink-0 com-px-2 com-py-1 com-rounded com-bg-blue-50;
       }
 
       .attention-arrow {

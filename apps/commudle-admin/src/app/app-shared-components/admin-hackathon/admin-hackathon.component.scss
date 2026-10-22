@@ -1,5 +1,5 @@
 .admin-hackathon-container {
-  @apply com-w-full;
+  @apply com-w-full com-bg-white com-rounded-lg com-p-5;
 
   .header-section {
     @apply com-flex com-justify-between com-items-center com-mb-6 md:com-flex-row com-flex-col com-gap-4;
@@ -57,15 +57,19 @@
             &:nth-child(1) {
               @apply com-w-[40%];
             }
+
             &:nth-child(2) {
               @apply com-w-[18%];
             }
+
             &:nth-child(3) {
               @apply com-w-[18%];
             }
+
             &:nth-child(4) {
               @apply com-w-[10%];
             }
+
             &:nth-child(5) {
               @apply com-w-[14%];
             }

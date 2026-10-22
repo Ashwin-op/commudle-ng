@@ -1,0 +1,163 @@
+<div class="event-overview" *ngIf="event">
+  <!-- Row 1: Event Hero -->
+  <section class="event-hero">
+    <div class="hero-top">
+      <div class="hero-banner" [ngClass]="{ 'no-image': !event.header_image_path }">
+        <img *ngIf="event.header_image_path" [src]="event.header_image_path" [alt]="event.name" />
+        <nb-icon *ngIf="!event.header_image_path" icon="image-outline"></nb-icon>
+      </div>
+      <div class="hero-info">
+        <div class="hero-title-row">
+          <h1 class="hero-event-name">{{ event.name }}</h1>
+          <a [routerLink]="['edit']" class="hero-edit-btn">
+            <nb-icon icon="edit-outline"></nb-icon>
+          </a>
+        </div>
+        <div class="hero-meta">
+          <span class="hero-status-badge" [ngClass]="{ 'status-live': isEventLive }">
+            {{ event.event_status?.name || 'Draft' }}
+          </span>
+          <span class="hero-meta-item" *ngIf="daysUntilEvent">{{ daysUntilEvent }}</span>
+          <span class="hero-meta-dot" *ngIf="formattedDate">·</span>
+          <span class="hero-meta-item" *ngIf="formattedDate">{{ formattedDate }}</span>
+          <span class="hero-meta-dot" *ngIf="formattedTime">·</span>
+          <span class="hero-meta-item" *ngIf="formattedTime">{{ formattedTime }}</span>
+        </div>
+        <div class="hero-location">
+          <span *ngIf="event.event_type"
+            >📍 {{ event.event_type === 'Online' ? 'Online Event' : event.location || 'Location TBD' }}</span
+          >
+          <span class="hero-divider" *ngIf="event.event_type">|</span>
+          <a
+            [routerLink]="['/communities', community.slug, 'events', event.slug]"
+            target="_blank"
+            class="hero-public-link"
+          >
+            🔗 Public Event Page
+            <nb-icon icon="external-link-outline"></nb-icon>
+          </a>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <button comButton status="basic" size="small" shape="semi-round" outline (click)="copyTextToClipboard()">
+          <fa-icon [icon]="icons.faArrowTrendUp"></fa-icon> &nbsp;Share Event
+        </button>
+        <a [routerLink]="['edit']" comButton status="primary" size="small" shape="semi-round">
+          <nb-icon icon="edit-outline"></nb-icon> &nbsp;Edit Event
+        </a>
+      </div>
+    </div>
+
+    <!-- Highlight stats bar -->
+    <div class="hero-highlights">
+      <div class="highlight-stat">
+        <div class="highlight-stat-icon registrations-icon">
+          <fa-icon [icon]="icons.faUsers"></fa-icon>
+        </div>
+        <div class="highlight-stat-info">
+          <span class="highlight-stat-value">{{ event.registrations_count || 0 }}</span>
+          <span class="highlight-stat-label">Registrations today</span>
+        </div>
+      </div>
+      <div class="highlight-stat">
+        <div class="highlight-stat-icon progress-icon">
+          <fa-icon [icon]="icons.faChartPie"></fa-icon>
+        </div>
+        <div class="highlight-stat-info">
+          <span class="highlight-stat-value">82%</span>
+          <span class="highlight-stat-label">Registration Progress</span>
+        </div>
+      </div>
+      <div class="highlight-stat">
+        <div class="highlight-stat-icon email-icon">
+          <fa-icon [icon]="icons.faEnvelope"></fa-icon>
+        </div>
+        <div class="highlight-stat-info">
+          <span class="highlight-stat-value">{{ event.custom_emails_count || 0 }}</span>
+          <span class="highlight-stat-label">Reminder email sent</span>
+        </div>
+      </div>
+      <div class="highlight-stat">
+        <div class="highlight-stat-icon health-icon">
+          <fa-icon [icon]="icons.faHeart"></fa-icon>
+        </div>
+        <div class="highlight-stat-info">
+          <span class="highlight-stat-value">Good</span>
+          <span class="highlight-stat-label">Event Health</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Row 2: Needs Attention + Event Snapshot + Recent Activity -->
+  <section class="three-col-row">
+    <!-- Needs Attention -->
+    <div class="attention-card">
+      <div class="section-header">
+        <h3 class="section-heading"><span>🔔</span> Needs Attention</h3>
+        <a [routerLink]="['details']" class="view-all-link">View All →</a>
+      </div>
+      <div class="attention-list">
+        <a *ngFor="let item of needsAttention | slice : 0 : 4" [routerLink]="item.route" class="attention-item">
+          <fa-icon
+            [icon]="item.done ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="item.done ? 'attention-icon-check' : 'attention-icon-cross'"
+          ></fa-icon>
+          <div class="attention-content">
+            <span class="attention-title">{{ item.title }}</span>
+            <span class="attention-sub">{{ item.sub }}</span>
+          </div>
+          <span class="attention-arrow">›</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Event Snapshot -->
+    <div class="snapshot-card">
+      <div class="section-header">
+        <h3 class="section-heading"><span>📊</span> Event Snapshot</h3>
+      </div>
+      <div class="snapshot-grid">
+        <div class="snapshot-stat">
+          <fa-icon [icon]="icons.faUsers" class="snapshot-stat-icon registrations-icon"></fa-icon>
+          <span class="snapshot-stat-label">Registrations</span>
+          <span class="snapshot-stat-value">{{ event.registrations_count || 0 }}</span>
+        </div>
+        <div class="snapshot-stat">
+          <fa-icon [icon]="icons.faMicrophone" class="snapshot-stat-icon speakers-icon"></fa-icon>
+          <span class="snapshot-stat-label">Speakers</span>
+          <span class="snapshot-stat-value">{{ event.speakers_count || 0 }}</span>
+        </div>
+        <div class="snapshot-stat">
+          <fa-icon [icon]="icons.faHandshakeSimple" class="snapshot-stat-icon sponsors-icon"></fa-icon>
+          <span class="snapshot-stat-label">Sponsors</span>
+          <span class="snapshot-stat-value">{{ event.sponsors_count || 0 }}</span>
+        </div>
+        <div class="snapshot-stat">
+          <fa-icon [icon]="icons.faUserGroup" class="snapshot-stat-icon team-icon"></fa-icon>
+          <span class="snapshot-stat-label">Team</span>
+          <span class="snapshot-stat-value">{{ event.volunteers_count || 0 }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="activity-card">
+      <div class="section-header">
+        <h3 class="section-heading"><span>⚡</span> Recent Activity</h3>
+        <a class="view-all-link">View All →</a>
+      </div>
+      <div class="activity-list">
+        <div *ngFor="let item of recentActivity" class="activity-item">
+          <div class="activity-avatar">
+            <nb-icon [icon]="item.icon + '-outline'"></nb-icon>
+          </div>
+          <div class="activity-content">
+            <span class="activity-text">{{ item.text }}</span>
+          </div>
+          <span class="activity-time">{{ item.time }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

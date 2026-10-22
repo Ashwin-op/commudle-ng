@@ -49,6 +49,7 @@ import { EventAgendaComponent } from './components/event-agenda/event-agenda.com
 import { EventCommentsComponent } from './components/event-comments/event-comments.component';
 import { EventDashboardComponent } from './components/event-dashboard/event-dashboard.component';
 import { EventDetailsComponent } from './components/event-details/event-details.component';
+import { EventAdminDashboardComponent } from './components/event-admin-dashboard/event-admin-dashboard.component';
 import { EventEmbeddedVideoStreamComponent } from './components/event-embedded-video-stream/event-embedded-video-stream.component';
 import { SegmentedControlComponent } from './components/segmented-control/segmented-control.component';
 import { EventSearchMultiSelectComponent } from './components/event-search-multi-select/event-search-multi-select.component';
@@ -118,6 +119,7 @@ import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-the
     EventSpeakersComponent,
     EventRecordingsComponent,
     EventDetailsComponent,
+    EventAdminDashboardComponent,
     EntryPassScanComponent,
     UserEngagementDataComponent,
     TimeBlocksComponent,

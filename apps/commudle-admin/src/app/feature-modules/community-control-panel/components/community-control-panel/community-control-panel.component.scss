@@ -25,6 +25,7 @@
 
   .logo-name {
     @apply com-flex com-items-center;
+
     .logo {
       @apply com-h-12 com-w-12 com-overflow-hidden;
 
@@ -46,6 +47,7 @@
 .header-links {
   .buttons {
     @apply com-flex com-flex-wrap md:com-gap-0 com-gap-2 com-justify-evenly md:com-justify-start;
+
     a,
     button {
       @apply md:com-mr-4 com-m-0;
@@ -55,6 +57,7 @@
 
 .menu {
   @apply com-border-0 com-border-b com-border-solid com-border-gray-200 com-w-auto com-overflow-auto com-scrollbar-hide com-pt-4 com-mx-6;
+
   a {
     @apply com-text-gunmetal com-text-sm com-leading-4 com-h-fit com-m-0 com-pt-0 com-px-6 com-pb-17px com-cursor-pointer com-no-underline;
 
@@ -70,6 +73,7 @@
     .title {
       @apply com-self-center com-ml-2;
     }
+
     span {
       @apply com-text-gray-500;
     }
@@ -78,6 +82,7 @@
   nb-icon {
     @apply com-text-2xl;
   }
+
   fa-icon {
     @apply com-text-xl;
   }
@@ -94,6 +99,7 @@
 }
 
 .disabled {
+
   fa-icon,
   span {
     @apply com-text-gray-400 #{!important};
@@ -101,7 +107,7 @@
 }
 
 .header {
-  @apply com-bg-white md:com-p-4 com-px-3 com-py-4 com-flex md:com-flex-row com-flex-col com-items-center md:com-gap-4 com-gap-0 md:com-sticky com-relative com-z-10 md:com-top-[var(--mobile-navbar-offset,52px)];
+  @apply com-bg-white md:com-p-4 com-px-3 com-py-4 com-flex md:com-flex-row com-flex-col com-items-center md:com-gap-4 com-gap-0 md:com-sticky com-relative com-z-10 md:com-top-[var(--mobile-navbar-offset, 52px)];
 }
 
 .sidebar {
@@ -110,12 +116,15 @@
   a {
     @apply com-text-inherit com-no-underline;
   }
+
   .action-buttons {
     @apply com-flex com-flex-col com-p-4 com-pt-3 com-gap-6;
+
     .sidebar-expand-icon {
       .icon {
         @apply com-text-Cadet-Grey com-cursor-pointer;
       }
+
       .heading {
         @apply com-text-xs com-text-Cadet-Grey;
       }
@@ -127,31 +136,39 @@
 
     .action-button {
       @apply com-p-2 com-rounded-lg com-flex com-gap-2 com-items-center com-cursor-pointer;
+
       &.active,
       &:hover {
         @apply com-bg-Azure-opacity-10;
+
         .heading {
           @apply com-font-semibold com-text-primary-500;
         }
+
         .icon {
           @apply com-text-primary-500;
         }
       }
+
       .icon {
         @apply com-text-sm com-flex com-text-Cadet-Grey com-items-center com-justify-center com-w-5 com-h-5;
       }
+
       .heading {
         @apply com-text-sm com-font-normal;
       }
 
       &.public-event-page {
         @apply com-text-Azure;
+
         .icon {
           @apply com-text-Azure;
         }
       }
+
       &.stats {
         @apply com-text-Caribbean-Green;
+
         .icon {
           @apply com-text-Caribbean-Green;
         }
@@ -159,33 +176,42 @@
     }
   }
 }
+
 a {
   @apply com-flex com-items-center;
 }
+
 .right-column {
   @apply com-w-full;
 }
 
 .event-dashboard-menu {
-  @apply com-sticky com-top-[var(--mobile-navbar-offset,52px)] com-z-10 com-my-4;
+  @apply com-sticky com-top-[var(--mobile-navbar-offset, 52px)] com-z-10 com-my-4;
+
   com-card {
     @apply com-mx-0;
+
     com-card-body {
       @apply com-p-0;
 
       div {
         @apply com-flex;
+
         .action-button {
           @apply com-p-2 com-flex com-gap-2 com-items-center com-text-inherit com-no-underline com-w-max;
+
           &.active {
             @apply com-border-0 com-border-b-3 com-border-solid com-border-primary-500;
+
             .heading {
               @apply com-text-primary-500;
             }
           }
+
           .icon {
             @apply com-text-lg com-text-Cadet-Grey;
           }
+
           .heading {
             @apply com-text-base com-font-medium com-w-max;
           }

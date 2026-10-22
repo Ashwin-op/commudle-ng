@@ -1,0 +1,276 @@
+.event-overview {
+  @apply com-flex com-flex-col com-gap-5 com-p-4 lg:com-p-0;
+}
+
+.section-heading {
+  @apply com-m-0 com-text-base com-font-semibold com-text-Yankees-Blue com-flex com-items-center com-gap-2;
+}
+
+.section-header {
+  @apply com-flex com-items-center com-justify-between com-mb-3;
+}
+
+.view-all-link {
+  @apply com-text-xs com-font-medium com-text-primary-500 com-no-underline;
+
+  &:hover {
+    @apply com-text-primary-700;
+  }
+}
+
+// Row 1: Event Hero
+.event-hero {
+  @apply com-relative com-overflow-hidden com-rounded-2xl com-border com-border-solid com-border-Bright-Gray;
+  background: linear-gradient(135deg, #f0f4ff 0%, #ffffff 40%, #f8f0ff 100%);
+
+  .hero-top {
+    @apply com-flex com-items-start com-gap-5 com-p-5;
+
+    .hero-banner {
+      @apply com-w-36 com-h-24 com-rounded-xl com-overflow-hidden com-flex-shrink-0;
+
+      img {
+        @apply com-w-full com-h-full com-object-cover;
+      }
+
+      &.no-image {
+        @apply com-flex com-items-center com-justify-center com-bg-gray-100;
+
+        nb-icon {
+          @apply com-text-2xl com-text-gray-300;
+        }
+      }
+    }
+
+    .hero-info {
+      @apply com-flex com-flex-col com-gap-1.5 com-flex-1 com-min-w-0;
+
+      .hero-title-row {
+        @apply com-flex com-items-center com-gap-2;
+
+        .hero-event-name {
+          @apply com-m-0 com-text-xl com-font-bold com-text-Yankees-Blue com-truncate;
+        }
+
+        .hero-edit-btn {
+          @apply com-text-gray-400 com-no-underline com-flex-shrink-0;
+          @apply hover:com-text-primary-500;
+        }
+      }
+
+      .hero-meta {
+        @apply com-flex com-flex-wrap com-items-center com-gap-1.5 com-text-sm com-text-Cadet-Grey;
+
+        .hero-status-badge {
+          @apply com-inline-flex com-items-center com-px-2.5 com-py-0.5 com-rounded-full com-text-xs com-font-semibold com-bg-green-100 com-text-green-700;
+
+          &.status-live {
+            @apply com-bg-red-100 com-text-red-600;
+            animation: pulse 2s infinite;
+          }
+        }
+
+        .hero-meta-dot {
+          @apply com-text-gray-300;
+        }
+
+        .hero-meta-item {
+          @apply com-text-sm com-text-Cadet-Grey;
+        }
+      }
+
+      .hero-location {
+        @apply com-flex com-flex-wrap com-items-center com-gap-2 com-text-sm com-text-Yankees-Blue;
+
+        .hero-divider {
+          @apply com-text-gray-300;
+        }
+
+        .hero-public-link {
+          @apply com-inline-flex com-items-center com-gap-1 com-text-sm com-font-medium com-text-primary-500 com-no-underline;
+          @apply hover:com-text-primary-700;
+
+          nb-icon {
+            @apply com-text-xs;
+          }
+        }
+      }
+    }
+
+    .hero-actions {
+      @apply com-flex com-items-center com-gap-2 com-flex-shrink-0;
+    }
+  }
+
+  .hero-highlights {
+    @apply com-flex com-flex-wrap com-gap-0 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+
+    .highlight-stat {
+      @apply com-flex com-items-center com-gap-3 com-flex-1 com-p-4 com-border-0 com-border-r com-border-solid com-border-Bright-Gray;
+
+      &:last-child {
+        @apply com-border-r-0;
+      }
+
+      .highlight-stat-icon {
+        @apply com-w-10 com-h-10 com-rounded-full com-flex com-items-center com-justify-center com-text-sm com-shrink-0;
+
+        &.registrations-icon {
+          @apply com-bg-blue-100 com-text-blue-600;
+        }
+
+        &.progress-icon {
+          @apply com-bg-purple-100 com-text-purple-600;
+        }
+
+        &.email-icon {
+          @apply com-bg-green-100 com-text-green-600;
+        }
+
+        &.health-icon {
+          @apply com-bg-red-100 com-text-red-500;
+        }
+      }
+
+      .highlight-stat-info {
+        @apply com-flex com-flex-col;
+
+        .highlight-stat-value {
+          @apply com-text-lg com-font-bold com-text-Yankees-Blue;
+        }
+
+        .highlight-stat-label {
+          @apply com-text-xs com-text-Cadet-Grey;
+        }
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+// Row 2: Three-column
+.three-col-row {
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-4;
+
+  .attention-card,
+  .snapshot-card,
+  .activity-card {
+    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+  }
+
+  .attention-list {
+    @apply com-mt-3;
+
+    .attention-item {
+      @apply com-flex com-items-center com-gap-3 com-py-2.5 com-px-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+
+      &:last-child {
+        @apply com-border-b-0;
+      }
+
+      &:hover {
+        @apply com-bg-gray-50 com-rounded-lg;
+      }
+
+      .attention-icon-check {
+        @apply com-text-green-500 com-text-lg com-shrink-0;
+      }
+
+      .attention-icon-cross {
+        @apply com-text-red-400 com-text-lg com-shrink-0;
+      }
+
+      .attention-content {
+        @apply com-flex com-flex-col com-flex-1 com-min-w-0;
+
+        .attention-title {
+          @apply com-text-sm com-font-medium com-text-Yankees-Blue;
+        }
+
+        .attention-sub {
+          @apply com-text-xs com-text-gray-500;
+        }
+      }
+
+      .attention-arrow {
+        @apply com-text-lg com-text-gray-400 com-shrink-0;
+      }
+    }
+  }
+
+  // Event Snapshot
+  .snapshot-grid {
+    @apply com-grid com-grid-cols-2 com-gap-3 com-mt-3;
+
+    .snapshot-stat {
+      @apply com-flex com-flex-col com-items-center com-gap-1.5 com-p-4 com-rounded-xl com-border com-border-solid com-border-Bright-Gray;
+
+      .snapshot-stat-icon {
+        @apply com-text-2xl;
+
+        &.registrations-icon {
+          @apply com-text-blue-500;
+        }
+
+        &.speakers-icon {
+          @apply com-text-purple-500;
+        }
+
+        &.sponsors-icon {
+          @apply com-text-green-500;
+        }
+
+        &.team-icon {
+          @apply com-text-orange-500;
+        }
+      }
+
+      .snapshot-stat-label {
+        @apply com-text-xs com-text-Cadet-Grey com-font-medium;
+      }
+
+      .snapshot-stat-value {
+        @apply com-text-2xl com-font-bold com-text-Yankees-Blue;
+      }
+    }
+  }
+
+  // Recent Activity
+  .activity-list {
+    @apply com-mt-3 com-flex com-flex-col;
+
+    .activity-item {
+      @apply com-flex com-items-center com-gap-3 com-py-2.5 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+
+      &:last-child {
+        @apply com-border-b-0;
+      }
+
+      .activity-avatar {
+        @apply com-w-8 com-h-8 com-rounded-full com-flex com-items-center com-justify-center com-text-sm com-shrink-0 com-bg-blue-100 com-text-blue-600;
+      }
+
+      .activity-content {
+        @apply com-flex com-flex-col com-flex-1 com-min-w-0;
+
+        .activity-text {
+          @apply com-text-sm com-text-Yankees-Blue com-line-clamp-1;
+        }
+      }
+
+      .activity-time {
+        @apply com-text-xs com-text-gray-400 com-shrink-0;
+      }
+    }
+  }
+}

@@ -97,6 +97,12 @@
               [routerLinkActiveOptions]="{ exact: true }"
             >
               <div class="icon">
+                <fa-icon [icon]="icons.faGauge"></fa-icon>
+              </div>
+              <div *ngIf="sidebarExpanded" class="heading">Overview</div>
+            </a>
+            <a class="action-button" [routerLink]="['details']" [routerLinkActive]="'active'">
+              <div class="icon">
                 <fa-icon [icon]="icons.faCircleInfo"></fa-icon>
               </div>
               <div *ngIf="sidebarExpanded" class="heading">Details</div>
