@@ -123,22 +123,26 @@
         class="section-loader"
       ></app-loading-spinner>
       <div class="attention-list" *ngIf="!isNeedsAttentionLoading || needsAttention">
-        <!-- Judges -->
+        <!-- Judges & mentors -->
         <a [routerLink]="['speakers']" class="attention-item">
           <fa-icon
-            [icon]="needsAttention?.judges?.pending_count === 0 ? icons.faCircleCheck : icons.faCircleXmark"
-            [ngClass]="needsAttention?.judges?.pending_count === 0 ? 'attention-icon-check' : 'attention-icon-cross'"
+            [icon]="needsAttention?.judges?.without_team?.total === 0 ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="
+              needsAttention?.judges?.without_team?.total === 0 ? 'attention-icon-check' : 'attention-icon-cross'
+            "
           ></fa-icon>
           <div class="attention-content">
-            <span class="attention-title">Judges</span>
+            <span class="attention-title">Judges &amp; Mentors</span>
             <span class="attention-sub">
-              <ng-container *ngIf="needsAttention?.judges?.pending_count === 0; else judgesPending">
-                All {{ needsAttention.judges.total_teams_count | number }} teams have judges assigned
+              {{ needsAttention?.judges?.judges_count | number }} judges ·
+              {{ needsAttention?.judges?.mentors_count | number }} mentors ·
+              {{ needsAttention?.judges?.teams_assigned_count | number }} teams assigned
+              <ng-container *ngIf="needsAttention?.judges?.without_team?.total > 0">
+                · {{ needsAttention.judges.without_team.total | number }} without a team:
+                <ng-container *ngFor="let person of needsAttention.judges.without_team.values; let last = last"
+                  >{{ person.name }}<ng-container *ngIf="!last">, </ng-container></ng-container
+                >
               </ng-container>
-              <ng-template #judgesPending>
-                {{ needsAttention?.judges?.pending_count | number }} of
-                {{ needsAttention?.judges?.total_teams_count | number }} teams still need judges
-              </ng-template>
             </span>
           </div>
           <span class="attention-arrow">›</span>
@@ -154,11 +158,15 @@
             <span class="attention-title">Round Criteria</span>
             <span class="attention-sub">
               <ng-container *ngIf="needsAttention?.round_criteria?.is_complete; else roundCriteriaIncomplete">
-                {{ needsAttention?.round_criteria?.round_name || 'Current round' }} criteria configured
+                {{ needsAttention?.round_criteria?.round_name || 'Current round' }} · Completed
               </ng-container>
               <ng-template #roundCriteriaIncomplete>
-                Set up scoring criteria for
-                {{ needsAttention?.round_criteria?.round_name || 'the current round' }}
+                {{ needsAttention?.round_criteria?.round_name || 'Current round' }} ·
+                {{ needsAttention?.round_criteria?.missing_fields?.length | number }} missing:
+                <ng-container *ngFor="let field of needsAttention?.round_criteria?.missing_fields; let last = last"
+                  >{{ field | capitalizeAndRemoveUnderscore
+                  }}<ng-container *ngIf="!last">, </ng-container></ng-container
+                >
               </ng-template>
             </span>
           </div>
@@ -177,7 +185,7 @@
               {{
                 needsAttention?.tracks?.track_count > 0
                   ? (needsAttention.tracks.track_count | number) +
-                    ' tracks, ' +
+                    ' tracks · ' +
                     (needsAttention.tracks.problem_statement_count | number) +
                     ' problem statements'
                   : 'Define tracks for participants'
@@ -188,22 +196,22 @@
         </a>
 
         <!-- Sponsor logo -->
-        <a [routerLink]="['sponsors']" class="attention-item">
+        <a *ngIf="needsAttention?.sponsor_logo" [routerLink]="['sponsors']" class="attention-item">
           <fa-icon
-            [icon]="needsAttention?.sponsor_logo?.missing_count === 0 ? icons.faCircleCheck : icons.faCircleXmark"
+            [icon]="needsAttention.sponsor_logo.missing_count === 0 ? icons.faCircleCheck : icons.faCircleXmark"
             [ngClass]="
-              needsAttention?.sponsor_logo?.missing_count === 0 ? 'attention-icon-check' : 'attention-icon-cross'
+              needsAttention.sponsor_logo.missing_count === 0 ? 'attention-icon-check' : 'attention-icon-cross'
             "
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Sponsor Logos</span>
             <span class="attention-sub">
-              <ng-container *ngIf="needsAttention?.sponsor_logo?.missing_count === 0; else sponsorLogoMissing">
-                All {{ needsAttention?.sponsor_logo?.total_count | number }} sponsors have logos
+              <ng-container *ngIf="needsAttention.sponsor_logo.missing_count === 0; else sponsorLogoMissing">
+                All {{ needsAttention.sponsor_logo.total_count | number }} sponsors have logos
               </ng-container>
               <ng-template #sponsorLogoMissing>
-                {{ needsAttention?.sponsor_logo?.missing_count | number }} of
-                {{ needsAttention?.sponsor_logo?.total_count | number }} sponsors missing a logo
+                {{ needsAttention.sponsor_logo.missing_count | number }} of
+                {{ needsAttention.sponsor_logo.total_count | number }} sponsors missing a logo
               </ng-template>
             </span>
           </div>
@@ -223,13 +231,18 @@
             <span class="attention-sub">
               <ng-container *ngIf="needsAttention?.registration?.registration_closes_at; else registrationNotSet">
                 <ng-container *ngIf="needsAttention.registration.days_remaining > 0">
-                  Registration closes in {{ needsAttention.registration.days_remaining | number }} day{{
+                  Closes on {{ moment(needsAttention.registration.registration_closes_at).format('D MMM, YYYY') }} ·
+                  {{ needsAttention.registration.days_remaining | number }} day{{
                     needsAttention.registration.days_remaining === 1 ? '' : 's'
                   }}
+                  left
                 </ng-container>
                 <ng-container *ngIf="needsAttention.registration.days_remaining <= 0">
-                  Registration closed on
-                  {{ moment(needsAttention.registration.registration_closes_at).format('D MMM, YYYY') }}
+                  Closed on {{ moment(needsAttention.registration.registration_closes_at).format('D MMM, YYYY') }} ·
+                  {{ -needsAttention.registration.days_remaining | number }} day{{
+                    needsAttention.registration.days_remaining === -1 ? '' : 's'
+                  }}
+                  ago
                 </ng-container>
               </ng-container>
               <ng-template #registrationNotSet>Configure registration settings</ng-template>
@@ -241,17 +254,15 @@
         <!-- Pending applications -->
         <a [routerLink]="['applications-dashboard']" class="attention-item">
           <fa-icon
-            [icon]="!needsAttention?.pending_applications?.count ? icons.faCircleCheck : icons.faCircleXmark"
-            [ngClass]="!needsAttention?.pending_applications?.count ? 'attention-icon-check' : 'attention-icon-cross'"
+            [icon]="hasPendingApplications ? icons.faCircleXmark : icons.faCircleCheck"
+            [ngClass]="hasPendingApplications ? 'attention-icon-cross' : 'attention-icon-check'"
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Pending Applications</span>
             <span class="attention-sub">
-              {{
-                needsAttention?.pending_applications?.count
-                  ? (needsAttention.pending_applications.count | number) + ' applications awaiting review'
-                  : 'No applications pending review'
-              }}
+              {{ needsAttention?.pending_applications?.awaiting_acceptance_count | number }} awaiting acceptance ·
+              {{ needsAttention?.pending_applications?.incomplete_leader_application_count | number }} leader
+              applications incomplete
             </span>
           </div>
           <span class="attention-arrow">›</span>
@@ -260,21 +271,27 @@
         <!-- Mentor / judge slots -->
         <a [routerLink]="['mentor-slots']" class="attention-item">
           <fa-icon
-            [icon]="needsAttention?.mentor_judge_slots?.open_slots > 0 ? icons.faCircleCheck : icons.faCircleXmark"
+            [icon]="
+              needsAttention?.mentor_judge_slots?.not_opened?.total === 0 ? icons.faCircleCheck : icons.faCircleXmark
+            "
             [ngClass]="
-              needsAttention?.mentor_judge_slots?.open_slots > 0 ? 'attention-icon-check' : 'attention-icon-cross'
+              needsAttention?.mentor_judge_slots?.not_opened?.total === 0
+                ? 'attention-icon-check'
+                : 'attention-icon-cross'
             "
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Mentor &amp; Judge Slots</span>
             <span class="attention-sub">
-              <ng-container *ngIf="needsAttention?.mentor_judge_slots?.open_slots > 0; else noOpenSlots">
-                {{ needsAttention.mentor_judge_slots.open_slots | number }} slot{{
-                  needsAttention.mentor_judge_slots.open_slots === 1 ? '' : 's'
-                }}
-                open for teams
+              {{ needsAttention?.mentor_judge_slots?.opened?.total | number }} opened ·
+              {{ needsAttention?.mentor_judge_slots?.not_opened?.total | number }} not opened
+              <ng-container *ngIf="needsAttention?.mentor_judge_slots?.not_opened?.total > 0">
+                :
+                <ng-container
+                  *ngFor="let person of needsAttention.mentor_judge_slots.not_opened.values; let last = last"
+                  >{{ person.name }}<ng-container *ngIf="!last">, </ng-container></ng-container
+                >
               </ng-container>
-              <ng-template #noOpenSlots>Open mentor &amp; judge slots for teams</ng-template>
             </span>
           </div>
           <span class="attention-arrow">›</span>

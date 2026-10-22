@@ -3,7 +3,7 @@ export type EHackathonDashboardStageType = 'registration' | 'round' | 'winners';
 
 export enum EHackathonDashboardStageStatus {
   COMPLETED = 'completed',
-  ONGOING = 'ongoing',
+  ONGOING = 'live',
   UPCOMING = 'upcoming',
 }
 
@@ -31,11 +31,25 @@ export interface IHackathonDashboardStageProgress {
 }
 
 // needs_attention
+export interface IHackathonDashboardAttentionPerson {
+  id: number;
+  name: string;
+  judge_type: string;
+}
+
+export interface IHackathonDashboardAttentionPeople {
+  values: IHackathonDashboardAttentionPerson[];
+  page: number;
+  count: number;
+  total: number;
+}
+
 export interface IHackathonDashboardNeedsAttention {
   judges: {
-    assigned_count: number;
-    total_teams_count: number;
-    pending_count: number;
+    judges_count: number;
+    mentors_count: number;
+    teams_assigned_count: number;
+    without_team: IHackathonDashboardAttentionPeople;
   };
   round_criteria: {
     round_id: number;
@@ -47,7 +61,7 @@ export interface IHackathonDashboardNeedsAttention {
     track_count: number;
     problem_statement_count: number;
   };
-  sponsor_logo: {
+  sponsor_logo?: {
     missing_count: number;
     total_count: number;
     missing_sponsor_ids: number[];
@@ -56,8 +70,14 @@ export interface IHackathonDashboardNeedsAttention {
     registration_closes_at: string | null;
     days_remaining: number;
   };
-  pending_applications: { count: number };
-  mentor_judge_slots: { open_slots: number };
+  pending_applications: {
+    awaiting_acceptance_count: number;
+    incomplete_leader_application_count: number;
+  };
+  mentor_judge_slots: {
+    opened: IHackathonDashboardAttentionPeople;
+    not_opened: IHackathonDashboardAttentionPeople;
+  };
 }
 
 // snapshot

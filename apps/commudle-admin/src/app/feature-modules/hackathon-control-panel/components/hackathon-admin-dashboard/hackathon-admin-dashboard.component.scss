@@ -1,5 +1,5 @@
 .hackathon-overview {
-  @apply com-flex com-flex-col com-gap-3;
+  @apply com-flex com-flex-col com-gap-2;
 }
 
 .section-loader {
@@ -39,7 +39,7 @@
 }
 
 .section-header {
-  @apply com-flex com-items-center com-justify-between com-mb-1.5 com-m-0;
+  @apply com-flex com-items-center com-justify-between com-mb-2 com-m-0;
 }
 
 // Row 1: Hackathon Hero
@@ -186,7 +186,7 @@
             }
 
             .step-value {
-              @apply com-text-xs com-text-gray-800;
+              @apply com-text-xs com-text-Cadet-Grey;
             }
 
             .step-sub {
@@ -198,11 +198,19 @@
             .step-dot {
               @apply com-border-green-500 com-bg-green-500;
             }
+
+            .step-sub {
+              @apply com-text-green-600;
+            }
           }
 
           &.active {
             .step-dot {
               @apply com-border-primary-500 com-bg-primary-500;
+            }
+
+            .step-sub {
+              @apply com-text-yellow-600;
             }
           }
         }
@@ -226,19 +234,19 @@
 
 // Row 2: Three-column
 .three-col-row {
-  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-3;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-2;
 
   .attention-card,
   .snapshot-card,
   .activity-card {
-    @apply com-rounded-xl com-p-3 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+    @apply com-rounded-xl com-p-2.5 com-bg-white com-border com-border-solid com-border-Bright-Gray;
   }
 
   .attention-list {
     @apply com-m-0;
 
     .attention-item {
-      @apply com-flex com-items-center com-gap-3 com-p-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+      @apply com-flex com-items-center com-gap-2 com-p-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
 
       &:last-child {
         @apply com-border-b-0;
@@ -264,7 +272,7 @@
         }
 
         .attention-sub {
-          @apply com-text-xs com-text-gray-500;
+          @apply com-text-xs com-text-gray-500 com-line-clamp-2;
         }
       }
 
@@ -395,7 +403,7 @@
 
   .competition-progress-card,
   .people-judging-card {
-    @apply com-rounded-xl com-p-3 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+    @apply com-rounded-xl com-p-10px com-bg-white com-border com-border-solid com-border-Bright-Gray;
   }
 
   .view-all-link {
@@ -419,7 +427,7 @@
       // Reserve 3 lines for the name so the count below always starts on the
       // same line across all cards.
       .progress-card-label {
-        @apply com-text-xs com-font-medium com-text-Cadet-Grey com-line-clamp-3 com-min-h-12;
+        @apply com-text-xs com-font-medium com-text-Cadet-Grey com-line-clamp-2 com-min-h-8;
       }
 
       .progress-card-value {

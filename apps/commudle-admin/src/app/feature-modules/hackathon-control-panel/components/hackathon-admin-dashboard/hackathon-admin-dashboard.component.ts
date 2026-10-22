@@ -144,6 +144,11 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     this.getSetupProgress();
   }
 
+  get hasPendingApplications(): boolean {
+    const pending = this.needsAttention?.pending_applications;
+    return !!(pending?.awaiting_acceptance_count || pending?.incomplete_leader_application_count);
+  }
+
   get daysUntilHackathon(): string {
     if (!this.hackathon?.start_date) {
       return '';
