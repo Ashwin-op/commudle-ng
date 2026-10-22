@@ -1,11 +1,11 @@
-<nb-card class="sponsors">
-  <nb-card-header>
+<com-card class="sponsors">
+  <com-card-header>
     <h6>
       <nb-icon icon="briefcase-outline"></nb-icon> &nbsp; Sponsors
       <commudle-help-section [helpDictionaryName]="'event-sponsors'"></commudle-help-section>
     </h6>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <button (click)="openForm(addSponsorDialogBox)" *ngIf="event.editable" nbButton status="primary">
       <nb-icon icon="plus"></nb-icon> &nbsp; <span>Add Sponsor</span>
     </button>
@@ -45,18 +45,18 @@
         </div>
       </div>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
 <ng-template #addSponsorDialogBox let-ref="dialogRef">
-  <nb-card class="add-sponsor-container">
-    <nb-card-header class="actions">
+  <com-card class="add-sponsor-container">
+    <com-card-header class="actions">
       <span>Add a sponsor</span>
       <button ghost nbButton size="small" shape="round" (click)="ref.close()">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <app-loading-spinner *ngIf="loadingExistingSponsors"></app-loading-spinner>
       <form [formGroup]="sponsorForm" class="sponsor-form sponsor-form-dialog-box">
         <div class="sponsor-select">
@@ -231,24 +231,24 @@
           <button nbButton status="danger" outline type="button" (click)="ref.close()">Cancel</button>
         </div>
       </form>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>
 
 <ng-template #removeSponsorTemplate let-ref="dialogRef" let-data>
-  <nb-card class="remove-sponsor-confirmation">
-    <nb-card-header>
+  <com-card class="remove-sponsor-confirmation">
+    <com-card-header>
       <div>Remove Sponsor</div>
       <button ghost nbButton size="small" shape="round" (click)="ref.close()">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body> Are you sure you want to remove this sponsor? </nb-card-body>
-    <nb-card-footer>
+    </com-card-header>
+    <com-card-body> Are you sure you want to remove this sponsor? </com-card-body>
+    <com-card-footer>
       <button nbButton status="danger" (click)="removeSponsor(data.sponsor_id, data.tierName, data.index); ref.close()">
         Remove
       </button>
       <button nbButton status="primary" (click)="ref.close()">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

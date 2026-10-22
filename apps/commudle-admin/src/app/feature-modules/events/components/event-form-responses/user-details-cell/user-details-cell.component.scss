@@ -143,8 +143,8 @@
 }
 
 .confirm-delete-note {
-  nb-card-header,
-  nb-card-footer {
+  com-card-header,
+  com-card-footer {
     @apply com-flex com-justify-between com-items-center;
   }
 }
@@ -192,7 +192,7 @@
 }
 
 .dialog-box {
-  nb-card-header {
+  com-card-header {
     @apply com-flex com-items-center com-justify-between;
   }
 }
@@ -255,10 +255,10 @@ button[nbButton][outline][ghost] {
 
 .responses-dialog {
   @apply com-w-[95dvw] com-h-90dvh;
-  nb-card-header {
+  com-card-header {
     @apply com-flex com-justify-between;
   }
-  nb-card-body {
+  com-card-body {
     @apply com-p-0;
   }
   .question-answer {
