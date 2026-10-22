@@ -1294,6 +1294,14 @@
       </div>
       <div
         class="action-item"
+        (click)="closeActionsPopover(); sendPaymentCsv()"
+        *ngIf="eventDataFormEntityGroup?.is_paid"
+      >
+        <fa-icon [icon]="icons.faFileCsv" class="action-icon"></fa-icon>
+        <span>Send Payment CSV to email</span>
+      </div>
+      <div
+        class="action-item"
         (click)="closeActionsPopover(); bulkStatusChangeConfirmation(confirmStatusChange)"
         *ngIf="event.editable && eventDataFormEntityGroup?.registration_type.name !== RegistrationTypeNames.FEEDBACK"
       >
@@ -1371,6 +1379,16 @@
     <div class="action-item" (click)="closeActionBottomSheet(); sendCSV()">
       <fa-icon [icon]="icons.faFileCsv" class="action-icon"></fa-icon>
       <span>Send CSV to email</span>
+      <fa-icon [icon]="icons.faArrowRight" class="chevron-icon"></fa-icon>
+    </div>
+
+    <div
+      class="action-item"
+      (click)="closeActionBottomSheet(); sendPaymentCsv()"
+      *ngIf="eventDataFormEntityGroup?.is_paid"
+    >
+      <fa-icon [icon]="icons.faFileCsv" class="action-icon"></fa-icon>
+      <span>Send Payment CSV to email</span>
       <fa-icon [icon]="icons.faArrowRight" class="chevron-icon"></fa-icon>
     </div>
 

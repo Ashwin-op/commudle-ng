@@ -53,11 +53,13 @@
                 ></nb-checkbox>
               </th>
               <th class="thumbnail-column"></th>
-              <th>EMAIL</th>
-              <th>NAME</th>
-              <th *ngFor="let variable of tableVariables">{{ variable.label }}</th>
-              <th>STATUS</th>
-              <th></th>
+              <th class="email-column">EMAIL</th>
+              <th class="name-column">NAME</th>
+              <th *ngFor="let variable of tableVariables" class="value-cell" [title]="variable.label">
+                {{ variable.label }}
+              </th>
+              <th class="status-column">STATUS</th>
+              <th class="actions-column"></th>
             </tr>
           </thead>
           <tbody>
@@ -92,10 +94,16 @@
                   </ng-template>
                 </ng-container>
               </td>
-              <td>{{ recipient.email }}</td>
-              <td>{{ recipient.name || '-' }}</td>
-              <td *ngFor="let variable of tableVariables">{{ recipient.row_values?.[variable.key] || '-' }}</td>
-              <td>
+              <td class="email-column" [title]="recipient.email">{{ recipient.email }}</td>
+              <td class="name-column" [title]="recipient.name || ''">{{ recipient.name || '-' }}</td>
+              <td
+                *ngFor="let variable of tableVariables"
+                class="value-cell"
+                [title]="recipient.row_values?.[variable.key] || ''"
+              >
+                {{ recipient.row_values?.[variable.key] || '-' }}
+              </td>
+              <td class="status-column">
                 <app-badge
                   [text]="statusLabel(recipient.status) | titlecase"
                   [fontSize]="'small'"
@@ -112,7 +120,7 @@
                   [nbTooltip]="missingValuesTooltip(recipient)"
                 ></fa-icon>
               </td>
-              <td class="actions">
+              <td class="actions actions-column">
                 <button
                   *ngIf="canSendIndividually && recipient.sendable && !isBatchRevoked"
                   ghost

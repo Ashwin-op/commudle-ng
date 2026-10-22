@@ -12,32 +12,36 @@
           No variables yet. Add one below, or upload a CSV.
         </div>
 
-        <div
-          *ngFor="let variable of variables"
-          class="variable-item"
-          [class.placed]="variable.positioned"
-          [class.selected]="selectedVariable?.id === variable.id"
-        >
-          <div class="variable-row">
-            <nb-checkbox [checked]="variable.positioned" (checkedChange)="toggleCanvasPlacement(variable, $event)">
-              {{ variable.label }}
-            </nb-checkbox>
+        <div class="variables-list" *ngIf="variables.length > 0">
+          <div
+            *ngFor="let variable of variables"
+            class="variable-item"
+            [class.placed]="variable.positioned"
+            [class.selected]="selectedVariable?.id === variable.id"
+          >
+            <div class="variable-row" [title]="variable.label">
+              <nb-checkbox [checked]="variable.positioned" (checkedChange)="toggleCanvasPlacement(variable, $event)">
+                {{ variable.label }}
+              </nb-checkbox>
 
-            <div class="variable-actions">
-              <button ghost comButton size="tiny" tabindex="-1" class="kebab-button">
-                <fa-icon [icon]="icons.faEllipsisVertical"></fa-icon>
-              </button>
-              <select
-                class="variable-actions-select"
-                (change)="onVariableAction(variable, $any($event.target).value); $any($event.target).value = ''"
-              >
-                <option value="" disabled selected>Actions</option>
-                <option value="default_value">Set Default Value</option>
-                <option value="delete">Delete</option>
-              </select>
+              <div class="variable-actions">
+                <button ghost comButton size="tiny" tabindex="-1" class="kebab-button">
+                  <fa-icon [icon]="icons.faEllipsisVertical"></fa-icon>
+                </button>
+                <select
+                  class="variable-actions-select"
+                  (change)="onVariableAction(variable, $any($event.target).value); $any($event.target).value = ''"
+                >
+                  <option value="" disabled selected>Actions</option>
+                  <option value="default_value">Set Default Value</option>
+                  <option value="delete">Delete</option>
+                </select>
+              </div>
+            </div>
+            <div class="default-value-subtext" *ngIf="variable.default_value">
+              Default: {{ variable.default_value }}
             </div>
           </div>
-          <div class="default-value-subtext" *ngIf="variable.default_value">Default: {{ variable.default_value }}</div>
         </div>
 
         <button type="button" class="add-variable-tile" [class.active]="showAddForm" (click)="toggleAddForm()">
