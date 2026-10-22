@@ -12,13 +12,14 @@ import {
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import type { ConnectedPosition } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { ComTooltipComponent, TOOLTIP_ANIM_MS } from '@commudle/commudle-theme';
-import type {
-  IComTooltipContent,
-  IComTooltipPlacement,
-  IComTooltipSize,
-  IComTooltipStatus,
-  IComTooltipVariant,
+import {
+  ComTooltipComponent,
+  TOOLTIP_ANIM_MS,
+  type IComTooltipContent,
+  type IComTooltipPlacement,
+  type IComTooltipSize,
+  type IComTooltipStatus,
+  type IComTooltipVariant,
 } from '@commudle/commudle-theme';
 
 const SPACE_WITH_DOT = 12;

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { CommudleTooltipModule } from '@commudle/commudle-theme';
 import { BreakpointsDirective } from './breakpoints.directive';
 import { ClickOutsideDirective } from './click-outside.directive';
 import { HighlightLinksDirective } from './highlight-links.directive';
@@ -20,7 +21,7 @@ import { TooltipDirective } from './tooltip.directive';
     ActivityFeedDirective,
     TooltipDirective,
   ],
-  imports: [CommonModule, OverlayModule],
+  imports: [CommonModule, OverlayModule, CommudleTooltipModule],
   exports: [
     ClickOutsideDirective,
     HighlightLinksDirective,

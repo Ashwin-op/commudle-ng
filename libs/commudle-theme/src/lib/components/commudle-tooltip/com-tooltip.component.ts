@@ -1,4 +1,3 @@
-import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -8,7 +7,6 @@ import {
   Output,
   TemplateRef,
 } from '@angular/core';
-import { CommudleCardModule } from '../commudle-card/commudle-card.module';
 import {
   TOOLTIP_ANIM_MS,
   TOOLTIP_COLORS,
@@ -36,8 +34,7 @@ const HIDDEN_TRANSFORMS: Record<IComTooltipPlacement, string> = {
   selector: 'com-tooltip-container',
   templateUrl: './com-tooltip.component.html',
   styleUrls: ['./com-tooltip.component.scss'],
-  standalone: true,
-  imports: [NgTemplateOutlet, CommudleCardModule],
+  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ComTooltipComponent {
