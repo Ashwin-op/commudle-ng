@@ -45,11 +45,11 @@
 }
 
 .section-header {
-  @apply com-flex com-items-center com-justify-between com-mb-1.5 com-m-0;
+  @apply com-flex com-items-center com-justify-between com-mb-2 com-m-0;
 }
 
 .section-header-post {
-  @apply com-flex md:com-flex-row com-flex-col md:com-items-center com-justify-between com-mb-1.5 com-m-0;
+  @apply com-flex md:com-flex-row com-flex-col md:com-items-center com-justify-between com-mb-2 com-m-0;
 }
 
 .view-all-link {
@@ -378,7 +378,7 @@
       }
 
       .snapshot-stat-sub {
-        @apply com-text-xs com-text-Cadet-Grey com-text-center;
+        @apply com-text-xs com-text-Cadet-Grey;
       }
     }
   }
@@ -451,11 +451,11 @@
 
 // Row 3: Audience + Post-Event
 .two-col-row {
-  @apply com-grid com-grid-cols-1 lg:com-grid-cols-2 com-gap-3;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-2 com-gap-2;
 
   .audience-card,
   .post-event-card {
-    @apply com-rounded-xl com-p-3 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+    @apply com-rounded-xl com-p-2.5 com-bg-white com-border com-border-solid com-border-Bright-Gray;
   }
 
   .post-event-card {
@@ -465,13 +465,13 @@
 }
 
 .audience-content {
-  @apply com-grid com-grid-cols-1 md:com-grid-cols-2 md:com-gap-6 com-gap-4 com-mt-2 com-items-start;
+  @apply com-grid com-grid-cols-1 md:com-grid-cols-2 md:com-gap-6 com-gap-3 com-mt-3 com-items-start;
 
   .audience-chart {
     @apply com-flex com-flex-col com-items-center com-gap-3;
 
     .chart-donut {
-      @apply com-w-24 com-h-24;
+      @apply com-w-20 com-h-20;
 
       .chart-donut-track {
         fill: none;
@@ -509,10 +509,10 @@
   }
 
   .audience-stats {
-    @apply com-flex com-flex-col com-gap-3 com-min-w-0;
+    @apply com-flex com-flex-col com-gap-2 com-min-w-0;
 
     .audience-col {
-      @apply com-flex com-flex-col com-min-w-0 com-bg-gray-50 com-rounded-lg com-p-2.5;
+      @apply com-flex com-flex-col com-min-w-0 com-bg-gray-50 com-rounded-lg com-p-2;
 
       .audience-col-heading {
         @apply com-m-0 com-text-xs com-font-medium com-text-Yankees-Blue com-mb-2;
@@ -549,7 +549,7 @@
   }
 
   .post-event-content {
-    @apply com-flex com-flex-col sm:com-flex-row com-gap-3 com-mt-2 com-items-start;
+    @apply com-flex com-flex-col sm:com-flex-row com-gap-2 com-mt-3 com-items-start;
 
     .post-event-hero {
       @apply com-flex com-flex-col com-gap-1 com-shrink-0 com-p-2.5;
@@ -563,19 +563,19 @@
       }
 
       .post-event-link {
-        @apply com-text-xs com-font-medium com-text-primary-500 com-mt-2 com-cursor-pointer com-no-underline;
+        @apply com-text-xs com-font-medium com-text-primary-500 com-mt-1 com-cursor-pointer com-no-underline;
         @apply hover:com-text-primary-700;
       }
     }
 
     .post-event-stats {
-      @apply com-grid com-grid-cols-2 sm:com-grid-cols-3 com-gap-3 com-flex-1 com-w-full;
+      @apply com-grid com-grid-cols-2 sm:com-grid-cols-3 com-gap-2 com-flex-1 com-w-full;
 
       .post-stat {
-        @apply com-flex com-flex-col com-items-center com-justify-center com-gap-1 com-py-3 com-px-2.5 com-min-w-0 com-bg-white com-rounded-xl com-border com-border-solid com-border-Bright-Gray;
+        @apply com-flex com-flex-col com-items-center com-justify-center com-gap-0.5 com-py-2 com-px-2 com-min-w-0 com-bg-white com-rounded-lg com-border com-border-solid com-border-Bright-Gray;
 
         .post-stat-value {
-          @apply com-text-xl com-font-semibold com-text-Yankees-Blue com-leading-none;
+          @apply com-text-lg com-font-semibold com-text-Yankees-Blue com-leading-none;
         }
 
         .post-stat-label {
