@@ -48,6 +48,7 @@ export class TooltipDirective implements OnChanges, OnDestroy {
 
   describedBy: string | null = null;
 
+  private static activeTooltip?: TooltipDirective;
   private readonly id = `com-tooltip-${nextId++}`;
   private overlayRef?: OverlayRef;
   private tip?: ComTooltipComponent;
@@ -56,6 +57,7 @@ export class TooltipDirective implements OnChanges, OnDestroy {
   constructor(private overlay: Overlay, private host: ElementRef<HTMLElement>) {}
 
   onEnter(): void {
+    if (TooltipDirective.activeTooltip !== this) TooltipDirective.activeTooltip?.onLeave();
     if (!this.overlayRef) {
       if (!this.tooltipDisabled && this.content) this.show();
     } else if (this.leaveTimer) {
@@ -63,6 +65,7 @@ export class TooltipDirective implements OnChanges, OnDestroy {
       this.leaveTimer = undefined;
       this.tip?.setTooltipVisible(true);
     }
+    if (this.overlayRef) TooltipDirective.activeTooltip = this;
   }
 
   onLeave(): void {
@@ -117,6 +120,7 @@ export class TooltipDirective implements OnChanges, OnDestroy {
   }
 
   private hideTooltip(): void {
+    if (TooltipDirective.activeTooltip === this) TooltipDirective.activeTooltip = undefined;
     clearTimeout(this.leaveTimer);
     this.leaveTimer = undefined;
     this.overlayRef?.dispose();
