@@ -380,15 +380,15 @@
       <div class="live-visitors-body">
         <div class="live-visitors-counts">
           <div class="live-count">
-            <span class="live-count-value">{{ liveVisitors?.live_count ?? '—' }}</span>
             <span class="live-count-label">
               <span class="live-dot"></span>
               Live now
             </span>
+            <span class="live-count-value">{{ liveVisitors?.live_count ?? '—' }}</span>
           </div>
           <div class="live-count">
-            <span class="live-count-value">{{ liveVisitors?.last_30_min_count ?? '—' }}</span>
             <span class="live-count-label">Last 30 min</span>
+            <span class="live-count-value">{{ liveVisitors?.last_30_min_count ?? '—' }}</span>
           </div>
         </div>
       </div>
@@ -401,6 +401,10 @@
           <fa-icon [icon]="icons.faFileLines" class="heading-icon-pages"></fa-icon> Top Pages
         </h3>
       </header>
+      <div class="top-list-header">
+        <span>Page Title</span>
+        <span>Views</span>
+      </div>
       <ul class="top-list">
         <li *ngIf="topPagesLoading" class="section-loader">
           <app-loading-spinner></app-loading-spinner>

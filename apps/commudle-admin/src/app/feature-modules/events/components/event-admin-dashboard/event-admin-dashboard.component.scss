@@ -7,7 +7,12 @@
 }
 
 .section-heading {
-  @apply com-m-0 com-text-base com-font-medium com-text-Yankees-Blue com-flex com-items-center com-gap-2;
+  @apply com-m-0 com-text-sm com-font-medium com-text-Yankees-Blue com-flex com-items-center com-gap-2;
+
+  fa-icon {
+    @apply com-text-sm com-inline-block;
+    animation: iconPulse 1.8s ease-in-out infinite;
+  }
 
   .heading-icon-attention {
     @apply com-text-Azure;
@@ -45,18 +50,86 @@
 }
 
 .section-header {
-  @apply com-flex com-items-center com-justify-between com-mb-2 com-m-0;
+  @apply com-flex com-items-center com-justify-between com-mb-1.5 com-m-0;
 }
 
 .section-header-post {
-  @apply com-flex md:com-flex-row com-flex-col md:com-items-center com-justify-between com-mb-2 com-m-0;
+  @apply com-flex md:com-flex-row com-flex-col md:com-items-center com-justify-between com-mb-1.5 com-m-0;
 }
 
 .view-all-link {
-  @apply com-text-xs com-font-medium com-text-primary-500 com-no-underline com-flex-shrink-0;
+  @apply com-text-xs com-font-medium com-text-primary-500 com-no-underline com-flex-shrink-0 com-transition-transform com-duration-200 com-inline-block;
 
   &:hover {
     @apply com-text-primary-700;
+    transform: translateX(2px);
+  }
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes barGrow {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes livePing {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+
+  75%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+@keyframes deltaPop {
+  from {
+    opacity: 0;
+    transform: scale(0.6) translateY(2px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes activityItemIn {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .event-overview * {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
   }
 }
 
@@ -64,6 +137,7 @@
 .event-hero {
   @apply com-relative com-flex com-flex-col md:com-flex-row com-items-stretch com-overflow-hidden com-rounded-2xl com-border com-border-solid com-border-Bright-Gray com-bg-white com-p-4 com-gap-4 md:com-gap-5;
   background: linear-gradient(135deg, #e8f0fe 0%, #f0e6ff 30%, #ffffff 60%, #e8f4ff 100%);
+  animation: cardFadeIn 0.4s ease-out both;
 
   .hero-banner {
     @apply com-w-full md:com-w-32 com-h-28 md:com-h-auto com-rounded-xl com-overflow-hidden com-flex-shrink-0 md:com-self-stretch com-min-h-[120px];
@@ -161,8 +235,12 @@
           }
 
           .hero-public-link {
-            @apply com-inline-flex com-items-center com-gap-1 com-text-xs com-font-medium com-text-primary-500 com-no-underline;
+            @apply com-inline-flex com-items-center com-gap-1 com-text-xs com-font-medium com-text-primary-500 com-no-underline com-transition-transform com-duration-200;
             @apply hover:com-text-primary-700;
+
+            &:hover {
+              transform: translateX(2px);
+            }
 
             nb-icon {
               @apply com-text-sm;
@@ -181,10 +259,10 @@
     }
 
     .hero-highlights {
-      @apply com-grid com-grid-cols-2 md:com-flex md:com-flex-wrap com-gap-0 com-border-0 com-border-t com-border-solid com-border-Bright-Gray com-pt-2;
+      @apply com-grid com-grid-cols-2 md:com-flex md:com-flex-wrap com-gap-0 com-border-0 com-border-t com-border-solid com-border-gray-300 com-pt-2;
 
       .highlight-stat {
-        @apply com-flex com-items-center com-gap-2 com-flex-1 com-py-1 com-px-2 md:com-px-3 com-border-0 md:com-border-r com-border-solid com-border-Bright-Gray;
+        @apply com-flex com-items-center com-gap-2 com-flex-1 com-py-1 com-px-2 md:com-px-3 com-border-0 md:com-border-r com-border-solid com-border-gray-300 com-transition-colors com-duration-200;
 
         &:first-child {
           @apply com-pl-0;
@@ -310,6 +388,15 @@
 
       &:hover {
         @apply com-bg-gray-50 com-rounded-lg;
+
+        .attention-arrow {
+          @apply com-text-primary-500;
+          transform: translateX(3px);
+        }
+
+        .attention-icon-cross {
+          transform: scale(1.15);
+        }
       }
 
       .attention-icon-check {
@@ -317,18 +404,18 @@
       }
 
       .attention-icon-cross {
-        @apply com-text-red-400 com-text-base com-shrink-0;
+        @apply com-text-red-400 com-text-base com-shrink-0 com-transition-transform com-duration-200;
       }
 
       .attention-content {
         @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-m-0;
 
         .attention-title {
-          @apply com-text-sm com-font-medium com-text-Yankees-Blue;
+          @apply com-text-xs com-font-medium com-text-Yankees-Blue;
         }
 
         .attention-sub {
-          @apply com-text-xs com-text-gray-500;
+          @apply com-text-xs com-font-normal com-text-gray-500;
         }
 
         .speaker-names {
@@ -337,14 +424,14 @@
       }
 
       .attention-arrow {
-        @apply com-text-lg com-text-gray-400 com-shrink-0;
+        @apply com-text-lg com-text-gray-400 com-shrink-0 com-transition-all com-duration-200;
       }
     }
   }
 
   // Event Snapshot
   .snapshot-grid {
-    @apply com-grid com-grid-cols-2 com-gap-2 com-m-0;
+    @apply com-grid com-grid-cols-2 com-gap-1.5 com-m-0;
 
     .snapshot-stat {
       @apply com-flex com-flex-col com-items-center com-gap-1.5 com-p-4 com-rounded-xl com-border com-border-solid com-border-Bright-Gray;
@@ -370,7 +457,7 @@
       }
 
       .snapshot-stat-label {
-        @apply com-text-sm com-text-Cadet-Grey com-font-medium;
+        @apply com-text-xs com-text-gray-500 com-font-normal;
       }
 
       .snapshot-stat-value {
@@ -378,7 +465,7 @@
       }
 
       .snapshot-stat-sub {
-        @apply com-text-xs com-text-Cadet-Grey;
+        @apply com-text-10px com-text-Cadet-Grey;
       }
     }
   }
@@ -395,6 +482,12 @@
   .activity-list {
     @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col;
 
+    @for $i from 1 through 8 {
+      .activity-item:nth-child(#{$i}) {
+        animation-delay: #{$i * 0.04}s;
+      }
+    }
+
     .activity-item {
       @apply com-flex com-items-start com-gap-3 com-py-2 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
@@ -403,7 +496,7 @@
       }
 
       .activity-avatar {
-        @apply com-w-6 com-h-6 com-rounded-full com-flex com-items-center com-justify-center com-text-10px com-font-medium com-shrink-0 com-text-white;
+        @apply com-w-6 com-h-6 com-rounded-full com-flex com-items-center com-justify-center com-text-10px com-font-medium com-shrink-0 com-text-white com-transition-transform com-duration-200;
 
         &.members-avatar {
           @apply com-bg-blue-500;
@@ -430,7 +523,7 @@
         @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-line-clamp-2 com-m-0;
 
         .activity-text {
-          @apply com-text-sm com-text-Yankees-Blue com-line-clamp-2 com-cursor-default;
+          @apply com-text-xs com-font-medium com-text-Yankees-Blue com-line-clamp-2 com-cursor-default;
 
           strong {
             @apply com-font-medium;
@@ -1397,6 +1490,216 @@
   }
 }
 
+// Row 3: Audience + Post-Event
+.two-col-row {
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-2 com-gap-3;
+
+  .audience-card,
+  .post-event-card {
+    @apply com-rounded-xl com-p-3 com-bg-white com-border com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+    animation: cardFadeIn 0.4s ease-out both;
+
+    &:hover {
+      @apply com-shadow-Card;
+      transform: translateY(-2px);
+    }
+  }
+
+  .audience-card {
+    animation-delay: 0.2s;
+  }
+
+  .post-event-card {
+    animation-delay: 0.25s;
+    background: linear-gradient(135deg, #ede9fe 0%, #f5f3ff 30%, #ffffff 55%, #eef2ff 80%, #e0e7ff 100%);
+    border-color: #a5b4fc;
+  }
+}
+
+.audience-content {
+  @apply com-grid com-grid-cols-1 md:com-grid-cols-2 md:com-gap-6 com-gap-3 com-mt-2 com-items-start;
+
+  .audience-chart {
+    @apply com-flex com-flex-col com-items-center com-gap-3;
+
+    .chart-donut {
+      @apply com-w-20 com-h-20;
+
+      .chart-donut-track {
+        fill: none;
+        stroke: #e5e7eb;
+        stroke-width: 3.8;
+      }
+
+      .chart-donut-segment {
+        fill: none;
+        stroke-width: 3.8;
+      }
+    }
+
+    .chart-donut-empty {
+      @apply com-w-24 com-h-24 com-rounded-full com-border-solid com-border-gray-200;
+      border-width: 12px;
+    }
+
+    .chart-legend {
+      @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-1 com-w-full;
+
+      li {
+        @apply com-flex com-items-center com-gap-2 com-text-xs com-text-Yankees-Blue;
+      }
+
+      .legend-dot {
+        @apply com-w-2.5 com-h-2.5 com-rounded-full com-shrink-0;
+        background-color: var(--dot-color);
+      }
+
+      .legend-pct {
+        @apply com-ml-auto com-text-xs com-text-Cadet-Grey;
+      }
+    }
+  }
+
+  .audience-stats {
+    @apply com-flex com-flex-col com-gap-2 com-min-w-0;
+
+    .audience-col {
+      @apply com-flex com-flex-col com-min-w-0 com-bg-gray-50 com-rounded-lg com-p-2;
+
+      .audience-col-heading {
+        @apply com-m-0 com-text-xs com-font-medium com-text-Yankees-Blue com-mb-1.5;
+      }
+
+      .audience-list {
+        @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-1.5;
+
+        li {
+          @apply com-flex com-items-center com-justify-between com-gap-2 com-text-xs com-text-Yankees-Blue;
+        }
+
+        .audience-name {
+          @apply com-flex-1 com-min-w-0 com-truncate com-text-xs com-font-normal com-text-gray-600;
+        }
+
+        .audience-bar {
+          @apply com-h-1.5 com-rounded-full com-shrink com-min-w-[8px] com-max-w-[72px] com-bg-indigo-500;
+          width: var(--bar-share, 0%);
+          animation: barGrow 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+          transform-origin: left;
+        }
+
+        .audience-pct {
+          @apply com-text-xs com-font-semibold com-text-Cadet-Grey com-w-8 com-text-right;
+        }
+      }
+    }
+  }
+}
+
+.post-event-card {
+  .post-event-date {
+    @apply com-text-xs com-text-Cadet-Grey;
+  }
+
+  .post-event-content {
+    @apply com-flex com-flex-col sm:com-flex-row com-gap-2 com-mt-2 com-items-start;
+
+    .post-event-hero {
+      @apply com-flex com-flex-col com-gap-1 com-shrink-0 com-p-2.5;
+
+      .post-event-title {
+        @apply com-m-0 com-text-xs com-font-medium com-text-tYankees-Blue;
+      }
+
+      .post-event-sub {
+        @apply com-m-0 com-text-xs com-text-Cadet-Grey;
+      }
+
+      .post-event-link {
+        @apply com-text-xs com-font-medium com-text-primary-500 com-mt-1 com-cursor-pointer com-no-underline com-transition-transform com-duration-200 com-inline-block;
+        @apply hover:com-text-primary-700;
+
+        &:hover {
+          transform: translateX(2px);
+        }
+      }
+    }
+
+    .post-event-stats {
+      @apply com-grid com-grid-cols-2 sm:com-grid-cols-3 com-gap-1.5 com-flex-1 com-w-full;
+
+      .post-stat {
+        @apply com-flex com-flex-col com-items-center com-justify-center com-gap-0.5 com-py-2 com-px-2 com-min-w-0 com-bg-white com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+
+        &:hover {
+          @apply com-border-primary-300 com-shadow-Card;
+          transform: translateY(-2px);
+        }
+
+        .post-stat-value {
+          @apply com-text-base com-font-medium com-text-Yankees-Blue com-leading-none;
+        }
+
+        .post-stat-label {
+          @apply com-text-xs com-text-Cadet-Grey com-text-center;
+        }
+
+        .post-stat-action {
+          @apply com-inline-flex com-items-center com-justify-center com-gap-1 com-no-underline com-text-center com-max-w-full com-whitespace-normal com-leading-tight;
+
+          nb-icon {
+            @apply com-text-xs com-w-4 com-h-4 com-shrink-0;
+          }
+        }
+      }
+    }
+  }
+
+  .post-event-charts {
+    @apply com-grid com-grid-cols-1 sm:com-grid-cols-2 md:com-gap-6 com-gap-3 com-mt-2;
+
+    .post-event-chart {
+      @apply com-flex com-flex-col com-gap-2;
+
+      .audience-col-heading {
+        @apply com-m-0 com-text-xs com-font-medium com-text-tYankees-Blue com-mb-1;
+      }
+
+      .chart-donut {
+        @apply com-w-24 com-h-24;
+
+        .chart-donut-track {
+          fill: none;
+          stroke: #e5e7eb;
+          stroke-width: 3.8;
+        }
+
+        .chart-donut-segment {
+          fill: none;
+          stroke-width: 3.8;
+        }
+      }
+
+      .chart-legend {
+        @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-1;
+
+        li {
+          @apply com-flex com-items-center com-gap-2 com-text-xs com-text-gray-600 dark:com-text-gray-800;
+        }
+
+        .legend-dot {
+          @apply com-w-2.5 com-h-2.5 com-rounded-full com-shrink-0;
+          background-color: var(--dot-color);
+        }
+
+        .legend-pct {
+          @apply com-ml-auto com-text-xs com-text-Cadet-Grey;
+        }
+      }
+    }
+  }
+}
+
 // Row 4: Live Visitors + Top Pages
 .live-traffic-row {
   @apply com-grid com-grid-cols-1 lg:com-grid-cols-2 com-gap-4;
@@ -1407,37 +1710,51 @@
   }
 
   .live-visitors-body {
-    @apply com-flex com-flex-col com-gap-3;
+    @apply com-flex com-flex-col com-gap-2;
 
     .live-visitors-counts {
-      @apply com-flex com-gap-4;
+      @apply com-flex com-gap-6;
 
       .live-count {
-        @apply com-flex com-flex-col com-gap-1;
+        @apply com-flex com-flex-col com-gap-2;
+
+        &:first-child .live-count-value {
+          animation: deltaPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
+        }
 
         .live-count-value {
-          @apply com-text-lg com-font-semibold com-text-Yankees-Blue com-leading-none;
+          @apply com-text-base com-font-medium com-text-Yankees-Blue com-leading-none;
         }
 
         .live-count-label {
-          @apply com-flex com-items-center com-gap-1.5 com-text-xs com-text-gray-500;
+          @apply com-flex com-items-center com-gap-1.5 com-text-xs com-font-normal com-text-gray-500;
 
           .live-dot {
-            @apply com-w-2 com-h-2 com-rounded-full com-bg-green-500 com-inline-block;
+            @apply com-w-2 com-h-2 com-rounded-full com-bg-green-500 com-relative com-inline-block;
+
+            &::after {
+              content: '';
+              @apply com-absolute com-inset-0 com-rounded-full com-bg-green-500;
+              animation: livePing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+            }
           }
         }
       }
     }
   }
 
+  .top-list-header {
+    @apply com-flex com-items-center com-justify-between com-pb-1 com-mb-1 com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-text-10px com-font-medium com-text-gray-400 com-uppercase com-tracking-wide;
+  }
+
   .top-list {
     @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-2;
 
     .top-list-item {
-      @apply com-flex com-items-center com-gap-2 com-text-xs com-text-Yankees-Blue;
+      @apply com-flex com-items-center com-gap-4 com-text-xs com-text-Yankees-Blue;
 
       .top-list-name {
-        @apply com-w-28 com-shrink-0 com-truncate com-text-sm com-text-Yankees-Blue com-no-underline;
+        @apply com-w-28 com-shrink-0 com-truncate com-text-xs com-font-normal com-text-gray-600 com-no-underline com-transition-colors com-duration-200;
 
         &:hover {
           @apply com-text-primary-600 com-underline;
@@ -1451,6 +1768,8 @@
       .top-list-bar {
         @apply com-block com-h-full com-rounded-full com-min-w-1;
         width: var(--bar-share, 0%);
+        animation: barGrow 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+        transform-origin: left;
 
         &.top-list-bar-pages {
           @apply com-bg-primary-500;
@@ -1458,7 +1777,7 @@
       }
 
       .top-list-value {
-        @apply com-ml-auto com-text-sm com-font-medium com-text-Cadet-Grey com-shrink-0;
+        @apply com-ml-auto com-text-xs com-font-semibold com-text-Yankees-Blue com-shrink-0;
       }
     }
 
