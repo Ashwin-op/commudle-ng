@@ -226,7 +226,19 @@
               <time class="timeline-event-time">{{ item.scheduled_at | date : 'h:mm a' }}</time>
               </a>
           </li>
-          <li *ngIf="upcomingSchedule.length === 0" class="timeline-empty">Nothing scheduled yet.</li>
+          <li *ngIf="upcomingSchedule.length === 0" class="timeline-empty">
+            <span class="timeline-empty-text">Nothing Scheduled Yet</span>
+            <span class="timeline-empty-actions">
+              <a comButton size="tiny" status="primary" appearance="outline" shape="semi-round"
+                [routerLink]="['/admin', 'communities', community.slug, 'events', 'event-dashboard', 'new']">
+                Create Event
+              </a>
+              <a comButton size="tiny" status="primary" appearance="outline" shape="semi-round"
+                [routerLink]="['/admin', 'communities', community.slug, 'hackathon-dashboard', 'new']">
+                Create Hackathon
+              </a>
+            </span>
+          </li>
         </ng-container>
       </ol>
     </article>
@@ -395,15 +407,15 @@
       <div class="live-visitors-body">
         <div class="live-visitors-counts">
           <div class="live-count">
-            <span class="live-count-value">{{ liveVisitors?.live_count ?? '—' }}</span>
             <span class="live-count-label">
               <span class="live-dot"></span>
               Live now
             </span>
+            <span class="live-count-value">{{ liveVisitors?.live_count ?? '—' }}</span>
           </div>
           <div class="live-count">
-            <span class="live-count-value">{{ liveVisitors?.last_30_min_count ?? '—' }}</span>
             <span class="live-count-label">Last 30 min</span>
+            <span class="live-count-value">{{ liveVisitors?.last_30_min_count ?? '—' }}</span>
           </div>
         </div>
       </div>
@@ -416,6 +428,10 @@
           <fa-icon [icon]="icons.faFileLines" class="heading-icon-pages"></fa-icon> Top Pages
         </h3>
       </header>
+      <div class="top-list-header">
+        <span>Page Title</span>
+        <span>Views</span>
+      </div>
       <ul class="top-list">
         <li *ngIf="topPagesLoading" class="section-loader">
           <app-loading-spinner></app-loading-spinner>
@@ -443,6 +459,10 @@
           <fa-icon [icon]="icons.faLocationDot" class="heading-icon-cities"></fa-icon> Top Cities
         </h3>
       </header>
+      <div class="top-list-header">
+        <span>City</span>
+        <span>Member Count</span>
+      </div>
       <ul class="top-list">
         <li *ngIf="topCitiesLoading" class="section-loader">
           <app-loading-spinner></app-loading-spinner>

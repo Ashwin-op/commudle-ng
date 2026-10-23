@@ -223,15 +223,6 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     this.loadNeedsAttention();
   }
 
-  // Mirrors the email confirmation flow exactly: visiting
-  // email-confirmations/collaboration-community?token=... with no status
-  // calls confirmCollaboration (accept); with &status=rejected it calls
-  // updateStatus(token, 'rejected'). Same two calls, triggered from the
-  // dashboard instead of an emailed link.
-  //
-  // Requires needsAttention.collaboration_requests items to carry a `token`
-  // -- not yet returned by the API, so this will show the "not available"
-  // toast below until that field is added server-side.
   collaborationActionLoading: Record<number, boolean> = {};
 
   acceptCollaborationRequest(request: IDashboardCollaborationRequest): void {
@@ -292,9 +283,6 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  // Schedule items only carry a numeric `id` (no slug), so this relies on the
-  // same friendly-id lookup (id or slug) the rest of the app's event/hackathon
-  // /newsletter routes already accept.
   scheduleItemLink(item: ICommunityDashboardScheduleItem): any[] {
     switch (item.type) {
       case 'event':
@@ -308,10 +296,6 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  // None of these activity types carry a per-item id/slug from the API (no
-  // channel/forum/survey id, no username on the user object) -- this links
-  // to the closest list page instead of the specific item until the backend
-  // adds one. Returns null for the unhandled fallback ('New activity').
   activityItemLink(activity: ICommunityDashboardActivityItem): any[] | null {
     switch (activity.type) {
       case 'channel_message':

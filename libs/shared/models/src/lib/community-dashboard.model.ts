@@ -44,9 +44,6 @@ export interface IDashboardCollaborationRequest {
   direction: 'incoming' | 'outgoing';
   status: string;
   created_at: string;
-  // Not yet returned by needs_attention -- same token embedded in the
-  // confirmation email link (email-confirmations/collaboration-community
-  // ?token=...), needed to call confirmCollaboration/updateStatus directly.
   token?: string;
 }
 
