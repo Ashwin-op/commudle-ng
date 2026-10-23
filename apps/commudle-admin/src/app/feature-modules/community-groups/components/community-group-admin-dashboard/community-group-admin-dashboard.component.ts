@@ -8,7 +8,9 @@ import {
   ICommunityGroupDashboardActivityItem,
   ICommunityGroupDashboardAudienceDemographics,
   ICommunityGroupDashboardChannelActivityItem,
+  ICommunityGroupDashboardCommunity,
   ICommunityGroupDashboardEmailCommunication,
+  ICommunityGroupDashboardEngagementSnapshot,
   ICommunityGroupDashboardFootprint,
   ICommunityGroupDashboardNeedsAttention,
   ICommunityGroupDashboardPulse,
@@ -117,6 +119,17 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   latestForumActivity: ICommunityGroupDashboardChannelActivityItem[] = [];
   isForumActivityLoading = false;
 
+  // Your Communities -- GET .../communities (paginated)
+  communities: ICommunityGroupDashboardCommunity[] = [];
+  communitiesPage = 1;
+  readonly communitiesCount = 10;
+  communitiesTotal = 0;
+  isCommunitiesLoading = false;
+
+  // Engagement Snapshot -- GET .../engagement_snapshot
+  engagementSnapshot: ICommunityGroupDashboardEngagementSnapshot;
+  isEngagementLoading = false;
+
   quickActions = [];
 
   constructor(
@@ -140,6 +153,8 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
         this.loadEmailCommunication();
         this.loadLatestChannelActivity();
         this.loadLatestForumActivity();
+        this.loadCommunities();
+        this.loadEngagementSnapshot();
         this.setQuickActions();
       }),
     );
@@ -343,6 +358,54 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
         },
         error: () => {
           this.isForumActivityLoading = false;
+        },
+      }),
+    );
+  }
+
+  loadCommunities(): void {
+    this.isCommunitiesLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService
+        .communities(this.communityGroup.id, this.communitiesPage, this.communitiesCount)
+        .subscribe({
+          next: (data) => {
+            this.communities = data.values;
+            this.communitiesTotal = data.total;
+            this.isCommunitiesLoading = false;
+          },
+          error: () => {
+            this.isCommunitiesLoading = false;
+          },
+        }),
+    );
+  }
+
+  onCommunitiesPageChange(page: number): void {
+    this.communitiesPage = page;
+    this.loadCommunities();
+  }
+
+  /** Normalizes a weekly-activity trend into an SVG polyline `points` string (viewBox 0 0 60 20). */
+  sparklinePoints(trend: number[]): string {
+    if (!trend?.length) {
+      return '';
+    }
+    const max = Math.max(...trend, 1);
+    const step = trend.length > 1 ? 60 / (trend.length - 1) : 0;
+    return trend.map((value, i) => `${i * step},${20 - (value / max) * 18}`).join(' ');
+  }
+
+  loadEngagementSnapshot(): void {
+    this.isEngagementLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService.engagementSnapshot(this.communityGroup.id).subscribe({
+        next: (data) => {
+          this.engagementSnapshot = data;
+          this.isEngagementLoading = false;
+        },
+        error: () => {
+          this.isEngagementLoading = false;
         },
       }),
     );

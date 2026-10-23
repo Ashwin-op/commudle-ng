@@ -228,7 +228,7 @@ a {
 .router {
   // min-w-0 lets this flex item shrink below its content's width, so a wide
   // child (e.g. a table) scrolls inside itself instead of widening the page.
-  @apply com-w-full com-min-w-0 md:com-m-4 com-m-0 com-bg-white com-rounded-lg;
+  @apply com-w-full com-min-w-0 md:com-m-4 com-m-0 com-rounded-lg;
 }
 
 .header-icons {

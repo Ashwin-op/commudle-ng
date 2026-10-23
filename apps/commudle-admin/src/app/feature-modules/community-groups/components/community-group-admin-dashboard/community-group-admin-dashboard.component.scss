@@ -35,6 +35,14 @@
   .heading-icon-forum {
     @apply com-text-blue-500;
   }
+
+  .heading-icon-communities {
+    @apply com-text-indigo-500;
+  }
+
+  .heading-icon-engagement {
+    @apply com-text-orange-500;
+  }
 }
 
 .section-header {
@@ -521,6 +529,100 @@
 
       .action-label {
         @apply com-text-xs com-font-normal com-text-Yankees-Blue com-text-center;
+      }
+    }
+  }
+}
+
+// Row 5: Your Communities + Engagement Snapshot
+.communities-engagement-row {
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-2;
+
+  .communities-card,
+  .engagement-card {
+    @apply com-rounded-xl com-p-2.5 com-bg-white com-border com-border-solid com-border-Bright-Gray;
+  }
+
+  .communities-card {
+    @apply lg:com-col-span-2;
+  }
+
+  .communities-list {
+    @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col;
+
+    .community-row {
+      @apply com-flex com-items-center com-gap-3 com-py-1.5 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+
+      &:last-child {
+        @apply com-border-b-0;
+      }
+
+      .community-name {
+        @apply com-flex-1 com-min-w-0 com-truncate com-text-sm com-font-medium com-text-Yankees-Blue com-no-underline;
+
+        &:hover {
+          @apply com-text-primary-600 com-underline;
+        }
+      }
+
+      .community-stat {
+        @apply com-text-xs com-text-Cadet-Grey com-shrink-0 com-whitespace-nowrap;
+      }
+
+      .community-sparkline {
+        @apply com-w-10 com-h-4 com-shrink-0;
+
+        polyline {
+          fill: none;
+          stroke: theme('colors.primary.500');
+          stroke-width: 2;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+      }
+
+      .community-status {
+        @apply com-text-xs com-font-medium com-shrink-0 com-px-2 com-py-0.5 com-rounded-full com-whitespace-nowrap;
+
+        &.healthy {
+          @apply com-text-green-600 com-bg-green-50;
+        }
+
+        &.needs_attention {
+          @apply com-text-red-500 com-bg-red-50;
+        }
+      }
+    }
+
+    .communities-empty {
+      @apply com-py-2 com-text-xs com-text-gray-500;
+    }
+  }
+
+  .engagement-stats {
+    @apply com-grid com-grid-cols-2 com-gap-2 com-m-0 com-p-0 com-list-none;
+
+    .engagement-stat {
+      @apply com-flex com-flex-col com-gap-0.5 com-p-2.5 com-rounded-lg com-border com-border-solid com-border-Bright-Gray;
+
+      .engagement-value {
+        @apply com-text-lg com-font-semibold com-text-Yankees-Blue com-leading-none;
+
+        &.growth-up {
+          @apply com-text-green-600;
+        }
+
+        &.growth-down {
+          @apply com-text-red-500;
+        }
+      }
+
+      .engagement-label {
+        @apply com-text-xs com-text-Cadet-Grey com-font-medium;
+      }
+
+      .engagement-growth {
+        @apply com-text-10px com-font-medium com-text-green-600;
       }
     }
   }

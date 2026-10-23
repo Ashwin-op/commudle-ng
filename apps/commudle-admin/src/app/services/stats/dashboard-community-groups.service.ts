@@ -64,7 +64,10 @@ export class DashboardCommunityGroupsService {
     page = 1,
     count = 10,
   ): Observable<IPaginationCount<ICommunityGroupDashboardActivityItem>> {
-    const params = new HttpParams().set('community_group_id', communityGroupId).set('page', page).set('count', count);
+    const params = new HttpParams()
+      .set('community_group_id', communityGroupId)
+      .set('page_no', page)
+      .set('page_items_count', count);
     return this.http.get<IPaginationCount<ICommunityGroupDashboardActivityItem>>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITY_GROUPS.RECENT_ACTIVITY),
       { params },
@@ -112,7 +115,10 @@ export class DashboardCommunityGroupsService {
   }
 
   communities(communityGroupId, page = 1, count = 10): Observable<IPaginationCount<ICommunityGroupDashboardCommunity>> {
-    const params = new HttpParams().set('community_group_id', communityGroupId).set('page', page).set('count', count);
+    const params = new HttpParams()
+      .set('community_group_id', communityGroupId)
+      .set('page_no', page)
+      .set('page_items_count', count);
     return this.http.get<IPaginationCount<ICommunityGroupDashboardCommunity>>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITY_GROUPS.COMMUNITIES),
       { params },

@@ -413,4 +413,85 @@
       </nav>
     </article>
   </section>
+
+  <!-- Row 5: Your Communities + Engagement Snapshot -->
+  <section class="communities-engagement-row">
+    <!-- Your Communities -->
+    <article class="communities-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faUserGroup" class="heading-icon-communities"></fa-icon> Your Communities
+        </h3>
+      </header>
+      <app-loading-spinner *ngIf="isCommunitiesLoading" class="section-loader"></app-loading-spinner>
+      <ul class="communities-list" *ngIf="!isCommunitiesLoading">
+        <li *ngFor="let c of communities" class="community-row">
+          <a [routerLink]="['/admin/communities', c.id]" class="community-name" [title]="c.name">{{ c.name }}</a>
+          <span class="community-stat">{{ c.members_count | number }} members</span>
+          <span class="community-stat">{{ c.upcoming_events_count | number }} upcoming</span>
+          <svg class="community-sparkline" viewBox="0 0 60 20" preserveAspectRatio="none">
+            <polyline [attr.points]="sparklinePoints(c.activity_trend)" />
+          </svg>
+          <span class="community-status" [ngClass]="c.status">{{ c.status | capitalizeAndRemoveUnderscore }}</span>
+        </li>
+        <li *ngIf="communities.length === 0" class="communities-empty">No communities yet.</li>
+      </ul>
+      <commudle-pagination-compact *ngIf="communitiesTotal > communitiesCount" [page]="communitiesPage"
+        [count]="communitiesCount" [total]="communitiesTotal"
+        (pageChange)="onCommunitiesPageChange($event)"></commudle-pagination-compact>
+    </article>
+
+    <!-- Engagement Snapshot -->
+    <article class="engagement-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faArrowTrendUp" class="heading-icon-engagement"></fa-icon> Engagement Snapshot
+        </h3>
+      </header>
+      <app-loading-spinner *ngIf="isEngagementLoading" class="section-loader"></app-loading-spinner>
+      <ul class="engagement-stats" *ngIf="!isEngagementLoading">
+        <li class="engagement-stat">
+          <span class="engagement-value">{{ engagementSnapshot?.members?.count ?? 0 | number }}</span>
+          <span class="engagement-label">Members</span>
+          <span class="engagement-growth" *ngIf="engagementSnapshot?.members?.growth">
+            +{{ engagementSnapshot.members.growth | number }}
+          </span>
+        </li>
+        <li class="engagement-stat">
+          <span class="engagement-value">{{ engagementSnapshot?.event_registrations?.count ?? 0 | number }}</span>
+          <span class="engagement-label">Event Registrations</span>
+          <span class="engagement-growth" *ngIf="engagementSnapshot?.event_registrations?.growth">
+            +{{ engagementSnapshot.event_registrations.growth | number }}
+          </span>
+        </li>
+        <li class="engagement-stat">
+          <span class="engagement-value">{{ engagementSnapshot?.hackathon_registrations?.count ?? 0 | number }}</span>
+          <span class="engagement-label">Hackathon Registrations</span>
+          <span class="engagement-growth" *ngIf="engagementSnapshot?.hackathon_registrations?.growth">
+            +{{ engagementSnapshot.hackathon_registrations.growth | number }}
+          </span>
+        </li>
+        <li class="engagement-stat">
+          <span class="engagement-value" [ngClass]="{
+              'growth-up': engagementSnapshot?.community_activity?.growth > 0,
+              'growth-down': engagementSnapshot?.community_activity?.growth < 0
+            }">
+            {{ engagementSnapshot?.community_activity?.growth > 0 ? '↑' : '↓' }}
+            {{ Math.abs(engagementSnapshot?.community_activity?.growth ?? 0) }}%
+          </span>
+          <span class="engagement-label">Community Activity</span>
+        </li>
+        <li class="engagement-stat">
+          <span class="engagement-value" [ngClass]="{
+              'growth-up': engagementSnapshot?.content_engagement?.growth > 0,
+              'growth-down': engagementSnapshot?.content_engagement?.growth < 0
+            }">
+            {{ engagementSnapshot?.content_engagement?.growth > 0 ? '↑' : '↓' }}
+            {{ Math.abs(engagementSnapshot?.content_engagement?.growth ?? 0) }}%
+          </span>
+          <span class="engagement-label">Content Engagement</span>
+        </li>
+      </ul>
+    </article>
+  </section>
 </div>

@@ -4,6 +4,9 @@ import { ICommunity } from '@commudle/shared-models';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
 import { AuthService, SeoService } from '@commudle/shared-services';
 import { DashboardCommunitiesService } from 'apps/commudle-admin/src/app/services/stats/dashboard-communities.service';
+import { EventCollaborationCommunitiesService } from 'apps/commudle-admin/src/app/services/event-collaboration-communities.service';
+import { HackathonCollaborationCommunitiesService } from '@commudle/shared-services';
+import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
 import {
   ICommunityDashboardActivityItem,
   ICommunityDashboardLiveVisitors,
@@ -13,6 +16,7 @@ import {
   ICommunityDashboardSnapshot,
   ICommunityDashboardTopCity,
   ICommunityDashboardTopPage,
+  IDashboardCollaborationRequest,
 } from '@commudle/shared-models';
 import { Subscription, interval } from 'rxjs';
 import {
@@ -26,7 +30,7 @@ import {
   faEnvelope,
   faScroll,
   faCircleCheck,
-  faCircleXmark,
+  faCircleChevronDown,
   faBell,
   faCalendarDay,
   faBolt,
@@ -92,7 +96,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     faEnvelope,
     faScroll,
     faCircleCheck,
-    faCircleXmark,
+    faCircleChevronDown,
     faBell,
     faCalendarDay,
     faBolt,
@@ -219,6 +223,60 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     this.loadNeedsAttention();
   }
 
+  // Mirrors the email confirmation flow exactly: visiting
+  // email-confirmations/collaboration-community?token=... with no status
+  // calls confirmCollaboration (accept); with &status=rejected it calls
+  // updateStatus(token, 'rejected'). Same two calls, triggered from the
+  // dashboard instead of an emailed link.
+  //
+  // Requires needsAttention.collaboration_requests items to carry a `token`
+  // -- not yet returned by the API, so this will show the "not available"
+  // toast below until that field is added server-side.
+  collaborationActionLoading: Record<number, boolean> = {};
+
+  acceptCollaborationRequest(request: IDashboardCollaborationRequest): void {
+    this.runCollaborationAction(request, (token) =>
+      request.type === 'hackathon'
+        ? this.hackathonCollaborationCommunitiesService.updateStatus(token, 'approved')
+        : this.eventCollaborationCommunitiesService.confirmCollaboration(token),
+    );
+  }
+
+  rejectCollaborationRequest(request: IDashboardCollaborationRequest): void {
+    this.runCollaborationAction(request, (token) =>
+      request.type === 'hackathon'
+        ? this.hackathonCollaborationCommunitiesService.updateStatus(token, 'rejected')
+        : this.eventCollaborationCommunitiesService.updateStatus(token, 'rejected'),
+    );
+  }
+
+  private runCollaborationAction(request: IDashboardCollaborationRequest, call: (token: string) => any): void {
+    if (!request.token) {
+      this.toastLogService.errorDialog(
+        "This request can't be actioned from the dashboard yet -- use the link from the collaboration email instead.",
+      );
+      return;
+    }
+    this.collaborationActionLoading[request.id] = true;
+    this.subscriptions.push(
+      call(request.token).subscribe({
+        next: () => {
+          this.collaborationActionLoading[request.id] = false;
+          this.toastLogService.successDialog('Response recorded');
+          if (this.needsAttention?.collaboration_requests) {
+            this.needsAttention.collaboration_requests.values =
+              this.needsAttention.collaboration_requests.values.filter((r) => r.id !== request.id);
+            this.needsAttention.collaboration_requests.total -= 1;
+          }
+        },
+        error: () => {
+          this.collaborationActionLoading[request.id] = false;
+          this.toastLogService.errorDialog('Something went wrong, please try again');
+        },
+      }),
+    );
+  }
+
   loadUpcomingSchedule(): void {
     this.upcomingScheduleLoading = true;
     this.subscriptions.push(
@@ -232,6 +290,40 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         },
       }),
     );
+  }
+
+  // Schedule items only carry a numeric `id` (no slug), so this relies on the
+  // same friendly-id lookup (id or slug) the rest of the app's event/hackathon
+  // /newsletter routes already accept.
+  scheduleItemLink(item: ICommunityDashboardScheduleItem): any[] {
+    switch (item.type) {
+      case 'event':
+        return ['/admin/communities', this.community.slug, 'events', 'event-dashboard', item.id];
+      case 'hackathon':
+        return ['/admin/communities', this.community.slug, 'hackathon-dashboard', item.id];
+      case 'newsletter':
+        return ['/admin/communities', this.community.slug, 'newsletters', 'edit', item.id];
+      default:
+        return [];
+    }
+  }
+
+  // None of these activity types carry a per-item id/slug from the API (no
+  // channel/forum/survey id, no username on the user object) -- this links
+  // to the closest list page instead of the specific item until the backend
+  // adds one. Returns null for the unhandled fallback ('New activity').
+  activityItemLink(activity: ICommunityDashboardActivityItem): any[] | null {
+    switch (activity.type) {
+      case 'channel_message':
+      case 'forum_message':
+        return ['/admin/communities', this.community.slug, 'channels'];
+      case 'survey_response_milestone':
+        return ['/admin/communities', this.community.slug, 'surveys'];
+      case 'new_member':
+        return ['/admin/communities', this.community.slug, 'members'];
+      default:
+        return null;
+    }
   }
 
   scheduleDateLabel(scheduledAt: string): string {

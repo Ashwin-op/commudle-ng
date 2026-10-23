@@ -9,7 +9,9 @@
       <h2 class="greeting-text">
         Welcome back, <span class="greeting-name">{{ currentUser?.name?.split(' ')[0] }}</span>
       </h2>
-      <p class="greeting-sub">Here's what's happening in your community today.</p>
+      <p class="greeting-sub">
+        Here's what's happening in <strong>{{ community?.name }}</strong> today.
+      </p>
     </header>
     <ul class="greeting-highlights">
       <li class="highlight-card">
@@ -202,7 +204,6 @@
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faCalendarDay" class="heading-icon-schedule"></fa-icon> Upcoming Schedule
         </h3>
-        <a [routerLink]="['events']" class="view-all-link">View All Events & Hackathons →</a>
       </header>
       <ol class="schedule-timeline">
         <app-loading-spinner *ngIf="upcomingScheduleLoading" class="section-loader"></app-loading-spinner>
@@ -223,7 +224,7 @@
                 {{ item.title }}
               </span>
               <time class="timeline-event-time">{{ item.scheduled_at | date : 'h:mm a' }}</time>
-            </p>
+              </a>
           </li>
           <li *ngIf="upcomingSchedule.length === 0" class="timeline-empty">Nothing scheduled yet.</li>
         </ng-container>
