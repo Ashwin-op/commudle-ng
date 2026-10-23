@@ -25,6 +25,7 @@ import { MainNewsletterSchedulerComponent } from './components/main-newsletter-s
 import { MainNewsletterTestEmailerComponent } from './components/main-newsletter-test-emailer/main-newsletter-test-emailer.component';
 import { MainNewsletterEmailStatsComponent } from './components/main-newsletter-email-stats/main-newsletter-email-stats.component';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { SharedComponentsModule } from 'apps/shared-components/shared-components
     MainNewslettersRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    CommudleCardModule,
 
     // nebular
     NbCardModule,
