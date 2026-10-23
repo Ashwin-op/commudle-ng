@@ -1,14 +1,4 @@
-import {
-  booleanAttribute,
-  Directive,
-  ElementRef,
-  HostBinding,
-  HostListener,
-  Input,
-  OnChanges,
-  OnDestroy,
-  SimpleChanges,
-} from '@angular/core';
+import { booleanAttribute, Directive, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import type { ConnectedPosition } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
@@ -38,6 +28,14 @@ let nextId = 0;
 @Directive({
   selector: '[comTooltip]',
   standalone: false,
+  host: {
+    '[attr.aria-describedby]': 'describedBy',
+    '(mouseenter)': 'onEnter()',
+    '(focusin)': 'onEnter()',
+    '(mouseleave)': 'onLeave()',
+    '(focusout)': 'onLeave()',
+    '(document:keydown.escape)': 'onLeave()',
+  },
 })
 export class TooltipDirective implements OnChanges, OnDestroy {
   @Input('comTooltip') content: IComTooltipContent | null | undefined;
@@ -48,7 +46,7 @@ export class TooltipDirective implements OnChanges, OnDestroy {
   @Input({ transform: booleanAttribute }) tooltipDot = true;
   @Input({ transform: booleanAttribute }) tooltipDisabled = false;
 
-  @HostBinding('attr.aria-describedby') describedBy: string | null = null;
+  describedBy: string | null = null;
 
   private readonly id = `com-tooltip-${nextId++}`;
   private overlayRef?: OverlayRef;
@@ -57,8 +55,6 @@ export class TooltipDirective implements OnChanges, OnDestroy {
 
   constructor(private overlay: Overlay, private host: ElementRef<HTMLElement>) {}
 
-  @HostListener('mouseenter')
-  @HostListener('focusin')
   onEnter(): void {
     if (!this.overlayRef) {
       if (!this.tooltipDisabled && this.content) this.show();
@@ -69,9 +65,6 @@ export class TooltipDirective implements OnChanges, OnDestroy {
     }
   }
 
-  @HostListener('mouseleave')
-  @HostListener('focusout')
-  @HostListener('document:keydown.escape')
   onLeave(): void {
     if (!this.overlayRef || this.leaveTimer) return;
     this.tip?.setTooltipVisible(false);
