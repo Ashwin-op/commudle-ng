@@ -51,7 +51,7 @@ import { UserPersonalConnectComponent } from 'libs/shared/components/src/lib/com
 import { ListingPageHeaderComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-header/listing-page-header.component';
 import { UserExpertTickComponent } from 'apps/commudle-admin/src/app/app-shared-components/user-expert-tick.component';
 import { RecaptchaModule } from 'ng-recaptcha-2';
-import { CommudleInputModule, CommudleCardModule } from '@commudle/commudle-theme';
+import { CommudleInputModule, CommudleCardModule, CommudleTooltipModule } from '@commudle/commudle-theme';
 
 @NgModule({
   declarations: [
@@ -94,6 +94,7 @@ import { CommudleInputModule, CommudleCardModule } from '@commudle/commudle-them
     UserPersonalConnectComponent,
     ListingPageHeaderComponent,
     CommudleCardModule,
+    CommudleTooltipModule,
     // Nebular
     NbCardModule,
     NbInputModule,

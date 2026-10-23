@@ -2,15 +2,15 @@ import { booleanAttribute, Directive, ElementRef, Input, OnChanges, OnDestroy, S
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import type { ConnectedPosition } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
+import { ComTooltipComponent } from '../components/com-tooltip/com-tooltip.component';
 import {
-  ComTooltipComponent,
   TOOLTIP_ANIM_MS,
   type IComTooltipContent,
   type IComTooltipPlacement,
   type IComTooltipSize,
   type IComTooltipStatus,
   type IComTooltipVariant,
-} from '@commudle/commudle-theme';
+} from '../models/com-tooltip.types';
 
 const SPACE_WITH_DOT = 12;
 const SPACE_WITHOUT_DOT = 4;

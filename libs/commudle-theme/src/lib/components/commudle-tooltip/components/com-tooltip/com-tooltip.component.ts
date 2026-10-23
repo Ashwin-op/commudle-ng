@@ -13,14 +13,14 @@ import {
   TOOLTIP_DOT_GAP,
   TOOLTIP_DOT_SIZE,
   TOOLTIP_SIZES,
-} from './models/com-tooltip.types';
+} from '../../models/com-tooltip.types';
 import type {
   IComTooltipContent,
   IComTooltipPlacement,
   IComTooltipSize,
   IComTooltipStatus,
   IComTooltipVariant,
-} from './models/com-tooltip.types';
+} from '../../models/com-tooltip.types';
 
 const SLIDE_PX = 8;
 const HIDDEN_TRANSFORMS: Record<IComTooltipPlacement, string> = {
