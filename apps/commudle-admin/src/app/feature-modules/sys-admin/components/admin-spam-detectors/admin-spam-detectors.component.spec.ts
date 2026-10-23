@@ -29,7 +29,7 @@ const buildSpamDetectorFixture: ISpamDetector = {
     name: 'Demo Build',
     description: 'Build description',
     slug: 'demo-build',
-  } as any,
+  },
   content_user_preview: null,
   user: {
     id: 10,
@@ -78,22 +78,18 @@ describe('AdminSpamDetectorsComponent', () => {
   let fixture: ComponentFixture<AdminSpamDetectorsComponent>;
 
   const spamDetectorServiceStub = {
-    getSpamStats: jasmine
-      .createSpy('getSpamStats')
-      .and.returnValue(of({ total: 2, spam_count: 1, safe_count: 1, pending_decision_count: 2 })),
-    getSpamResult: jasmine
-      .createSpy('getSpamResult')
-      .and.returnValue(of({ values: [buildSpamDetectorFixture], total: 1, page: 1, count: 10 })),
-    updateSpamDetector: jasmine.createSpy('updateSpamDetector').and.returnValue(of(buildSpamDetectorFixture)),
+    getSpamStats: jest.fn().mockReturnValue(of({ total: 2, spam_count: 1, safe_count: 1, pending_decision_count: 2 })),
+    getSpamResult: jest.fn().mockReturnValue(of({ values: [buildSpamDetectorFixture], total: 1, page: 1, count: 10 })),
+    updateSpamDetector: jest.fn().mockReturnValue(of(buildSpamDetectorFixture)),
   };
 
   const seoServiceStub = {
-    noIndex: jasmine.createSpy('noIndex'),
-    setTitle: jasmine.createSpy('setTitle'),
+    noIndex: jest.fn(),
+    setTitle: jest.fn(),
   };
 
   const toastrServiceStub = {
-    successDialog: jasmine.createSpy('successDialog'),
+    successDialog: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -110,6 +106,7 @@ describe('AdminSpamDetectorsComponent', () => {
 
     fixture = TestBed.createComponent(AdminSpamDetectorsComponent);
     component = fixture.componentInstance;
+    component.moment = jest.requireActual('moment');
     fixture.detectChanges();
   });
 
@@ -118,13 +115,51 @@ describe('AdminSpamDetectorsComponent', () => {
   });
 
   it('should detect user, build, and review decision states correctly', () => {
-    expect(component.isCommunityBuildContent(buildSpamDetectorFixture)).toBeTrue();
-    expect(component.isUserContent(buildSpamDetectorFixture)).toBeFalse();
-    expect(component.isReviewDecision(buildSpamDetectorFixture)).toBeFalse();
+    expect(component.isCommunityBuildContent(buildSpamDetectorFixture)).toBe(true);
+    expect(component.isUserContent(buildSpamDetectorFixture)).toBe(false);
+    expect(component.isReviewDecision(buildSpamDetectorFixture)).toBe(false);
 
-    expect(component.isUserContent(userSpamDetectorFixture)).toBeTrue();
-    expect(component.isCommunityBuildContent(userSpamDetectorFixture)).toBeFalse();
-    expect(component.isReviewDecision(userSpamDetectorFixture)).toBeTrue();
+    expect(component.isUserContent(userSpamDetectorFixture)).toBe(true);
+    expect(component.isCommunityBuildContent(userSpamDetectorFixture)).toBe(false);
+    expect(component.isReviewDecision(userSpamDetectorFixture)).toBe(true);
+  });
+
+  it.each([true, false, null])('should send the selected spam filter %s and reset pagination', async (value) => {
+    component.isSpam = value === null ? true : null;
+    component.isSpamDecision = false;
+    component.contentType = 'CommunityBuild';
+    fixture.detectChanges();
+    await fixture.whenStable();
+    component.page = 3;
+    spamDetectorServiceStub.getSpamResult.mockClear();
+
+    const select = fixture.nativeElement.querySelectorAll('.filter-controls select')[1] as HTMLSelectElement;
+    select.selectedIndex = value === null ? 0 : value ? 1 : 2;
+    select.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(component.isSpam).toBe(value);
+    expect(spamDetectorServiceStub.getSpamResult).toHaveBeenLastCalledWith(1, 10, value, false, 'CommunityBuild');
+  });
+
+  it.each([true, false, null])('should send the selected admin filter %s and preserve other filters', async (value) => {
+    component.isSpam = false;
+    component.isSpamDecision = value === null ? true : null;
+    component.contentType = 'User';
+    fixture.detectChanges();
+    await fixture.whenStable();
+    component.page = 3;
+    spamDetectorServiceStub.getSpamResult.mockClear();
+
+    const select = fixture.nativeElement.querySelectorAll('.filter-controls select')[2] as HTMLSelectElement;
+    select.selectedIndex = value === null ? 0 : value ? 1 : 2;
+    select.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(component.isSpamDecision).toBe(value);
+    expect(spamDetectorServiceStub.getSpamResult).toHaveBeenLastCalledWith(1, 10, false, value, 'User');
   });
 
   it('should render community build rows as before', () => {

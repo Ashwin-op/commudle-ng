@@ -78,18 +78,18 @@
       </div>
       <div class="filter-field">
         <label>Spam Detection</label>
-        <select [(ngModel)]="isSpam" (change)="changeSpamDetectorType($any($event.target))">
-          <option [ngValue]="null" value="null">All Results</option>
-          <option [ngValue]="true" value="true">Flagged as Spam</option>
-          <option [ngValue]="false" value="false">Not Spam / Review</option>
+        <select [ngModel]="isSpam" (ngModelChange)="changeSpamDetectorType($event)">
+          <option [ngValue]="null">All Results</option>
+          <option [ngValue]="true">Flagged as Spam</option>
+          <option [ngValue]="false">Not Spam / Review</option>
         </select>
       </div>
       <div class="filter-field">
         <label>Admin Decision</label>
-        <select [(ngModel)]="isSpamDecision" (change)="changeSpamDecisionType($any($event.target))">
-          <option [ngValue]="null" value="null">All Decisions</option>
-          <option [ngValue]="true" value="true">Confirmed Spam</option>
-          <option [ngValue]="false" value="false">Confirmed Safe</option>
+        <select [ngModel]="isSpamDecision" (ngModelChange)="changeSpamDecisionType($event)">
+          <option [ngValue]="null">All Decisions</option>
+          <option [ngValue]="true">Confirmed Spam</option>
+          <option [ngValue]="false">Confirmed Safe</option>
         </select>
       </div>
     </div>
