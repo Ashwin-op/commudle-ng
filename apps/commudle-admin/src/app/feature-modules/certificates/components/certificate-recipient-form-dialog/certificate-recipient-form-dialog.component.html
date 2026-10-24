@@ -59,6 +59,12 @@
     </form>
   </com-card-body>
   <com-card-footer>
+    <commudle-alert
+      *ngIf="revokedReissueNotice"
+      class="revoked-reissue-notice"
+      [info]="true"
+      message="This certificate was revoked. Saving will reissue it with the new details and make it public again."
+    ></commudle-alert>
     <button
       type="submit"
       comButton

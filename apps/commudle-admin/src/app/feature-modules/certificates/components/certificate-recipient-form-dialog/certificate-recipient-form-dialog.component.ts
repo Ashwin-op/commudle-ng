@@ -69,6 +69,12 @@ export class CertificateRecipientFormDialogComponent implements OnInit, OnDestro
     return this.isEditMode && ISSUED_STATUSES.includes(this.recipient.status);
   }
 
+  // Reissuing un-revokes server-side (generate_one clears revoked_at), so the
+  // notice only applies where the save actually reissues.
+  get revokedReissueNotice(): boolean {
+    return this.reissuesOnSave && !!this.recipient.revoked_at;
+  }
+
   get submitLabel(): string {
     if (!this.isEditMode) {
       return 'Add Recipient';
