@@ -51,8 +51,7 @@ export class CreateCommunityGroupFormComponent implements OnInit, OnDestroy {
     menubar: false,
     convert_urls: false,
     placeholder: 'Tell people what your organization is about...',
-    content_style:
-      "@import url('https://fonts.googleapis.com/css?family=Inter'); body { font-family: 'Inter'; font-size: 14px !important; }",
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 14px !important;}',
     plugins: ['autolink', 'lists', 'link', 'autoresize'],
     toolbar: 'bold italic | link | bullist numlist | removeformat',
     default_link_target: '_blank',

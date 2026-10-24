@@ -45,8 +45,7 @@ export class HackathonControlPanelBasicFormComponent implements OnInit, OnDestro
     menubar: false,
     convert_urls: false,
     placeholder: 'Write description for hackathon',
-    content_style:
-      "@import url('https://fonts.googleapis.com/css?family=Inter'); body {font-family: 'Inter'; font-size: 16px;} h1 {font-size: 2.5em !important;} h2 {font-size: 2em !important;} h3 {font-size: 1.5em !important;} h4 {font-size: 1.25em !important;} h5 {font-size: 1.1em !important;} h6 {font-size: 1em !important;}",
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 16px !important;} h1 {font-size: 2.5em !important;} h2 {font-size: 2em !important;} h3 {font-size: 1.5em !important;} h4 {font-size: 1.25em !important;} h5 {font-size: 1.1em !important;} h6 {font-size: 1em !important;}',
     plugins: [
       'emoticons',
       'advlist',

@@ -62,8 +62,7 @@ export class EditEventComponent implements OnInit {
     height: 300,
     menubar: false,
     convert_urls: false,
-    content_style:
-      "@import url('https://fonts.googleapis.com/css?family=Inter'); body {font-family: 'Inter'; font-size: 16px !important;}",
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 16px !important;}',
     plugins:
       'advlist autolink link image charmap preview anchor lists searchreplace visualblocks code fullscreen insertdatetime media table code help wordcount',
     toolbar:

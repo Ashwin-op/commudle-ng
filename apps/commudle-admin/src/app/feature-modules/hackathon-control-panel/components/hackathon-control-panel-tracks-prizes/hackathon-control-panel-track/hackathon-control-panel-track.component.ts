@@ -30,8 +30,7 @@ export class HackathonControlPanelTrackComponent implements OnInit {
     menubar: false,
     convert_urls: false,
     placeholder: 'About',
-    content_style:
-      "@import url('https://fonts.googleapis.com/css?family=Inter'); body {font-family: 'Inter'; font-size: 16px !important;}",
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 16px !important;}',
     plugins: ['emoticons', 'lists', 'preview', 'table', 'autoresize', 'media'],
     toolbar: 'bullist numlist emoticons bold italic | backcolor  media table',
     default_link_target: '_blank',

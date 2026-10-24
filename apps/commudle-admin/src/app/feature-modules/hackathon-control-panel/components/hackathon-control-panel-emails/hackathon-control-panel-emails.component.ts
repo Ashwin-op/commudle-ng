@@ -23,10 +23,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-    selector: 'commudle-hackathon-control-panel-emails',
-    templateUrl: './hackathon-control-panel-emails.component.html',
-    styleUrls: ['./hackathon-control-panel-emails.component.scss'],
-    standalone: false
+  selector: 'commudle-hackathon-control-panel-emails',
+  templateUrl: './hackathon-control-panel-emails.component.html',
+  styleUrls: ['./hackathon-control-panel-emails.component.scss'],
+  standalone: false,
 })
 export class HackathonControlPanelEmailsComponent implements OnInit, OnDestroy {
   hackathonId: number | string;
@@ -57,8 +57,7 @@ export class HackathonControlPanelEmailsComponent implements OnInit, OnDestroy {
     menubar: false,
     convert_urls: false,
     placeholder: 'Write additional message',
-    content_style:
-      "@import url('https://fonts.googleapis.com/css?family=Inter'); body {font-family: 'Inter'; font-size: 16px !important;}",
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 16px !important;}',
     plugins: [
       'emoticons',
       'advlist',
