@@ -67,7 +67,8 @@
       [disabled]="recipientForm.invalid || isSaving"
       (click)="onSubmit()"
     >
-      {{ isEditMode ? 'Save Changes' : 'Add Recipient' }}
+      <fa-icon *ngIf="isSaving" [icon]="icons.faSpinner" animation="spin"></fa-icon>
+      {{ submitLabel }}
     </button>
   </com-card-footer>
 </com-card>
