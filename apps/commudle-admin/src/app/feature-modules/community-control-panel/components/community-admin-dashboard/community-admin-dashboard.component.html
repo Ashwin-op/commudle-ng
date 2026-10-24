@@ -227,6 +227,9 @@
               </a>
           </li>
           <li *ngIf="upcomingSchedule.length === 0" class="timeline-empty">
+            <span class="timeline-empty-icon">
+              <fa-icon [icon]="icons.faCalendarDay"></fa-icon>
+            </span>
             <span class="timeline-empty-text">Nothing Scheduled Yet</span>
             <span class="timeline-empty-actions">
               <a comButton size="tiny" status="primary" appearance="outline" shape="semi-round"
@@ -297,7 +300,6 @@
             </p>
             <p class="activity-time">{{ activity.created_at | date : 'short' }}</p>
           </li>
-          <li *ngIf="recentActivity.length === 0" class="activity-empty">No recent activity yet.</li>
         </ng-container>
       </ul>
       <commudle-pagination-compact *ngIf="recentActivityTotal > 0" [page]="recentActivityPage"
@@ -447,7 +449,12 @@
             </span>
             <span class="top-list-value">{{ page.views | number }}</span>
           </li>
-          <li *ngIf="topPages.length === 0" class="top-list-empty">No page views yet.</li>
+          <li *ngIf="topPages.length === 0" class="top-list-empty">
+            <span class="top-list-empty-icon pages">
+              <fa-icon [icon]="icons.faFileLines"></fa-icon>
+            </span>
+            <span class="top-list-empty-text">No page views yet.</span>
+          </li>
         </ng-container>
       </ul>
     </article>
@@ -476,7 +483,12 @@
             </span>
             <span class="top-list-value">{{ city.member_count | number }}</span>
           </li>
-          <li *ngIf="topCities.length === 0" class="top-list-empty">No city data yet.</li>
+          <li *ngIf="topCities.length === 0" class="top-list-empty">
+            <span class="top-list-empty-icon cities">
+              <fa-icon [icon]="icons.faLocationDot"></fa-icon>
+            </span>
+            <span class="top-list-empty-text">No city data yet.</span>
+          </li>
         </ng-container>
       </ul>
       <commudle-pagination-compact *ngIf="topCitiesTotal > topCitiesCount" [page]="topCitiesPage"

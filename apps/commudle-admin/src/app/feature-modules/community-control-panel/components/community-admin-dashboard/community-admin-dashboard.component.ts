@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ICommunity } from '@commudle/shared-models';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
 import { AuthService, SeoService } from '@commudle/shared-services';
@@ -110,6 +110,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private authService: AuthService,
     private seoService: SeoService,
     private dashboardCommunitiesService: DashboardCommunitiesService,
@@ -268,6 +269,16 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
+  outgoingCollaborationLink(request: IDashboardCollaborationRequest): any[] {
+    return request.type === 'hackathon'
+      ? ['/admin/communities', this.community.slug, 'hackathon-dashboard', request.slug, 'collaboration']
+      : ['/admin/communities', this.community.slug, 'events', 'event-dashboard', request.slug, 'collaborations'];
+  }
+
+  onCollaborationRowClick(request: IDashboardCollaborationRequest): void {
+    this.router.navigate(this.outgoingCollaborationLink(request));
+  }
+
   loadUpcomingSchedule(): void {
     this.upcomingScheduleLoading = true;
     this.subscriptions.push(
@@ -296,7 +307,10 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  activityItemLink(activity: ICommunityDashboardActivityItem): any[] | null {
+  // Where the rest of the row (everything except the user name) goes --
+  // there's no per-item channel/forum/survey id in this payload, so this
+  // is still a best-effort link to the relevant list page, same as before.
+  activityRowLink(activity: ICommunityDashboardActivityItem): any[] | null {
     switch (activity.type) {
       case 'channel_message':
       case 'forum_message':
@@ -307,6 +321,18 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         return ['/admin/communities', this.community.slug, 'members'];
       default:
         return null;
+    }
+  }
+
+  // Row click handler, not a routerLink on the row itself -- the user name
+  // inside is its own real <a>, and <a> can't nest inside <a> (the browser
+  // silently un-nests it, breaking the row link for everything after the
+  // name). The name's click calls $event.stopPropagation() so this handler
+  // only fires for clicks elsewhere on the row.
+  onActivityRowClick(activity: ICommunityDashboardActivityItem): void {
+    const link = this.activityRowLink(activity);
+    if (link) {
+      this.router.navigate(link);
     }
   }
 

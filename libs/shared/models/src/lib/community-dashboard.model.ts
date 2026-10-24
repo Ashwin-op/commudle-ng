@@ -41,6 +41,10 @@ export interface IDashboardCollaborationRequest {
   type: string;
   slug: string;
   requester: string;
+  // Not yet returned by needs_attention -- same gap as activity.user above,
+  // needed to link the requester's name to their profile (/users/:slug).
+  requester_id?: number;
+  requester_slug?: string;
   direction: 'incoming' | 'outgoing';
   status: string;
   created_at: string;
@@ -98,6 +102,7 @@ export type EDashboardActivityType = 'channel_message' | 'forum_message' | 'new_
 export interface IDashboardActivityUser {
   id: number;
   name: string;
+  slug: string;
 }
 
 export interface ICommunityDashboardActivityItem {
