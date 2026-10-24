@@ -159,16 +159,17 @@ export class EditDataFormComponent implements OnInit, OnChanges {
   }
 
   addQuestionChoiceButtonClick(questionIndex: number) {
-    (<FormArray>(
-      (<FormArray>this.editDataForm.get('data_form').get('questions')).controls[questionIndex].get('question_choices')
-    )).push(this.initQuestionChoice());
+    const questions = (<FormArray>this.editDataForm.get('data_form').get('questions')).controls;
+    const questionChoices = questions[questionIndex].get('question_choices') as FormArray;
+    questionChoices.push(this.initQuestionChoice());
 
-    // Focus
     setTimeout(() => {
-      const inputs = this.choiceInputs.toArray();
-      if (inputs.length > 0) {
-        inputs[inputs.length - 1].nativeElement.focus();
-      }
+      const target = this.choiceInputs
+        .toArray()
+        .filter((el) => el.nativeElement.dataset.qi === String(questionIndex))
+        .pop();
+      target?.nativeElement.scrollIntoView({ block: 'nearest' });
+      target?.nativeElement.focus({ preventScroll: true });
     }, 0);
   }
 

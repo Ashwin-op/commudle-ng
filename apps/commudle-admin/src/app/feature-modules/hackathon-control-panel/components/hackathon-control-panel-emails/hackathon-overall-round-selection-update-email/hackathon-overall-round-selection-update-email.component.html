@@ -1,11 +1,11 @@
-<nb-card class="round-selection-mailer">
-  <nb-card-header>
+<com-card class="round-selection-mailer">
+  <com-card-header>
     <span>Send Round Selection Update Email</span>
     <button nbButton size="small" shape="round" (click)="closePopup()" ghost>
       <nb-icon icon="close"></nb-icon>
     </button>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <commudle-alert
       [info]="true"
       message="This will send a pre-formatted email and a notification to all members of the community"
@@ -23,8 +23,8 @@
       <label for="message">Message (Optional)</label>
       <editor [init]="tinyMCE" [(ngModel)]="message"></editor>
     </div>
-  </nb-card-body>
-  <nb-card-footer>
+  </com-card-body>
+  <com-card-footer>
     <button
       (click)="previewEmail(hackathonId); showPreviewSpinner = true"
       nbButton
@@ -46,5 +46,5 @@
     >
       Send
     </button>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

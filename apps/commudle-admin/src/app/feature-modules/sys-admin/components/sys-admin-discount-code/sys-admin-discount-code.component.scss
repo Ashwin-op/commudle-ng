@@ -1,4 +1,8 @@
 .discount-code-container {
+  @apply com-flex com-mt-4;
+  h4 {
+    @apply com-m-0;
+  }
   .button-filter {
     @apply com-flex com-justify-between com-items-center com-mb-6;
 

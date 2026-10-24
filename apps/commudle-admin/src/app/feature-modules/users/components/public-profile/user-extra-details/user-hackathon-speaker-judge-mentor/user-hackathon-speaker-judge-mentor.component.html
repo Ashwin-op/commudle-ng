@@ -1,9 +1,17 @@
 <com-card *ngIf="!isLoading && judges.length > 0" id="hackathons-mentor-judge">
   <com-card-header>
-    <a [routerLink]="'.'" fragment="hackathons-mentor-judge">
-      <fa-icon [icon]="icons.faGavel" class="com-text-Azure"></fa-icon>
+    <div class="section-heading-anchor heading">
+      <fa-icon [icon]="icons.faGavel" class="com-text-Azure icon"></fa-icon>
       Hackathon Mentor/Judge
-    </a>
+      <a
+        [routerLink]="'.'"
+        fragment="hackathons-mentor-judge"
+        class="anchor-link"
+        aria-label="Link to hackathon mentor/judge section"
+      >
+        <fa-icon [icon]="faHashtag" class="anchor-icon-small"></fa-icon>
+      </a>
+    </div>
   </com-card-header>
   <com-card-body>
     <div class="grid">

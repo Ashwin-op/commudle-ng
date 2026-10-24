@@ -62,7 +62,16 @@
         title="Group people icon"
       />
       <div class="section-heading">
-        <h2><a [routerLink]="'.'" fragment="join-community">Join a community to learn and network</a></h2>
+        <h2 class="title section-heading-anchor">
+          Join a community to learn and network<a
+            [routerLink]="'.'"
+            fragment="join-community"
+            class="anchor-link"
+            aria-label="link to join-community section"
+          >
+            <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+          </a>
+        </h2>
       </div>
       <app-homepage-featured-communities></app-homepage-featured-communities>
     </div>
@@ -109,7 +118,12 @@
 
   <div class="homepage-section com-pb-12" id="experts">
     <div class="section-heading">
-      <h2><a [routerLink]="'.'" fragment="experts">Experts</a></h2>
+      <h2 class="section-heading-anchor title">
+        Experts
+        <a [routerLink]="'.'" fragment="experts" class="anchor-link" aria-label="Link to experts section">
+          <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+        </a>
+      </h2>
       <h3 class="subheading">Techies with experience, and a blue tick</h3>
     </div>
     <app-homepage-experts></app-homepage-experts>
@@ -135,7 +149,12 @@
 
   <div *ngIf="testimonials" class="homepage-section com-pb-12" id="testimonials">
     <div class="testimonials">
-      <h2 class="heading"><a [routerLink]="'.'" fragment="testimonials">Testimonials</a></h2>
+      <h2 class="heading section-heading-anchor">
+        Testimonials
+        <a [routerLink]="'.'" fragment="testimonials" class="anchor-link" aria-label="link to testimonials section">
+          <fa-icon [icon]="faHashtag" class="anchor-icon-small"></fa-icon>
+        </a>
+      </h2>
       <h3 class="subheading">Don't just take our word for it</h3>
       <div class="testimonial-card">
         <commudle-testimonial-card [testimonials]="testimonials"></commudle-testimonial-card>
@@ -145,8 +164,16 @@
 
   <div class="homepage-section com-pb-36" id="developers-journey">
     <div class="section-heading">
-      <h2 class="heading">
-        <a [routerLink]="'.'" fragment="developers-journey">Commudle drives Software Developers' Journey</a>
+      <h2 class="heading section-heading-anchor">
+        Commudle drives Software Developer's Journey
+        <a
+          [routerLink]="'.'"
+          fragment="developers-journey"
+          class="anchor-link"
+          aria-label="link to software developer's journey section"
+        >
+          <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+        </a>
       </h2>
     </div>
     <app-homepage-features></app-homepage-features>

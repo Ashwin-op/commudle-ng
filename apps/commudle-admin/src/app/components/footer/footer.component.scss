@@ -86,9 +86,13 @@ footer {
   .footer-badges {
     @apply com-flex com-flex-wrap com-items-center com-gap-4 com-mt-8;
 
+    a {
+      @apply com-flex;
+    }
+
     img,
     .tiny-startup {
-      @apply com-h-[52px] com-w-[145px];
+      @apply com-h-[52px];
     }
   }
 

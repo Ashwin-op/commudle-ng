@@ -4,6 +4,11 @@ h2 {
   @apply com-m-0;
 }
 
+com-card-header,
+com-card-footer {
+  @apply com-flex com-items-center com-justify-between;
+}
+
 a {
   width: max-content;
 }
@@ -70,4 +75,8 @@ a {
       @apply com-text-sm com-text-gray-500 md:com-w-max com-pt-2 com-pb-1 com-ml-72px md:com-p-0 md:com-m-0;
     }
   }
+}
+
+.tag-list {
+  @apply com-flex com-gap-2 com-my-2 com-flex-wrap;
 }

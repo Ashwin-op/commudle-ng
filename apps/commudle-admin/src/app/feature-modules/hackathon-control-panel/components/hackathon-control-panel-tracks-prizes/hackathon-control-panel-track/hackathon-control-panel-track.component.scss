@@ -125,16 +125,17 @@
   }
 }
 
-nb-card-header,
-nb-card-footer {
+com-card-header,
+com-card-footer {
   @apply com-flex com-justify-between com-items-center;
 }
 
 .track-form {
-  @apply com-w-[100dvw] com-mx-0;
-  @apply md:com-w-[560px] md:com-max-h-[90dvh];
-
-  nb-card-footer {
+  @apply com-w-[100dvw] com-mx-0 md:com-w-[560px] com-max-h-[90dvh] com-flex com-overflow-y-auto;
+  com-card-body {
+    @apply com-scrollbar-hide;
+  }
+  com-card-footer {
     @apply com-justify-end com-gap-2;
   }
 

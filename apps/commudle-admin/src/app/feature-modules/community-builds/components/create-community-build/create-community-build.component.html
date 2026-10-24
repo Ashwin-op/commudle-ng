@@ -6,8 +6,8 @@
 <div class="base-layout community-build">
   <div class="container">
     <div class="one-column-layout">
-      <nb-card *ngIf="!isCampaignPage && !(parentId && parentType) && !editBuildForm" class="page-header">
-        <nb-card-body>
+      <com-card *ngIf="!isCampaignPage && !(parentId && parentType) && !editBuildForm" class="page-header">
+        <com-card-body>
           <div
             class="background-image"
             [ngStyle]="{ 'background-image': 'url(\'' + staticAssets.create_build_background + '\')' }"
@@ -38,10 +38,10 @@
               </div>
             </div>
           </div>
-        </nb-card-body>
-      </nb-card>
-      <nb-card *ngIf="parentId && parentType" class="page-header">
-        <nb-card-body>
+        </com-card-body>
+      </com-card>
+      <com-card *ngIf="parentId && parentType" class="page-header">
+        <com-card-body>
           <div
             class="background-image"
             [ngStyle]="{ 'background-image': 'url(\'' + staticAssets.create_hackathon_build_background + '\')' }"
@@ -72,14 +72,14 @@
               </div>
             </div>
           </div>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
 
       <div *ngIf="editBuildForm" class="edit-build-header">
         <p class="edit-header">Edit Your Build<fa-icon [icon]="faEdit"></fa-icon></p>
       </div>
-      <nb-card class="form-card" [ngClass]="{ 'com-rounded-t-none': editBuildForm }">
-        <nb-card-body>
+      <com-card class="form-card" [ngClass]="{ 'com-rounded-t-none': editBuildForm }">
+        <com-card-body>
           <form (keydown.enter)="$event.preventDefault()" [formGroup]="communityBuildForm">
             <div class="field">
               <div class="field-header">
@@ -546,8 +546,8 @@
               </button>
             </div>
           </form>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
 
       <ng-template #googleSlidesEmbed>
         <div>

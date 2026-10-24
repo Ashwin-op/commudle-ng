@@ -1,0 +1,157 @@
+<div class="certificate-verify-page">
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+  <div class="base-layout" *ngIf="!isLoading">
+    <div class="container">
+      <commudle-alert
+        *ngIf="notFound"
+        [error]="true"
+        errorMessage="This certificate could not be found. It may have been revoked, or the link may be incorrect."
+      ></commudle-alert>
+
+      <ng-container *ngIf="recipient">
+        <span class="page-eyebrow">Verification</span>
+        <h1 class="page-title">Certificate Verification</h1>
+        <p class="page-description">Verify the authenticity of a certificate issued on Commudle.</p>
+
+        <div class="two-column-layout medium">
+          <div class="left-column">
+            <com-card class="verify-card">
+              <com-card-body>
+                <div class="verified-banner">
+                  <div class="verified-icon">
+                    <fa-icon [icon]="icons.faCircleCheck"></fa-icon>
+                  </div>
+                  <div>
+                    <div class="verified-title">Verified Certificate</div>
+                    <div class="verified-subtitle">This certificate is authentic and valid.</div>
+                  </div>
+                </div>
+
+                <div class="info-list">
+                  <div class="info-row" *ngIf="recipient.recipient_name">
+                    <div class="info-icon"><fa-icon [icon]="icons.faUser"></fa-icon></div>
+                    <div>
+                      <div class="info-label">Recipient</div>
+                      <div class="info-value">{{ recipient.recipient_name }}</div>
+                      <a
+                        *ngIf="recipient.profile"
+                        class="profile-link"
+                        [href]="'/users/' + recipient.profile.username"
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        View {{ recipient.profile.name || recipient.profile.username }}'s profile
+                      </a>
+                    </div>
+                  </div>
+                  <div class="info-row" *ngIf="recipient.title">
+                    <div class="info-icon"><fa-icon [icon]="icons.faFileLines"></fa-icon></div>
+                    <div>
+                      <div class="info-label">Certificate Name</div>
+                      <div class="info-value">{{ recipient.title }}</div>
+                    </div>
+                  </div>
+                  <div class="info-row" *ngIf="recipient.issuer">
+                    <div class="info-icon"><fa-icon [icon]="icons.faLandmark"></fa-icon></div>
+                    <div>
+                      <div class="info-label">Issued by</div>
+                      <div class="info-value">{{ recipient.issuer.name || recipient.issuer.type }}</div>
+                    </div>
+                  </div>
+                  <div class="info-row" *ngIf="recipient.issued_on">
+                    <div class="info-icon"><fa-icon [icon]="icons.faCalendarDays"></fa-icon></div>
+                    <div>
+                      <div class="info-label">Issue Date</div>
+                      <div class="info-value">{{ recipient.issued_on | date : 'mediumDate' }}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="verify-divider"></div>
+
+                <div class="detail-list">
+                  <div class="detail-row">
+                    <div class="info-icon"><fa-icon [icon]="icons.faShieldHalved"></fa-icon></div>
+                    <div class="detail-body">
+                      <div class="info-label">Certificate ID</div>
+                      <div class="detail-value-box">
+                        <span class="detail-value-text">{{ recipient.uuid }}</span>
+                        <button
+                          ghost
+                          comButton
+                          size="tiny"
+                          title="Copy certificate ID"
+                          (click)="copyToClipboard(recipient.uuid)"
+                        >
+                          <fa-icon [icon]="icons.faCopy"></fa-icon>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="detail-row">
+                    <div class="info-icon"><fa-icon [icon]="icons.faLink"></fa-icon></div>
+                    <div class="detail-body">
+                      <div class="info-label">Verification Link</div>
+                      <div class="detail-value-box">
+                        <span class="detail-value-text">{{ verificationLink }}</span>
+                        <button
+                          ghost
+                          comButton
+                          size="tiny"
+                          title="Copy verification link"
+                          (click)="copyToClipboard(verificationLink)"
+                        >
+                          <fa-icon [icon]="icons.faCopy"></fa-icon>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="detail-row">
+                    <div class="info-icon"><fa-icon [icon]="icons.faClock"></fa-icon></div>
+                    <div class="detail-body">
+                      <div class="info-label">Verified On</div>
+                      <div class="info-value">{{ verifiedOnLabel }}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <a
+                  *ngIf="recipient.pdf_url"
+                  comButton
+                  status="primary"
+                  [fullWidth]="true"
+                  class="action-btn"
+                  [href]="recipient.pdf_url"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <fa-icon [icon]="icons.faDownload"></fa-icon> &nbsp; Download Certificate
+                </a>
+                <button outline comButton [fullWidth]="true" class="action-btn" (click)="shareCertificate()">
+                  <fa-icon [icon]="icons.faShareNodes"></fa-icon> &nbsp; Share Certificate
+                </button>
+              </com-card-body>
+            </com-card>
+          </div>
+
+          <div class="main-column">
+            <div class="pdf-frame" *ngIf="recipient.pdf_url">
+              <object
+                *ngIf="pdfObjectUrl; else pdfLoading"
+                [data]="pdfObjectUrl | safe : 'resourceUrl'"
+                type="application/pdf"
+                class="pdf-object"
+              ></object>
+              <ng-template #pdfLoading>
+                <div class="pdf-loading">
+                  <app-loading-spinner></app-loading-spinner>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

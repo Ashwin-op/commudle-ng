@@ -8,12 +8,13 @@ import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communi
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Output, EventEmitter } from '@angular/core';
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-    selector: 'commudle-communities-list',
-    templateUrl: './communities-list.component.html',
-    styleUrls: ['./communities-list.component.scss'],
-    standalone: false
+  selector: 'commudle-communities-list',
+  templateUrl: './communities-list.component.html',
+  styleUrls: ['./communities-list.component.scss'],
+  standalone: false,
 })
 export class CommunitiesListComponent implements OnInit, OnDestroy {
   communities: ICommunity[] = [];
@@ -37,6 +38,7 @@ export class CommunitiesListComponent implements OnInit, OnDestroy {
   loadingData = false;
   loadingCommunities = false;
   private isBrowser: boolean;
+  faHashtag = faHashtag;
 
   @Output() seoTitleChange = new EventEmitter<string>();
 
@@ -45,7 +47,7 @@ export class CommunitiesListComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private location: Location,
-    @Inject(PLATFORM_ID) platformId: Object,
+    @Inject(PLATFORM_ID) platformId: object,
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
     this.options = ['Newest', 'Most Events', 'Most Members'];

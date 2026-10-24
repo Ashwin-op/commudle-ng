@@ -198,17 +198,17 @@
 </div>
 
 <ng-template #cloneEvent let-data let-ref="dialogRef">
-  <nb-card class="clone-event">
-    <nb-card-header>
+  <com-card class="clone-event">
+    <com-card-header>
       <h3>Clone of {{ data.eventData.name }}</h3>
       <button ghost nbButton size="small" (click)="ref.close()">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <app-edit-event [eventId]="data.eventData.id" type="clone"></app-edit-event>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>
 
 <!-- angular2 smart table -kept for reference-->

@@ -1,11 +1,11 @@
-<nb-card class="discount-code-form">
-  <nb-card-header>
+<com-card class="discount-code-form">
+  <com-card-header>
     <h5>{{ isEdit ? 'Edit' : 'Create' }} Discount Code</h5>
     <button nbButton ghost shape="round" (click)="closeDialog()">
       <fa-icon [icon]="icons.faClose"></fa-icon>
     </button>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <form [formGroup]="discountCodeForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="code">Code <span class="required">*</span></label>
@@ -188,8 +188,8 @@
         />
       </div> -->
     </form>
-  </nb-card-body>
-  <nb-card-footer>
+  </com-card-body>
+  <com-card-footer>
     <button nbButton status="basic" type="button" (click)="closeDialog()">Cancel</button>
     <button
       nbButton
@@ -200,5 +200,5 @@
     >
       {{ isSubmitting ? 'Saving...' : isEdit ? 'Update' : 'Create' }}
     </button>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

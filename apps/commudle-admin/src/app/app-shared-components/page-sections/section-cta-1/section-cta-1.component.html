@@ -1,0 +1,53 @@
+<div [attr.id]="config.fragmentId || null" class="cta-section">
+  <!-- Purely decorative — soft colour blobs + a big watermark rocket, so the section doesn't read as bare/floating text on a flat surface. -->
+  <div class="cta-decor" aria-hidden="true">
+    <span class="cta-decor__blob cta-decor__blob--a"></span>
+    <span class="cta-decor__blob cta-decor__blob--b"></span>
+    <fa-icon [icon]="faRocket" class="cta-decor__rocket"></fa-icon>
+  </div>
+
+  <div class="base-layout container section-container">
+    <div class="cta-inner">
+      <h2 class="cta-heading" [ngClass]="{ 'section-heading-anchor': config.fragmentId }">
+        {{ config.heading }}
+        <a
+          *ngIf="config.fragmentId"
+          [routerLink]="'.'"
+          [fragment]="config.fragmentId"
+          class="anchor-link"
+          [attr.aria-label]="'Link to ' + config.heading + ' section'"
+        >
+          <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+        </a>
+      </h2>
+      <p *ngIf="config.subtext" class="cta-subtext">
+        {{ config.subtext }}
+      </p>
+
+      <div class="cta-buttons">
+        <a
+          *ngIf="config.primaryCta.routerLink; else primaryButton"
+          [routerLink]="config.primaryCta.routerLink"
+          [queryParams]="config.primaryCta.queryParams || null"
+        >
+          <button nbButton status="primary" size="large" shape="semi-round">{{ config.primaryCta.label }}</button>
+        </a>
+        <ng-template #primaryButton>
+          <button nbButton status="primary" size="large" shape="semi-round" type="button" (click)="onPrimaryClick()">
+            {{ config.primaryCta.label }}
+          </button>
+        </ng-template>
+
+        <a
+          *ngIf="config.secondaryCta"
+          [routerLink]="config.secondaryCta.routerLink"
+          [queryParams]="config.secondaryCta.queryParams || null"
+        >
+          <button nbButton status="basic" outline size="large" shape="semi-round">
+            {{ config.secondaryCta.label }}
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

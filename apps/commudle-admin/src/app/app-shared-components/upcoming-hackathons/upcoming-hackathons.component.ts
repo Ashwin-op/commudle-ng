@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from '@commudle/shared-environments';
 import { ICommunity, IHackathon } from '@commudle/shared-models';
 import { removeHtmlTags, SeoService } from '@commudle/shared-services';
-import { faLink } from '@fortawesome/free-solid-svg-icons';
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { IPageInfo } from 'apps/shared-models/page-info.model';
@@ -15,7 +15,7 @@ import { IPageInfo } from 'apps/shared-models/page-info.model';
 })
 export class UpcomingHackathonsComponent implements OnInit {
   upcomingHackathons = [];
-  faLink = faLink;
+  faHashtag = faHashtag;
   showSpinner = false;
   pageInfo: IPageInfo;
   total: number;

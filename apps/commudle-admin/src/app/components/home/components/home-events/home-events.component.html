@@ -1,10 +1,10 @@
-<nb-card class="home-events-container">
-  <nb-card-header class="home-events-header">Events</nb-card-header>
-  <nb-card-body class="home-events-body">
+<com-card class="home-events-container">
+  <com-card-header class="home-events-header">Events</com-card-header>
+  <com-card-body class="home-events-body">
     <!--  DESKTOP  -->
     <div *ngIf="!isLoading" class="home-events-cards">
       <app-home-events-card
-        *ngFor="let event of events | slice: eventsStartIdx:eventsStartIdx + 4"
+        *ngFor="let event of events | slice : eventsStartIdx : eventsStartIdx + 4"
         [event]="event"
       ></app-home-events-card>
     </div>
@@ -40,5 +40,5 @@
         <nb-icon icon="arrow-right"></nb-icon>
       </button>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

@@ -1,10 +1,10 @@
-<nb-card *ngIf="builds.length > 0">
-  <nb-card-body>
+<com-card *ngIf="builds.length > 0">
+  <com-card-body>
     <h3 class="heading">More Builds by {{ user.name }}</h3>
     <div class="other-builds custom-scrollbar">
       <div class="other-builds-card" *ngFor="let build of builds">
         <commudle-featured-projects-card [communityBuild]="build"></commudle-featured-projects-card>
       </div>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

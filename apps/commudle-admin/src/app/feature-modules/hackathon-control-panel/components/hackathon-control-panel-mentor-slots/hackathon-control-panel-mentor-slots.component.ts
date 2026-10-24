@@ -142,7 +142,7 @@ export class HackathonControlPanelMentorSlotsComponent implements OnInit, AfterV
         booking_open: [true],
         starts_at: ['', Validators.required],
         ends_at: ['', Validators.required],
-        slot_length: [30, [Validators.required, Validators.min(1)]],
+        slot_length: [30, [Validators.required, Validators.min(10)]],
         max_teams_per_slot: [1, [Validators.required, Validators.min(1)]],
         only_admin_assigns_teams: [true],
         mentor_manages_teams: [false],

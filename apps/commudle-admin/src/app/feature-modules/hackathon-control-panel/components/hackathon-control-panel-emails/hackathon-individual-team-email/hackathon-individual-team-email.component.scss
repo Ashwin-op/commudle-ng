@@ -1,11 +1,12 @@
 .mail-popup {
-  @apply md:com-w-[40dvw] com-max-h-[90dvh] com-w-auto com-mx-0;
-  nb-card-header,
-  nb-card-footer {
+  @apply md:com-w-[40dvw] com-max-h-[90dvh] com-w-auto com-mx-0 com-flex;
+  com-card-header,
+  com-card-footer {
     @apply com-flex com-justify-between com-items-center com-gap-4;
   }
 
-  nb-card-body {
+  com-card-body {
+    @apply com-p-6 com-overflow-y-auto com-scrollbar-hide;
     .mandatory-field {
       @apply com-text-red-500 com-ml-0.5;
     }

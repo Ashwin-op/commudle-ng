@@ -1,6 +1,6 @@
 .registrations {
   @apply com-bg-white com-m-0;
-  nb-card-body {
+  com-card-body {
     @apply com-flex com-flex-col com-items-center com-w-full md:com-p-4 com-p-3;
   }
 }
@@ -87,10 +87,10 @@
 
 .qr-code {
   @apply md:com-w-[152px] com-w-full md:com-h-[152px] com-h-[180px] md:com-pl-4 com-pl-0 com-bg-white md:com-pt-0 com-pt-2 com-border-0 md:com-border-l com-border-l-0 com-border-solid com-border-Bright-Gray com-cursor-pointer;
-  nb-card {
+  com-card {
     @apply com-m-0 com-w-full com-h-full;
 
-    nb-card-body {
+    com-card-body {
       @apply com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-tWhite;
     }
   }
@@ -154,7 +154,7 @@ app-loading-spinner {
 
 .template {
   @apply com-h-[60dvh] md:com-w-[40dvw] com-w-[90dvw];
-  nb-card-header {
+  com-card-header {
     @apply com-flex com-flex-row com-justify-between com-items-center;
     p {
       @apply com-text-2xl com-font-semibold com-m-0;
@@ -168,7 +168,7 @@ app-loading-spinner {
   .qr-code-template {
     @apply com-m-0 com-w-full com-h-full;
 
-    nb-card-body {
+    com-card-body {
       @apply com-rounded-lg com-bg-tWhite com-flex com-flex-col com-items-center com-p-0;
     }
     .qr-unique-code-template {

@@ -88,7 +88,7 @@
         <div class="categories">
           <div class="category">
             <div *ngIf="sidebarExpanded" class="category-heading">
-              <span>EVENT SETUP</span>
+              <span>SETUP</span>
             </div>
             <a
               class="action-button"
@@ -113,22 +113,6 @@
               </div>
               <div *ngIf="sidebarExpanded" class="heading">Location & Agenda</div>
             </a>
-          </div>
-          <div class="category">
-            <div *ngIf="sidebarExpanded" class="category-heading">
-              <span>MORE</span>
-            </div>
-            <a
-              *ngIf="event.event_status.name !== EEventStatuses.DRAFT"
-              [routerLink]="['updates']"
-              [routerLinkActive]="'active'"
-              class="action-button"
-            >
-              <div class="icon">
-                <fa-icon [icon]="icons.faStar"></fa-icon>
-              </div>
-              <div *ngIf="sidebarExpanded" class="heading">Send Updates</div>
-            </a>
             <a [routerLink]="['collaborations']" [routerLinkActive]="'active'" class="action-button">
               <div class="icon">
                 <fa-icon [icon]="icons.faHandshakeSimple"></fa-icon>
@@ -141,16 +125,10 @@
               </div>
               <div *ngIf="sidebarExpanded" class="heading">Team</div>
             </a>
-            <a (click)="sendEmails()" class="action-button">
-              <div class="icon">
-                <fa-icon [icon]="icons.faPaperPlane"></fa-icon>
-              </div>
-              <div *ngIf="sidebarExpanded" class="heading">Send Emails</div>
-            </a>
           </div>
           <div class="category">
             <div *ngIf="sidebarExpanded" class="category-heading">
-              <div>LINKS</div>
+              <span>PROMOTE</span>
             </div>
             <a
               [routerLink]="['/communities', community.slug, 'events', event.slug]"
@@ -161,6 +139,38 @@
                 <fa-icon [icon]="icons.faArrowUpRightFromSquare"></fa-icon>
               </div>
               <div *ngIf="sidebarExpanded" class="heading">Public Event Page</div>
+            </a>
+            <a
+              *ngIf="event.event_status.name !== EEventStatuses.DRAFT"
+              [routerLink]="['updates']"
+              [routerLinkActive]="'active'"
+              class="action-button"
+            >
+              <div class="icon">
+                <fa-icon [icon]="icons.faStar"></fa-icon>
+              </div>
+              <div *ngIf="sidebarExpanded" class="heading">Send Updates</div>
+            </a>
+            <a (click)="sendEmails()" class="action-button">
+              <div class="icon">
+                <fa-icon [icon]="icons.faPaperPlane"></fa-icon>
+              </div>
+              <div *ngIf="sidebarExpanded" class="heading">Send Emails</div>
+            </a>
+          </div>
+          <div class="category">
+            <div *ngIf="sidebarExpanded" class="category-heading">
+              <span>RUN EVENT</span>
+            </div>
+            <a
+              class="action-button"
+              [routerLink]="['/communities', community.slug, 'events', event.slug, 'attended-members']"
+              target="_blank"
+            >
+              <div class="icon">
+                <fa-icon [icon]="icons.faListCheck"></fa-icon>
+              </div>
+              <div *ngIf="sidebarExpanded" class="heading">Attendees</div>
             </a>
             <a
               [routerLink]="['/admin', 'communities', community.slug, 'event-dashboard', event.slug, 'scan-entry-pass']"
@@ -175,7 +185,7 @@
           </div>
           <div class="category">
             <div *ngIf="sidebarExpanded" class="category-heading">
-              <div>INSIGHTS</div>
+              <span>REVIEW</span>
             </div>
             <a [routerLink]="['stats']" class="action-button stats" [routerLinkActive]="'active'">
               <div class="icon">
@@ -183,21 +193,11 @@
               </div>
               <div *ngIf="sidebarExpanded" class="heading">Event Stats</div>
             </a>
-            <a
-              class="action-button"
-              [routerLink]="['/communities', community.slug, 'events', event.slug, 'attended-members']"
-              target="_blank"
-            >
-              <div class="icon">
-                <fa-icon [icon]="icons.faListCheck"></fa-icon>
-              </div>
-              <div *ngIf="sidebarExpanded" class="heading">Attended Members</div>
-            </a>
             <a [routerLink]="['emails']" [routerLinkActive]="'active'" class="action-button">
               <div class="icon">
                 <fa-icon [icon]="icons.faEnvelopeCircleCheck"></fa-icon>
               </div>
-              <div *ngIf="sidebarExpanded" class="heading">Mails Sent Stats</div>
+              <div *ngIf="sidebarExpanded" class="heading">Email Stats</div>
             </a>
           </div>
         </div>
@@ -207,8 +207,8 @@
 
   <div class="right-column">
     <div *appBreakpoints="'<=md'" class="event-dashboard-menu">
-      <nb-card>
-        <nb-card-body>
+      <com-card>
+        <com-card-body>
           <div class="com-scrollbar-hide">
             <a
               class="action-button"
@@ -221,18 +221,6 @@
               </div>
               <div class="heading">Details</div>
             </a>
-            <a
-              *ngIf="event.event_status.name !== EEventStatuses.DRAFT"
-              [routerLink]="['updates']"
-              [routerLinkActive]="'active'"
-              class="action-button"
-            >
-              <div class="icon">
-                <nb-icon icon="star-outline"></nb-icon>
-              </div>
-              <div class="heading">Send Updates</div>
-            </a>
-
             <a [routerLink]="['registrations']" [routerLinkActive]="'active'" class="action-button">
               <div class="icon">
                 <nb-icon icon="edit-2-outline"></nb-icon>
@@ -257,15 +245,52 @@
               </div>
               <div class="heading">Team</div>
             </a>
+            <a
+              *ngIf="event.event_status.name !== EEventStatuses.DRAFT"
+              [routerLink]="['updates']"
+              [routerLinkActive]="'active'"
+              class="action-button"
+            >
+              <div class="icon">
+                <nb-icon icon="star-outline"></nb-icon>
+              </div>
+              <div class="heading">Send Updates</div>
+            </a>
+            <a
+              class="action-button"
+              [routerLink]="['/communities', community.slug, 'events', event.slug, 'attended-members']"
+              target="_blank"
+            >
+              <div class="icon">
+                <nb-icon icon="people-outline"></nb-icon>
+              </div>
+              <div class="heading">Attendees</div>
+            </a>
+            <a
+              [routerLink]="['/admin', 'communities', community.slug, 'event-dashboard', event.slug, 'scan-entry-pass']"
+              target="_blank"
+              class="action-button"
+            >
+              <div class="icon">
+                <nb-icon icon="expand-outline"></nb-icon>
+              </div>
+              <div class="heading">Scan Entry Pass</div>
+            </a>
+            <a [routerLink]="['stats']" [routerLinkActive]="'active'" class="action-button">
+              <div class="icon">
+                <nb-icon icon="trending-up-outline"></nb-icon>
+              </div>
+              <div class="heading">Event Stats</div>
+            </a>
             <a [routerLink]="['emails']" [routerLinkActive]="'active'" class="action-button">
               <div class="icon">
                 <nb-icon icon="email-outline"></nb-icon>
               </div>
-              <div class="heading">Emails</div>
+              <div class="heading">Email Stats</div>
             </a>
           </div>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
     </div>
     <div class="router">
       <router-outlet></router-outlet>

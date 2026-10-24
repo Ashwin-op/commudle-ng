@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { NbDialogRef, NbDialogService, NbTagComponent, NbTagInputAddEvent, NbToastrService } from '@commudle/theme';
+import { NbDialogRef, NbDialogService, NbToastrService } from '@commudle/theme';
 import { UserProfileManagerService } from 'apps/commudle-admin/src/app/feature-modules/users/services/user-profile-manager.service';
 import { UserProfileMenuService } from 'apps/commudle-admin/src/app/feature-modules/users/services/user-profile-menu.service';
 import { GoogleTagManagerService } from 'apps/commudle-admin/src/app/services/google-tag-manager.service';
@@ -20,7 +20,7 @@ import { IPageInfo } from 'apps/shared-models/page-info.model';
 import { IUser } from 'apps/shared-models/user.model';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
 import { Subject, Subscription, takeUntil } from 'rxjs';
-import { faBriefcase } from '@fortawesome/free-solid-svg-icons';
+import { faBriefcase, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { GooglePlacesAutocompleteService } from 'apps/commudle-admin/src/app/services/google-places-autocomplete.service';
 import { SeoService } from '@commudle/shared-services';
 import { EnumFormatPipe } from 'apps/shared-pipes/enum-format.pipe';
@@ -66,6 +66,7 @@ export class UserJobComponent implements OnInit, OnChanges, OnDestroy {
   subscriptions: Subscription[] = [];
 
   faBriefcase = faBriefcase;
+  faHashtag = faHashtag;
   schemaForJobs = [];
 
   environment = environment;
@@ -246,18 +247,15 @@ export class UserJobComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  onTagAdd({ value, input }: NbTagInputAddEvent): void {
-    const finalValue = value.trim();
-    const isDuplicateTag = this.tags.indexOf(finalValue) !== -1;
-
-    if (finalValue && !isDuplicateTag) {
-      this.tags.push(value);
+  onTagAdd(value: string): void {
+    const tag = value.trim();
+    if (tag && !this.tags.includes(tag)) {
+      this.tags.push(tag);
     }
-    input.nativeElement.value = '';
   }
 
-  onTagRemove(tagToRemove: NbTagComponent): void {
-    this.tags = this.tags.filter((tag) => tag !== tagToRemove.text);
+  onTagRemove(tagToRemove: string): void {
+    this.tags = this.tags.filter((tag) => tag !== tagToRemove);
   }
 
   updateJob() {

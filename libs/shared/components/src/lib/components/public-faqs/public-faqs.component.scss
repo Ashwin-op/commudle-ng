@@ -6,16 +6,12 @@ com-card {
     background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
     @apply dark:com-from-[#080808] dark:com-via-[#141414] dark:com-to-[#080808] dark:com-bg-gradient-to-br;
 
-    fa-icon {
+    .heading-icon {
       @apply com-text-lg com-text-primary-500;
     }
 
-    h2 {
-      @apply com-text-base com-font-semibold com-text-Yankees-Blue com-m-0;
-
-      a {
-        @apply com-no-underline com-text-inherit;
-      }
+    .heading {
+      @apply com-text-base com-font-semibold com-text-Yankees-Blue com-m-0 com-no-underline com-text-inherit com-flex com-items-center;
     }
   }
 

@@ -133,16 +133,17 @@
   }
 }
 
-nb-card-header,
-nb-card-footer {
+com-card-header,
+com-card-footer {
   @apply com-flex com-justify-between com-items-center;
 }
 
 .prize-form-dialog {
-  @apply com-w-[100dvw] com-mx-0;
-  @apply md:com-w-[560px] md:com-max-h-[90dvh];
-
-  nb-card-footer {
+  @apply com-w-[100dvw] com-mx-0 md:com-w-[560px] com-max-h-[90dvh] com-flex com-overflow-y-auto;
+  com-card-body {
+    @apply com-scrollbar-hide;
+  }
+  com-card-footer {
     @apply com-justify-end com-gap-2;
   }
 
@@ -190,10 +191,9 @@ nb-card-footer {
 }
 
 .prize-distribution-dialog {
-  @apply com-h-full com-w-[100dvw] com-mx-0;
-  @apply md:com-h-[90dvh] md:com-w-[70dvw];
+  @apply com-h-full com-w-[100dvw] com-mx-0 md:com-h-[90dvh] md:com-w-[70dvw] com-flex com-overflow-y-auto;
 
-  nb-card-header {
+  com-card-header {
     .header-content {
       @apply com-flex com-items-center com-justify-between com-w-full;
 
@@ -215,7 +215,7 @@ nb-card-footer {
     }
   }
 
-  nb-card-body {
+  com-card-body {
     @apply com-p-0 com-flex com-flex-col;
 
     .search-container {
@@ -340,12 +340,12 @@ nb-card-footer {
     }
   }
 
-  nb-card-footer {
+  com-card-footer {
     border-top: 1px solid var(--divider-color, rgba(128, 128, 128, 0.2));
   }
 
   @media (max-width: 768px) {
-    nb-card-body {
+    com-card-body {
       .teams-list {
         @apply com-overflow-x-auto;
 

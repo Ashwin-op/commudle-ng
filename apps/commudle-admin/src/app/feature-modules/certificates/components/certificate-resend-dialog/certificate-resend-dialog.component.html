@@ -1,0 +1,48 @@
+<com-card class="certificate-resend-dialog">
+  <com-card-header>{{ title }}</com-card-header>
+  <com-card-body>
+    <ng-container *ngIf="readOnly; else editable">
+      <div class="email-field-container">
+        <label class="email-field-label">Email Subject</label>
+        <div class="email-field-readonly">{{ emailSubject }}</div>
+      </div>
+
+      <div class="email-field-container">
+        <label class="email-field-label">Email Body</label>
+        <div class="email-field-readonly email-body-readonly">{{ emailBody }}</div>
+      </div>
+    </ng-container>
+
+    <ng-template #editable>
+      <div class="email-field-container">
+        <label class="email-field-label">Email Subject</label>
+        <input
+          class="email-field"
+          nbInput
+          fullWidth
+          fieldSize="small"
+          [(ngModel)]="emailSubject"
+          placeholder="e.g. Your certificate is ready"
+        />
+      </div>
+
+      <div class="email-field-container">
+        <label class="email-field-label">Email Body</label>
+        <textarea
+          class="email-field"
+          nbInput
+          fullWidth
+          rows="6"
+          [(ngModel)]="emailBody"
+          placeholder="The message recipients see in the email"
+        ></textarea>
+      </div>
+    </ng-template>
+  </com-card-body>
+  <com-card-footer class="resend-footer">
+    <button comButton status="basic" (click)="close()">{{ readOnly ? 'Close' : 'Cancel' }}</button>
+    <button *ngIf="!readOnly" comButton status="primary" [disabled]="!canConfirm" (click)="confirm()">
+      {{ confirmLabel }}
+    </button>
+  </com-card-footer>
+</com-card>

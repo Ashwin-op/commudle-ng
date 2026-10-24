@@ -2,22 +2,22 @@
   <div class="container">
     <div class="one-column-layout">
       <!-- Page header -->
-      <nb-card class="cc-page-header">
-        <nb-card-body *ngIf="!communityGroup">
+      <com-card class="cc-page-header">
+        <com-card-body *ngIf="!communityGroup">
           <h1 class="cc-page-title">Create New Community</h1>
-        </nb-card-body>
-        <nb-card-body *ngIf="communityGroup" class="cc-group-header">
+        </com-card-body>
+        <com-card-body *ngIf="communityGroup" class="cc-group-header">
           <img class="cc-group-logo" [src]="communityGroup.logo.url" [alt]="communityGroup.name" />
           <div>
             <p class="cc-group-name">{{ communityGroup.name }}</p>
             <h1 class="cc-page-title">Add A New Community</h1>
           </div>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
 
       <!-- Success state -->
-      <nb-card *ngIf="createdCommunity" class="cc-success-card">
-        <nb-card-body class="cc-success">
+      <com-card *ngIf="createdCommunity" class="cc-success-card">
+        <com-card-body class="cc-success">
           <div class="cc-success-icon">
             <nb-icon icon="checkmark-circle-2"></nb-icon>
           </div>
@@ -38,12 +38,12 @@
               <nb-icon icon="plus-outline"></nb-icon> Create another
             </button>
           </div>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
 
       <!-- Form -->
-      <nb-card *ngIf="!createdCommunity" class="cc-form-card">
-        <nb-card-body>
+      <com-card *ngIf="!createdCommunity" class="cc-form-card">
+        <com-card-body>
           <form [formGroup]="communityForm" class="cf-form">
             <!-- Media: banner with overlapping logo -->
             <div class="cf-media">
@@ -299,8 +299,8 @@
               </button>
             </div>
           </form>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
     </div>
   </div>
 </div>

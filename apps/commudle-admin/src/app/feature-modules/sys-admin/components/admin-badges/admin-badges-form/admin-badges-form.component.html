@@ -1,9 +1,9 @@
-<nb-card class="admin-badges-form">
-  <nb-card-header class="d-flex justify-content-space-between align-items-center">
+<com-card class="admin-badges-form">
+  <com-card-header>
     Badges
     <button [routerLink]="['/sys-admin', 'badges']" ghost nbButton shape="round" size="small">Show All Badges</button>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <form (submit)="submitForm()" [formGroup]="badgeForm" class="form-fields d-flex flex-column">
       <label>
         Name*
@@ -37,5 +37,5 @@
         {{ badge ? 'Update Badge' : 'Create Badge' }}
       </button>
     </form>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

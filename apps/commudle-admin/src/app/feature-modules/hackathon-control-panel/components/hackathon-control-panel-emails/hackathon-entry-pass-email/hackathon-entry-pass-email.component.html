@@ -1,11 +1,11 @@
-<nb-card class="send-entry-pass-dialog-box">
-  <nb-card-header>
+<com-card class="send-entry-pass-dialog-box">
+  <com-card-header>
     <span>Send Entry Pass Email</span>
     <button nbButton ghost (click)="close()" shape="round">
       <nb-icon icon="close"></nb-icon>
     </button>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <commudle-alert
       [info]="true"
       [message]="'This will send a pre-formatted email, you can add any additional message and change the subject'"
@@ -42,8 +42,8 @@
         </div>
       </form>
     </div>
-  </nb-card-body>
-  <nb-card-footer>
+  </com-card-body>
+  <com-card-footer>
     <button
       nbButton
       status="primary"
@@ -56,5 +56,5 @@
     <button nbButton status="primary" (click)="sendEntryPassEmail()" [disabled]="entryPassForm.invalid" fullWidth>
       Send
     </button>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

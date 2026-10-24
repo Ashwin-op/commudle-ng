@@ -13,10 +13,7 @@ div {
         .heading-subheading {
           @apply md:com-w-[564px] com-w-full;
           .heading {
-            @apply com-m-0;
-            a {
-              @apply md:com-text-4xl com-text-3xl com-font-bold com-text-black com-m-0;
-            }
+            @apply com-m-0 md:com-text-4xl com-text-3xl com-font-bold com-text-black com-m-0;
           }
 
           .sub-heading {

@@ -16,6 +16,7 @@ import { IEventUpdate } from 'apps/shared-models/event_update.model';
 import * as moment from 'moment';
 import { IPageInfo } from '@commudle/shared-models';
 import { NbDialogService } from '@commudle/theme';
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-event-updates',
   templateUrl: './event-updates.component.html',
@@ -31,7 +32,7 @@ export class EventUpdatesComponent implements OnInit, OnChanges {
   moment = moment;
   page_info: IPageInfo;
   limit = 5;
-
+  faHashtag = faHashtag;
   @ViewChild('imageTemplate') imageTemplate: TemplateRef<any>;
 
   constructor(private eventUpdatesService: EventUpdatesService, private dialogService: NbDialogService) {}

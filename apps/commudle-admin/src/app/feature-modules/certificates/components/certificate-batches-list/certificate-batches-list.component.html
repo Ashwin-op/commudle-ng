@@ -1,0 +1,96 @@
+<div class="certificate-batches-list">
+  <div class="list-header">
+    <h1 class="page-title">Certificates</h1>
+    <button
+      *ngIf="isLoading || batches.length > 0"
+      comButton
+      status="primary"
+      size="medium"
+      (click)="openCreateDialog()"
+    >
+      <fa-icon [icon]="icons.faPlus"></fa-icon> &nbsp; New Batch
+    </button>
+  </div>
+
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+  <ng-container *ngIf="!isLoading">
+    <div class="empty-state" *ngIf="batches.length === 0">
+      <fa-icon [icon]="icons.faAward" class="empty-state-icon"></fa-icon>
+      <h2 class="empty-state-title">Create Your First Certificate Batch</h2>
+      <p class="empty-state-description">You can create one by clicking the "New Batch" button</p>
+      <button comButton status="primary" size="medium" class="empty-state-button" (click)="openCreateDialog()">
+        <fa-icon [icon]="icons.faPlus"></fa-icon> &nbsp; New Batch
+      </button>
+    </div>
+
+    <section class="batch-list-container" *ngIf="batches.length > 0">
+      <div class="table-wrapper">
+        <table class="batches-table">
+          <thead>
+            <tr class="table-header">
+              <th>NAME</th>
+              <th>STATUS</th>
+              <th>RECIPIENTS</th>
+              <th>SENT</th>
+              <th>CREATED</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let batch of batches" class="batch-row">
+              <td>
+                <a [routerLink]="[batch.uuid]" class="batch-name">{{ batch.name }}</a>
+              </td>
+              <td>
+                <app-badge
+                  [text]="statusLabel(batch.status) | titlecase"
+                  [fontSize]="'small'"
+                  [borderRadius]="'round'"
+                  [color]="statusColor(batch.status)"
+                  [fontColor]="statusFontColor(batch.status)"
+                ></app-badge>
+              </td>
+              <td>{{ batch.recipients_count }}</td>
+              <td class="sent-column">
+                <span class="sent-value">{{ batch.sent_count }}</span>
+                <commudle-certificate-delivery-funnel
+                  [compact]="true"
+                  [total]="batch.recipients_count"
+                  [headlineSegments]="sentSegments(batch)"
+                  class="delivery-funnel-compact"
+                ></commudle-certificate-delivery-funnel>
+              </td>
+              <td class="date-column">{{ moment(batch.created_at).format('DD MMM YYYY') }}</td>
+              <td class="actions-column">
+                <div class="batch-actions">
+                  <button ghost comButton size="tiny" tabindex="-1" class="kebab-button">
+                    <fa-icon [icon]="icons.faEllipsisVertical"></fa-icon>
+                  </button>
+                  <select
+                    class="batch-actions-select"
+                    (change)="onBatchAction(batch, $any($event.target).value); $any($event.target).value = ''"
+                  >
+                    <option value="" disabled selected>Actions</option>
+                    <option value="delete">Delete</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <app-pagination
+        class="pagination"
+        *ngIf="total > count"
+        [current]="page"
+        [count]="count"
+        [total]="total"
+        (goTo)="onPageChange($event)"
+        (next)="onPageChange($event)"
+        (previous)="onPageChange($event)"
+      ></app-pagination>
+    </section>
+  </ng-container>
+</div>

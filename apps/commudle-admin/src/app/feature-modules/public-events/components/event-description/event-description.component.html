@@ -1,8 +1,13 @@
 <com-card id="details">
   <com-card-header class="com-flex com-items-center">
-    <h6 class="title">
-      <a [routerLink]="'.'" fragment="details"><nb-icon icon="info-outline" status="info"></nb-icon>Details</a>
+    <h6 class="title section-heading-anchor">
+      <nb-icon icon="info-outline" status="info"></nb-icon>
+      Details
+      <a [routerLink]="'.'" fragment="details" class="anchor-link" aria-label="Link to Details section">
+        <fa-icon [icon]="faHashtag" class="anchor-icon-small"></fa-icon>
+      </a>
     </h6>
+
     <app-share-button
       *ngIf="share"
       [content]="environment.app_url + '/communities/' + event.kommunity_slug + '/events/' + event.slug"

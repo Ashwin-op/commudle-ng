@@ -1,7 +1,15 @@
-.event-data-form-groups-list > nb-card {
-  @apply com-mx-0;
+.event-data-form-groups-list > com-card {
+  @apply com-mx-0 com-my-4;
   .edfeg-details {
     @apply com-flex com-flex-col md:com-flex-row com-justify-between com-gap-2 md:com-gap-12 com-p-4;
+    &.manual-group {
+      @apply md:com-justify-start;
+
+      .manual-placeholder {
+        @apply com-hidden md:com-block md:com-w-60;
+      }
+    }
+
     .form-details {
       @apply com-w-60;
       p {
@@ -35,7 +43,7 @@
 
     .toggle-cards {
       @apply com-mx-0 com-my-2 com-bg-tWhite;
-      nb-card-body {
+      com-card-body {
         @apply com-p-2;
         nb-checkbox {
           @apply com-flex com-items-center;

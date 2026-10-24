@@ -1,6 +1,17 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { faGithub, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { faInfo, faEnvelope, faStickyNote, faXmark, faCheck } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBehance,
+  faDribbble,
+  faFacebook,
+  faGithub,
+  faGitlab,
+  faInstagram,
+  faLinkedin,
+  faMedium,
+  faTwitter,
+  faYoutube,
+} from '@fortawesome/free-brands-svg-icons';
+import { faInfo, faEnvelope, faPen, faStickyNote, faXmark, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { NbDialogService } from '@commudle/theme';
 import { EmailerComponent } from 'apps/commudle-admin/src/app/app-shared-components/emailer/emailer.component';
 import { DataFormEntityResponseGroupsService } from 'apps/commudle-admin/src/app/services/data-form-entity-response-groups.service';
@@ -28,8 +39,16 @@ export class UserDetailsCellComponent implements OnInit, OnChanges {
   faGithub = faGithub;
   faTwitter = faTwitter;
   faLinkedin = faLinkedin;
+  faDribbble = faDribbble;
+  faBehance = faBehance;
+  faMedium = faMedium;
+  faGitlab = faGitlab;
+  faFacebook = faFacebook;
+  faYoutube = faYoutube;
+  faInstagram = faInstagram;
   faInfo = faInfo;
   faEnvelope = faEnvelope;
+  faPen = faPen;
   faStickyNote = faStickyNote;
   EExperienceLevel = EExperienceLevel;
   EDomain = EDomain;
@@ -49,6 +68,7 @@ export class UserDetailsCellComponent implements OnInit, OnChanges {
 
   @Output() updatedRegistrationStatus = new EventEmitter();
   @Output() updateEntryPass = new EventEmitter();
+  @Output() editSpeaker = new EventEmitter<IDataFormEntityResponseGroup>();
   moment = moment;
 
   @ViewChild('confirmDeleteEntryPassDialog') confirmDeleteEntryPassDialog: TemplateRef<any>;
@@ -85,11 +105,10 @@ export class UserDetailsCellComponent implements OnInit, OnChanges {
     this.dataFormEntityResponseGroupsService
       .updateEventRegistrationStatus(registrationStatusId, this.userResponse.id)
       .subscribe((data) => {
-        if (data.entry_pass) {
-          this.userResponse.entry_pass = data.entry_pass;
-        }
+        // the response carries the pass that still exists after the change, null when it was deleted or never existed
+        this.userResponse.entry_pass = data.entry_pass ?? null;
         this.updatedRegistrationStatus.emit(data.registration_status);
-        this.updateEntryPass.emit(data.entry_pass);
+        this.updateEntryPass.emit(data.entry_pass ?? null);
         this.toastLogService.successDialog('Updated!');
       });
   }
@@ -159,7 +178,14 @@ export class UserDetailsCellComponent implements OnInit, OnChanges {
   }
 
   openConfirmationDialogBox(registrationStatusId) {
-    if (registrationStatusId !== 4 && this.userResponse.entry_pass) {
+    const confirmedStatusId = this.registrationStatuses?.find((rs) => rs.name === 'confirmed')?.id;
+    // the pass belongs to the event, so it is only deleted when nothing else keeps this person confirmed
+    if (
+      // the mobile select passes the id as a string
+      Number(registrationStatusId) !== confirmedStatusId &&
+      this.userResponse.entry_pass &&
+      !this.userResponse.confirmed_on_other_form
+    ) {
       this.dialogService.open(this.confirmDeleteEntryPassDialog, {
         context: {
           registrationStatusId: registrationStatusId,

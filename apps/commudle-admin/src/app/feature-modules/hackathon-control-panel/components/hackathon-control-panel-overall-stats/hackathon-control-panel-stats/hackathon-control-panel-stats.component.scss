@@ -1,3 +1,6 @@
+com-card {
+  @apply md:com-my-4;
+}
 .hackathon-stats-container {
   @apply com-grid com-grid-cols-1 sm:com-grid-cols-3 lg:com-grid-cols-4 com-gap-4 com-pb-7;
   .hackathon-stats-item {
@@ -18,6 +21,14 @@
   }
   .chart-container {
     @apply com-h-auto com-border com-border-solid com-border-Bright-Gray com-rounded-xl com-p-2 com-mt-3 com-mb-7;
+
+    .tag-list {
+      @apply com-flex com-flex-wrap com-gap-2;
+
+      .custom-tag {
+        @apply com-border com-border-solid com-rounded-full com-border-Azure com-text-Azure;
+      }
+    }
   }
 
   .chart-time-container {

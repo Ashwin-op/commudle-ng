@@ -1,7 +1,7 @@
 .user-consents-container {
   @apply com-max-w-[500px] com-h-full;
 
-  nb-card-header {
+  com-card-header {
     @apply com-p-0;
 
     .animation {
@@ -16,11 +16,11 @@
     }
   }
 
-  nb-card-body {
+  com-card-body {
     @apply com-px-6 com-py-0 com-min-h-[50vh] com-max-h-[50vh];
   }
 
-  nb-card-footer {
+  com-card-footer {
     .accept-button {
       @apply com-text-tWhite com-text-sm com-bg-Ultramarine-Blue com-mr-4;
     }

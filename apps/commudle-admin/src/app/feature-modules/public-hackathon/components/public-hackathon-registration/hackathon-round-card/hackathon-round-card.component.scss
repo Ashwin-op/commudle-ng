@@ -129,7 +129,7 @@
       }
 
       .slot-booked {
-        @apply com-w-full com-flex com-flex-col com-gap-1 com-mt-1 com-pt-2 com-border-0 com-border-t com-border-solid com-border-Bright-Gray com-text-xs com-text-gray-700;
+        @apply com-w-full com-flex com-flex-col com-gap-2 com-mt-1 com-pt-2 com-border-0 com-border-t com-border-solid com-border-Bright-Gray com-text-xs com-text-gray-700;
 
         .meeting-link {
           @apply com-text-primary-500 com-text-xs com-no-underline hover:com-text-primary-600 com-flex com-items-center com-gap-1;
@@ -193,18 +193,24 @@
     }
   }
 
-  com-card-body {
-    @apply com-p-4;
+  com-card-body,
+  .book-slot-dialog-body {
+    @apply com-flex com-flex-col com-gap-3 com-p-4;
 
     .slot-item {
-      @apply com-flex com-gap-2 com-items-stretch com-flex-col;
+      @apply com-flex com-flex-col com-items-center;
 
-      p {
-        @apply com-text-sm com-text-gray-500 com-m-0;
+      .no-slots {
+        @apply com-text-sm com-text-gray-500 com-m-0 com-text-center com-py-4;
       }
 
-      button {
-        @apply com-text-sm com-font-medium;
+      .slot-row {
+        @apply com-text-sm com-font-medium com-text-Yankees-Blue com-py-3 com-cursor-pointer com-transition-colors com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+        @apply hover:com-text-primary-500;
+
+        &:last-child {
+          @apply com-border-b-0;
+        }
       }
     }
   }
@@ -216,4 +222,8 @@
 
 .round-content-actions {
   @apply com-flex md:com-flex-row com-flex-col-reverse com-gap-2 com-items-start;
+}
+
+.footer-confirm-dialog {
+  @apply com-flex com-justify-between;
 }

@@ -3,7 +3,7 @@
 
   .container {
     .details-section {
-      @apply com-mb-4 com-rounded-t-none com-rounded-b-lg com-border com-border-solid com-border-Bright-Gray com-shadow-none;
+      @apply com-border com-border-solid com-border-Bright-Gray com-shadow-none;
 
       com-card-body {
         @apply com-flex com-flex-col com-p-3 com-rounded-b-lg;

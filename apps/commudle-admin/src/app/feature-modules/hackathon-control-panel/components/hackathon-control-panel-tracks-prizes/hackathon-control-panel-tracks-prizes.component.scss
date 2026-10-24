@@ -1,11 +1,28 @@
-nb-card {
-  @apply com-mx-0;
-  nb-card-header {
-    @apply com-flex com-items-center;
+com-card {
+  @apply com-mx-0 md:com-my-4;
+  com-card-header {
+    @apply com-flex com-items-center com-justify-start;
+  }
+}
+
+.router-tab {
+  @apply com-top-0 com-flex com-items-center com-gap-3 com-mb-4 com-border-0 com-border-b com-border-Bright-Gray com-border-solid;
+
+  a {
+    @apply com-text-gunmetal com-p-0 com-shrink-0 com-border-0 com-no-underline com-items-center;
+  }
+
+  .route-tab-option {
+    @apply com-flex com-items-center com-gap-2 com-text-sm com-font-medium com-h-fit com-m-0 com-p-2 com-cursor-pointer com-no-underline;
+  }
+
+  .active {
+    @apply com-border-0 com-border-b-4 com-border-primary-500 com-border-solid com-text-primary-500;
   }
 }
 
 .next-step-container {
+  @apply com-px-4;
   a {
     @apply com-text-lg com-font-semibold com-text-Yankees-Blue com-no-underline hover:com-text-Yankees-Blue;
   }

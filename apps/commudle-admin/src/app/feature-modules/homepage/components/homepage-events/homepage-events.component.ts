@@ -2,20 +2,20 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { HomeService } from 'apps/commudle-admin/src/app/services/home.service';
 import { IEvent } from 'apps/shared-models/event.model';
 import { IsBrowserService } from 'apps/shared-services/is-browser.service';
-
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
-    selector: 'app-homepage-events',
-    templateUrl: './homepage-events.component.html',
-    styleUrls: ['./homepage-events.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-homepage-events',
+  templateUrl: './homepage-events.component.html',
+  styleUrls: ['./homepage-events.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class HomepageEventsComponent implements OnInit {
   events: IEvent[];
   maxEventsCount = 12;
   eventsStartIdx = 0;
   isLoading = true;
-
+  faHashtag = faHashtag;
   constructor(
     private homeService: HomeService,
     private isBrowserService: IsBrowserService,

@@ -1,5 +1,5 @@
-<nb-card class="notes-dialog">
-  <nb-card-header>
+<com-card class="notes-dialog">
+  <com-card-header>
     <div class="header-content">
       <nb-icon icon="file-text-outline"></nb-icon>
       <span>Notes - {{ team.name }}</span>
@@ -7,9 +7,9 @@
     <button ghost nbButton size="small" (click)="close()" shape="round">
       <nb-icon icon="close"></nb-icon>
     </button>
-  </nb-card-header>
+  </com-card-header>
 
-  <nb-card-body>
+  <com-card-body>
     <!-- Add Note Section -->
     <div class="add-note-section">
       <textarea
@@ -55,24 +55,24 @@
         </div>
       </div>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
 <!-- Delete Confirmation Dialog -->
 <ng-template #deleteConfirmDialog let-ref="dialogRef">
-  <nb-card class="confirm-dialog">
-    <nb-card-header class="confirm-header">
+  <com-card class="confirm-dialog">
+    <com-card-header class="confirm-header">
       <span>Delete Note</span>
       <button ghost nbButton size="small" (click)="ref.close(false)" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <p class="confirm-text">Are you sure you want to delete this note? This action cannot be undone.</p>
-    </nb-card-body>
-    <nb-card-footer class="confirm-actions">
+    </com-card-body>
+    <com-card-footer class="confirm-actions">
       <button nbButton ghost (click)="ref.close(false)">Cancel</button>
       <button nbButton status="danger" (click)="ref.close(true)">Delete</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

@@ -29,15 +29,15 @@
 </section>
 
 <ng-template #description let-ref="dialogRef">
-  <nb-card class="channel-description-dialog">
-    <nb-card-header>
+  <com-card class="channel-description-dialog">
+    <com-card-header>
       <span>Channel Description</span>
       <button ghost nbButton size="small" (click)="ref.close()">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       {{ selectedChannel?.description }}
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>

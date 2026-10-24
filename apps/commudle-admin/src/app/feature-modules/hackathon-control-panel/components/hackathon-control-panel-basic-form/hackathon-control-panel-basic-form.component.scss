@@ -1,9 +1,9 @@
-nb-card {
-  @apply com-mx-0;
+com-card {
+  @apply com-mx-0 md:com-my-4;
 }
 
-nb-card-header {
-  @apply com-flex com-items-center;
+com-card-header {
+  @apply com-flex com-items-center com-justify-start;
 }
 
 .hackathon-form {
@@ -55,6 +55,7 @@ nb-card-header {
 }
 
 .next-step-container {
+  @apply com-px-4;
   a {
     @apply com-text-lg com-font-semibold com-text-Yankees-Blue com-no-underline hover:com-text-Yankees-Blue;
   }

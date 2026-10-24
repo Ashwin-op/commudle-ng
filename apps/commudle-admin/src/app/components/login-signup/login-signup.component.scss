@@ -4,7 +4,7 @@
 
 .login-container {
   @apply com-m-0 md:com-w-[26dvw] com-w-[90dvw] com-h-full;
-  nb-card-header {
+  com-card-header {
     @apply com-flex com-justify-between com-items-center;
 
     h2 {
@@ -16,7 +16,7 @@
     }
   }
 
-  nb-card-body {
+  com-card-body {
     @apply com-p-6;
   }
 

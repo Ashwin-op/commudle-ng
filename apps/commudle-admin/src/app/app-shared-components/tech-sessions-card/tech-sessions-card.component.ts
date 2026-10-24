@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NbButtonModule, NbCardModule, NbIconModule } from '@commudle/theme';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
@@ -20,6 +21,7 @@ import { MiniUserProfileModule } from 'apps/shared-modules/mini-user-profile/min
     RouterModule,
     NbButtonModule,
     NbCardModule,
+    CommudleCardModule,
     SharedComponentsModule,
     NbIconModule,
     MiniUserProfileModule,

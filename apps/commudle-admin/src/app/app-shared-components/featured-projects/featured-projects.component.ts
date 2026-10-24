@@ -4,6 +4,7 @@ import { IFeaturedItems } from 'apps/shared-models/featured-items.model';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { NbCardModule } from '@commudle/theme';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
 import { FeaturedProjectsCardComponent } from 'apps/commudle-admin/src/app/app-shared-components/featured-projects-card/featured-projects-card.component';
 import { SkeletonCardsComponent } from 'apps/commudle-admin/src/app/feature-modules/skeleton-screens/components/skeleton-cards/skeleton-cards.component';
@@ -19,6 +20,7 @@ import { RouterModule } from '@angular/router';
   imports: [
     CommonModule,
     NbCardModule,
+    CommudleCardModule,
     SharedComponentsModule,
     FeaturedProjectsCardComponent,
     SkeletonCardsComponent,

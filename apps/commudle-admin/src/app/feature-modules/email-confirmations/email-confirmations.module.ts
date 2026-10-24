@@ -6,6 +6,7 @@ import { RsvpComponent } from './components/rsvp/rsvp.component';
 import { CollaborationCommunityComponent } from './components/collaboration-community/collaboration-community.component';
 import { UserRoleConfirmationComponent } from './components/user-role-confirmation/user-role-confirmation.component';
 import { NbIconModule, NbCardModule, NbSpinnerModule, NbToggleModule, NbButtonModule } from '@commudle/theme';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 import { EmailUnsubscribeComponent } from './components/email-unsubscribe/email-unsubscribe.component';
 import { FormsModule } from '@angular/forms';
 import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives.module';
@@ -40,6 +41,7 @@ import { HackathonRegisteredCardComponent } from 'apps/commudle-admin/src/app/ap
     SharedDirectivesModule,
     SharedPipesModule,
     FontAwesomeModule,
+    CommudleCardModule,
     // Nebular
     NbIconModule,
     NbCardModule,

@@ -1,7 +1,7 @@
 .menu {
   @apply com-h-fit com-sticky com-top-72px com-w-264px;
 
-  nb-card {
+  com-card {
     @apply com-w-full;
   }
 
@@ -48,11 +48,11 @@
   .related-labs {
     @apply com-mt-4 com-mx-0 com-mb-0 com-hidden;
 
-    nb-card-header {
+    com-card-header {
       @apply com-text-Azure com-text-base com-p-4 com-font-normal com-border-b-0;
     }
 
-    nb-card-body {
+    com-card-body {
       @apply com-p-0;
 
       .details {

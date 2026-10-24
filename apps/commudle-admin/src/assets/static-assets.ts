@@ -408,6 +408,10 @@ export const staticAssets = {
   //258
   hackathon_empty_state_trophy:
     'https://json.commudle.com/rails/active_storage/blobs/proxy/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBOG1yQnc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--5171daa3f93062153f12c8c909c5b4897fe231f8/com_57c76a915ab577e5_20260818155146.png',
+
+  //259
+  hacakthon_trophy_winner_state:
+    'https://json.commudle.com/rails/active_storage/blobs/proxy/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBMkhNQnc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--23c89c2579840a12f24e672e400b1c8857c79fd5/com_5ad5b9cc4d7cc6fd_20260829151915.png',
 };
 
 export const AwsS3Bucket = {

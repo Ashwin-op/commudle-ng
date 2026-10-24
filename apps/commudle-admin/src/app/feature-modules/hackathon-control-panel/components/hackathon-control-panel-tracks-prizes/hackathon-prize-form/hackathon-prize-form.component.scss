@@ -1,12 +1,13 @@
 .prize-form {
-  @apply com-w-[100dvw] com-mx-0;
-  @apply md:com-w-[560px] md:com-max-h-[90dvh];
+  @apply com-w-[100dvw] com-mx-0 com-flex com-overflow-y-auto md:com-w-[560px] com-max-h-[90dvh];
 
-  nb-card-header {
+  com-card-header {
     @apply com-flex com-justify-between com-items-center;
   }
-
-  nb-card-footer {
+  com-card-body {
+    @apply com-scrollbar-hide;
+  }
+  com-card-footer {
     @apply com-flex com-justify-end com-items-center com-gap-2;
   }
 

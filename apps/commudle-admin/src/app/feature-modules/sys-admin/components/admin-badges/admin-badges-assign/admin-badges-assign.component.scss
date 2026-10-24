@@ -1,7 +1,11 @@
 @import './apps/commudle-admin/src/assets/styles/variables';
 
 .admin-badges-assign {
-  nb-card-body {
+  @apply com-mt-4;
+  com-card-header {
+    @apply com-flex com-items-center com-justify-between;
+  }
+  com-card-body {
     .form-fields {
       width: 100%;
 

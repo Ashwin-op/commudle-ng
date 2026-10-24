@@ -9,6 +9,7 @@ import { SeoService } from 'apps/shared-services/seo.service';
 import { removeHtmlTags } from '@commudle/shared-services';
 import { ActivatedRoute } from '@angular/router';
 import { EEventType } from '@commudle/shared-models';
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'commudle-public-home-list-events-upcoming',
   templateUrl: './public-home-list-events-upcoming.component.html',
@@ -24,7 +25,7 @@ export class PublicHomeListEventsUpcomingComponent implements OnInit, AfterViewI
   page_info: IPageInfo;
   total: number;
   limit = 20;
-
+  faHashtag = faHashtag;
   isLoadingUpcoming = true;
   showSpinner = false;
   EEventType = EEventType;

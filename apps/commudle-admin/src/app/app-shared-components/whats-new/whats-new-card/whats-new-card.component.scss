@@ -41,7 +41,7 @@ li {
 .image-popup {
   @apply com-w-[90dvw] com-h-[56dvh] md:com-h-[48dvh] md:com-w-[40dvw] com-z-[999];
 
-  nb-card-body {
+  com-card-body {
     @apply com-p-4 com-flex com-items-center com-justify-center com-h-full com-overflow-auto;
 
     .image-wrapper {

@@ -3,7 +3,7 @@ import { ITestimonial } from 'apps/shared-models/testimonial.model';
 import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.service';
 import { SeoService } from '@commudle/shared-services';
 import { CmsService } from 'apps/shared-services/cms.service';
-import { EHttpContextFlag } from 'apps/shared-models/enums/http-context-tokens';
+import { EHttpContextFlag } from '@commudle/shared-models';
 
 @Component({
   selector: 'commudle-testimonial-card',

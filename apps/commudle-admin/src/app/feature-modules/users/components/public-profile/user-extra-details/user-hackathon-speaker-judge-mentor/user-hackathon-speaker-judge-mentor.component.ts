@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { IUser } from '@commudle/shared-models';
 import { IHackathonJudge } from '@commudle/shared-models';
-import { faTrophy, faUsers, faMicrophone, faCalendarAlt, faGavel } from '@fortawesome/free-solid-svg-icons';
+import { faTrophy, faUsers, faMicrophone, faCalendarAlt, faGavel, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 import { UserProfileMenuService } from 'apps/commudle-admin/src/app/feature-modules/users/services/user-profile-menu.service';
 import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.service';
@@ -18,7 +18,7 @@ export class UserHackathonSpeakerJudgeMentorComponent implements OnInit, OnDestr
   judges: IHackathonJudge[] = [];
   isLoading = true;
   icons = { faTrophy, faUsers, faMicrophone, faCalendarAlt, faGavel };
-
+  faHashtag = faHashtag;
   private subscriptions: Subscription[] = [];
 
   constructor(private appUsersService: AppUsersService, private userProfileMenuService: UserProfileMenuService) {}

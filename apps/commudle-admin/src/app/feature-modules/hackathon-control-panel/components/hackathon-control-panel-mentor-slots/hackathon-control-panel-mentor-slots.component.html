@@ -1,4 +1,4 @@
-<nb-card
+<com-card
   class="main-card-container"
   [ngClass]="{
     'fullscreen-card': isFullscreen,
@@ -6,7 +6,7 @@
     'sidebar-collapsed': !mainSidebarExpanded
   }"
 >
-  <nb-card-header>
+  <com-card-header>
     <span>Mentor Slot Booking</span>
     <div class="header-actions">
       <button
@@ -17,8 +17,8 @@
         <fa-icon [icon]="isFullscreen ? icons.faExpand : icons.faCompress"></fa-icon>
       </button>
     </div>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
     <div class="data-table com-overflow-hidden com-w-full com-h-[70dvh] com-relative">
       <commudle-data-table
@@ -52,8 +52,8 @@
         <p *ngIf="mentorFilter === 'all'" class="sub-text">Please add mentors or judges to start managing slots.</p>
       </div>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
 <ng-template #mentorHeaderTemplate let-column="column">
   <div class="mentor-header">
@@ -200,46 +200,46 @@
 </ng-template>
 
 <ng-template #savingDialog>
-  <nb-card class="saving-dialog-card">
-    <nb-card-body>
+  <com-card class="saving-dialog-card">
+    <com-card-body>
       <div class="saving-dialog-content">
         <app-loading-spinner></app-loading-spinner>
         <p class="saving-dialog-text">Saving slot rules, this may take a few moments...</p>
       </div>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>
 
 <ng-template #updateMentorMeetingUrl let-data let-ref="dialogRef">
-  <nb-card class="dialog-box-card">
-    <nb-card-header>
+  <com-card class="dialog-box-card">
+    <com-card-header>
       <div>Update Meeting URL</div>
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div class="form-group">
         <label for="meetingUrl">Meeting URL</label>
         <input type="text" id="meetingUrl" nbInput fullWidth [(ngModel)]="meetingUrl" placeholder="Enter meeting URL" />
       </div>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button nbButton status="primary" (click)="updateMeetingUrl(data.mentorId, ref)">Update</button>
       <button nbButton (click)="ref.close()">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #updateSlotRules let-data let-ref="dialogRef">
-  <nb-card class="dialog-box-card slot-rule-form" [formGroup]="slotRuleForm">
-    <nb-card-header>
+  <com-card class="dialog-box-card slot-rule-form" [formGroup]="slotRuleForm">
+    <com-card-header>
       <div>Add/Update Slot Rules</div>
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div class="form-group">
         <nb-checkbox formControlName="booking_open" (checkedChange)="onBookingOpenChange($event)"
           >Booking Open</nb-checkbox
@@ -307,9 +307,9 @@
           errorMessage="Slot length is required"
         ></commudle-alert>
         <commudle-alert
-          *ngIf="slotRuleForm.controls['slot_length'].touched && slotRuleForm.controls['slot_length'].errors?.['min']"
+          *ngIf="(slotRuleForm.controls['slot_length'].touched || slotRuleForm.controls['slot_length'].dirty) && slotRuleForm.controls['slot_length'].errors?.['min']"
           [error]="true"
-          errorMessage="Slot length must be at least 1 minute"
+          errorMessage="Slot length must be at least 10 minutes"
         ></commudle-alert>
       </div>
       <div class="slot-info" *ngIf="calculateTotalSlots() > 0">
@@ -331,8 +331,8 @@
           errorMessage="Max teams must be at least 1"
         ></commudle-alert>
       </div>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button
         nbButton
         status="primary"
@@ -342,8 +342,8 @@
         Save
       </button>
       <button nbButton (click)="ref.close()">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <commudle-sidebar

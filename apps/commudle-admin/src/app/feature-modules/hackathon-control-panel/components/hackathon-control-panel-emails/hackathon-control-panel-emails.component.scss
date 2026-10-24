@@ -1,5 +1,5 @@
 .communication-section {
-  @apply com-mx-0 md:com-mx-2;
+  @apply com-mx-0 md:com-mx-2 md:com-my-4;
 
   .header-section {
     @apply com-flex com-items-center com-gap-2;
@@ -37,7 +37,7 @@
 .mail-popup {
   @apply md:com-w-[40dvw] com-max-h-[90dvh] com-w-auto com-mx-0;
 
-  nb-card-header {
+  com-card-header {
     @apply com-flex com-justify-between com-items-center;
 
     span {
@@ -45,7 +45,7 @@
     }
   }
 
-  nb-card-footer {
+  com-card-footer {
     @apply com-flex com-items-center com-justify-between com-gap-4;
   }
 

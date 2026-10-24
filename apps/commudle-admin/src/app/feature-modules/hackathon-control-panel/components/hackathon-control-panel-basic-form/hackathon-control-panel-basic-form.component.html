@@ -1,9 +1,9 @@
-<nb-card>
-  <nb-card-header
+<com-card>
+  <com-card-header
     >{{ hackathon ? 'Basic Information' : 'New Hackathon Form' }}
     <commudle-help-section [helpDictionaryName]="'hackathon-create'"></commudle-help-section>
-  </nb-card-header>
-  <nb-card-body class="hackathon-form">
+  </com-card-header>
+  <com-card-body class="hackathon-form">
     <form [formGroup]="hackathonForm">
       <div>
         <label for="banner_image">Banner Image</label>
@@ -351,8 +351,8 @@
         {{ saveButtonText }}
       </button>
     </form>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
 <div *ngIf="hackathon" class="next-step-container">
   <a>

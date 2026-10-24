@@ -9,7 +9,7 @@ import { SkeletonCardsComponent } from 'apps/commudle-admin/src/app/feature-modu
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RouterModule } from '@angular/router';
 import { UsersModule } from 'apps/commudle-admin/src/app/feature-modules/users/users.module';
-
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'commudle-featured-builds',
   standalone: true,
@@ -29,7 +29,7 @@ export class FeaturedBuildsComponent implements OnInit {
   @Input() featuredProjects: IFeaturedItems[] = [];
   staticAssets = staticAssets;
   showSpinner = false;
-
+  faHashtag = faHashtag;
   constructor(private featuredItemsService: FeaturedItemsService) {}
 
   ngOnInit() {

@@ -10,7 +10,7 @@ import { EDbModels, EEventType } from '@commudle/shared-models';
 import { environment } from 'apps/commudle-admin/src/environments/environment';
 import { SeoService } from 'apps/shared-services/seo.service';
 import { removeHtmlTags } from '@commudle/shared-services';
-
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'commudle-public-home-list-speakers-upcoming',
   templateUrl: './public-home-list-speakers-upcoming.component.html',
@@ -29,7 +29,7 @@ export class PublicHomeListSpeakersUpcomingComponent implements OnInit {
   page = 1;
   eventForSchema = [];
   EEventType = EEventType;
-
+  faHashtag = faHashtag;
   constructor(
     private eventsService: EventsService,
     private communityGroupsService: CommunityGroupsService,

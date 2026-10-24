@@ -1,6 +1,16 @@
 <div class="signup-newsletter">
   <div class="signup">
-    <a [routerLink]="'.'" fragment="download-or-read"><p class="signup-heading">Download or Read Online</p></a>
+    <p class="signup-heading section-heading-anchor">
+      Download or Read Online
+      <a
+        [routerLink]="'.'"
+        fragment="download-or-read"
+        class="anchor-link"
+        aria-label="Link to download or read section"
+      >
+        <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+      </a>
+    </p>
     <p class="signup-subheading">We will keep updating it!</p>
   </div>
   <a [routerLink]="['/developer-ecosystem-blueprint/book']" class="read-or-download"

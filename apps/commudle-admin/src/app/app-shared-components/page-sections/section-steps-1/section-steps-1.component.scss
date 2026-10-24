@@ -1,0 +1,156 @@
+:host {
+  display: block;
+}
+
+.base-layout {
+  min-height: 0;
+}
+
+.section-container {
+  @apply com-px-4 md:com-px-6;
+}
+
+.steps-section {
+  @apply com-bg-white com-py-12 md:com-py-16 com-overflow-hidden;
+}
+
+.section-header {
+  @apply com-mb-10;
+
+  &__eyebrow {
+    @apply com-text-Caption com-font-semibold com-text-primary-600;
+    @apply com-uppercase com-tracking-widest com-mb-3 com-block com-m-0;
+  }
+
+  &__heading {
+    @apply com-text-Page-Section-Header com-font-medium com-text-Yankees-Blue com-mb-3 com-m-0;
+  }
+
+  &__sub {
+    @apply com-text-Paragraph-1 com-text-Auro-Metal-Saurus com-max-w-xl com-m-0;
+  }
+}
+
+.steps {
+  @apply com-grid com-grid-cols-1 sm:com-grid-cols-2 lg:com-grid-cols-4 com-gap-x-6 com-gap-y-10;
+}
+
+.step {
+  @apply com-relative com-flex com-flex-col com-items-start;
+
+  // Numbered badge — coloured per step (green → yellow → orange → red,
+  // rising intensity toward "done"; see STEP_PALETTE / colorFor()) instead
+  // of a flat, repeated primary blue. The glow behind each one is the same
+  // colour, via the token it's actually named after (Caribbean-Green,
+  // Chrome-Yellow, Giants-Orange, Infra-Red) rather than raw hex.
+  &__num {
+    @apply com-inline-flex com-items-center com-justify-center com-rounded-full com-flex-shrink-0;
+    @apply com-text-tWhite com-text-Paragraph-1 com-font-bold;
+    @apply com-w-10 com-h-10 com-relative com-z-[1] com-mb-3;
+
+    // When the step has a media image, the badge moves onto its top-left
+    // corner instead of sitting above the card — a white ring keeps it
+    // legible regardless of what's underneath it in that particular image.
+    &--onmedia {
+      @apply com-absolute com-top-2.5 com-left-2.5 com-z-[2] com-mb-0;
+      @apply com-border-3 com-border-white;
+    }
+
+    &--green {
+      @apply com-bg-Caribbean-Green com-shadow-[0_8px_18px_-6px_rgba(0,214,143,0.55)];
+    }
+
+    &--yellow {
+      @apply com-bg-Chrome-Yellow com-shadow-[0_8px_18px_-6px_rgba(255,170,0,0.55)];
+    }
+
+    &--orange {
+      @apply com-bg-Giants-Orange com-shadow-[0_8px_18px_-6px_rgba(255,92,30,0.5)];
+    }
+
+    &--red {
+      @apply com-bg-Infra-Red com-shadow-[0_8px_18px_-6px_rgba(255,61,113,0.5)];
+    }
+  }
+
+  &__card {
+    @apply com-flex com-flex-col com-bg-white com-rounded-10 com-overflow-hidden;
+    @apply com-border com-border-Bright-Gray;
+    @apply com-w-full com-relative com-z-[1];
+  }
+
+  // Edge-to-edge illustration above the icon/title/text — only rendered
+  // when the step config provides one; icon-only steps skip straight to
+  // __body with no gap above it.
+  &__media {
+    @apply com-relative com-w-full com-overflow-hidden;
+    // `aspect-ratio` has no working Tailwind utility in this project's build
+    // (this install shadows/omits the core aspect-ratio utility in favour
+    // of the separate `@tailwindcss/aspect-ratio` plugin, which only
+    // provides the older `aspect-w-*`/`aspect-h-*` pair — not a drop-in
+    // replacement here) — genuine gap, stays plain CSS.
+    aspect-ratio: 16 / 10;
+
+    img {
+      @apply com-w-full com-h-full com-object-cover com-block;
+    }
+  }
+
+  &__body {
+    @apply com-flex com-flex-col com-gap-2 com-p-5;
+  }
+
+  &__title {
+    @apply com-text-Card-Subheading com-font-semibold com-text-Yankees-Blue;
+  }
+
+  &__text {
+    @apply com-text-Paragraph-2 com-text-Auro-Metal-Saurus;
+  }
+
+  // Icon badge — a proper contained circle (matching the icon-badge
+  // convention used in feature-grid-2/3) instead of a bare glyph, so it
+  // doesn't read as a stray icon floating above the title. Same colour
+  // rotation as __num, but as a light tint behind a saturated icon —
+  // same convention as the intro-highlights-1 highlight badges (just
+  // green/yellow/orange/red here instead of blue/yellow/red/green, to
+  // avoid repeating primary blue yet again on this page).
+  &__icon {
+    @apply com-inline-flex com-items-center com-justify-center com-rounded-full com-flex-shrink-0;
+    @apply com-w-11 com-h-11 com-text-lg;
+
+    // When the step has a media image, the icon sits on the image's
+    // bottom-left corner (inset, not flush to the edge) instead of in the
+    // body — same white-ring treatment as __num--onmedia, for the same
+    // reason: legible over whatever happens to be in that image there.
+    &--onmedia {
+      @apply com-absolute com-bottom-2.5 com-left-2.5 com-z-[2];
+      @apply com-border-3 com-border-white;
+    }
+
+    // Tint backgrounds have no dedicated named token (only the saturated
+    // colour does), so the background is the one arbitrary Tailwind value
+    // here; the icon colour itself still uses the real named token.
+    &--green {
+      @apply com-bg-[rgba(0,214,143,0.14)] com-text-Caribbean-Green;
+    }
+
+    &--yellow {
+      @apply com-bg-Blond com-text-Chrome-Yellow;
+    }
+
+    &--orange {
+      @apply com-bg-[rgba(255,92,30,0.14)] com-text-Giants-Orange;
+    }
+
+    &--red {
+      @apply com-bg-[rgba(255,61,113,0.14)] com-text-Infra-Red;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

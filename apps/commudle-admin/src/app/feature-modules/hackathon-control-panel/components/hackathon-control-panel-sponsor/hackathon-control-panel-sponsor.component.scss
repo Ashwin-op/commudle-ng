@@ -1,7 +1,7 @@
 .sponsors-container {
-  @apply com-mx-0 md:com-mx-2;
+  @apply com-mx-0 md:com-mx-2 md:com-my-4;
 
-  nb-card-body {
+  com-card-body {
     .sponsors-cards-container {
       h6 {
         @apply com-mb-0 com-mt-2;
@@ -14,9 +14,14 @@
 }
 
 .sponsor-form-dialog-box {
-  @apply com-h-full com-w-[100dvw] md:com-h-[90dvh] md:com-w-[70dvw] com-mx-0;
+  @apply com-w-[100dvw] com-max-h-[90dvh] md:com-w-[70dvw] com-mx-0 com-overflow-hidden com-flex com-flex-col;
+
   form {
     @apply com-flex com-flex-col com-gap-3;
+  }
+
+  com-card-body {
+    @apply com-flex com-min-h-0 com-overflow-y-auto com-scrollbar-hide;
     .select {
       @apply com-flex com-items-center com-gap-1 com-h-8 com-p-1 com-text-sm com-rounded-[4px] com-cursor-pointer com-bg-[#F6F9FC] hover:com-bg-[#eef2f7]/50  com-border com-border-solid com-border-[#E4E9F2]  com-w-full;
       select {
@@ -29,7 +34,9 @@
 .actions {
   @apply com-flex com-justify-between;
 }
-
-nb-card-header {
-  @apply com-flex com-items-center;
+com-card-body {
+  @apply com-scrollbar-hide;
+}
+com-card-header {
+  @apply com-flex com-items-center com-justify-start;
 }

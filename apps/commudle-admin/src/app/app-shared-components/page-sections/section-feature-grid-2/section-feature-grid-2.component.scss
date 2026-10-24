@@ -1,0 +1,55 @@
+:host {
+  display: block;
+}
+
+// Prevents global .base-layout from inflating the section to 100vh.
+.base-layout {
+  min-height: 0;
+}
+
+.section-container {
+  @apply com-px-4 md:com-px-6;
+}
+
+.feature-grid-2-section {
+  @apply com-bg-white com-py-12 md:com-py-16 com-overflow-hidden;
+}
+
+.section-header {
+  @apply com-mb-10;
+
+  &__eyebrow {
+    @apply com-text-Caption com-font-semibold com-text-primary-600;
+    @apply com-uppercase com-tracking-widest com-mb-3 com-block;
+  }
+
+  &__heading {
+    @apply com-text-Page-Section-Header com-font-medium com-text-Yankees-Blue com-mb-3;
+  }
+
+  &__sub {
+    @apply com-text-Paragraph-1 com-text-Auro-Metal-Saurus com-max-w-xl;
+  }
+}
+
+.feature-grid {
+  @apply com-grid com-grid-cols-1 md:com-grid-cols-2 lg:com-grid-cols-3 com-gap-6;
+}
+
+.feature-card {
+  @apply com-bg-Ghost-White com-rounded-10 com-p-6 com-h-full;
+
+  &__icon {
+    @apply com-inline-flex com-items-center com-justify-center com-rounded-10;
+    @apply com-bg-primary-100 com-text-primary-600;
+    @apply com-w-11 com-h-11 com-text-lg;
+  }
+
+  &__title {
+    @apply com-text-Card-Subheading com-text-Yankees-Blue com-mt-4;
+  }
+
+  &__description {
+    @apply com-text-Paragraph-2 com-text-Auro-Metal-Saurus com-mt-2;
+  }
+}

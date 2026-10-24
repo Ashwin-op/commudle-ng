@@ -34,13 +34,13 @@
   <div class="sidebar">
     <commudle-sidebar
       [expandedWidth]="sidebarExpanded ? ESidebarWidth.XL : ESidebarWidth.XSMALL"
-      [forWindow]="isMobileView ? true : false"
-      [showExpandedButton]="true"
+      [forWindow]="isMobileView"
+      [showExpandedButton]="!isMobileView || sidebarExpanded"
       [eventName]="sidebarEventName"
       [heading]="'Hackathon Dashboard'"
       [textSize]="ESidebarHeading.MEDIUM"
     >
-      <div class="action-buttons">
+      <div class="action-buttons" (click)="closeSidebarOnMobile()">
         <div
           class="header-icons"
           [ngClass]="{ 'header-icons-non-expanded': !sidebarExpanded, 'header-icons-expanded': sidebarExpanded }"

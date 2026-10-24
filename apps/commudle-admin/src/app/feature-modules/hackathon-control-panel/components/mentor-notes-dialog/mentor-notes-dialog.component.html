@@ -1,11 +1,11 @@
-<nb-card class="notes-dialog">
-  <nb-card-header>
+<com-card class="notes-dialog">
+  <com-card-header>
     <span>Notes - {{ mentor.name }}</span>
     <button ghost nbButton size="small" (click)="close()" shape="round">
       <nb-icon icon="close"></nb-icon>
     </button>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <div class="add-note-section">
       <textarea nbInput fullWidth [(ngModel)]="newNote" placeholder="Write a note..." rows="3"></textarea>
       <div class="action-buttons">
@@ -31,18 +31,18 @@
         </div>
       </div>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
 <ng-template #deleteConfirmDialog let-data let-ref="dialogRef">
-  <nb-card>
-    <nb-card-header>Delete Note</nb-card-header>
-    <nb-card-body>
+  <com-card>
+    <com-card-header>Delete Note</com-card-header>
+    <com-card-body>
       <p>Are you sure you want to delete this note? This action cannot be undone.</p>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button nbButton status="danger" (click)="ref.close(true)">Delete</button>&nbsp;&nbsp;&nbsp;
       <button nbButton (click)="ref.close(false)">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

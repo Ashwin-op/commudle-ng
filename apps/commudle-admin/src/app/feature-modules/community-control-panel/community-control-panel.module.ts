@@ -62,7 +62,7 @@ import { CommunityMailsSentStatsComponent } from './components/community-mails-s
 import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-components/help-section/help-section.component';
 import { CommudleButtonModule } from '@commudle/commudle-theme';
 import { CommudleInputModule } from '@commudle/commudle-theme';
-
+import { CommudleCardModule } from '@commudle/commudle-theme';
 @NgModule({
   declarations: [
     CommunityControlPanelComponent,
@@ -109,7 +109,7 @@ import { CommudleInputModule } from '@commudle/commudle-theme';
     ReusableComponentsModule,
     HelpSectionComponent,
     CommudleButtonModule,
-
+    CommudleCardModule,
     //standalone
     SidebarComponent,
 

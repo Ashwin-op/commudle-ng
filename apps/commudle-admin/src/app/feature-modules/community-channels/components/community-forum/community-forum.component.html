@@ -57,51 +57,51 @@
 </section>
 
 <ng-template #editForum let-data let-ref="dialogRef">
-  <nb-card class="setting-dialog-box">
-    <nb-card-header>
+  <com-card class="setting-dialog-box">
+    <com-card-header>
       <h4>Edit Forum > {{ data.name }}</h4>
       <button ghost nbButton size="small" (click)="ref.close()">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <commudle-edit-channel
         [discussionType]="discussionType.FORUM"
         [forum]="data"
         (updateForm)="closeDialogBox()"
       ></commudle-edit-channel>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>
 
 <ng-template #deleteForum let-data let-ref="dialogRef">
-  <nb-card class="setting-dialog-box">
-    <nb-card-header>
+  <com-card class="setting-dialog-box">
+    <com-card-header>
       <h4>Delete Forum > {{ data.name }}</h4>
       <button ghost nbButton size="small" (click)="ref.close()">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <app-delete-channel
         [channelId]="data.id"
         [currentUrl]="'communities/' + parent.slug + '/forums'"
         (updateForm)="closeDialogBox()"
       ></app-delete-channel>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>
 
 <ng-template #inviteInForm let-data let-ref="dialogRef">
-  <nb-card class="setting-dialog-box">
-    <nb-card-header>
+  <com-card class="setting-dialog-box">
+    <com-card-header>
       <h4>Invite > {{ data.name }}</h4>
       <button ghost nbButton size="small" (click)="ref.close()">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <app-invite-form [forum]="data" (updateForm)="closeDialogBox()"></app-invite-form>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>

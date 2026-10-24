@@ -1,0 +1,15 @@
+.certificate-variable-default-value-dialog {
+  @apply com-w-[24rem] com-max-w-[90vw];
+}
+
+.dialog-header {
+  @apply com-flex com-justify-between com-items-center;
+}
+
+.form-field-container {
+  @apply com-mb-1;
+
+  .form-field {
+    @apply com-block com-w-full com-mb-1;
+  }
+}

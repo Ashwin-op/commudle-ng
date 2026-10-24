@@ -193,12 +193,33 @@ com-card {
   }
 }
 
+.loading-more-state {
+  @apply com-flex com-items-center com-justify-center com-gap-2 com-py-4;
+
+  span {
+    @apply com-text-gray-500;
+  }
+}
+
 .teams-table-wrapper {
   @apply com-overflow-x-auto com-w-full;
 }
 
 .teams-table {
   @apply com-w-full com-border-collapse com-min-w-[800px];
+  table-layout: fixed;
+
+  .col-sm {
+    width: 8%;
+  }
+
+  .col-md {
+    width: 12%;
+  }
+
+  .col-lg {
+    width: 20%;
+  }
 
   thead {
     @apply com-bg-gray-50;
@@ -317,6 +338,10 @@ com-card {
 
         .submission-details {
           @apply com-flex com-flex-col com-gap-2 com-max-w-[400px];
+
+          .submissions-list {
+            @apply com-flex com-flex-col com-gap-2;
+          }
 
           .ppt-link,
           .project-link,
@@ -587,6 +612,14 @@ com-card {
 
         .no-submission {
           @apply com-text-gray-400;
+        }
+
+        .submission-round-item {
+          @apply com-flex com-flex-col com-gap-0.5 com-mb-1.5;
+
+          strong {
+            @apply com-text-gray-500 com-font-medium;
+          }
         }
       }
 

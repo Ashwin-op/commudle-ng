@@ -6,7 +6,7 @@ import { IPageInfo } from 'apps/shared-models/page-info.model';
 import { IPagination } from 'apps/shared-models/pagination.model';
 import { Output, EventEmitter } from '@angular/core';
 import { SeoService } from '@commudle/shared-services';
-
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'commudle-builds',
   templateUrl: './builds.component.html',
@@ -32,7 +32,7 @@ export class BuildsComponent implements OnInit {
   selectedTags = [];
   isCampaignMode = false;
   schemaForBuild = [];
-
+  faHashtag = faHashtag;
   @Output() seoMetadataChange = new EventEmitter<object>();
   @Output() totalSubmissionsChange = new EventEmitter<number>();
 

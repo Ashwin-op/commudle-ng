@@ -10,7 +10,7 @@
   @apply com-m-0 com-w-full com-bg-white com-rounded-[10px] com-border-none com-flex com-flex-col com-max-h-[90vh];
 }
 
-nb-card-header {
+com-card-header {
   @apply com-flex com-justify-between com-items-center com-pr-4 com-pl-5 com-py-5 com-bg-gradient-to-r com-from-blue-500 com-to-blue-300 com-rounded-t-[10px];
   .heading {
     @apply com-flex com-items-center com-flex-1;
@@ -37,8 +37,8 @@ nb-card-header {
   }
 }
 
-nb-card-body {
-  @apply com-px-5 com-py-1 com-flex-1 com-overflow-y-auto;
+com-card-body {
+  @apply com-px-5 com-py-1 com-flex-1 com-overflow-y-auto com-scrollbar-hide;
 
   ul {
     @apply com-m-0 com-px-3 com-py-0;
@@ -53,7 +53,7 @@ nb-card-body {
   }
 }
 
-nb-card-footer {
+com-card-footer {
   @apply com-flex com-justify-between com-py-3 com-px-5 com-flex-shrink-0 com-bg-white com-rounded-b-[10px] com-border-t com-border-solid com-border-Bright-Gray com-sticky com-bottom-0 com-z-10;
 
   button {

@@ -1,8 +1,16 @@
 <com-card *ngIf="speakersContents.length > 0" id="speaker-resources">
   <com-card-body>
     <div class="heading">
-      <h3 class="title">
-        <a [routerLink]="'.'" fragment="speaker-resources">{{ heading }}</a>
+      <h3 class="title section-heading-anchor">
+        {{ heading }}
+        <a
+          [routerLink]="'.'"
+          fragment="speaker-resources"
+          class="anchor-link"
+          aria-label="Link to speaker-resources section"
+        >
+          <fa-icon [icon]="faHashtag" class="anchor-icon-small"></fa-icon>
+        </a>
       </h3>
       <h4 class="sub-heading">{{ subheading }}</h4>
     </div>

@@ -1,9 +1,9 @@
-<nb-card class="admin-badges-assign">
-  <nb-card-header class="d-flex justify-content-space-between align-items-center">
+<com-card class="admin-badges-assign">
+  <com-card-header>
     Badges
     <button [routerLink]="['/sys-admin', 'badges']" ghost nbButton shape="round" size="small">Show All Badges</button>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <div>
       <form
         (submit)="assignBadge()"
@@ -35,18 +35,18 @@
     <button (click)="getUserBadges()" *ngIf="userBadges.length !== total" fullWidth ghost nbButton>
       Get more user badges
     </button>
-  </nb-card-body>
+  </com-card-body>
 
   <ng-template #confirmUnassignBadge let-ref="dialogRef">
-    <nb-card>
-      <nb-card-header class="text-center">Confirmation</nb-card-header>
-      <nb-card-body>
+    <com-card>
+      <com-card-header class="text-center">Confirmation</com-card-header>
+      <com-card-body>
         <p>Are you sure you want to unassign this Badge from the User?</p>
-      </nb-card-body>
-      <nb-card-footer class="d-flex justify-content-space-between">
+      </com-card-body>
+      <com-card-footer class="d-flex justify-content-space-between">
         <button (click)="unassignBadge(); ref.close()" ghost nbButton status="success">Yes</button>
         <button (click)="ref.close()" nbButton status="danger">No</button>
-      </nb-card-footer>
-    </nb-card>
+      </com-card-footer>
+    </com-card>
   </ng-template>
-</nb-card>
+</com-card>

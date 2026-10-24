@@ -1,11 +1,11 @@
-<nb-card class="communication-section">
-  <nb-card-header>
+<com-card class="communication-section">
+  <com-card-header>
     <div class="header-section">
       <h2 class="page-title">Communications</h2>
       <commudle-help-section [helpDictionaryName]="'hackathon-communications'"></commudle-help-section>
     </div>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <div class="email-sections">
       <div class="email-section">
         <div class="section-header">
@@ -51,18 +51,18 @@
         </div>
       </div>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
 <ng-template #SendRegistrationsByMail let-ref="dialogRef">
-  <nb-card class="mail-popup">
-    <nb-card-header>
+  <com-card class="mail-popup">
+    <com-card-header>
       <span>Registration Invite Email</span>
       <button nbButton size="small" shape="round" (click)="closeDialogBox()" ghost>
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <commudle-alert
         [info]="true"
         message="This will send a pre-formatted email and a notification to all members of the community"
@@ -71,8 +71,8 @@
         <label for="message" class="message">Message (Optional)</label>
         <editor [init]="tinyMCE" [(ngModel)]="message"></editor>
       </div>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button
         (click)="previewEmail(hackathonId); showPreviewSpinner = true"
         nbButton
@@ -96,26 +96,26 @@
         <fa-icon [icon]="icons.faPaperPlane"></fa-icon>
         &nbsp; Send
       </button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #SendRejectionEmails let-ref="dialogRef">
-  <nb-card class="mail-popup">
-    <nb-card-header>
+  <com-card class="mail-popup">
+    <com-card-header>
       <span>Send Rejection Emails</span>
       <button nbButton size="small" shape="round" (click)="closeDialogBox()" ghost>
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <commudle-alert [info]="true" message="This will send rejection emails to all rejected teams"></commudle-alert>
       <div class="message-field">
         <label for="message" class="message">Message (Optional)</label>
         <editor [init]="tinyMCE" [(ngModel)]="message"></editor>
       </div>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button
         (click)="previewRejectionEmail(hackathonId); showPreviewSpinner = true"
         nbButton
@@ -139,6 +139,6 @@
         <fa-icon [icon]="icons.faPaperPlane"></fa-icon>
         &nbsp; Send
       </button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

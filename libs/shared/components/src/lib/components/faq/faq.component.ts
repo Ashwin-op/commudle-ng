@@ -1,17 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IFaq } from '@commudle/shared-models';
 import { SeoService } from '@commudle/shared-services';
-
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
-    selector: 'commudle-faq',
-    templateUrl: './faq.component.html',
-    styleUrls: ['./faq.component.scss'],
-    standalone: false
+  selector: 'commudle-faq',
+  templateUrl: './faq.component.html',
+  styleUrls: ['./faq.component.scss'],
+  standalone: false,
 })
 export class FaqComponent implements OnInit {
   @Input() faqs: IFaq[];
   showAnswers = [];
-
+  faHashtag = faHashtag;
   constructor(private seoService: SeoService) {}
 
   ngOnInit(): void {

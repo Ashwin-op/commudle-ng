@@ -1,11 +1,11 @@
-<nb-card class="login-container">
-  <nb-card-header>
+<com-card class="login-container">
+  <com-card-header>
     <h2>{{ heading }}</h2>
     <button *ngIf="showCloseButton" nbButton ghost (click)="closeDialog()">
       <fa-icon [icon]="faXmark" class="cross-icon"></fa-icon>
     </button>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <form [formGroup]="loginForm" class="login-form">
       <label class="email-label">EMAIL<span class="mandatory-field">*</span></label>
       <input
@@ -63,5 +63,5 @@
       type="standard"
       size="large"
     ></div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

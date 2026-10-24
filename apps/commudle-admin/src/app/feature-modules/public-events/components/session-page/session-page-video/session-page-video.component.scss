@@ -15,7 +15,7 @@
   &.external-link {
     // height: 150px;
 
-    nb-card-body {
+    com-card-body {
       .video-stream {
         position: initial;
         height: initial;
@@ -23,11 +23,11 @@
     }
   }
 
-  nb-card-body {
+  com-card-body {
     padding: 0;
     height: inherit;
     overflow: unset;
-
+    position: relative;
     .session-page-info {
       gap: $space-12;
       position: absolute;
@@ -176,11 +176,11 @@
 
       app-session-page-details {
         &::ng-deep {
-          nb-card {
+          com-card {
             border-radius: 0;
             margin: $space-16 0 0;
 
-            nb-card-body {
+            com-card-body {
               padding: 0 $space-8 $space-8;
             }
           }

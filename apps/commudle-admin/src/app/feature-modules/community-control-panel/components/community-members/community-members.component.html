@@ -128,7 +128,7 @@
 
       <!-- Active Filter Tags -->
       <div class="active-filter-tags">
-        <nb-tag-list>
+        <div class="filter-tag-list">
           <!-- <nb-tag
             [appearance]="mostActive ? 'filled' : 'outline'"
             [text]="'Most Active (Top 10%)'"
@@ -147,25 +147,29 @@
             [ngClass]="{ activeTag: contributor }"
             (click)="filterByTags(options[1])"
           ></nb-tag> -->
-          <nb-tag
-            [appearance]="contentCreator ? 'filled' : 'outline'"
-            [text]="'Content Creator'"
-            size="small"
-            status="info"
-            [removable]="contentCreator ? 'true' : 'false'"
-            [ngClass]="{ activeTag: contentCreator }"
+          <app-tag
+            class="filter-tag"
+            [tags]="['Content Creator']"
+            [removable]="contentCreator"
+            [inputSize]="'custom'"
+            [minTagLimit]="false"
+            [shape]="'rounded'"
+            [backgroundColor]="contentCreator ? 'com-bg-Azure' : 'com-bg-Azure-opacity-10'"
+            [fontColor]="contentCreator ? 'com-text-tWhite' : 'com-text-Azure'"
             (click)="filterByTags(options[2])"
-          ></nb-tag>
-          <nb-tag
-            [appearance]="speaker ? 'filled' : 'outline'"
-            [text]="'Speaker'"
-            size="small"
-            status="info"
-            [removable]="speaker ? 'true' : 'false'"
-            [ngClass]="{ activeTag: speaker }"
+          ></app-tag>
+          <app-tag
+            class="filter-tag"
+            [tags]="['Speaker']"
+            [removable]="speaker"
+            [inputSize]="'custom'"
+            [minTagLimit]="false"
+            [shape]="'rounded'"
+            [backgroundColor]="speaker ? 'com-bg-Azure' : 'com-bg-Azure-opacity-10'"
+            [fontColor]="speaker ? 'com-text-tWhite' : 'com-text-Azure'"
             (click)="filterByTags(options[3])"
-          ></nb-tag>
-        </nb-tag-list>
+          ></app-tag>
+        </div>
         <button
           *ngIf="isActiveFilter"
           (click)="clearAllFilters()"
@@ -584,8 +588,8 @@
 
 <!-- Remove User Dialog -->
 <ng-template #removeUserDialog let-data let-ref="dialogRef">
-  <nb-card class="dialog-card">
-    <nb-card-header class="dialog-header">
+  <com-card class="dialog-card">
+    <com-card-header class="dialog-header">
       <span>
         <nb-icon icon="alert-triangle" status="warning"></nb-icon>
         Confirmation
@@ -593,8 +597,8 @@
       <button (click)="ref.close()" ghost nbButton size="small">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body class="dialog-body">
+    </com-card-header>
+    <com-card-body class="dialog-body">
       <p>
         Are you sure you want to <strong>remove</strong>&nbsp;<em>{{ data.user?.name }}</em> from the community? (Select
         the roles you want to remove them from)
@@ -610,8 +614,8 @@
         </div>
       </div>
       <p><strong>Note:</strong>&nbsp;This action cannot be undone.</p>
-    </nb-card-body>
-    <nb-card-footer class="dialog-footer">
+    </com-card-body>
+    <com-card-footer class="dialog-footer">
       <button (click)="ref.close()" ghost nbButton status="danger">No</button>
       <button
         (click)="removeUser(); ref.close()"
@@ -621,14 +625,14 @@
       >
         Yes
       </button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <!-- Block User Dialog -->
 <ng-template #blockUserDialog let-data let-ref="dialogRef">
-  <nb-card class="dialog-card">
-    <nb-card-header class="dialog-header">
+  <com-card class="dialog-card">
+    <com-card-header class="dialog-header">
       <span>
         <nb-icon icon="alert-triangle" status="warning"></nb-icon>
         Confirmation
@@ -636,16 +640,16 @@
       <button (click)="ref.close()" ghost nbButton size="small">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body class="dialog-body">
+    </com-card-header>
+    <com-card-body class="dialog-body">
       <p>
         Are you sure you want to <strong>remove & block</strong>&nbsp;<em>{{ data.user?.name }}</em> from the community?
       </p>
       <p><strong>Note:</strong>&nbsp;This action cannot be undone.</p>
-    </nb-card-body>
-    <nb-card-footer class="dialog-footer">
+    </com-card-body>
+    <com-card-footer class="dialog-footer">
       <button (click)="ref.close()" ghost nbButton status="danger">No</button>
       <button (click)="blockUser(data.user.id); ref.close()" nbButton status="success">Yes</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

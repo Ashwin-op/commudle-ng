@@ -6,10 +6,10 @@ import { SeoService } from 'apps/shared-services/seo.service';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 
 @Component({
-    selector: 'commudle-student-non-profit-community-support',
-    templateUrl: './student-non-profit-community-support.component.html',
-    styleUrls: ['./student-non-profit-community-support.component.scss'],
-    standalone: false
+  selector: 'commudle-student-non-profit-community-support',
+  templateUrl: './student-non-profit-community-support.component.html',
+  styleUrls: ['./student-non-profit-community-support.component.scss'],
+  standalone: false,
 })
 export class StudentNonProfitCommunitySupportComponent implements OnInit, OnDestroy {
   faStar = faStar;
@@ -62,7 +62,8 @@ export class StudentNonProfitCommunitySupportComponent implements OnInit, OnDest
       },
       {
         question: 'I am a student building a startup, can I apply for this plan?',
-        answer: 'Yes! As long as your community is free to join and engage with, we are here to support you.',
+        answer:
+          'Yes, you can apply for this plan, and there are high chances of getting selected owing to the availability of free communities. We roll out and give access under this plan to very limited and selected communities.',
       },
     ];
   }

@@ -112,8 +112,8 @@ com-card {
   .active-filter-tags {
     @apply com-flex com-flex-nowrap com-items-center com-gap-2 md:com-pl-3 com-pl-0 md:com-w-full com-w-max;
 
-    nb-tag {
-      @apply com-whitespace-nowrap;
+    .filter-tag {
+      @apply com-cursor-pointer com-whitespace-nowrap com-border com-border-solid com-border-Azure com-rounded-full;
     }
 
     .clear-filters-btn {
@@ -129,7 +129,6 @@ com-card {
 .activeTag {
   @apply com-bg-Azure com-text-tWhite #{!important};
 }
-
 .no-members-found {
   @apply com-flex com-justify-center;
 

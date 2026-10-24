@@ -3,9 +3,9 @@
   [info]="true"
   message="Although this is an individual participation, it would be great if you can select a team name for your project, by default it will be your name."
 ></commudle-alert>
-<br />
+<br *ngIf="!hasTeammateOption" />
 <form [formGroup]="teammateForm">
-  <div>
+  <div class="section-padding">
     <label for="name">{{ hasTeammateOption ? 'Team Name*' : 'Your Name?*' }}</label>
     <input
       type="text"
@@ -17,7 +17,19 @@
   </div>
   <ng-container formArrayName="teammates">
     <div *ngFor="let teammate of teammatesArray.controls; let i = index" [formGroupName]="i" class="teammate-form">
-      <section>
+      <!-- View mode: read-only profile card -->
+      <section *ngIf="viewMode && !isNewTeammate(i)">
+        <app-user-profile-card-medium
+          *ngIf="getTeammateUser(i); else viewEmail"
+          [user]="getTeammateUser(i)"
+        ></app-user-profile-card-medium>
+        <ng-template #viewEmail>
+          <span class="view-email">{{ getEmailControl(i)?.value }}</span>
+        </ng-template>
+      </section>
+
+      <!-- Edit mode: editable email -->
+      <section *ngIf="!viewMode || isNewTeammate(i)">
         <label for="email">Enter Email*</label>
         <input
           type="email"
@@ -34,7 +46,7 @@
           *ngIf="getEmailControl(i)?.invalid && getEmailControl(i)?.touched"
           [error]="true"
           [errorMessage]="getEmailControl(i)?.errors?.['required'] ? 'Email is required' : 
-                         getEmailControl(i)?.errors?.['invalidEmail'] ? 'Please enter a valid email address (e.g., user@example.com)' : ''"
+                       getEmailControl(i)?.errors?.['invalidEmail'] ? 'Please enter a valid email address (e.g., user@example.com)' : ''"
         >
         </commudle-alert>
       </section>
@@ -52,20 +64,17 @@
         </select>
       </section>
 
-      <button
+      <section
         *ngIf="
           hackathonUserResponse &&
           (hackathonUserResponse.current_user_is_team_lead || team?.user_id === currentUser?.id)
         "
-        type="button"
-        nbButton
-        ghost
-        status="danger"
-        (click)="removeTeammate(i)"
       >
-        <fa-icon [icon]="icons.faUserLargeSlash"></fa-icon>
-        <span>Remove Teammate</span>
-      </button>
+        <button type="button" nbButton ghost status="danger" (click)="removeTeammate(i)">
+          <fa-icon [icon]="icons.faUserLargeSlash"></fa-icon>
+          <span>Remove Teammate</span>
+        </button>
+      </section>
     </div>
   </ng-container>
 
@@ -76,7 +85,7 @@
   <button
     *ngIf="hasTeammateOption && hackathon.max_number_of_teammates - 1 > teammatesArray.controls.length"
     type="button"
-    (click)="addTeammate()"
+    (click)="addTeammate('', '', true)"
     nbButton
   >
     <fa-icon [icon]="icons.faPlus"></fa-icon>

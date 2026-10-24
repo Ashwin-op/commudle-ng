@@ -100,16 +100,16 @@
 }
 
 .clone-event {
-  @apply md:com-w-[60dvw] md:com-h-[90dvh] com-w-[92dvw] com-h-[96dvh] com-m-0;
-  nb-card-header {
+  @apply md:com-w-[60dvw] md:com-h-[90dvh] com-w-[92dvw] com-h-[96dvh] com-m-0 com-flex com-overflow-y-auto;
+  com-card-header {
     @apply com-flex com-justify-between com-items-center md:com-px-6 md:com-py-4 com-p-4;
 
     h3 {
       @apply com-m-0 md:com-text-lg com-text-base com-font-semibold com-text-Yankees-Blue;
     }
   }
-  nb-card-body {
-    @apply com-p-0 com-rounded-10;
+  com-card-body {
+    @apply com-p-0 com-rounded-10 com-scrollbar-hide;
   }
 }
 

@@ -99,23 +99,23 @@
 </ng-template>
 
 <ng-template #confirmDeleteTemplate let-data let-ref="dialogRef">
-  <nb-card class="delete-container">
-    <nb-card-header>
+  <com-card class="delete-container">
+    <com-card-header>
       <div>Are You Sure</div>
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div>
         Are you sure you want to delete <strong>{{ data.cb.name }}</strong
         >?
       </div>
       <em>This action can not be undone</em>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button nbButton status="danger" (click)="destroyBuild(data.cb.id); ref.close()">Confirm</button>
       <button nbButton status="primary" (click)="ref.close()" outline>cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

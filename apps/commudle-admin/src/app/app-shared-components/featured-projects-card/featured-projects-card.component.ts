@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NbButtonModule, NbCardModule } from '@commudle/theme';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 import { MiniUserProfileModule } from 'apps/shared-modules/mini-user-profile/mini-user-profile.module';
 import * as moment from 'moment';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
@@ -12,13 +13,18 @@ import { ICommunityBuild } from '@commudle/shared-models';
   standalone: true,
   templateUrl: './featured-projects-card.component.html',
   styleUrls: ['./featured-projects-card.component.scss'],
-  imports: [CommonModule, NbCardModule, MiniUserProfileModule, SharedComponentsModule, NbButtonModule, RouterModule],
+  imports: [
+    CommonModule,
+    NbCardModule,
+    CommudleCardModule,
+    MiniUserProfileModule,
+    SharedComponentsModule,
+    NbButtonModule,
+    RouterModule,
+  ],
 })
-export class FeaturedProjectsCardComponent implements OnInit {
+export class FeaturedProjectsCardComponent {
   @Input() communityBuild: ICommunityBuild;
   @Input() showTag = true;
   moment = moment;
-  constructor() {}
-
-  ngOnInit(): void {}
 }

@@ -23,6 +23,28 @@
       </com-card>
     </div>
 
+    <com-card
+      *ngIf="
+        selectedTeam && getCurrentUserHur(selectedTeam)?.invite_status === EInvitationStatus.INCOMPLETE_APPLICATION
+      "
+      class="application-incomplete-popup"
+    >
+      <com-card-body>
+        <commudle-alert
+          [error]="true"
+          errorMessage="Your application needs to be completed to show your name in the winner list."
+        >
+          <a
+            errorContent
+            class="complete-application-link"
+            [routerLink]="['/communities', community?.slug, 'hackathons', hackathon?.slug, 'fill-form', hrgId]"
+          >
+            Complete Application <fa-icon [icon]="icons.faArrowRight"></fa-icon>
+          </a>
+        </commudle-alert>
+      </com-card-body>
+    </com-card>
+
     <div *ngIf="userTeamDetails && userTeamDetails.length > 1" class="team-selector">
       <label class="team-selector-label">
         Selected Team: <strong>{{ selectedTeam?.name }}</strong>
@@ -49,7 +71,7 @@
       <com-card-body>
         <commudle-alert
           [info]="true"
-          [message]="'Action Required: Please select a Track to continue.'"
+          [message]="'Action Required: Please select a Track and Problem Statement to continue.'"
         ></commudle-alert>
         <button comButton status="primary" size="small" shape="semi-round" (click)="openProblemStatementDialog()">
           Select Problem Statement
@@ -257,6 +279,7 @@
         [hackathon]="hackathon"
         [team]="data.selectedTeam"
         [hasSubmitButton]="true"
+        [viewMode]="true"
         (submitTeammateDetailsEvent)="submitTeammateDetails($event, ref, data.hackathonUserResponse.id)"
       ></commudle-public-hackathon-teammate-form>
     </com-card-body>

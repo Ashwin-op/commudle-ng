@@ -1,5 +1,5 @@
-<nb-card class="review-section">
-  <nb-card-header>
+<com-card class="review-section">
+  <com-card-header>
     <div class="header-container">
       <div class="header-title">
         <h2>Applications & Projects</h2>
@@ -210,8 +210,8 @@
         </div>
       </div>
     </div>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <div>
       <form [formGroup]="searchForm">
         <input
@@ -659,8 +659,8 @@
         </div>
       </ng-template>
     </div>
-  </nb-card-body>
-  <nb-card-footer>
+  </com-card-body>
+  <com-card-footer>
     <!-- PAGINATION -->
     <div *ngIf="total > 0" class="pagination">
       <app-pagination
@@ -674,12 +674,12 @@
         [showCount]="true"
       ></app-pagination>
     </div>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>
 
 <ng-template #userResponseDetailsDialogBox let-ref="dialogRef" let-data>
-  <nb-card class="response-dialog-box">
-    <nb-card-header class="com-flex com-justify-between com-items-center">
+  <com-card class="response-dialog-box">
+    <com-card-header class="com-flex com-justify-between com-items-center">
       <div class="heading">
         <div>
           <span>{{ selectedTeamDetails.name }}</span>
@@ -701,8 +701,8 @@
       <button nbButton ghost (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <!-- Tab Navigation -->
       <div class="tab-navigation">
         <div (click)="switchTab('details')" [class.active]="activeTab === 'details'" class="tab-item">Details</div>
@@ -1191,8 +1191,8 @@
             @if(selectedResponse?.length > 0){
             <span>Form Responses</span>
             @for (questionAndAnswer of selectedResponse; track questionAndAnswer.id) {
-            <nb-card class="form-responses-card">
-              <nb-card-body>
+            <com-card class="form-responses-card">
+              <com-card-body>
                 <details open>
                   <summary>
                     <strong>{{ questionAndAnswer.question.title }}</strong>
@@ -1219,8 +1219,8 @@
                     </div>
                   </ng-container>
                 </details>
-              </nb-card-body>
-            </nb-card>
+              </com-card-body>
+            </com-card>
             } }
           </div>
         </div>
@@ -1264,19 +1264,19 @@
           <p>No scores available</p>
         </div>
       </div>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>
 
 <ng-template #sendApplicationStatusEmails let-ref="dialogRef" let-data>
-  <nb-card class="send-application-status-dialog-box">
-    <nb-card-header>
+  <com-card class="send-application-status-dialog-box">
+    <com-card-header>
       <span>Send Application Status Emails</span>
       <button nbButton ghost (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div class="email-buttons-actions">
         <div class="email-buttons">
           <button
@@ -1336,27 +1336,27 @@
           <button nbButton status="primary" (click)="goToEmails(); ref.close()">More Emails</button>
         </div>
       </div>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>
 
 <ng-template #confirmSendApplicationEmail let-ref="dialogRef" let-data>
-  <nb-card class="send-application-status-dialog-box">
-    <nb-card-header>
+  <com-card class="send-application-status-dialog-box">
+    <com-card-header>
       <span>Are you sure?</span>
       <button nbButton ghost (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div>
         <p>
           Are you sure, You want to send email to all
           <strong>{{ data.hackathonTeamRegistrationStatus | titlecase }}</strong> Team Members
         </p>
       </div>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button
         nbButton
         status="primary"
@@ -1365,19 +1365,19 @@
         Send
       </button>
       <button nbButton status="danger">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #confirmApplicationStatusChanged let-ref="dialogRef" let-data>
-  <nb-card class="confirmation-application-dialog-box">
-    <nb-card-header class="">
+  <com-card class="confirmation-application-dialog-box">
+    <com-card-header class="">
       <span>Confirm Application Status Change</span>
       <button nbButton ghost (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div class="confirmation-content">
         <p>
           Are you sure you want to change this team's status to
@@ -1385,8 +1385,8 @@
           >?
         </p>
       </div>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button
         nbButton
         status="primary"
@@ -1395,27 +1395,27 @@
         Confirm
       </button>
       <button nbButton status="basic" (click)="ref.close()">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #roundChangedConfirmationDialogBox let-ref="dialogRef" let-data>
-  <nb-card class="confirmation-round-dialog-box">
-    <nb-card-header>
+  <com-card class="confirmation-round-dialog-box">
+    <com-card-header>
       <span>Confirm Status Change</span>
       <button nbButton ghost (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div class="confirmation-content">
         <p>
           Are you sure you want to move this team to <strong>{{ data.roundName | titlecase }}</strong
           >, an email will automatically be sent to them ?
         </p>
       </div>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button
         nbButton
         status="primary"
@@ -1424,19 +1424,19 @@
         Confirm
       </button>
       <button nbButton status="basic" (click)="ref.close()">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #trackChangedConfirmationDialogBox let-ref="dialogRef" let-data>
-  <nb-card class="confirmation-track-dialog-box">
-    <nb-card-header>
+  <com-card class="confirmation-track-dialog-box">
+    <com-card-header>
       <span>Confirm Track Change</span>
       <button nbButton ghost (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div class="confirmation-content">
         <p>
           Are you sure you want to change this team's track to <strong>{{ data.trackName }}</strong
@@ -1448,8 +1448,8 @@
           new problem statement from this track."
         ></commudle-alert>
       </div>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button
         nbButton
         status="primary"
@@ -1458,19 +1458,19 @@
         Confirm
       </button>
       <button nbButton status="basic" (click)="ref.close()">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #problemStatementChangedConfirmationDialogBox let-ref="dialogRef" let-data>
-  <nb-card class="confirmation-problem-statement-dialog-box">
-    <nb-card-header>
+  <com-card class="confirmation-problem-statement-dialog-box">
+    <com-card-header>
       <span>Confirm Problem Statement Change</span>
       <button nbButton ghost (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div class="confirmation-content">
         <p>
           Are you sure you want to change this team's problem statement to
@@ -1478,8 +1478,8 @@
           >?
         </p>
       </div>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button
         nbButton
         status="primary"
@@ -1488,36 +1488,36 @@
         Confirm
       </button>
       <button nbButton status="basic" (click)="ref.close()">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #problemStatementDialog let-ref="dialogRef" let-data>
-  <nb-card class="problem-statement-dialog">
-    <nb-card-header class="com-flex com-justify-between com-items-center">
+  <com-card class="problem-statement-dialog">
+    <com-card-header class="com-flex com-justify-between com-items-center">
       <span>Problem Statement #{{ data.problemStatement.display_id }}</span>
       <button nbButton ghost (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div [innerHTML]="data.problemStatement.title"></div>
       <div *ngIf="data.problemStatement.max_teams_limit" class="com-mt-4">
         <strong>Max Teams Limit:</strong> {{ data.problemStatement.max_teams_limit }}
       </div>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>
 
 <ng-template #teamAttendanceDialog let-ref="dialogRef" let-data>
-  <nb-card>
-    <nb-card-header class="com-flex com-justify-between com-items-center">
+  <com-card>
+    <com-card-header class="com-flex com-justify-between com-items-center">
       <span>{{ data.selectedTeam.team.name }} - Attendance Details</span>
       <button nbButton ghost (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body class="com-p-0">
+    </com-card-header>
+    <com-card-body class="com-p-0">
       <table class="team-attendance-table">
         <thead>
           <tr>
@@ -1553,16 +1553,16 @@
           </tr>
         </tbody>
       </table>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button (click)="ref.close()" nbButton status="basic">Close</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #bulkOperationDialog let-ref="dialogRef" let-data>
-  <nb-card class="bulk-operation-dialog">
-    <nb-card-header>
+  <com-card class="bulk-operation-dialog">
+    <com-card-header>
       <div>
         <h3>Select {{ getBulkOperationLabel() }}</h3>
         <p>Choose a value to apply to all filtered teams</p>
@@ -1570,8 +1570,8 @@
       <button nbButton ghost (click)="ref.close()" shape="round" size="small">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div *ngIf="data.operationType === 'application_status'" class="option-grid">
         <button
           *ngFor="let status of EHackathonRegistrationStatus | keyvalue"
@@ -1658,47 +1658,63 @@
           #{{ ps.display_id }}
         </button>
       </div>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>
 
 <ng-template #bulkConfirmDialog let-ref="dialogRef">
-  <nb-card>
-    <nb-card-header class="com-flex com-justify-between com-items-center">
+  <com-card>
+    <com-card-header class="com-flex com-justify-between com-items-center">
       <span>Confirm Bulk Operation</span>
       <button nbButton ghost (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <p>
         You are changing <strong>{{ getBulkOperationLabel() }}</strong> of
         <strong>{{ getFilteredTeamsCount() }}</strong> teams to <strong>{{ getBulkOperationValueLabel() }}</strong
         >. This operation cannot be reverted. Are you sure?
       </p>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button nbButton status="primary" (click)="confirmBulkOperation()">Confirm</button>
       <button nbButton status="basic" (click)="ref.close()">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #documentViewerDialog let-ref="dialogRef" let-data>
-  <nb-card class="document-viewer-dialog">
-    <nb-card-header class="com-flex com-justify-between com-items-center">
-      <div>
-        <h3>{{ data.roundName }}</h3>
-        <p>{{ data.teamName }}</p>
+  <com-card class="document-viewer-dialog">
+    <com-card-header class="com-flex com-justify-between com-items-center">
+      <div class="document-viewer-title">
+        <div>
+          <span class="round-label">{{ data.roundName }}</span>
+          <h3 class="team-name">{{ data.teamName }}</h3>
+        </div>
+        <a
+          *ngIf="data.url"
+          [href]="data.url"
+          target="_blank"
+          rel="noopener noreferrer"
+          [attr.download]="data.teamName + ' - ' + data.roundName"
+          comButton
+          ghost
+          size="small"
+          status="primary"
+        >
+          <fa-icon [icon]="icons.faDownload"></fa-icon>
+          Download
+        </a>
       </div>
       <button nbButton ghost (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <ngx-doc-viewer [url]="data.url" viewer="google" style="width: 100%; height: 80vh"></ngx-doc-viewer>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>
 
 <ng-template #psStatsPopover>

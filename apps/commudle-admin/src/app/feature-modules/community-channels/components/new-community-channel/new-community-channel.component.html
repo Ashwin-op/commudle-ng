@@ -1,15 +1,15 @@
-<nb-card>
-  <nb-card-header>
+<com-card>
+  <com-card-header>
     <span>New {{ discussionType | titlecase }} for {{ parent.name }}</span>
     <button (click)="closeForm()" ghost nbButton size="small" shape="round">
       <nb-icon icon="close"></nb-icon>
     </button>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <commudle-community-channel-form
       [presetGroupName]="groupName"
       [discussionType]="discussionType"
       (saved)="closeForm()"
     ></commudle-community-channel-form>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

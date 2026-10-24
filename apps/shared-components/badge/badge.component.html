@@ -4,7 +4,7 @@
     rectangle: borderRadius === 'rectangle',
     'semi-round': borderRadius === 'semi-round',
     round: borderRadius === 'round',
-    'full-round': borderRadius === 'full-round'
+    'full-round': borderRadius === 'full-round',
   }"
   class="{{ position }} {{ color }}"
 >
@@ -14,12 +14,14 @@
         'small-text': fontSize == 'small',
         'x-small-text': fontSize == 'x-small',
         'xx-small-text': fontSize == 'xx-small',
-        'regular-text': fontSize == 'regular'
+        'regular-text': fontSize == 'regular',
       }"
       class="{{ fontColor }}"
     >
-      <nb-icon *ngIf="nbIcon" icon="{{ nbIcon }}"></nb-icon>
-      <fa-icon *ngIf="faIcon" [icon]="faIcon"></fa-icon>
+      <span [ngClass]="{ 'icon-container': customIconWidth }">
+        <nb-icon *ngIf="nbIcon" icon="{{ nbIcon }}"></nb-icon>
+        <fa-icon *ngIf="faIcon" [icon]="faIcon"></fa-icon>
+      </span>
       {{ text }}
     </p>
   </div>

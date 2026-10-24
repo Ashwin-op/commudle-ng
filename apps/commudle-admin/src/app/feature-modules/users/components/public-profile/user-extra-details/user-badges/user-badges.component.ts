@@ -4,13 +4,13 @@ import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.
 import { IBadge } from 'apps/shared-models/badge.model';
 import { IUser } from 'apps/shared-models/user.model';
 import { Subscription } from 'rxjs';
-import { faAward } from '@fortawesome/free-solid-svg-icons';
+import { faAward, faHashtag } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-    selector: 'app-user-badges',
-    templateUrl: './user-badges.component.html',
-    styleUrls: ['./user-badges.component.scss'],
-    standalone: false
+  selector: 'app-user-badges',
+  templateUrl: './user-badges.component.html',
+  styleUrls: ['./user-badges.component.scss'],
+  standalone: false,
 })
 export class UserBadgesComponent implements OnChanges, OnDestroy {
   @Input() user: IUser;
@@ -22,7 +22,7 @@ export class UserBadgesComponent implements OnChanges, OnDestroy {
   subscriptions: Subscription[] = [];
 
   faAward = faAward;
-
+  faHashtag = faHashtag;
   constructor(private appUsersService: AppUsersService, public userProfileMenuService: UserProfileMenuService) {}
 
   ngOnChanges(changes: SimpleChanges): void {

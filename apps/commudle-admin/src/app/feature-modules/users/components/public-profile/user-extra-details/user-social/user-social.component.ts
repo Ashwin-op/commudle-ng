@@ -14,7 +14,7 @@ import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service'
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { faFileText } from '@fortawesome/free-solid-svg-icons';
-
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-user-social',
   templateUrl: './user-social.component.html',
@@ -37,7 +37,7 @@ export class UserSocialComponent implements OnInit, OnChanges, OnDestroy {
   socialLinkChanged: Subject<string> = new Subject<string>();
   socialLinkChangedSubscription: Subscription;
   faFileText = faFileText;
-
+  faHashtag = faHashtag;
   linkPreview: ILinkPreview;
   socialResourcesForm;
   tags: string[] = [];

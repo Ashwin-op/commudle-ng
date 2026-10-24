@@ -7,7 +7,7 @@ import { IDataFormEntityResponseGroup } from 'apps/shared-models/data_form_entit
 import { IUserEventRegistration } from 'apps/shared-models/user_event_registration.model';
 import { SeoService } from 'apps/shared-services/seo.service';
 import { IUser } from '@commudle/shared-models';
-
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-speakers',
   templateUrl: './speakers.component.html',
@@ -25,7 +25,7 @@ export class SpeakersComponent implements OnInit {
   isMobileView: boolean;
   totalSpeakers: number;
   isBot: boolean;
-
+  faHashtag = faHashtag;
   speakers: IDataFormEntityResponseGroup[] = [];
   simpleAgendaSpeakers: IUserEventRegistration[] = [];
 

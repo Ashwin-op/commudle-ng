@@ -36,11 +36,15 @@ app-loading-spinner {
 
 .tags {
   @apply com-mb-8;
-  nb-tag {
-    @apply com-lowercase com-cursor-pointer;
+
+  .tag-list {
+    @apply com-flex com-flex-wrap com-gap-2;
+  }
+
+  .tag-link {
+    @apply com-no-underline;
   }
 }
-
 .pagination {
   @apply com-my-8;
 }

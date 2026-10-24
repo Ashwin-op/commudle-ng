@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NbDialogRef, NbDialogService, NbToastrService } from '@commudle/theme';
-import { faBuilding } from '@fortawesome/free-solid-svg-icons';
+import { faBuilding, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { UserProfileMenuService } from 'apps/commudle-admin/src/app/feature-modules/users/services/user-profile-menu.service';
 import { UserWorkHistoryService } from 'apps/commudle-admin/src/app/feature-modules/users/services/user-work-history.service';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
@@ -11,16 +11,17 @@ import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service'
 import { Subject, Subscription, takeUntil } from 'rxjs';
 
 @Component({
-    selector: 'app-user-work-history',
-    templateUrl: './user-work-history.component.html',
-    styleUrls: ['./user-work-history.component.scss'],
-    standalone: false
+  selector: 'app-user-work-history',
+  templateUrl: './user-work-history.component.html',
+  styleUrls: ['./user-work-history.component.scss'],
+  standalone: false,
 })
 export class UserWorkHistoryComponent implements OnInit, OnChanges, OnDestroy {
   @Input() user: IUser;
 
   currentUser: ICurrentUser;
   faBuilding = faBuilding;
+  faHashtag = faHashtag;
 
   userWorkHistories: IUserWorkHistory[] = [];
   userWorkHistoryForm: FormGroup<{

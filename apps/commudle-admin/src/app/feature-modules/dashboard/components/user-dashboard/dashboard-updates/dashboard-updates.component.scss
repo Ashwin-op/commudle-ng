@@ -1,5 +1,5 @@
-nb-card {
-  @apply md:com-m-0 com-mx-3 com-bg-gray-50;
+com-card {
+  @apply md:com-m-0 com-mx-3 com-bg-gray-50 com-overflow-visible;
 
   .plus-icon {
     @apply com-text-xs;
@@ -121,7 +121,7 @@ nb-card {
     .channel-updates {
       @apply com-flex com-flex-col com-bg-white;
 
-      nb-card-body {
+      com-card-body {
         @apply md:com-p-4 com-p-3;
       }
 
@@ -161,7 +161,7 @@ nb-card {
 .post-content {
   @apply com-bg-gray-50 com-m-0 com-p-4 com-w-full com-rounded-t-none com-border-t-0;
 
-  nb-card-body {
+  com-card-body {
     @apply com-p-0;
   }
 
@@ -258,10 +258,10 @@ nb-card {
 
 .qr-code {
   @apply md:com-w-[152px] com-w-full md:com-h-[152px] com-h-[180px] md:com-pl-4 com-pl-0 com-bg-white md:com-pt-0 com-pt-2  com-border-0 md:com-border-l com-border-l-0 com-border-solid com-border-Bright-Gray com-cursor-pointer;
-  nb-card {
+  com-card {
     @apply com-m-0 com-w-full com-h-full;
 
-    nb-card-body {
+    com-card-body {
       @apply com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-tWhite com-flex com-flex-col com-items-center com-p-4;
     }
   }
@@ -269,7 +269,7 @@ nb-card {
 
 .template {
   @apply md:com-w-[28dvw] com-w-[90dvw] com-bg-white com-overflow-hidden;
-  nb-card-header {
+  com-card-header {
     @apply com-flex com-flex-row com-justify-between com-items-center;
     p {
       @apply com-text-lg com-font-semibold com-m-0 com-text-Yankees-Blue;
@@ -283,7 +283,7 @@ nb-card {
     }
   }
 
-  nb-card-body {
+  com-card-body {
     @apply com-flex com-flex-col com-justify-center com-items-center com-p-6 com-overflow-hidden;
   }
 

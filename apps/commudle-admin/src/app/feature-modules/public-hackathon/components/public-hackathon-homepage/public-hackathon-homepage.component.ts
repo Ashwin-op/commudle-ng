@@ -28,6 +28,7 @@ import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon
 import { IContactInfo } from 'apps/shared-models/contact-info.model';
 import { EHackathonStatus, IHackathon } from 'apps/shared-models/hackathon.model';
 import { Subject, Subscription, takeUntil } from 'rxjs';
+import { getAccessibleTeams } from '../../utils/hackathon-team-access';
 import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { HackathonResponseGroupService } from 'apps/commudle-admin/src/app/services/hackathon-response-group.service';
 
@@ -73,6 +74,7 @@ export class PublicHackathonHomepageComponent implements OnInit, OnDestroy, Afte
   activeFragment: string;
   userTeamDetails: IHackathonTeam[];
   EHackathonRegistrationStatus = EHackathonRegistrationStatus;
+  currentUserId: number;
   EHackathonStatus = EHackathonStatus;
   environment = environment;
   hasDashboardAndChannelAccess = false;
@@ -109,6 +111,7 @@ export class PublicHackathonHomepageComponent implements OnInit, OnDestroy, Afte
 
     this.authService.currentUser$.pipe(takeUntil(this.destroy$)).subscribe((currentUser) => {
       if (currentUser) {
+        this.currentUserId = currentUser.id;
         this.getHackathonCurrentRegistrationDetails();
         this.getUserRoles();
       }
@@ -193,11 +196,7 @@ export class PublicHackathonHomepageComponent implements OnInit, OnDestroy, Afte
         .subscribe((data: IHackathonTeam[]) => {
           if (data) {
             this.userTeamDetails = data;
-            if (
-              this.userTeamDetails.some((team) => team.registration_status === EHackathonRegistrationStatus.ACCEPTED)
-            ) {
-              this.hasDashboardAndChannelAccess = true;
-            }
+            this.hasDashboardAndChannelAccess = getAccessibleTeams(data, this.currentUserId).length > 0;
           }
         }),
     );

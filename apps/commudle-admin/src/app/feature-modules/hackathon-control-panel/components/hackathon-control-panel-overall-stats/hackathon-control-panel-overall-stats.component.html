@@ -1,3 +1,18 @@
 <div class="router-tab">
-  <nb-route-tabset [tabs]="tabs"></nb-route-tabset>
+  <div class="route-tabs">
+    <a routerLink="./" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <div class="route-tab-option">
+        <span>STATS</span>
+      </div>
+    </a>
+    <a routerLink="./emails" routerLinkActive="active">
+      <div class="route-tab-option">
+        <span>EMAIL STATS</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="route-tab-content">
+    <router-outlet></router-outlet>
+  </div>
 </div>

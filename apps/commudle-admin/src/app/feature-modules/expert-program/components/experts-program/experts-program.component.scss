@@ -13,11 +13,9 @@
   }
 
   h2 {
-    @apply com-mt-0;
-    a {
-      @apply com-mb-0 com-p-0 md:com-mt-12 com-text-Yankees-Blue com-no-underline;
-    }
+    @apply com-mt-0 com-mb-0 com-p-0 md:com-mt-12 com-text-Yankees-Blue com-flex com-items-center;
   }
+
   p {
     @apply com-m-0 md:com-mt-8 com-mt-6 com-text-base com-text-gray-500;
   }
@@ -63,7 +61,7 @@
       @apply com-flex com-flex-col md:com-p-0 com-px-4 md:com-pt-[74px] com-py-6 md:com-w-[694px] md:com-min-h-[386px] com-w-full com-h-full;
 
       .heading {
-        @apply md:com-text-4xl com-text-3xl com-font-bold com-mt-0 com-mb-9 md:com-mb-11 com-text-Yankees-Blue;
+        @apply com-flex com-items-center md:com-text-4xl com-text-3xl com-font-bold com-mt-0 com-mb-9 md:com-mb-11 com-text-Yankees-Blue;
       }
     }
 

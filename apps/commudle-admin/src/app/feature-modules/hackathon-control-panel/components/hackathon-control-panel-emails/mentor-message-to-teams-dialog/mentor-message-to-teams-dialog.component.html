@@ -1,11 +1,11 @@
-<nb-card class="mail-popup">
-  <nb-card-header>
+<com-card class="mail-popup">
+  <com-card-header>
     <span>Send Message to Teams via Mentors/Judges</span>
     <button nbButton size="small" shape="round" (click)="closeDialogBox()" ghost>
       <nb-icon icon="close"></nb-icon>
     </button>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <commudle-alert [info]="true" message="This will send a message to teams through selected mentors"></commudle-alert>
     <form [formGroup]="emailForm">
       <div class="form-group">
@@ -48,8 +48,8 @@
         <editor [init]="tinyMCE" formControlName="message"></editor>
       </div>
     </form>
-  </nb-card-body>
-  <nb-card-footer>
+  </com-card-body>
+  <com-card-footer>
     <div class="footer-actions">
       <button
         nbButton
@@ -74,5 +74,5 @@
         Send
       </button>
     </div>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

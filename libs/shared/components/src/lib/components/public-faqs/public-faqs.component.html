@@ -1,8 +1,11 @@
 <com-card>
   <com-card-header>
-    <fa-icon [icon]="faCircleQuestion"></fa-icon>
-    <h2>
-      <a [routerLink]="['.']" fragment="faq"> FAQs </a>
+    <fa-icon [icon]="faCircleQuestion" class="heading-icon"></fa-icon>
+    <h2 class="heading section-heading-anchor">
+      FAQs
+      <a [routerLink]="['.']" fragment="faq" class="anchor-link" aria-label="link to FAQs section">
+        <fa-icon [icon]="faHashtag" class="anchor-icon-small"></fa-icon>
+      </a>
     </h2>
   </com-card-header>
   <com-card-body>

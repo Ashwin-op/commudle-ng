@@ -1,0 +1,56 @@
+<div [attr.id]="config.fragmentId || null" class="steps-section">
+  <div class="base-layout container section-container">
+    <div *ngIf="config.eyebrow || config.heading || config.subtext" class="section-header">
+      <p *ngIf="config.eyebrow" class="section-header__eyebrow">{{ config.eyebrow }}</p>
+      <h2
+        *ngIf="config.heading"
+        class="section-header__heading"
+        [ngClass]="{ 'section-heading-anchor': config.fragmentId }"
+      >
+        {{ config.heading }}
+        <a
+          *ngIf="config.fragmentId"
+          [routerLink]="'.'"
+          [fragment]="config.fragmentId"
+          class="anchor-link"
+          [attr.aria-label]="'Link to ' + config.heading + ' section'"
+        >
+          <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+        </a>
+      </h2>
+      <p *ngIf="config.subtext" class="section-header__sub">{{ config.subtext }}</p>
+    </div>
+
+    <ol class="steps">
+      <li *ngFor="let step of config.steps; let i = index" class="step">
+        <!-- No image: number sits above the card, icon sits in the body (unchanged fallback layout). -->
+        <span *ngIf="!step.image" class="step__num" [ngClass]="'step__num--' + colorFor(i)" aria-hidden="true">
+          {{ i + 1 }}
+        </span>
+
+        <div class="step__card">
+          <!-- With an image: number overlays its top-left corner, icon overlays its bottom-left corner. -->
+          <div *ngIf="step.image" class="step__media">
+            <img [src]="step.image.url" [alt]="step.image.alt" loading="lazy" />
+            <span class="step__num step__num--onmedia" [ngClass]="'step__num--' + colorFor(i)" aria-hidden="true">
+              {{ i + 1 }}
+            </span>
+            <span class="step__icon step__icon--onmedia" [ngClass]="'step__icon--' + colorFor(i)" aria-hidden="true">
+              <fa-icon [icon]="iconFor(step.icon)"></fa-icon>
+            </span>
+          </div>
+
+          <div class="step__body">
+            <span *ngIf="!step.image" class="step__icon" [ngClass]="'step__icon--' + colorFor(i)" aria-hidden="true">
+              <fa-icon [icon]="iconFor(step.icon)"></fa-icon>
+            </span>
+            <span class="step__title">
+              {{ step.title }}
+            </span>
+            <span class="step__text">{{ step.text }}</span>
+          </div>
+        </div>
+      </li>
+    </ol>
+  </div>
+</div>

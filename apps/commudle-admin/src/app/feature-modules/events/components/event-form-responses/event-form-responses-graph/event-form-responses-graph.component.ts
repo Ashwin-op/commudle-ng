@@ -1,14 +1,17 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { DataFormEntityResponseGroupsService } from 'apps/commudle-admin/src/app/services/data-form-entity-response-groups.service';
+import {
+  DataFormEntityResponseGroupsService,
+  IEventStatusFilter,
+} from 'apps/commudle-admin/src/app/services/data-form-entity-response-groups.service';
 import { EQuestionTypes } from 'apps/shared-models/enums/question_types.enum';
 import { IQuestion } from 'apps/shared-models/question.model';
 import { Chart } from 'chart.js';
 
 @Component({
-    selector: 'commudle-event-form-responses-graph',
-    templateUrl: './event-form-responses-graph.component.html',
-    styleUrls: ['./event-form-responses-graph.component.scss'],
-    standalone: false
+  selector: 'commudle-event-form-responses-graph',
+  templateUrl: './event-form-responses-graph.component.html',
+  styleUrls: ['./event-form-responses-graph.component.scss'],
+  standalone: false,
 })
 export class EventFormResponsesGraphComponent implements OnInit, OnDestroy {
   isLoading = true;
@@ -19,10 +22,13 @@ export class EventFormResponsesGraphComponent implements OnInit, OnDestroy {
   @Input() page;
   @Input() count;
   @Input() selectedGenders: string[] = [];
+  @Input() selectedUserDomains: string[] = [];
+  @Input() selectedExperienceLevels: string[] = [];
   @Input() selectedEventLocationTrackId;
   @Input() question: IQuestion;
   @Input() showGenderGraphOnly = false;
   @Input() community_engagement_filters: Record<string, unknown> = {};
+  @Input() event_status_filter: IEventStatusFilter | null = null;
 
   EQuestionTypes = EQuestionTypes;
   responses;
@@ -75,6 +81,9 @@ export class EventFormResponsesGraphComponent implements OnInit, OnDestroy {
         this.selectedEventLocationTrackId,
         formData,
         Object.keys(this.community_engagement_filters).length === 0 ? null : this.community_engagement_filters,
+        this.selectedUserDomains,
+        this.selectedExperienceLevels,
+        this.event_status_filter,
       )
 
       .subscribe((data) => {

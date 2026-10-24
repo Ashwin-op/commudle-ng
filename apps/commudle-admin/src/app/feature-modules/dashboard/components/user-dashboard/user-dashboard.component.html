@@ -4,17 +4,17 @@
       <div class="three-column-layout">
         <div class="left-column">
           <commudle-user-profile [currentUser]="currentUser"></commudle-user-profile>
-          <nb-card class="user-profile-details" *appBreakpoints="'>lg'">
-            <nb-card-body *ngIf="currentUser">
+          <com-card class="user-profile-details" *appBreakpoints="'>lg'">
+            <com-card-body *ngIf="currentUser">
               <commudle-userprofile-details
                 [userProfileDetails]="userProfileDetails"
                 [username]="currentUser.username"
               ></commudle-userprofile-details>
-            </nb-card-body>
-          </nb-card>
+            </com-card-body>
+          </com-card>
           <div class="user-managed-communities" *appBreakpoints="'>lg'">
-            <nb-card>
-              <nb-card-body>
+            <com-card>
+              <com-card-body>
                 <h2 class="user-managed-communities-heading">Your Communities</h2>
                 <div *ngFor="let community of managedCommunities">
                   <a [routerLink]="['/admin', 'communities', community.slug]" class="community">
@@ -31,8 +31,8 @@
                     <p class="community-members-count">{{ community.members_count }}</p>
                   </a>
                 </div>
-              </nb-card-body>
-            </nb-card>
+              </com-card-body>
+            </com-card>
           </div>
         </div>
         <div class="main-column">
@@ -86,8 +86,8 @@
                   <div *ngFor="let feed of activityFeed">
                     <ng-container [ngSwitch]="feed.actionable_type">
                       <ng-container *ngSwitchCase="EDbModels.VOTE">
-                        <nb-card class="activity-cards" appActivityFeed [feed]="feed">
-                          <nb-card-header
+                        <com-card class="activity-cards" appActivityFeed [feed]="feed">
+                          <com-card-header
                             ><h2 class="user">
                               <img
                                 [src]="
@@ -114,8 +114,8 @@
                                 >
                               </span>
                             </h2>
-                          </nb-card-header>
-                          <nb-card-body>
+                          </com-card-header>
+                          <com-card-body>
                             <ng-container *ngIf="feed.actionable.object_type === EDbModels.COMMUNITY_BUILD">
                               <app-community-build-card
                                 [communityBuild]="feed.actionable.object_data"
@@ -129,13 +129,13 @@
                                 [session]="feed.actionable.object_data"
                               ></commudle-tech-sessions-card>
                             </ng-container>
-                          </nb-card-body>
-                        </nb-card>
+                          </com-card-body>
+                        </com-card>
                       </ng-container>
 
                       <ng-container *ngSwitchCase="EDbModels.COMMUNITY_BUILD">
-                        <nb-card class="activity-cards" appActivityFeed [feed]="feed">
-                          <nb-card-header
+                        <com-card class="activity-cards" appActivityFeed [feed]="feed">
+                          <com-card-header
                             ><h2>
                               <img
                                 [src]="
@@ -147,16 +147,16 @@
                               <span class="performer-name">{{ feed.performer.name }}</span
                               ><span class="action-text">{{ feed.action_text }}</span>
                             </h2>
-                          </nb-card-header>
-                          <nb-card-body>
+                          </com-card-header>
+                          <com-card-body>
                             <app-community-build-card [communityBuild]="feed.actionable"></app-community-build-card>
-                          </nb-card-body>
-                        </nb-card>
+                          </com-card-body>
+                        </com-card>
                       </ng-container>
 
                       <ng-container *ngSwitchCase="EDbModels.EVENT">
-                        <nb-card class="activity-cards" appActivityFeed [feed]="feed">
-                          <nb-card-header
+                        <com-card class="activity-cards" appActivityFeed [feed]="feed">
+                          <com-card-header
                             ><h2>
                               <img
                                 [src]="
@@ -168,16 +168,16 @@
                               <span class="performer-name">{{ feed.performer.name }}</span
                               ><span class="action-text">{{ feed.action_text }}</span>
                             </h2>
-                          </nb-card-header>
-                          <nb-card-body>
+                          </com-card-header>
+                          <com-card-body>
                             <commudle-event-large-card [event]="feed.actionable"></commudle-event-large-card>
-                          </nb-card-body>
-                        </nb-card>
+                          </com-card-body>
+                        </com-card>
                       </ng-container>
 
                       <ng-container *ngSwitchCase="EDbModels.HACKATHON">
-                        <nb-card class="activity-cards" appActivityFeed [feed]="feed">
-                          <nb-card-header
+                        <com-card class="activity-cards" appActivityFeed [feed]="feed">
+                          <com-card-header
                             ><h2>
                               <img
                                 [src]="
@@ -189,19 +189,19 @@
                               <span class="performer-name">{{ feed.performer.name }}</span
                               ><span class="action-text">{{ feed.action_text }}</span>
                             </h2>
-                          </nb-card-header>
-                          <nb-card-body>
+                          </com-card-header>
+                          <com-card-body>
                             <commudle-hackathon-large-card
                               [hackathon]="feed.actionable"
                               [headerImageWidth]="'214px'"
                             ></commudle-hackathon-large-card>
-                          </nb-card-body>
-                        </nb-card>
+                          </com-card-body>
+                        </com-card>
                       </ng-container>
 
                       <ng-container *ngSwitchCase="EDbModels.LAB">
-                        <nb-card class="activity-cards" appActivityFeed [feed]="feed">
-                          <nb-card-header
+                        <com-card class="activity-cards" appActivityFeed [feed]="feed">
+                          <com-card-header
                             ><h2>
                               <img
                                 [src]="
@@ -213,16 +213,16 @@
                               <span class="performer-name">{{ feed.performer.name }}</span
                               ><span class="action-text">{{ feed.action_text }}</span>
                             </h2>
-                          </nb-card-header>
-                          <nb-card-body>
+                          </com-card-header>
+                          <com-card-body>
                             <app-labs-card [lab]="feed.actionable"></app-labs-card>
-                          </nb-card-body>
-                        </nb-card>
+                          </com-card-body>
+                        </com-card>
                       </ng-container>
 
                       <ng-container *ngSwitchCase="EDbModels.SOCIAL_RESOURCE">
-                        <nb-card class="activity-cards" appActivityFeed [feed]="feed">
-                          <nb-card-header
+                        <com-card class="activity-cards" appActivityFeed [feed]="feed">
+                          <com-card-header
                             ><h2>
                               <img
                                 [src]="
@@ -234,13 +234,13 @@
                               <span class="performer-name">{{ feed.performer.name }}</span
                               ><span class="action-text">{{ feed.action_text }}</span>
                             </h2>
-                          </nb-card-header>
-                          <nb-card-body>
+                          </com-card-header>
+                          <com-card-body>
                             <commudle-event-content-card
                               [speakersContent]="feed.actionable"
                             ></commudle-event-content-card>
-                          </nb-card-body>
-                        </nb-card>
+                          </com-card-body>
+                        </com-card>
                       </ng-container>
                     </ng-container>
                   </div>

@@ -5,10 +5,7 @@
     @apply com-m-0 com-mt-10 lg:com-mt-0;
 
     .communities-list-heading {
-      @apply com-m-0;
-      a {
-        @apply com-text-Dark-Jungle-Green com-text-2xl com-font-bold com-leading-30px com-no-underline;
-      }
+      @apply com-m-0 com-text-Dark-Jungle-Green com-text-2xl com-font-bold com-leading-30px com-flex com-items-center;
     }
   }
 
@@ -31,16 +28,11 @@
     .tags {
       @apply com-m-0;
 
-      nb-tag {
-        @apply com-text-Dark-Jungle-Green com-border-0;
-      }
-
-      .activeTag {
-        @apply com-bg-primary-500 com-text-tWhite;
+      .tag-list {
+        @apply com-flex com-flex-wrap com-gap-2;
       }
     }
   }
-
   .communities-list-cards {
     @apply com-flex com-flex-wrap com-gap-4 lg:com-grid lg:com-grid-cols-3;
   }

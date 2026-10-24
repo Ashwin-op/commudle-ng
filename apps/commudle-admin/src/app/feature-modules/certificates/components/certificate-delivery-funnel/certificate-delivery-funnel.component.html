@@ -1,0 +1,38 @@
+<div class="certificate-delivery-funnel" [class.compact]="compact">
+  <div class="funnel-header" *ngIf="!compact">
+    <span class="funnel-title">{{ title }}</span>
+    <span class="funnel-subtitle" *ngIf="total != null">{{ total }} {{ totalLabel }}</span>
+  </div>
+
+  <div class="headline-bar" [class.compact]="compact" *ngIf="headlineSegments.length > 0">
+    <div
+      class="headline-segment"
+      *ngFor="let segment of headlineSegments"
+      [ngClass]="segment.colorClass"
+      [style.width.%]="percent(segment.value)"
+    >
+      <span *ngIf="!compact && percent(segment.value) > 8">
+        {{ segment.label ? segment.label + ' ' : '' }}{{ segment.value }}
+      </span>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!compact">
+    <div class="metrics-row" *ngIf="metrics.length > 0">
+      <div class="metric" *ngFor="let metric of metrics">
+        <div class="metric-bar">
+          <div class="metric-bar-fill" [ngClass]="metric.colorClass" [style.width.%]="percent(metric.value)"></div>
+        </div>
+        <div class="metric-value">{{ metric.value }}</div>
+        <div class="metric-label">{{ metric.label }}</div>
+      </div>
+    </div>
+
+    <div class="funnel-legend" *ngIf="legend.length > 0">
+      <span class="legend-item" *ngFor="let item of legend">
+        <span class="legend-dot" [ngClass]="item.colorClass"></span>
+        {{ item.value }} {{ item.label }}
+      </span>
+    </div>
+  </ng-container>
+</div>

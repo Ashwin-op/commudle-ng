@@ -1,8 +1,11 @@
-<a [routerLink]="'.'" fragment="faq">
-  <h2 class="heading">Frequently Asked Questions</h2>
-  <div class="faq-cards">
-    <div *ngFor="let faq of faqs" class="faq-card">
-      <commudle-faq-card [faq]="faq"></commudle-faq-card>
-    </div>
+<h2 class="heading section-heading-anchor">
+  Frequently Asked Questions
+  <a [routerLink]="'.'" fragment="faq" class="anchor-link" aria-label="Link to FAQ section">
+    <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+  </a>
+</h2>
+<div class="faq-cards">
+  <div *ngFor="let faq of faqs" class="faq-card">
+    <commudle-faq-card [faq]="faq"></commudle-faq-card>
   </div>
-</a>
+</div>

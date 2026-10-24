@@ -47,9 +47,9 @@
         Are you sure you want to change your username?
       </p>
     </nb-card-body>
-    <nb-card-footer class="d-flex justify-content-start">
+    <nb-card-footer class="dialog-footer">
       <button (click)="ref.close()" ghost nbButton status="danger">No</button>
-      <button (click)="setUsername()" nbButton status="success">Yes</button>
+      <button (click)="setUsername(ref)" nbButton status="success">Yes</button>
     </nb-card-footer>
   </nb-card>
 </ng-template>

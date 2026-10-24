@@ -22,6 +22,7 @@ import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives
 import { UserDashboardCampaignComponent } from 'apps/commudle-admin/src/app/feature-modules/dashboard/components/user-dashboard-campaign/user-dashboard-campaign.component';
 import { SharedComponentsModule as newSharedComponentsModule } from '@commudle/shared-components';
 import { TechSessionsCardComponent } from 'apps/commudle-admin/src/app/app-shared-components/tech-sessions-card/tech-sessions-card.component';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 @NgModule({
   declarations: [UserDashboardComponent, DashboardUpdatesComponent, UserDashboardCampaignComponent],
   imports: [
@@ -48,6 +49,7 @@ import { TechSessionsCardComponent } from 'apps/commudle-admin/src/app/app-share
     EventContentCardComponent,
     MiniUserProfileModule,
     newSharedComponentsModule,
+    CommudleCardModule,
     TechSessionsCardComponent,
   ],
 })

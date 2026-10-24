@@ -1,0 +1,10 @@
+<com-card class="certificate-confirm-dialog">
+  <com-card-header>{{ title }}</com-card-header>
+  <com-card-body>
+    <p class="confirm-message">{{ message }}</p>
+  </com-card-body>
+  <com-card-footer class="confirm-footer">
+    <button comButton status="basic" (click)="cancel()">{{ cancelLabel }}</button>
+    <button comButton [status]="danger ? 'danger' : 'primary'" (click)="confirm()">{{ confirmLabel }}</button>
+  </com-card-footer>
+</com-card>

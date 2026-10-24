@@ -1,6 +1,6 @@
-<nb-card>
-  <nb-card-header>Applications Received</nb-card-header>
-  <nb-card-body>
+<com-card>
+  <com-card-header>Applications Received</com-card-header>
+  <com-card-body>
     <ng-container *ngIf="!isLoading; else loading">
       <nb-list class="job-applications-list">
         <nb-list-item *ngFor="let jobApplication of jobApplications">
@@ -61,5 +61,5 @@
       [total]="total"
       class="com-mt-6"
     ></app-pagination>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

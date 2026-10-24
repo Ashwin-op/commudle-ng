@@ -1,11 +1,7 @@
-h2 {
-  @apply md:com-text-4xl com-text-2xl com-font-bold com-text-Yankees-Blue com-m-0 md:com-mb-[52px] com-mb-10 com-text-center;
-}
-
-a {
-  @apply com-no-underline;
+.heading {
+  @apply com-no-underline com-gap-2 com-flex com-items-center com-justify-center md:com-text-4xl com-text-2xl com-font-bold com-text-Yankees-Blue com-m-0 md:com-mb-[52px] com-mb-10 com-text-center;
 }
 
 .faq-cards {
-  @apply com-flex com-flex-col com-pb-8;
+  @apply com-flex com-flex-col com-gap-4 com-pb-8;
 }

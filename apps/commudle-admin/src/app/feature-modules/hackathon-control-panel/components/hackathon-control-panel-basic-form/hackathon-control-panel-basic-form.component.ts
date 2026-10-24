@@ -45,7 +45,7 @@ export class HackathonControlPanelBasicFormComponent implements OnInit, OnDestro
     menubar: false,
     convert_urls: false,
     placeholder: 'Write description for hackathon',
-    content_style: 'body {font-family: system-ui, sans-serif; font-size: 16px !important;}',
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 16px !important;} h1 {font-size: 2.5em !important;} h2 {font-size: 2em !important;} h3 {font-size: 1.5em !important;} h4 {font-size: 1.25em !important;} h5 {font-size: 1.1em !important;} h6 {font-size: 1em !important;}',
     plugins: [
       'emoticons',
       'advlist',
@@ -69,7 +69,8 @@ export class HackathonControlPanelBasicFormComponent implements OnInit, OnDestro
       'media',
     ],
     toolbar:
-      'bold italic backcolor | codesample emoticons | link | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | media code | removeformat | table',
+      'h2 h3 h4 h5 h6 fontsize | bold italic backcolor | codesample emoticons | link | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | media code | removeformat | table',
+    font_size_formats: '10px 12px 14px 16px 18px',
     default_link_target: '_blank',
     branding: false,
     license_key: 'gpl',

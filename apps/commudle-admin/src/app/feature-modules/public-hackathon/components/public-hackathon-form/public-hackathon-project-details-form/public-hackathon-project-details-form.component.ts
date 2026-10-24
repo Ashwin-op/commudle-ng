@@ -65,6 +65,7 @@ export class PublicHackathonProjectDetailsFormComponent implements OnInit {
 
     // Reset problem statement selection when track changes
     this.hackathonProjectDetailsForm.patchValue({ hackathon_problem_statement_id: '' });
+    this.toggleProblemStatementValidator();
   }
 
   updateProblemStatementForEdit() {
@@ -76,6 +77,18 @@ export class PublicHackathonProjectDetailsFormComponent implements OnInit {
     } else {
       this.selectedTrackProblemStatements = [];
     }
+
+    this.toggleProblemStatementValidator();
+  }
+
+  private toggleProblemStatementValidator() {
+    const control = this.hackathonProjectDetailsForm.get('hackathon_problem_statement_id');
+    if (this.selectedTrackProblemStatements.length > 0) {
+      control.setValidators([Validators.required]);
+    } else {
+      control.clearValidators();
+    }
+    control.updateValueAndValidity();
   }
 
   fetchHackathonTracks() {
@@ -97,7 +110,13 @@ export class PublicHackathonProjectDetailsFormComponent implements OnInit {
   }
 
   submitProjectDetails() {
-    this.createOrUpdateProjectDetails.emit(this.hackathonProjectDetailsForm.value);
+    const payload = { ...this.hackathonProjectDetailsForm.value };
+
+    if (!payload.hackathon_problem_statement_id) {
+      delete payload.hackathon_problem_statement_id;
+    }
+
+    this.createOrUpdateProjectDetails.emit(payload);
   }
 
   previousButton() {

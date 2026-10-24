@@ -3,14 +3,14 @@
     <div class="container">
       <div class="one-column-layout">
         <div>
-          <nb-card *ngIf="formClosed">
-            <nb-card-body> This form is closed! </nb-card-body>
-          </nb-card>
+          <com-card *ngIf="formClosed">
+            <com-card-body> This form is closed! </com-card-body>
+          </com-card>
         </div>
 
         <div *ngIf="!formClosed">
-          <nb-card class="header">
-            <nb-card-body>
+          <com-card class="header">
+            <com-card-body>
               <p *ngIf="community" class="community">
                 <app-community-badge [community]="community"></app-community-badge>
               </p>
@@ -32,27 +32,27 @@
                 "
                 message="This is an approval based registration process, if you are shortlisted then you will receive a link to make the payment and complete your registration."
               ></commudle-alert>
-            </nb-card-body>
-          </nb-card>
+            </com-card-body>
+          </com-card>
 
-          <nb-card *ngIf="showProfileForm">
-            <nb-card-header> Let's Update Your Basic Profile! </nb-card-header>
-            <nb-card-body>
+          <com-card *ngIf="showProfileForm" class="profile-form-card">
+            <com-card-header> Let's Update Your Basic Profile! </com-card-header>
+            <com-card-body>
               <div>
                 <app-basic-user-profile></app-basic-user-profile>
               </div>
-            </nb-card-body>
-          </nb-card>
-          <nb-card *ngIf="dataFormEntity.user_details && currentUser">
-            <nb-card-body>
+            </com-card-body>
+          </com-card>
+          <com-card *ngIf="dataFormEntity.user_details && currentUser" class="profile-form-card">
+            <com-card-body>
               <commudle-user-details-form
                 [userFormDetails]="dataFormEntity.user_details"
                 [showActionButtons]="false"
                 (submitUserDetailsEvent)="updateUserDetails($event)"
                 (isLoadingEventEmitter)="submitButtonLoading = false"
               ></commudle-user-details-form>
-            </nb-card-body>
-          </nb-card>
+            </com-card-body>
+          </com-card>
 
           <div class="data-form-fill-body">
             <app-data-form-fill
@@ -72,49 +72,3 @@
     </div>
   </div>
 </div>
-
-<ng-template #formConfirmationDialog let-data>
-  <nb-card class="confirmation-dialog">
-    <nb-card-body>
-      <div>
-        <p class="thank-you-icon">
-          <nb-icon icon="done-all" status="success"></nb-icon>
-        </p>
-        <p class="thank-you-text">Thank You {{ currentUser.name }} for filling the form!</p>
-        <div class="com-my-3 com-mx-2">
-          <commudle-alert
-            [info]="
-              dataFormEntity?.event_data_form_entity_group?.is_paid &&
-              dataFormEntity?.event_data_form_entity_group?.approval_based_payments
-            "
-            message="This is an approval based registration process, if you are shortlisted then you will receive a link to make the payment and complete your registration."
-          ></commudle-alert>
-        </div>
-        <div *appBreakpoints="'>lg'" class="user">
-          <commudle-user-profile [currentUser]="currentUser"></commudle-user-profile>
-          <commudle-userprofile-details
-            [userProfileDetails]="userProfileDetails"
-            [username]="currentUser.username"
-            [completeProfileText]="completeProfileText"
-          ></commudle-userprofile-details>
-        </div>
-        <div *appBreakpoints="'<=lg'" class="user">
-          <commudle-user-profile [currentUser]="currentUser"></commudle-user-profile>
-          <commudle-userprofile-details
-            [userProfileDetails]="userProfileDetails"
-            [username]="currentUser.username"
-            [showLowerCardUserDetails]="false"
-            [completeProfileText]="completeProfileText"
-          ></commudle-userprofile-details>
-        </div>
-      </div>
-    </nb-card-body>
-    <nb-card-footer>
-      <p *ngIf="event">
-        <a [routerLink]="['/communities', community.slug, 'events', event.slug]">
-          <p>Go to Event Page &nbsp;<fa-icon [icon]="faArrowRight"></fa-icon></p>
-        </a>
-      </p>
-    </nb-card-footer>
-  </nb-card>
-</ng-template>

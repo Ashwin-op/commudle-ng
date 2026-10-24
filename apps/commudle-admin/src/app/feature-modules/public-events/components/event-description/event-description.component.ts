@@ -4,12 +4,12 @@ import { IEvent } from 'apps/shared-models/event.model';
 import { environment } from 'apps/commudle-admin/src/environments/environment';
 import { SeoService } from 'apps/shared-services/seo.service';
 import { ActivatedRoute } from '@angular/router';
-
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
-    selector: 'app-event-description',
-    templateUrl: './event-description.component.html',
-    styleUrls: ['./event-description.component.scss'],
-    standalone: false
+  selector: 'app-event-description',
+  templateUrl: './event-description.component.html',
+  styleUrls: ['./event-description.component.scss'],
+  standalone: false,
 })
 export class EventDescriptionComponent implements OnInit, AfterViewInit {
   @Input() community: ICommunity;
@@ -21,7 +21,7 @@ export class EventDescriptionComponent implements OnInit, AfterViewInit {
   showFullDescription = false;
   environment = environment;
   isBot: boolean;
-
+  faHashtag = faHashtag;
   constructor(private seoService: SeoService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit() {

@@ -1,6 +1,6 @@
-nb-card {
-  @apply com-mx-0;
-  nb-card-body {
+com-card {
+  @apply com-mx-0 md:com-my-4;
+  com-card-body {
     @apply com-p-0;
   }
 }

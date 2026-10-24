@@ -1,7 +1,13 @@
 <com-card id="speakers">
   <com-card-header>
-    <h6 class="title">
-      <a [routerLink]="'.'" fragment="speakers"><nb-icon icon="people-outline" status="success"></nb-icon>Speakers</a>
+    <h6 class="title section-heading-anchor">
+      <nb-icon icon="people-outline" status="success"></nb-icon>Speakers<a
+        [routerLink]="'.'"
+        fragment="speakers"
+        class="anchor-link"
+      >
+        <fa-icon [icon]="faHashtag" class="anchor-icon-small"></fa-icon>
+      </a>
     </h6>
   </com-card-header>
   <com-card-body

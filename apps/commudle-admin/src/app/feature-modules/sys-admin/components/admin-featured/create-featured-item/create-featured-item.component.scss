@@ -4,6 +4,7 @@
 
 .dropdown {
   @apply com-w-full com-flex com-items-center com-gap-1 com-h-8 com-p-1 com-text-sm com-rounded-md com-cursor-pointer com-bg-[#eef2f7] com-my-0 com-mb-2;
+
   select {
     @apply com-bg-[#eef2f7] com-cursor-pointer com-w-full;
   }
@@ -11,7 +12,32 @@
 
 .dropdown:hover {
   @apply com-bg-[#eef2f7]/50;
+
   select {
     @apply com-bg-[#eef2f7]/30;
   }
+}
+
+.featured-community-card {
+  @apply com-min-w-[50vw];
+}
+
+.featured-community-card-header {
+  @apply com-flex com-items-center com-justify-between;
+}
+
+.featured-community-form {
+  @apply com-flex com-flex-col com-gap-3;
+}
+
+.category-select {
+  @apply com-border-0;
+}
+
+.category-select-placeholder {
+  @apply com-text-[#8E9BB3];
+}
+
+.featured-community-card-footer {
+  @apply com-flex com-justify-between;
 }

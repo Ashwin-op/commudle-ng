@@ -1,10 +1,10 @@
-<nb-card class="sponsors-container">
-  <nb-card-header>
+<com-card class="sponsors-container">
+  <com-card-header>
     Sponsors
     <commudle-help-section [helpDictionaryName]="'hackathon-sponsors'"></commudle-help-section>
     &nbsp;
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <button nbButton status="primary" (click)="openSponsorDialogBox(addSponsorDialogBox)">
       <fa-icon [icon]="icons.faPlus"></fa-icon>
       &nbsp; Add Sponsor
@@ -23,18 +23,18 @@
         </div>
       </div>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
 <ng-template #addSponsorDialogBox let-ref="dialogRef" let-data>
-  <nb-card class="sponsor-form-dialog-box">
-    <nb-card-header class="actions">
+  <com-card class="sponsor-form-dialog-box">
+    <com-card-header class="actions">
       <span>{{ data.sponsor ? 'Edit Sponsor' : 'Add Sponsor' }}</span>
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <form [formGroup]="sponsorForm">
         <!-- Tier Name -->
         <div>
@@ -162,8 +162,8 @@
           ></commudle-alert>
         </div>
       </form>
-    </nb-card-body>
-    <nb-card-footer class="actions">
+    </com-card-body>
+    <com-card-footer class="actions">
       <button
         nbButton
         status="primary"
@@ -176,24 +176,24 @@
         {{ data.sponsor ? 'Update' : 'Save' }}
       </button>
       <button nbButton status="danger" outline (click)="ref.close()">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #conformDeleteDialogBox let-ref="dialogRef" let-data>
-  <nb-card>
-    <nb-card-header class="actions">
+  <com-card>
+    <com-card-header class="actions">
       <span>Confirm delete Sponsor</span>
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>Are you sure, you want to delete sponsor?</nb-card-body>
-    <nb-card-footer class="actions">
+    </com-card-header>
+    <com-card-body>Are you sure, you want to delete sponsor?</com-card-body>
+    <com-card-footer class="actions">
       <button nbButton status="primary" (click)="destroySponsor(data.sponsorId, data.index); ref.close()">
         Delete
       </button>
       <button nbButton status="danger" (click)="ref.close()" outline>Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

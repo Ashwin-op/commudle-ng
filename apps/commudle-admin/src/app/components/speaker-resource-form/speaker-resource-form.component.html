@@ -3,11 +3,11 @@
     <div class="two-column-layout medium">
       <div class="main-column">
         <div *ngIf="this.speakerResource" class="speaker-resource-form page-padding">
-          <nb-card>
+          <com-card>
             <h5 class="heading">UPDATE SESSION DETAILS FOR {{ speakerResource.user.name | uppercase }}</h5>
-          </nb-card>
-          <nb-card>
-            <nb-card-body>
+          </com-card>
+          <com-card>
+            <com-card-body>
               <div *ngIf="this.community" class="details">
                 <div class="community">
                   <div class="logo">
@@ -34,11 +34,11 @@
                   </p>
                 </div>
               </div>
-            </nb-card-body>
-          </nb-card>
+            </com-card-body>
+          </com-card>
 
-          <nb-card>
-            <nb-card-body>
+          <com-card>
+            <com-card-body>
               <div class="form">
                 <form [formGroup]="speakerResourceForm">
                   <div class="title">
@@ -167,8 +167,8 @@
                   <button nbButton status="primary" type="submit" (click)="submitForm()">Save</button>
                 </form>
               </div>
-            </nb-card-body>
-          </nb-card>
+            </com-card-body>
+          </com-card>
 
           <!-- Templates for embedding steps -->
           <ng-template #googleSlidesEmbed>

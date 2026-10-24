@@ -5,6 +5,7 @@ import { StudentNonProfitCommunitySupportComponent } from './components/student-
 import { NbButtonModule } from '@commudle/theme';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedComponentsModule } from '@commudle/shared-components';
+import { SharedComponentsModule as AppSharedComponentsModule } from 'apps/shared-components/shared-components.module';
 
 @NgModule({
   declarations: [StudentNonProfitCommunitySupportComponent],
@@ -14,6 +15,7 @@ import { SharedComponentsModule } from '@commudle/shared-components';
     NbButtonModule,
     FontAwesomeModule,
     SharedComponentsModule,
+    AppSharedComponentsModule,
   ],
 })
 export class StudentNonProfitSupportModule {}

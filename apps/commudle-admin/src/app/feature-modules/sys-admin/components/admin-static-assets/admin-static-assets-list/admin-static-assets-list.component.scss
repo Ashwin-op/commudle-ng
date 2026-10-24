@@ -1,13 +1,14 @@
 @import './apps/commudle-admin/src/assets/styles/variables';
 
 .admin-assets-list {
-  nb-card-header {
+  @apply com-mt-4;
+  com-card-header {
     @media screen and (max-width: $tab-width) {
       @apply com-flex-col;
     }
   }
 
-  nb-card-body {
+  com-card-body {
     @apply com-p-0;
 
     .search-container {
@@ -56,7 +57,7 @@
 
 @media all and (max-width: $tab-width) {
   .admin-assets-list {
-    nb-card-body {
+    com-card-body {
       .assets-list-container {
         nb-list {
           nb-list-item {

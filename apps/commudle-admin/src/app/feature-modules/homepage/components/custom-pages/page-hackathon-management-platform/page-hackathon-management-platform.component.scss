@@ -20,6 +20,10 @@ h2:hover .section-anchor-link {
   @apply com-opacity-100 com-text-primary-600;
 }
 
+.title {
+  @apply com-flex com-items-center com-w-max com-gap-2;
+}
+
 // Global heading styles with Yankees-Blue
 h1,
 h2,
@@ -180,7 +184,7 @@ section {
 }
 
 .section-title {
-  @apply com-text-xl com-font-bold com-text-Yankees-Blue com-mb-4;
+  @apply com-text-xl com-font-bold com-text-Yankees-Blue com-mb-4 com-flex com-items-center com-justify-center;
   @apply md:com-text-3xl;
 }
 

@@ -1,7 +1,7 @@
 .notes-dialog {
   @apply com-w-[560px] com-max-w-[90vw] com-max-h-[80vh];
 
-  nb-card-header {
+  com-card-header {
     @apply com-flex com-justify-between com-items-center com-border-b com-border-Bright-Gray;
 
     .header-content {
@@ -17,7 +17,7 @@
     }
   }
 
-  nb-card-body {
+  com-card-body {
     @apply com-p-5 com-overflow-hidden com-flex com-flex-col;
   }
 

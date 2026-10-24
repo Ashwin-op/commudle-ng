@@ -1,5 +1,5 @@
 .hackathon-judge-mentor-section {
-  @apply com-mx-0 md:com-mx-2;
+  @apply com-mx-0 md:com-mx-2 md:com-my-4;
 
   .email-select-type-form {
     @apply com-flex com-gap-4 com-w-full;
@@ -15,7 +15,7 @@
 }
 
 .speaker-form {
-  @apply com-w-[100dvw] com-max-h-[90dvh] md:com-w-[70dvw] com-mx-0;
+  @apply com-w-[100dvw] com-max-h-[90dvh] md:com-w-[70dvw] com-mx-0 com-flex com-overflow-y-auto;
 
   .judge-form {
     @apply com-flex com-flex-col com-gap-3;
@@ -72,9 +72,9 @@
 }
 
 .judge-cards {
-  @apply com-grid com-grid-cols-1 md:com-grid-cols-3 com-gap-x-5 com-bg-gray-200;
+  @apply com-grid com-grid-cols-1 md:com-grid-cols-3 md:com-gap-x-5 com-gap-x-0 com-gap-y-4 com-bg-gray-200;
 }
 
-nb-card-header {
-  @apply com-flex com-items-center;
+com-card-header {
+  @apply com-flex com-items-center com-justify-start;
 }

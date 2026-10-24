@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, TemplateRef, ViewChild, HostListener } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, TemplateRef, ViewChild, HostListener } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NbDialogService } from '@commudle/theme';
 import * as moment from 'moment';
@@ -15,12 +15,12 @@ import { ICurrentUser } from 'apps/shared-models/current_user.model';
 import { faCalendar } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
-    selector: 'app-community-build-details',
-    templateUrl: './community-build-details.component.html',
-    styleUrls: ['./community-build-details.component.scss'],
-    standalone: false
+  selector: 'app-community-build-details',
+  templateUrl: './community-build-details.component.html',
+  styleUrls: ['./community-build-details.component.scss'],
+  standalone: false,
 })
-export class CommunityBuildDetailsComponent implements OnInit {
+export class CommunityBuildDetailsComponent implements OnInit, OnChanges {
   @Input() cBuild: ICommunityBuild;
 
   discussionChat: IDiscussion;
@@ -55,16 +55,19 @@ export class CommunityBuildDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getDiscussionChat();
     this.authWatchService.currentUser$.pipe(takeUntil(this.destroy$)).subscribe((currentUser: ICurrentUser) => {
       this.currentUser = currentUser;
     });
+  }
+
+  ngOnChanges() {
+    this.getDiscussionChat();
     this.teammates = this.cBuild.user_roles_users;
-    if (this.cBuild.video_iframe?.startsWith('<iframe') && this.cBuild.video_iframe?.endsWith('</iframe>')) {
-      this.embedCode = this.sanitizer.bypassSecurityTrustHtml(this.cBuild.video_iframe);
-    } else {
-      this.embedCode = null;
-    }
+    this.embedCode =
+      this.cBuild.video_iframe?.startsWith('<iframe') && this.cBuild.video_iframe?.endsWith('</iframe>')
+        ? this.sanitizer.bypassSecurityTrustHtml(this.cBuild.video_iframe)
+        : null;
+    this.currentImageIndex = 0;
     this.isSingleImage();
     this.setSchema();
   }

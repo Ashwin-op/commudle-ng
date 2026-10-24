@@ -374,45 +374,45 @@
 
 <!-- End session confirmation dialog -->
 <ng-template #endSessionDialog let-ref="dialogRef">
-  <nb-card class="end-session-dialog">
-    <nb-card-header class="end-session-header">
+  <com-card class="end-session-dialog">
+    <com-card-header class="end-session-header">
       <span>End Session</span>
       <button ghost nbButton size="small" (click)="ref.close(false)" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <p class="end-session-message">{{ endSessionMessage }}</p>
       <ul *ngIf="endSessionExtras.length" class="end-session-extras">
         <li *ngFor="let extra of endSessionExtras">{{ extra }}</li>
       </ul>
-    </nb-card-body>
-    <nb-card-footer class="end-session-actions">
+    </com-card-body>
+    <com-card-footer class="end-session-actions">
       <button (click)="ref.close(true)" nbButton size="small" status="danger">Yes, end session</button>
       <button (click)="ref.close(false)" nbButton size="small" ghost status="basic">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <!-- Stop stream confirmation dialog -->
 <ng-template #stopStreamDialog let-ref="dialogRef">
-  <nb-card class="end-session-dialog">
-    <nb-card-header class="end-session-header">
+  <com-card class="end-session-dialog">
+    <com-card-header class="end-session-header">
       <span>Stop Streaming</span>
       <button ghost nbButton size="small" (click)="ref.close(false)" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <p class="end-session-message">Are you sure you want to stop the streaming for viewers?</p>
       <ul class="end-session-extras">
         <li>The hosts will still be able to see each other on the stage.</li>
         <li>Viewers will not see anything.</li>
       </ul>
-    </nb-card-body>
-    <nb-card-footer class="end-session-actions">
+    </com-card-body>
+    <com-card-footer class="end-session-actions">
       <button (click)="ref.close(true)" nbButton size="small" status="danger">Yes, stop streaming</button>
       <button (click)="ref.close(false)" nbButton size="small" ghost status="basic">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

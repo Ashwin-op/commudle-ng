@@ -1,32 +1,32 @@
 <div class="base-layout">
   <div class="container">
     <div class="one-column-layout">
-      <nb-card>
-        <nb-card-header>
+      <com-card>
+        <com-card-header>
           <h1>Forms List</h1>
-        </nb-card-header>
-        <nb-card-body>
+        </com-card-header>
+        <com-card-body>
           <div class="com-flex com-justify-between">
             <button nbButton status="primary" (click)="openDialog(manuallyAddPayment)">Link payment manually</button>
             <button nbButton status="info" (click)="openPaymentInfoDialog(fetchPaymentInfoDialog)" outline>
               Fetch payment info
             </button>
           </div>
-          <commudle-paid-form-list></commudle-paid-form-list> </nb-card-body
-      ></nb-card>
+          <commudle-paid-form-list></commudle-paid-form-list> </com-card-body
+      ></com-card>
     </div>
   </div>
 </div>
 
 <ng-template #manuallyAddPayment let-ref="dialogRef">
-  <nb-card>
-    <nb-card-header>
+  <com-card>
+    <com-card-header>
       <span>Add Payment Details</span>
       <button ghost nbButton size="small" (click)="ref.close()">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div>
         <label for="payment_id"
           ><div>Payment Id from razorpay</div>
@@ -34,22 +34,22 @@
           <input [(ngModel)]="rzpPaymentId" nbInput type="text" id="payment_id" placeholder="Razorpay Payment id" />
         </label>
       </div>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button nbButton status="primary" (click)="createPayment(); ref.close()">Submit</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #fetchPaymentInfoDialog let-ref="dialogRef">
-  <nb-card class="com-w-[800px] com-max-h-[90vh]">
-    <nb-card-header>
+  <com-card class="com-w-[800px] com-max-h-[90vh]">
+    <com-card-header>
       <span>Fetch Payment Info</span>
       <button ghost nbButton size="small" (click)="ref.close()">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body class="com-max-h-[calc(90vh-150px)] com-overflow-y-auto">
+    </com-card-header>
+    <com-card-body class="com-max-h-[calc(90vh-150px)] com-overflow-y-auto">
       <div class="com-flex com-gap-4 com-items-end">
         <div>
           <label for="fetch_payment_id">
@@ -76,9 +76,9 @@
         <h5>Payment Information:</h5>
         <pre class="com-bg-gray-100 com-p-4 com-rounded com-overflow-x-auto">{{ paymentInfo | json }}</pre>
       </div>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button nbButton status="primary" (click)="fetchPaymentInfo(fromApi)" [disabled]="isLoading">Fetch Info</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

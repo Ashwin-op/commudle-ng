@@ -14,14 +14,14 @@
 </div>
 
 <ng-template #refundPage let-ref="dialogRef">
-  <nb-card>
-    <nb-card-header>
+  <com-card>
+    <com-card-header>
       <span>Refund Policy</span>
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body class="com-px-0">
+    </com-card-header>
+    <com-card-body class="com-px-0">
       <app-custom-page-form
         [parentId]="community.id"
         [parentType]="EDbModels.KOMMUNITY"
@@ -29,16 +29,16 @@
         [pageSlug]="refundPolicy?.slug"
         (createdPage)="updateRefundPage($event)"
       ></app-custom-page-form>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button nbButton status="primary" (click)="createOrUpdateRefundPage()">Save</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #discountCodesDialogBox let-ref="dialogRef">
-  <nb-card>
-    <nb-card-header>
+  <com-card>
+    <com-card-header>
       <div>
         <span>Discount Codes List</span>
         &nbsp; &nbsp; &nbsp;
@@ -49,8 +49,8 @@
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body class="com-p-0">
+    </com-card-header>
+    <com-card-body class="com-p-0">
       <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
       <div class="discount-codes" *ngIf="!isLoading">
         <table>
@@ -119,6 +119,6 @@
           </tr>
         </table>
       </div>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>

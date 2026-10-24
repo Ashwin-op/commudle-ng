@@ -1,12 +1,12 @@
-nb-card {
-  @apply com-relative com-transition-all com-duration-300;
+com-card {
+  @apply com-relative com-transition-all com-duration-300 md:com-mx-2 md:com-my-4;
 
   &.sidebar-expanded:not(.fullscreen-card) {
-    width: calc(100dvw - 360px);
+    @apply com-w-full md:com-w-[calc(100dvw-360px)];
   }
 
   &.sidebar-collapsed:not(.fullscreen-card) {
-    width: calc(100dvw - 130px);
+    @apply com-w-full md:com-w-[calc(100dvw-130px)];
   }
 
   &.fullscreen-card {
@@ -18,7 +18,7 @@ nb-card {
   }
 }
 
-nb-card-header {
+com-card-header {
   @apply com-flex com-justify-between com-items-center;
 
   .header-actions {

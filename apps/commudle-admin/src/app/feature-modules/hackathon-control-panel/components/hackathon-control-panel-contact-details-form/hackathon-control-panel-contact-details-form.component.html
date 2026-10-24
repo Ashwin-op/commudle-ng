@@ -1,10 +1,10 @@
-<nb-card>
-  <nb-card-header
+<com-card>
+  <com-card-header
     >Contact & Social Links<commudle-help-section
       [helpDictionaryName]="'hackathon-contacts-social-links'"
     ></commudle-help-section
-  ></nb-card-header>
-  <nb-card-body class="hackathon-contact-form">
+  ></com-card-header>
+  <com-card-body class="hackathon-contact-form">
     <form [formGroup]="hackathonContactForm">
       <div class="form-groups-heading">Hackathon's Information</div>
       <!-- Website -->
@@ -220,8 +220,8 @@
         Save
       </button>
     </form>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
 <div *ngIf="hackathon" class="next-step-container">
   <a>

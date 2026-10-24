@@ -9,7 +9,7 @@
       .container {
         .one-column-layout {
           .header {
-            @apply com-mb-3;
+            @apply com-mb-3 com-mx-2;
             .form-name {
               @apply com-text-2xl com-font-semibold com-my-1 com-text-center com-text-Yankees-Blue;
             }
@@ -35,7 +35,9 @@
               }
             }
           }
-
+          .profile-form-card {
+            @apply com-mx-2;
+          }
           .data-form-fill-body {
             max-width: 920px;
             margin: 0 auto;
@@ -47,7 +49,7 @@
 }
 .confirmation-dialog {
   @apply com-m-0 md:com-w-[25dvw] com-w-auto com-h-full;
-  nb-card-body {
+  com-card-body {
     @apply com-px-0 com-py-0;
     text-align: center;
     .thank-you-icon {
@@ -61,7 +63,7 @@
     }
   }
 
-  nb-card-footer {
+  com-card-footer {
     display: flex;
     p {
       @apply com-m-0 com-font-medium;

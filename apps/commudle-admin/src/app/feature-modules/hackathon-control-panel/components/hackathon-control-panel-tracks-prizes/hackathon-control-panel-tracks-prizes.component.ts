@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IHackathon, ICommunity } from '@commudle/shared-models';
-import { NbRouteTab } from '@commudle/theme';
 import { faArrowRight, faGamepad, faMicrophone, faRectangleList } from '@fortawesome/free-solid-svg-icons';
 import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon.service';
 import { Subscription } from 'rxjs';
@@ -17,16 +16,6 @@ import { SeoService, ToastrService } from '@commudle/shared-services';
 export class HackathonControlPanelTracksPrizesComponent implements OnInit, OnDestroy {
   hackathon: IHackathon;
   isTogglingProblemStatement = false;
-  tabs: NbRouteTab[] = [
-    {
-      title: 'Tracks',
-      route: './',
-    },
-    {
-      title: 'prizes',
-      route: ['./prizes'],
-    },
-  ];
   subscriptions: Subscription[] = [];
 
   parent: ICommunity | ICommunityGroup;

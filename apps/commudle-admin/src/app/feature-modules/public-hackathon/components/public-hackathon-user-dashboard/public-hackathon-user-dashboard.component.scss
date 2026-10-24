@@ -184,15 +184,19 @@ com-card {
 }
 
 .edit-team-members-dialog {
-  @apply com-w-full md:com-w-[30dvw] com-max-h-90dvh;
+  @apply com-flex com-w-full md:com-w-[30dvw] com-max-h-90dvh;
 
   com-card-header {
     @apply com-flex com-justify-between com-items-center;
   }
+
+  com-card-body {
+    @apply com-scrollbar-hide;
+  }
 }
 
 .problem-statement-prompt {
-  @apply com-flex com-justify-between com-rounded-lg com-overflow-hidden;
+  @apply com-flex com-justify-between com-rounded-lg com-overflow-hidden com-mt-4;
 
   com-card-body {
     @apply com-flex com-flex-row com-justify-between com-gap-3 com-p-3;
@@ -208,10 +212,14 @@ com-card {
 }
 
 .problem-statement-dialog {
-  @apply com-max-h-[90dvh] md:com-w-[30dvw];
+  @apply com-max-w-[90dvw] com-max-h-[90dvh] md:com-w-[30dvw] com-flex com-flex-col;
 
   com-card-header {
-    @apply com-flex com-justify-between com-items-center;
+    @apply com-flex com-justify-between com-items-center com-shrink-0;
+  }
+
+  com-card-body {
+    @apply com-flex com-flex-col com-min-w-0 com-overflow-y-auto com-scrollbar-hide;
   }
 }
 
@@ -271,7 +279,7 @@ com-card {
     }
 
     .problem-statement-section {
-      @apply com-mt-3 com-p-3 com-bg-gray-50 com-rounded-lg com-border com-border-solid com-border-Bright-Gray;
+      @apply com-mt-3 com-p-3 com-bg-gray-50 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-flex;
 
       .problem-label {
         @apply com-text-xs com-font-medium com-text-gray-500 com-mb-1;
@@ -280,6 +288,22 @@ com-card {
       .problem-name {
         @apply com-text-sm com-text-Yankees-Blue com-font-medium;
       }
+    }
+  }
+}
+
+.application-incomplete-popup {
+  @apply com-mt-4 com-border com-border-solid com-border-red-500;
+
+  com-card-body {
+    @apply com-p-4;
+  }
+
+  .complete-application-link {
+    @apply com-inline-flex com-items-center com-text-sm com-gap-1 com-ml-1 com-font-semibold com-text-red-600 com-cursor-pointer com-whitespace-nowrap;
+
+    &:hover {
+      @apply com-underline;
     }
   }
 }

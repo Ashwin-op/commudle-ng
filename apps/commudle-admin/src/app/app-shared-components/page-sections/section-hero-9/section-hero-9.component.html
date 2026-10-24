@@ -1,0 +1,97 @@
+<section class="hero-section">
+  <div class="base-layout container section-container">
+    <div class="hero-layout" [ngClass]="{ 'hero-layout--with-image': config.image }">
+      <!-- ── Left: text ─────────────────────────────────────────────── -->
+      <div class="hero-text">
+        <div *ngIf="config.badge" class="hero-badge">
+          <span class="hero-badge__label">{{ config.badge }}</span>
+        </div>
+
+        <h1 class="hero-heading">
+          <span class="hero-heading__line1" [innerHTML]="safeLine1"></span>
+          <span class="hero-heading__line2" [innerHTML]="safeLine2"></span>
+        </h1>
+
+        <p class="hero-subtext">
+          {{ config.subtext }}
+        </p>
+
+        <div class="cta-buttons">
+          <a
+            *ngIf="config.primaryCta.routerLink; else primaryButton"
+            [routerLink]="config.primaryCta.routerLink"
+            [queryParams]="config.primaryCta.queryParams || null"
+          >
+            <button nbButton status="primary" size="large" shape="semi-round">{{ config.primaryCta.label }}</button>
+          </a>
+          <ng-template #primaryButton>
+            <button nbButton status="primary" size="large" shape="semi-round" type="button" (click)="onPrimaryClick()">
+              {{ config.primaryCta.label }}
+            </button>
+          </ng-template>
+
+          <button
+            *ngIf="config.videoCta"
+            nbButton
+            status="basic"
+            outline
+            size="large"
+            shape="semi-round"
+            type="button"
+            (click)="openVideo()"
+          >
+            <fa-icon [icon]="icons.faCirclePlay" class="cta-buttons__play-icon"></fa-icon>{{ config.videoCta.label }}
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Right: photo ──────────────────────────────────────────── -->
+      <div *ngIf="config.image" class="hero-visual">
+        <div class="hero-visual__glow" aria-hidden="true"></div>
+
+        <!--
+          __frame shrink-wraps exactly to the rendered image (not the taller
+          flex-centred .hero-visual box), so the floating accents below —
+          positioned against __frame — hug the photo's actual edges instead
+          of drifting off relative to empty space above/below it.
+        -->
+        <div class="hero-visual__frame">
+          <img class="hero-visual__img" [src]="config.image.url" [alt]="config.image.alt" loading="eager" />
+
+          <!-- Floating icon/text accents — purely decorative, GSAP-animated (see animateFloatingAccents()). -->
+          <div *ngIf="config.floatingAccents?.length" class="floating-accents" aria-hidden="true">
+            <span
+              *ngFor="let accent of config.floatingAccents; let i = index"
+              #floatingAccent
+              class="floating-accent"
+              [ngClass]="positionFor(i)"
+            >
+              <span class="floating-accent__icon"><fa-icon [icon]="iconFor(accent.icon)"></fa-icon></span>
+              <span *ngIf="accent.label" class="floating-accent__label">
+                {{ accent.label }}
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Video dialog ─────────────────────────────────────────────────── -->
+<ng-template #videoDialog>
+  <nb-card class="video-dialog">
+    <nb-card-body class="video-dialog__body">
+      <div class="video-dialog__frame">
+        <iframe
+          *ngIf="safeVideoUrl"
+          [src]="safeVideoUrl"
+          title="Video"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</ng-template>

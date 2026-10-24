@@ -1,10 +1,14 @@
 .community-stats {
+  > com-card {
+    @apply com-mx-2 com-my-4;
+  }
+
   a {
     width: max-content;
   }
 
   .page-header {
-    nb-card-header {
+    com-card-header {
       @apply com-flex com-items-center;
       h3 {
         font-weight: 300;
@@ -21,8 +25,8 @@
     }
   }
 
-  nb-card.stat-card.events {
-    nb-card-body {
+  com-card.stat-card.events {
+    com-card-body {
       .wide.chart-container {
         height: 400px;
         margin-bottom: 3rem;
@@ -37,14 +41,14 @@
     }
   }
 
-  nb-card.stat-card {
-    nb-card-header {
+  com-card.stat-card {
+    com-card-header {
       h3 {
         @apply com-font-light com-m-0;
       }
     }
 
-    nb-card-body {
+    com-card-body {
       .first-section {
         @apply com-items-center com-flex com-flex-wrap com-justify-evenly com-pl-0 com-py-4 com-pr-4;
 
@@ -63,8 +67,16 @@
       .section-second {
         .tag-section {
           @apply com-mt-12 com-mb-4;
+
           p {
             @apply com-text-xl;
+          }
+
+          .tag-list {
+            @apply com-flex com-flex-wrap com-gap-2;
+            .custom-tag {
+              @apply com-border com-border-solid com-rounded-full com-border-Azure com-text-Azure;
+            }
           }
         }
       }

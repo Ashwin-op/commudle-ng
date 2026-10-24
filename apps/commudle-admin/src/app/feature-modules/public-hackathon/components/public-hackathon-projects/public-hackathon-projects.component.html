@@ -1,13 +1,13 @@
-<nb-card>
-  <nb-card-body>
+<com-card>
+  <com-card-body>
     <commudle-loading-spinner *ngIf="isLoading; else projectCards"></commudle-loading-spinner>
     <ng-template #projectCards>
       <div *ngIf="communityBuilds.length === 0">No Project to show</div>
-      <nb-card *ngFor="let build of communityBuilds" class="project-card">
-        <nb-card-body>
+      <com-card *ngFor="let build of communityBuilds" class="project-card">
+        <com-card-body>
           <commudle-build-card [communityBuild]="build" [showHackathonPrizes]="true"></commudle-build-card>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
       <div class="pagination" *ngIf="total > 0">
         <app-pagination
           (goTo)="page = $event; fetchHackathonProjects()"
@@ -19,5 +19,5 @@
         ></app-pagination>
       </div>
     </ng-template>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

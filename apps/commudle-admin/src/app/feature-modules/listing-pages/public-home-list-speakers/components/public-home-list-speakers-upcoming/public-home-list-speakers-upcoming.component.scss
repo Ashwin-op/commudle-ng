@@ -9,10 +9,7 @@ com-card {
     @apply com-mt-0 com-mb-4 com-mx-0 com-flex com-flex-col com-px-4 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray lg:com-mb-5 lg:com-p-0 lg:com-border-b-0;
 
     .title {
-      @apply com-m-0 com-leading-[0];
-      a {
-        @apply com-text-base com-font-semibold com-text-Yankees-Blue com-mb-1 com-mt-0 com-mx-0 com-no-underline lg:com-text-sm;
-      }
+      @apply com-m-0 com-leading-[0] com-text-base com-font-semibold com-text-Yankees-Blue com-mb-1 com-mt-0 com-mx-0 com-no-underline lg:com-text-sm;
     }
     .sub-heading {
       @apply com-text-sm com-font-normal com-text-gray-500 com-m-0 lg:com-text-xs;

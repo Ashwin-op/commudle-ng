@@ -595,7 +595,7 @@
 
 // ── Confirmation Dialog ──
 .confirm-dialog-card {
-  @apply com-min-w-[400px];
+  @apply com-min-w-[400px] com-flex;
 
   .confirm-dialog-header {
     @apply com-flex com-justify-between com-items-center;

@@ -9,7 +9,7 @@ import { IUserRolesUser } from 'apps/shared-models/user_roles_user.model';
 import { Subscription } from 'rxjs';
 import { faLightbulb, faCalendar, faUsers, faBookOpen, faIdBadge } from '@fortawesome/free-solid-svg-icons';
 import { IEvent } from 'apps/shared-models/event.model';
-
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-user-contributions',
   templateUrl: './user-contributions.component.html',
@@ -45,7 +45,7 @@ export class UserContributionsComponent implements OnInit, OnChanges, OnDestroy 
   faUsers = faUsers;
   faBookOpen = faBookOpen;
   faIdBadge = faIdBadge;
-
+  faHashtag = faHashtag;
   constructor(
     private appUsersService: AppUsersService,
     public userProfileMenuService: UserProfileMenuService,

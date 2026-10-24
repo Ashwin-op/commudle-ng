@@ -1,22 +1,22 @@
 .already-exist-dfe {
   @apply com-w-[100dvw] md:com-w-[448px] com-m-0;
-  nb-card-footer,
-  nb-card-header {
+  com-card-footer,
+  com-card-header {
     @apply com-flex com-justify-between com-items-center;
   }
-  nb-card-header {
+  com-card-header {
     fa-icon,
     span {
       @apply com-text-base com-text-orange-400 com-mr-2;
     }
   }
-  nb-card-footer {
+  com-card-footer {
     button {
       @apply com-w-full;
     }
     @apply com-gap-5;
   }
-  nb-card-body {
+  com-card-body {
     div {
       @apply com-text-sm com-text-gray-500;
     }

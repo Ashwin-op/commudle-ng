@@ -2,7 +2,10 @@
   <div class="base-layout">
     <div class="container">
       <div *ngIf="showHeading" class="header">
-        <h1 class="heading"><span>One Stop Solution</span> For Your Developer Communities</h1>
+        <h1 class="heading">
+          <span>One Stop Solution</span>
+          For Your Developer Communities
+        </h1>
         <h2 class="subheading">
           We understand the vast engagement needs to build a developer community network for your company.
         </h2>
@@ -20,8 +23,11 @@
             <img [src]="headerImgUrl" />
           </div>
         </div>
-        <h2 *ngIf="showHeading" class="features-heading">
-          <a [routerLink]="'.'" fragment="features">Everything Your Developer Community Needs</a>
+        <h2 *ngIf="showHeading" class="features-heading section-heading-anchor">
+          Everything Your Developer Community Needs
+          <a [routerLink]="'.'" fragment="features" class="anchor-link" aria-label="Link to features section">
+            <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+          </a>
         </h2>
         <h2 *ngIf="showSubHeading" class="features-subheading">
           Build communities with multiple types of engagements, your search for 'the right platform' ends here.
@@ -45,8 +51,16 @@
         </div>
       </div>
       <div *ngIf="showHeading" class="platform" id="know-your-community">
-        <h2 class="heading">
-          <a [routerLink]="'.'" fragment="know-your-community">Know & Grow Your Community Like Never Before</a>
+        <h2 class="heading section-heading-anchor">
+          Know & Grow Your Community Like Never Before
+          <a
+            [routerLink]="'.'"
+            fragment="know-your-community"
+            class="anchor-link"
+            aria-label="Link to know your community section"
+          >
+            <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+          </a>
         </h2>
         <p class="subheading">
           With multiple options to engage with your community members, you can gain smarter insights on what the
@@ -115,8 +129,16 @@
         </commudle-public-page-layout>
       </div>
       <div *ngIf="showHeading" class="build-community com-relative" id="build-community">
-        <h2 class="heading-build-community">
-          <a [routerLink]="'.'" fragment="build-community">Build Your Communities with 100,000+ techies on Commudle</a>
+        <h2 class="heading-build-community section-heading-anchor">
+          Build Your Communities with 100,000+ techies on Commudle
+          <a
+            [routerLink]="'.'"
+            fragment="build-community"
+            class="anchor-link"
+            aria-label="Link to build community section"
+          >
+            <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+          </a>
         </h2>
         <img
           *ngIf="!isMobileView"

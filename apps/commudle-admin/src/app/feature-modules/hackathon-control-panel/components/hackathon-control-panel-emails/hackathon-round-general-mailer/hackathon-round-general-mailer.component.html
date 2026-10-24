@@ -1,11 +1,11 @@
-<nb-card class="round-selection-mailer">
-  <nb-card-header>
+<com-card class="round-selection-mailer">
+  <com-card-header>
     <span>Send round general email</span>
     <button nbButton shape="round" (click)="closePopup()">
       <nb-icon icon="close"></nb-icon>
     </button>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <form [formGroup]="roundGeneralMailerForm">
       <div class="round">
         <label for="round_id">
@@ -34,8 +34,8 @@
         <editor [init]="tinyMCE" formControlName="message"></editor>
       </div>
     </form>
-  </nb-card-body>
-  <nb-card-footer>
+  </com-card-body>
+  <com-card-footer>
     <button
       (click)="previewEmail(hackathonId); showPreviewSpinner = true"
       nbButton
@@ -57,5 +57,5 @@
     >
       Send
     </button>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

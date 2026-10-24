@@ -72,8 +72,6 @@ apps/ssr-perf/out
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md
 
-AGENTS.md
-
 .warp/*
 
 .npmrc
@@ -89,3 +87,6 @@ skills-lock.json
 .github/skills
 
 scripts
+
+
+.november

@@ -119,6 +119,11 @@ export class EventLocationsComponent implements OnInit {
     });
   }
 
+  onSpeakerAdded(speaker: IDataFormEntityResponseGroup) {
+    this.eventSpeakers = [...(this.eventSpeakers || []), speaker];
+    this.changeDetectorRef.markForCheck();
+  }
+
   toggleEventTypeValidations(eventType) {
     this.selectedEventType = eventType;
     switch (eventType) {

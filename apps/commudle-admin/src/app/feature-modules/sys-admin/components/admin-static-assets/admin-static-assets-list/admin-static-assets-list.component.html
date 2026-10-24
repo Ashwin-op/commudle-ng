@@ -1,5 +1,5 @@
-<nb-card class="admin-assets-list">
-  <nb-card-header class="d-flex justify-content-space-between align-items-center">
+<com-card class="admin-assets-list">
+  <com-card-header class="d-flex justify-content-space-between align-items-center">
     <span>Static Assets</span>
     <div>
       <button [routerLink]="['/sys-admin', 'static-assets', 'new']" ghost nbButton shape="round" size="small">
@@ -7,8 +7,8 @@
         Create Assets
       </button>
     </div>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <div class="search-container">
       <input
         [(ngModel)]="searchQuery"
@@ -59,22 +59,22 @@
       </nb-list>
       <button (click)="getAsset()" *ngIf="assets.length !== total" fullWidth ghost nbButton>Get more Assets</button>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
 <ng-template #copyLinkDialog let-data let-ref="dialogRef">
-  <nb-card class="copy-link-card">
-    <nb-card-header>Copy Asset Link</nb-card-header>
-    <nb-card-body>
+  <com-card class="copy-link-card">
+    <com-card-header>Copy Asset Link</com-card-header>
+    <com-card-body>
       <div class="copy-link-container">
         <div class="link-wrapper" (click)="copyLink(data.url)">
           <p class="link-text">{{ data.url }}</p>
           <nb-icon icon="copy-outline" class="copy-icon"></nb-icon>
         </div>
       </div>
-    </nb-card-body>
-    <nb-card-footer class="d-flex justify-content-end">
+    </com-card-body>
+    <com-card-footer class="d-flex justify-content-end">
       <button (click)="ref.close()" nbButton size="small" status="primary">Close</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

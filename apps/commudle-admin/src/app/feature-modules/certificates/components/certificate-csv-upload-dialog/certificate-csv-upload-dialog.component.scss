@@ -1,0 +1,62 @@
+.certificate-csv-upload-dialog {
+  @apply com-w-[32rem] com-max-w-[90vw];
+}
+
+.dialog-header {
+  @apply com-flex com-justify-between com-items-center;
+}
+
+.hint-text {
+  @apply com-text-Auro-Metal-Saurus com-text-sm com-mb-3;
+}
+
+.hidden-file-input {
+  @apply com-hidden;
+}
+
+// Matches certificate-upload-design-dialog's own dropzone styling, for
+// consistency between this feature's two file-upload dialogs.
+.dropzone {
+  @apply com-flex com-flex-col com-items-center com-justify-center com-gap-2 com-py-6 com-px-4 com-border-2 com-border-dashed com-border-Bright-Gray com-rounded-lg com-cursor-pointer com-text-Auro-Metal-Saurus com-text-sm com-font-medium com-text-center;
+
+  fa-icon {
+    @apply com-text-2xl;
+  }
+
+  &:hover,
+  &.dragging {
+    @apply com-border-Azure com-text-Azure;
+  }
+}
+
+.preview-summary {
+  @apply com-flex com-gap-6 com-mb-4;
+
+  .summary-row {
+    @apply com-text-center;
+
+    .summary-value {
+      @apply com-block com-text-2xl com-font-semibold;
+    }
+
+    .summary-label {
+      @apply com-text-xs com-text-Auro-Metal-Saurus;
+    }
+  }
+}
+
+.preview-section {
+  @apply com-mb-4;
+
+  h4 {
+    @apply com-mb-1;
+  }
+
+  ul {
+    @apply com-m-0 com-pl-5;
+
+    li.blocking {
+      @apply com-text-red-500;
+    }
+  }
+}

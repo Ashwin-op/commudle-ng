@@ -1,9 +1,9 @@
-<nb-card *ngIf="channels.length > 0">
-  <nb-card-header>
+<com-card *ngIf="channels.length > 0">
+  <com-card-header>
     <p>All Channels</p>
     <commudle-help-section [helpDictionaryName]="'channels'"></commudle-help-section
-  ></nb-card-header>
-  <nb-card-body class="channels-list-cards">
+  ></com-card-header>
+  <com-card-body class="channels-list-cards">
     <div *ngFor="let channel of channels">
       <a [routerLink]="[channel.id]">
         <div class="channel-list-card">
@@ -15,14 +15,14 @@
         </div>
       </a>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
-<nb-card *ngIf="channels.length === 0">
-  <nb-card-body class="empty-state">
+<com-card *ngIf="channels.length === 0">
+  <com-card-body class="empty-state">
     <div>
       <p class="heading">No Channels Available</p>
       <p class="sub-heading">You can create one by clicking the plus button on the left menu</p>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

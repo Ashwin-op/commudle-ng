@@ -1,6 +1,6 @@
 <div class="channel-members">
-  <nb-card>
-    <nb-card-header>
+  <com-card>
+    <com-card-header>
       <div>
         <p class="margin0 fontw-300">
           <nb-icon icon="people" status="basic"></nb-icon>
@@ -13,8 +13,8 @@
           <nb-icon icon="close-circle" status="basic"></nb-icon>
         </small>
       </span>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div class="search">
         <form [formGroup]="channelForm">
           <input
@@ -48,6 +48,6 @@
         </div>
         <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
       </div>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </div>

@@ -69,12 +69,12 @@
 }
 
 .dialog-box-card {
-  nb-card-header,
-  nb-card-footer {
+  com-card-header,
+  com-card-footer {
     @apply com-flex com-justify-between com-items-center;
   }
 
-  nb-card-body {
+  com-card-body {
     p {
       @apply com-text-gray-700 com-mb-0;
     }

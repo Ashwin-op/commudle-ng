@@ -1,5 +1,5 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbDialogRef, NbDialogService } from '@commudle/theme';
 import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
@@ -16,7 +16,6 @@ import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
 import { SeoService } from 'apps/shared-services/seo.service';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { GoogleTagManagerService } from 'apps/commudle-admin/src/app/services/google-tag-manager.service';
-import { IUserStat } from 'libs/shared/models/src/lib/user-stats.model';
 import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.service';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { UserDetailsFormComponent } from 'apps/shared-components/user-details-form/user-details-form.component';
@@ -48,13 +47,11 @@ export class FillDataFormComponent implements OnInit, OnDestroy {
 
   subscriptions: Subscription[] = [];
   gtmData: any = {};
-  userProfileDetails: IUserStat;
   faArrowRight = faArrowRight;
   formAnswers = {};
   submitButtonLoading = false;
   private destroy$ = new Subject<void>();
 
-  @ViewChild('formConfirmationDialog', { static: true }) formConfirmationDialog: TemplateRef<any>;
   @ViewChild(UserDetailsFormComponent) userDetailsFormComponent: UserDetailsFormComponent;
 
   constructor(
@@ -94,9 +91,6 @@ export class FillDataFormComponent implements OnInit, OnDestroy {
       this.authWatchService.currentUser$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
         this.currentUser = data;
         if (this.currentUser) {
-          this.appUsersService.getProfileStats().subscribe((data) => {
-            this.userProfileDetails = data;
-          });
           this.gtmData.com_user_id = this.currentUser.id;
         }
       }),

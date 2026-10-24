@@ -80,14 +80,14 @@
 
 <!-- Prize Form Dialog -->
 <ng-template #addPrizeDialogBox let-data let-ref="dialogRef">
-  <nb-card class="prize-form-dialog">
-    <nb-card-header>
+  <com-card class="prize-form-dialog">
+    <com-card-header>
       <span>{{ data.prize ? 'Edit Prize' : 'New Prize' }}</span>
       <button (click)="ref.close()" ghost nbButton shape="round" size="small">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <form [formGroup]="prizeForm" class="form-fields">
         <div class="form-group">
           <label for="name">Name <span class="required">*</span></label>
@@ -118,6 +118,13 @@
               <option [value]="1">1st</option>
               <option [value]="2">2nd</option>
               <option [value]="3">3rd</option>
+              <option [value]="4">4th</option>
+              <option [value]="5">5th</option>
+              <option [value]="6">6th</option>
+              <option [value]="7">7th</option>
+              <option [value]="8">8th</option>
+              <option [value]="9">9th</option>
+              <option [value]="10">10th</option>
             </select>
             <commudle-alert
               *ngIf="prizeForm.get('order').touched && prizeForm.get('order').hasError('required')"
@@ -199,8 +206,8 @@
           ></commudle-alert>
         </div>
       </form>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button (click)="ref.close()" nbButton ghost status="basic">Cancel</button>
       <button
         (click)="data.prize ? updatePrize(data.prize.id, data.index) : createPrize(); ref.close()"
@@ -210,31 +217,31 @@
       >
         {{ data.prize ? 'Update Prize' : 'Create Prize' }}
       </button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <!-- Delete Confirmation Dialog -->
 <ng-template #deletePrizeDialogBox let-data let-ref="dialogRef">
-  <nb-card>
-    <nb-card-header>
+  <com-card>
+    <com-card-header>
       <span>Confirm Delete Prize</span>
       <button (click)="ref.close()" ghost nbButton shape="round" size="small">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>Are you sure you want to delete this prize?</nb-card-body>
-    <nb-card-footer>
+    </com-card-header>
+    <com-card-body>Are you sure you want to delete this prize?</com-card-body>
+    <com-card-footer>
       <button (click)="deletePrize(data.prizeId, data.index); ref.close()" nbButton status="danger">Delete</button>
       <button (click)="ref.close()" nbButton ghost>Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <!-- Winners Management Dialog -->
 <ng-template #winnersDialogBox let-ref="dialogRef">
-  <nb-card class="prize-distribution-dialog">
-    <nb-card-header>
+  <com-card class="prize-distribution-dialog">
+    <com-card-header>
       <div class="header-content">
         <div class="prize-info">
           <span class="prize-title">{{ selectedPrize?.name }}</span>
@@ -249,8 +256,8 @@
           <nb-icon icon="close"></nb-icon>
         </button>
       </div>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div class="search-container">
         <form [formGroup]="searchForm">
           <div class="search-input-wrapper">
@@ -444,8 +451,8 @@
           </tbody>
         </table>
       </div>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <div class="com-w-full">
         <app-pagination
           *ngIf="winnerTotal > 0"
@@ -459,52 +466,52 @@
           (previous)="onWinnerPageChange($event)"
         ></app-pagination>
       </div>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <!-- Add Winner Confirmation -->
 <ng-template #addWinnerDialogBox let-data let-ref="dialogRef">
-  <nb-card class="confirmation-dialog">
-    <nb-card-header>
+  <com-card class="confirmation-dialog">
+    <com-card-header>
       <span>Confirm Winner Selection</span>
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <p>
         You are about to select <strong>{{ data.team.name }}</strong> as a winner for the
         <strong>{{ selectedPrize?.name }}</strong> prize.
       </p>
       <p>Are you sure you want to proceed?</p>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button (click)="addWinner(data.team, data.index); ref.close()" nbButton status="primary">
         Yes, Select as Winner
       </button>
       <button (click)="ref.close()" nbButton ghost>Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <!-- Remove Winner Confirmation -->
 <ng-template #removeWinnerDialogBox let-data let-ref="dialogRef">
-  <nb-card class="confirmation-dialog">
-    <nb-card-header>
+  <com-card class="confirmation-dialog">
+    <com-card-header>
       <span>Confirm Winner Removal</span>
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <p>
         You are about to remove <strong>{{ data.teamName }}</strong> as a winner for the
         <strong>{{ selectedPrize?.name }}</strong> prize.
       </p>
       <p>Are you sure you want to proceed?</p>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button
         (click)="removeWinner(data.winnerId, data.userResponseIndex, data.winnerIndex); ref.close()"
         nbButton
@@ -513,6 +520,6 @@
         Yes, Remove Winner
       </button>
       <button (click)="ref.close()" nbButton ghost>Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

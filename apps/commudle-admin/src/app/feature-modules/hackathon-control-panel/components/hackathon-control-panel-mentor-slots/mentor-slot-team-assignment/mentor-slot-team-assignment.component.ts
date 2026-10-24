@@ -4,8 +4,6 @@ import {
   Output,
   EventEmitter,
   ChangeDetectionStrategy,
-  TemplateRef,
-  ViewChild,
   OnInit,
   ChangeDetectorRef,
   OnDestroy,
@@ -13,7 +11,6 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { faPlus, faXmark, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { NbDialogService } from '@commudle/theme';
 import {
   EHackathonTeamRoundScoreStatus,
   ERoundMentorSlotStatus,
@@ -37,21 +34,20 @@ export class MentorSlotTeamAssignmentComponent implements OnInit, OnChanges, OnD
   @Input() mentor: IHackathonJudge;
   @Input() slotTime: { starts_at: Date; ends_at: Date };
   @Input() roundMentorSlots: IRoundMentorSlot[];
+
   @Output() slotClick = new EventEmitter<IRoundMentorSlot>();
   @Output() cancelSlot = new EventEmitter<void>();
+
   EHackathonTeamRoundScoreStatus = EHackathonTeamRoundScoreStatus;
 
   currentSlot: IRoundMentorSlot;
   isSlotCancelled = false;
 
-  @ViewChild('cancelConfirmDialog') cancelConfirmDialog: TemplateRef<any>;
-  @ViewChild('activateConfirmDialog') activateConfirmDialog: TemplateRef<any>;
-
   readonly icons = { faPlus, faXmark, faCheck };
+
   private destroy$ = new Subject<void>();
 
   constructor(
-    private dialogService: NbDialogService,
     private roundMentorSlotService: RoundMentorSlotService,
     private toastrService: ToastrService,
     private cdr: ChangeDetectorRef,
@@ -79,6 +75,7 @@ export class MentorSlotTeamAssignmentComponent implements OnInit, OnChanges, OnD
         moment(slot.starts_at).isSame(moment(this.slotTime.starts_at)) &&
         moment(slot.ends_at).isSame(moment(this.slotTime.ends_at)),
     );
+
     this.isSlotCancelled =
       this.currentSlot?.status === ERoundMentorSlotStatus.CANCELLED ||
       this.currentSlot?.status === ERoundMentorSlotStatus.CANCELLED_BY_MENTOR;
@@ -86,25 +83,18 @@ export class MentorSlotTeamAssignmentComponent implements OnInit, OnChanges, OnD
 
   onSlotClick(): void {
     if (this.isSlotCancelled || !this.currentSlot) return;
+
     this.slotClick.emit(this.currentSlot);
   }
 
   onCancelSlot(event: Event): void {
     event.stopPropagation();
-    this.dialogService.open(this.cancelConfirmDialog).onClose.subscribe((confirmed) => {
-      if (confirmed) {
-        this.cancelMentorSlot();
-      }
-    });
+    this.cancelMentorSlot();
   }
 
   onActivateSlot(event: Event): void {
     event.stopPropagation();
-    this.dialogService.open(this.activateConfirmDialog).onClose.subscribe((confirmed) => {
-      if (confirmed) {
-        this.activateMentorSlot();
-      }
-    });
+    this.activateMentorSlot();
   }
 
   activateMentorSlot(): void {

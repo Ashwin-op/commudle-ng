@@ -138,4 +138,10 @@ export class HackathonControlPanelDashboardComponent implements OnInit, OnDestro
   toggleSidebar() {
     this.sidebarService.toggleSidebarVisibility(this.sidebarEventName);
   }
+
+  closeSidebarOnMobile() {
+    if (this.isMobileView) {
+      this.sidebarService.closeSidebar(this.sidebarEventName);
+    }
+  }
 }

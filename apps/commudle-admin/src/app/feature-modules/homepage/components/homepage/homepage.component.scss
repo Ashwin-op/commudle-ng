@@ -32,10 +32,8 @@
     .section-heading {
       @apply com-mt-0 com-mb-8 md:com-mb-12 com-text-left;
 
-      h2 {
-        a {
-          @apply com-m-0 com-text-2xl md:com-text-4xl com-font-semibold com-text-Yankees-Blue com-no-underline;
-        }
+      .title {
+        @apply com-flex com-items-center md:com-text-4xl com-text-2xl com-m-0 com-font-semibold com-text-Yankees-Blue com-no-underline;
       }
     }
 
@@ -57,7 +55,7 @@
       @apply com-flex com-flex-col com-m-0;
 
       .heading {
-        @apply com-text-center md:com-text-xl com-text-base com-font-bold com-text-primary-500 com-m-0 md:com-mb-4 com-mb-6;
+        @apply com-text-center com-flex com-items-center com-justify-center md:com-text-xl com-text-base com-font-bold com-text-primary-500 com-m-0 md:com-mb-4 com-mb-6;
       }
 
       .subheading {

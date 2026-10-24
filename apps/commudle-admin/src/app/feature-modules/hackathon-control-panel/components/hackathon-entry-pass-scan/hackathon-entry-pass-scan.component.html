@@ -1,7 +1,7 @@
 <div class="entry-pass-scan-page">
   <div class="page-container">
-    <nb-card>
-      <nb-card-header>
+    <com-card>
+      <com-card-header>
         <div class="header-wrapper">
           <h2>Entry Pass Scanner - {{ hackathon?.name }}</h2>
           <a [routerLink]="['checked-in-list']">
@@ -11,9 +11,9 @@
             </button>
           </a>
         </div>
-      </nb-card-header>
+      </com-card-header>
 
-      <nb-card-body>
+      <com-card-body>
         <!-- Scanner Controls -->
         <div *ngIf="hasPermission; else noPermission" class="controls-section">
           <div *ngIf="hasDevices; else noDevices" class="device-controls">
@@ -92,21 +92,21 @@
             <button [disabled]="!manualEntryPassInput.value" type="submit" nbButton status="primary">Submit</button>
           </form>
         </div>
-      </nb-card-body>
-    </nb-card>
+      </com-card-body>
+    </com-card>
   </div>
 </div>
 
 <ng-template #entryPassDetailsDialogBox let-ref="dialogRef">
-  <nb-card class="entry-pass-dialog">
-    <nb-card-header>
+  <com-card class="entry-pass-dialog">
+    <com-card-header>
       <div class="header-content">
         <h3>Entry Pass for team: {{ entryPass.hackathon_team.name }}</h3>
         <div class="pass-code">{{ entryPass.entry_pass_code }}</div>
       </div>
-    </nb-card-header>
+    </com-card-header>
 
-    <nb-card-body>
+    <com-card-body>
       <div class="entry-pass-content">
         <!-- Pass Owner -->
         <div class="pass-owner-section">
@@ -205,9 +205,9 @@
           </div>
         </div>
       </div>
-    </nb-card-body>
+    </com-card-body>
 
-    <nb-card-footer class="dialog-actions">
+    <com-card-footer class="dialog-actions">
       <button (click)="ref.close()" nbButton status="basic" ghost>
         <nb-icon icon="close-outline"></nb-icon>
         Cancel
@@ -220,6 +220,6 @@
         <nb-icon icon="checkmark-outline"></nb-icon>
         Confirm Entry
       </button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

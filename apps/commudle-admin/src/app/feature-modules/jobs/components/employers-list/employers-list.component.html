@@ -1,12 +1,12 @@
 <div class="base-layout">
   <div class="container !com-max-w-5xl">
     <div class="one-column-layout com-mb-10">
-      <nb-card>
-        <nb-card-header class="com-flex com-justify-between com-items-center">
+      <com-card>
+        <com-card-header>
           <span class="com-text-4xl com-font-normal">Techies Who Are Hiring</span>
           <button nbButton routerLink="/jobs" shape="semi-round" status="primary">View All Jobs</button>
-        </nb-card-header>
-        <nb-card-body>
+        </com-card-header>
+        <com-card-body>
           <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
           <div *ngFor="let user of users" class="employer">
             <app-user-profile-card-large [user]="user" class="com-py-2"></app-user-profile-card-large>
@@ -31,8 +31,8 @@
           >
             View More
           </button>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
     </div>
   </div>
 </div>

@@ -8,12 +8,11 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { ICommunity, IEvent } from '@commudle/shared-models';
 import { ILogoTint, LogoTintService } from '@commudle/shared-services';
 import { EventCollaborationCommunitiesService } from 'apps/commudle-admin/src/app/services/event-collaboration-communities.service';
 import { IEventCollaborationCommunity } from 'apps/shared-models/event_collaboration_community.model';
-
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-collaboration-communities',
   templateUrl: './collaboration-communities.component.html',
@@ -25,10 +24,9 @@ export class CollaborationCommunitiesComponent implements OnInit, OnChanges {
   @Input() event: IEvent;
   @Output() hasCollaborationCommunities = new EventEmitter();
 
-  faLink = faLink;
   collaborationCommunities: IEventCollaborationCommunity[] = [];
   logoTints: Record<number, ILogoTint> = {};
-
+  faHashtag = faHashtag;
   summary = {
     totalCommunities: 0,
     combinedMembers: 0,

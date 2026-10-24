@@ -1,12 +1,12 @@
 .checked-in-list-page {
-  nb-card {
-    nb-card-header {
+  com-card {
+    com-card-header {
       h2 {
         @apply com-m-0 com-text-xl com-font-semibold;
       }
     }
 
-    nb-card-body {
+    com-card-body {
       .loading {
         @apply com-flex com-justify-center com-py-8;
       }

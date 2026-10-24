@@ -1,0 +1,53 @@
+com-card {
+  @apply com-relative com-m-0 com-mb-4;
+
+  com-card-header {
+    @apply com-px-4 com-py-3 com-rounded-t-lg com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
+    @apply dark:com-from-[#080808] dark:com-via-[#141414] dark:com-to-[#080808] dark:com-bg-gradient-to-br;
+    @apply com-flex com-m-0 com-text-base com-font-semibold com-text-Yankees-Blue com-no-underline com-items-center com-gap-2;
+
+    .heading {
+      @apply com-flex com-items-center com-gap-2;
+    }
+
+    .icon {
+      @apply com-text-lg;
+    }
+  }
+
+  com-card-body {
+    @apply com-p-4;
+  }
+
+  .grid {
+    @apply com-grid com-grid-cols-1 sm:com-grid-cols-2 lg:com-grid-cols-3 com-gap-4;
+  }
+
+  .certificate-card {
+    @apply com-block com-p-4 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-no-underline com-transition-all com-duration-200;
+
+    &:hover {
+      @apply com-border-Ultramarine-Blue com-shadow-md;
+    }
+  }
+
+  // Same landscape ratio as the verify page's own pdf-frame
+  // (certificate-verify-page.component.scss) - most certificate designs
+  // are landscape.
+  .certificate-thumbnail {
+    @apply com-block com-w-full com-aspect-[1.414] com-object-cover com-rounded com-mb-3 com-bg-gray-100;
+  }
+
+  .certificate-title {
+    @apply com-font-semibold com-text-Yankees-Blue com-mb-1;
+  }
+
+  .certificate-issuer {
+    @apply com-text-sm com-text-Auro-Metal-Saurus;
+  }
+
+  .certificate-date {
+    @apply com-text-xs com-text-Auro-Metal-Saurus com-mt-1;
+  }
+}

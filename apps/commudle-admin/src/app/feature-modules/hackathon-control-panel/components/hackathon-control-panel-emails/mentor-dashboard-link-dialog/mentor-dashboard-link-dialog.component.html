@@ -1,18 +1,18 @@
-<nb-card class="mail-popup">
-  <nb-card-header>
+<com-card class="mail-popup">
+  <com-card-header>
     <span>{{ isBulk ? 'Send Dashboard Link to All Mentors' : 'Send Dashboard Link to ' + mentor.name + '' }}</span>
     <button nbButton size="small" shape="round" (click)="closeDialogBox()">
       <nb-icon icon="close"></nb-icon>
     </button>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <commudle-alert [info]="true" message="This will send a pre-formatted email "></commudle-alert>
     <div class="message-field">
       <label for="message" class="message">Message (Optional)</label>
       <editor [init]="tinyMCE" [(ngModel)]="message"></editor>
     </div>
-  </nb-card-body>
-  <nb-card-footer>
+  </com-card-body>
+  <com-card-footer>
     <button
       nbButton
       status="primary"
@@ -24,5 +24,5 @@
     >
       Send
     </button>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

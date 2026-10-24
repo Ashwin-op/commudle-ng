@@ -1,11 +1,11 @@
 <div class="base-layout">
   <div class="container">
     <div class="one-column-layout">
-      <nb-card class="discount-code-container">
-        <nb-card-header>
+      <com-card class="discount-code-container">
+        <com-card-header>
           <h4>Discount Codes Management</h4>
-        </nb-card-header>
-        <nb-card-body>
+        </com-card-header>
+        <com-card-body>
           <div class="button-filter">
             <button nbButton status="primary" (click)="openCreateForm()" shape="semi-round">
               <fa-icon [icon]="icons.faAdd"></fa-icon> &nbsp; Add New Discount Code
@@ -90,8 +90,8 @@
               <p>No discount codes found for the selected filter.</p>
             </div>
           </div>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
     </div>
   </div>
 </div>

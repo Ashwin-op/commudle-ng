@@ -1,11 +1,11 @@
-<nb-card class="prize-form">
-  <nb-card-header>
+<com-card class="prize-form">
+  <com-card-header>
     <span>{{ hackathonPrize ? 'Edit Prize' : 'New Prize' }}</span>
     <button (click)="closeForm()" ghost nbButton shape="round" size="small">
       <nb-icon icon="close"></nb-icon>
     </button>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <form [formGroup]="prizeForm" class="form-fields">
       <div class="form-group">
         <label for="name">Name <span class="required">*</span></label>
@@ -36,6 +36,13 @@
             <option [value]="1">1st</option>
             <option [value]="2">2nd</option>
             <option [value]="3">3rd</option>
+            <option [value]="4">4th</option>
+            <option [value]="5">5th</option>
+            <option [value]="6">6th</option>
+            <option [value]="7">7th</option>
+            <option [value]="8">8th</option>
+            <option [value]="9">9th</option>
+            <option [value]="10">10th</option>
           </select>
           <commudle-alert
             *ngIf="prizeForm.get('order').touched && prizeForm.get('order').hasError('required')"
@@ -111,8 +118,8 @@
         ></commudle-alert>
       </div>
     </form>
-  </nb-card-body>
-  <nb-card-footer>
+  </com-card-body>
+  <com-card-footer>
     <button (click)="closeForm()" nbButton ghost status="basic">Cancel</button>
     <button
       (click)="hackathonPrize ? updatePrize(hackathonPrize.id) : createPrize()"
@@ -122,5 +129,5 @@
     >
       {{ hackathonPrize ? 'Update Prize' : 'Create Prize' }}
     </button>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

@@ -4,10 +4,13 @@
   id="work-history"
 >
   <com-card-header>
-    <a [routerLink]="'.'" fragment="work-history">
-      <fa-icon [icon]="faBuilding" class="com-text-Caribbean-Green"></fa-icon>
+    <div class="section-heading-anchor heading">
+      <fa-icon [icon]="faBuilding" class="com-text-Caribbean-Green icon"></fa-icon>
       Work History
-    </a>
+      <a [routerLink]="'.'" fragment="work-history" class="anchor-link" aria-label="Link to work history section">
+        <fa-icon [icon]="faHashtag" class="anchor-icon-small"></fa-icon>
+      </a>
+    </div>
   </com-card-header>
   <com-card-body>
     <button

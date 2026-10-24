@@ -6,6 +6,7 @@ import { ExpertsProgramComponent } from './components/experts-program/experts-pr
 import { AppSharedComponentsModule } from 'apps/commudle-admin/src/app/app-shared-components/app-shared-components.module';
 import { SharedComponentsModule } from '@commudle/shared-components';
 import { NbButtonModule } from '@commudle/theme';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [ExpertsProgramComponent],
@@ -15,6 +16,7 @@ import { NbButtonModule } from '@commudle/theme';
     AppSharedComponentsModule,
     SharedComponentsModule,
     NbButtonModule,
+    FontAwesomeModule,
   ],
 })
 export class ExpertProgramModule {}

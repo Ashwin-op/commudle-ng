@@ -2,7 +2,7 @@
   <div *ngIf="!hideUser" class="user">
     <app-user-profile-card-large [showFollowButton]="true" [user]="lab.user"></app-user-profile-card-large>
   </div>
-  <nb-card *ngIf="!hideSteps" class="steps">
+  <com-card *ngIf="!hideSteps" class="steps">
     <nb-list>
       <nb-list-item
         (click)="onSetStep(-1)"
@@ -35,16 +35,16 @@
         </div>
       </nb-list-item>
     </nb-list>
-  </nb-card>
-  <nb-card *ngIf="similarLabs.length > 0 && !hideRelatedLabs" class="related-labs">
-    <nb-card-header>Related Labs</nb-card-header>
-    <nb-card-body>
+  </com-card>
+  <com-card *ngIf="similarLabs.length > 0 && !hideRelatedLabs" class="related-labs">
+    <com-card-header>Related Labs</com-card-header>
+    <com-card-body>
       <div *ngFor="let lab of similarLabs" [routerLink]="['/labs', lab.slug]" class="details clickable">
         <p class="name">{{ lab.name }}</p>
         <p class="type">LAB</p>
       </div>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
   <ng-container *ngIf="!hideRecommendedLabs">
     <app-recommended-labs></app-recommended-labs>
   </ng-container>

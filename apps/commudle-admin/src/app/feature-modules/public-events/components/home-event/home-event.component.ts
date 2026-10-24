@@ -4,7 +4,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { IUser } from '@commudle/shared-models';
 import { DiscussionService, removeHtmlTags } from '@commudle/shared-services';
 import { NbMenuService } from '@commudle/theme';
-import { faCalendar, faClockFour, faEllipsisVertical, faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { faCalendar, faClockFour, faEllipsisVertical, faGlobe, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
 import { DiscussionsService } from 'apps/commudle-admin/src/app/services/discussions.service';
 import { EventsService } from 'apps/commudle-admin/src/app/services/events.service';
@@ -69,6 +69,7 @@ export class HomeEventComponent implements OnInit, OnDestroy, AfterViewInit {
   faCalendar = faCalendar;
   faClockFour = faClockFour;
   faGlobe = faGlobe;
+  faHashtag = faHashtag;
   interestedUsers: IUser[];
   interestedUsersCount: number;
   formsData: IEventDataFormEntityGroup[] = [];

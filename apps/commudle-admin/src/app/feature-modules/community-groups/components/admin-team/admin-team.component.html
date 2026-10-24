@@ -62,21 +62,21 @@
 </com-card>
 
 <ng-template #removeConfirmationDialog let-ref="dialogRef" let-context>
-  <nb-card class="remove-dialog">
-    <nb-card-header class="remove-dialog-header">
+  <com-card class="remove-dialog">
+    <com-card-header class="remove-dialog-header">
       <span>Remove Team Member</span>
       <button (click)="ref.close()" ghost nbButton size="small" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <p class="remove-dialog-text">
         Are you sure you want to remove <strong>{{ team[context.index]?.user?.name }}</strong> from the admin team?
       </p>
-    </nb-card-body>
-    <nb-card-footer class="remove-dialog-footer">
+    </com-card-body>
+    <com-card-footer class="remove-dialog-footer">
       <button (click)="ref.close()" nbButton outline status="basic" size="small">Cancel</button>
       <button (click)="remove(context.index, ref)" nbButton status="danger" size="small">Remove</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

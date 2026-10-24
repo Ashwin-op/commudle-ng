@@ -1,7 +1,11 @@
 <com-card id="agenda">
   <com-card-header>
-    <h6 class="title">
-      <a [routerLink]="'.'" fragment="agenda"><nb-icon icon="calendar-outline" status="primary"></nb-icon>Agenda</a>
+    <h6 class="title section-heading-anchor">
+      <nb-icon icon="calendar-outline" status="primary"></nb-icon>
+      Agenda
+      <a [routerLink]="'.'" fragment="agenda" class="anchor-link" aria-label="Link to Agenda section">
+        <fa-icon [icon]="faHashtag" class="anchor-icon-small"></fa-icon>
+      </a>
     </h6>
     <div *ngIf="showShareButton" class="share-btn">
       <a [routerLink]="['/communities', community.slug, 'events', event.slug, 'agenda']" target="_blank">

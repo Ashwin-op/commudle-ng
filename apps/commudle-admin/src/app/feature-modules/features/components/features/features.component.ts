@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { IFaq } from '@commudle/shared-models';
 import { SeoService } from '@commudle/shared-services';
-import { faArrowRightArrowLeft, faArrowUpRightDots, faChartSimple } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightArrowLeft, faArrowUpRightDots, faChartSimple, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { DarkModeService } from 'apps/commudle-admin/src/app/services/dark-mode.service';
 import { FooterService } from 'apps/commudle-admin/src/app/services/footer.service';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
@@ -11,10 +11,10 @@ import { ResponsiveService } from 'apps/shared-services/responsive.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'commudle-features',
-    templateUrl: './features.component.html',
-    styleUrls: ['./features.component.scss'],
-    standalone: false
+  selector: 'commudle-features',
+  templateUrl: './features.component.html',
+  styleUrls: ['./features.component.scss'],
+  standalone: false,
 })
 export class FeaturesComponent implements OnInit, OnDestroy {
   @Input() categoryName = 'all';
@@ -34,6 +34,7 @@ export class FeaturesComponent implements OnInit, OnDestroy {
   isDarkMode = false;
   faqs: IFaq[];
   headerImgUrl = staticAssets.features_page_header;
+  faHashtag = faHashtag;
 
   constructor(
     private cmsService: CmsService,

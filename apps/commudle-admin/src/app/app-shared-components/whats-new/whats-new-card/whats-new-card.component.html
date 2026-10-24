@@ -18,18 +18,18 @@
 </li>
 
 <ng-template #imageTemplate let-ref="dialogRef" let-data>
-  <nb-card class="image-popup">
-    <nb-card-body>
+  <com-card class="image-popup">
+    <com-card-body>
       <div class="image-wrapper">
         <img [src]="data.image" [alt]="data.title" />
       </div>
-    </nb-card-body>
-    <nb-card-footer class="close-button-footer">
+    </com-card-body>
+    <com-card-footer class="close-button-footer">
       <div class="close-button-container">
         <button nbButton size="medium" class="close-button" (click)="ref.close()" aria-label="Close">
           <nb-icon icon="close" class="close-icon"></nb-icon>
         </button>
       </div>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

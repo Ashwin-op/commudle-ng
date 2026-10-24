@@ -2,8 +2,8 @@
   <div class="container">
     <div *ngIf="lab" class="two-column-layout medium mobile-reverse">
       <div class="main-column">
-        <nb-card>
-          <nb-card-body>
+        <com-card>
+          <com-card-body>
             <p class="heading">Changes will be auto saved every 10 seconds</p>
 
             <form [formGroup]="headerImageForm" class="lab-header-image">
@@ -81,14 +81,14 @@
                 </div>
               </div>
             </form>
-          </nb-card-body>
-        </nb-card>
+          </com-card-body>
+        </com-card>
         <div *ngIf="labForm['controls'].lab_steps['controls'].length > 0" [formGroup]="labForm">
-          <nb-card
+          <com-card
             *ngFor="let lStep of labForm['controls'].lab_steps['controls']; let i = index"
             formArrayName="lab_steps"
           >
-            <nb-card-body>
+            <com-card-body>
               <div>
                 <div [formGroupName]="i" class="lab-step">
                   <h3 class="steps-counter d-flex justify-content-start align-items-center com-mb-0">
@@ -132,22 +132,22 @@
                   </div>
                 </div>
               </div>
-            </nb-card-body>
-          </nb-card>
+            </com-card-body>
+          </com-card>
         </div>
 
-        <nb-card class="clickable">
-          <nb-card-body (click)="addStep()">
+        <com-card class="clickable">
+          <com-card-body (click)="addStep()">
             <div class="add-step-button text-center">
               <nb-icon icon="plus"></nb-icon>
               <br />
               Add New Section
             </div>
-          </nb-card-body>
-        </nb-card>
+          </com-card-body>
+        </com-card>
 
-        <nb-card>
-          <nb-card-body>
+        <com-card>
+          <com-card-body>
             <div class="tags">
               <p>Adding some TAGS will help you get better visibility 😃</p>
               <span *ngIf="showTagsValidation && tags.length < 5">
@@ -162,8 +162,8 @@
                 [tags]="tags"
               ></app-tag>
             </div>
-          </nb-card-body>
-        </nb-card>
+          </com-card-body>
+        </com-card>
         <div class="actions-card">
           <p class="publish-notification text-basic">
             <i *ngIf="lab.publish_status !== EPublishStatus.published">
@@ -197,16 +197,16 @@
       </div>
       <div class="right-column">
         <div>
-          <nb-card>
-            <nb-card-body>
+          <com-card>
+            <com-card-body>
               <a [routerLink]="['/labs', lab.slug]" class="preview" ghost nbButton target="_blank">
                 <nb-icon icon="eye"></nb-icon>
                 <p>Preview</p>
               </a>
-            </nb-card-body>
-          </nb-card>
-          <nb-card>
-            <nb-card-body class="guide">
+            </com-card-body>
+          </com-card>
+          <com-card>
+            <com-card-body class="guide">
               <p>
                 A good lab has clear steps and images to help you understand.
                 <commudle-help-section [helpDictionaryName]="'lab-create'"></commudle-help-section>
@@ -219,14 +219,14 @@
                 <p>Guide Video</p>
               </div>
               <ng-template #guideVideo let-data>
-                <nb-card>
-                  <nb-card-body>
+                <com-card>
+                  <com-card-body>
                     <youtube-player videoId="Ef_7SgjaoEM"></youtube-player>
-                  </nb-card-body>
-                </nb-card>
+                  </com-card-body>
+                </com-card>
               </ng-template>
-            </nb-card-body>
-          </nb-card>
+            </com-card-body>
+          </com-card>
         </div>
       </div>
     </div>
@@ -234,14 +234,14 @@
 </div>
 
 <ng-template #submitDialog>
-  <nb-card>
-    <nb-card-header>Insufficient number of sections</nb-card-header>
-    <nb-card-body>
+  <com-card>
+    <com-card-header>Insufficient number of sections</com-card-header>
+    <com-card-body>
       We suggest you create your lab in 3 or more sections as it becomes easier for the reader
-    </nb-card-body>
-    <nb-card-footer class="d-flex justify-content-space-between">
+    </com-card-body>
+    <com-card-footer class="d-flex justify-content-space-between">
       <button (click)="onSubmitDialogClose()" nbButton status="danger">Go back</button>
       <button (click)="updateLab(EPublishStatus.submitted, true)" nbButton status="success">Continue</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

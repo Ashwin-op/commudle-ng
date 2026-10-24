@@ -15,10 +15,10 @@
     .content {
       @apply com-w-full md:com-max-w-[744px];
 
-      nb-card {
+      com-card {
         @apply com-min-h-[80vh] com-border-none com-mt-0 com-mx-4 com-mb-4;
 
-        nb-card-body {
+        com-card-body {
           @apply com-p-16;
 
           .introduction {
@@ -141,12 +141,12 @@
           }
         }
 
-        nb-card-footer {
+        com-card-footer {
           @apply com-bg-Anti-Flash com-border-0 com-pt-6 com-px-0 com-pb-0;
         }
 
         @media all and (max-width: 768px) {
-          nb-card-body {
+          com-card-body {
             @apply com-p-5;
 
             .introduction {
@@ -156,7 +156,7 @@
             }
           }
 
-          nb-card-footer {
+          com-card-footer {
             @apply com-sticky com-bottom-16 com-py-2 com-px-0;
           }
         }
@@ -240,7 +240,7 @@
             top: initial;
             @apply com-w-full;
 
-            nb-card {
+            com-card {
               width: initial;
             }
 
@@ -270,7 +270,7 @@
                   top: initial;
                   @apply com-w-full;
 
-                  nb-card {
+                  com-card {
                     width: initial;
                   }
 

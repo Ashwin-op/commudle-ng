@@ -125,6 +125,7 @@ import { UsersModule } from './feature-modules/users/users.module';
 import { AppInitService } from './services/app-init.service';
 import { LoginSignupComponent } from 'apps/commudle-admin/src/app/components/login-signup/login-signup.component';
 import { FillDataFormConfirmationComponent } from 'apps/commudle-admin/src/app/components/fill-data-form/fill-data-form-confirmation/fill-data-form-confirmation.component';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 
 export function initApp(appInitService: AppInitService): () => Promise<any> {
   return () => appInitService.initializeApp();
@@ -258,6 +259,7 @@ export function initApp(appInitService: AppInitService): () => Promise<any> {
     ListingPageHeaderComponent,
     UserExpertTickComponent,
     RecaptchaV3Module,
+    CommudleCardModule,
   ],
   providers: [
     AppInitService,

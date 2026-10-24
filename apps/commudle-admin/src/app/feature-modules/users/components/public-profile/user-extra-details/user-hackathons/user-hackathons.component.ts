@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { IUser } from '@commudle/shared-models';
 import { IUserHackathon } from '@commudle/shared-models';
-import { faCode, faTrophy } from '@fortawesome/free-solid-svg-icons';
+import { faCode, faHashtag, faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 import { UserProfileMenuService } from 'apps/commudle-admin/src/app/feature-modules/users/services/user-profile-menu.service';
 import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.service';
@@ -17,7 +17,7 @@ export class UserHackathonsComponent implements OnInit, OnDestroy {
   hackathons: IUserHackathon[] = [];
   isLoading = true;
   icons = { faTrophy };
-
+  faHashtag = faHashtag;
   private subscriptions: Subscription[] = [];
 
   constructor(private appUsersService: AppUsersService, private userProfileMenuService: UserProfileMenuService) {}

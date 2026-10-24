@@ -1,5 +1,7 @@
 // @import './apps/commudle-admin/src/assets/styles/variables';
-
+.admin-asset-form {
+  @apply com-mt-4;
+}
 .file-container {
   @apply com-items-center com-flex com-justify-center;
 }

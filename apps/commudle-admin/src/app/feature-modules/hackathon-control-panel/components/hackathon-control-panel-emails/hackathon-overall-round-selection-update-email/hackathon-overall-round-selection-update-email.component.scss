@@ -1,6 +1,6 @@
 .round-selection-mailer {
   @apply md:com-w-[40dvw] com-max-h-[90dvh] com-w-auto com-mx-0;
-  nb-card-header {
+  com-card-header {
     @apply com-flex com-justify-between com-items-center;
 
     span {
@@ -28,7 +28,7 @@
     @apply com-text-sm com-font-medium com-text-Yankees-Blue;
   }
 
-  nb-card-footer {
+  com-card-footer {
     @apply com-flex com-justify-between com-items-center com-gap-6;
   }
 

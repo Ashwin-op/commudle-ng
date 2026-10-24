@@ -1,10 +1,10 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { IEvent } from 'apps/shared-models/event.model';
-import { faCalendarCheck, faLink } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
 import { EventsService } from 'apps/commudle-admin/src/app/services/events.service';
 import { IPageInfo } from 'apps/shared-models/page-info.model';
 import { ActivatedRoute } from '@angular/router';
-
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'commudle-public-home-list-events-past',
   templateUrl: './public-home-list-events-past.component.html',
@@ -14,8 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 export class PublicHomeListEventsPastComponent implements OnInit, AfterViewInit {
   pastEvents: IEvent[] = [];
   faCalendarCheck = faCalendarCheck;
-  faLink = faLink;
-
+  faHashtag = faHashtag;
   page_info: IPageInfo;
   limit = 9;
   total: number;

@@ -9,7 +9,7 @@ import { ITrackSlot } from 'apps/shared-models/track-slot.model';
 import { SeoService } from 'apps/shared-services/seo.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-agenda',
   templateUrl: './agenda.component.html',
@@ -30,7 +30,7 @@ export class AgendaComponent implements OnInit {
   isLoading = true;
   selectedLocation;
   upcomingEvents: Array<ITrackSlot> = [];
-
+  faHashtag = faHashtag;
   constructor(
     private eventLocationsService: EventLocationsService,
     private seoService: SeoService,

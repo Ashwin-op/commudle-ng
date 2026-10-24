@@ -4,12 +4,12 @@ import { EventsService } from 'apps/commudle-admin/src/app/services/events.servi
 import { SocialResourceService } from 'apps/commudle-admin/src/app/services/social-resource.service';
 import { IPageInfo } from 'apps/shared-models/page-info.model';
 import { ISpeakerResource } from 'apps/shared-models/speaker_resource.model';
-
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
-    selector: 'commudle-public-home-list-speakers-content',
-    templateUrl: './public-home-list-speakers-content.component.html',
-    styleUrls: ['./public-home-list-speakers-content.component.scss'],
-    standalone: false
+  selector: 'commudle-public-home-list-speakers-content',
+  templateUrl: './public-home-list-speakers-content.component.html',
+  styleUrls: ['./public-home-list-speakers-content.component.scss'],
+  standalone: false,
 })
 export class PublicHomeListSpeakersContentComponent implements OnInit {
   @Input() parentType: string;
@@ -23,7 +23,7 @@ export class PublicHomeListSpeakersContentComponent implements OnInit {
   isLoadingTechSessions = false;
   showSkeletonCard = true;
   limit = 3;
-
+  faHashtag = faHashtag;
   constructor(
     private socialResourceService: SocialResourceService,
     private eventsService: EventsService,

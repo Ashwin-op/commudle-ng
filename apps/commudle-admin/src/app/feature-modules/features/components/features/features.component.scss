@@ -14,7 +14,7 @@ a {
   @apply com-flex com-flex-col com-text-center com-mx-0 md:com-mt-14 com-mt-10;
 
   .heading {
-    @apply com-my-0 md:com-text-[60px] com-text-3xl com-font-extrabold com-text-gray-900 sm:com-text-6xl com-mb-4;
+    @apply com-my-0 com-gap-2 md:com-text-[60px] com-text-3xl com-font-extrabold com-text-gray-900 sm:com-text-6xl com-mb-4;
 
     //TODO: Convert style css to tailwindCss
     span {
@@ -31,10 +31,7 @@ a {
 }
 
 .features-heading {
-  @apply com-text-center md:com-pt-28 com-pt-10 com-pb-4 com-m-0;
-  a {
-    @apply md:com-text-4xl com-text-3xl com-font-semibold com-text-black com-m-0 com-mb-4 com-no-underline;
-  }
+  @apply com-text-center com-gap-2 md:com-pt-28 com-pt-10 com-pb-4 com-m-0 md:com-text-4xl com-text-3xl com-font-semibold com-text-black com-m-0 com-mb-4 com-no-underline com-flex com-items-center com-justify-center;
 }
 
 .features-subheading {
@@ -65,11 +62,8 @@ a {
   }
 }
 
-.heading {
-  @apply com-m-0;
-  a {
-    @apply com-no-underline md:com-text-5xl com-text-3xl com-font-bold com-text-Yankees-Blue;
-  }
+.platform .heading {
+  @apply com-m-0 com-no-underline com-gap-2 md:com-text-5xl com-text-3xl com-font-bold com-text-Yankees-Blue com-flex com-items-center com-justify-center;
 }
 
 .subheading {
@@ -97,7 +91,7 @@ a {
           @apply com-flex com-flex-col;
 
           .heading {
-            @apply com-m-0 md:com-mb-14px com-mb-4 com-text-2xl com-font-bold com-text-Yankees-Blue md:com-text-left com-text-center;
+            @apply com-m-0 md:com-mb-14px com-mb-4 com-text-2xl com-font-bold com-text-Yankees-Blue md:com-text-left com-text-center com-flex com-items-center com-justify-center;
           }
 
           .subheading {
@@ -128,9 +122,7 @@ a {
 .build-community {
   @apply com-flex com-flex-col com-items-center com-text-center md:com-mt-0 com-mt-8;
   .heading-build-community {
-    a {
-      @apply com-m-0 md:com-mb-0 com-mb-4 com-text-4xl com-font-bold com-text-Yankees-Blue com-no-underline;
-    }
+    @apply com-m-0 com-gap-2 md:com-mb-0 com-mb-4 com-text-4xl com-font-bold com-text-Yankees-Blue com-no-underline com-flex com-items-center com-justify-center;
   }
 
   .image {

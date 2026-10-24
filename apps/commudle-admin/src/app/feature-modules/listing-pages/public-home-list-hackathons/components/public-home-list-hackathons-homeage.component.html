@@ -2,28 +2,40 @@
   <div header>
     <commudle-listing-page-header [parentType]="'hackathons'"></commudle-listing-page-header>
   </div>
-  <div one-column *ngIf="isMobileView">
+
+  <div one-column *appBreakpoints="'<=lg'">
     <div class="publish-hackathon-button">
       <a [routerLink]="['/pricing']" nbButton size="giant" class="button">
         <nb-icon icon="plus"></nb-icon>
         Start your hackathon
       </a>
     </div>
+
     <app-skeleton-cards
       *ngIf="showSpinnerUpcoming"
       [ImageShapeCircle]="false"
       [ImageShapeSquare]="true"
       [cards]="4"
     ></app-skeleton-cards>
+
     <div *ngIf="upcomingHackathons.length > 0 && !showSpinnerUpcoming" id="upcoming-events" class="upcoming-events">
       <h2 class="title">
-        <a [routerLink]="'.'" fragment="upcoming-hackathons">
-          <div class="heading-subheading">
-            <span class="title">Upcoming Hackathons</span
-            ><span class="sub-heading">Explore latest & exciting hackathons</span>
-          </div></a
-        >
+        <div class="heading-subheading">
+          <h3 class="title section-heading-anchor">
+            <span>Upcoming Hackathons</span>
+            <a
+              [routerLink]="'.'"
+              fragment="upcoming-hackathons"
+              class="anchor-link"
+              aria-label="Link to upcoming hackathons section"
+            >
+              <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+            </a>
+          </h3>
+          <span class="sub-heading">Explore latest & exciting hackathons</span>
+        </div>
       </h2>
+
       <div *ngFor="let upcomingHackathon of upcomingHackathons" class="event-horizontal-card" id="upcoming-hackathons">
         <commudle-hackathon-horizontal-card
           [hackathon]="upcomingHackathon"
@@ -31,33 +43,48 @@
         ></commudle-hackathon-horizontal-card>
       </div>
     </div>
+
     <div class="featured-communities">
       <commudle-public-home-list-events-featured-communities></commudle-public-home-list-events-featured-communities>
     </div>
+
     <div class="events-upcoming">
       <commudle-public-home-list-speakers-upcoming></commudle-public-home-list-speakers-upcoming>
     </div>
+
     <div class="explore-experts">
       <commudle-explore-experts></commudle-explore-experts>
     </div>
+
     <div class="tech-sessions">
       <commudle-public-home-list-events-tech-sessions></commudle-public-home-list-events-tech-sessions>
     </div>
+
     <app-skeleton-cards
       *ngIf="showSpinnerPast"
       [ImageShapeCircle]="false"
       [ImageShapeSquare]="true"
       [cards]="4"
     ></app-skeleton-cards>
+
     <div *ngIf="pastHackathons.length > 0 && !showSpinnerPast" class="past-hackathons-container">
       <h2 class="title">
-        <a [routerLink]="'.'" fragment="past-hackathons">
-          <div class="heading-subheading">
-            <span class="title">Past Hackathons</span
-            ><span class="sub-heading">Explore latest & exciting hackathons</span>
-          </div></a
-        >
+        <div class="heading-subheading">
+          <h3 class="title section-heading-anchor">
+            <span>Past Hackathons</span>
+            <a
+              [routerLink]="'.'"
+              fragment="past-hackathons"
+              class="anchor-link"
+              aria-label="Link to past hackathons section"
+            >
+              <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+            </a>
+          </h3>
+          <span class="sub-heading">Explore latest & exciting hackathons</span>
+        </div>
       </h2>
+
       <div class="past-hackathons">
         <div *ngFor="let hackathon of pastHackathons" id="past-hackathons">
           <commudle-hackathon-medium-card [hackathon]="hackathon"></commudle-hackathon-medium-card>
@@ -65,22 +92,33 @@
       </div>
     </div>
   </div>
-  <div main-column *ngIf="!isMobileView">
+
+  <div main-column *appBreakpoints="'>lg'">
     <app-skeleton-cards
       *ngIf="showSpinnerUpcoming"
       [ImageShapeCircle]="false"
       [ImageShapeSquare]="true"
       [cards]="4"
     ></app-skeleton-cards>
+
     <div *ngIf="upcomingHackathons.length > 0 && !showSpinnerUpcoming" id="upcoming-events" class="upcoming-events">
       <h2 class="title">
-        <a [routerLink]="'.'" fragment="upcoming-hackathons">
-          <div class="heading-subheading">
-            <span class="title">Upcoming Hackathons</span
-            ><span class="sub-heading">Explore latest & exciting hackathons</span>
-          </div></a
-        >
+        <div class="heading-subheading">
+          <h3 class="title section-heading-anchor">
+            <span>Upcoming Hackathons</span>
+            <a
+              [routerLink]="'.'"
+              fragment="upcoming-hackathons"
+              class="anchor-link"
+              aria-label="Link to upcoming hackathons section"
+            >
+              <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+            </a>
+          </h3>
+          <span class="sub-heading">Explore latest & exciting hackathons</span>
+        </div>
       </h2>
+
       <div *ngFor="let upcomingHackathon of upcomingHackathons" class="event-horizontal-card" id="upcoming-hackathons">
         <commudle-hackathon-horizontal-card
           [hackathon]="upcomingHackathon"
@@ -88,21 +126,32 @@
         ></commudle-hackathon-horizontal-card>
       </div>
     </div>
+
     <app-skeleton-cards
       *ngIf="showSpinnerPast"
       [ImageShapeCircle]="false"
       [ImageShapeSquare]="true"
       [cards]="4"
     ></app-skeleton-cards>
+
     <div *ngIf="pastHackathons.length > 0 && !showSpinnerPast" class="past-hackathons-container">
       <h2 class="title">
-        <a [routerLink]="'.'" fragment="past-hackathons">
-          <div class="heading-subheading">
-            <span class="title">Past Hackathons</span
-            ><span class="sub-heading">Explore latest & exciting hackathons</span>
-          </div></a
-        >
+        <div class="heading-subheading">
+          <h3 class="title section-heading-anchor">
+            <span>Past Hackathons</span>
+            <a
+              [routerLink]="'.'"
+              fragment="past-hackathons"
+              class="anchor-link"
+              aria-label="Link to past hackathons section"
+            >
+              <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+            </a>
+          </h3>
+          <span class="sub-heading">Explore latest & exciting hackathons</span>
+        </div>
       </h2>
+
       <div class="past-hackathons">
         <div *ngFor="let hackathon of pastHackathons" id="past-hackathons">
           <commudle-hackathon-medium-card [hackathon]="hackathon"></commudle-hackathon-medium-card>
@@ -110,6 +159,7 @@
       </div>
     </div>
   </div>
+
   <div right-column class="right-column">
     <div class="publish-hackathon-button">
       <a [routerLink]="['/pricing']" nbButton size="giant" class="button">
@@ -117,15 +167,19 @@
         Start your hackathon
       </a>
     </div>
+
     <div class="featured-communities">
       <commudle-public-home-list-events-featured-communities></commudle-public-home-list-events-featured-communities>
     </div>
+
     <div class="events-upcoming">
       <commudle-public-home-list-speakers-upcoming></commudle-public-home-list-speakers-upcoming>
     </div>
+
     <div class="explore-experts">
       <commudle-explore-experts></commudle-explore-experts>
     </div>
+
     <div class="tech-sessions">
       <commudle-public-home-list-events-tech-sessions></commudle-public-home-list-events-tech-sessions>
     </div>

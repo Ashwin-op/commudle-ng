@@ -75,6 +75,10 @@ input {
   .anchor-icon-small {
     @apply com-text-sm;
   }
+
+  .anchor-icon-large {
+    @apply com-text-xl;
+  }
 }
 
 .section-heading-anchor:hover .anchor-link {
@@ -407,7 +411,7 @@ nb-option-list.search-autocomplete {
 }
 
 .pac-container {
-  z-index: 1051 !important;
+  z-index: 10000 !important;
 }
 
 .nb-theme-default nb-card {

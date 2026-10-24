@@ -75,14 +75,14 @@
 </div>
 
 <ng-template #logoutDialogBox let-ref="dialogRef">
-  <nb-card class="logout-confirmation">
-    <nb-card-body>
+  <com-card class="logout-confirmation">
+    <com-card-body>
       <h3>Are you sure?</h3>
       <p>You’ll be signed out of your account and redirected to the homepage.</p>
-    </nb-card-body>
-    <nb-card-footer class="action-buttons !com-my-0">
+    </com-card-body>
+    <com-card-footer class="action-buttons !com-my-0">
       <button nbButton status="danger" shape="semi-round" fullWidth (click)="logout(); ref.close()">Yes, Logout</button>
       <button nbButton status="basic" shape="semi-round" fullWidth (click)="ref.close()">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

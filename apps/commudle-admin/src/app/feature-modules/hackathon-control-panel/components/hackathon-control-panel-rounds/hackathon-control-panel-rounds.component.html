@@ -1,8 +1,8 @@
-<nb-card>
-  <nb-card-header
+<com-card>
+  <com-card-header
     >Rounds<commudle-help-section [helpDictionaryName]="'hackathon-rounds'"></commudle-help-section
-  ></nb-card-header>
-  <nb-card-body>
+  ></com-card-header>
+  <com-card-body>
     <button (click)="openRoundDialogBox(addRoundsDialogBox)" nbButton status="primary">
       <fa-icon [icon]="icons.faPlus"></fa-icon> &nbsp; Add Round
     </button>
@@ -91,8 +91,8 @@
       </table>
     </div>
     }
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
 <div *ngIf="hackathon" class="next-step-container">
   <a>
@@ -133,14 +133,14 @@
 </div>
 
 <ng-template #addRoundsDialogBox let-ref="dialogRef" let-data>
-  <nb-card class="round-form-dialog-box">
-    <nb-card-header class="actions">
+  <com-card class="round-form-dialog-box">
+    <com-card-header class="actions">
       <span>{{ data.round ? 'Edit Round' : 'Add Round' }}</span>
       <button (click)="ref.close()" ghost nbButton shape="round" size="small">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <form [formGroup]="roundForm">
         <!-- name -->
         <div>
@@ -360,8 +360,8 @@
           </button>
         </div>
       </form>
-    </nb-card-body>
-    <nb-card-footer class="actions">
+    </com-card-body>
+    <com-card-footer class="actions">
       <button
         nbButton
         status="primary"
@@ -371,39 +371,39 @@
         {{ data.round ? 'Update Round' : 'Create Round' }}
       </button>
       <button nbButton status="danger" outline (click)="ref.close(); roundForm.reset()">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #conformDeleteDialogBox let-ref="dialogRef" let-data>
-  <nb-card>
-    <nb-card-header class="actions">
+  <com-card>
+    <com-card-header class="actions">
       <span>Are you sure?</span>
       <button (click)="ref.close()" ghost nbButton shape="round" size="small">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <p>If you delete this round, all the associated channels will also be deleted.</p>
-    </nb-card-body>
-    <nb-card-footer class="actions">
+    </com-card-body>
+    <com-card-footer class="actions">
       <button nbButton status="primary" (click)="destroyRound(data.roundId, data.index); ref.close()">Delete</button>
       <button nbButton status="danger" (click)="ref.close()" outline>Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #createChannelDialogBox let-ref="dialogRef" let-data>
-  <nb-card>
-    <nb-card-header class="actions">
+  <com-card>
+    <com-card-header class="actions">
       <span
         >Create Channel for Round: <strong>{{ data.round.name }}</strong></span
       >
       <button (click)="ref.close()" ghost nbButton shape="round" size="small">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <span>Are you sure you want to create a channel for {{ data.round.name }}?</span>
       <br />
       <span>This will:</span>
@@ -411,12 +411,12 @@
         <li>Create a channel and add all the selected teams and their members in the channel automatically.</li>
         <li>Add or remove any selected teams into this round to this channel when their round is changed.</li>
       </ol>
-    </nb-card-body>
-    <nb-card-footer class="actions">
+    </com-card-body>
+    <com-card-footer class="actions">
       <button nbButton status="primary" (click)="createChannel(data.round, data.index); ref.close()">
         Create Channel
       </button>
       <button nbButton status="danger" ghost (click)="ref.close()">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

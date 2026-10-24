@@ -1,7 +1,7 @@
 .template-card {
-  @apply com-m-0 com-p-0 md:com-w-[650px] com-h-full md:com-max-h-[90dvh] com-w-full com-overflow-y-auto;
+  @apply com-flex com-m-0 com-p-0 md:com-w-[650px] com-h-full md:com-max-h-[90dvh] com-w-full com-overflow-y-auto;
 
-  nb-card-header {
+  com-card-header {
     @apply com-flex com-items-center com-justify-between com-py-4 com-px-6;
 
     h3 {
@@ -13,7 +13,7 @@
     }
   }
 
-  nb-card-body {
+  com-card-body {
     @apply md:com-w-full com-w-[96dvw] com-overflow-x-hidden;
   }
 

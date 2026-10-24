@@ -34,7 +34,6 @@ import { environment } from '@commudle/shared-environments';
 import { RazorpayService } from '@commudle/shared-services';
 import { EDbModels, IRazorpayOrder } from '@commudle/shared-models';
 import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.service';
-import { IUserStat } from 'libs/shared/models/src/lib/user-stats.model';
 import { UserProfileManagerService } from 'apps/commudle-admin/src/app/feature-modules/users/services/user-profile-manager.service';
 import { UserDetailsFormComponent } from 'apps/shared-components/user-details-form/user-details-form.component';
 import { ResponsiveService } from 'apps/shared-services/responsive.service';
@@ -115,7 +114,6 @@ export class FillDataFormPaidComponent implements OnInit, OnDestroy, AfterViewIn
 
   showEventTicketOrder;
   isLoadingPayment = false;
-  userProfileDetails: IUserStat;
   formAnswers = {};
   isMobileView = false;
   refundPolicy: ICustomPage;
@@ -185,9 +183,6 @@ export class FillDataFormPaidComponent implements OnInit, OnDestroy, AfterViewIn
         this.currentUser = data;
         if (this.currentUser) {
           this.gtmData.com_user_id = this.currentUser.id;
-          this.appUsersService.getProfileStats().subscribe((data) => {
-            this.userProfileDetails = data;
-          });
         }
       }),
     );

@@ -1,0 +1,15 @@
+.certificate-recipient-preview-dialog {
+  @apply com-w-[45rem] com-max-w-[90vw];
+}
+
+.dialog-header {
+  @apply com-flex com-justify-between com-items-center;
+}
+
+.dialog-body {
+  @apply com-h-[calc(100vh-220px)];
+}
+
+.pdf-object {
+  @apply com-w-full com-h-full;
+}

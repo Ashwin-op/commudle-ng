@@ -1,11 +1,11 @@
-<nb-card
+<com-card
   [ngClass]="{
     'fullscreen-card': isFullscreen,
     'sidebar-expanded': mainSidebarExpanded,
     'sidebar-collapsed': !mainSidebarExpanded
   }"
 >
-  <nb-card-header>
+  <com-card-header>
     <span> Mentor Team Allocation Interface </span>
     <div class="header-actions">
       <button
@@ -16,8 +16,8 @@
         <fa-icon [icon]="isFullscreen ? icons.faCompress : icons.faExpand"></fa-icon>
       </button>
     </div>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <!-- <button
       nbButton
       status="primary"
@@ -60,8 +60,8 @@
         <p *ngIf="mentorFilter === 'all'" class="sub-text">Please add mentors or judges to start assigning teams.</p>
       </div>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
 <ng-template #roundHeaderTemplate let-column="column">
   <div class="round-header">
@@ -162,66 +162,66 @@
 </ng-template>
 
 <ng-template #distributeTeamsEvenly let-data let-ref="dialogRef">
-  <nb-card>
-    <nb-card-header class="dialog-header">
+  <com-card>
+    <com-card-header class="dialog-header">
       <span>Distribute Teams Evenly</span>
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <p>This will distribute the teams evenly among all mentors for the selected round.</p>
-    </nb-card-body>
-    <nb-card-footer class="dialog-footer">
+    </com-card-body>
+    <com-card-footer class="dialog-footer">
       <button nbButton (click)="ref.close()">Cancel</button>
       <button nbButton status="primary" (click)="confirmDistributeTeams(data.roundId); ref.close()">Confirm</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #assignAllTeamsToAllMentors let-data let-ref="dialogRef">
-  <nb-card>
-    <nb-card-header class="dialog-header">
+  <com-card>
+    <com-card-header class="dialog-header">
       <span>Add All Teams to All Mentors/Judges</span>
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <p>
         This will assign all teams <strong>participating in this round</strong> to
         <strong>every mentor/judge</strong> for the selected round.
       </p>
       <p class="warning-text">Note: This may take some time if there are many teams and mentors.</p>
-    </nb-card-body>
-    <nb-card-footer class="dialog-footer">
+    </com-card-body>
+    <com-card-footer class="dialog-footer">
       <button nbButton (click)="ref.close()">Cancel</button>
       <button nbButton status="primary" (click)="confirmAssignAllTeams(data.roundId); ref.close()">Confirm</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #promoteTeams let-data let-ref="dialogRef">
-  <nb-card>
-    <nb-card-header class="dialog-header">
+  <com-card>
+    <com-card-header class="dialog-header">
       <span>Copy all the mentor-team allocations to next round</span>
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <p>
         This will promote teams and their evaluator assignments to <strong>{{ data.nextRoundName }}</strong
         >.
       </p>
-    </nb-card-body>
-    <nb-card-footer class="dialog-footer">
+    </com-card-body>
+    <com-card-footer class="dialog-footer">
       <button nbButton (click)="ref.close()">Cancel</button>
       <button nbButton status="primary" (click)="confirmShiftTeams(data.previousRoundId, data.nextRoundId, ref)">
         Confirm
       </button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #fullScreenLoading>
@@ -295,14 +295,15 @@
       </div>
 
       <div class="team-tags">
-        <nb-tag
+        <app-tag
           *ngFor="let team of teamAssignmentData[selectedMentorId]?.[selectedRoundId]?.assignedTeams"
-          status="success"
+          [tags]="[team.name]"
           [removable]="true"
-          (remove)="requestRemoveTeam(selectedMentorId, team.id, selectedRoundId, team.name)"
-          [text]="team.name"
-        >
-        </nb-tag>
+          [minTagLimit]="false"
+          [backgroundColor]="'com-bg-green-100'"
+          [fontColor]="'com-text-green-700'"
+          (tagDelete)="requestRemoveTeam(selectedMentorId, team.id, selectedRoundId, team.name)"
+        ></app-tag>
         <span *ngIf="!teamAssignmentData[selectedMentorId]?.[selectedRoundId]?.count" class="no-teams">
           No teams assigned yet
         </span>

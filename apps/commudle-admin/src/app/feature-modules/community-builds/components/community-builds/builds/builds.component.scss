@@ -6,11 +6,9 @@
     .header-text {
       @apply com-flex com-flex-col com-m-0  com-pb-1;
       .title {
-        @apply com-flex com-flex-row com-items-center com-m-0 com-mb-2;
-        a {
-          @apply md:com-text-2xl com-text-xl md:com-font-bold com-font-semibold com-text-Yankees-Blue com-m-0 com-no-underline;
-        }
+        @apply com-flex com-flex-row com-items-center com-m-0 com-mb-2 md:com-text-2xl com-text-xl md:com-font-bold com-font-semibold com-text-Yankees-Blue;
       }
+
       .sub-heading {
         @apply md:com-flex com-hidden com-text-sm com-font-medium com-text-gray-500 com-m-0;
       }

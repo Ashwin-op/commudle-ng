@@ -4,17 +4,17 @@ import { HomeService } from 'apps/commudle-admin/src/app/services/home.service';
 import { ICommunityBuild } from 'apps/shared-models/community-build.model';
 import { IsBrowserService } from 'apps/shared-services/is-browser.service';
 import { removeHtmlTags } from '@commudle/shared-services';
-
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
-    selector: 'app-homepage-builds',
-    templateUrl: './homepage-builds.component.html',
-    styleUrls: ['./homepage-builds.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-homepage-builds',
+  templateUrl: './homepage-builds.component.html',
+  styleUrls: ['./homepage-builds.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class HomepageBuildsComponent implements OnInit {
   builds: ICommunityBuild[] = [];
-
+  faHashtag = faHashtag;
   constructor(
     private homeService: HomeService,
     private isBrowserService: IsBrowserService,

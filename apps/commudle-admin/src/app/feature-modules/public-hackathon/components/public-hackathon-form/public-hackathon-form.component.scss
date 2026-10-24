@@ -1,12 +1,16 @@
 .spinner {
   @apply com-min-h-[50dvh] com-flex com-justify-center com-items-center;
 }
-.details-section {
-  @apply com-flex com-justify-between com-items-center com-py-0;
-  .details {
-    @apply com-flex com-gap-3 com-items-center;
-    .hackathon-name {
-      @apply com-text-Yankees-Blue com-text-4xl com-font-bold;
+
+.details-card {
+  @apply com-flex com-mx-2 com-my-4;
+  .details-section {
+    @apply com-flex-row com-justify-between com-items-center com-py-0;
+    .details {
+      @apply com-flex com-gap-3 com-items-center;
+      .hackathon-name {
+        @apply com-text-Yankees-Blue com-text-4xl com-font-bold;
+      }
     }
   }
   .social-links {
@@ -27,7 +31,7 @@ nb-stepper {
 
 .confirmation-dialog {
   @apply com-m-0 md:com-w-[25dvw] com-w-auto com-h-full;
-  nb-card-body {
+  com-card-body {
     @apply com-px-0 com-py-0;
     text-align: center;
     .thank-you-icon {
@@ -41,7 +45,7 @@ nb-stepper {
     }
   }
 
-  nb-card-footer {
+  com-card-footer {
     display: flex;
     p {
       @apply com-m-0 com-font-medium;
@@ -149,13 +153,19 @@ nb-stepper {
     }
   }
 
-  nb-card-footer {
+  com-card-footer {
     @apply com-text-center;
   }
 }
 
 .create-team-confirm-dialog {
-  @apply com-m-0 com-w-auto com-max-w-md;
+  @apply com-m-0 com-w-auto com-max-w-md com-flex;
+  com-card-header {
+    @apply com-flex com-justify-between com-items-center;
+  }
+  com-card-footer {
+    @apply com-flex com-justify-end com-gap-3;
+  }
 
   .dialog-content {
     @apply com-text-center com-py-2;

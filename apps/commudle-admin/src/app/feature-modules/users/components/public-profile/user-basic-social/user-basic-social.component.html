@@ -1,8 +1,12 @@
 <com-card class="user-basic-social-container" id="about">
   <com-card-header>
-    <a [routerLink]="'.'" fragment="about"
-      ><fa-icon [icon]="faExclamationCircle" class="com-text-primary-500"></fa-icon>About</a
-    >
+    <div class="section-heading-anchor heading">
+      <fa-icon [icon]="faExclamationCircle" class="com-text-primary-500 Icon"></fa-icon>
+      About
+      <a [routerLink]="'.'" fragment="about" class="anchor-link" aria-label="Link to about section">
+        <fa-icon [icon]="faHashtag" class="anchor-icon-small"></fa-icon>
+      </a>
+    </div>
   </com-card-header>
   <com-card-body>
     <div *ngIf="user.about_me" class="about">
@@ -78,6 +82,7 @@
       >
         <app-badge
           [faIcon]="faYoutube"
+          [customIconWidth]="true"
           [fontColor]="'com-text-primary-500'"
           [fontSize]="'regular'"
           [borderRadius]="'round'"

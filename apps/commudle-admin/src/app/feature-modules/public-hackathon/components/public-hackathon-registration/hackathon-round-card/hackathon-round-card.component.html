@@ -156,6 +156,9 @@
               {{ moment(bookedSlotByMentor.get(evaluator.id).ends_at).format('hh:mm A') }}
             </span>
           </div>
+          <commudle-alert [info]="true">
+            <div infoContent>In case you want to change the slot, please contact the admin team</div>
+          </commudle-alert>
           @if(mentorSlotsByMentor.get(evaluator.id)?.[0]?.hackathon_judge?.meeting_location) {
           @if(mentorSlotsByMentor.get(evaluator.id)[0].hackathon_judge.meeting_location.startsWith('http://') ||
           mentorSlotsByMentor.get(evaluator.id)[0].hackathon_judge.meeting_location.startsWith('https://')) {
@@ -168,9 +171,6 @@
           >
             <nb-icon icon="video-outline"></nb-icon> Join Meeting
           </a>
-          <commudle-alert [info]="true">
-            <div infoContent>In case you want to alter the slot, please contact the admin team</div>
-          </commudle-alert>
           } @else {
           <span class="meeting-location-text">
             <nb-icon icon="pin-outline"></nb-icon>
@@ -203,16 +203,15 @@
         <nb-icon icon="close"></nb-icon>
       </button>
     </com-card-header>
-    <com-card-body>
+    <com-card-body class="book-slot-dialog-body">
+      <commudle-alert [info]="true" message="Slot once booked cannot be changed."></commudle-alert>
       <div class="slot-item">
         @if(selectedMentorSlots.length > 0) {
-        <div *ngFor="let slot of selectedMentorSlots">
-          <button comButton fullWidth status="basic" shape="semi-round" (click)="bookSlot(slot.id, ref)">
-            {{ moment(slot.starts_at).format('MMM DD, YYYY hh:mm A') }} - {{ moment(slot.ends_at).format('hh:mm A') }}
-          </button>
+        <div class="slot-row" *ngFor="let slot of selectedMentorSlots" (click)="bookSlot(slot.id, ref)">
+          {{ moment(slot.starts_at).format('MMM DD, YYYY hh:mm A') }} - {{ moment(slot.ends_at).format('hh:mm A') }}
         </div>
         } @else {
-        <p>No slots available yet!</p>
+        <p class="no-slots">No slots available yet!</p>
         }
       </div>
     </com-card-body>
@@ -225,7 +224,7 @@
     <com-card-body>
       <p>Are you sure? Once the slot is booked, it cannot be changed.</p>
     </com-card-body>
-    <com-card-footer>
+    <com-card-footer class="footer-confirm-dialog">
       <button comButton status="primary" shape="semi-round" (click)="ref.close(true)">Confirm</button>
       <button comButton status="basic" shape="semi-round" (click)="ref.close(false)">Cancel</button>
     </com-card-footer>

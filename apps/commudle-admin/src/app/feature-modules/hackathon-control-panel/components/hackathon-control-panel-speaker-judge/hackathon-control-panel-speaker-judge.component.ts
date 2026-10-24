@@ -117,7 +117,7 @@ export class HackathonControlPanelSpeakerJudgeComponent implements OnInit, OnDes
 
   fetchSpeakerJudgeDetails() {
     this.profileExist = false;
-    const email = this.fetchSpeakerJudge.get('email').value;
+    const email = this.fetchSpeakerJudge.get('email').value?.toLowerCase();
 
     this.hackathonService.check_duplicate_judge(email, this.hackathonSlug).subscribe((data) => {
       this.appUsersService.getProfileByEmail(data).subscribe((userData: IUser) => {
@@ -131,7 +131,7 @@ export class HackathonControlPanelSpeakerJudgeComponent implements OnInit, OnDes
             judge_type: judgeType,
           });
         }
-        this.dialogService.open(this.judgeFormDialog);
+        this.dialogService.open(this.judgeFormDialog).onClose.subscribe(() => this.resetSpeakerRegistrationForm());
         this.fetchSpeakerJudge.reset();
       });
     });
@@ -183,16 +183,21 @@ export class HackathonControlPanelSpeakerJudgeComponent implements OnInit, OnDes
     });
     this.imageUrl = judge.photo?.url;
 
-    this.dialogService.open(dialog, {
-      context: { index: index, judge: judge },
-    });
+    this.dialogService
+      .open(dialog, {
+        context: { index: index, judge: judge },
+      })
+      .onClose.subscribe(() => this.resetSpeakerRegistrationForm());
   }
 
   createJudge() {
     const formData = new FormData();
 
     Object.entries(this.speakerRegistrationForm.value).forEach(([key]) => {
-      const value = this.speakerRegistrationForm.value[key];
+      let value = this.speakerRegistrationForm.value[key];
+      if (key === 'email' && value) {
+        value = value.toLowerCase();
+      }
       formData.append('hackathon_judge[' + key + ']', value);
     });
 
@@ -233,7 +238,10 @@ export class HackathonControlPanelSpeakerJudgeComponent implements OnInit, OnDes
     const formData = new FormData();
 
     Object.entries(this.speakerRegistrationForm.value).forEach(([key]) => {
-      const value = this.speakerRegistrationForm.value[key];
+      let value = this.speakerRegistrationForm.value[key];
+      if (key === 'email' && value) {
+        value = value.toLowerCase();
+      }
       formData.append('hackathon_judge[' + key + ']', value);
     });
 
@@ -305,7 +313,7 @@ export class HackathonControlPanelSpeakerJudgeComponent implements OnInit, OnDes
               judge_type: judgeType,
             });
           }
-          this.dialogService.open(this.judgeFormDialog);
+          this.dialogService.open(this.judgeFormDialog).onClose.subscribe(() => this.resetSpeakerRegistrationForm());
           this.isSelectingUser = false;
         });
       });
@@ -326,5 +334,8 @@ export class HackathonControlPanelSpeakerJudgeComponent implements OnInit, OnDes
     this.fetchSpeakerJudge.patchValue({
       email: '',
     });
+    this.imageUrl = '';
+    this.imageBlob = null;
+    this.profileExist = false;
   }
 }

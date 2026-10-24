@@ -28,9 +28,9 @@
             [user]="communityBuild.user"
             [curBuild]="communityBuild"
           ></commudle-show-more-builds>
-          <nb-card class="updates" *ngIf="communityBuild.entity_updates.length > 0">
-            <nb-card-header>Updates</nb-card-header>
-            <nb-card-body>
+          <com-card class="updates" *ngIf="communityBuild.entity_updates.length > 0">
+            <com-card-header>Updates</com-card-header>
+            <com-card-body>
               <ul>
                 <li *ngFor="let updates of communityBuild.entity_updates">
                   <div
@@ -40,13 +40,13 @@
                   <span class="date">{{ moment(updates.created_at).format('dddd, MMM Do, YYYY') }}</span>
                 </li>
               </ul>
-            </nb-card-body>
-          </nb-card>
+            </com-card-body>
+          </com-card>
         </div>
       </div>
       <div *appBreakpoints="'<=lg'" class="one-column-layout">
-        <nb-card class="created-by-card">
-          <nb-card-body class="created-container">
+        <com-card class="created-by-card">
+          <com-card-body class="created-container">
             <h3>Created by</h3>
             <app-user-profile-card-large
               [showFollowButton]="true"
@@ -63,8 +63,8 @@
                 ></app-user-profile-card-small>
               </div>
             </ng-container>
-          </nb-card-body>
-        </nb-card>
+          </com-card-body>
+        </com-card>
         <app-community-build-details [cBuild]="communityBuild"></app-community-build-details>
         <commudle-show-more-builds [user]="communityBuild.user" [curBuild]="communityBuild"></commudle-show-more-builds>
       </div>

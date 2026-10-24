@@ -10,7 +10,7 @@ import { IUser } from 'apps/shared-models/user.model';
 import { IUserResume } from 'apps/shared-models/user_resume.model';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
 import { Subject, Subscription, takeUntil } from 'rxjs';
-import { faClipboard } from '@fortawesome/free-solid-svg-icons';
+import { faClipboard, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from '@commudle/shared-services';
 import { PdfXssValidationService } from '@commudle/shared-components';
 
@@ -35,6 +35,7 @@ export class UserResumeComponent implements OnInit, OnChanges, OnDestroy {
   dialogRef: NbDialogRef<any>;
 
   faClipboard = faClipboard;
+  faHashtag = faHashtag;
 
   @ViewChild('userResumeDialog', { static: true }) userResumeDialog: TemplateRef<any>;
 

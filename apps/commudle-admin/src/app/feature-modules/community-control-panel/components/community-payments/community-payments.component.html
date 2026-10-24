@@ -1,3 +1,16 @@
 <div class="routes">
-  <nb-route-tabset [tabs]="tabs"></nb-route-tabset>
+  <div class="route-tabs">
+    <a routerLink="." routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <div class="route-tab-option">
+        <span>Bank Details</span>
+      </div>
+    </a>
+    <a routerLink="./logs" routerLinkActive="active">
+      <div class="route-tab-option">
+        <span>Payment Logs</span>
+      </div>
+    </a>
+  </div>
+
+  <router-outlet></router-outlet>
 </div>

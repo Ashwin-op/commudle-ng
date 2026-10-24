@@ -1,11 +1,11 @@
 .discussion {
   @apply com-rounded-none com-m-4;
 
-  nb-card-header {
+  com-card-header {
     @apply com-text-gunmetal com-font-medium com-text-base;
   }
 
-  nb-card-body {
+  com-card-body {
     overflow: unset;
 
     .discussion-chat-component {

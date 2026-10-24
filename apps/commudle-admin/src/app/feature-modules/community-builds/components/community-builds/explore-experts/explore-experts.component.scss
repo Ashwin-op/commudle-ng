@@ -6,10 +6,7 @@ com-card {
       @apply com-mt-0 com-mb-4 com-mx-0 com-flex com-flex-col md:com-p-0 com-px-4 com-py-3 com-border-0 md:com-border-b-0 com-border-b com-border-solid com-border-Bright-Gray;
 
       .title {
-        @apply com-flex com-m-0;
-        a {
-          @apply com-text-sm com-font-semibold com-text-Yankees-Blue com-mb-1 com-mt-0 com-mx-0 com-no-underline;
-        }
+        @apply com-flex com-items-center com-m-0 com-text-sm com-font-semibold com-text-Yankees-Blue com-mb-1 com-mt-0 com-mx-0 com-no-underline;
       }
       .sub-heading {
         @apply com-text-xs com-font-normal com-text-gray-500 com-m-0;

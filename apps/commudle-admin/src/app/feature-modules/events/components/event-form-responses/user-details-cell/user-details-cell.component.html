@@ -6,6 +6,29 @@
         {{ moment(userResponse.created_at).fromNow() }}
       </p>
     </div>
+    @if (userResponse.manually_added && event.editable) {
+    <button
+      (click)="editSpeaker.emit(userResponse)"
+      nbButton
+      outline
+      size="small"
+      shape="semi-round"
+      type="button"
+      class="com-mb-2"
+    >
+      <fa-icon [icon]="faPen"></fa-icon> Edit speaker details
+    </button>
+    } @if (userResponse.manually_added) {
+    <p class="user-domain">
+      <small>
+        Added by @if (userResponse.added_by) {
+        <a [routerLink]="['/users', userResponse.added_by.username]" target="_blank">{{
+          userResponse.added_by.name
+        }}</a>
+        } @else { unknown }
+      </small>
+    </p>
+    }
     <p class="contact-details">
       <small>{{ user.email === 'Not Visible' ? 'Email: Not Visible' : user.email }}</small>
       <small *ngIf="user.phone"> / {{ user.phone === 'Not Visible' ? 'Phone: Not Visible' : user.phone }}</small>
@@ -28,6 +51,32 @@
       </a>
       <a *ngIf="user.personal_website" href="{{ user.personal_website | completeurl }}" target="_blank">
         <fa-icon [icon]="faInfo"></fa-icon>
+      </a>
+      <a *ngIf="user.dribbble" href="{{ user.dribbble | completeurl : 'dribbble' }}" target="_blank" title="Dribbble">
+        <fa-icon [icon]="faDribbble"></fa-icon>
+      </a>
+      <a *ngIf="user.behance" href="{{ user.behance | completeurl : 'behance' }}" target="_blank" title="Behance">
+        <fa-icon [icon]="faBehance"></fa-icon>
+      </a>
+      <a *ngIf="user.medium" href="{{ user.medium | completeurl : 'medium' }}" target="_blank" title="Medium">
+        <fa-icon [icon]="faMedium"></fa-icon>
+      </a>
+      <a *ngIf="user.gitlab" href="{{ user.gitlab | completeurl : 'gitlab' }}" target="_blank" title="GitLab">
+        <fa-icon [icon]="faGitlab"></fa-icon>
+      </a>
+      <a *ngIf="user.facebook" href="{{ user.facebook | completeurl : 'facebook' }}" target="_blank" title="Facebook">
+        <fa-icon [icon]="faFacebook"></fa-icon>
+      </a>
+      <a *ngIf="user.youtube" href="{{ user.youtube | completeurl : 'youtube' }}" target="_blank" title="YouTube">
+        <fa-icon [icon]="faYoutube"></fa-icon>
+      </a>
+      <a
+        *ngIf="user.instagram"
+        href="{{ user.instagram | completeurl : 'instagram' }}"
+        target="_blank"
+        title="Instagram"
+      >
+        <fa-icon [icon]="faInstagram"></fa-icon>
       </a>
     </div>
   </div>
@@ -256,35 +305,35 @@
 </div>
 
 <ng-template #confirmDeleteEntryPassDialog let-data let-ref="dialogRef">
-  <nb-card class="confirm-delete-entry-pass">
-    <nb-card-header>
+  <com-card class="confirm-delete-entry-pass">
+    <com-card-header>
       <div>Are You Sure?</div>
-      <button ghost nbButton size="small" (click)="ref.close()">
-        <nb-icon icon="close"></nb-icon>
+      <button comButton ghost size="small" (click)="ref.close()" aria-label="Close">
+        <fa-icon [icon]="icons.faXmark"></fa-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div>This user already has an entry pass, are you sure you want to change the status?</div>
       <em>Changing the status will delete the entry pass.</em>
-    </nb-card-body>
-    <nb-card-footer>
-      <button nbButton status="primary" (click)="updateRegistrationStatus(data.registrationStatusId); ref.close()">
+    </com-card-body>
+    <com-card-footer>
+      <button comButton status="primary" (click)="updateRegistrationStatus(data.registrationStatusId); ref.close()">
         Confirm
       </button>
-      <button nbButton status="danger" (click)="ref.close()">cancel</button>
-    </nb-card-footer>
-  </nb-card>
+      <button comButton status="danger" (click)="ref.close()">Cancel</button>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #notesListDialog let-data let-ref="dialogRef">
-  <nb-card class="notes-dialog-box dialog-box">
-    <nb-card-header>
+  <com-card class="notes-dialog-box dialog-box">
+    <com-card-header>
       <div>Notes</div>
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div class="add-note-container">
         <textarea nbInput placeholder="Enter your note..." [(ngModel)]="newNoteText" rows="2" fullWidth></textarea>
         <button
@@ -315,37 +364,37 @@
         </div>
         }
       </div>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>
 
 <ng-template #confirmDeleteNoteDialog let-data let-ref="dialogRef">
-  <nb-card class="confirm-delete-note">
-    <nb-card-header>
+  <com-card class="confirm-delete-note">
+    <com-card-header>
       <div>Delete Note</div>
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div>Are you sure you want to delete this note?</div>
       <em>This action cannot be undone.</em>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button nbButton status="danger" (click)="destroyNote(data.noteId, data.index); ref.close()">Delete</button>
       <button nbButton status="basic" (click)="ref.close()">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #viewResponseDialogBox let-data let-ref="dialogRef">
-  <nb-card class="responses-dialog">
-    <nb-card-header>
+  <com-card class="responses-dialog">
+    <com-card-header>
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <nb-tabset>
         <nb-tab tabTitle="Questions">
           @for ( dferv of userResponse.data_form_entity_response_values; track dferv.id) {
@@ -363,8 +412,8 @@
           ></app-user-engagement-data>
         </nb-tab>
       </nb-tabset>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>
 
 <commudle-bottom-sheet [isOpen]="mobileActionBottomSheet" title="Actions" (close)="closeActionBottomSheet()">

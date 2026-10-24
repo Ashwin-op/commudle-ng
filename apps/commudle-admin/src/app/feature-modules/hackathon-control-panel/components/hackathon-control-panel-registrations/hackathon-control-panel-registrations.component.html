@@ -1,5 +1,5 @@
-<nb-card class="registration-form-section">
-  <nb-card-header>
+<com-card class="registration-form-section">
+  <com-card-header>
     <span
       >Registration<commudle-help-section [helpDictionaryName]="'hackathon-registrations'"></commudle-help-section
     ></span>
@@ -19,8 +19,8 @@
         <fa-icon [icon]="icons.faUpRightFromSquare"></fa-icon> &nbsp; Link to register
       </button></a
     >
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <div class="heading">
       Choose which fields are absolutely necessary for registering. Remember, a shorter form leads to quicker signup
     </div>
@@ -215,8 +215,8 @@
         <button nbButton fullWidth status="primary" (click)="updateOrCreateHackathonUserResponse()">Save</button>
       </div>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
 <div *ngIf="hackathon" class="next-step-container">
   <a>

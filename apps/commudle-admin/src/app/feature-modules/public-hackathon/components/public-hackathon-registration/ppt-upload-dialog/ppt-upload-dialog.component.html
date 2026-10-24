@@ -1,5 +1,5 @@
-<nb-card class="upload-dialog">
-  <nb-card-header>
+<com-card class="upload-dialog">
+  <com-card-header>
     <div class="header-content">
       <h4 class="dialog-title">{{ existingSubmission ? 'Update' : 'Submit' }} Submission</h4>
       <button nbButton ghost size="small" (click)="close()" class="close-button" shape="round">
@@ -7,10 +7,20 @@
       </button>
     </div>
     <p class="round-name">{{ round.name }}</p>
-  </nb-card-header>
+  </com-card-header>
 
-  <nb-card-body>
+  <com-card-body>
     <form [formGroup]="uploadForm">
+      <!-- File or link notice -->
+      <commudle-alert
+        [info]="true"
+        [message]="
+          existingSubmission
+            ? 'Submit either a file or a link, not both. Switching tabs and submitting will replace your current submission.'
+            : 'Submit either a file or a link, not both.'
+        "
+      ></commudle-alert>
+
       <!-- Mode Toggle -->
       <div class="mode-toggle">
         <button
@@ -118,9 +128,9 @@
         ></textarea>
       </div>
     </form>
-  </nb-card-body>
+  </com-card-body>
 
-  <nb-card-footer>
+  <com-card-footer>
     <div class="dialog-actions">
       <button nbButton ghost (click)="close()">Cancel</button>
       <button nbButton status="primary" [disabled]="isSubmitDisabled()" (click)="onSubmit()">
@@ -129,5 +139,5 @@
         Submitting... } @else { {{ existingSubmission ? 'Update' : 'Submit' }} }
       </button>
     </div>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

@@ -4,8 +4,16 @@
       <img alt="Featured Projects" src="{{ staticAssets.emojis.eye }}" title="Featured Projects" />
     </div>
     <div class="header-text">
-      <h3 class="title">
-        <a [routerLink]="'.'" fragment="featured-builds">Featured Projects</a>
+      <h3 class="title section-heading-anchor">
+        Featured Projects
+        <a
+          [routerLink]="'.'"
+          fragment="featured-builds"
+          class="anchor-link"
+          aria-label="Link to Featured Projects section"
+        >
+          <fa-icon [icon]="faHashtag" class="anchor-icon-small"></fa-icon>
+        </a>
       </h3>
       <h4 class="sub-heading">Check out amazing projects and get inspired</h4>
     </div>

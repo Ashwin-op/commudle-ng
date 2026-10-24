@@ -1,59 +1,64 @@
 <div class="two-column-layout medium">
   <div class="main-column">
-    <!-- upcoming events -->
-    <com-card *ngIf="upcomingTotal > 0 || isLoadingUpcoming" class="events-card com-m-0">
-      <com-card-header>
-        <h6 class="section-title"><fa-icon [icon]="faCalendarDays"></fa-icon> Upcoming Events</h6>
-      </com-card-header>
-      <com-card-body>
-        <app-loading-spinner *ngIf="isLoadingUpcoming"></app-loading-spinner>
-        <div
-          *ngIf="!isLoadingUpcoming"
-          class="upcoming-event-cards-list"
-          [ngClass]="upcomingEvents.length === 1 ? 'single-event' : 'multiple-event'"
-        >
-          <commudle-event-medium-card *ngFor="let event of upcomingEvents" [event]="event"></commudle-event-medium-card>
-        </div>
-        <app-pagination
-          *ngIf="upcomingTotal > 0"
-          [count]="upcomingCount"
-          [current]="upcomingPage"
-          [total]="upcomingTotal"
-          (goTo)="onUpcomingPageChange($event)"
-          (next)="onUpcomingPageChange($event)"
-          (previous)="onUpcomingPageChange($event)"
-        ></app-pagination>
-      </com-card-body>
-    </com-card>
+    <div class="main-container">
+      <!-- upcoming events -->
+      <com-card *ngIf="upcomingTotal > 0 || isLoadingUpcoming" class="events-card com-m-0">
+        <com-card-header>
+          <h6 class="section-title"><fa-icon [icon]="faCalendarDays"></fa-icon> Upcoming Events</h6>
+        </com-card-header>
+        <com-card-body>
+          <app-loading-spinner *ngIf="isLoadingUpcoming"></app-loading-spinner>
+          <div
+            *ngIf="!isLoadingUpcoming"
+            class="upcoming-event-cards-list"
+            [ngClass]="upcomingEvents.length === 1 ? 'single-event' : 'multiple-event'"
+          >
+            <commudle-event-medium-card
+              *ngFor="let event of upcomingEvents"
+              [event]="event"
+            ></commudle-event-medium-card>
+          </div>
+          <app-pagination
+            *ngIf="upcomingTotal > 0"
+            [count]="upcomingCount"
+            [current]="upcomingPage"
+            [total]="upcomingTotal"
+            (goTo)="onUpcomingPageChange($event)"
+            (next)="onUpcomingPageChange($event)"
+            (previous)="onUpcomingPageChange($event)"
+          ></app-pagination>
+        </com-card-body>
+      </com-card>
 
-    <!-- past events -->
-    <com-card class="events-card com-m-0 com-mt-4">
-      <com-card-header>
-        <h6 class="section-title"><fa-icon [icon]="faCalendarDays"></fa-icon> Past Events</h6>
-      </com-card-header>
-      <com-card-body>
-        <app-loading-spinner *ngIf="isLoadingPast"></app-loading-spinner>
-        <div *ngIf="!isLoadingPast" class="past-events-card-list">
-          <commudle-event-card *ngFor="let event of pastEvents" [event]="event"></commudle-event-card>
-        </div>
-        <app-pagination
-          *ngIf="pastTotal > 0"
-          [count]="pastCount"
-          [current]="pastPage"
-          [total]="pastTotal"
-          (goTo)="onPastPageChange($event)"
-          (next)="onPastPageChange($event)"
-          (previous)="onPastPageChange($event)"
-        ></app-pagination>
-      </com-card-body>
-    </com-card>
+      <!-- past events -->
+      <com-card class="events-card com-m-0">
+        <com-card-header>
+          <h6 class="section-title"><fa-icon [icon]="faCalendarDays"></fa-icon> Past Events</h6>
+        </com-card-header>
+        <com-card-body>
+          <app-loading-spinner *ngIf="isLoadingPast"></app-loading-spinner>
+          <div *ngIf="!isLoadingPast" class="past-events-card-list">
+            <commudle-event-card *ngFor="let event of pastEvents" [event]="event"></commudle-event-card>
+          </div>
+          <app-pagination
+            *ngIf="pastTotal > 0"
+            [count]="pastCount"
+            [current]="pastPage"
+            [total]="pastTotal"
+            (goTo)="onPastPageChange($event)"
+            (next)="onPastPageChange($event)"
+            (previous)="onPastPageChange($event)"
+          ></app-pagination>
+        </com-card-body>
+      </com-card>
+    </div>
   </div>
 
   <div class="right-column">
     <div *ngIf="upcomingHackathons?.length > 0" class="upcoming-hackathons">
       <commudle-upcoming-hackathons></commudle-upcoming-hackathons>
     </div>
-    <div class="recent-tech">
+    <div class="recent-tech" [ngClass]="{ 'com-mt-4': upcomingHackathons?.length > 0 }">
       <commudle-public-home-list-events-tech-sessions
         [communityGroupId]="communityGroup?.id"
       ></commudle-public-home-list-events-tech-sessions>

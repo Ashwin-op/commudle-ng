@@ -1,11 +1,11 @@
-<nb-card class="template-card">
-  <nb-card-header
+<com-card class="template-card">
+  <com-card-header
     ><h3>Email Preview</h3>
     <button ghost nbButton size="small" shape="round" (click)="closePopup()">
       <nb-icon icon="close"></nb-icon>
     </button>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <p class="sample-preview">This is a preview of your email</p>
     <div class="info-message">
       <commudle-alert
@@ -13,8 +13,8 @@
       ></commudle-alert>
     </div>
     <div [innerHTML]="previewData | safe : 'html'" class="inner-html"></div>
-  </nb-card-body>
-  <nb-card-footer>
+  </com-card-body>
+  <com-card-footer>
     <button nbButton status="primary" shape="semi-round" (click)="closePopup()">Close</button>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

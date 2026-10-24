@@ -3,18 +3,18 @@
 .join-by-token {
   height: $min-page-height;
 
-  nb-card {
+  com-card {
     width: 500px;
     max-width: 90vw;
 
-    nb-card-header {
+    com-card-header {
       @apply com-py-5 com-px-6;
       p {
         @apply com-text-2xl com-font-medium com-px-0 com-my-0;
       }
     }
 
-    nb-card-body {
+    com-card-body {
       @apply com-px-6 com-py-0;
       p {
         @apply com-mb-4 com-text-base;
@@ -29,7 +29,7 @@
     }
   }
 
-  nb-card-footer {
+  com-card-footer {
     .accept-button {
       @apply com-text-tWhite com-text-sm com-bg-Yankees-Blue com-mr-4;
     }

@@ -1,0 +1,108 @@
+.certificate-verify-page {
+  @apply com-py-12 com-px-4;
+}
+
+.page-eyebrow {
+  @apply com-block com-text-xs com-font-semibold com-text-Auro-Metal-Saurus com-uppercase com-tracking-wide com-mb-2;
+}
+
+.page-title {
+  @apply com-text-3xl com-font-bold com-text-Yankees-Blue com-m-0 com-mb-2;
+}
+
+.page-description {
+  @apply com-text-Auro-Metal-Saurus com-mb-8;
+}
+
+// .two-column-layout itself defines no gap (apps/commudle-admin/src/assets/
+// styles/grid.scss) - other pages that use it get their spacing from
+// per-column padding/borders instead (see listing-pages-layout.component.scss).
+// Scoped here rather than adding a gap to the shared grid class, since that's
+// used by many other pages this shouldn't affect.
+.two-column-layout {
+  @screen lg {
+    @apply com-gap-4;
+  }
+}
+
+.verified-banner {
+  @apply com-flex com-items-center com-gap-3 com-bg-green-50 com-rounded-lg com-p-4 com-mb-6;
+
+  .verified-icon {
+    @apply com-flex-none com-w-8 com-h-8 com-rounded-full com-bg-green-600 com-text-white com-flex com-items-center com-justify-center;
+  }
+
+  .verified-title {
+    @apply com-font-semibold com-text-green-700;
+  }
+
+  .verified-subtitle {
+    @apply com-text-sm com-text-green-700 com-opacity-80;
+  }
+}
+
+.info-list {
+  @apply com-flex com-flex-col com-gap-4;
+}
+
+.info-row,
+.detail-row {
+  @apply com-flex com-items-start com-gap-3;
+}
+
+.info-icon {
+  @apply com-flex-none com-w-9 com-h-9 com-rounded-full com-bg-gray-100 com-text-Auro-Metal-Saurus com-flex com-items-center com-justify-center;
+}
+
+.info-label {
+  @apply com-text-sm com-text-Auro-Metal-Saurus;
+}
+
+.info-value {
+  @apply com-font-semibold com-text-Yankees-Blue;
+}
+
+.verify-divider {
+  @apply com-border-0 com-border-t com-border-solid com-border-Bright-Gray com-my-6;
+}
+
+.detail-list {
+  @apply com-flex com-flex-col com-gap-4 com-mb-6;
+
+  .detail-body {
+    @apply com-flex-1 com-min-w-0;
+  }
+}
+
+.detail-value-box {
+  @apply com-flex com-items-center com-justify-between com-gap-2 com-bg-gray-100 com-rounded com-px-3 com-py-2 com-mt-1;
+
+  .detail-value-text {
+    @apply com-text-sm com-text-Yankees-Blue com-truncate;
+  }
+}
+
+.action-btn {
+  @apply com-flex com-items-center com-justify-center com-mb-3;
+}
+
+.profile-link {
+  @apply com-block com-text-Ultramarine-Blue com-text-sm com-mt-0.5;
+}
+
+// Fixed to an A4-landscape-ish ratio (most certificate designs are
+// landscape) so the frame holds its shape as the window resizes, instead
+// of the old vh-based height that stretched taller/shorter with viewport.
+// Fills the main-column's own width (no separate max-width cap) now that
+// the column itself is sized deliberately via .two-column-layout.medium.
+.pdf-frame {
+  @apply com-w-full com-aspect-[1.414] com-rounded-lg com-overflow-hidden com-shadow-lg com-bg-Yankees-Blue com-p-3;
+}
+
+.pdf-object {
+  @apply com-block com-w-full com-h-full com-rounded com-bg-white;
+}
+
+.pdf-loading {
+  @apply com-w-full com-h-full com-rounded com-bg-white com-flex com-items-center com-justify-center;
+}

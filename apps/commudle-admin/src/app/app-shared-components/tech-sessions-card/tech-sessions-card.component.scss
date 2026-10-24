@@ -1,7 +1,7 @@
-nb-card {
-  @apply com-m-0 com-h-full;
+com-card {
+  @apply com-flex com-flex-col com-m-0 com-h-full com-w-full com-border com-border-solid com-border-Bright-Gray com-rounded-lg;
 
-  nb-card-body {
+  com-card-body {
     @apply com-p-3;
 
     a {

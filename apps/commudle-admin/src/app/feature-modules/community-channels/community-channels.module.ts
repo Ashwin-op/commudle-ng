@@ -55,7 +55,7 @@ import { ArchiveComponent } from './components/channel-settings/archive/archive.
 import { InfiniteScrollModule } from 'apps/shared-modules/infinite-scroll/infinite-scroll.module';
 import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-components/help-section/help-section.component';
 import { UserPersonalConnectComponent } from 'libs/shared/components/src/lib/components/user-personal-connect/user-personal-connect.component';
-
+import { CommudleCardModule } from '@commudle/commudle-theme';
 @NgModule({
   declarations: [
     ChannelForumDashboardComponent,
@@ -95,6 +95,7 @@ import { UserPersonalConnectComponent } from 'libs/shared/components/src/lib/com
     MentionModule,
     InfiniteScrollModule,
     SharedComponentsModule, //new
+    CommudleCardModule,
     //External
     FontAwesomeModule,
     //standalone modules

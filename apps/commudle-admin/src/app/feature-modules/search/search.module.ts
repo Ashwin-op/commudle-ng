@@ -13,6 +13,7 @@ import {
   NbTagModule,
   NbUserModule,
 } from '@commudle/theme';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
 import { SearchPageComponent } from './components/search-page/search-page.component';
 import { SearchRoutingModule } from './search-routing.module';
@@ -37,6 +38,7 @@ import { SearchPageCampaignComponent } from 'apps/commudle-admin/src/app/feature
 import { SharedComponentsModule as newSharedComponentsModule } from '@commudle/shared-components';
 import { UserExpertTickComponent } from 'apps/commudle-admin/src/app/app-shared-components/user-expert-tick.component';
 import { SharedPipesModule } from 'apps/shared-pipes/pipes.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 @NgModule({
   declarations: [
     SearchBoxComponent,
@@ -56,10 +58,12 @@ import { SharedPipesModule } from 'apps/shared-pipes/pipes.module';
     NbFormFieldModule,
     NbUserModule,
     NbCardModule,
+    CommudleCardModule,
     NbSpinnerModule,
     NbButtonModule,
     NbListModule,
     NbTagModule,
+    FontAwesomeModule,
     SharedDirectivesModule,
     SharedComponentsModule,
     PublicHomeListSpeakersModule,

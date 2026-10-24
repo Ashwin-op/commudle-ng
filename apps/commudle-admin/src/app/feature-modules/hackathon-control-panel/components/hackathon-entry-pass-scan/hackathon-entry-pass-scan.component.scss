@@ -2,10 +2,10 @@
   .page-container {
     @apply com-mx-auto;
 
-    nb-card {
-      @apply com-mx-0 md:com-mx-2 com-mt-0 com-pt-4;
+    com-card {
+      @apply com-mx-0 md:com-mx-2 com-mt-0 md:com-mt-4 com-pt-4;
 
-      nb-card-header {
+      com-card-header {
         .header-wrapper {
           @apply com-flex com-items-center com-justify-between com-gap-4;
 
@@ -15,7 +15,7 @@
         }
       }
 
-      nb-card-body {
+      com-card-body {
         .controls-section {
           @apply com-mb-6;
 
@@ -104,7 +104,7 @@
 .entry-pass-dialog {
   @apply com-w-full com-max-w-[100dvw] md:com-max-w-[700px] com-max-h-90dvh com-mx-0;
 
-  nb-card-header {
+  com-card-header {
     flex-shrink: 0;
 
     .header-content {
@@ -120,7 +120,7 @@
     }
   }
 
-  nb-card-body {
+  com-card-body {
     overflow-y: auto;
     overflow-x: hidden;
     flex: 1;
@@ -236,7 +236,7 @@
     }
   }
 
-  nb-card-footer {
+  com-card-footer {
     @apply com-flex com-gap-2 md:com-gap-3 com-flex-wrap;
   }
 }

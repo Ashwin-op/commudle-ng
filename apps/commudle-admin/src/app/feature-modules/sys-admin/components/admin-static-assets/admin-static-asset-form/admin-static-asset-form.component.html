@@ -1,11 +1,11 @@
-<nb-card class="admin-asset-form">
-  <nb-card-header class="card-header">
+<com-card class="admin-asset-form">
+  <com-card-header class="card-header">
     Static Assets
     <button [routerLink]="['/sys-admin', 'static-assets']" ghost nbButton shape="round" size="small">
       Show All Assets
     </button>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <form (submit)="submitForm()" [formGroup]="assetForm">
       <label>
         Name*
@@ -20,5 +20,5 @@
       </div>
       <button fullWidth ghost nbButton status="primary" type="submit">Save</button>
     </form>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

@@ -1,7 +1,7 @@
 .notes-dialog {
   @apply com-w-[600px] com-max-w-[90vw] com-max-h-[85vh];
 
-  nb-card-header {
+  com-card-header {
     @apply com-flex com-justify-between com-items-center;
 
     span {

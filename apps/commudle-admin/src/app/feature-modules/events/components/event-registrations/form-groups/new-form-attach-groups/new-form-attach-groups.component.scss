@@ -27,9 +27,9 @@
 }
 
 .form-attach-dialog {
-  @apply com-max-h-[90dvh] com-m-0 com-w-full md:com-w-[60dvw];
+  @apply com-max-h-[90dvh] com-m-0 com-w-full md:com-w-[60dvw] com-flex com-overflow-y-auto;
 
-  nb-card-header {
+  com-card-header {
     @apply com-flex com-justify-between com-items-center com-p-4;
 
     h1 {
@@ -37,8 +37,8 @@
     }
   }
 
-  nb-card-body {
-    @apply com-p-5;
+  com-card-body {
+    @apply com-p-5 com-scrollbar-hide;
   }
 
   input {
@@ -65,7 +65,7 @@
     }
   }
 
-  nb-card-footer {
+  com-card-footer {
     @apply com-p-4;
   }
 }

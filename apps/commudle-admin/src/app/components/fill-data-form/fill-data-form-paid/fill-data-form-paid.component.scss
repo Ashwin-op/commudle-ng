@@ -27,7 +27,7 @@
 }
 
 .confirmation-dialog {
-  nb-card-body {
+  com-card-body {
     text-align: center;
     .thank-you-icon {
       nb-icon {
@@ -36,7 +36,7 @@
     }
   }
 
-  nb-card-footer {
+  com-card-footer {
     display: flex;
     justify-content: space-evenly;
     align-items: baseline;
@@ -55,8 +55,8 @@
 }
 
 .payment-details-section {
-  nb-card {
-    nb-card-body {
+  com-card {
+    com-card-body {
       @apply com-p-0;
       .payment-deatils {
         @apply com-flex com-justify-between com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-py-2 com-px-4;

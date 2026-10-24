@@ -20,4 +20,5 @@ export interface IEventDataFormEntityGroup {
   allow_cancellation: boolean;
   approval_based_payments: boolean;
   paid_ticket_setting: IPaymentDetail;
+  manually_added?: boolean;
 }

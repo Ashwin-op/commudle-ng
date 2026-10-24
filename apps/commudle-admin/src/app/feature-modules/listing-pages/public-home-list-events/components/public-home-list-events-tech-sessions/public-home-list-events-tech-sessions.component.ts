@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { faHeadset, faLink } from '@fortawesome/free-solid-svg-icons';
+import { faHeadset, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
 import { EventsService } from 'apps/commudle-admin/src/app/services/events.service';
 import { ICommunity } from 'apps/shared-models/community.model';
@@ -17,9 +17,9 @@ export class PublicHomeListEventsTechSessionsComponent implements OnInit, AfterV
   @Input() communityGroupId: number;
   techSessions: ISessions[] = [];
   faHeadset = faHeadset;
-  faLink = faLink;
   showSpinner = false;
   page_info: IPageInfo;
+  faHashtag = faHashtag;
   total: number;
   isLoadingTechSessions = false;
   showSkeletonCard = true;

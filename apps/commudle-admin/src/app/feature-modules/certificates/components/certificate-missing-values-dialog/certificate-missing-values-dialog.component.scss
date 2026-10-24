@@ -1,0 +1,40 @@
+.certificate-missing-values-dialog {
+  @apply com-w-[32rem] com-max-w-[90vw];
+}
+
+.dialog-header {
+  @apply com-flex com-justify-between com-items-center;
+}
+
+.dialog-hint {
+  @apply com-text-sm com-text-Auro-Metal-Saurus com-mb-4;
+}
+
+.missing-values-table-wrapper {
+  @apply com-max-h-64 com-overflow-y-auto com-border com-border-Bright-Gray com-rounded-lg;
+}
+
+.missing-values-table {
+  @apply com-w-full com-text-sm com-border-collapse;
+
+  th,
+  td {
+    @apply com-text-left com-px-3 com-py-2 com-align-top;
+  }
+
+  thead th {
+    @apply com-sticky com-top-0 com-bg-gray-100 com-text-Auro-Metal-Saurus com-font-medium;
+  }
+
+  tbody tr:not(:last-child) td {
+    @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+  }
+
+  tbody td {
+    @apply com-text-Yankees-Blue;
+  }
+}
+
+.dialog-footer {
+  @apply com-flex com-justify-end com-gap-2;
+}

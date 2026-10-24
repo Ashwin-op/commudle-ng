@@ -1,5 +1,35 @@
-<nb-card>
-  <nb-card-body class="com-min-h-[50vh]">
-    <nb-route-tabset [tabs]="tabs"></nb-route-tabset>
-  </nb-card-body>
-</nb-card>
+<com-card>
+  <com-card-body>
+    <div class="route-tabs">
+      <a routerLink="./communities" routerLinkActive="active">
+        <div class="route-tab-option">
+          <span>Featured Communities</span>
+        </div>
+      </a>
+      <a routerLink="./builds" routerLinkActive="active">
+        <div class="route-tab-option">
+          <span>Featured Builds</span>
+        </div>
+      </a>
+      <a routerLink="./labs" routerLinkActive="active">
+        <div class="route-tab-option">
+          <span>Featured Labs</span>
+        </div>
+      </a>
+      <a routerLink="./events" routerLinkActive="active">
+        <div class="route-tab-option">
+          <span>Featured Events</span>
+        </div>
+      </a>
+      <a routerLink="./featured-users" routerLinkActive="active">
+        <div class="route-tab-option">
+          <span>Featured Users</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="route-tab-content">
+      <router-outlet></router-outlet>
+    </div>
+  </com-card-body>
+</com-card>

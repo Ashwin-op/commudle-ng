@@ -39,7 +39,7 @@
         <div class="upcoming-card-details-desktop">
           <div class="time-badge">
             <p class="event-title" [ngClass]="{ 'gradient-effect-title': showGradientEffect }">
-              {{ event.name }}
+              <span class="event-name-text">{{ event.name }}</span>
               <span
                 *ngIf="hostCommunity && event?.kommunity_id !== hostCommunity?.id"
                 class="collaboration-text"

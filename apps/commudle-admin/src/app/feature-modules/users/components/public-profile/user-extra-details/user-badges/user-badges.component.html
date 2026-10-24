@@ -1,9 +1,12 @@
 <com-card *ngIf="badges.length > 0" class="user-badges" id="badges">
   <com-card-header>
-    <a [routerLink]="'.'" fragment="badges">
-      <fa-icon [icon]="faAward" class="com-text-Chrome-Yellow"></fa-icon>
+    <div class="section-heading-anchor heading">
+      <fa-icon [icon]="faAward" class="com-text-Chrome-Yellow icon"></fa-icon>
       Badges
-    </a>
+      <a [routerLink]="'.'" fragment="badges" class="anchor-link" aria-label="Link to user badges section">
+        <fa-icon [icon]="faHashtag" class="anchor-icon-small"></fa-icon>
+      </a>
+    </div>
   </com-card-header>
   <com-card-body>
     <img

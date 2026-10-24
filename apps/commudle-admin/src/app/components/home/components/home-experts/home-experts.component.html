@@ -1,6 +1,6 @@
-<nb-card class="home-experts-container">
-  <nb-card-header>Experts</nb-card-header>
-  <nb-card-body class="home-experts-body">
+<com-card class="home-experts-container">
+  <com-card-header>Experts</com-card-header>
+  <com-card-body class="home-experts-body">
     <nb-list *ngIf="experts.length === 0" class="home-experts-list">
       <nb-list-item *ngFor="let _ of [].constructor(3)">
         <app-skeleton-text [rows]="2"></app-skeleton-text>
@@ -38,5 +38,5 @@
     <!--    <div *ngIf="experts.length > 0" class="home-experts-all text-center clickable">-->
     <!--      <a>Meet all</a>-->
     <!--    </div>-->
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

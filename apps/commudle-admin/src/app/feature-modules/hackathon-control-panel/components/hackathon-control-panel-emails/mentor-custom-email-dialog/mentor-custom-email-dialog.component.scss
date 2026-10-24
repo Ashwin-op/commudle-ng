@@ -1,4 +1,4 @@
-nb-card-header {
+com-card-header {
   @apply com-flex com-justify-between com-items-center;
 
   span {
@@ -14,11 +14,11 @@ nb-card-header {
   }
 }
 
-nb-card-footer {
+com-card-footer {
   @apply com-flex com-justify-between com-items-center com-gap-6;
 }
 
-nb-card-body {
+com-card-body {
   @apply com-p-6;
 }
 

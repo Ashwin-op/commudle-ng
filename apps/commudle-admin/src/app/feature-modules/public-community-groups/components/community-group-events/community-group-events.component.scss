@@ -6,6 +6,10 @@
   @apply com-m-0 md:com-mr-4;
 }
 
+.main-container {
+  @apply com-flex com-flex-col com-gap-4;
+}
+
 .events-card {
   com-card-header {
     @apply com-px-4 com-py-2 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
@@ -43,9 +47,12 @@
 }
 
 .speakers-upcoming,
-.recent-tech,
 .speakers {
   @apply com-m-0 com-my-4;
+}
+
+.recent-tech {
+  @apply com-m-0 com-mb-4;
 }
 
 .upcoming-hackathons {

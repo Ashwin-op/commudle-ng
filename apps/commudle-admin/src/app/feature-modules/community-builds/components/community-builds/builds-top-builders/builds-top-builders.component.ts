@@ -3,12 +3,12 @@ import { CommunityBuildsService } from 'apps/commudle-admin/src/app/services/com
 import { IUser } from 'apps/shared-models/user.model';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 import { LabsService } from 'apps/commudle-admin/src/app/feature-modules/labs/services/labs.service';
-
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
-    selector: 'commudle-builds-top-builders',
-    templateUrl: './builds-top-builders.component.html',
-    styleUrls: ['./builds-top-builders.component.scss'],
-    standalone: false
+  selector: 'commudle-builds-top-builders',
+  templateUrl: './builds-top-builders.component.html',
+  styleUrls: ['./builds-top-builders.component.scss'],
+  standalone: false,
 })
 export class BuildsTopBuildersComponent implements OnInit {
   @Input() backgroundColor: string;
@@ -32,6 +32,7 @@ export class BuildsTopBuildersComponent implements OnInit {
   staticAssets = staticAssets;
   showSkeletonCard = true;
   showSpinner = false;
+  faHashtag = faHashtag;
 
   constructor(private communityBuildsService: CommunityBuildsService, private labsService: LabsService) {
     this.options = ['This Month', 'This Year', 'All Time'];
@@ -92,7 +93,11 @@ export class BuildsTopBuildersComponent implements OnInit {
     this.showSkeletonCard = true;
     this.page = 1;
     this.topBuilders = [];
-    this.parentType === 'builds' ? this.getCommunityBuilds() : this.getLabs();
+    if (this.parentType === 'builds') {
+      this.getCommunityBuilds();
+    } else {
+      this.getLabs();
+    }
   }
 
   getLabs() {

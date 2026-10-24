@@ -15,6 +15,15 @@ import { ISessions } from 'apps/shared-models/sessions.model';
 import { ISpeakerResource } from 'apps/shared-models/speaker_resource.model';
 import { IPaginationCount } from '@commudle/shared-models';
 import { IEventDataFormEntityGroup } from 'apps/shared-models/event_data_form_enity_group.model';
+export interface IEventFilterOption {
+  id: number;
+  name: string;
+  slug: string;
+  start_time: string;
+  status: string;
+  kommunity: { name: string; slug: string };
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -86,6 +95,28 @@ export class EventsService {
       {
         params,
       },
+    );
+  }
+
+  searchForFilters(
+    communityId: string,
+    query?: string,
+    page?: number,
+    count?: number,
+  ): Observable<IPaginationCount<IEventFilterOption>> {
+    let params = new HttpParams().set('community_id', communityId);
+    if (query) {
+      params = params.set('query', query);
+    }
+    if (page) {
+      params = params.set('page', page);
+    }
+    if (count) {
+      params = params.set('count', count);
+    }
+    return this.http.get<IPaginationCount<IEventFilterOption>>(
+      this.apiRoutesService.getRoute(API_ROUTES.EVENTS.SEARCH_FOR_FILTERS),
+      { params },
     );
   }
 

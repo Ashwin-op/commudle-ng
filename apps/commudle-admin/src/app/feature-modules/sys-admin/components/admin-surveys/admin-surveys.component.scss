@@ -1,11 +1,12 @@
 .survey-header {
+  @apply com-flex com-justify-between com-items-center com-px-2 com-mb-4;
   h4 {
     margin: 0;
   }
 }
 
 .survey {
-  nb-card-body {
+  com-card-body {
     display: flex;
     flex-direction: column;
 

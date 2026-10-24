@@ -6,6 +6,19 @@ p {
   @apply com-m-0;
 }
 
+com-card-header,
+com-card-footer {
+  @apply com-flex com-items-center com-justify-between;
+}
+
+.delete-dialog-title {
+  @apply com-flex com-items-center com-gap-2;
+}
+
+.delete-dialog-body {
+  @apply com-max-w-[350px];
+}
+
 .my-job-application {
   @apply com-flex com-flex-col md:com-flex-row com-gap-2 com-justify-between com-items-center;
 

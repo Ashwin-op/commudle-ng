@@ -11,6 +11,7 @@ import { INewsletter } from 'apps/shared-models/newsletter.model';
 import { CmsService } from 'apps/shared-services/cms.service';
 import { IListingPageHeader } from 'apps/shared-models/listing-page-header.model';
 import { environment } from '@commudle/shared-environments';
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-search-page',
   templateUrl: './search-page.component.html',
@@ -76,6 +77,7 @@ export class SearchPageComponent implements OnInit, OnDestroy {
   currentFragment = '';
   locationPageHeader: IListingPageHeader;
   EDbModels = EDbModels;
+  faHashtag = faHashtag;
 
   constructor(
     private searchService: SearchService,

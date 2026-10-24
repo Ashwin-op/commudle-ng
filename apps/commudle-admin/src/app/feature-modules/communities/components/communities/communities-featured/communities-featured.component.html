@@ -1,6 +1,14 @@
 <div class="communities-featured-container" id="featured-communities">
-  <h2 class="communities-featured-heading">
-    <a [routerLink]="'.'" fragment="featured-communities">Featured Communities</a>
+  <h2 class="communities-featured-heading section-heading-anchor">
+    Featured Communities
+    <a
+      [routerLink]="'.'"
+      fragment="featured-communities"
+      class="anchor-link"
+      aria-label="Link to featured communities section"
+    >
+      <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+    </a>
   </h2>
   <div *ngIf="skeletonLoaderCard" class="skeleton-vertical-cards">
     <commudle-skeleton-vertical-cards [cards]="6"></commudle-skeleton-vertical-cards>

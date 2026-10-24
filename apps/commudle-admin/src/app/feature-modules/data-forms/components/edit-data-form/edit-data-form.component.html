@@ -1,6 +1,6 @@
 <div class="data-form-container page-padding">
-  <nb-card>
-    <nb-card-header>
+  <com-card>
+    <com-card-header>
       <h3>Edit Form</h3>
       <commudle-alert
         [error]="true"
@@ -19,12 +19,12 @@
           Clone this form
         </button>
       </div>
-    </nb-card-header>
-  </nb-card>
+    </com-card-header>
+  </com-card>
   <form [formGroup]="editDataForm" class="edit-data-form">
     <div formGroupName="data_form">
-      <nb-card>
-        <nb-card-body class="card-body">
+      <com-card>
+        <com-card-body class="card-body">
           <div role="group">
             <div>
               <label fullWidth>
@@ -52,8 +52,8 @@
               </label>
             </div>
           </div>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
 
       <div (cdkDropListDropped)="drop($event)" cdkDropList>
         <div
@@ -62,13 +62,13 @@
         >
           <div *cdkDragPlaceholder class="custom-placeholder"></div>
           <div *cdkDragPreview class="custom-preview" formArrayName="questions">
-            <nb-card [formGroupName]="i" class="questions-form-section com-w-80 md:com-w-500px">
-              <nb-card-header class="com-p-0 com-flex com-justify-center">
+            <com-card [formGroupName]="i" class="questions-form-section com-w-80 md:com-w-500px">
+              <com-card-header class="com-p-0 com-flex com-justify-center">
                 <button ghost nbButton size="small">
                   <nb-icon icon="move-outline"></nb-icon>
                 </button>
-              </nb-card-header>
-              <nb-card-body>
+              </com-card-header>
+              <com-card-body>
                 <div class="custom-question-container">
                   <label>
                     Question {{ i + 1 }}
@@ -76,17 +76,17 @@
                     <input formControlName="title" fullWidth nbInput placeholder="Title*" required type="text" />
                   </label>
                 </div>
-              </nb-card-body>
-            </nb-card>
+              </com-card-body>
+            </com-card>
           </div>
           <div formArrayName="questions">
-            <nb-card [formGroupName]="i" class="questions-form-section">
-              <nb-card-header cdkDragHandle class="drag-button">
+            <com-card [formGroupName]="i" class="questions-form-section">
+              <com-card-header cdkDragHandle class="drag-button">
                 <button ghost nbButton size="small">
                   <nb-icon icon="move-outline"></nb-icon>
                 </button>
-              </nb-card-header>
-              <nb-card-body>
+              </com-card-header>
+              <com-card-body>
                 <div>
                   <div class="question-container">
                     <div>
@@ -268,8 +268,8 @@
                     </button>
                   </div>
                 </div>
-              </nb-card-body>
-            </nb-card>
+              </com-card-body>
+            </com-card>
           </div>
         </div>
 

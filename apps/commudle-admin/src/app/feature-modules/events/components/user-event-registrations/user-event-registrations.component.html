@@ -1,8 +1,8 @@
 <div class="base-layout">
   <div class="container">
     <div class="one-column-layout">
-      <nb-card>
-        <nb-card-body>
+      <com-card>
+        <com-card-body>
           <p>
             <a
               [routerLink]="['/admin/communities', community.slug, 'event-dashboard', event.slug]"
@@ -77,11 +77,11 @@
               </nb-option>
             </nb-select>
           </div>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
 
-      <nb-card class="data-table-responses">
-        <nb-card-body>
+      <com-card class="data-table-responses">
+        <com-card-body>
           <div class="data-table-container">
             <ngx-datatable
               #table
@@ -148,8 +148,8 @@
               </ngx-datatable-column>
             </ngx-datatable>
           </div>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
     </div>
   </div>
 </div>

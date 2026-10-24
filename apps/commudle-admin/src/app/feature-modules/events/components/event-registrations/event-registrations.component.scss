@@ -1,5 +1,5 @@
 .registrations {
-  @apply com-mx-0 com-my-6;
+  @apply com-mx-0 com-my-6 com-flex;
 }
 
 .next-step-section {
@@ -9,5 +9,5 @@
 }
 
 h6 {
-  @apply com-flex com-items-center;
+  @apply com-flex com-items-center com-m-0;
 }

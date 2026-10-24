@@ -1,7 +1,7 @@
-nb-card {
+com-card {
   @apply com-w-95vw md:com-w-800px com-h-95vh;
 
-  nb-card-body {
+  com-card-body {
     @apply com-p-4 com-overflow-hidden;
 
     .user-profile-completion-stepper {

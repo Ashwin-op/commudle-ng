@@ -1,0 +1,110 @@
+.certificate-batches-list {
+  @apply com-p-4 md:com-p-6 com-bg-white com-min-h-screen com-rounded-10 com-overflow-hidden;
+
+  .list-header {
+    @apply com-flex com-justify-between md:com-items-center md:com-mb-6 com-mb-4 com-flex-col md:com-flex-row com-gap-4;
+
+    .page-title {
+      @apply com-text-2xl com-font-semibold com-text-Yankees-Blue com-m-0;
+    }
+  }
+
+  .empty-state {
+    @apply com-flex com-flex-col com-items-center com-justify-center md:com-pt-20 com-pt-14;
+
+    .empty-state-icon {
+      @apply com-text-[140px] md:com-mb-8 com-mb-10 com-text-blue-200;
+    }
+
+    .empty-state-title {
+      @apply com-text-2xl com-font-medium com-text-Yankees-Blue com-m-0 com-mb-2 com-text-center;
+    }
+
+    .empty-state-description {
+      @apply com-text-base com-font-medium com-text-gray-500 com-m-0 md:com-mb-8 com-mb-4 com-text-center com-max-w-[320px];
+    }
+
+    .empty-state-button {
+      @apply com-rounded-lg;
+    }
+  }
+
+  .batch-list-container {
+    @apply com-w-full;
+
+    .table-wrapper {
+      @apply com-overflow-scroll;
+
+      .batches-table {
+        @apply com-w-full com-border-collapse com-bg-gray-50;
+
+        .table-header {
+          @apply com-border-0 com-border-solid com-border-b com-border-Bright-Gray com-bg-white;
+
+          th {
+            @apply com-px-4 com-py-2 com-text-left com-text-xs com-font-semibold com-text-gray-500;
+          }
+        }
+
+        .batch-row {
+          @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray hover:com-bg-gray-100 com-transition-colors;
+
+          &:last-child {
+            @apply com-border-b-0;
+          }
+
+          td {
+            @apply com-p-4 com-text-sm com-font-medium com-text-gray-500;
+
+            &.date-column {
+              @apply com-whitespace-nowrap;
+            }
+
+            &.sent-column {
+              @apply com-min-w-[8rem];
+
+              .sent-value {
+                @apply com-block com-mb-1;
+              }
+
+              .delivery-funnel-compact {
+                @apply com-block com-w-full;
+              }
+            }
+
+            &.actions-column {
+              @apply com-w-8;
+            }
+          }
+        }
+      }
+    }
+
+    .pagination {
+      @apply com-p-0 com-pt-6 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+    }
+  }
+}
+
+.batch-name {
+  @apply com-no-underline com-text-Yankees-Blue com-border-0;
+
+  &:hover {
+    @apply com-border-b com-border-solid com-border-Yankees-Blue;
+  }
+}
+
+.batch-actions {
+  @apply com-relative com-inline-flex com-items-center com-flex-shrink-0;
+
+  .kebab-button {
+    @apply com-pointer-events-none;
+  }
+
+  // Same invisible-native-select-over-an-icon pattern as
+  // certificate-canvas's variable actions menu - opens the browser's
+  // native dropdown directly on click/tap, no custom overlay to manage.
+  .batch-actions-select {
+    @apply com-absolute com-inset-0 com-w-full com-h-full com-opacity-0 com-cursor-pointer com-m-0 com-p-0 com-border-0;
+  }
+}

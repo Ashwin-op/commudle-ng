@@ -28,7 +28,7 @@
         <div class="hackathon-details">
           <div class="title-row">
             <p class="name" [ngClass]="{ 'gradient-effect-title': showGradientEffect }">
-              {{ hackathon.name }}
+              <span class="name-text">{{ hackathon.name }}</span>
               <span
                 *ngIf="hackathon.hackathon_collaboration_communities_count > 0"
                 class="collaboration-text"

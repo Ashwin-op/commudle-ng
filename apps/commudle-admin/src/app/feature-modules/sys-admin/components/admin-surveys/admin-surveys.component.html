@@ -1,15 +1,15 @@
 <div class="base-layout">
   <div class="container">
     <div class="one-column-layout">
-      <div class="survey-header com-flex com-justify-between com-items-center com-px-2 com-mb-4">
+      <div class="survey-header">
         <h4>Admin Surveys</h4>
         <a [queryParams]="{ parent_type: 'AdminSurvey' }" [routerLink]="['/forms/new']" nbButton status="primary">
           <nb-icon icon="plus"></nb-icon>
           New Survey Form
         </a>
       </div>
-      <nb-card *ngFor="let survey of adminSurveys; let i = index" class="survey">
-        <nb-card-body>
+      <com-card *ngFor="let survey of adminSurveys; let i = index" class="survey">
+        <com-card-body>
           <h5 class="name">
             {{ survey.name }}
             <small>
@@ -42,8 +42,8 @@
               Responses: {{ survey.total_responses }}
             </a>
           </div>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
     </div>
   </div>
 </div>

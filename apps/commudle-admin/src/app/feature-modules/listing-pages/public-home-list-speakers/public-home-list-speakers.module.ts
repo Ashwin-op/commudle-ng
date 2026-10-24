@@ -33,6 +33,7 @@ import { ListingPageHeaderComponent } from 'apps/commudle-admin/src/app/app-shar
 import { MiniUserProfileModule } from 'apps/shared-modules/mini-user-profile/mini-user-profile.module';
 import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-components/help-section/help-section.component';
 import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-theme';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-the
     FormsModule,
     ReactiveFormsModule,
     AppSharedComponentsModule,
+    FontAwesomeModule,
     //Standalone
     EventContentCardComponent,
     SkeletonVerticalCardsComponent,

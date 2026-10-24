@@ -110,6 +110,7 @@ export class CommunityComponent implements OnInit, OnDestroy {
         communityGroupSlug: this.communityGroup.slug,
       },
       closeOnBackdropClick: false,
+      hasScroll: true,
     });
     ref.onClose.subscribe((community: ICommunity) => {
       if (community) {

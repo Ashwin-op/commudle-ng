@@ -1,11 +1,11 @@
 .mail-popup {
   @apply md:com-w-[50dvw] md:com-max-h-[90dvh] com-w-auto com-mx-0;
 
-  nb-card-header {
+  com-card-header {
     @apply com-flex com-justify-between com-items-center;
   }
 
-  nb-card-body {
+  com-card-body {
     @apply com-overflow-y-auto;
 
     .form-group {
@@ -95,7 +95,7 @@
     }
   }
 
-  nb-card-footer {
+  com-card-footer {
     .footer-actions {
       @apply com-flex com-gap-3;
 

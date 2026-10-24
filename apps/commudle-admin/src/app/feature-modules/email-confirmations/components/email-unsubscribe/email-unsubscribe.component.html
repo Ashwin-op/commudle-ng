@@ -1,6 +1,6 @@
 <div class="email-unsubscribe com-flex com-flex-col justify-content-center align-items-center" [nbSpinner]="loading">
-  <nb-card *ngIf="emailUnsubscribeGroup">
-    <nb-card-body>
+  <com-card *ngIf="emailUnsubscribeGroup">
+    <com-card-body>
       <div class="details">
         <h2 *ngIf="currentUser">Hi {{ currentUser.name }}</h2>
         <p>
@@ -22,8 +22,8 @@
         &nbsp;
         <p>On</p>
       </div>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
   <div class="com-flex com-justify-center" *ngIf="currentUser">
     <a href="{{ environment.app_url }}/users/{{ currentUser.username }}/(p:settings/email-preferences)"
       >Update Email Preferences</a

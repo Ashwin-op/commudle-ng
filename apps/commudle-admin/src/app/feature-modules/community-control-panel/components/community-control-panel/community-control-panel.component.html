@@ -122,6 +122,12 @@
             </div>
             <span *ngIf="sidebarExpanded" class="heading">Page Builder</span>
           </a>
+          <a [routerLink]="['certificates']" class="action-button" routerLinkActive="active">
+            <div class="icon">
+              <fa-icon [icon]="icons.faAward"></fa-icon>
+            </div>
+            <span *ngIf="sidebarExpanded" class="heading">Certificates</span>
+          </a>
         </div>
         <div class="category">
           <div *ngIf="sidebarExpanded" class="category-heading">
@@ -290,6 +296,12 @@
               <fa-icon [icon]="icons.faScrewdriverWrench"></fa-icon>
             </div>
             <span class="heading">Page Builder</span>
+          </a>
+          <a [routerLink]="['certificates']" class="action-button" routerLinkActive="active">
+            <div class="icon">
+              <fa-icon [icon]="icons.faAward"></fa-icon>
+            </div>
+            <span class="heading">Certificates</span>
           </a>
           <a [routerLink]="['newsletters']" class="action-button" routerLinkActive="active">
             <div class="icon">

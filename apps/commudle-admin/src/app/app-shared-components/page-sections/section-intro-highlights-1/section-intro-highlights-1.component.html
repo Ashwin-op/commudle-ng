@@ -1,0 +1,45 @@
+<div [attr.id]="config.fragmentId || null" class="intro-section">
+  <div class="base-layout container section-container">
+    <div class="intro-grid">
+      <div class="intro-copy">
+        <h2 class="intro-heading" [ngClass]="{ 'section-heading-anchor': config.fragmentId }">
+          {{ config.heading }}
+          <a
+            *ngIf="config.fragmentId"
+            [routerLink]="'.'"
+            [fragment]="config.fragmentId"
+            class="anchor-link"
+            [attr.aria-label]="'Link to ' + config.heading + ' section'"
+          >
+            <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+          </a>
+        </h2>
+        <p class="intro-body">{{ config.body }}</p>
+
+        <!-- Decorative illustration — fills the empty space below the copy on larger screens. -->
+        <div class="intro-illustration" aria-hidden="true">
+          <span class="intro-illustration__blob intro-illustration__blob--a"></span>
+          <span class="intro-illustration__blob intro-illustration__blob--b"></span>
+          <span class="intro-illustration__blob intro-illustration__blob--c"></span>
+          <span class="intro-illustration__icon">
+            <fa-icon [icon]="illustrationIcon"></fa-icon>
+          </span>
+        </div>
+      </div>
+
+      <ul class="highlights">
+        <li *ngFor="let h of config.highlights; let i = index" class="highlight">
+          <span class="highlight__icon" [ngClass]="paletteFor(i)" aria-hidden="true">
+            <fa-icon [icon]="iconFor(h.icon)"></fa-icon>
+          </span>
+          <span class="highlight__body">
+            <span class="highlight__title">
+              {{ h.title }}
+            </span>
+            <span class="highlight__text">{{ h.text }}</span>
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

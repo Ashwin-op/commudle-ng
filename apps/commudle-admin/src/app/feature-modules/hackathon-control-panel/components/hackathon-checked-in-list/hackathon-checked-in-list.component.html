@@ -1,10 +1,10 @@
 <div class="checked-in-list-page">
-  <nb-card>
-    <nb-card-header>
+  <com-card>
+    <com-card-header>
       <h2>Check-in List - {{ hackathon?.name }}</h2>
-    </nb-card-header>
+    </com-card-header>
 
-    <nb-card-body>
+    <com-card-body>
       <div *ngIf="isLoading" class="loading">
         <app-loading-spinner></app-loading-spinner>
       </div>
@@ -118,6 +118,6 @@
           ></app-pagination>
         </div>
       </div>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </div>

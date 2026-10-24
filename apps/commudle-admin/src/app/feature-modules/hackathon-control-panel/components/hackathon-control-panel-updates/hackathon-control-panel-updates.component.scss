@@ -1,4 +1,4 @@
-nb-card {
+com-card {
   @apply com-mx-0 com-my-6;
   .updates {
     @apply com-py-2 com-flex com-flex-col;
@@ -56,8 +56,8 @@ h6 {
 }
 
 .delete-event-update-dialog {
-  nb-card-header,
-  nb-card-footer {
+  com-card-header,
+  com-card-footer {
     @apply com-flex com-justify-between com-items-center;
   }
 }

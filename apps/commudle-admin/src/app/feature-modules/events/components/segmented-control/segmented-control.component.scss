@@ -1,0 +1,16 @@
+.segmented {
+  @apply com-flex com-w-full;
+
+  button {
+    @apply com-flex-1 com-min-w-0 com-h-[38px] com-text-xs com-leading-tight com-whitespace-normal;
+
+    // joined look: only the outer corners stay round
+    &:not(:first-child) {
+      @apply com-rounded-l-none -com-ml-px;
+    }
+
+    &:not(:last-child) {
+      @apply com-rounded-r-none;
+    }
+  }
+}

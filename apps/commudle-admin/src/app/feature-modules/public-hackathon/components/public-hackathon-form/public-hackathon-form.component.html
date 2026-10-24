@@ -5,8 +5,8 @@
     </div>
     <div class="two-column-layout">
       <div class="main-column">
-        <nb-card *ngIf="!isLoading">
-          <nb-card-body class="details-section">
+        <com-card *ngIf="!isLoading" class="details-card">
+          <com-card-body class="details-section">
             <div class="details">
               <h1 class="hackathon-name">
                 {{ hackathon.name }}
@@ -42,10 +42,10 @@
                 </a>
               </ng-container>
             </div>
-          </nb-card-body>
-        </nb-card>
-        <nb-card *ngIf="hackathonUserResponsesByTeam && hackathonUserResponsesByTeam.length > 0">
-          <nb-card-body>
+          </com-card-body>
+        </com-card>
+        <com-card *ngIf="hackathonUserResponsesByTeam && hackathonUserResponsesByTeam.length > 0" class="details-card">
+          <com-card-body>
             <div class="team-selection">
               @if(hackathonUserResponsesByTeam.length > 1){
               <commudle-alert
@@ -104,10 +104,10 @@
                 }
               </div>
             </div>
-          </nb-card-body>
-        </nb-card>
-        <nb-card *ngIf="!isLoading">
-          <nb-card-body>
+          </com-card-body>
+        </com-card>
+        <com-card *ngIf="!isLoading" class="details-card">
+          <com-card-body>
             <nb-stepper orientation="horizontal" [linear]="true" #stepper disableStepNavigation>
               <nb-step label="Profile">
                 <commudle-user-details-form
@@ -168,53 +168,16 @@
                 </div>
               </nb-step>
             </nb-stepper>
-          </nb-card-body>
-        </nb-card>
+          </com-card-body>
+        </com-card>
       </div>
     </div>
   </div>
 </div>
 
-<ng-template #formConfirmationDialog let-data>
-  <nb-card class="confirmation-dialog">
-    <nb-card-body>
-      <div>
-        <p class="thank-you-icon">
-          <nb-icon icon="done-all" status="success"></nb-icon>
-        </p>
-        <p class="thank-you-text">Thank You {{ currentUser.name }} for filling the form!</p>
-        <div class="user">
-          <commudle-user-profile [currentUser]="currentUser"></commudle-user-profile>
-          <commudle-userprofile-details
-            [userProfileDetails]="userProfileDetails"
-            [username]="currentUser.username"
-            [completeProfileText]="'Complete your profile to boost your chances of getting shortlisted'"
-          ></commudle-userprofile-details>
-        </div>
-        <div *appBreakpoints="'<=lg'" class="user">
-          <commudle-user-profile [currentUser]="currentUser"></commudle-user-profile>
-          <commudle-userprofile-details
-            [userProfileDetails]="userProfileDetails"
-            [username]="currentUser.username"
-            [showLowerCardUserDetails]="false"
-            [completeProfileText]="'Complete your profile to boost your chances of getting shortlisted'"
-          ></commudle-userprofile-details>
-        </div>
-      </div>
-    </nb-card-body>
-    <nb-card-footer>
-      <p *ngIf="hackathon">
-        <a [routerLink]="['/communities', community.slug, 'hackathons', hackathon.slug]">
-          <p>Go to Hackathon Page &nbsp;<fa-icon [icon]="icons.faArrowRight"></fa-icon></p>
-        </a>
-      </p>
-    </nb-card-footer>
-  </nb-card>
-</ng-template>
-
 <ng-template #formClosedDialog>
-  <nb-card class="form-closed-dialog">
-    <nb-card-body>
+  <com-card class="form-closed-dialog">
+    <com-card-body>
       <div class="dialog-content">
         <p class="icon">
           <nb-icon icon="close-circle" status="danger"></nb-icon>
@@ -223,22 +186,22 @@
         <p>The application period for this hackathon has ended. You can no longer submit applications.</p>
         <p><strong>Application closed on:</strong> {{ hackathon.application_end_date | date : 'medium' }}</p>
       </div>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button nbButton status="primary" (click)="closeFormDialog()">Go to Hackathon Page</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #createTeamConfirmDialog>
-  <nb-card class="create-team-confirm-dialog">
-    <nb-card-header class="com-flex com-justify-between com-items-center">
+  <com-card class="create-team-confirm-dialog">
+    <com-card-header>
       <span>Create New Team</span>
       <button ghost nbButton size="small" (click)="cancelCreateNewTeam()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div class="dialog-content">
         <p class="icon">
           <nb-icon icon="alert-triangle-outline" status="warning"></nb-icon>
@@ -255,10 +218,10 @@
           </div>
         </div>
       </div>
-    </nb-card-body>
-    <nb-card-footer class="com-flex com-justify-end com-gap-3">
+    </com-card-body>
+    <com-card-footer>
       <button nbButton ghost (click)="cancelCreateNewTeam()">Cancel</button>
       <button nbButton status="danger" (click)="confirmCreateNewTeam()">Yes, Create My Team</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

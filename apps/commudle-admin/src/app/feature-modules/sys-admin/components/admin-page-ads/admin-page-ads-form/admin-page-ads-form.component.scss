@@ -1,7 +1,11 @@
 @import './apps/commudle-admin/src/assets/styles/variables';
 
 .admin-page-ads-form {
-  nb-card-body {
+  @apply com-mt-4;
+  com-card-header {
+    @apply com-flex com-justify-between com-items-center;
+  }
+  com-card-body {
     .form-fields {
       label,
       nb-toggle,

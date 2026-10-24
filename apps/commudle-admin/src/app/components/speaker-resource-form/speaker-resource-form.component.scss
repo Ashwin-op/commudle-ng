@@ -6,7 +6,7 @@
       @apply com-text-xl com-text-Yankees-Blue com-p-6 com-m-0;
     }
 
-    nb-card-body {
+    com-card-body {
       @apply com-m-0 com-p-6;
       .details {
         .community {
@@ -41,7 +41,7 @@
       }
     }
 
-    nb-card-body {
+    com-card-body {
       @apply com-m-0 com-px-6 com-pt-6 com-pb-4;
       .form {
         .title {

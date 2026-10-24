@@ -14,17 +14,20 @@
     .submit-button {
       @apply com-mx-2;
     }
+    com-card {
+      @apply com-mb-4;
 
-    .card-body {
-      input {
-        @apply com-mt-2 com-mb-0;
-      }
+      .card-body {
+        input {
+          @apply com-mt-2 com-mb-0;
+        }
 
-      .description {
-        @apply com-mt-4;
-        label {
-          textarea {
-            @apply com-mt-2;
+        .description {
+          @apply com-mt-4;
+          label {
+            textarea {
+              @apply com-mt-2;
+            }
           }
         }
       }

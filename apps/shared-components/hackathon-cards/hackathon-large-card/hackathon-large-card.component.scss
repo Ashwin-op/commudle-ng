@@ -21,14 +21,18 @@ a {
             @apply com-flex com-flex-row com-items-start com-justify-between com-gap-2;
 
             .name {
-              @apply com-text-base com-font-medium com-text-Yankees-Blue com-m-0 com-line-clamp-1;
+              @apply com-text-base com-font-medium com-text-Yankees-Blue com-m-0 com-flex com-items-center;
 
               &.gradient-effect-title {
                 @apply com-text-tYankees-Blue;
               }
 
+              .name-text {
+                @apply com-truncate com-min-w-0;
+              }
+
               .collaboration-text {
-                @apply com-text-xs com-font-normal com-text-gray-500 com-ml-2;
+                @apply com-text-xs com-font-normal com-text-gray-500 com-ml-2 com-flex-shrink-0 com-whitespace-nowrap;
 
                 &.gradient-effect-meta {
                   @apply com-text-tgray-500;

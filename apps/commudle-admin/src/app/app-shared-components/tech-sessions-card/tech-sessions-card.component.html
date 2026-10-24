@@ -1,5 +1,5 @@
-<nb-card [ngClass]="horizontalScroll ? 'com-w-72' : 'com-w-full'">
-  <nb-card-body>
+<com-card [ngClass]="horizontalScroll ? 'com-w-72' : 'com-w-full'">
+  <com-card-body>
     <a
       [routerLink]="
         session.embedded_content
@@ -11,5 +11,5 @@
       <p class="event-time">{{ moment(session.event.start_time).format('dddd, MMM Do, YYYY') }}</p>
       <app-user-profile-card-small [user]="session.user"></app-user-profile-card-small>
     </a>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

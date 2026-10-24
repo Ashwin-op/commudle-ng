@@ -14,6 +14,7 @@ import {
   NbSpinnerModule,
   NbTooltipModule,
 } from '@commudle/theme';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives.module';
 import { MiniUserProfileModule } from 'apps/shared-modules/mini-user-profile/mini-user-profile.module';
@@ -55,6 +56,7 @@ import { EventStreamingComponent } from 'apps/commudle-admin/src/app/feature-mod
     NbSelectModule,
     NbIconModule,
     NbCardModule,
+    CommudleCardModule,
     NbSpinnerModule,
     NbTooltipModule,
     NbDialogModule.forChild(),

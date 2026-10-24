@@ -204,17 +204,17 @@ p {
 
 .delete-dialog {
   com-card-header {
-    @apply com-px-4 com-py-3;
+    @apply com-px-4 com-py-3 com-flex com-items-center com-justify-between;
     background: linear-gradient(135deg, #f7f7f8 0%, #ffffff 50%, #f7f7f8 100%);
     border-bottom: 1px solid var(--color-bright-gray);
   }
 
   com-card-body {
-    @apply com-p-4;
+    @apply com-p-4 com-flex com-max-w-[350px];
   }
 
   com-card-footer {
-    @apply com-px-4 com-py-3;
+    @apply com-px-4 com-py-3 com-flex com-justify-between com-items-center;
     border-top: 1px solid var(--color-bright-gray);
   }
 }

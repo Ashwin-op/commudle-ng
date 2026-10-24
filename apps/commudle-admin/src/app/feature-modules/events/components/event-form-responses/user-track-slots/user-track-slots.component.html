@@ -67,8 +67,8 @@
 </div>
 
 <ng-template #deleteTrackSlotTemplate let-data let-ref="dialogRef">
-  <nb-card>
-    <nb-card-body>
+  <com-card class="delete-track-slot-card">
+    <com-card-body>
       <div>
         <p>
           Are you sure you want to delete
@@ -76,13 +76,13 @@
           slot?
         </p>
       </div>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <div>
         <button (click)="deleteSlot(data.trackSlot, data.index); ref.close()" nbButton status="primary">Yes</button>
         &nbsp;
         <button (click)="ref.close()" nbButton status="danger" outline>No</button>
       </div>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

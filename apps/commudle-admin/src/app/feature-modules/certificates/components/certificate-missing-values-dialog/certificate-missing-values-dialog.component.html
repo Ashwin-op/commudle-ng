@@ -1,0 +1,37 @@
+<com-card class="certificate-missing-values-dialog">
+  <com-card-header class="dialog-header">
+    <span>Missing Values</span>
+    <button ghost comButton size="small" (click)="close()" shape="round">
+      <fa-icon [icon]="icons.faXmark"></fa-icon>
+    </button>
+  </com-card-header>
+  <com-card-body>
+    <p class="dialog-hint">
+      {{ rows.length }} recipient{{ rows.length === 1 ? '' : 's' }} {{ rows.length === 1 ? 'is' : 'are' }} missing a
+      value used on this certificate. Sending now renders those fields blank for them.
+    </p>
+
+    <div class="missing-values-table-wrapper">
+      <table class="missing-values-table">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Missing</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of rows">
+            <td>{{ row.email }}</td>
+            <td>{{ row.name || '-' }}</td>
+            <td>{{ missingKeysLabel(row) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </com-card-body>
+  <com-card-footer class="dialog-footer">
+    <button comButton status="basic" (click)="wait()">Wait</button>
+    <button comButton status="primary" (click)="skipAndSend()">Skip and Send</button>
+  </com-card-footer>
+</com-card>

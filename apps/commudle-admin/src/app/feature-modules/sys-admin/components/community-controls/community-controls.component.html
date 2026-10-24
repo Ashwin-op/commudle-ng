@@ -4,11 +4,11 @@
       <h2 class="com-text-center com-mb-4">System Administration</h2>
       <div class="admin-controls-grid">
         <!-- Community Management -->
-        <nb-card>
-          <nb-card-header>
+        <com-card>
+          <com-card-header>
             <h3>Community Management</h3>
-          </nb-card-header>
-          <nb-card-body>
+          </com-card-header>
+          <com-card-body>
             <div class="control-buttons">
               <button [routerLink]="['/admin/communities/new']" nbButton status="primary" fullWidth>
                 <nb-icon icon="globe-outline"></nb-icon>
@@ -19,15 +19,15 @@
                 Create Community Group
               </button>
             </div>
-          </nb-card-body>
-        </nb-card>
+          </com-card-body>
+        </com-card>
 
         <!-- Content Management -->
-        <nb-card>
-          <nb-card-header>
+        <com-card>
+          <com-card-header>
             <h3>Content Management</h3>
-          </nb-card-header>
-          <nb-card-body>
+          </com-card-header>
+          <com-card-body>
             <div class="control-buttons">
               <button [routerLink]="['profanity']" nbButton status="primary" fullWidth>
                 <nb-icon icon="shield-outline"></nb-icon>
@@ -38,15 +38,15 @@
                 Spam Detectors
               </button>
             </div>
-          </nb-card-body>
-        </nb-card>
+          </com-card-body>
+        </com-card>
 
         <!-- Payment & Orders -->
-        <nb-card>
-          <nb-card-header>
+        <com-card>
+          <com-card-header>
             <h3>Payment & Orders</h3>
-          </nb-card-header>
-          <nb-card-body>
+          </com-card-header>
+          <com-card-body>
             <div class="control-buttons">
               <button [routerLink]="['discount-codes']" nbButton status="primary" fullWidth>
                 <nb-icon icon="pricetags-outline"></nb-icon>
@@ -57,23 +57,23 @@
                 Purchase Orders
               </button>
             </div>
-          </nb-card-body>
-        </nb-card>
+          </com-card-body>
+        </com-card>
 
         <!-- Subscription Plans -->
-        <nb-card>
-          <nb-card-header>
+        <com-card>
+          <com-card-header>
             <h3>Subscription Plans</h3>
-          </nb-card-header>
-          <nb-card-body>
+          </com-card-header>
+          <com-card-body>
             <div class="control-buttons">
               <button [routerLink]="['razorpay-plans']" nbButton status="primary" fullWidth>
                 <nb-icon icon="credit-card-outline"></nb-icon>
                 Plans & Razorpay Sync
               </button>
             </div>
-          </nb-card-body>
-        </nb-card>
+          </com-card-body>
+        </com-card>
       </div>
     </div>
   </div>

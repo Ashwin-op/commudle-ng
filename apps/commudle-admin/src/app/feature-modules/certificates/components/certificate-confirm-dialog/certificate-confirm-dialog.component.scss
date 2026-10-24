@@ -1,0 +1,11 @@
+.certificate-confirm-dialog {
+  @apply com-w-[26rem] com-max-w-[90vw];
+}
+
+.confirm-message {
+  @apply com-text-Yankees-Blue;
+}
+
+.confirm-footer {
+  @apply com-flex com-justify-end com-gap-2;
+}

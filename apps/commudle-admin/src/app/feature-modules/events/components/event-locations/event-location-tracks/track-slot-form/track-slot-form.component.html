@@ -1,12 +1,12 @@
-<nb-card>
-  <nb-card-header class="com-flex com-justify-between">
+<com-card>
+  <com-card-header>
     <div>{{ operationType === 'create' ? 'Add a session' : 'Edit a session' }}</div>
     <button (click)="close()" ghost nbButton size="small" shape="round">
       <nb-icon icon="close"></nb-icon>
     </button>
-  </nb-card-header>
+  </com-card-header>
 
-  <nb-card-body>
+  <com-card-body>
     <div>
       <form
         (ngSubmit)="operationType === 'create' ? addSlot() : editSlot(trackSlot.id)"
@@ -137,10 +137,10 @@
         </div>
       </form>
     </div>
-  </nb-card-body>
-  <nb-card-footer>
+  </com-card-body>
+  <com-card-footer>
     <div class="save-button-bottom" (click)="operationType === 'create' ? addSlot() : editSlot(trackSlot.id)">
       <button [disabled]="!trackSlotForm.valid" fullWidth nbButton status="info" type="submit">Save</button>
     </div>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

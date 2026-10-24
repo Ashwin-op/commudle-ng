@@ -107,8 +107,11 @@
     <div *ngIf="hackathon.updates_count > 0" id="updates">
       <com-card>
         <com-card-header>
-          <h2>
-            <a [routerLink]="['.']" fragment="updates"> Updates </a>
+          <h2 class="section-heading-anchor title">
+            Updates
+            <a [routerLink]="['.']" fragment="updates" class="anchor-link" aria-label="Link to updates section">
+              <fa-icon [icon]="icons.faHashtag" class="anchor-icon-small"></fa-icon>
+            </a>
           </h2>
         </com-card-header>
         <com-card-body>
@@ -127,7 +130,7 @@
             <fa-icon [icon]="icons.faSackDollar" class="sponsors-card-heading-icon"></fa-icon>
             <span>Sponsors</span>
             <a [routerLink]="'.'" fragment="sponsors" class="anchor-link" aria-label="Link to sponsors section">
-              <fa-icon [icon]="icons.faLink" class="anchor-icon-small"></fa-icon>
+              <fa-icon [icon]="icons.faHashtag" class="anchor-icon-small"></fa-icon>
             </a>
           </h6>
         </com-card-header>
@@ -208,8 +211,11 @@
 
     <com-card id="comments" class="comments">
       <com-card-header class="comments-header">
-        <h2>
-          <a [routerLink]="['.']" fragment="comments"> Comments </a>
+        <h2 class="section-heading-anchor title">
+          Comments
+          <a [routerLink]="['.']" fragment="comments" class="anchor-link" aria-label="Link to comments section">
+            <fa-icon [icon]="icons.faHashtag" class="anchor-icon-small"></fa-icon>
+          </a>
         </h2>
         <button
           *ngIf="isOrganizer && discussionChat && items"
@@ -281,7 +287,10 @@
           </div>
           <div class="round-info">
             <div class="name">{{ round.name }}</div>
-            <div class="date">{{ moment(round.date).format('DD MMM YYYY') }}</div>
+            <div class="date">
+              {{ moment(round.date).format('DD MMM YYYY') }}
+              <ng-container *ngIf="round.end_date">- {{ moment(round.end_date).format('DD MMM YYYY') }}</ng-container>
+            </div>
           </div>
         </div>
       </com-card-body>

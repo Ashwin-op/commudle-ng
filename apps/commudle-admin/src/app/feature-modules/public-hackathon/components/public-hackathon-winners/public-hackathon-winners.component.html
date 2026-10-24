@@ -47,10 +47,11 @@
   <div *ngIf="winnersByPrize.length > 0" class="winners-list">
     <div *ngFor="let entry of winnersByPrize" class="winner-card" [ngClass]="getPrizeRankClass(entry.prize.order)">
       <div class="winner-card-header">
-        <div class="winner-trophy" *ngIf="entry.prize.order <= 3">
+        <div class="winner-trophy">
           <img *ngIf="entry.prize.order === 1" [src]="staticAssets.hackathon_trophy_winner" alt="Winner Trophy" />
           <img *ngIf="entry.prize.order === 2" [src]="staticAssets.hackathon_trophy_silver" alt="Silver Trophy" />
           <img *ngIf="entry.prize.order === 3" [src]="staticAssets.hackathon_trophy_bronze" alt="Bronze Trophy" />
+          <img *ngIf="entry.prize.order > 3" [src]="staticAssets.hacakthon_trophy_winner_state" alt="Trophy" />
         </div>
         <div class="winner-prize-info">
           <div class="prize-badge">

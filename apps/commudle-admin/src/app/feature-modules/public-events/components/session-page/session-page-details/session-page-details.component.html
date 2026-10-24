@@ -1,5 +1,5 @@
-<nb-card class="session-page-details">
-  <nb-card-body>
+<com-card class="session-page-details">
+  <com-card-body>
     <div *ngIf="moment().isBetween(moment(startTime), moment(endTime))">
       <div class="text-success">
         <nb-icon icon="flash"></nb-icon>
@@ -30,5 +30,5 @@
         <div class="community-name">{{ community.name | truncatetext : 35 }}</div>
       </a>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

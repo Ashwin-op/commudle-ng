@@ -32,25 +32,32 @@
         <div class="blog-container">
           <h2 class="header">Relating with Developers & Communities</h2>
           <div class="tags">
-            <nb-tag-list>
-              <nb-tag
-                [text]="defaultTag.value"
-                appearance="outline"
-                [removable]="activeTag === defaultTag.value"
-                [status]="activeTag === defaultTag.value ? 'primary' : 'basic'"
-                size="small"
-                (click)="setActiveTag(defaultTag)"
-              ></nb-tag>
-              <nb-tag
+            <div class="tag-list">
+              <a [routerLink]="['/blogs']" [queryParams]="{ page: 1 }" class="tag-link">
+                <app-tag
+                  [tags]="[defaultTag.value]"
+                  [shape]="'rounded'"
+                  [removable]="activeTag === defaultTag.value"
+                  [fontColor]="activeTag === defaultTag.value ? 'com-text-azure' : 'com-text-tYankees-Blue'"
+                  [backgroundColor]="activeTag === defaultTag.value ? 'com-bg-primary-100' : 'com-bg-[#F7F9FC]'"
+                ></app-tag>
+              </a>
+
+              <a
                 *ngFor="let tag of tags"
-                [text]="tag.value"
-                appearance="outline"
-                [removable]="activeTag === tag.value"
-                [status]="activeTag === tag.value ? 'primary' : 'basic'"
-                size="small"
-                (click)="setActiveTag(tag)"
-              ></nb-tag>
-            </nb-tag-list>
+                [routerLink]="['/blogs/category', tag.value]"
+                [queryParams]="{ page: 1 }"
+                class="tag-link"
+              >
+                <app-tag
+                  [tags]="[tag.value]"
+                  [shape]="'rounded'"
+                  [removable]="activeTag === tag.value"
+                  [fontColor]="activeTag === tag.value ? 'com-text-azure' : 'com-text-tYankees-Blue'"
+                  [backgroundColor]="activeTag === tag.value ? 'com-bg-primary-100' : 'com-bg-[#F7F9FC]'"
+                ></app-tag>
+              </a>
+            </div>
           </div>
           <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
           <div class="blog-list" *ngIf="!isLoading">

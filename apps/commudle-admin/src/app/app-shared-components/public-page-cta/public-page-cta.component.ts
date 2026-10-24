@@ -1,15 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
-
+import { Component } from '@angular/core';
+import { faCheck, faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
-    selector: 'commudle-public-page-cta',
-    templateUrl: './public-page-cta.component.html',
-    styleUrls: ['./public-page-cta.component.scss'],
-    standalone: false
+  selector: 'commudle-public-page-cta',
+  templateUrl: './public-page-cta.component.html',
+  styleUrls: ['./public-page-cta.component.scss'],
+  standalone: false,
 })
-export class PublicPageCtaComponent implements OnInit {
+export class PublicPageCtaComponent {
   faCheck = faCheck;
-  constructor() {}
-
-  ngOnInit(): void {}
+  faHashtag = faHashtag;
 }

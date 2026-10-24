@@ -30,7 +30,12 @@
         <markdown [data]="caseStudyPage.caseStudyMarkdownDescription"></markdown>
       </div>
       <div *ngIf="caseStudyPage?.testimonials" class="testimonials" id="testimonials">
-        <h2 class="heading"><a [routerLink]="'.'" fragment="testimonials">TESTIMONIALS</a></h2>
+        <h2 class="heading section-heading-anchor">
+          TESTIMONIALS
+          <a [routerLink]="'.'" fragment="testimonials" class="anchor-link">
+            <fa-icon [icon]="faHashtag" class="anchor-icon-small"></fa-icon>
+          </a>
+        </h2>
         <h3 class="subheading">Don't just take our word for it</h3>
         <div class="testimonial-card">
           <commudle-testimonial-card [testimonials]="caseStudyPage.testimonials"></commudle-testimonial-card>

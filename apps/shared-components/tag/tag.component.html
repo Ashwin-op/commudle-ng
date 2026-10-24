@@ -6,7 +6,8 @@
     'semi-round': shape === 'semi-round',
     rectangle: shape === 'rectangle',
     'input-small': inputSize === 'small',
-    'input-medium': inputSize === 'medium'
+    'input-medium': inputSize === 'medium' || inputSize === 'custom',
+    'input-custom': inputSize === 'custom'
   }"
 >
   <span
@@ -16,9 +17,9 @@
     class="{{ backgroundColor }} {{ fontColor }}"
   >
     {{ tag }}
-    <fa-icon *ngIf="editable" class="remove-icon" (click)="onTagRemove(tag)" [icon]="faXmark"> </fa-icon>
-  </span>
 
+    <fa-icon *ngIf="editable || removable" class="remove-icon" (click)="onTagRemove(tag)" [icon]="faXmark"> </fa-icon>
+  </span>
   <form [formGroup]="searchForm">
     <input
       (keydown)="onKeyDown($event)"

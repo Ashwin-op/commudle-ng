@@ -116,24 +116,24 @@
 
 <!-- Default Channel Confirmation Dialog -->
 <ng-template #defaultConfirmDialog let-ref="dialogRef">
-  <nb-card class="default-confirm-dialog">
-    <nb-card-header class="default-confirm-dialog-header">
+  <com-card class="default-confirm-dialog">
+    <com-card-header class="default-confirm-dialog-header">
       <span>Change Default Channel</span>
       <button ghost nbButton size="small" (click)="ref.close(false)" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <p>
         <strong>{{ existingDefaultChannel?.name }}</strong> is currently the default channel. Setting this channel as
         default will remove the default status from <strong>{{ existingDefaultChannel?.name }}</strong
         >.
       </p>
       <p>Do you want to continue?</p>
-    </nb-card-body>
-    <nb-card-footer class="default-confirm-dialog-footer">
+    </com-card-body>
+    <com-card-footer class="default-confirm-dialog-footer">
       <button nbButton status="basic" (click)="ref.close(false)">Cancel</button>
       <button nbButton status="primary" (click)="ref.close(true)">Confirm</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

@@ -20,7 +20,7 @@ import { SharedComponentsModule } from 'apps/shared-components/shared-components
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SharedPipesModule } from 'apps/shared-pipes/pipes.module';
 import { EditorModule as tinyMCEEditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
-
+import { CommudleCardModule } from '@commudle/commudle-theme';
 @NgModule({
   declarations: [EditDataFormComponent, CreateDataFormComponent],
   imports: [
@@ -31,7 +31,7 @@ import { EditorModule as tinyMCEEditorModule, TINYMCE_SCRIPT_SRC } from '@tinymc
     NbToggleModule,
     SharedPipesModule,
     NbFormFieldModule,
-
+    CommudleCardModule,
     // External
     FontAwesomeModule,
 

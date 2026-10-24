@@ -1,6 +1,6 @@
 <div *ngIf="dataForm && formCreated" class="data-form">
-  <nb-card *ngIf="dataForm.description">
-    <nb-card-body class="com-p-0">
+  <com-card *ngIf="dataForm.description">
+    <com-card-body class="form-description-card-body">
       <div class="form-description">
         <div
           [innerHTML]="
@@ -10,19 +10,20 @@
           "
         ></div>
       </div>
-    </nb-card-body>
-    <nb-card-footer (click)="viewMore()" *ngIf="dataForm.description.length > 1500" class="com-cursor-pointer">
+    </com-card-body>
+
+    <com-card-footer (click)="viewMore()" *ngIf="dataForm.description.length > 1500" class="description-card-footer">
       <div>
         {{ footerText }}
         <nb-icon *ngIf="!showFullDescription" icon="arrow-ios-downward-outline"></nb-icon>
         <nb-icon *ngIf="showFullDescription" icon="arrow-ios-upward-outline"></nb-icon>
       </div>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
   <form (ngSubmit)="submitForm()" [formGroup]="dataFormEntityResponseForm">
     <div *ngFor="let question of enabledQuestions; let i = index" class="question">
-      <nb-card>
-        <nb-card-body class="com-p-0 com-overflow-hidden">
+      <com-card>
+        <com-card-body class="question-card-body">
           <div class="detail">
             <span class="index">{{ i + 1 }}.</span>
             <p>
@@ -129,14 +130,14 @@
               <commudle-alert [error]="true" [errorMessage]="'Required Field'"></commudle-alert>
             </span>
           </div>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
     </div>
-    <nb-card>
-      <nb-card-body>
+    <com-card>
+      <com-card-body>
         <commudle-alert [info]="true" [message]="message"></commudle-alert>
-      </nb-card-body>
-    </nb-card>
+      </com-card-body>
+    </com-card>
 
     <div class="submit-button" *ngIf="showSubmitButton">
       <app-loading-spinner *ngIf="isFormSubmitting || submitButtonLoading"></app-loading-spinner>

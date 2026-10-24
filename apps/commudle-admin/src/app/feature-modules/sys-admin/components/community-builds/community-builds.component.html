@@ -1,8 +1,8 @@
 <div class="base-layout">
   <div class="container">
     <div class="one-column-layout">
-      <nb-card class="community-builds">
-        <nb-card-header>
+      <com-card class="community-builds">
+        <com-card-header>
           <h4>Community Builds</h4>
           <div class="select">
             <select [ngModel]="selectedBuildStatus" (ngModelChange)="fetchBuildsByStatus($event)">
@@ -11,8 +11,8 @@
               </option>
             </select>
           </div>
-        </nb-card-header>
-        <nb-card-body>
+        </com-card-header>
+        <com-card-body>
           @if (isLoading) {
           <app-loading-spinner></app-loading-spinner>
           } @else {
@@ -73,8 +73,8 @@
             </div>
           </div>
           }
-        </nb-card-body>
-        <nb-card-footer
+        </com-card-body>
+        <com-card-footer
           ><div class="pagination">
             <app-pagination
               (goTo)="page = $event; getBuilds()"
@@ -85,8 +85,8 @@
               [current]="page"
               [total]="total"
             ></app-pagination></div
-        ></nb-card-footer>
-      </nb-card>
+        ></com-card-footer>
+      </com-card>
     </div>
   </div>
 </div>

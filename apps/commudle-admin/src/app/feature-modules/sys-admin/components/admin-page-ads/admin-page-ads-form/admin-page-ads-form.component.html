@@ -1,9 +1,9 @@
-<nb-card class="admin-page-ads-form">
-  <nb-card-header class="d-flex justify-content-space-between align-items-center">
+<com-card class="admin-page-ads-form">
+  <com-card-header>
     Page Ads
     <button [routerLink]="['/sys-admin', 'pa']" ghost nbButton shape="round" size="small">Show All Ads</button>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <form (submit)="submitForm()" [formGroup]="pageAdForm" class="form-fields d-flex flex-column">
       <label>
         Title*
@@ -54,5 +54,5 @@
         {{ pageAd ? 'Update Ad' : 'Create Ad' }}
       </button>
     </form>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

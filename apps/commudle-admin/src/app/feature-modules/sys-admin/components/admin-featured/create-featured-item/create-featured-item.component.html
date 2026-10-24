@@ -1,12 +1,14 @@
-<nb-card class="com-min-w-[50vw]">
-  <nb-card-header class="d-flex align-items-center justify-content-space-between">
+<com-card class="featured-community-card">
+  <com-card-header class="featured-community-card-header">
     Create a Featured Community Build
+
     <button (click)="close()" ghost nbButton size="small">
       <nb-icon icon="close"></nb-icon>
     </button>
-  </nb-card-header>
-  <nb-card-body>
-    <div class="com-flex com-flex-col com-gap-3">
+  </com-card-header>
+
+  <com-card-body>
+    <div class="featured-community-form">
       <nb-form-field>
         <input
           #searchInput
@@ -19,34 +21,40 @@
           type="text"
         />
       </nb-form-field>
+
       <nb-autocomplete #autoNgModel>
         <nb-option *ngFor="let result of searchResult" (click)="selected(result.id, result.name)">
           {{ result.name }}
         </nb-option>
       </nb-autocomplete>
+
       <div *ngIf="entityType === EDbModels.USER">
         <div class="dropdown">
           <select
             [(ngModel)]="categoryType"
-            class="com-border-0"
+            class="category-select"
             [ngClass]="{
-              'com-text-[#8E9BB3]': categoryType === ''
+              'category-select-placeholder': categoryType === ''
             }"
           >
             <option value="" selected disabled>Select Category</option>
+
             <option *ngFor="let categoryType of ECategoryType | keyvalue" [value]="categoryType.value">
               {{ categoryType.value | titlecase }}
             </option>
           </select>
         </div>
       </div>
+
       <input [(ngModel)]="reason" fullWidth maxlength="50" nbInput placeholder="Enter the reason" type="text" />
     </div>
-  </nb-card-body>
-  <nb-card-footer class="d-flex justify-content-space-between">
+  </com-card-body>
+
+  <com-card-footer class="featured-community-card-footer">
     <button (click)="createFeaturedItems()" [disabled]="!reason || entityId === undefined" nbButton status="success">
       Create
     </button>
+
     <button (click)="close()" ghost nbButton status="danger">Cancel</button>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

@@ -4,9 +4,9 @@
       <div class="back-btn">
         <commudle-back-button text="Back to dashboard" router="/dashboard"></commudle-back-button>
       </div>
-      <nb-card class="registrations">
-        <nb-card-header><h2 class="event-registration-heading">Your Registrations</h2></nb-card-header>
-        <nb-card-body>
+      <com-card class="registrations">
+        <com-card-header><h2 class="event-registration-heading">Your Registrations</h2></com-card-header>
+        <com-card-body>
           <div class="event-registrations">
             <div class="registration-grid">
               <div class="registration-header">
@@ -207,12 +207,12 @@
                     "
                     class="qr-code mobile-qr"
                   >
-                    <nb-card>
-                      <nb-card-body>
+                    <com-card>
+                      <com-card-body>
                         <canvas id="qr-code-mobile"></canvas>
                         <p class="qr-code-display">{{ registration.entry_pass.unique_code }}</p>
-                      </nb-card-body>
-                    </nb-card>
+                      </com-card-body>
+                    </com-card>
                   </div>
                 </div>
               </div>
@@ -230,12 +230,12 @@
                 "
                 class="qr-code desktop-qr"
               >
-                <nb-card>
-                  <nb-card-body>
+                <com-card>
+                  <com-card-body>
                     <canvas id="qr-code-desktop"></canvas>
                     <p class="qr-code-display">{{ registration.entry_pass.unique_code }}</p>
-                  </nb-card-body>
-                </nb-card>
+                  </com-card-body>
+                </com-card>
               </div>
             </ng-container>
           </div>
@@ -250,27 +250,27 @@
               [total]="total"
             ></app-pagination>
           </div>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
     </div>
   </div>
 </div>
 
 <ng-template #qrCodePopup let-data let-ref="dialogRef">
-  <nb-card class="template">
-    <nb-card-header>
+  <com-card class="template">
+    <com-card-header>
       <p>{{ data.eventName }}&nbsp; ({{ data.formName }})</p>
       <button ghost nbButton size="small" (click)="ref.close()">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
-      <nb-card class="qr-code-template">
-        <nb-card-body>
+    </com-card-header>
+    <com-card-body>
+      <com-card class="qr-code-template">
+        <com-card-body>
           <canvas id="template-qr"></canvas>
           <p class="qr-unique-code-template">{{ data.entryPassCode }}</p>
-        </nb-card-body>
-      </nb-card>
-    </nb-card-body>
-  </nb-card>
+        </com-card-body>
+      </com-card>
+    </com-card-body>
+  </com-card>
 </ng-template>

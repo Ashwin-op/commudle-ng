@@ -1,9 +1,9 @@
 <div class="base-layout">
   <div class="container">
     <div class="one-column-layout">
-      <nb-card>
-        <nb-card-header>Purchase Orders</nb-card-header>
-        <nb-card-body
+      <com-card>
+        <com-card-header>Purchase Orders</com-card-header>
+        <com-card-body
           ><section>
             <form [formGroup]="searchForm">
               <div class="filter-container">
@@ -72,8 +72,8 @@
               <div *ngIf="!isLoading">No Payment record found!</div>
             </ng-template>
           </section>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
     </div>
   </div>
 </div>

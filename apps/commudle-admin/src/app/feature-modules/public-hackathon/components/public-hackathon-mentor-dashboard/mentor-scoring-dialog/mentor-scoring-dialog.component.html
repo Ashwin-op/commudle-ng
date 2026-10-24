@@ -1,5 +1,5 @@
-<nb-card class="scoring-dialog">
-  <nb-card-header>
+<com-card class="scoring-dialog">
+  <com-card-header>
     <div class="header-content">
       <h4 class="dialog-title">
         {{
@@ -14,9 +14,9 @@
       <p class="team-name">{{ teamData?.team?.name }}</p>
       <span class="round-badge">{{ teamData?.team?.round?.name }}</span>
     </div>
-  </nb-card-header>
+  </com-card-header>
 
-  <nb-card-body>
+  <com-card-body>
     <div *ngIf="isLoadingCriteria" class="loading-section">
       <app-loading-spinner></app-loading-spinner>
       <p>Loading marking criteria...</p>
@@ -104,9 +104,9 @@
         ></textarea>
       </div>
     </form>
-  </nb-card-body>
+  </com-card-body>
 
-  <nb-card-footer>
+  <com-card-footer>
     <div class="dialog-actions">
       <button nbButton ghost (click)="close()" [disabled]="isSubmitting">Cancel</button>
       <button nbButton status="basic" [disabled]="isSubmitting" (click)="submitScore('draft')">
@@ -123,5 +123,5 @@
         {{ isSubmitting ? 'Submitting...' : 'Submit' }}
       </button>
     </div>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

@@ -2,7 +2,7 @@
   @apply com-px-0 com-py-6;
 
   .search-input {
-    @apply md:com-m-0 com-mx-4 com-sticky com-top-[80px] com-z-20 com-bg-white com-py-2;
+    @apply md:com-m-0 com-mx-4 com-sticky com-top-[80px] com-z-20 com-bg-white;
   }
 
   .query-searched {
@@ -13,16 +13,10 @@
     }
   }
 
-  nb-tag-list {
-    @apply com-mt-4 com-p-0 md:com-pb-6 com-pb-2 md:com-px-0 com-px-4 com-w-full com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
-
-    nb-tag {
-      @apply md:com-mb-0 com-mb-4;
-      .selected {
-        @apply com-bg-primary-500;
-      }
-    }
+  .tag-list {
+    @apply com-flex com-flex-wrap com-gap-2 com-mt-4 com-p-0 md:com-pb-6 com-pb-2 md:com-px-0 com-px-4 com-w-full com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
   }
+
   .container {
     .three-column-layout {
       @apply com-pt-4;
@@ -34,26 +28,28 @@
           @apply com-sticky com-top-[86px] com-w-full;
         }
 
-        nb-card {
+        com-card {
           @apply com-m-0;
 
-          nb-card-header {
+          com-card-header {
             @apply com-text-sm com-font-semibold com-text-black com-p-4;
           }
 
-          nb-card-body {
+          com-card-body {
             @apply com-p-0;
 
             .query-results-heading {
-              @apply com-py-2 com-m-0 com-text-sm com-font-medium com-text-Yankees-Blue;
+              @apply com-py-2 com-m-0 com-text-sm com-font-medium com-text-Yankees-Blue com-flex com-items-center;
             }
           }
         }
       }
     }
+
     .main-column {
       @apply com-p-0 md:com-px-0 com-px-4;
     }
+
     .results-count {
       @apply com-m-0 com-text-base com-font-semibold com-text-gray-500;
     }
@@ -126,10 +122,10 @@
 
       .advertisement {
         @apply md:com-flex com-hidden;
-        nb-card {
+        com-card {
           @apply md:com-w-[342px] com-h-[325px] com-m-0 com-border-2 com-border-dashed com-border-Azure md:com-mx-0 com-mx-1;
 
-          nb-card-body {
+          com-card-body {
             @apply com-flex com-items-center com-justify-center;
 
             h2 {
@@ -163,10 +159,6 @@
 
   .view-all {
     @apply com-no-underline com-p-0 com-text-base com-font-normal com-text-Yankees-Blue;
-  }
-
-  nb-tag.appearance-filled.status-primary.selected {
-    @apply com-bg-primary-500 com-text-tWhite;
   }
 
   .load-more {

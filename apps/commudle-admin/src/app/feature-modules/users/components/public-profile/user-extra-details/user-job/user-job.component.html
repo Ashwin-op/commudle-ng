@@ -1,9 +1,12 @@
 <com-card class="user-job" id="jobs">
   <com-card-header>
-    <a [routerLink]="'.'" fragment="jobs">
-      <fa-icon [icon]="faBriefcase" class="com-text-primary-500"></fa-icon>
+    <div class="section-heading-anchor heading">
+      <fa-icon [icon]="faBriefcase" class="com-text-primary-500 icon"></fa-icon>
       Jobs
-    </a>
+      <a [routerLink]="'.'" fragment="jobs" class="anchor-link" aria-label="link to user-job section">
+        <fa-icon [icon]="faHashtag" class="anchor-icon-small"></fa-icon>
+      </a>
+    </div>
     <commudle-help-section [helpDictionaryName]="'jobs'"></commudle-help-section>
   </com-card-header>
   <com-card-body>
@@ -161,19 +164,16 @@
         </label>
         <label>
           Tags
-          <nb-tag-list (tagRemove)="onTagRemove($event)">
-            <nb-tag *ngFor="let tag of tags" [text]="tag" removable></nb-tag>
-            <input
-              (keypress)="restrictComma($event)"
-              (tagAdd)="onTagAdd($event)"
-              [separatorKeys]="[13, 188]"
-              formControlName="tags"
-              fullWidth
-              nbTagInput
-              placeholder="Type a tag and press enter or comma"
-              type="text"
-            />
-          </nb-tag-list>
+          <app-tag
+            [tags]="tags"
+            [editable]="true"
+            [minTagLimit]="false"
+            (tagAdd)="onTagAdd($event)"
+            (tagDelete)="onTagRemove($event)"
+            [label]="'Type a tag and press enter or comma'"
+            [backgroundColor]="'com-bg-tAnti-Flash'"
+            [fontColor]="'com-text-tYankees-Blue'"
+          ></app-tag>
         </label>
       </form>
       <div *ngIf="!isEditing">

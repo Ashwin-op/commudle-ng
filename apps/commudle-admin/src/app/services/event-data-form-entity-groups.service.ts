@@ -5,6 +5,30 @@ import { Observable } from 'rxjs';
 import { ApiRoutesService } from 'apps/shared-services/api-routes.service';
 import { API_ROUTES } from 'apps/shared-services/api-routes.constants';
 import { IEventDataFormEntityGroups } from 'apps/shared-models/event_data_form_entity_groups.model';
+import { IEventStatusFilter } from 'apps/commudle-admin/src/app/services/data-form-entity-response-groups.service';
+
+// every filter on the form responses table; the list call and the bulk status call are both built from this
+export interface IResponseFilterPayload {
+  query: string;
+  registrationStatusIds: (number | string)[];
+  genders: string[];
+  eventLocationTrackId: number;
+  questionFilters: { q: string; v: string }[];
+  userDomains: string[];
+  experienceLevels: string[];
+  communityEngagementFilters: Record<string, unknown> | null;
+  eventStatusFilter: IEventStatusFilter | null;
+}
+
+export interface IBulkStatusPreview {
+  people_to_update: number;
+  passes_to_delete: number;
+  attended_passes_to_delete: number;
+}
+
+export interface IBulkStatusResult {
+  updated_count: number;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -85,22 +109,46 @@ export class EventDataFormEntityGroupsService {
     });
   }
 
+  // dryRun true only returns counts and changes nothing
   changeBulkRegistrationStatus(
-    fromRegistrationStatus,
-    toRegistrationStatus,
-    eventDataFormEntityGroupId,
-    changeCanceledStatus,
-    count: number,
-  ): Observable<boolean> {
-    return this.http.put<boolean>(
+    toRegistrationStatus: string,
+    eventDataFormEntityGroupId: number,
+    filters: IResponseFilterPayload,
+    dryRun: true,
+  ): Observable<IBulkStatusPreview>;
+  changeBulkRegistrationStatus(
+    toRegistrationStatus: string,
+    eventDataFormEntityGroupId: number,
+    filters: IResponseFilterPayload,
+    dryRun?: false,
+  ): Observable<IBulkStatusResult>;
+  changeBulkRegistrationStatus(
+    toRegistrationStatus: string,
+    eventDataFormEntityGroupId: number,
+    filters: IResponseFilterPayload,
+    dryRun = false,
+  ): Observable<IBulkStatusPreview | IBulkStatusResult> {
+    // only active filters are sent, same as the list call
+    const body: Record<string, unknown> = {
+      event_data_form_entity_group_id: eventDataFormEntityGroupId,
+      to_registration_status: toRegistrationStatus,
+    };
+    if (dryRun) body.dry_run = true;
+    if (filters.query) body.query = filters.query;
+    if (filters.registrationStatusIds.length > 0) body.registration_status_id = filters.registrationStatusIds;
+    if (filters.genders.length > 0) body.gender = filters.genders;
+    if (filters.eventLocationTrackId) body.event_location_track_id = filters.eventLocationTrackId;
+    if (filters.questionFilters.length > 0) body.qres = filters.questionFilters;
+    if (filters.userDomains.length > 0) body.user_domains = filters.userDomains;
+    if (filters.experienceLevels.length > 0) body.experience_levels = filters.experienceLevels;
+    if (filters.communityEngagementFilters) {
+      body.community_engagement_filters = JSON.stringify(filters.communityEngagementFilters);
+    }
+    if (filters.eventStatusFilter) body.event_status_filter = JSON.stringify(filters.eventStatusFilter);
+
+    return this.http.put<IBulkStatusPreview | IBulkStatusResult>(
       this.apiRoutesService.getRoute(API_ROUTES.EVENT_DATA_FORM_ENTITY_GROUPS.CHANGE_BULK_REGISTRATION_STATUS),
-      {
-        from_registration_status: fromRegistrationStatus,
-        to_registration_status: toRegistrationStatus,
-        event_data_form_entity_group_id: eventDataFormEntityGroupId,
-        canceled_change: changeCanceledStatus,
-        count: count,
-      },
+      body,
     );
   }
 

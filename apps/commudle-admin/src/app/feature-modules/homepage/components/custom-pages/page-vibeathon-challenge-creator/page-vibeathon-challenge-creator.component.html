@@ -1,44 +1,79 @@
 <!-- ── Hero ─────────────────────────────────────────────────────────────────── -->
-<commudle-section-hero-8 [config]="heroConfig"></commudle-section-hero-8>
+<commudle-section-hero-9 [config]="heroConfig" (primaryCtaClick)="scrollToForm()"></commudle-section-hero-9>
 
-<!-- ── Page body ─────────────────────────────────────────────────────────────── -->
-<div class="page-body">
+<!-- ── What is a Vibeathon Challenge? ───────────────────────────────────────── -->
+<commudle-section-intro-highlights-1 [config]="introConfig"></commudle-section-intro-highlights-1>
+
+<!-- ── Page body (the challenge-creator tool — logic unchanged, visually highlighted) ── -->
+<div id="create-your-challenge" class="page-body">
+  <!-- Sticky background watermark — stays pinned near the top of the viewport
+       while the step cards scroll past/over it, so the section keeps reading
+       as "this is where you start" for the whole time it's in view, not just
+       on first glance. Purely decorative. -->
+  <div class="page-body__watermark" aria-hidden="true">
+    <span class="page-body__watermark-text">Start Here</span>
+  </div>
+
   <div class="page-inner">
+    <!-- Section header — makes sure this doesn't get missed while scrolling past it. -->
+    <div class="tool-header">
+      <div class="start-badge">
+        <span #startBadgeDot class="start-badge__dot" aria-hidden="true"></span>
+        Start here — takes less than a minute
+      </div>
+      <h2 class="tool-header__heading section-heading-anchor">
+        Create Your Challenge
+        <a
+          [routerLink]="'.'"
+          fragment="create-your-challenge"
+          class="anchor-link"
+          aria-label="Link to Create Your Challenge section"
+        >
+          <fa-icon [icon]="icons.faHashtag" class="anchor-icon-medium"></fa-icon>
+        </a>
+      </h2>
+      <p class="tool-header__sub">Give it a name below and your shareable links go live instantly.</p>
+    </div>
+
     <!-- ── Steps timeline — connects all step badge circles with a vertical line ── -->
     <div class="steps-timeline">
-      <!-- Step 1 — Name Your Challenge -->
-      <div class="step-card">
-        <div class="step-header">
-          <div class="step-badge" aria-hidden="true">1</div>
-          <div>
-            <h2 class="step-title">Name Your Challenge</h2>
-            <p class="step-desc">Choose a unique and memorable name for your challenge.</p>
-          </div>
-        </div>
+      <!-- Step 1 — Name Your Challenge (featured: glow + entrance animation, GSAP) -->
+      <div #featuredWrap class="step-card-featured-wrap">
+        <div #featuredGlow class="step-card-featured-wrap__glow" aria-hidden="true"></div>
 
-        <div class="form-field">
-          <label for="challengeNameInput" class="field-label">
-            Challenge Name <span class="field-required" aria-label="required">*</span>
-          </label>
-
-          <div class="input-wrapper">
-            <input
-              nbInput
-              id="challengeNameInput"
-              fullWidth
-              type="text"
-              [(ngModel)]="challengeName"
-              (ngModelChange)="onNameChange()"
-              [status]="isNameValid ? 'success' : 'basic'"
-              placeholder="e.g. VibeCheck 2026"
-              maxlength="60"
-              autocomplete="off"
-              aria-describedby="challengeNameHint"
-            />
-            <fa-icon *ngIf="isNameValid" [icon]="icons.faCheck" class="input-valid-icon" aria-hidden="true"></fa-icon>
+        <div class="step-card step-card--featured">
+          <div class="step-header">
+            <div class="step-badge" aria-hidden="true">1</div>
+            <div>
+              <h2 class="step-title">Name Your Challenge</h2>
+              <p class="step-desc">Choose a unique and memorable name for your challenge.</p>
+            </div>
           </div>
 
-          <p id="challengeNameHint" class="field-hint">This name will be visible to all participants.</p>
+          <div class="form-field">
+            <label for="challengeNameInput" class="field-label">
+              Challenge Name <span class="field-required" aria-label="required">*</span>
+            </label>
+
+            <div class="input-wrapper">
+              <input
+                nbInput
+                id="challengeNameInput"
+                fullWidth
+                type="text"
+                [(ngModel)]="challengeName"
+                (ngModelChange)="onNameChange()"
+                [status]="isNameValid ? 'success' : 'basic'"
+                placeholder="e.g. VibeCheck 2026"
+                maxlength="60"
+                autocomplete="off"
+                aria-describedby="challengeNameHint"
+              />
+              <fa-icon *ngIf="isNameValid" [icon]="icons.faCheck" class="input-valid-icon" aria-hidden="true"></fa-icon>
+            </div>
+
+            <p id="challengeNameHint" class="field-hint">This name will be visible to all participants.</p>
+          </div>
         </div>
       </div>
 
@@ -200,3 +235,21 @@
   <!-- /page-inner -->
 </div>
 <!-- /page-body -->
+
+<!-- ── How it works ─────────────────────────────────────────────────────────── -->
+<commudle-section-steps-1 [config]="howItWorksConfig"></commudle-section-steps-1>
+
+<!-- ── Who runs Vibeathon Challenges ────────────────────────────────────────── -->
+<commudle-section-feature-grid-3 [config]="whoItsForConfig"></commudle-section-feature-grid-3>
+
+<!-- ── Everything a challenge needs ─────────────────────────────────────────── -->
+<commudle-section-feature-grid-2 [config]="whatYouGetConfig"></commudle-section-feature-grid-2>
+
+<!-- ── See what people are building ─────────────────────────────────────────── -->
+<commudle-section-showcase-1 [config]="runChallengeConfig" (primaryCtaClick)="scrollToForm()"></commudle-section-showcase-1>
+
+<!-- ── FAQ ─────────────────────────────────────────────────────────────────── -->
+<commudle-section-faq-1 [config]="faqConfig"></commudle-section-faq-1>
+
+<!-- ── Ready to launch? ────────────────────────────────────────────────────── -->
+<commudle-section-cta-1 [config]="ctaConfig" (primaryCtaClick)="scrollToForm()"></commudle-section-cta-1>

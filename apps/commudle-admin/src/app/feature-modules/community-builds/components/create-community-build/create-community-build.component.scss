@@ -1,7 +1,7 @@
 .community-build {
-  nb-card.page-header {
+  com-card.page-header {
     @apply com-m-0 com-mb-4 com-rounded-t-none md:com-rounded-b-10 com-rounded-b-none;
-    nb-card-body {
+    com-card-body {
       @apply com-p-0;
     }
 
@@ -76,9 +76,9 @@
     }
   }
 
-  nb-card.form-card {
+  com-card.form-card {
     @apply com-m-0;
-    nb-card-body {
+    com-card-body {
       @apply md:com-px-10 com-px-4 md:com-pb-10 com-pb-8 com-pt-0;
     }
 

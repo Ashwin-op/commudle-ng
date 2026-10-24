@@ -1,7 +1,12 @@
 <com-card id="experts">
   <com-card-body>
     <div class="heading">
-      <h3 class="title"><a [routerLink]="'.'" fragment="experts">EXPERTS TO FOLLOW</a></h3>
+      <h3 class="title section-heading-anchor">
+        EXPERTS TO FOLLOW
+        <a [routerLink]="'.'" fragment="experts" class="anchor-link" aria-label="Link to experts section">
+          <fa-icon [icon]="faHashtag" class="anchor-icon-small"></fa-icon>
+        </a>
+      </h3>
       <h4 class="sub-heading">Grow your network</h4>
     </div>
     <app-skeleton-cards

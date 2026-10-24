@@ -1,0 +1,54 @@
+.certificate-recipient-form-dialog {
+  @apply com-w-[28rem] com-max-w-[90vw];
+}
+
+.dialog-header {
+  @apply com-flex com-justify-between com-items-center;
+}
+
+// A max-height on the outer card plus com-card-body's own flex-1/
+// overflow-auto wasn't enough on its own to make the <form> actually
+// scroll - relying on flex-shrink propagating down through com-card-body's
+// component boundary to a plain block child proved unreliable in practice.
+// A hard max-height + overflow-y-auto directly on the body itself sidesteps
+// that entirely: it scrolls regardless of how the flex sizing above it
+// resolves, and doesn't depend on the header/card-footer's own heights.
+.dialog-body {
+  @apply com-max-h-[60vh] com-overflow-y-auto;
+}
+
+.form-field-container {
+  @apply com-mb-4;
+
+  .form-field {
+    @apply com-block com-w-full com-mb-1;
+  }
+
+  .required {
+    @apply com-text-red-500;
+  }
+
+  .hint {
+    @apply com-text-xs com-font-normal com-text-Auro-Metal-Saurus;
+  }
+}
+
+.new-fields {
+  @apply com-mb-2;
+
+  .new-field-row {
+    @apply com-flex com-gap-2 com-items-center com-mb-2;
+
+    .new-field-label {
+      @apply com-w-2/5;
+    }
+
+    .new-field-value {
+      @apply com-flex-1;
+    }
+  }
+}
+
+.add-field-button {
+  @apply com-mb-4;
+}

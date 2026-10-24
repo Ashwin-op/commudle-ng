@@ -11,7 +11,8 @@ import { PublicHomeListEventsModule } from 'apps/commudle-admin/src/app/feature-
 import { SkeletonCardsComponent } from 'apps/commudle-admin/src/app/feature-modules/skeleton-screens/components/skeleton-cards/skeleton-cards.component';
 import { PublicHomeListSpeakersModule } from 'apps/commudle-admin/src/app/feature-modules/listing-pages/public-home-list-speakers/public-home-list-speakers.module';
 import { NbIconModule, NbButtonModule } from '@commudle/theme';
-
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives.module';
 @NgModule({
   declarations: [PublicHomeListHackathonsHomeageComponent],
   imports: [
@@ -27,6 +28,8 @@ import { NbIconModule, NbButtonModule } from '@commudle/theme';
     PublicHomeListSpeakersModule,
     NbIconModule,
     NbButtonModule,
+    FontAwesomeModule,
+    SharedDirectivesModule,
   ],
   exports: [PublicHomeListHackathonsHomeageComponent],
 })

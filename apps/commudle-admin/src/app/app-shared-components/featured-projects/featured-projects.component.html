@@ -1,11 +1,11 @@
-<nb-card
+<com-card
   [ngClass]="{
     'container-scroll': isMobileView || showCardsHorizontal,
     container: !(isMobileView || showCardsHorizontal)
   }"
   id="featured-builds"
 >
-  <nb-card-body>
+  <com-card-body>
     <div class="heading">
       <button *ngIf="showStarsEmojiOnHeading" nbButton class="image">
         <img alt="Featured Projects" src="{{ staticAssets.emojis.stars }}" title="Featured Projects" />
@@ -42,5 +42,5 @@
         </div>
       </div>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

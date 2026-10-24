@@ -37,7 +37,8 @@ export class CreateCommunityFormComponent implements OnInit, AfterViewInit, OnDe
   /** When set, the created community is automatically linked to this community group. */
   @Input() communityGroupSlug: string | null = null;
 
-  @ViewChild('autocompleteInput') autocompleteInput: ElementRef;
+  @ViewChild('autocompleteInput')
+  autocompleteInput: ElementRef;
 
   communityForm: FormGroup;
   isSubmitting = false;
@@ -135,12 +136,22 @@ export class CreateCommunityFormComponent implements OnInit, AfterViewInit, OnDe
     this.destroy$.complete();
   }
 
-  private initAutocomplete(): void {
-    if (!this.autocompleteInput?.nativeElement || typeof google === 'undefined') return;
-    this.googlePlacesAutocompleteService.initAutocomplete(this.autocompleteInput.nativeElement);
-    this.googlePlacesAutocompleteService.placeChanged.pipe(takeUntil(this.destroy$)).subscribe((place) => {
-      this.communityForm.get('location').setValue(place.formatted_address);
+  initAutocomplete() {
+    setTimeout(() => {
+      const input = this.autocompleteInput?.nativeElement as HTMLInputElement | undefined;
+      if (!input || typeof google === 'undefined') return;
+
+      this.googlePlacesAutocompleteService.initAutocomplete(input);
+      this.googlePlacesAutocompleteService.placeChanged
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((place: google.maps.places.PlaceResult) => {
+          this.onLocationPlaceSelected(place);
+        });
     });
+  }
+
+  onLocationPlaceSelected(place: google.maps.places.PlaceResult) {
+    this.communityForm.patchValue({ location: place.formatted_address });
   }
 
   onSlugInput(): void {

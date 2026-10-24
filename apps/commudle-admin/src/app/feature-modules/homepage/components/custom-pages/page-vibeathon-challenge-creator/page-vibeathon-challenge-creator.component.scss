@@ -4,16 +4,120 @@
 
 // ── Page body ─────────────────────────────────────────────────────────────────
 
+// This is the primary/starting action on the page, so it gets a livelier
+// gradient wash instead of the flat Ghost-White used elsewhere — distinct
+// from both the white hero and the pale-blue intro band above it.
+// No `overflow-x-hidden` here on purpose (unlike every other section on
+// this page) — the sticky "Start Here" watermark below needs its nearest
+// *actual* scrolling ancestor to be the page/viewport, not this element.
+// Per the CSS spec, setting `overflow-x: hidden` while leaving `overflow-y`
+// at its default forces the computed overflow-y to `auto` too — which would
+// make `.page-body` itself the sticky containing block, and since its own
+// height only ever grows to fit its content (no independent scroll range),
+// the watermark would have nowhere to "stick" and the effect would just not
+// work. The card glow (18px bleed) and input glow (3px bleed) inside this
+// section are both well within its horizontal padding, so there's nothing
+// this was actually protecting against.
 .page-body {
-  @apply com-bg-Ghost-White com-overflow-x-hidden;
-  min-height: 40vh;
+  @apply com-relative com-min-h-[40vh];
+  // Multi-stop gradient wash — not expressible as a Tailwind gradient
+  // utility (those only support a 2–3 stop from/via/to ramp), so this
+  // stays a plain CSS `background`, same exception taken throughout this
+  // page's section components for conic/radial gradients.
+  background: linear-gradient(180deg, #eef2ff 0%, #f8f9fd 55%, #ffffff 100%);
+
+  // The gradient above is a raw hex wash, not a theme-aware token, so it
+  // never flips in dark mode on its own — meanwhile the text inside this
+  // section (.tool-header, .success-section, etc.) uses theme-aware tokens
+  // like Yankees-Blue, which DO flip to near-white in dark mode. Without
+  // this override that's white text on this still-light background:
+  // invisible. `[data-theme='dark']` is set on <html> by DarkModeService,
+  // same pattern as navbar.component.scss.
+  :host-context([data-theme='dark']) & {
+    background: linear-gradient(180deg, #1a2036 0%, #1c1e26 55%, #121212 100%);
+  }
+}
+
+// ── Tool section header ──────────────────────────────────────────────────────
+//
+// Sits above the "Start here" badge so the section reads clearly even to
+// someone quickly scrolling past — this is the page's primary action.
+
+.tool-header {
+  @apply com-flex com-flex-col com-gap-3;
+
+  &__heading {
+    @apply com-text-Page-Section-Header com-font-bold com-text-Yankees-Blue com-m-0;
+  }
+
+  &__sub {
+    @apply com-text-Paragraph-1 com-text-Auro-Metal-Saurus com-m-0;
+  }
+}
+
+// ── "Start here" badge ──────────────────────────────────────────────────────
+
+.start-badge {
+  @apply com-inline-flex com-items-center com-gap-2 com-self-start com-rounded-full;
+  @apply com-bg-primary-100 com-text-primary-700 com-text-Paragraph-2 com-font-semibold;
+  @apply com-border com-border-primary-200 com-py-1.5 com-px-4;
+
+  &__dot {
+    @apply com-bg-primary-600 com-w-2 com-h-2 com-rounded-full com-flex-shrink-0;
+    @apply com-animate-[start-badge-ping_1.8s_ease-in-out_infinite];
+  }
+}
+
+// Keyframes can't be expressed as a Tailwind utility class — `animate-[…]`
+// above only references this by name, the keyframe steps themselves have
+// to be a plain `@keyframes` rule.
+@keyframes start-badge-ping {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 0.5;
+  }
 }
 
 // Wider container (max-w-4xl = 56 rem) gives the 280 px QR column room alongside
 // the link content without cramping either side.
 .page-inner {
   @apply com-max-w-4xl com-mx-auto com-px-4 md:com-px-6 com-py-12;
-  @apply com-flex com-flex-col com-gap-6;
+  @apply com-flex com-flex-col com-gap-6 com-relative com-z-[1];
+}
+
+// ── Sticky background watermark ────────────────────────────────────────────────
+//
+// `position: sticky` + `height: 0` is the standard "sticky background
+// layer" trick: the element takes up no space in normal flow, so it
+// doesn't push .page-inner down, but its content still paints and sticks
+// at `top: 0` for as long as .page-body (its parent) is in view — meaning
+// the text stays pinned near the top of the viewport while the step cards
+// scroll past over it below, then scrolls away normally once .page-body's
+// bottom passes. `overflow: visible` (the default) is required for the
+// text to render outside the 0-height box — this element deliberately
+// does not clip, so the text can wrap on narrow screens instead.
+.page-body__watermark {
+  @apply com-sticky com-top-0 com-h-0 com-z-0 com-pointer-events-none;
+  @apply com-flex com-justify-center com-w-full com-pt-[18vh];
+}
+
+.page-body__watermark-text {
+  @apply com-font-extrabold com-uppercase com-tracking-[0.04em] com-select-none;
+  @apply com-text-center com-px-4 com-max-w-full;
+  @apply com-text-[clamp(3rem,12vw,9rem)];
+  @apply com-text-primary-600 com-opacity-[0.07];
+
+  // primary-600 is a static brand hex (doesn't flip with theme), so the
+  // dark-mode gradient behind it needs a touch more opacity to still read
+  // at the same visual weight it has on the light gradient.
+  :host-context([data-theme='dark']) & {
+    @apply com-opacity-[0.14];
+  }
 }
 
 // ── Steps timeline (wrapper around all step-cards) ────────────────────────────
@@ -26,19 +130,12 @@
 //   step-card padding-left (p-6 = 24 px) + half badge width (40 px / 2 = 20 px) = 44 px
 
 .steps-timeline {
-  @apply com-flex com-flex-col com-gap-6;
-  position: relative;
+  @apply com-flex com-flex-col com-gap-6 com-relative;
 
   &::before {
-    content: '';
-    position: absolute;
-    left: 43px; // badge centre X (44) − half line width (1)
-    top: 44px; // start at centre of first badge
-    bottom: 44px; // end at centre of last badge
-    width: 2px;
-    @apply com-bg-primary-200;
-    border-radius: 2px;
-    z-index: 0;
+    // badge centre X (44) − half line width (1); start/end at badge centres
+    @apply com-content-[''] com-absolute com-left-[43px] com-top-[44px] com-bottom-[44px];
+    @apply com-w-0.5 com-bg-primary-200 com-rounded-[2px] com-z-0;
   }
 }
 
@@ -47,15 +144,41 @@
 .step-card {
   @apply com-bg-white com-rounded-10 com-p-6;
   @apply com-flex com-flex-col com-gap-6;
-  border: 1px solid;
-  @apply com-border-Bright-Gray;
+  @apply com-border com-border-Bright-Gray;
   // Ensure card background covers the timeline line within each card
-  position: relative;
-  z-index: 1;
+  @apply com-relative com-z-[1];
+}
+
+// ── Featured card (step 1 — the main action on the page) ──────────────────────
+//
+// A soft, slow-rotating blurred glow sits behind the card (GSAP-animated —
+// see ngAfterViewInit) and the card itself gets a stronger border + shadow so
+// it reads as the highlighted starting point of the page.
+
+.step-card-featured-wrap {
+  @apply com-relative;
+
+  // Hex values map directly to tokens defined in tailwind.preset.js (same
+  // mapping convention as section-hero-4):
+  //   #3366ff = primary-500, #6f22df = Blue-Violet,
+  //   #ff3d71 = Infra-Red,   #ffaa00 = Chrome-Yellow
+  &__glow {
+    @apply com-absolute com-inset-[-18px] com-z-0 com-pointer-events-none;
+    @apply com-rounded-3xl com-blur-[28px] com-opacity-[0.55];
+    // Multi-stop conic gradient — see the note on .page-body's background.
+    background: conic-gradient(from 0deg, #3366ff 0%, #6f22df 30%, #ff3d71 55%, #ffaa00 75%, #3366ff 100%);
+  }
+}
+
+.step-card--featured {
+  @apply com-border-primary-200 com-border-[1.5px];
+  @apply com-shadow-[0_20px_45px_-22px_rgba(51,102,255,0.35)];
 }
 
 // Slide-up entrance — plays automatically when the element is inserted into the
-// DOM (via *ngIf). Uses opacity + translateY only (performance-safe).
+// DOM (via *ngIf). Uses opacity + translateY only (performance-safe). Keyframe
+// steps stay plain CSS (see start-badge-ping above); `.step-card--reveal`
+// itself references it through the `animate-[…]` arbitrary utility.
 @keyframes slide-up-fade {
   from {
     opacity: 0;
@@ -68,8 +191,10 @@
 }
 
 .step-card--reveal {
-  animation: slide-up-fade 0.4s ease-out both;
+  @apply com-animate-[slide-up-fade_0.4s_ease-out_both];
 
+  // No Tailwind utility covers `animation-delay` (only `delay-*` for
+  // `transition-delay` exists in core) — plain CSS is the only option.
   &.step-card--reveal-delayed {
     animation-delay: 0.1s;
   }
@@ -113,6 +238,9 @@
 
 // Pulsing glow draws attention to the input before the user starts typing.
 // Uses opacity + transform only — performance-safe per styling guidelines.
+// Opacity/scale pulse (pre-focus attention grabber) — unchanged mechanics,
+// just no longer tied to a single flat colour (see the gradient below).
+// Keyframe steps stay plain CSS — see the note on start-badge-ping above.
 @keyframes input-glow-pulse {
   0%,
   100% {
@@ -120,46 +248,58 @@
     transform: scale(1);
   }
   50% {
-    opacity: 1;
+    opacity: 0.75;
     transform: scale(1.01);
+  }
+}
+
+// Colour-cycles the gradient ring via `filter: hue-rotate`, not a
+// transform — rotating the ring itself (an inset:-3px pseudo-element)
+// would grow its effective bounding box every frame, which is exactly
+// what turned `.page-body` into an unwanted scroll container earlier on
+// this page (see the featured-card glow's comment). `filter` is
+// paint-only and can't do that.
+@keyframes input-glow-hue {
+  from {
+    filter: hue-rotate(0deg);
+  }
+  to {
+    filter: hue-rotate(360deg);
   }
 }
 
 // Wrapper positions the green checkmark and the attention glow.
 .input-wrapper {
-  position: relative;
+  @apply com-relative;
 
-  // Glow ring rendered as a ::before pseudo-element — stops on focus.
+  // Glow ring rendered as a ::before pseudo-element — a Gemini-style
+  // multicolour sweep instead of a flat blue tint. Hex values map directly
+  // to tokens in tailwind.preset.js (same mapping convention used
+  // elsewhere on this page): #3366ff = primary-500, #6f22df = Blue-Violet,
+  // #ff3d71 = Infra-Red, #ffaa00 = Chrome-Yellow.
   &::before {
-    content: '';
-    position: absolute;
-    inset: -3px;
-    border-radius: 8px;
-    background: rgba(51, 102, 255, 0.14); // primary-500 at low opacity
-    pointer-events: none;
-    z-index: 0;
-    animation: input-glow-pulse 2s ease-in-out infinite;
+    @apply com-content-[''] com-absolute com-inset-[-3px] com-rounded-lg;
+    @apply com-pointer-events-none com-z-0 com-blur-[1px];
+    // Multi-stop conic gradient — see the note on .page-body's background.
+    background: conic-gradient(from 0deg, #3366ff, #6f22df, #ff3d71, #ffaa00, #3366ff);
+    @apply com-animate-[input-glow-pulse_2s_ease-in-out_infinite,input-glow-hue_6s_linear_infinite];
   }
 
+  // "Activated" state — like Gemini's input glow lighting up on mobile once
+  // you tap in: full-opacity, faster colour cycling, instead of just
+  // switching off.
   &:focus-within::before {
-    animation: none;
-    opacity: 0;
+    @apply com-opacity-100 com-animate-[input-glow-hue_2.5s_linear_infinite];
   }
 
   input {
-    padding-right: 40px;
-    position: relative;
-    z-index: 1;
+    @apply com-pr-10 com-relative com-z-[1];
   }
 }
 
 .input-valid-icon {
-  @apply com-text-Caribbean-Green;
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
+  @apply com-text-Caribbean-Green com-absolute com-right-3 com-top-1/2;
+  @apply -com-translate-y-1/2 com-pointer-events-none;
 }
 
 .field-hint {
@@ -179,12 +319,7 @@
 .link-row {
   @apply com-bg-Ghost-White com-rounded-10 com-border com-border-Bright-Gray;
   @apply com-p-4 com-flex com-flex-col com-gap-4;
-
-  @screen md {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 24px;
-  }
+  @apply md:com-flex-row md:com-items-start md:com-gap-6;
 
   &--submit {
     @apply com-border-Caribbean-Green;
@@ -192,8 +327,7 @@
 }
 
 .link-row__content {
-  @apply com-flex com-flex-col com-gap-4 com-flex-1;
-  min-width: 0; // prevent flex blowout on long URLs
+  @apply com-flex com-flex-col com-gap-4 com-flex-1 com-min-w-0; // min-w-0 prevents flex blowout on long URLs
 }
 
 // 280 px QR column — fixed width locks the column so it doesn't shrink.
@@ -203,19 +337,19 @@
 
   canvas {
     // Force a crisp 280×280 display via CSS scaling of the lean-qr buffer.
-    // image-rendering: pixelated keeps QR modules sharp instead of blurry.
-    // background: #ffffff ensures the canvas is never transparent in dark mode
-    // (lean-qr also receives off: '#ffffff' in renderQR for belt-and-braces).
-    width: 280px;
-    height: 280px;
-    display: block;
+    @apply com-w-[280px] com-h-[280px] com-block com-rounded-lg;
+    // `image-rendering` has no Tailwind utility — keeps QR modules sharp
+    // instead of blurry, genuine gap, stays plain CSS.
     image-rendering: pixelated;
-    background: #ffffff;
-    border-radius: 8px;
+    // Static white (tWhite = always #ffffff, both themes), not the
+    // theme-aware `white` token — the canvas must never go dark-mode-
+    // transparent (lean-qr also receives off: '#ffffff' in renderQR for
+    // belt-and-braces).
+    @apply com-bg-tWhite;
   }
 
   @screen md {
-    width: 280px;
+    @apply com-w-[280px];
   }
 }
 
@@ -235,14 +369,8 @@
 
 // Circular icon badge — 40×40, centred icon.
 .link-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  font-size: 16px;
+  @apply com-w-10 com-h-10 com-rounded-full com-flex com-items-center com-justify-center;
+  @apply com-flex-shrink-0 com-text-base;
 
   &--view {
     @apply com-bg-primary-100 com-text-primary-600;
@@ -257,29 +385,25 @@
 
 .url-row {
   @apply com-flex com-items-center com-gap-2 com-rounded-10 com-p-2;
-  @apply com-bg-white com-border com-border-Bright-Gray;
-  min-width: 0;
+  @apply com-bg-white com-border com-border-Bright-Gray com-min-w-0;
 }
 
 .url-row__icon {
-  @apply com-text-Cadet-Grey;
-  flex-shrink: 0;
-  font-size: 12px;
+  @apply com-text-Cadet-Grey com-flex-shrink-0 com-text-Caption;
 }
 
 .url-row__text {
-  @apply com-flex-1 com-truncate com-text-Caption com-text-Auro-Metal-Saurus;
-  min-width: 0;
+  @apply com-flex-1 com-truncate com-text-Caption com-text-Auro-Metal-Saurus com-min-w-0;
 }
 
 .copy-btn {
-  flex-shrink: 0;
+  @apply com-flex-shrink-0;
 }
 
 // Anchor wrapper for the Open Link button — must be block so fullWidth on the
 // button inside stretches the full row.
 .open-link-anchor {
-  display: block;
+  @apply com-block;
 }
 
 // ── Success section ───────────────────────────────────────────────────────────
@@ -294,6 +418,11 @@
 }
 
 // ── Reduced motion ────────────────────────────────────────────────────────────
+//
+// A global `*` reset with `!important` — inherently a plain-CSS escape
+// hatch (there's no Tailwind utility form of "disable every animation on
+// the page unconditionally"), same as every other reduced-motion block on
+// this page's section components.
 
 @media (prefers-reduced-motion: reduce) {
   * {

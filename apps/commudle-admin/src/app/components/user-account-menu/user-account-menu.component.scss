@@ -52,11 +52,11 @@
 
 .logout-confirmation {
   @apply com-h-full com-m-0;
-  nb-card-footer {
+  com-card-footer {
     @apply com-flex com-flex-col com-gap-4 com-justify-between com-items-center;
   }
 
-  nb-card-body {
+  com-card-body {
     @apply com-text-center com-pt-6 com-pb-4 com-px-4;
 
     h3 {

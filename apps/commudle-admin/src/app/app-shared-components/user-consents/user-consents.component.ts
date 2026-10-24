@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NbButtonModule, NbCardModule } from '@commudle/theme';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 import { UserFollowConsentComponent } from 'apps/commudle-admin/src/app/app-shared-components/user-consents/user-follow-consent/user-follow-consent.component';
 import { JoinChannelConsentComponent } from 'apps/commudle-admin/src/app/app-shared-components/user-consents/join-channel-consent/join-channel-consent.component';
 import { JoinCommunityConsentComponent } from 'apps/commudle-admin/src/app/app-shared-components/user-consents/join-community-consent/join-community-consent.component';
@@ -31,6 +32,7 @@ import { HackathonRegistrationConsentComponent } from 'apps/commudle-admin/src/a
     CommonModule,
     NbButtonModule,
     NbCardModule,
+    CommudleCardModule,
     FontAwesomeModule,
     UserFollowConsentComponent,
     JoinChannelConsentComponent,
@@ -52,7 +54,7 @@ import { HackathonRegistrationConsentComponent } from 'apps/commudle-admin/src/a
     HackathonRegistrationConsentComponent,
   ],
 })
-export class UserConsentsComponent implements OnInit {
+export class UserConsentsComponent {
   @Input() consentType;
   @Input() username: string;
   @Input() communitySlug: string;
@@ -79,10 +81,6 @@ export class UserConsentsComponent implements OnInit {
   consentTypesEnum = ConsentTypesEnum;
 
   @ViewChild('consentAnimation', { static: false }) consentAnimationContainer: ElementRef<HTMLDivElement>;
-
-  constructor() {}
-
-  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     import('lottie-web').then((l) => {

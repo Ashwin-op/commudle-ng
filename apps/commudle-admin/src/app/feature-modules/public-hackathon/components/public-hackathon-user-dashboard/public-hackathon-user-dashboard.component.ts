@@ -7,9 +7,11 @@ import {
   EHackathonRegistrationStatus,
   EInvitationStatus,
   EParticipateTypes,
+  ICommunity,
   ICommunityChannel,
   IHackathonTeam,
   IHackathonUserResponse,
+  IHackathonTrack,
 } from '@commudle/shared-models';
 import { AuthService, ToastrService, SeoService } from '@commudle/shared-services';
 import { NbDialogService } from '@commudle/theme';
@@ -21,6 +23,7 @@ import { IHackathon } from 'apps/shared-models/hackathon.model';
 import { IHackathonResponseGroup } from 'apps/shared-models/hackathon-response-group.model';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
 import { Subject, Subscription, takeUntil } from 'rxjs';
+import { getAccessibleTeams } from '../../utils/hackathon-team-access';
 @Component({
   selector: 'commudle-public-hackathon-user-dashboard',
   templateUrl: './public-hackathon-user-dashboard.component.html',
@@ -38,8 +41,11 @@ export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy 
   };
   EHackathonRegistrationStatus = EHackathonRegistrationStatus;
   hackathon: IHackathon;
+  community: ICommunity;
   subscriptions: Subscription[] = [];
+  allTeams: IHackathonTeam[];
   userTeamDetails: IHackathonTeam[];
+  hackathonTracks: IHackathonTrack[] = [];
   hrgId: number;
   EDbModels: EDbModels;
   EDiscussionType = EDiscussionType;
@@ -75,6 +81,8 @@ export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy 
     this.subscriptions.push(
       this.activatedRoute.parent.data.subscribe((data) => {
         this.hackathon = data.hackathon;
+        this.community = data.community;
+        this.fetchHackathonTracks();
         if (this.hackathon.participate_types === EParticipateTypes.TEAM) {
           this.hasTeammateOption = true;
         }
@@ -106,13 +114,23 @@ export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy 
     this.destroy$.complete();
   }
 
+  fetchHackathonTracks() {
+    this.hackathonService
+      .pIndexHackathonTracks(this.hackathon.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: IHackathonTrack[]) => {
+        this.hackathonTracks = data || [];
+      });
+  }
+
   getHackathonCurrentRegistrationDetails() {
     this.hackathonService
       .getHackathonCurrentRegistrationDetails(this.hackathon.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: IHackathonTeam[]) => {
         if (data) {
-          this.userTeamDetails = data;
+          this.allTeams = data;
+          this.userTeamDetails = getAccessibleTeams(data, this.currentUser?.id);
           this.categorizeTeams();
           this.syncSelectedTeam();
         }
@@ -120,9 +138,9 @@ export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy 
   }
 
   categorizeTeams() {
-    if (!this.userTeamDetails || !this.currentUser) return;
-    this.ownTeams = this.userTeamDetails.filter((team) => team.user_id === this.currentUser.id);
-    this.pendingInvites = this.userTeamDetails.filter((team) => {
+    if (!this.allTeams || !this.currentUser) return;
+    this.ownTeams = this.allTeams.filter((team) => team.user_id === this.currentUser.id);
+    this.pendingInvites = this.allTeams.filter((team) => {
       const myHur = team.hackathon_user_responses?.find((hur) => hur.user_id === this.currentUser.id);
       return myHur && myHur.invite_status === EInvitationStatus.INVITED && team.user_id !== this.currentUser.id;
     });
@@ -212,10 +230,19 @@ export class PublicHackathonUserDashboardComponent implements OnInit, OnDestroy 
 
   shouldShowProblemStatementPrompt(): boolean {
     if (!this.selectedTeam) return false;
-    return (
-      this.selectedTeam.registration_status === EHackathonRegistrationStatus.ACCEPTED &&
-      !this.selectedTeam.problem_statement
-    );
+    if (this.selectedTeam.registration_status !== EHackathonRegistrationStatus.ACCEPTED) return false;
+    if (this.hackathonTracks.length === 0) {
+      return false;
+    }
+
+    const hasSelectedTrack = !!this.selectedTeam.track;
+    if (!hasSelectedTrack) {
+      return true;
+    }
+    const selectedTrack = this.hackathonTracks.find((track) => track.id == this.selectedTeam.track.id);
+    const trackHasProblemStatements = (selectedTrack?.hackathon_problem_statements?.length ?? 0) > 0;
+    const hasSelectedProblemStatement = !!this.selectedTeam.problem_statement;
+    return trackHasProblemStatements && !hasSelectedProblemStatement;
   }
 
   openProblemStatementDialog() {

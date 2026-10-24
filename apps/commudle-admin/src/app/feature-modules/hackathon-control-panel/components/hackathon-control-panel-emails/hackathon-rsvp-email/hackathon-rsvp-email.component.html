@@ -1,11 +1,11 @@
-<nb-card class="send-rsvp-dialog-box">
-  <nb-card-header>
+<com-card class="send-rsvp-dialog-box">
+  <com-card-header>
     <span>Send RSVP Email</span>
     <button nbButton ghost (click)="close()" shape="round">
       <nb-icon icon="close"></nb-icon>
     </button>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <commudle-alert
       [info]="true"
       [message]="'This will send a pre-formatted email, you can add any additional message and change the subject'"
@@ -27,8 +27,8 @@
         <editor formControlName="message" [init]="tinyMCE"></editor>
       </div>
     </form>
-  </nb-card-body>
-  <nb-card-footer>
+  </com-card-body>
+  <com-card-footer>
     <button
       nbButton
       status="primary"
@@ -39,5 +39,5 @@
       Preview Email
     </button>
     <button nbButton status="primary" (click)="sendRsvpEmail()" [disabled]="rsvpForm.invalid" fullWidth>Send</button>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

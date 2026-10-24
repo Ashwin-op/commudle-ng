@@ -1,38 +1,38 @@
-<nb-card class="settings">
-  <nb-card-header *ngIf="invitation" class="settings-header">
+<com-card class="settings">
+  <com-card-header *ngIf="invitation" class="settings-header">
     You are being invited to the Stage!
     <button (click)="close(false)" nbButton ghost size="small"><nb-icon icon="close"></nb-icon></button>
-  </nb-card-header>
-  <nb-card-header *ngIf="joinStage" class="settings-header">
+  </com-card-header>
+  <com-card-header *ngIf="joinStage" class="settings-header">
     Join the stage
     <button (click)="close(false)" nbButton ghost size="small"><nb-icon icon="close"></nb-icon></button>
-  </nb-card-header>
-  <nb-card-header *ngIf="!(invitation || joinStage)" class="settings-header">
+  </com-card-header>
+  <com-card-header *ngIf="!(invitation || joinStage)" class="settings-header">
     Settings
     <button (click)="close(false)" nbButton ghost size="small"><nb-icon icon="close"></nb-icon></button>
-  </nb-card-header>
+  </com-card-header>
 
   <!-- Invitation / Join Stage view -->
   <ng-container *ngIf="invitation || joinStage">
-    <nb-card-body *ngIf="audioInputDevices.length === 0 || videoDevices.length === 0" class="stage-permissions">
+    <com-card-body *ngIf="audioInputDevices.length === 0 || videoDevices.length === 0" class="stage-permissions">
       <nb-alert accent="info">Please allow access to microphone and camera devices to continue!</nb-alert>
       <button (click)="getMediaPermissions()" fullWidth nbButton status="info" size="medium">Get Permission</button>
-    </nb-card-body>
-    <nb-card-body [ngClass]="{ hidden: audioInputDevices.length === 0 || videoDevices.length === 0 }">
+    </com-card-body>
+    <com-card-body [ngClass]="{ hidden: audioInputDevices.length === 0 || videoDevices.length === 0 }">
       <ng-container *ngTemplateOutlet="audioVideoSettings"></ng-container>
-    </nb-card-body>
-    <nb-card-footer class="stage-actions">
+    </com-card-body>
+    <com-card-footer class="stage-actions">
       <button (click)="close(true)" nbButton size="medium" status="success" fullWidth>
         <nb-icon icon="video"></nb-icon>
         Join Stage
       </button>
       <button (click)="close(false)" nbButton size="medium" status="basic" outline fullWidth>Cancel</button>
-    </nb-card-footer>
+    </com-card-footer>
   </ng-container>
 
   <!-- Full settings view with LHS menu -->
   <ng-container *ngIf="!(invitation || joinStage)">
-    <nb-card-body class="settings-body">
+    <com-card-body class="settings-body">
       <div class="settings-layout">
         <div class="settings-menu">
           <div
@@ -57,10 +57,10 @@
         <div class="settings-content">
           <!-- Audio / Video Tab -->
           <div *ngIf="activeTab === 'audio-video'">
-            <nb-card-body *ngIf="audioInputDevices.length === 0 || videoDevices.length === 0">
+            <com-card-body *ngIf="audioInputDevices.length === 0 || videoDevices.length === 0">
               <nb-alert accent="info">Please allow access to microphone and camera devices to continue!</nb-alert>
               <button (click)="getMediaPermissions()" fullWidth nbButton status="info">Get Permission</button>
-            </nb-card-body>
+            </com-card-body>
             <div [ngClass]="{ hidden: audioInputDevices.length === 0 || videoDevices.length === 0 }">
               <ng-container *ngTemplateOutlet="audioVideoSettings"></ng-container>
             </div>
@@ -208,52 +208,52 @@
           </div>
         </div>
       </div>
-    </nb-card-body>
+    </com-card-body>
   </ng-container>
-</nb-card>
+</com-card>
 
 <!-- HLS start options dialog -->
 <ng-template #hlsOptionsDialog let-ref="dialogRef">
-  <nb-card class="confirm-dialog">
-    <nb-card-header class="confirm-header">
+  <com-card class="confirm-dialog">
+    <com-card-header class="confirm-header">
       <span>Start HLS Streaming</span>
       <button ghost nbButton size="small" (click)="ref.close(null)" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <p class="confirm-message">How would you like to start the HLS stream?</p>
-    </nb-card-body>
-    <nb-card-footer class="confirm-actions">
+    </com-card-body>
+    <com-card-footer class="confirm-actions">
       <button (click)="ref.close('toggleHls')" nbButton size="small" status="success">Stream Only</button>
       <button (click)="ref.close('toggleHlsWithRecording')" nbButton size="small" status="info">
         Stream + Recording
       </button>
       <button (click)="ref.close(null)" nbButton size="small" ghost status="basic">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <!-- Confirmation dialog template -->
 <ng-template #confirmDialog let-ref="dialogRef">
-  <nb-card class="confirm-dialog">
-    <nb-card-header class="confirm-header">
+  <com-card class="confirm-dialog">
+    <com-card-header class="confirm-header">
       <span>{{ confirmTitle }}</span>
       <button ghost nbButton size="small" (click)="ref.close(false)" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <p class="confirm-message">{{ confirmMessage }}</p>
       <ul *ngIf="confirmExtras.length > 0" class="confirm-extras">
         <li *ngFor="let extra of confirmExtras">{{ extra }}</li>
       </ul>
-    </nb-card-body>
-    <nb-card-footer class="confirm-actions">
+    </com-card-body>
+    <com-card-footer class="confirm-actions">
       <button (click)="ref.close(true)" nbButton size="small" status="danger">Yes, confirm</button>
       <button (click)="ref.close(false)" nbButton size="small" ghost status="basic">Cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <!-- Shared audio/video settings template -->

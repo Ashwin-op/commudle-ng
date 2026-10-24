@@ -4,7 +4,7 @@ p {
 
 .community-build-discussion {
   @apply com-m-0 com-mt-10;
-  nb-card-body {
+  com-card-body {
     @apply com-p-0;
 
     commudle-discussion {
@@ -126,13 +126,14 @@ p {
 }
 
 .image-window {
-  @apply com-m-0;
-  nb-card-header {
-    @apply com-flex com-items-center com-justify-between;
+  @apply com-w-[100dvw] md:com-w-full com-flex com-flex-col;
+
+  com-card-header {
+    @apply com-flex com-justify-between com-items-center;
   }
 
-  nb-card-body {
-    @apply md:com-px-6 com-px-4 com-py-4;
+  com-card-body {
+    @apply md:com-px-6 com-px-4 com-py-4 com-flex;
     .banner-image {
       @apply md:com-w-[900px] com-overflow-y-auto com-w-full com-h-auto com-scrollbar-hide;
     }

@@ -4,7 +4,7 @@ import { IBlog } from 'apps/commudle-admin/src/app/feature-modules/public-blogs/
 import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.service';
 import { FooterService } from 'apps/commudle-admin/src/app/services/footer.service';
 import { environment } from 'apps/commudle-admin/src/environments/environment';
-import { EHttpContextFlag } from 'apps/shared-models/enums/http-context-tokens';
+import { EHttpContextFlag } from '@commudle/shared-models';
 import { CmsService } from 'apps/shared-services/cms.service';
 import { SeoService } from 'apps/shared-services/seo.service';
 
@@ -160,12 +160,9 @@ export class BlogsListComponent implements OnInit, OnDestroy {
 
   setActiveTag(tag): void {
     this.activeTag = tag.value;
-    if (tag.slug == this.defaultTag.slug) {
-      this.router.navigate(['/blogs'], { queryParams: { page: this.page } });
-    } else {
+    if (tag.slug !== this.defaultTag.slug) {
       this.page = 1;
       this.updatePagesAndCount(false);
-      this.router.navigate(['/blogs/category', tag.slug], { queryParams: { page: this.page } });
     }
     this.getFilteredData(tag.value);
   }

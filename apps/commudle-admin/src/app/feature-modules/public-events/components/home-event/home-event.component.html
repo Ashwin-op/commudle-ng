@@ -3,7 +3,13 @@
     <!-- <div class="community-badge">
       <app-community-badge [background]="'bg-white'" [community]="community"></app-community-badge>
     </div> -->
-    <com-card class="details-section">
+    <com-card
+      class="details-section"
+      [ngClass]="{
+        'com-mb-4 !com-rounded-t-none !com-rounded-b-lg': event.header_image_path,
+        '!com-rounded-none': !event.header_image_path
+      }"
+    >
       <com-card-body>
         <div class="details">
           <h1 class="event-name">
@@ -147,10 +153,17 @@
             class="event-form-card"
           >
             <com-card-body>
-              <h6 class="event-form-title">
-                <a [routerLink]="'.'" fragment="event-form"
-                  ><nb-icon icon="file-text-outline" status="primary"></nb-icon>Event Forms</a
+              <h6 class="event-form-title section-heading-anchor">
+                <nb-icon icon="file-text-outline" status="primary"></nb-icon>
+                Event Forms
+                <a
+                  [routerLink]="'.'"
+                  fragment="event-form"
+                  class="anchor-link"
+                  aria-label="Link to Event Forms section"
                 >
+                  <fa-icon [icon]="faHashtag" class="anchor-icon-small"></fa-icon>
+                </a>
               </h6>
               <div #eventFormSection id="event-form" class="registration-form">
                 <app-highlighted-links
@@ -193,10 +206,12 @@
         <div #commentsSection id="comments">
           <com-card *ngIf="discussionChat" class="home-event-discussion">
             <com-card-header>
-              <h6 class="title">
-                <a [routerLink]="'.'" fragment="comments"
-                  ><nb-icon icon="message-circle-outline" status="info"></nb-icon>Comments</a
-                >
+              <h6 class="title section-heading-anchor">
+                <nb-icon icon="message-circle-outline" status="info"></nb-icon>
+                Comments
+                <a [routerLink]="'.'" fragment="comments" class="anchor-link" aria-label="Link to comments section">
+                  <fa-icon [icon]="faHashtag" class="anchor-icon-small"></fa-icon>
+                </a>
                 <commudle-help-section [helpDictionaryName]="'event-comments'"></commudle-help-section>
               </h6>
               <button

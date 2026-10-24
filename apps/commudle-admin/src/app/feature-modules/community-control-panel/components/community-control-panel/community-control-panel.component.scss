@@ -105,7 +105,7 @@
 }
 
 .sidebar {
-  @apply com-sticky com-top-[112px] com-h-[calc(100vh-60px-52px)] com-flex com-flex-col com-overflow-hidden;
+  @apply com-sticky com-top-[112px] com-h-[calc(100vh-60px-52px)] com-flex com-flex-col;
 
   a {
     @apply com-text-inherit com-no-underline;
@@ -196,7 +196,9 @@ a {
 }
 
 .router {
-  @apply com-w-full md:com-m-4 com-m-0 com-bg-white com-rounded-lg;
+  // min-w-0 lets this flex item shrink below its content's width, so a wide
+  // child (e.g. a table) scrolls inside itself instead of widening the page.
+  @apply com-w-full com-min-w-0 md:com-m-4 com-m-0 com-bg-white com-rounded-lg;
 }
 
 .header-icons {

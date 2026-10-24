@@ -1,5 +1,5 @@
-<nb-card class="user-details-container" [ngClass]="{ 'no-menu-items': noMenuItems }">
-  <nb-card-body *ngIf="user">
+<com-card class="user-details-container" [ngClass]="{ 'no-menu-items': noMenuItems }">
+  <com-card-body *ngIf="user">
     <app-user-cover-photo [user]="user" (coverImageUpdate)="updateProfile.emit()"></app-user-cover-photo>
     <div class="profile-header">
       <div class="action-buttons">
@@ -135,14 +135,29 @@
             </div>
           </div>
         </div>
-        <nb-tag-list *ngIf="user.tags?.length > 0" class="tags">
-          <nb-tag *ngFor="let tag of user.tags" [text]="tag.name" appearance="outline" class="user-tags"></nb-tag>
-          <nb-tag (click)="onTagDialogOpen()" *ngIf="currentUser?.id === user.id" class="add-tag" text="+"></nb-tag>
-        </nb-tag-list>
+        <div class="tags">
+          <ng-container *ngIf="user.tags?.length > 0">
+            <app-tag
+              *ngFor="let tag of user.tags"
+              [tags]="[tag.name]"
+              backgroundColor="com-bg-blue-50"
+              fontColor="com-text-Azure"
+              class="user-tags"
+            ></app-tag>
+          </ng-container>
+          <app-tag
+            *ngIf="currentUser?.id === user.id"
+            [tags]="['+']"
+            backgroundColor="com-bg-Azure"
+            fontColor="com-text-white"
+            (click)="onTagDialogOpen()"
+            class="add-tag"
+          ></app-tag>
+        </div>
       </div>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
 <ng-template #editTags let-ref="dialogRef">
   <com-card class="tag-dialog">
@@ -159,18 +174,16 @@
           >Add tags of your skills which you want other developers to see!</span
         >
       </div>
-      <nb-tag-list (tagRemove)="onTagRemove($event)">
-        <nb-tag *ngFor="let tag of tagsDialog" [text]="tag" removable></nb-tag>
-        <input
-          (keypress)="restrictComma($event)"
-          (tagAdd)="onTagAdd($event)"
-          [separatorKeys]="[13, 188]"
-          fullWidth
-          nbTagInput
-          placeholder="Type a tag and press enter or comma"
-          type="text"
-        />
-      </nb-tag-list>
+      <app-tag
+        [tags]="tagsDialog"
+        [editable]="true"
+        [minTagLimit]="false"
+        [label]="'Type a tag and press enter or comma'"
+        (tagAdd)="onTagAdd($event)"
+        (tagDelete)="onTagRemove($event)"
+        [backgroundColor]="'com-bg-tAnti-Flash'"
+        [fontColor]="'com-text-tYankees-Blue'"
+      ></app-tag>
     </com-card-body>
     <com-card-footer>
       <button (click)="ref.close()" ghost nbButton status="danger">Cancel</button>
@@ -206,15 +219,15 @@
 </ng-template>
 
 <ng-template #qrCodeDialog let-ref="dialogRef">
-  <nb-card class="qr-dialog-card">
-    <nb-card-header>
+  <com-card class="qr-dialog-card">
+    <com-card-header>
       <span>Scan QR Code</span>
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <commudle-user-profile-qr-card [user]="user"></commudle-user-profile-qr-card>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>

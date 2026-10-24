@@ -50,6 +50,8 @@ import { EventCommentsComponent } from './components/event-comments/event-commen
 import { EventDashboardComponent } from './components/event-dashboard/event-dashboard.component';
 import { EventDetailsComponent } from './components/event-details/event-details.component';
 import { EventEmbeddedVideoStreamComponent } from './components/event-embedded-video-stream/event-embedded-video-stream.component';
+import { SegmentedControlComponent } from './components/segmented-control/segmented-control.component';
+import { EventSearchMultiSelectComponent } from './components/event-search-multi-select/event-search-multi-select.component';
 import { EventFormResponsesComponent } from './components/event-form-responses/event-form-responses.component';
 import { UserDetailsCellComponent } from './components/event-form-responses/user-details-cell/user-details-cell.component';
 import { UserEngagementDataComponent } from './components/event-form-responses/user-engagement-data/user-engagement-data.component';
@@ -57,6 +59,7 @@ import { EventLocationTracksComponent } from './components/event-locations/event
 import { TimeBlocksComponent } from './components/event-locations/event-location-tracks/time-blocks/time-blocks.component';
 import { TrackSlotsComponent } from './components/event-locations/event-location-tracks/track-slots/track-slots.component';
 import { EventLocationsComponent } from './components/event-locations/event-locations.component';
+import { AddEventSpeakerComponent } from './components/event-locations/add-event-speaker/add-event-speaker.component';
 import { EventRecordingsComponent } from './components/event-recordings/event-recordings.component';
 import { EventRegistrationsComponent } from './components/event-registrations/event-registrations.component';
 import { EventSimpleRegistrationComponent } from './components/event-registrations/event-simple-registration/event-simple-registration.component';
@@ -95,12 +98,15 @@ import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-the
     CollaboratingCommunitiesComponent,
     VolunteersComponent,
     EventFormResponsesComponent,
+    EventSearchMultiSelectComponent,
+    SegmentedControlComponent,
     EventCommentsComponent,
     EventStatsComponent,
     EventDashboardComponent,
     FormGroupsComponent,
     UserDetailsCellComponent,
     EventLocationsComponent,
+    AddEventSpeakerComponent,
     EventLocationTracksComponent,
     EventUpdatesComponent,
     EventStatusComponent,

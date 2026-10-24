@@ -284,6 +284,7 @@ export class UserSubscriptionsComponent implements OnInit, OnDestroy {
     const ref = this.dialogService.open(CreateCommunityFormComponent, {
       context: { subscriptionId: target.id },
       closeOnBackdropClick: false,
+      hasScroll: true,
     });
     ref.onClose.pipe(takeUntil(this.destroy$)).subscribe((community) => {
       if (!community) return;

@@ -5,12 +5,13 @@ import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 import { IListingPageHeader } from 'apps/shared-models/listing-page-header.model';
 import { CmsService } from 'apps/shared-services/cms.service';
 import { SeoService } from 'apps/shared-services/seo.service';
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-    selector: 'commudle-experts-program',
-    templateUrl: './experts-program.component.html',
-    styleUrls: ['./experts-program.component.scss'],
-    standalone: false
+  selector: 'commudle-experts-program',
+  templateUrl: './experts-program.component.html',
+  styleUrls: ['./experts-program.component.scss'],
+  standalone: false,
 })
 export class ExpertsProgramComponent implements OnInit, OnDestroy {
   staticAssets = staticAssets;
@@ -18,7 +19,7 @@ export class ExpertsProgramComponent implements OnInit, OnDestroy {
   richText: string;
   faqs: IFaq[];
   headerImgUrl: string;
-
+  faHashtag = faHashtag;
   constructor(private seoService: SeoService, private cmsService: CmsService, private footerService: FooterService) {}
 
   ngOnInit(): void {

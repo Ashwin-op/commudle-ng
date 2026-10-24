@@ -22,7 +22,6 @@ import { SeoService, ToastrService } from '@commudle/shared-services';
 import { DataFormEntityResponsesService } from 'apps/commudle-admin/src/app/services/data-form-entity-responses.service';
 import { LibAuthwatchService } from 'apps/shared-services/lib-authwatch.service';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
-import { IUserStat } from 'libs/shared/models/src/lib/user-stats.model';
 import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.service';
 import { ConsentTypesEnum } from 'apps/shared-models/enums/consent-types.enum';
 import { UserConsentsComponent } from 'apps/commudle-admin/src/app/app-shared-components/user-consents/user-consents.component';
@@ -48,7 +47,6 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
   selectedTeam: IHackathonUserResponsesGroupByTeam;
 
   @ViewChild('stepper') stepper: NbStepperComponent;
-  @ViewChild('formConfirmationDialog', { static: true }) formConfirmationDialog: TemplateRef<any>;
   @ViewChild('formClosedDialog', { static: true }) formClosedDialog: TemplateRef<any>;
   @ViewChild('createTeamConfirmDialog', { static: true }) createTeamConfirmDialog: TemplateRef<any>;
   isLoading = true;
@@ -67,7 +65,6 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
   };
 
   currentUser: ICurrentUser;
-  userProfileDetails: IUserStat;
   dialogRef: NbDialogRef<any>;
   EInvitationStatus = EInvitationStatus;
 
@@ -118,11 +115,6 @@ export class PublicHackathonFormComponent implements OnInit, OnDestroy {
       }),
       this.authWatchService.currentUser$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
         this.currentUser = data;
-        if (this.currentUser) {
-          this.appUsersService.getProfileStats().subscribe((data) => {
-            this.userProfileDetails = data;
-          });
-        }
       }),
     );
   }

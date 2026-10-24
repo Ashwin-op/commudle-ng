@@ -1,5 +1,6 @@
 .community-builds {
-  nb-card-header {
+  @apply com-mt-4;
+  com-card-header {
     @apply com-flex com-gap-4;
     .select {
       @apply com-w-max #{!important};

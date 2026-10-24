@@ -1,0 +1,54 @@
+<com-card class="certificate-upload-design-dialog">
+  <com-card-header>Upload a new design</com-card-header>
+  <com-card-body>
+    <div class="form-field-container">
+      <label class="form-field"> Design Name <span class="required">*</span> </label>
+      <input
+        class="form-field"
+        [formControl]="uploadForm.controls['name']"
+        nbInput
+        fullWidth
+        placeholder="e.g. 2026 Workshop Certificate"
+      />
+      <commudle-alert
+        *ngIf="uploadForm.get('name')?.touched && uploadForm.get('name')?.errors?.['required']"
+        [error]="true"
+        errorMessage="Design name is required"
+      ></commudle-alert>
+    </div>
+
+    <div class="form-field-container">
+      <label class="form-field"> Background Image <span class="required">*</span> </label>
+
+      <div
+        class="dropzone"
+        [class.dragging]="isDragging"
+        [class.has-file]="selectedFilePreviewUrl"
+        (click)="onDropzoneClick(fileInput)"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+      >
+        <ng-container *ngIf="!selectedFilePreviewUrl">
+          <fa-icon [icon]="icons.faCloudUploadAlt"></fa-icon>
+          <span>Drag and drop an image, or click to choose a file</span>
+        </ng-container>
+        <img *ngIf="selectedFilePreviewUrl" [src]="selectedFilePreviewUrl" class="preview-image" alt="Preview" />
+      </div>
+      <span class="file-constraints-hint">JPEG, JPG, or PNG - up to {{ maxFileSizeLabel }}</span>
+      <input
+        #fileInput
+        type="file"
+        accept="image/png,image/jpeg"
+        class="hidden-file-input"
+        (change)="onFileSelected($event)"
+      />
+    </div>
+  </com-card-body>
+  <com-card-footer class="dialog-footer">
+    <button comButton status="basic" [disabled]="isSaving" (click)="cancel()">Cancel</button>
+    <button comButton status="primary" [disabled]="isSaving" (click)="uploadDesign()">
+      {{ isSaving ? 'Uploading...' : 'Upload & Use' }}
+    </button>
+  </com-card-footer>
+</com-card>

@@ -23,3 +23,7 @@
 input:hover {
   @apply com-bg-gray-50 #{!important};
 }
+
+.dialog-footer {
+  @apply com-flex com-justify-between;
+}

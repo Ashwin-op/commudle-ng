@@ -59,11 +59,11 @@ table {
 }
 
 .setting-dialog-box {
-  nb-card-footer,
-  nb-card-header {
+  com-card-footer,
+  com-card-header {
     @apply com-flex com-justify-between com-items-center;
   }
-  nb-card-body {
+  com-card-body {
     @apply com-p-0;
   }
 }

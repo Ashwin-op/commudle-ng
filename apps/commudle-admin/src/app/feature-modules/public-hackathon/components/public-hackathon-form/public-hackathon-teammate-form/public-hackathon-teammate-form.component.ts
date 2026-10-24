@@ -35,9 +35,12 @@ export class PublicHackathonTeammateFormComponent implements OnInit, AfterViewIn
   @Input() hasSubmitButton = false;
   @Input() hackathon: IHackathon;
   @Input() team: IHackathonTeam;
+  @Input() viewMode = false;
   @Output() submitTeammateDetailsEvent = new EventEmitter<any>();
   @Output() previousButtonEvent = new EventEmitter<any>();
   showEmailError = false;
+  // rows added by the user in this session; these stay editable even in viewMode
+  private newTeammateGroups = new WeakSet<AbstractControl>();
   teammateForm: FormGroup;
   currentUser: ICurrentUser;
 
@@ -104,7 +107,7 @@ export class PublicHackathonTeammateFormComponent implements OnInit, AfterViewIn
     return null;
   }
 
-  addTeammate(email = '', tshirt_size = '') {
+  addTeammate(email = '', tshirt_size = '', isNew = false) {
     let teammateGroup;
     if (this.hackathonResponseGroup.user_details.tshirt_size) {
       teammateGroup = this.fb.group({
@@ -117,6 +120,7 @@ export class PublicHackathonTeammateFormComponent implements OnInit, AfterViewIn
       });
     }
 
+    if (isNew) this.newTeammateGroups.add(teammateGroup);
     this.teammatesArray.push(teammateGroup);
 
     setTimeout(() => {
@@ -136,8 +140,18 @@ export class PublicHackathonTeammateFormComponent implements OnInit, AfterViewIn
     return this.teammateForm.get('teammates') as FormArray;
   }
 
+  isNewTeammate(index: number): boolean {
+    return this.newTeammateGroups.has(this.teammatesArray.at(index));
+  }
+
   getEmailControl(index: number) {
     return this.teammatesArray.at(index).get('email');
+  }
+
+  getTeammateUser(index: number) {
+    const email = this.getEmailControl(index)?.value?.toLowerCase();
+    const hur = this.team?.hackathon_user_responses?.find((h) => h.user_email?.toLowerCase() === email);
+    return hur?.user || null;
   }
 
   fetchTeamDetails() {

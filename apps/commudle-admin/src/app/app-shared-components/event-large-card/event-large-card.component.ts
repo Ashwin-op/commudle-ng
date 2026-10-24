@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IEvent } from 'apps/shared-models/event.model';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
 import { NbCardModule, NbIconModule, NbButtonModule } from '@commudle/theme';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 import { BadgeComponent } from 'apps/shared-components/badge/badge.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMapPin } from '@fortawesome/free-solid-svg-icons';
@@ -19,6 +20,7 @@ import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communi
     NbCardModule,
     NbIconModule,
     NbButtonModule,
+    CommudleCardModule,
     SharedComponentsModule,
     BadgeComponent,
     FontAwesomeModule,

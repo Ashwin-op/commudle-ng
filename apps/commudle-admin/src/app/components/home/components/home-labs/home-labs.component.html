@@ -1,9 +1,9 @@
-<nb-card class="home-labs-container">
-  <nb-card-header [routerLink]="['/labs']" class="home-labs-header clickable">
+<com-card class="home-labs-container">
+  <com-card-header [routerLink]="['/labs']" class="home-labs-header clickable">
     Labs
     <p class="home-labs-sub-header">Learn from people like you</p>
-  </nb-card-header>
-  <nb-card-body class="home-labs-body">
+  </com-card-header>
+  <com-card-body class="home-labs-body">
     <nb-list *ngIf="labs.length === 0" class="home-labs-list">
       <nb-list-item *ngFor="let _ of [].constructor(4)">
         <app-skeleton-text [rows]="2"></app-skeleton-text>
@@ -16,5 +16,5 @@
       </nb-list-item>
     </nb-list>
     <a *ngIf="labs.length > 0" [routerLink]="['/labs']" class="home-labs-all text-center">View all</a>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

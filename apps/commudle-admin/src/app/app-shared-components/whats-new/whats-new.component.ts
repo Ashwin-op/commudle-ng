@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NbButtonModule, NbCardModule, NbDialogService } from '@commudle/theme';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SeoService } from 'apps/shared-services/seo.service';
@@ -15,7 +16,7 @@ import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
   standalone: true,
   templateUrl: './whats-new.component.html',
   styleUrls: ['./whats-new.component.scss'],
-  imports: [CommonModule, NbCardModule, FontAwesomeModule, WhatsNewCardComponent, NbButtonModule],
+  imports: [CommonModule, NbCardModule, CommudleCardModule, FontAwesomeModule, WhatsNewCardComponent, NbButtonModule],
 })
 export class WhatsNewComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>(); // This Subject will emit when the component is destroyed.

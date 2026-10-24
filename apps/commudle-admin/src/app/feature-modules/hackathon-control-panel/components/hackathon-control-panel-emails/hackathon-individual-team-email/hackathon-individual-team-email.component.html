@@ -1,12 +1,12 @@
-<nb-card class="mail-popup">
-  <nb-card-header>
+<com-card class="mail-popup">
+  <com-card-header>
     <span *ngIf="hackathonTeams.length === 1">Send email to {{ hackathonTeams[0]?.name }}</span>
     <span *ngIf="hackathonTeams.length > 1">Send email to {{ hackathonTeams.length }} teams</span>
     <button nbButton size="small" shape="round" (click)="closeDialogBox()" ghost>
       <nb-icon icon="close"></nb-icon>
     </button>
-  </nb-card-header>
-  <nb-card-body>
+  </com-card-header>
+  <com-card-body>
     <form [formGroup]="emailForm">
       <div class="subject">
         <label for="emailReason">Subject <span class="mandatory-field">*</span></label>
@@ -17,8 +17,8 @@
         <editor [init]="tinyMCE" formControlName="body"></editor>
       </div>
     </form>
-  </nb-card-body>
-  <nb-card-footer>
+  </com-card-body>
+  <com-card-footer>
     <button
       (click)="previewEmail()"
       nbButton
@@ -41,5 +41,5 @@
     >
       Send
     </button>
-  </nb-card-footer>
-</nb-card>
+  </com-card-footer>
+</com-card>

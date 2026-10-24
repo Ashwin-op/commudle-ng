@@ -65,7 +65,7 @@ import { DiscountCodeFormComponent } from './components/sys-admin-discount-code/
 import { PurchaseOrdersComponent } from './components/purchase-orders/purchase-orders.component';
 import { RazorpayPlansComponent } from './components/razorpay-plans/razorpay-plans.component';
 import { AdminProductPricesComponent } from './components/razorpay-plans/product-prices/product-prices.component';
-
+import { CommudleCardModule } from '@commudle/commudle-theme';
 @NgModule({
   declarations: [
     SysAdminComponent,
@@ -115,7 +115,7 @@ import { AdminProductPricesComponent } from './components/razorpay-plans/product
     SharedDirectivesModule,
     SharedPipesModule,
     MiniUserProfileModule,
-
+    CommudleCardModule,
     LinkyModule,
 
     FontAwesomeModule,

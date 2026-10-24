@@ -1,0 +1,63 @@
+.certificate-delivery-funnel {
+  @apply com-w-full;
+
+  .funnel-header {
+    @apply com-flex com-justify-between com-items-center com-mb-3;
+
+    .funnel-title {
+      @apply com-text-xs com-font-semibold com-text-Auro-Metal-Saurus com-uppercase com-tracking-wide;
+    }
+
+    .funnel-subtitle {
+      @apply com-text-xs com-text-Auro-Metal-Saurus;
+    }
+  }
+
+  .headline-bar {
+    @apply com-flex com-w-full com-h-10 com-rounded-lg com-overflow-hidden com-bg-gray-100 com-mb-4;
+
+    &.compact {
+      @apply com-h-2 com-rounded-full com-mb-0;
+    }
+
+    .headline-segment {
+      @apply com-flex com-items-center com-justify-center com-text-white com-text-sm com-font-semibold com-whitespace-nowrap com-overflow-hidden com-transition-all;
+    }
+  }
+
+  .metrics-row {
+    @apply com-flex com-flex-wrap com-gap-6 com-mb-4;
+
+    .metric {
+      @apply com-flex-1 com-min-w-[6rem];
+
+      .metric-bar {
+        @apply com-w-full com-h-1.5 com-rounded-full com-bg-gray-100 com-overflow-hidden com-mb-2;
+
+        .metric-bar-fill {
+          @apply com-h-full com-rounded-full;
+        }
+      }
+
+      .metric-value {
+        @apply com-text-xl com-font-semibold com-text-Yankees-Blue;
+      }
+
+      .metric-label {
+        @apply com-text-xs com-text-Auro-Metal-Saurus com-uppercase com-tracking-wide;
+      }
+    }
+  }
+
+  .funnel-legend {
+    @apply com-flex com-flex-wrap com-gap-4 com-pt-3 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+
+    .legend-item {
+      @apply com-flex com-items-center com-gap-2 com-text-sm com-text-Auro-Metal-Saurus;
+
+      .legend-dot {
+        @apply com-w-2.5 com-h-2.5 com-rounded-sm com-flex-none;
+      }
+    }
+  }
+}

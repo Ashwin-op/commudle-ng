@@ -37,6 +37,7 @@ import { EmailPreferencesComponent } from './components/public-profile/user-basi
 import { UserBasicDetailsComponent } from './components/public-profile/user-basic-details/user-basic-details.component';
 import { UserBasicSocialComponent } from './components/public-profile/user-basic-social/user-basic-social.component';
 import { UserBadgesComponent } from './components/public-profile/user-extra-details/user-badges/user-badges.component';
+import { UserCertificatesComponent } from './components/public-profile/user-extra-details/user-certificates/user-certificates.component';
 import { UserHackathonsComponent } from './components/public-profile/user-extra-details/user-hackathons/user-hackathons.component';
 import { UserHackathonRoleCardComponent } from './components/public-profile/user-extra-details/user-hackathon-role-card/user-hackathon-role-card.component';
 import { UserHackathonSpeakerJudgeMentorComponent } from './components/public-profile/user-extra-details/user-hackathon-speaker-judge-mentor/user-hackathon-speaker-judge-mentor.component';
@@ -99,6 +100,7 @@ import { UserProfileQrCardComponent } from 'apps/commudle-admin/src/app/app-shar
     UserNetworkComponent,
     UserNetworkListComponent,
     UserBadgesComponent,
+    UserCertificatesComponent,
     UserHackathonsComponent,
     UserHackathonRoleCardComponent,
     UserHackathonSpeakerJudgeMentorComponent,

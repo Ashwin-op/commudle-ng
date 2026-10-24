@@ -99,11 +99,8 @@
               }
 
               .ps-title {
-                @apply com-text-sm com-text-Yankees-Blue;
-
-                ::ng-deep p {
-                  @apply com-m-0;
-                }
+                @apply com-flex-1 com-min-w-0 com-text-sm com-text-Yankees-Blue com-break-words;
+                white-space: pre-wrap;
               }
             }
 

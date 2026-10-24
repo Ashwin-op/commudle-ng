@@ -1,6 +1,8 @@
 .collaborations {
-  @apply com-mx-0 md:com-mx-2;
-
+  @apply com-mx-0 md:com-mx-2 md:com-my-4;
+  h6 {
+    @apply com-m-0 com-flex;
+  }
   .add-collaboration {
     @apply com-mb-6;
 
@@ -113,7 +115,7 @@
 .confirmation-dialog {
   @apply com-max-w-md;
 
-  nb-card-header {
+  com-card-header {
     @apply com-flex com-justify-between com-items-center;
 
     div {
@@ -121,11 +123,11 @@
     }
   }
 
-  nb-card-body {
+  com-card-body {
     @apply com-text-gray-700 com-text-sm com-leading-relaxed;
   }
 
-  nb-card-footer {
+  com-card-footer {
     @apply com-flex com-gap-2 com-justify-end;
   }
 }

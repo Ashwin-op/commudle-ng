@@ -1,19 +1,24 @@
 form {
   @apply com-flex com-flex-col com-gap-3;
+
   div {
-    @apply com-border-0 com-pb-4 com-border-b com-border-solid com-border-Bright-Gray;
+    @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
   }
+
   .teammate-form {
     section {
       @apply com-mb-4;
     }
+
     input[type='email'] {
       text-transform: lowercase;
     }
+
     select {
       @apply com-border com-border-solid com-border-[#e4e9f2] com-rounded com-bg-[#f7f9fc] com-p-2 com-w-full;
     }
   }
+
   .action-buttons {
     @apply com-flex com-items-center com-justify-between;
   }
@@ -21,4 +26,12 @@ form {
 
 button {
   @apply com-flex com-flex-row com-gap-2 com-items-center com-w-max;
+}
+
+.view-email {
+  @apply com-text-sm com-text-Cadet-Grey;
+}
+
+.section-padding {
+  @apply com-pb-4;
 }

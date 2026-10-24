@@ -167,3 +167,15 @@
 app-user-profile-horizontal {
   @apply com-w-full;
 }
+.remove-dialog {
+  @apply com-max-h-[90dvh];
+  .remove-dialog-header {
+    @apply com-flex com-items-center com-justify-between;
+  }
+  .remove-dialog-body {
+    @apply com-max-w-[350px];
+  }
+  .remove-dialog-footer {
+    @apply com-flex com-items-center com-justify-between;
+  }
+}

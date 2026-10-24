@@ -1,7 +1,7 @@
 .event-stats-container {
   @apply com-my-6;
-  nb-card {
-    @apply com-mx-0;
+  com-card {
+    @apply com-mx-0 com-my-4;
   }
   .event-stats {
     a {
@@ -9,11 +9,11 @@
     }
 
     .page-header {
-      nb-card-header {
-        @apply com-flex com-items-center;
+      com-card-header {
+        @apply com-flex com-items-center com-justify-start;
         h3 {
           font-weight: 300;
-          margin-bottom: 0;
+          margin: 0;
 
           nb-icon {
             font-size: 2rem;
@@ -26,8 +26,8 @@
       }
     }
 
-    nb-card.stat-card.visitors {
-      nb-card-header {
+    com-card.stat-card.visitors {
+      com-card-header {
         h3 {
           font-weight: 300;
           margin: 0;
@@ -38,7 +38,7 @@
         }
       }
 
-      nb-card-body {
+      com-card-body {
         height: 300px;
 
         .chart-container {
@@ -53,8 +53,8 @@
       }
     }
 
-    nb-card.stat-card.registration {
-      nb-card-header {
+    com-card.stat-card.registration {
+      com-card-header {
         h3 {
           font-weight: 300;
           margin: 0;
@@ -65,7 +65,7 @@
         }
       }
 
-      nb-card-body.simple-registration {
+      com-card-body.simple-registration {
         .number-group {
           background: #e5f6ef;
           display: flex;
@@ -89,7 +89,7 @@
         }
       }
 
-      nb-card-body.custom-registration {
+      com-card-body.custom-registration {
         .form-group {
           margin-bottom: 2rem;
 
@@ -123,18 +123,16 @@
       }
     }
 
-    nb-card.stat-card.attendees {
-      nb-card-header {
+    com-card.stat-card.attendees {
+      com-card-header {
         h3 {
           font-weight: 300;
           margin: 0;
         }
       }
 
-      nb-card-body {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
+      com-card-body {
+        @apply com-flex com-flex-wrap com-flex-row com-justify-around;
 
         .chart-container {
           padding: 1rem 0;
@@ -159,14 +157,22 @@
       }
     }
 
-    nb-card.stat-card.event-members {
-      nb-card-header {
+    .tag-list {
+      @apply com-mt-3 com-flex com-flex-wrap com-gap-2;
+
+      .custom-tag {
+        @apply com-border com-border-solid com-rounded-full com-border-Azure com-text-Azure;
+      }
+    }
+
+    com-card.stat-card.event-members {
+      com-card-header {
         h3 {
           @apply com-m-0 com-font-light;
         }
       }
 
-      nb-card-body {
+      com-card-body {
         @apply com-flex com-flex-wrap com-justify-evenly;
 
         .chart-container {
@@ -186,8 +192,8 @@
       }
     }
 
-    nb-card.stat-card.discussions {
-      nb-card-header {
+    com-card.stat-card.discussions {
+      com-card-header {
         h3 {
           font-weight: 300;
           margin: 0;
@@ -198,7 +204,7 @@
         }
       }
 
-      nb-card-body {
+      com-card-body {
         nb-list {
           nb-list-item {
             p {
@@ -223,8 +229,8 @@
       }
     }
 
-    nb-card.stat-card.polls {
-      nb-card-header {
+    com-card.stat-card.polls {
+      com-card-header {
         h3 {
           font-weight: 300;
           margin: 0;
@@ -235,7 +241,7 @@
         }
       }
 
-      nb-card-body {
+      com-card-body {
         nb-list {
           nb-list-item {
             display: flex;

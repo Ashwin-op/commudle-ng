@@ -1,6 +1,6 @@
 .mail-popup {
-  @apply md:com-w-[50dvw] md:com-max-h-[90dvh] com-w-[100dvw] com-mx-0;
-  nb-card-header {
+  @apply com-flex md:com-w-[50dvw] md:com-max-h-[90dvh] com-w-[100dvw] com-mx-0;
+  com-card-header {
     @apply com-flex com-justify-between com-items-center;
 
     span {
@@ -8,12 +8,12 @@
     }
   }
 
-  nb-card-footer {
+  com-card-footer {
     @apply com-flex com-justify-between com-items-center com-gap-6;
   }
 
-  nb-card-body {
-    @apply com-p-6;
+  com-card-body {
+    @apply com-p-6 com-overflow-y-auto com-scrollbar-hide;
   }
 
   .message-field {

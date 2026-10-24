@@ -1,7 +1,11 @@
 <com-card *ngIf="eventUpdates.length > 0" id="updates">
   <com-card-header>
-    <h6 class="title">
-      <a [routerLink]="'.'" fragment="updates"><nb-icon icon="star-outline" status="warning"></nb-icon> Updates</a>
+    <h6 class="title section-heading-anchor">
+      <nb-icon icon="star-outline" status="warning"></nb-icon>
+      Updates
+      <a [routerLink]="'.'" fragment="updates" class="anchor-link">
+        <fa-icon [icon]="faHashtag" class="anchor-icon-medium"></fa-icon>
+      </a>
     </h6>
   </com-card-header>
   <com-card-body>

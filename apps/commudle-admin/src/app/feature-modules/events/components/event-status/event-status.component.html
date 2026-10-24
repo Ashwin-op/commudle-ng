@@ -14,32 +14,32 @@
 </section>
 
 <ng-template #completeStatusConfirmationPopup let-ref="dialogRef" let-data>
-  <nb-card>
-    <nb-card-body>
+  <com-card>
+    <com-card-body>
       <div>Are you sure you want to change status to Completed ?</div>
-    </nb-card-body>
-    <nb-card-footer class="action-buttons">
+    </com-card-body>
+    <com-card-footer class="action-buttons">
       <button (click)="ref.close(true)" nbButton status="success">Yes</button>
       <button (click)="ref.close(false)" nbButton status="danger">No</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
 
 <ng-template #confirmOpenEventStatusDialogBox let-ref="dialogRef" let-data>
-  <nb-card class="confirm-open-event-status-dialog-box">
-    <nb-card-header>
+  <com-card class="confirm-open-event-status-dialog-box">
+    <com-card-header>
       <div>Are you sure?</div>
       <button ghost nbButton size="small" shape="round" (click)="ref.close()">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div>You have not yet created any registration form.</div>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button (click)="ref.close(0)" nbButton status="primary">Create Form</button>
       <button (click)="ref.close(1)" nbButton status="info" outline>Open Anyway</button>
       <button (click)="ref.close(2)" nbButton status="danger" outline>Don't open</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

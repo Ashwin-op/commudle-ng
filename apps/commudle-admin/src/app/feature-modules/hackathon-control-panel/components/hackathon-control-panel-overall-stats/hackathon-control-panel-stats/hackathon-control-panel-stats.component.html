@@ -1,6 +1,6 @@
-<nb-card>
-  <nb-card-header>Hackathon Stats</nb-card-header>
-  <nb-card-body>
+<com-card>
+  <com-card-header>Hackathon Stats</com-card-header>
+  <com-card-body>
     <div class="hackathon-stats-container" *ngIf="hackathonTeamStats">
       <!-- Registered -->
       <div class="hackathon-stats-item">
@@ -65,15 +65,15 @@
       <div class="graph-container">
         <span class="title">User Tags</span>
         <div class="chart-container">
-          <nb-tag-list *ngIf="hackathonUserResponsesTags">
-            <nb-tag
-              status="info"
-              appearance="outline"
+          <div *ngIf="hackathonUserResponsesTags" class="tag-list">
+            <app-tag
+              [inputSize]="'custom'"
+              class="custom-tag"
               *ngFor="let tag of hackathonUserResponsesTags.users_tags.tags"
-              text="{{ tag[0] }} ({{ tag[1] }})"
-              [removable]="false"
-            ></nb-tag>
-          </nb-tag-list>
+              [tags]="[tag[0] + ' (' + tag[1] + ')']"
+              backgroundColor="com-bg-Azure-opacity-10"
+            ></app-tag>
+          </div>
         </div>
       </div>
     </div>
@@ -150,19 +150,19 @@
         </div>
       </div>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
 <ng-template #psDialog let-data let-ref="dialogRef">
-  <nb-card>
-    <nb-card-header>
+  <com-card>
+    <com-card-header>
       <div>{{ data.display_id }}</div>
       <button ghost nbButton size="small" (click)="ref.close()" shape="round">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div [innerHTML]="data.title"></div>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>

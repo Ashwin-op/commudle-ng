@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { NbDialogService } from '@commudle/theme';
 import { UserProfileManagerService } from 'apps/commudle-admin/src/app/feature-modules/users/services/user-profile-manager.service';
 import { AppUsersService } from 'apps/commudle-admin/src/app/services/app-users.service';
@@ -15,10 +14,10 @@ import { of, Subject, Subscription, takeUntil } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
-    selector: 'app-username',
-    templateUrl: './username.component.html',
-    styleUrls: ['./username.component.scss'],
-    standalone: false
+  selector: 'app-username',
+  templateUrl: './username.component.html',
+  styleUrls: ['./username.component.scss'],
+  standalone: false,
 })
 export class UsernameComponent implements OnInit, OnDestroy {
   @Input() showSaveButton = true;
@@ -29,7 +28,6 @@ export class UsernameComponent implements OnInit, OnDestroy {
   currentUsername = '';
   checkingUsername = false;
   currentUser: ICurrentUser;
-  reloadPage = true;
 
   usernameForm;
   validationError: string;
@@ -43,7 +41,6 @@ export class UsernameComponent implements OnInit, OnDestroy {
     private authWatchService: LibAuthwatchService,
     private fb: FormBuilder,
     private usersService: AppUsersService,
-    private router: Router,
     private dialogService: NbDialogService,
     private userProfileManagerService: UserProfileManagerService,
   ) {
@@ -82,9 +79,6 @@ export class UsernameComponent implements OnInit, OnDestroy {
 
     this.userProfileManagerService.updateUsername$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
-        if (!this.router.url.includes('/users/' + this.lastUsername)) {
-          this.reloadPage = false;
-        }
         if (this.currentUsername !== this.lastUsername) {
           this.setUsername();
         }
@@ -139,7 +133,9 @@ export class UsernameComponent implements OnInit, OnDestroy {
     );
   }
 
-  setUsername() {
+  setUsername(ref?: any) {
+    ref?.close();
+
     const newUsername = this.usernameForm.get('username').value;
 
     if (!newUsername || newUsername === this.lastUsername) {
@@ -153,11 +149,9 @@ export class UsernameComponent implements OnInit, OnDestroy {
         next: (data) => {
           if (data) {
             this.lastUsername = newUsername;
-            if (this.reloadPage) {
-              this.router.navigate(['/users', newUsername]).then(() => location.reload());
-            }
-            this.reloadPage = true;
-            this.authWatchService.checkAlreadySignedIn().subscribe();
+            this.authWatchService.checkAlreadySignedIn().subscribe(() => {
+              window.location.href = `/users/${newUsername}`;
+            });
           }
         },
         error: () => {

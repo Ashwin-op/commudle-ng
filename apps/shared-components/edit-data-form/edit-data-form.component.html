@@ -191,6 +191,7 @@
                         <div [formGroupName]="chi" class="required-choice">
                           <input
                             #choiceInput
+                            [attr.data-qi]="i"
                             [readonly]="choice.value.has_responses"
                             formControlName="title"
                             nbInput

@@ -1,9 +1,15 @@
 .discount-code-form {
-  @apply com-w-full md:com-w-[40dvw] com-max-h-[90dvh];
+  @apply com-w-full md:com-w-[40dvw] com-max-h-[90dvh] com-overflow-y-auto com-flex;
 
-  nb-card-header,
-  nb-card-footer {
+  com-card-header,
+  com-card-footer {
     @apply com-flex com-justify-between com-items-center;
+    h5 {
+      @apply com-m-0;
+    }
+  }
+  com-card-body {
+    @apply com-scrollbar-hide;
   }
   .form-group-container {
     @apply com-flex com-gap-6 com-items-center;

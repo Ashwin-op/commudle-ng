@@ -54,6 +54,18 @@
         @apply dark:com-from-[#1f1408] dark:com-to-[#0f172a] dark:com-bg-gradient-to-br dark:com-border-orange-800;
       }
 
+      &.prize-rank-4,
+      &.prize-rank-5,
+      &.prize-rank-6,
+      &.prize-rank-7,
+      &.prize-rank-8,
+      &.prize-rank-9,
+      &.prize-rank-10 {
+        background: linear-gradient(135deg, #f8fafc 0%, #ffffff 60%);
+        @apply com-border com-border-solid com-border-gray-300;
+        @apply dark:com-from-[#0f172a] dark:com-to-[#0f172a] dark:com-bg-gradient-to-br dark:com-border-gray-700;
+      }
+
       .prize-card-content {
         @apply com-flex com-flex-row com-items-center com-p-3 com-gap-3 md:com-gap-5;
 
@@ -63,6 +75,10 @@
 
           img {
             @apply com-w-full com-h-full com-object-cover;
+          }
+
+          .default-trophy-icon {
+            @apply com-text-5xl com-text-primary-400;
           }
         }
 
@@ -159,6 +175,26 @@
 
         .arrow-btn {
           background: #f97316;
+        }
+      }
+
+      &.prize-rank-4,
+      &.prize-rank-5,
+      &.prize-rank-6,
+      &.prize-rank-7,
+      &.prize-rank-8,
+      &.prize-rank-9,
+      &.prize-rank-10 {
+        .prize-badge {
+          @apply com-text-gray-500;
+        }
+
+        .prize-amount {
+          @apply com-text-gray-500;
+        }
+
+        .arrow-btn {
+          background: #9ca3af;
         }
       }
     }

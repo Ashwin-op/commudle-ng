@@ -1,13 +1,13 @@
 <div>
-  <nb-card class="agenda">
-    <nb-card-header>
+  <com-card class="agenda">
+    <com-card-header>
       <h6>
         <nb-icon icon="calendar-outline"></nb-icon>
         Agenda
         <commudle-help-section [helpDictionaryName]="'event-location-agenda'"></commudle-help-section>
       </h6>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <div *ngIf="event.editable" class="com-flex com-items-center com-gap-4">
         <p>
           Simple Hosting
@@ -66,8 +66,8 @@
           [event]="event"
         ></commudle-event-embedded-video-stream>
       </div>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </div>
 
 <div class="next-step-section" *ngIf="event.event_status.id !== 5">

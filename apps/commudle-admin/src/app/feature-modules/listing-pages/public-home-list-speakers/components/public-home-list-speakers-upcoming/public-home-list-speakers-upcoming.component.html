@@ -1,7 +1,17 @@
 <com-card *ngIf="upcomingEvents.length > 0" id="upcoming-events">
   <com-card-body>
     <div class="heading">
-      <h3 class="title"><a [routerLink]="'.'" fragment="upcoming-events">Upcoming Events</a></h3>
+      <h3 class="title section-heading-anchor">
+        Upcoming Events
+        <a
+          [routerLink]="'.'"
+          fragment="upcoming-events"
+          class="anchor-link"
+          aria-label="Link to upcoming events section"
+        >
+          <fa-icon [icon]="faHashtag" class="anchor-icon-small"></fa-icon>
+        </a>
+      </h3>
       <h4 class="sub-heading">Check out amazing events lined up</h4>
     </div>
     <app-skeleton-cards

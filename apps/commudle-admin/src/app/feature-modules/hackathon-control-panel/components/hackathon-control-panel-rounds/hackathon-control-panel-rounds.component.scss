@@ -1,5 +1,5 @@
-nb-card {
-  @apply com-mx-0;
+com-card {
+  @apply com-mx-0 md:com-my-4;
 }
 .add-round-button {
   @apply com-border-2 com-border-dashed com-border-slate-500 com-rounded-lg com-text-center com-py-5 com-cursor-pointer;
@@ -72,9 +72,14 @@ nb-card {
 }
 
 .round-form-dialog-box {
-  @apply com-h-full com-w-[100dvw] md:com-h-[90dvh] md:com-w-[70dvw] com-mx-0;
+  @apply com-w-[100dvw] com-max-h-[90dvh] md:com-w-[70dvw] com-mx-0 com-overflow-hidden com-flex com-flex-col;
+
   form {
     @apply com-flex com-flex-col com-gap-3;
+  }
+
+  com-card-body {
+    @apply com-flex com-min-h-0 com-overflow-y-auto com-scrollbar-hide;
   }
 }
 
@@ -82,11 +87,12 @@ nb-card {
   @apply com-flex com-justify-between com-items-center;
 }
 
-nb-card-header {
-  @apply com-flex com-items-center;
+com-card-header {
+  @apply com-flex com-items-center com-justify-start;
 }
 
 .next-step-container {
+  @apply com-px-4;
   a {
     @apply com-text-lg com-font-semibold com-text-Yankees-Blue com-no-underline hover:com-text-Yankees-Blue;
   }

@@ -12,7 +12,7 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import { UserProfileMenuService } from 'apps/commudle-admin/src/app/feature-modules/users/services/user-profile-menu.service';
 import { IUser } from 'apps/shared-models/user.model';
-import { faExclamationCircle, faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationCircle, faGlobe, faHashtag } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-user-basic-social',
@@ -36,7 +36,7 @@ export class UserBasicSocialComponent implements OnChanges {
   faTwitter = faTwitter;
   faGithub = faGithub;
   faGlobe = faGlobe;
-
+  faHashtag = faHashtag;
   constructor(public userProfileMenuService: UserProfileMenuService) {}
 
   ngOnChanges(changes: SimpleChanges): void {

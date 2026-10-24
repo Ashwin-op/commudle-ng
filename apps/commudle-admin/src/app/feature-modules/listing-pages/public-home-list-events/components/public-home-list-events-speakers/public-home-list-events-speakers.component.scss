@@ -8,7 +8,7 @@ com-card {
       @apply com-m-0 com-mb-4 com-flex com-px-4 com-py-3 com-flex-col com-border-0 com-border-b com-border-solid com-border-Bright-Gray lg:com-mb-5 lg:com-p-0 lg:com-border-b-0;
 
       .title {
-        @apply com-m-0 com-mb-1 com-inline-flex com-items-center com-leading-[0] com-text-base com-font-semibold com-text-Yankees-Blue lg:com-text-sm;
+        @apply com-m-0 com-mb-1 com-flex com-items-center com-leading-[0] com-text-base com-font-semibold com-text-Yankees-Blue lg:com-text-sm;
 
         a {
           @apply com-no-underline;

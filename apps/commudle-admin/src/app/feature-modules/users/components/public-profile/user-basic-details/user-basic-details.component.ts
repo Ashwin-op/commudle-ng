@@ -11,7 +11,7 @@ import {
   OnChanges,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NbDialogRef, NbDialogService, NbTagComponent, NbTagInputAddEvent, NbToastrService } from '@commudle/theme';
+import { NbDialogRef, NbDialogService, NbToastrService } from '@commudle/theme';
 import { faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 import { faExclamationTriangle, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import { UserChatsService } from 'apps/commudle-admin/src/app/feature-modules/user-chats/services/user-chats.service';
@@ -149,21 +149,17 @@ export class UserBasicDetailsComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   // Function to remove a tag
-  onTagRemove(tagToRemove: NbTagComponent): void {
-    this.tagsDialog = this.tagsDialog.filter((tag) => tag !== tagToRemove.text);
+  onTagRemove(value: string): void {
+    this.tagsDialog = this.tagsDialog.filter((tag) => tag !== value);
   }
 
   // Function to add a tag
-  onTagAdd({ value, input }: NbTagInputAddEvent): void {
-    // Add a tag if the value is not empty and the number of tags is under the allowed limit
-    if (value) {
-      // Add a tag only if it is not present
-      if (!this.tagsDialog.includes(value)) {
-        this.tagsDialog.push(value);
-      }
+  onTagAdd(value: string): void {
+    const finalValue = value.trim();
+
+    if (finalValue && !this.tagsDialog.includes(finalValue)) {
+      this.tagsDialog.push(finalValue);
     }
-    // Reset the input
-    input.nativeElement.value = '';
   }
 
   restrictComma(event) {

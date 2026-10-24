@@ -244,8 +244,9 @@
       }
 
       &.rank-default {
-        @apply com-bg-white;
-        border-color: #e5e7eb;
+        background: linear-gradient(135deg, #f8fafc 0%, #ffffff 60%);
+        border-color: #d1d5db;
+        @apply dark:com-from-[#0f172a] dark:com-to-[#0f172a] dark:com-bg-gradient-to-br dark:com-border-gray-700;
 
         .prize-badge {
           @apply com-text-gray-500;
@@ -266,6 +267,10 @@
 
           img {
             @apply com-w-full com-h-full com-object-cover;
+          }
+
+          .default-trophy-icon {
+            @apply com-text-5xl com-text-primary-400;
           }
         }
 

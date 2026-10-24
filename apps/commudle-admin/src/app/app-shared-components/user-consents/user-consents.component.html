@@ -1,14 +1,14 @@
 <div class="user-consents-container">
-  <nb-card>
-    <nb-card-header>
+  <com-card>
+    <com-card-header>
       <div class="animation">
         <div>
           <span #consentAnimation></span>
         </div>
         <p>Your Privacy, Our Priority</p>
       </div>
-    </nb-card-header>
-    <nb-card-body [ngSwitch]="consentType">
+    </com-card-header>
+    <com-card-body [ngSwitch]="consentType">
       <div *ngSwitchCase="consentTypesEnum.UserFollow">
         <commudle-user-follow-consent [username]="username"></commudle-user-follow-consent>
       </div>
@@ -79,12 +79,12 @@
       <div *ngSwitchCase="consentTypesEnum.HACKATHON_REGISTRATION">
         <commudle-hackathon-registration-consent></commudle-hackathon-registration-consent>
       </div>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button nbButton shape="rectangle" (click)="accept()" [ngClass]="buttonStyle">
         {{ buttonText }}
       </button>
       <button nbButton shape="rectangle" (click)="reject()" class="reject-button">Decline</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </div>

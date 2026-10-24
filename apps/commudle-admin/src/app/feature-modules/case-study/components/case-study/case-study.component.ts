@@ -5,7 +5,7 @@ import { FooterService } from 'apps/commudle-admin/src/app/services/footer.servi
 import { ICaseStudy } from 'apps/shared-models/case-study.model';
 import { CmsService } from 'apps/shared-services/cms.service';
 import { Subscription } from 'rxjs';
-
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'commudle-case-study',
   templateUrl: './case-study.component.html',
@@ -19,7 +19,7 @@ export class CaseStudyComponent implements OnInit, OnDestroy {
   richTextDescription: string;
   richTextStats: any[] = [];
   private subscriptions: Subscription[] = [];
-
+  faHashtag = faHashtag;
   constructor(
     private cmsService: CmsService,
     private activatedRoute: ActivatedRoute,

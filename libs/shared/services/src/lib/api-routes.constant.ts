@@ -199,6 +199,7 @@ export const API_ROUTES = {
     GET: 'api/v2/events',
     CLONE: 'api/v2/events/clone',
     COMMUNITY_EVENTS_FOR_EMAIL: 'api/v2/events/community_events_for_email',
+    SEARCH_FOR_FILTERS: 'api/v2/events/search_for_filters',
     UPDATE_STATUS: 'api/v2/events/update_status',
     UPDATE_CUSTOM_REGISTRATION: 'api/v2/events/update_custom_registration',
     UPDATE_CUSTOM_AGENDA: 'api/v2/events/update_custom_agenda',
@@ -315,12 +316,14 @@ export const API_ROUTES = {
     GET_EVENT_DATA_FORM_RESPONSES: 'api/v2/data_form_entity_response_groups/event_data_form_responses',
     UPDATE_EVENT_REGISTRATION_STATUS: 'api/v2/data_form_entity_response_groups/update_event_registration_status',
     GET_EVENT_SPEAKERS: 'api/v2/data_form_entity_response_groups/event_speakers',
+    SPEAKER_SUBMISSION_LOOKUP: 'api/v2/data_form_entity_response_groups/speaker_submission_lookup',
+    CREATE_MANUALLY_ADDED_SPEAKER: 'api/v2/data_form_entity_response_groups/create_manually_added_speaker',
+    UPDATE_MANUALLY_ADDED_SPEAKER: 'api/v2/data_form_entity_response_groups/update_manually_added_speaker',
     UPDATE_RSVP: 'api/v2/data_form_entity_response_groups/update_rsvp',
     DATA_FORM_ENTITY_RESPONSES: 'api/v2/data_form_entity_response_groups/data_form_entity_responses',
     PUBLIC_GET_EVENT_SPEAKERS: 'api/v2/data_form_entity_response_groups/public_event_speakers',
     PUBLIC_EVENT_INTERESTED_USERS: 'api/v2/data_form_entity_response_groups/public_event_interested_users',
     FILTERED_RESPONSE_VALUES: 'api/v2/data_form_entity_response_groups/filtered_response_values',
-    ALL_ATTENDED_EVENTS_FILTERS: 'api/v2/data_form_entity_response_groups/all_attended_events_filters',
   },
 
   // event_entry_passes
@@ -1230,5 +1233,58 @@ export const API_ROUTES = {
     INDEX_BY_ROUND_MENTOR: 'api/v2/round_mentor_slots/index_by_round_mentor', //GET
     CREATE: 'api/v2/round_mentor_slots', //POST
     UPDATE_STATUS: 'api/v2/round_mentor_slots/update_status', //PUT
+  },
+
+  CERTIFICATE_BATCHES: {
+    INDEX: 'api/v2/certificate_batches', //GET
+    SHOW: 'api/v2/certificate_batches/show', //GET
+    CREATE: 'api/v2/certificate_batches', //POST
+    UPDATE: 'api/v2/certificate_batches', //PUT
+    DELETE: 'api/v2/certificate_batches', //DELETE
+    CSV_PREVIEW: 'api/v2/certificate_batches/csv_preview', //POST
+    CSV_COMMIT: 'api/v2/certificate_batches/csv_commit', //POST
+    SAMPLE_CSV: 'api/v2/certificate_batches/sample_csv', //GET
+    SEND: 'api/v2/certificate_batches/send', //POST
+    RESEND: 'api/v2/certificate_batches/resend', //POST
+    REVOKE: 'api/v2/certificate_batches/revoke', //POST
+    UNREVOKE: 'api/v2/certificate_batches/unrevoke', //POST
+    PROGRESS: 'api/v2/certificate_batches/progress', //GET
+    ISSUE: 'api/v2/certificate_batches/issue', //POST
+    MISSING_VALUES_PREVIEW: 'api/v2/certificate_batches/missing_values_preview', //GET
+  },
+
+  CERTIFICATE_DESIGNS: {
+    INDEX: 'api/v2/certificate_designs', //GET
+    CREATE: 'api/v2/certificate_designs', //POST
+    DELETE: 'api/v2/certificate_designs', //DELETE
+  },
+
+  CERTIFICATE_VARIABLES: {
+    INDEX: 'api/v2/certificate_variables', //GET
+    CREATE: 'api/v2/certificate_variables', //POST
+    UPDATE: 'api/v2/certificate_variables', //PUT
+    UPDATE_LAYOUT: 'api/v2/certificate_variables/update_layout', //PUT
+    DELETE: 'api/v2/certificate_variables', //DELETE
+  },
+
+  CERTIFICATE_RECIPIENTS: {
+    INDEX: 'api/v2/certificate_recipients', //GET
+    CREATE: 'api/v2/certificate_recipients', //POST
+    UPDATE: 'api/v2/certificate_recipients', //PUT
+    DELETE: 'api/v2/certificate_recipients', //DELETE
+    SHOW: 'api/v2/certificate_recipients/show', //GET
+    PREVIEW: 'api/v2/certificate_recipients/preview', //GET, raw application/pdf
+    SEND_ONE: 'api/v2/certificate_recipients/send_one', //POST
+    GENERATE_ONE: 'api/v2/certificate_recipients/generate_one', //POST
+    REVOKE: 'api/v2/certificate_recipients/revoke', //POST
+    UNREVOKE: 'api/v2/certificate_recipients/unrevoke', //POST
+  },
+
+  // Public, no auth - the real, permanently-stored certificate (as opposed
+  // to certificate_recipients/preview, which re-renders a throwaway copy).
+  CERTIFICATES: {
+    INDEX: 'api/v2/certificates', //GET, ?username=&page=&count=, public no auth
+    VERIFY: 'api/v2/certificates/verify', //GET, ?uuid=
+    DOWNLOAD: 'api/v2/certificates/download', //GET, ?uuid=, raw application/pdf
   },
 };

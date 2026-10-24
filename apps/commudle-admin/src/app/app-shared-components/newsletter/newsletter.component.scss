@@ -142,13 +142,13 @@
   @apply com-pointer-events-none com-no-underline com-text-gray-400;
 }
 
-nb-card {
-  nb-card-footer,
-  nb-card-header {
+com-card {
+  com-card-footer,
+  com-card-header {
     @apply com-flex com-justify-between com-items-center;
   }
 
-  nb-card-body {
+  com-card-body {
     form {
       @apply com-flex com-flex-col com-gap-3;
       div {

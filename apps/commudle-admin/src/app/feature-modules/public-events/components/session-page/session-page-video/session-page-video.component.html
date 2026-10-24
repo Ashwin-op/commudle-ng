@@ -1,4 +1,4 @@
-<nb-card
+<com-card
   [ngClass]="{
     fullscreen: isFullScreen,
     'internal-link': !embeddedVideoStream || ['commudle', 'youtube', 'other'].includes(embeddedVideoStream.source),
@@ -6,7 +6,7 @@
   }"
   class="session-page-video"
 >
-  <nb-card-body>
+  <com-card-body>
     <div *ngIf="embeddedVideoStream" class="session-page-info d-flex align-items-center">
       <span *ngIf="isLive || isHlsRunning" class="status-chip status-chip-live">LIVE</span>
       <span *ngIf="isYtStreaming" class="status-chip status-chip-yt">YT</span>
@@ -190,5 +190,5 @@
       </div>
       <commudle-session-page-poll [pollableId]="pollableId" [pollableType]="pollableType"></commudle-session-page-poll>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>

@@ -48,7 +48,7 @@
             <div class="ps-list">
               <div *ngFor="let ps of track.hackathon_problem_statements" class="ps-item">
                 <span class="ps-id">{{ ps.display_id }}</span>
-                <span class="ps-title" [innerHTML]="ps.title"></span>
+                <div class="ps-title" [innerHTML]="ps.title"></div>
               </div>
             </div>
           </div>

@@ -10,12 +10,12 @@ import { CmsService } from 'apps/shared-services/cms.service';
 import { IsBrowserService } from 'apps/shared-services/is-browser.service';
 import { SeoService } from 'apps/shared-services/seo.service';
 import { Observable, Subscription, of, timer } from 'rxjs';
-
+import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 @Component({
-    selector: 'app-homepage',
-    templateUrl: './homepage.component.html',
-    styleUrls: ['./homepage.component.scss'],
-    standalone: false
+  selector: 'app-homepage',
+  templateUrl: './homepage.component.html',
+  styleUrls: ['./homepage.component.scss'],
+  standalone: false,
 })
 export class HomepageComponent implements OnInit, OnDestroy, AfterViewInit {
   timer$: Observable<number>;
@@ -23,7 +23,7 @@ export class HomepageComponent implements OnInit, OnDestroy, AfterViewInit {
   banner: IListingPageHeader;
   staticAsset = staticAssets;
   homepageActions: IHomepageAction[] = [];
-
+  faHashtag = faHashtag;
   // @ViewChild('homepageAnimation', { static: false }) homepageAnimationContainer: ElementRef<HTMLDivElement>;
   testimonials: ITestimonial[];
   homepageCallouts: { subtitle: string; title: string }[] = [

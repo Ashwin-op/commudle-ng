@@ -1,15 +1,15 @@
 <div class="base-layout">
   <div class="container">
     <div class="one-column-layout">
-      <nb-card>
-        <nb-card-header>
+      <com-card>
+        <com-card-header>
           <span>Profanity Words and domains</span>
           <button (click)="openDialog(profanityTermFormDialog)" ghost nbButton shape="round" size="small">
             <nb-icon icon="plus"></nb-icon>
             Create New Profanity Term
           </button>
-        </nb-card-header>
-        <nb-card-body>
+        </com-card-header>
+        <com-card-body>
           <div class="select">
             <select placeholder="Filter by" [(ngModel)]="showAllResults" (ngModelChange)="changeProfanityType()">
               <option value="">All</option>
@@ -29,8 +29,8 @@
               <td>{{ profanityTerm.user.email }}</td>
             </tr>
           </table>
-        </nb-card-body>
-        <nb-card-footer>
+        </com-card-body>
+        <com-card-footer>
           <div class="pagination">
             <app-pagination
               (goTo)="page = $event; getProfanityTerms()"
@@ -42,21 +42,21 @@
               [total]="total"
             ></app-pagination>
           </div>
-        </nb-card-footer>
-      </nb-card>
+        </com-card-footer>
+      </com-card>
     </div>
   </div>
 </div>
 
 <ng-template #profanityTermFormDialog let-data let-ref="dialogRef">
-  <nb-card>
-    <nb-card-header>
+  <com-card>
+    <com-card-header>
       <div>Create</div>
       <button ghost nbButton size="small" (click)="ref.close()">
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body>
+    </com-card-header>
+    <com-card-body>
       <form (ngSubmit)="create()" [formGroup]="profanityTermForm">
         <div>
           <nb-toggle formControlName="has_word">Word</nb-toggle>
@@ -68,10 +68,10 @@
           <label>Domain<input formControlName="domain" nbInput type="text" fullWidth placeholder="Domain" /></label>
         </div>
       </form>
-    </nb-card-body>
-    <nb-card-footer>
+    </com-card-body>
+    <com-card-footer>
       <button nbButton status="primary" (click)="create(); ref.close()">Create</button>
       <button nbButton status="danger" (click)="ref.close()">cancel</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>
