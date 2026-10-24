@@ -312,22 +312,33 @@
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faMicrophone" class="snapshot-stat-icon speakers-icon"></fa-icon>
-          <span class="snapshot-stat-label">Speakers</span>
-          <span class="snapshot-stat-value">{{ eventSnapshot.speakers_count ?? 0 }}</span>
+          <div class="snapshot-stat-info">
+            <span class="snapshot-stat-label">Speakers</span>
+            <span class="snapshot-stat-value">{{ eventSnapshot.speakers_count ?? 0 }}</span>
+          </div>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faHandshakeSimple" class="snapshot-stat-icon sponsors-icon"></fa-icon>
-          <span class="snapshot-stat-label">Sponsors</span>
-          <span class="snapshot-stat-value">{{ eventSnapshot.sponsors_count ?? 0 }}</span>
+          <div class="snapshot-stat-info">
+            <span class="snapshot-stat-label">Sponsors</span>
+            <span class="snapshot-stat-value">{{ eventSnapshot.sponsors_count ?? 0 }}</span>
+          </div>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faUserGroup" class="snapshot-stat-icon team-icon"></fa-icon>
-          <span class="snapshot-stat-label">Team</span>
-          <span class="snapshot-stat-value">{{ eventSnapshot.team_members_count ?? 0 }}</span>
+          <div class="snapshot-stat-info">
+            <span class="snapshot-stat-label">Team</span>
+            <span class="snapshot-stat-value">{{ eventSnapshot.team_members_count ?? 0 }}</span>
+          </div>
         </div>
       </div>
       <ng-template #snapshotEmpty>
-        <p class="snapshot-empty" *ngIf="!isSnapshotLoading">No snapshot data yet.</p>
+        <div class="snapshot-empty" *ngIf="!isSnapshotLoading">
+          <span class="snapshot-empty-icon">
+            <fa-icon [icon]="icons.faChartPie"></fa-icon>
+          </span>
+          <span class="snapshot-empty-text">No snapshot data yet.</span>
+        </div>
         <app-loading-spinner *ngIf="isSnapshotLoading" class="section-loader"></app-loading-spinner>
       </ng-template>
     </div>
@@ -357,10 +368,11 @@
           </p>
           <time class="activity-time">{{ activityTime(item) }}</time>
         </li>
-        <li *ngIf="recentActivity.length === 0" class="activity-item">
-          <p class="activity-content">
-            <span class="activity-text">No recent activity yet</span>
-          </p>
+        <li *ngIf="recentActivity.length === 0" class="activity-empty">
+          <span class="activity-empty-icon">
+            <fa-icon [icon]="icons.faBolt"></fa-icon>
+          </span>
+          <span class="activity-empty-text">No recent activity yet.</span>
         </li>
       </ul>
       <commudle-pagination-compact *ngIf="activityTotal > activityCount" [page]="activityPage" [count]="activityCount"
@@ -420,7 +432,12 @@
             </span>
             <span class="top-list-value">{{ page.views | number }}</span>
           </li>
-          <li *ngIf="topPages.length === 0" class="top-list-empty">No page views yet.</li>
+          <li *ngIf="topPages.length === 0" class="top-list-empty">
+            <span class="top-list-empty-icon pages">
+              <fa-icon [icon]="icons.faFileLines"></fa-icon>
+            </span>
+            <span class="top-list-empty-text">No page views yet.</span>
+          </li>
         </ng-container>
       </ul>
     </article>
@@ -466,8 +483,12 @@
                   [style.--bar-share.%]="item.percentage"></span><span class="audience-pct">{{ item.percentage
                   }}%</span>
               </li>
-              <li *ngIf="!isAudienceLoading && !audienceSnapshot?.companies?.values?.length">
-                <span class="audience-name">No data yet</span>
+              <li *ngIf="!isAudienceLoading && !audienceSnapshot?.companies?.values?.length"
+                class="audience-list-empty">
+                <span class="audience-list-empty-icon">
+                  <fa-icon [icon]="icons.faUserGroup"></fa-icon>
+                </span>
+                <span class="audience-list-empty-text">No data yet</span>
               </li>
             </ul>
             <commudle-pagination-compact *ngIf="audienceSnapshot?.companies?.total > companiesCount"

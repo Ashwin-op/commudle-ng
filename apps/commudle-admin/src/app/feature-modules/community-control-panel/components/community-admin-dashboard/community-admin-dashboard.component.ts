@@ -307,9 +307,6 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Where the rest of the row (everything except the user name) goes --
-  // there's no per-item channel/forum/survey id in this payload, so this
-  // is still a best-effort link to the relevant list page, same as before.
   activityRowLink(activity: ICommunityDashboardActivityItem): any[] | null {
     switch (activity.type) {
       case 'channel_message':
@@ -324,11 +321,6 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Row click handler, not a routerLink on the row itself -- the user name
-  // inside is its own real <a>, and <a> can't nest inside <a> (the browser
-  // silently un-nests it, breaking the row link for everything after the
-  // name). The name's click calls $event.stopPropagation() so this handler
-  // only fires for clicks elsewhere on the row.
   onActivityRowClick(activity: ICommunityDashboardActivityItem): void {
     const link = this.activityRowLink(activity);
     if (link) {

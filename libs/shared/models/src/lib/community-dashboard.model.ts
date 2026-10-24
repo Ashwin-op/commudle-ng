@@ -41,8 +41,6 @@ export interface IDashboardCollaborationRequest {
   type: string;
   slug: string;
   requester: string;
-  // Not yet returned by needs_attention -- same gap as activity.user above,
-  // needed to link the requester's name to their profile (/users/:slug).
   requester_id?: number;
   requester_slug?: string;
   direction: 'incoming' | 'outgoing';

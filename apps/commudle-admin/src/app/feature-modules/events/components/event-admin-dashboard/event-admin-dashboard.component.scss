@@ -7,29 +7,35 @@
 }
 
 .section-heading {
-  @apply com-m-0 com-text-sm com-font-medium com-text-Yankees-Blue com-flex com-items-center com-gap-2;
+  @apply com-m-0 com-text-sm com-font-medium com-text-Yankees-Blue com-flex md:com-items-center com-items-start com-gap-2;
 
   fa-icon {
-    @apply com-text-sm com-inline-block;
+    @apply com-w-6 com-h-6 com-rounded-md com-flex com-items-center com-justify-center com-text-xs com-shrink-0;
     animation: iconPulse 1.8s ease-in-out infinite;
   }
 
   .heading-icon-attention {
-    @apply com-text-Azure;
+    @apply com-bg-red-50 com-text-Infra-Red;
   }
 
-  .heading-icon-snapshot,
-  .heading-icon-pages,
+  .heading-icon-snapshot {
+    @apply com-bg-green-50 com-text-green-600;
+  }
+
+  .heading-icon-pages {
+    @apply com-bg-blue-50 com-text-primary-500;
+  }
+
   .heading-icon-audience {
-    @apply com-text-primary-500;
+    @apply com-bg-purple-50 com-text-purple-600;
   }
 
   .heading-icon-activity {
-    @apply com-text-yellow-500;
+    @apply com-bg-yellow-50 com-text-yellow-600;
   }
 
   .heading-icon-visitors {
-    @apply com-text-blue-500;
+    @apply com-bg-blue-50 com-text-blue-500;
   }
 }
 
@@ -400,18 +406,18 @@
       }
 
       .attention-icon-check {
-        @apply com-text-green-500 com-text-base com-shrink-0;
+        @apply com-text-green-500 com-text-sm com-shrink-0;
       }
 
       .attention-icon-cross {
-        @apply com-text-red-400 com-text-base com-shrink-0 com-transition-transform com-duration-200;
+        @apply com-text-red-400 com-text-sm com-shrink-0 com-transition-transform com-duration-200;
       }
 
       .attention-content {
         @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-m-0;
 
         .attention-title {
-          @apply com-text-xs com-font-medium com-text-Yankees-Blue;
+          @apply com-text-xs com-text-Yankees-Blue;
         }
 
         .attention-sub {
@@ -431,7 +437,7 @@
 
   // Event Snapshot
   .snapshot-grid {
-    @apply com-grid com-grid-cols-2 com-gap-1.5 com-m-0;
+    @apply com-grid com-grid-cols-1 com-gap-3 com-m-0;
 
     .snapshot-stat {
       @apply com-flex com-flex-col com-items-center com-gap-1.5 com-p-4 com-rounded-xl com-border com-border-solid com-border-Bright-Gray;
@@ -440,24 +446,32 @@
         @apply com-text-2xl;
 
         &.registrations-icon {
-          @apply com-text-blue-500;
+          @apply com-bg-blue-50 com-text-blue-600;
         }
 
         &.speakers-icon {
-          @apply com-text-purple-500;
+          @apply com-bg-purple-50 com-text-purple-600;
         }
 
         &.sponsors-icon {
-          @apply com-text-green-500;
+          @apply com-bg-green-50 com-text-green-600;
         }
 
         &.team-icon {
-          @apply com-text-orange-500;
+          @apply com-bg-orange-50 com-text-orange-600;
         }
+      }
+
+      .snapshot-stat-info {
+        @apply com-flex com-flex-col com-min-w-0 com-flex-1 com-gap-6px;
       }
 
       .snapshot-stat-label {
         @apply com-text-xs com-text-gray-500 com-font-normal;
+      }
+
+      .snapshot-stat-value-row {
+        @apply com-flex com-items-center com-gap-1.5;
       }
 
       .snapshot-stat-value {
@@ -465,7 +479,7 @@
       }
 
       .snapshot-stat-sub {
-        @apply com-text-10px com-text-Cadet-Grey;
+        @apply com-text-10px com-text-green-600;
       }
     }
   }
@@ -476,6 +490,18 @@
 
   .snapshot-empty {
     @apply com-py-2 com-text-center com-text-xs com-text-gray-500 com-m-0;
+  }
+
+  .snapshot-empty {
+    @apply com-flex com-flex-col com-items-center com-gap-2 com-py-4 com-text-xs com-text-gray-500 com-m-0;
+
+    .snapshot-empty-icon {
+      @apply com-flex com-items-center com-justify-center com-w-12 com-h-12 com-rounded-full com-bg-green-50 com-text-green-500 com-text-xl com-mb-1;
+    }
+
+    .snapshot-empty-text {
+      @apply com-text-xs com-font-medium com-text-Yankees-Blue;
+    }
   }
 
   // Recent Activity
@@ -523,7 +549,7 @@
         @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-line-clamp-2 com-m-0;
 
         .activity-text {
-          @apply com-text-xs com-font-medium com-text-Yankees-Blue com-line-clamp-2 com-cursor-default;
+          @apply com-text-xs com-text-Yankees-Blue com-line-clamp-2 com-cursor-default;
 
           strong {
             @apply com-font-medium;
@@ -531,12 +557,20 @@
         }
       }
 
-      .activity-name-avatar {
-        @apply com-inline-flex com-items-center com-justify-center com-w-5 com-h-5 com-rounded-full com-bg-primary-500 com-text-white com-text-[10px] com-font-medium com-mr-0.5 com-align-middle;
-      }
-
       .activity-time {
         @apply com-text-xs com-text-gray-400 com-shrink-0;
+      }
+    }
+
+    .activity-empty {
+      @apply com-flex com-flex-col com-items-center com-gap-2 com-py-4 com-text-xs com-text-gray-500;
+
+      .activity-empty-icon {
+        @apply com-flex com-items-center com-justify-center com-w-12 com-h-12 com-rounded-full com-bg-yellow-50 com-text-yellow-500 com-text-xl com-mb-1;
+      }
+
+      .activity-empty-text {
+        @apply com-text-xs com-font-medium com-text-Yankees-Blue;
       }
     }
   }
@@ -1591,6 +1625,18 @@
         .audience-pct {
           @apply com-text-xs com-font-semibold com-text-Cadet-Grey com-w-8 com-text-right;
         }
+
+        .audience-list-empty {
+          @apply com-flex-col com-items-center com-justify-center com-gap-2 com-py-3;
+
+          .audience-list-empty-icon {
+            @apply com-flex com-items-center com-justify-center com-w-12 com-h-12 com-rounded-full com-bg-purple-50 com-text-purple-600 com-text-xl com-mb-1;
+          }
+
+          .audience-list-empty-text {
+            @apply com-text-xs com-font-medium com-text-Yankees-Blue;
+          }
+        }
       }
     }
   }
@@ -1777,7 +1823,7 @@
       }
 
       .top-list-value {
-        @apply com-ml-auto com-text-xs com-font-semibold com-text-Yankees-Blue com-shrink-0;
+        @apply com-ml-auto com-text-xs com-font-medium com-text-Cadet-Grey com-shrink-0;
       }
     }
 

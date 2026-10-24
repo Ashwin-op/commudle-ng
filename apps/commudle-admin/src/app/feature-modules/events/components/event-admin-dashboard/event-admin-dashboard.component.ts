@@ -296,7 +296,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
       case 'update_like':
         return 'liked your update';
       case 'email_delivered':
-        return 'Reminder email delivered';
+        return 'email delivered';
       default:
         return type;
     }
@@ -305,11 +305,6 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   /** The feed items carry the actor under a few possible keys; fall back to no name. */
   activityActorName(item: IEventDashboardActivityItem): string {
     return item?.user?.name || item?.user_name || item?.name || '';
-  }
-
-  activityInitial(item: IEventDashboardActivityItem): string {
-    const name = this.activityActorName(item);
-    return name ? name.charAt(0).toUpperCase() : '';
   }
 
   activityTime(item: IEventDashboardActivityItem): string {
