@@ -8,8 +8,11 @@ export interface ICampaignEstimate {
   daily_spend: IMinMaxRange;
   budget: number;
   price_per_impression: number;
-  end_date: string;
-  remaining_days: number;
-  required_daily_impressions: number;
-  delivery_status: string;
+  end_date: string | null;
+  remaining_days: number | null;
+  required_daily_impressions: number | null;
+  delivery_status: ECampaignDeliveryStatus;
 }
+
+// no_end_date: no pacing verdict is possible, only the daily ranges
+export type ECampaignDeliveryStatus = 'deliverable' | 'borderline' | 'undeliverable' | 'no_end_date';

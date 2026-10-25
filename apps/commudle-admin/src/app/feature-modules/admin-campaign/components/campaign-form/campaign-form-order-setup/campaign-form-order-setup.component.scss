@@ -298,3 +298,23 @@ nb-accordion {
 .change-log-list {
   @apply com-list-none com-m-0 com-p-0 com-flex com-flex-col com-gap-2 com-text-sm;
 }
+
+.estimate-status {
+  @apply com-mt-3 com-px-3 com-py-2 com-rounded-md com-text-sm com-border com-border-solid;
+
+  &.deliverable {
+    @apply com-bg-green-100 com-border-green-500 com-text-green-700;
+  }
+
+  &.borderline {
+    @apply com-bg-yellow-100 com-border-yellow-500 com-text-yellow-800;
+  }
+
+  &.undeliverable {
+    @apply com-bg-red-100 com-border-red-500 com-text-red-700;
+  }
+
+  &.no_end_date {
+    @apply com-bg-gray-100 com-border-gray-300 com-text-gray-700;
+  }
+}

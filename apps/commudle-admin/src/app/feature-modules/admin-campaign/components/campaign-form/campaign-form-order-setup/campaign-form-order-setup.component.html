@@ -199,7 +199,7 @@
                   <!-- Est. Impressions -->
                   <div *ngIf="estimate" class="budget-info-row com-mb-5">
                     <div class="cost-container">
-                      <label for="est_impressions">Est. Impressions:</label>
+                      <label for="est_impressions">Est. daily impressions:</label>
                       <span class="info-value">{{
                         this.estimate.daily_impressions.min + ' - ' + this.estimate.daily_impressions.max
                       }}</span>
@@ -336,8 +336,10 @@
                       >
                     </div>
                     <div class="cost-container">
-                      <span>Est. runtime ~ X days/hours/minutes :</span>
-                      <span class="budget-info-value">{{ this.estimate.remaining_days }}</span>
+                      <span>Est. runtime:</span>
+                      <span class="budget-info-value">{{
+                        estimate.remaining_days != null ? '~' + estimate.remaining_days + ' days' : 'No end date'
+                      }}</span>
                     </div>
                   </div>
 
@@ -348,6 +350,14 @@
                     {{ estimate.daily_spend.max | currency : campaign?.currency_type }}
                     per day
                   </p>
+
+                  <div *ngIf="estimate?.delivery_status" class="estimate-status" [ngClass]="estimate.delivery_status">
+                    <p class="com-m-0">{{ estimateStatusMessage() }}</p>
+                    <p class="small-info-text com-mt-1 com-mb-0" *ngIf="estimate.required_daily_impressions != null">
+                      Spending the full budget by the end date needs about
+                      {{ estimate.required_daily_impressions | number : '1.0-0' }} impressions per day.
+                    </p>
+                  </div>
                 </form>
                 <!-- price_per_impression -->
               </div>

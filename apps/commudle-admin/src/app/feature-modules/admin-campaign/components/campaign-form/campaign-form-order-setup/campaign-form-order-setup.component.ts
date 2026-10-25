@@ -133,6 +133,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
           this.campaign = campaign;
           this.patchCampaignForm();
           this.getFundStatus();
+          this.getEstimatedImpressions();
           if (this.isLaunched) {
             this.liveEndAt = this.formatDateTimeForInput(this.campaign.end_at);
             // the end date can only be shortened, never extended past what it was at launch
@@ -186,6 +187,21 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
 
   get activeAssetsCount(): number {
     return (this.campaign?.campaign_assets ?? []).filter((asset) => asset.active !== false).length;
+  }
+
+  estimateStatusMessage(): string {
+    switch (this.estimate?.delivery_status) {
+      case 'deliverable':
+        return 'On track: your budget and schedule should be fully delivered.';
+      case 'borderline':
+        return 'Borderline: this budget may not fully deliver by the end date. Consider a smaller budget, a later end date, or broader targeting.';
+      case 'undeliverable':
+        return "Unlikely to deliver: with the current targeting, this budget and timeline can't realistically be met. Broaden your targeting, lower the budget, or extend the end date.";
+      case 'no_end_date':
+        return 'No end date is set, so there is no delivery verdict. The ranges above are daily estimates.';
+      default:
+        return '';
+    }
   }
 
   selectedCommunityNames(): string {
@@ -449,6 +465,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
         };
         this.loadCampaignAssetsFromApi();
         this.resetAssetForm();
+        this.getEstimatedImpressions();
         this.cdr.detectChanges();
         if (wasNew) {
           this.router.navigate(['campaigns', 'edit', this.campaign.id], { replaceUrl: true });
@@ -567,11 +584,12 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
   }
 
   getEstimatedImpressions(): void {
-    if (!this.campaign?.id) return;
-    // this.campaignService.getEstimatedImpressions(this.campaign.id).subscribe((res) => {
-    //   this.estimate = res.data;
-    //   this.cdr.detectChanges();
-    // });
+    // a launched campaign can't change targeting or budget, so an estimate would only mislead
+    if (!this.campaign?.id || this.isLaunched) return;
+    this.campaignService.getEstimatedImpressions(this.campaign.id).subscribe((estimate) => {
+      this.estimate = estimate;
+      this.cdr.detectChanges();
+    });
   }
 
   private formatDateTimeForInput(dateString: string): string {

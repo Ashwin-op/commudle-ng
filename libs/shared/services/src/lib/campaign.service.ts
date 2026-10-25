@@ -162,12 +162,11 @@ export class CampaignService {
     });
   }
 
-  getEstimatedImpressions(campaignId: string): Observable<{ data: ICampaignEstimate }> {
+  getEstimatedImpressions(campaignId: string): Observable<ICampaignEstimate> {
     const params = new HttpParams().set('campaign_id', campaignId);
-    return this.http.get<{ data: ICampaignEstimate }>(
-      this.baseApiService.getRoute(API_ROUTES.CAMPAIGNS.ESTIMATED_IMPRESSIONS),
-      { params },
-    );
+    return this.http.get<ICampaignEstimate>(this.baseApiService.getRoute(API_ROUTES.CAMPAIGNS.ESTIMATED_IMPRESSIONS), {
+      params,
+    });
   }
 
   // Local testing only: set localStorage 'dev_simulated_ip' to an IP in the location you want to test.
