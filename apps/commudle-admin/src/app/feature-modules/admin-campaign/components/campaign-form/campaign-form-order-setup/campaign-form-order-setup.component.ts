@@ -81,6 +81,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
   staticAssets = staticAssets;
   defaultUrl = environment.app_url + '/campaigns/new';
   savingAsset = false;
+  private dateSaveTimer: ReturnType<typeof setTimeout>;
   minStartLeadHours = 1;
   // keep in sync with Campaign::MIN_CAMPAIGN_DURATION on the backend
   static readonly MIN_DURATION_HOURS = 12;
@@ -145,7 +146,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
           }
           setTimeout(() => {
             if (this.campaignForm.get('set_end_date')?.value) {
-              this.onSetEndDateChange();
+              this.onSetEndDateChange(false); // initial load must not write to the campaign
             }
             if (!this.isForm1Invalid()) {
               this.form1Invalid = false;
@@ -300,6 +301,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
   }
 
   ngOnDestroy() {
+    clearTimeout(this.dateSaveTimer);
     // placeChanged lives on a root singleton service, so a stale subscription would fire for a destroyed form
     this.subscriptions.unsubscribe();
   }
@@ -654,6 +656,25 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     if (this.campaign?.id && key === 'budget') {
       this.updateCampaign();
     }
+    if (key === 'start_at' || key === 'end_at') {
+      this.saveDatesForEstimate();
+    }
+  }
+
+  // The estimate is computed from the saved campaign, so a date change has to be saved before it can refresh.
+  // Debounced, and skipped while the dates are invalid so the server isn't sent a range it will reject.
+  private saveDatesForEstimate() {
+    if (!this.campaign?.id || this.isLaunched) return;
+    clearTimeout(this.dateSaveTimer);
+    this.dateSaveTimer = setTimeout(() => {
+      const datesValid =
+        this.campaignForm.get('start_at')?.valid &&
+        this.campaignForm.get('end_at')?.valid &&
+        !this.campaignForm.errors?.['endDateValidator'];
+      if (datesValid) {
+        this.updateCampaign();
+      }
+    }, 800);
   }
 
   handleArrayFormInput(value: string | number, key: string, index: number, formArrayName: string) {
@@ -772,7 +793,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     return true;
   }
 
-  onSetEndDateChange() {
+  onSetEndDateChange(save = true) {
     const setEndDate = this.campaignForm.get('set_end_date')?.value;
     const endDateControl = this.campaignForm.get('end_at');
 
@@ -784,6 +805,9 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
         endDateControl.setValue('');
       }
       endDateControl.updateValueAndValidity();
+    }
+    if (save) {
+      this.saveDatesForEstimate();
     }
   }
 
