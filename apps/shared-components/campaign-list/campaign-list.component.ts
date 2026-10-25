@@ -60,6 +60,11 @@ export class CampaignListComponent implements OnChanges {
   }
 
   // the wallet is per currency, and an owner's campaigns share one currency in practice
+  // the API deals in minor units (cents/paise)
+  toMajorUnits(minorAmount: number): number {
+    return (minorAmount ?? 0) / 100;
+  }
+
   private loadWallet(currency: string) {
     const walletCurrency = currency || 'USD';
     if (this.walletCurrency === walletCurrency) return;

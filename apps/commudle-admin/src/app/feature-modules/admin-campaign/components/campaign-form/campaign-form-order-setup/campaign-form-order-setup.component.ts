@@ -192,10 +192,19 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     return (this.campaign?.campaign_assets ?? []).filter((asset) => asset.active !== false).length;
   }
 
-  // Pricing (and so the spend derived from it) is stored in minor units (cents); budget and wallet are still major
-  // units today. Convert only the pricing-based figures until the backend standardises on minor units.
+  // The API deals in minor units everywhere (cents/paise): budget, spend, wallet balances and pricing.
+  // The form works in major units (what the advertiser types), so convert at the boundary.
   toMajorUnits(minorAmount: number): number {
     return (minorAmount ?? 0) / 100;
+  }
+
+  toMinorUnits(majorAmount: number | string): number {
+    return Math.round(Number(majorAmount || 0) * 100);
+  }
+
+  // wallet balances are in minor units, the budget field is in major units
+  walletCoversBudget(): boolean {
+    return !!this.wallet && this.wallet.available_balance >= this.toMinorUnits(this.campaignForm?.get('budget')?.value);
   }
 
   estimateStatusMessage(): string {
@@ -582,7 +591,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
         end_at: this.formatDateTimeForInput(this.campaign.end_at),
         set_end_date: !!this.campaign.end_at,
         cta_label: this.campaign.cta_label,
-        budget: this.campaign.budget,
+        budget: this.toMajorUnits(this.campaign.budget),
         locations: this.selectedLocations,
         communities: communitySlugs,
       });
@@ -709,7 +718,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     if (formValue.cta_label) {
       formData.append('campaign[cta_label]', formValue.cta_label);
     }
-    if (formValue.budget) formData.append('campaign[budget]', formValue.budget.toString());
+    if (formValue.budget) formData.append('campaign[budget]', this.toMinorUnits(formValue.budget).toString());
     if (formValue.start_at) formData.append('campaign[start_at]', formValue.start_at);
     if (formValue.set_end_date && formValue.end_at) {
       formData.append('campaign[end_at]', formValue.end_at);
@@ -766,7 +775,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
   }
 
   callSubmitForApproval() {
-    if (this.wallet && this.wallet.available_balance >= this.campaignForm?.get('budget')?.value) {
+    if (this.walletCoversBudget()) {
       this.campaignService.submitForApproval(this.campaign.id).subscribe((data) => {
         if (data) {
           this.toasterService.successDialog('Campaign submitted');

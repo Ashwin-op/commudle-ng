@@ -9,13 +9,13 @@
       </tr>
       <tr>
         <td class="wallet-details-value">
-          {{ wallet.balance | currency : currencyType }}
+          {{ toMajorUnits(wallet.balance) | currency : currencyType }}
         </td>
         <td class="wallet-details-value">
-          {{ wallet.available_balance | currency : currencyType }}
+          {{ toMajorUnits(wallet.available_balance) | currency : currencyType }}
         </td>
         <td class="wallet-details-value">
-          {{ wallet.reserved_balance | currency : currencyType }}
+          {{ toMajorUnits(wallet.reserved_balance) | currency : currencyType }}
         </td>
       </tr>
     </tbody>

@@ -2,13 +2,14 @@
 <div class="wallet-summary" *ngIf="wallet">
   <span class="wallet-summary-title">Wallet</span>
   <span
-    >Available: <strong>{{ wallet.available_balance | currency : walletCurrency }}</strong></span
+    >Available: <strong>{{ toMajorUnits(wallet.available_balance) | currency : walletCurrency }}</strong></span
   >
   <span
-    >Reserved for campaigns: <strong>{{ wallet.reserved_balance | currency : walletCurrency }}</strong></span
+    >Reserved for campaigns:
+    <strong>{{ toMajorUnits(wallet.reserved_balance) | currency : walletCurrency }}</strong></span
   >
   <span
-    >Total: <strong>{{ wallet.balance | currency : walletCurrency }}</strong></span
+    >Total: <strong>{{ toMajorUnits(wallet.balance) | currency : walletCurrency }}</strong></span
   >
 </div>
 
@@ -268,7 +269,7 @@
                 Send mail
               </button>
             </td>
-            <td>{{ campaign.budget ? (campaign.budget | currency : campaign.currency_type) : '-' }}</td>
+            <td>{{ campaign.budget ? (toMajorUnits(campaign.budget) | currency : campaign.currency_type) : '-' }}</td>
             <td class="duration-time">
               <div *ngIf="campaign.start_at">
                 <span>{{ moment(campaign.start_at).format('MMM Do, YYYY') }}</span
@@ -307,7 +308,7 @@
             <td class="data-cell com-text-right border-right">
               {{
                 statsOverview[campaign.id]?.budget_remaining != null
-                  ? (statsOverview[campaign.id]?.budget_remaining | currency : campaign.currency_type)
+                  ? (toMajorUnits(statsOverview[campaign.id]?.budget_remaining) | currency : campaign.currency_type)
                   : '--'
               }}
             </td>
@@ -457,7 +458,7 @@
           Its remaining reserved budget
           <ng-container *ngIf="statsOverview[data.campaign.id]?.budget_remaining != null"
             >(<strong>{{
-              statsOverview[data.campaign.id].budget_remaining | currency : data.campaign.currency_type
+              toMajorUnits(statsOverview[data.campaign.id].budget_remaining) | currency : data.campaign.currency_type
             }}</strong
             >)</ng-container
           >

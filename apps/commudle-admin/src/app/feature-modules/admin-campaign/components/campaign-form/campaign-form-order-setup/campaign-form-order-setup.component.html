@@ -23,12 +23,12 @@
                   <dt>Status</dt>
                   <dd>{{ campaign?.status | titlecase }}</dd>
                   <dt>Budget</dt>
-                  <dd>{{ campaign?.budget | currency : campaign?.currency_type }}</dd>
+                  <dd>{{ toMajorUnits(campaign?.budget) | currency : campaign?.currency_type }}</dd>
                   <ng-container *ngIf="wallet">
                     <dt>Wallet</dt>
                     <dd>
-                      {{ wallet.available_balance | currency : campaign?.currency_type }} available,
-                      {{ wallet.reserved_balance | currency : campaign?.currency_type }} reserved
+                      {{ toMajorUnits(wallet.available_balance) | currency : campaign?.currency_type }} available,
+                      {{ toMajorUnits(wallet.reserved_balance) | currency : campaign?.currency_type }} reserved
                     </dd>
                   </ng-container>
                   <dt>Starts</dt>
@@ -324,8 +324,8 @@
                     <div class="cost-container">
                       <span>Est. cost:</span>
                       <span class="budget-info-value"
-                        >{{ toMajorUnits(estimate.price_per_impression) | currency : campaign?.currency_type
-                        }}<span class="small-info-text"> per impression</span></span
+                        >{{ toMajorUnits(estimate.price_per_impression * 1000) | currency : campaign?.currency_type
+                        }}<span class="small-info-text"> per 1,000 impressions</span></span
                       >
                     </div>
                     <div class="cost-container">
@@ -557,13 +557,13 @@
                 </tr>
                 <tr>
                   <td class="wallet-details-value">
-                    {{ wallet.balance | currency : campaign?.currency_type }}
+                    {{ toMajorUnits(wallet.balance) | currency : campaign?.currency_type }}
                   </td>
                   <td class="wallet-details-value">
-                    {{ wallet.available_balance | currency : campaign?.currency_type }}
+                    {{ toMajorUnits(wallet.available_balance) | currency : campaign?.currency_type }}
                   </td>
                   <td class="wallet-details-value">
-                    {{ wallet.reserved_balance | currency : campaign?.currency_type }}
+                    {{ toMajorUnits(wallet.reserved_balance) | currency : campaign?.currency_type }}
                   </td>
                 </tr>
               </tbody>
@@ -577,11 +577,7 @@
               shape="semi-round"
               (click)="openGoLiveConfirmation(goLiveDialog)"
             >
-              {{
-                wallet && wallet.available_balance >= campaignForm.get('budget').value
-                  ? 'Submit campaign'
-                  : 'Pay and submit campaign'
-              }}
+              {{ walletCoversBudget() ? 'Submit campaign' : 'Pay and submit campaign' }}
               &nbsp;<fa-icon [icon]="icons.faArrowRight"></fa-icon>
             </button>
           </div>
@@ -618,9 +614,7 @@
         <li>
           Budget of <strong>{{ campaignForm.get('budget').value | currency : campaign?.currency_type }}</strong> is
           reserved from your wallet{{
-            wallet && wallet.available_balance >= campaignForm.get('budget').value
-              ? ''
-              : ' (you will be taken to checkout to pay the shortfall)'
+            walletCoversBudget() ? '' : ' (you will be taken to checkout to pay the shortfall)'
           }}.
         </li>
         <li>
