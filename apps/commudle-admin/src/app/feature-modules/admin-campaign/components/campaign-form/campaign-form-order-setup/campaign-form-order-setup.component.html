@@ -319,7 +319,7 @@
                     <div class="cost-container">
                       <span>Est. cost:</span>
                       <span class="budget-info-value"
-                        >{{ this.estimate.price_per_impression | currency : campaign?.currency_type
+                        >{{ toMajorUnits(estimate.price_per_impression) | currency : campaign?.currency_type
                         }}<span class="small-info-text"> per impression</span></span
                       >
                     </div>
@@ -333,9 +333,9 @@
 
                   <p class="small-info-text" *ngIf="estimate?.daily_spend">
                     You will end up spending
-                    {{ estimate.daily_spend.min | currency : campaign?.currency_type }}
+                    {{ toMajorUnits(estimate.daily_spend.min) | currency : campaign?.currency_type }}
                     -
-                    {{ estimate.daily_spend.max | currency : campaign?.currency_type }}
+                    {{ toMajorUnits(estimate.daily_spend.max) | currency : campaign?.currency_type }}
                     per day
                   </p>
 

@@ -192,6 +192,12 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     return (this.campaign?.campaign_assets ?? []).filter((asset) => asset.active !== false).length;
   }
 
+  // Pricing (and so the spend derived from it) is stored in minor units (cents); budget and wallet are still major
+  // units today. Convert only the pricing-based figures until the backend standardises on minor units.
+  toMajorUnits(minorAmount: number): number {
+    return (minorAmount ?? 0) / 100;
+  }
+
   estimateStatusMessage(): string {
     switch (this.estimate?.delivery_status) {
       case 'deliverable':
