@@ -82,6 +82,8 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
   defaultUrl = environment.app_url + '/campaigns/new';
   savingAsset = false;
   minStartLeadHours = 1;
+  // keep in sync with Campaign::MIN_CAMPAIGN_DURATION on the backend
+  static readonly MIN_DURATION_HOURS = 12;
   readonly maxActiveAssets = 5;
   changeLog: ICampaignChangeLogEntry[] = [];
   liveEndAt = '';
@@ -368,7 +370,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     });
   }
 
-  // Mirrors the server rules: end after start, not in the past, and at least minCampaignDays after the start.
+  // Mirrors the server rules: end after start, not in the past, and at least minCampaignDurationHours after the start.
   endDateValidator(formGroup: AbstractControl): ValidationErrors | null {
     const startDate = formGroup.get('start_at')?.value;
     const endDate = formGroup.get('end_at')?.value;
@@ -382,8 +384,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     const start = new Date(startDate);
     if (end <= start) return { endDateValidator: 'beforeStart' };
 
-    const minEndDate = new Date(start);
-    minEndDate.setDate(minEndDate.getDate() + 3);
+    const minEndDate = new Date(start.getTime() + CampaignFormOrderSetupComponent.MIN_DURATION_HOURS * 60 * 60 * 1000);
     return end < minEndDate ? { endDateValidator: 'tooSoon' } : null;
   }
 
