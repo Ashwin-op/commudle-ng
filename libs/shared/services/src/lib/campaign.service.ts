@@ -10,6 +10,7 @@ import {
   IPurchaseOrder,
 } from '@commudle/shared-models';
 import { Observable } from 'rxjs';
+import { environment } from '@commudle/shared-environments';
 import { API_ROUTES } from './api-routes.constant';
 import { BaseApiService } from './base-api.service';
 
@@ -169,8 +170,18 @@ export class CampaignService {
     );
   }
 
+  // Local testing only: set localStorage 'dev_simulated_ip' to an IP in the location you want to test.
+  // Does nothing in production builds, and the backend only honours it in Rails development.
+  private devSimulatedIpParams(params = new HttpParams()): HttpParams {
+    if (environment.production || typeof localStorage === 'undefined') {
+      return params;
+    }
+    const ip = localStorage.getItem('dev_simulated_ip');
+    return ip ? params.set('dev_simulated_ip', ip) : params;
+  }
+
   recordImpression(formData: any, campaignId: string): Observable<any> {
-    const params = new HttpParams().set('campaign_id', campaignId);
+    const params = this.devSimulatedIpParams(new HttpParams().set('campaign_id', campaignId));
     return this.http.post<any>(this.baseApiService.getRoute(API_ROUTES.CAMPAIGNS.RECORD_IMPRESSION), formData, {
       params,
     });
@@ -184,7 +195,9 @@ export class CampaignService {
   }
 
   serveCampaign(): Observable<any> {
-    return this.http.get<any>(this.baseApiService.getRoute(API_ROUTES.CAMPAIGNS.CAMPAIGN_SERVE));
+    return this.http.get<any>(this.baseApiService.getRoute(API_ROUTES.CAMPAIGNS.CAMPAIGN_SERVE), {
+      params: this.devSimulatedIpParams(),
+    });
   }
 
   createPurchaseOrder(campaignId: string, userWalletBalance = true): Observable<IPurchaseOrder> {

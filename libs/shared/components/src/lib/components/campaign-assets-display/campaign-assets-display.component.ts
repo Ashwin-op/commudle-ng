@@ -222,7 +222,8 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
     this.createUserEngagementForCampaign(EUserActivityEventType.CLICK);
   }
 
-  createUserEngagementForCampaign(eventType) {
+  // assetId is the creative that was clicked; for an impression it falls back to the slide currently on screen
+  createUserEngagementForCampaign(eventType, assetId?: number) {
     if (this.campaignType === 'live' && this.campaign) {
       const currentUrl = this.isBrowser ? window.location.href : '';
       const formData = new FormData();
@@ -230,6 +231,10 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
       formData.append('campaign_engagement[url]', currentUrl);
       if (this.serveToken) {
         formData.append('campaign_engagement[serve_token]', this.serveToken);
+      }
+      const campaignAssetId = assetId ?? this.campaign.campaign_assets?.[this.currentSlide]?.id;
+      if (campaignAssetId != null) {
+        formData.append('campaign_engagement[campaign_asset_id]', String(campaignAssetId));
       }
 
       if (!this.seoService.isBot) {

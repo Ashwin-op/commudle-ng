@@ -1,3 +1,17 @@
+<!-- Wallet -->
+<div class="wallet-summary" *ngIf="wallet">
+  <span class="wallet-summary-title">Wallet</span>
+  <span
+    >Available: <strong>{{ wallet.available_balance | currency : walletCurrency }}</strong></span
+  >
+  <span
+    >Reserved for campaigns: <strong>{{ wallet.reserved_balance | currency : walletCurrency }}</strong></span
+  >
+  <span
+    >Total: <strong>{{ wallet.balance | currency : walletCurrency }}</strong></span
+  >
+</div>
+
 <!-- KPI Cards -->
 <div class="kpi-cards" *ngIf="statsUserCampaigns">
   <div class="kpi-card">
@@ -125,11 +139,13 @@
             <td class="status-cell">
               <div *ngIf="campaign.status">
                 <app-badge
-                  [text]="campaign.status | capitalizeAndRemoveUnderscore"
+                  [text]="statusLabel(campaign)"
                   [fontSize]="'small'"
                   [borderRadius]="'round'"
                   [color]="
-                    campaign.status === ECampaignStatus.PENDING_PAYMENT
+                    isScheduled(campaign)
+                      ? 'com-bg-blue-100'
+                      : campaign.status === ECampaignStatus.PENDING_PAYMENT
                       ? 'com-bg-gray-100'
                       : campaign.status === ECampaignStatus.DRAFT
                       ? 'com-bg-gray-100'
@@ -152,7 +168,9 @@
                       : 'com-bg-gray-100'
                   "
                   [fontColor]="
-                    campaign.status === ECampaignStatus.PENDING_PAYMENT
+                    isScheduled(campaign)
+                      ? 'com-text-blue-700'
+                      : campaign.status === ECampaignStatus.PENDING_PAYMENT
                       ? 'com-text-gray-700'
                       : campaign.status === ECampaignStatus.DRAFT
                       ? 'com-text-gray-700'
@@ -175,6 +193,9 @@
                       : 'com-text-gray-700'
                   "
                 ></app-badge>
+                <div class="small-info-text com-mt-1" *ngIf="isScheduled(campaign)">
+                  Starts {{ campaign.start_at | date : 'medium' }}
+                </div>
               </div>
               <div
                 *ngIf="isCampaignAdmin && campaign.status"
@@ -420,22 +441,37 @@
 </ng-template> -->
 
 <ng-template #stopCampaignDialog let-data let-ref="dialogRef">
-  <com-card class="stop-campaign-dialog">
-    <com-card-header>
+  <com-card class="confirm-dialog">
+    <com-card-header class="confirm-dialog-header">
       <h3>Stop this campaign?</h3>
+      <button comButton ghost size="small" shape="round" aria-label="Close" (click)="ref.close()">
+        <fa-icon [icon]="icons.faXmark"></fa-icon>
+      </button>
     </com-card-header>
-    <com-card-body class="stop-campaign-dialog-body">
-      <p>
-        Stopping is permanent. Your unspent budget returns to your wallet's available balance, and the campaign stops
-        serving. To run it again you will need to create a new campaign.
+    <com-card-body class="confirm-dialog-body">
+      <p class="confirm-dialog-question">
+        Stopping <strong>{{ data.campaign.name }}</strong> is permanent.
       </p>
-      <p>
-        If you only want a break, use Pause instead. The budget stays reserved while a campaign is paused, and is
-        released only when you stop it or its end date passes.
-      </p>
+      <ul class="confirm-dialog-list">
+        <li>
+          Its remaining reserved budget
+          <ng-container *ngIf="statsOverview[data.campaign.id]?.budget_remaining != null"
+            >(<strong>{{
+              statsOverview[data.campaign.id].budget_remaining | currency : data.campaign.currency_type
+            }}</strong
+            >)</ng-container
+          >
+          is released back to your wallet's available balance.
+        </li>
+        <li>The campaign stops serving right away and cannot be restarted. You would create a new campaign instead.</li>
+        <li>
+          Just need a break? Use <strong>Pause</strong> instead. A paused campaign keeps its budget reserved and can be
+          resumed any time.
+        </li>
+      </ul>
     </com-card-body>
-    <com-card-footer class="stop-campaign-dialog-footer">
-      <button comButton ghost size="small" shape="semi-round" (click)="ref.close()">Cancel</button>
+    <com-card-footer class="confirm-dialog-footer">
+      <button comButton outline size="small" shape="semi-round" (click)="ref.close()">Cancel</button>
       <button comButton status="danger" size="small" shape="semi-round" (click)="confirmStop(ref, data.campaign)">
         Yes, stop campaign
       </button>

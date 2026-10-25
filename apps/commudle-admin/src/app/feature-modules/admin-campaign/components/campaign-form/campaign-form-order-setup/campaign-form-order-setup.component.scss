@@ -255,14 +255,30 @@ nb-accordion {
   @apply com-ml-auto;
 }
 
-.go-live-dialog {
-  @apply com-max-w-md;
+.confirm-dialog {
+  @apply com-w-[90vw] com-max-w-md;
 
-  .go-live-dialog-body {
-    @apply com-max-h-[60vh] com-overflow-y-auto;
+  .confirm-dialog-header {
+    @apply com-flex com-items-center com-justify-between;
+
+    h3 {
+      @apply com-m-0 com-text-lg com-font-semibold;
+    }
   }
 
-  .go-live-dialog-footer {
+  .confirm-dialog-body {
+    @apply com-max-h-[60vh] com-overflow-y-auto;
+
+    .confirm-dialog-question {
+      @apply com-mt-0 com-mb-3 com-font-medium;
+    }
+
+    .confirm-dialog-list {
+      @apply com-m-0 com-pl-5 com-flex com-flex-col com-gap-2 com-text-sm com-text-gray-600;
+    }
+  }
+
+  .confirm-dialog-footer {
     @apply com-flex com-justify-end com-gap-2;
   }
 }

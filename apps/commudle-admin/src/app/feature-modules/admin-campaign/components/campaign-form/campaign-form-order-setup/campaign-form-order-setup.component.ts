@@ -39,7 +39,7 @@ import {
 import { GooglePlacesAutocompleteService } from 'apps/commudle-admin/src/app/services/google-places-autocomplete.service';
 import { SearchService } from 'apps/commudle-admin/src/app/feature-modules/search/services/search.service';
 import { ISearch } from 'apps/shared-models/search.model';
-import { faArrowRight, faFileImage, faRectangleAd, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faFileImage, faRectangleAd, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { debounceTime, distinctUntilChanged, EMPTY, Observable, of, Subscription, switchMap, tap } from 'rxjs';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 import { environment } from '@commudle/shared-environments';
@@ -58,6 +58,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     faFileImage,
     faRectangleAd,
     faTrash,
+    faXmark,
   };
   campaign: ICampaign;
   // built from the form (not the saved campaign) so the preview updates as the user types
@@ -351,20 +352,23 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     });
   }
 
+  // Mirrors the server rules: end after start, not in the past, and at least minCampaignDays after the start.
   endDateValidator(formGroup: AbstractControl): ValidationErrors | null {
     const startDate = formGroup.get('start_at')?.value;
     const endDate = formGroup.get('end_at')?.value;
 
-    if (!startDate || !endDate) return null; // No validation if either date is missing
+    if (!formGroup.get('set_end_date')?.value || !endDate) return null; // end date is optional
+
+    const end = new Date(endDate);
+    if (end < new Date()) return { endDateValidator: 'past' };
+    if (!startDate) return null;
 
     const start = new Date(startDate);
-    const end = new Date(endDate);
+    if (end <= start) return { endDateValidator: 'beforeStart' };
 
-    // Ensure end date is at least 3 days after the start date
     const minEndDate = new Date(start);
     minEndDate.setDate(minEndDate.getDate() + 3);
-
-    return end < minEndDate ? { endDateValidator: true } : null;
+    return end < minEndDate ? { endDateValidator: 'tooSoon' } : null;
   }
 
   createCampaignAsset(asset?: ICampaignAsset): FormGroup {

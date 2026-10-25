@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges, TemplateRef } from '@angular/core';
-import { ICampaign, ECampaignStatus, EDbModels, ICampaignStats } from '@commudle/shared-models';
-import { CampaignService, NoteService, ToastrService } from '@commudle/shared-services';
-import { faEdit, faArrowRight, faSync, faTrash, faFilter } from '@fortawesome/free-solid-svg-icons';
+import { ICampaign, ECampaignStatus, EDbModels, ICampaignStats, IWallet } from '@commudle/shared-models';
+import { CampaignService, NoteService, ToastrService, WalletService } from '@commudle/shared-services';
+import { faEdit, faArrowRight, faSync, faTrash, faFilter, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { NbDialogRef, NbDialogService } from '@commudle/theme';
 import * as moment from 'moment';
 
@@ -18,7 +18,7 @@ export class CampaignListComponent implements OnChanges {
   @Input() selectedStatus: ECampaignStatus | null = null;
   @Output() refreshRequested = new EventEmitter<ECampaignStatus | null>();
   moment = moment;
-  icons = { faEdit, faArrowRight, faSync, faTrash, faFilter };
+  icons = { faEdit, faArrowRight, faSync, faTrash, faFilter, faXmark };
   ECampaignStatus = ECampaignStatus;
   readonly adminStatusOptions: ECampaignStatus[] = [
     ECampaignStatus.PAUSED,
@@ -29,12 +29,15 @@ export class CampaignListComponent implements OnChanges {
   statusFilter: ECampaignStatus | null = null;
   statsUserCampaigns: ICampaignStats;
   statsOverview: ICampaignStats[] = [];
+  wallet: IWallet;
+  walletCurrency: string;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['selectedStatus']) {
       this.statusFilter = this.selectedStatus;
     }
     if (changes['campaigns'] && this.campaigns?.length) {
+      this.loadWallet(this.campaigns[0].currency_type);
       this.campaigns.forEach((campaign) => {
         if (this.statsOverview[campaign.id]) return;
         this.campaignService.getStatsOverview(campaign.id).subscribe((stats: ICampaignStats) => {
@@ -49,10 +52,32 @@ export class CampaignListComponent implements OnChanges {
     private toasterService: ToastrService,
     private dialogService: NbDialogService,
     private noteService: NoteService,
+    private walletService: WalletService,
   ) {}
 
   ngOnInit(): void {
     this.getUserCampaignsStats();
+  }
+
+  // the wallet is per currency, and an owner's campaigns share one currency in practice
+  private loadWallet(currency: string) {
+    const walletCurrency = currency || 'USD';
+    if (this.walletCurrency === walletCurrency) return;
+    this.walletCurrency = walletCurrency;
+    this.walletService.getFundStatus(walletCurrency).subscribe((wallet) => (this.wallet = wallet));
+  }
+
+  // a campaign flips to 'live' at submit, which can be well before its start time
+  isScheduled(campaign: ICampaign): boolean {
+    return campaign.status === ECampaignStatus.LIVE && !!campaign.start_at && new Date(campaign.start_at) > new Date();
+  }
+
+  statusLabel(campaign: ICampaign): string {
+    return this.isScheduled(campaign) ? 'Scheduled' : this.capitalizeStatus(campaign.status);
+  }
+
+  private capitalizeStatus(status: string): string {
+    return (status || '').replace(/_/g, ' ').replace(/^\w/, (c) => c.toUpperCase());
   }
 
   getStatusOptionsForCampaign(campaign: ICampaign): ECampaignStatus[] {

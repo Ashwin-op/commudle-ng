@@ -15,7 +15,7 @@
         }"
   >
     <div class="component-container-wrapper" *ngFor="let ca of campaign?.campaign_assets">
-      <a [href]="ca?.url" target="_blank" (click)="createUserEngagementForCampaign(UserActivityEventType.CLICK)">
+      <a [href]="ca?.url" target="_blank" (click)="createUserEngagementForCampaign(UserActivityEventType.CLICK, ca.id)">
         <img [src]="ca.image?.url" class="slider-image" [alt]="ca.headline" [title]="ca.headline" />
         <div class="campaign-image-footer">
           <p class="campaign-url">{{ ca.url }}</p>
