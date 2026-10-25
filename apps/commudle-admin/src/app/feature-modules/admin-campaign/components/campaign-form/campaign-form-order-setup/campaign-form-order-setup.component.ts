@@ -685,6 +685,14 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     }
   }
 
+  private appendList(formData: FormData, key: string, values: string[]) {
+    if (values.length === 0) {
+      formData.append(key, '');
+      return;
+    }
+    values.forEach((value) => formData.append(key, value));
+  }
+
   // campaign fields only (no assets) - what a full draft save sends
   private buildCampaignFormData(): FormData {
     const formData = new FormData();
@@ -703,12 +711,13 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
       formData.append('campaign[end_at]', '');
     }
 
-    // Append locations and communities
+    // Append locations and communities. FormData can't carry an empty array, and the server only touches targeting
+    // when the key is present, so an empty list is sent as one blank entry (the server strips blanks and clears).
     const locations = Array.isArray(formValue.locations) ? formValue.locations : [];
-    locations.forEach((loc) => formData.append('campaign[locations][]', loc));
+    this.appendList(formData, 'campaign[locations][]', locations);
 
     const communitySlugs = this.selectedCommunities.map((c) => c.slug);
-    communitySlugs.forEach((slug) => formData.append('campaign[communities][]', slug));
+    this.appendList(formData, 'campaign[communities][]', communitySlugs);
     return formData;
   }
 

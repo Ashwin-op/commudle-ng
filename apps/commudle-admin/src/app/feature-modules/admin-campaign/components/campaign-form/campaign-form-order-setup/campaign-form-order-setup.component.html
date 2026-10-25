@@ -238,7 +238,7 @@
 
                   <!-- Location (add one, shown as tag below; add more like communities) -->
                   <div>
-                    <label for="locationSearchInput"> Location<span class="required"> *</span> </label>
+                    <label for="locationSearchInput"> Location <span class="small-info-text">(optional)</span> </label>
                     <div class="input">
                       <nb-form-field>
                         <input
@@ -261,25 +261,13 @@
                           status="basic"
                         ></nb-tag>
                       </div>
-                      <div
-                        *ngIf="
-                          campaignForm.get('locations')?.invalid &&
-                          campaignForm.get('locations')?.touched &&
-                          campaignForm.get('locations')?.hasError('required')
-                        "
-                        class="alert-container"
-                      >
-                        <commudle-alert
-                          [error]="true"
-                          errorMessage="At least one location is required"
-                        ></commudle-alert>
-                      </div>
+                      <p class="small-info-text">Leave empty to show your ad to everyone.</p>
                     </div>
                   </div>
 
                   <!-- Communities -->
                   <div>
-                    <label for="communities">Communities</label>
+                    <label for="communities">Communities <span class="small-info-text">(optional)</span></label>
                     <div class="input">
                       <nb-form-field>
                         <input
