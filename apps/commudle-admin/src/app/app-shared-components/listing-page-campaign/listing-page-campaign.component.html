@@ -1,5 +1,6 @@
-<div class="listing-page-campaign">
+<div class="listing-page-campaign" [class.horizontal]="layout === 'horizontal'">
   <commudle-campaign-assets-display
+    [layout]="layout"
     [defaultImageUrl]="defaultUrl"
     [defaultImage]="staticAssets.campaign_user_dashboard"
   ></commudle-campaign-assets-display>

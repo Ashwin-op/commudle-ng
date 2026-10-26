@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, Input } from '@angular/core';
 import { faCalendarDays, faLink } from '@fortawesome/free-solid-svg-icons';
 import { EventsService } from 'apps/commudle-admin/src/app/services/events.service';
 import { ICommunity } from 'apps/shared-models/community.model';
@@ -18,6 +18,8 @@ import { faHashtag } from '@fortawesome/free-solid-svg-icons';
 })
 export class PublicHomeListEventsUpcomingComponent implements OnInit, AfterViewInit {
   community: ICommunity;
+  // set by the page on mobile, where the ad sits inside this list instead of the sidebar
+  @Input() showAd = false;
   upcomingEvents: IEvent[] = [];
   faCalendarDays = faCalendarDays;
   faLink = faLink;

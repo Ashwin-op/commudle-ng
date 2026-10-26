@@ -15,9 +15,16 @@
     *ngIf="isLoadingUpcoming"
   ></app-skeleton-cards>
   <div *ngIf="!isLoadingUpcoming">
-    <div *ngFor="let event of upcomingEvents" class="event-horizontal-card">
-      <commudle-event-horizontal-card [event]="event"></commudle-event-horizontal-card>
-    </div>
+    <ng-container *ngFor="let event of upcomingEvents; let i = index">
+      <div class="event-horizontal-card">
+        <commudle-event-horizontal-card [event]="event"></commudle-event-horizontal-card>
+      </div>
+      <!-- one ad, after the 3rd event, and only when there are at least 4 so it is never the last thing in the list -->
+      <commudle-listing-page-campaign
+        *ngIf="showAd && i === 2 && upcomingEvents.length >= 4"
+        [layout]="'horizontal'"
+      ></commudle-listing-page-campaign>
+    </ng-container>
   </div>
   <div class="no-upcoming" *ngIf="!isLoadingUpcoming && upcomingEvents.length === 0">
     <p>No Upcoming Events</p>

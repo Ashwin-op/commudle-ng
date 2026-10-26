@@ -681,7 +681,7 @@
       <div class="right-column">
         <h3 class="heading">Campaign Preview</h3>
         <p class="small-info-text preview-caption">
-          Vertical view: the ad fills the width of its slot. Images are cropped to 4:3 around the centre.
+          Desktop shows the vertical card, mobile the horizontal card. Images are cropped to 4:3 around the centre.
         </p>
         <div class="preview-device-toggle">
           <button
@@ -690,7 +690,7 @@
             shape="semi-round"
             [outline]="previewDevice !== 'desktop'"
             status="primary"
-            (click)="previewDevice = 'desktop'"
+            (click)="setPreviewDevice('desktop')"
           >
             Desktop sidebar
           </button>
@@ -700,7 +700,7 @@
             shape="semi-round"
             [outline]="previewDevice !== 'mobile'"
             status="primary"
-            (click)="previewDevice = 'mobile'"
+            (click)="setPreviewDevice('mobile')"
           >
             Mobile
           </button>
@@ -711,6 +711,7 @@
             [defaultImage]="staticAssets.campaign_default_image"
             [campaignPreview]="previewCampaign"
             [campaignType]="'preview'"
+            [layout]="previewDevice === 'mobile' ? 'horizontal' : 'vertical'"
           ></commudle-campaign-assets-display>
         </div>
       </div>

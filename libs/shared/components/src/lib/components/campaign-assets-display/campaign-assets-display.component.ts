@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  HostListener,
   Inject,
   PLATFORM_ID,
   Input,
@@ -15,7 +16,7 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { EDbModels, ICampaign, EUserActivityEventType } from '@commudle/shared-models';
 import { CampaignService, GoogleTagManagerService, SeoService } from '@commudle/shared-services';
-import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
+import { faCircleQuestion, faEllipsisVertical, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'commudle-campaign-assets-display',
@@ -28,6 +29,8 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
   @Input() defaultImageUrl: string;
   @Input() campaignType: 'preview' | 'live' = 'live';
   @Input() campaignPreview: ICampaign;
+  // vertical: image on top (sidebars). horizontal: thumbnail on the left (inside mobile lists), with a menu
+  @Input() layout: 'vertical' | 'horizontal' = 'vertical';
 
   campaign: ICampaign;
   private serveToken: string | null = null;
@@ -41,6 +44,13 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
   private campaignObserver!: IntersectionObserver;
   private defaultImageObserver!: IntersectionObserver;
   faCircleQuestion = faCircleQuestion;
+  faEllipsisVertical = faEllipsisVertical;
+  faXmark = faXmark;
+
+  // ad menu state (horizontal layout). Hiding only removes the ad until the page is loaded again.
+  menuOpen = false;
+  showWhy = false;
+  adHidden = false;
 
   private viewInitialized = false;
   private hasTrackedCampaignView = false;
@@ -181,6 +191,52 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
     if (inViewport) {
       observer.observe(element); // Still required to properly trigger
     }
+  }
+
+  toggleMenu(event: Event): void {
+    event.stopPropagation();
+    this.menuOpen = !this.menuOpen;
+  }
+
+  @HostListener('document:click')
+  closeMenu(): void {
+    this.menuOpen = false;
+  }
+
+  openWhy(): void {
+    this.showWhy = true;
+    this.menuOpen = false;
+  }
+
+  hideAd(): void {
+    // in the campaign form preview the menu is only there to show how it looks
+    if (this.campaignType === 'preview') {
+      this.menuOpen = false;
+      return;
+    }
+    this.adHidden = true;
+    this.menuOpen = false;
+    this.showWhy = false;
+    this.clearAutoSlide();
+  }
+
+  // opens the person's email app with the ad's details filled in
+  get reportHref(): string {
+    const page = this.isBrowser ? window.location.href : '';
+    const creative = this.campaign?.campaign_assets?.[this.currentSlide]?.id ?? '';
+    const body = [
+      'Hi Commudle team,',
+      '',
+      'I would like to report this ad.',
+      '',
+      `Campaign: ${this.campaign?.id ?? ''}`,
+      `Creative: ${creative}`,
+      `Page: ${page}`,
+      '',
+      'What is wrong with this ad:',
+      '',
+    ].join('\n');
+    return `mailto:support@commudle.com?subject=${encodeURIComponent('Report an ad')}&body=${encodeURIComponent(body)}`;
   }
 
   ngOnDestroy(): void {

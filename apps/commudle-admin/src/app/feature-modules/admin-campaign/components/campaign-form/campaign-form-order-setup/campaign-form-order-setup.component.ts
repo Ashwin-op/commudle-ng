@@ -110,7 +110,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
   static readonly MIN_DURATION_HOURS = 12;
   // keep in sync with the backend limits on CampaignAsset
   static readonly MAX_TITLE_LENGTH = 80;
-  static readonly MAX_DESCRIPTION_LENGTH = 160;
+  static readonly MAX_DESCRIPTION_LENGTH = 80;
   readonly maxTitleLength = CampaignFormOrderSetupComponent.MAX_TITLE_LENGTH;
   readonly maxDescriptionLength = CampaignFormOrderSetupComponent.MAX_DESCRIPTION_LENGTH;
   static readonly DEFAULT_START_LEAD_HOURS = 3;
@@ -229,6 +229,11 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
 
   // The API deals in minor units everywhere (cents/paise): budget, spend, wallet balances and pricing.
   // The form works in major units (what the advertiser types), so convert at the boundary.
+  setPreviewDevice(device: 'desktop' | 'mobile'): void {
+    this.previewDevice = device;
+    this.refreshPreview();
+  }
+
   toMajorUnits(minorAmount: number): number {
     return (minorAmount ?? 0) / 100;
   }
@@ -389,6 +394,16 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
         description: draftDescription || '',
         url: draftUrl || '',
         image: { url: draftPreviewUrl },
+      } as ICampaignAsset);
+    }
+    // the mobile card has no empty-state artwork, so show a sample one until a creative exists
+    if (assets.length === 0 && this.previewDevice === 'mobile') {
+      assets.push({
+        id: null,
+        headline: '',
+        description: '',
+        url: '#',
+        image: { url: this.staticAssets.campaign_default_image },
       } as ICampaignAsset);
     }
     this.previewCampaign = {
