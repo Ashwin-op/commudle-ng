@@ -209,7 +209,7 @@
                   <!-- Total Budget -->
                   <div class="total-budget-container">
                     <label for="budget">
-                      Total Budget<span class="small-info-text"> (Min budget should be atleast $50)</span
+                      Total Budget<span class="small-info-text"> (Min budget should be atleast $10)</span
                       ><span class="required"> *</span></label
                     >
                     <div class="input-budget">
@@ -232,7 +232,7 @@
                     ></commudle-alert>
                     <commudle-alert
                       [error]="campaignForm.get('budget')?.touched && campaignForm.get('budget')?.hasError('min')"
-                      errorMessage="Minimum budget should be at least $50"
+                      errorMessage="Minimum budget should be at least $10"
                     ></commudle-alert>
                   </div>
 
@@ -434,7 +434,7 @@
                           />
                           <div class="images">
                             <p class="image-size-text">
-                              <span class="image-size">1280 x 720px or higher recommended</span
+                              <span class="image-size">1000 x 1000px or higher recommended</span
                               ><span class="image-type">JPG, JPEG, PNG</span>
                             </p>
                           </div>
@@ -545,30 +545,72 @@
           </nb-accordion-item>
         </nb-accordion>
 
-        <div *ngIf="!isLaunched" class="sticky-footer">
-          <div *ngIf="wallet" class="wallet-details-section">
-            <h4 class="wallet-details-heading">Wallet</h4>
-            <table class="wallet-details-table">
-              <tbody>
-                <tr>
-                  <td class="wallet-details-label">Balance</td>
-                  <td class="wallet-details-label">Available balance</td>
-                  <td class="wallet-details-label">Reserved balance</td>
-                </tr>
-                <tr>
-                  <td class="wallet-details-value">
-                    {{ toMajorUnits(wallet.balance) | currency : campaign?.currency_type }}
-                  </td>
-                  <td class="wallet-details-value">
-                    {{ toMajorUnits(wallet.available_balance) | currency : campaign?.currency_type }}
-                  </td>
-                  <td class="wallet-details-value">
-                    {{ toMajorUnits(wallet.reserved_balance) | currency : campaign?.currency_type }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        <div *ngIf="!isLaunched" #formFooter class="form-footer">
+          <!-- collapsed by default, opens by itself when the user scrolls down to it -->
+          <nb-accordion *ngIf="wallet" class="wallet-accordion">
+            <nb-accordion-item [expanded]="walletExpanded" (collapsedChange)="walletExpanded = !$event">
+              <nb-accordion-item-header>
+                <div class="accordion-header-content">
+                  <span class="accordion-title">Wallet</span>
+                  <span class="small-info-text com-ml-3"
+                    >Available {{ toMajorUnits(wallet.available_balance) | currency : campaign?.currency_type }}</span
+                  >
+                </div>
+              </nb-accordion-item-header>
+              <nb-accordion-item-body>
+                <div class="wallet-details-section">
+                  <table class="wallet-details-table">
+                    <tbody>
+                      <tr>
+                        <td class="wallet-details-label">Balance</td>
+                        <td class="wallet-details-label">Available balance</td>
+                        <td class="wallet-details-label">Reserved balance</td>
+                      </tr>
+                      <tr>
+                        <td class="wallet-details-value">
+                          {{ toMajorUnits(wallet.balance) | currency : campaign?.currency_type }}
+                        </td>
+                        <td class="wallet-details-value">
+                          {{ toMajorUnits(wallet.available_balance) | currency : campaign?.currency_type }}
+                        </td>
+                        <td class="wallet-details-value">
+                          {{ toMajorUnits(wallet.reserved_balance) | currency : campaign?.currency_type }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <ng-container *ngIf="walletAfterSubmit() as after">
+                    <p class="wallet-budget-line">
+                      Selected budget:
+                      <strong>{{ campaignForm.get('budget').value | currency : campaign?.currency_type }}</strong>
+                    </p>
+                    <h4 class="wallet-details-heading">Wallet after submitting</h4>
+                    <table class="wallet-details-table">
+                      <tbody>
+                        <tr>
+                          <td class="wallet-details-label">Available balance</td>
+                          <td class="wallet-details-label">Reserved balance</td>
+                        </tr>
+                        <tr>
+                          <td class="wallet-details-value">
+                            {{ toMajorUnits(after.available) | currency : campaign?.currency_type }}
+                          </td>
+                          <td class="wallet-details-value">
+                            {{ toMajorUnits(after.reserved) | currency : campaign?.currency_type }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <p class="small-info-text" *ngIf="after.shortfall > 0">
+                      Your available balance is
+                      {{ toMajorUnits(after.shortfall) | currency : campaign?.currency_type }} short. You will pay this
+                      at checkout before the campaign goes live.
+                    </p>
+                  </ng-container>
+                </div>
+              </nb-accordion-item-body>
+            </nb-accordion-item>
+          </nb-accordion>
           <div class="next-button">
             <button
               comButton
@@ -585,7 +627,32 @@
       </div>
       <div class="right-column">
         <h3 class="heading">Campaign Preview</h3>
-        <div class="right-column-container">
+        <p class="small-info-text preview-caption">
+          Vertical view: the ad fills the width of its slot. Images are cropped to a square around the centre.
+        </p>
+        <div class="preview-device-toggle">
+          <button
+            comButton
+            size="tiny"
+            shape="semi-round"
+            [outline]="previewDevice !== 'desktop'"
+            status="primary"
+            (click)="previewDevice = 'desktop'"
+          >
+            Desktop sidebar
+          </button>
+          <button
+            comButton
+            size="tiny"
+            shape="semi-round"
+            [outline]="previewDevice !== 'mobile'"
+            status="primary"
+            (click)="previewDevice = 'mobile'"
+          >
+            Mobile
+          </button>
+        </div>
+        <div class="right-column-container" [ngClass]="'preview-' + previewDevice">
           <commudle-campaign-assets-display
             [defaultImageUrl]="defaultUrl"
             [defaultImage]="staticAssets.campaign_default_image"

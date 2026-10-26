@@ -486,6 +486,17 @@
                       : 'A confirmation has been sent to your email.'
                   }}
                 </p>
+                <button
+                  *ngIf="purchaseOrder?.notes?.campaign?.id"
+                  comButton
+                  status="primary"
+                  size="small"
+                  shape="semi-round"
+                  class="com-mt-3"
+                  (click)="goToCampaigns()"
+                >
+                  Back to campaigns
+                </button>
               </div>
 
               <div class="summary-body">

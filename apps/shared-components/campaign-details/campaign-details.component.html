@@ -24,7 +24,8 @@
     </p>
 
     <p class="campaign-item">
-      <strong>Budget:</strong> {{ campaign.budget ? (campaign.budget | currency : campaign.currency_type) : '--' }}
+      <strong>Budget:</strong>
+      {{ campaign.budget ? (campaign.budget / 100 | currency : campaign.currency_type) : '--' }}
     </p>
 
     <p class="campaign-item">

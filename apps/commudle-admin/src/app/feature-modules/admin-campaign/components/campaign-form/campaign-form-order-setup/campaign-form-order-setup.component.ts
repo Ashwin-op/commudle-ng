@@ -52,6 +52,29 @@ import { environment } from '@commudle/shared-environments';
 })
 export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('locationSearchInput', { read: ElementRef }) locationSearchInput: ElementRef;
+  // how wide the preview card is drawn: a desktop sidebar slot or a phone-width feed
+  previewDevice: 'desktop' | 'mobile' = 'desktop';
+  walletExpanded = false;
+  private walletAutoOpened = false;
+  private footerObserver?: IntersectionObserver;
+
+  // The wallet accordion stays minimised until the user scrolls down to the footer, then opens once by itself.
+  // The footer sits behind an *ngIf, so this is a setter rather than something wired up in ngAfterViewInit.
+  @ViewChild('formFooter') set formFooter(footer: ElementRef<HTMLElement> | undefined) {
+    this.footerObserver?.disconnect();
+    if (!footer || typeof IntersectionObserver === 'undefined') return;
+    this.footerObserver = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !this.walletAutoOpened) {
+          this.walletAutoOpened = true;
+          this.walletExpanded = true;
+          this.cdr.detectChanges();
+        }
+      },
+      { threshold: 0.3 },
+    );
+    this.footerObserver.observe(footer.nativeElement);
+  }
   campaignForm: FormGroup;
   icons = {
     faArrowRight,
@@ -85,6 +108,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
   minStartLeadHours = 1;
   // keep in sync with Campaign::MIN_CAMPAIGN_DURATION on the backend
   static readonly MIN_DURATION_HOURS = 12;
+  static readonly DEFAULT_START_LEAD_HOURS = 3;
   readonly maxActiveAssets = 5;
   changeLog: ICampaignChangeLogEntry[] = [];
   liveEndAt = '';
@@ -111,11 +135,17 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     this.campaignForm = this._fb.group(
       {
         name: ['', Validators.required],
-        start_at: ['', [Validators.required, (c: AbstractControl) => this.startAtValidator(c)]],
+        // new campaigns start 3 hours from now by default (the minimum allowed is 1 hour)
+        start_at: [
+          this.toDateTimeLocal(
+            new Date(Date.now() + CampaignFormOrderSetupComponent.DEFAULT_START_LEAD_HOURS * 3600000),
+          ),
+          [Validators.required, (c: AbstractControl) => this.startAtValidator(c)],
+        ],
         end_at: [''],
         set_end_date: [false],
         cta_label: [''],
-        budget: [0, [Validators.required, Validators.min(50)]],
+        budget: [0, [Validators.required, Validators.min(10)]],
         locations: [],
         communities: [],
         campaign_assets: this._fb.array([this.createCampaignAsset()]),
@@ -200,6 +230,19 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
 
   toMinorUnits(majorAmount: number | string): number {
     return Math.round(Number(majorAmount || 0) * 100);
+  }
+
+  // What the wallet looks like once this campaign is submitted (all in minor units). A shortfall is paid at
+  // checkout first, so the available balance is used up and the whole budget ends up reserved.
+  walletAfterSubmit(): { available: number; reserved: number; shortfall: number } | null {
+    const budget = this.toMinorUnits(this.campaignForm?.get('budget')?.value);
+    if (!this.wallet || !budget) return null;
+    const shortfall = Math.max(budget - this.wallet.available_balance, 0);
+    return {
+      available: Math.max(this.wallet.available_balance - budget, 0),
+      reserved: this.wallet.reserved_balance + budget,
+      shortfall,
+    };
   }
 
   // wallet balances are in minor units, the budget field is in major units
@@ -317,6 +360,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
 
   ngOnDestroy() {
     clearTimeout(this.dateSaveTimer);
+    this.footerObserver?.disconnect();
     // placeChanged lives on a root singleton service, so a stale subscription would fire for a destroyed form
     this.subscriptions.unsubscribe();
   }
@@ -336,6 +380,15 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
       cta_label: this.campaignForm.get('cta_label')?.value || 'Learn more',
       campaign_assets: assets,
     } as ICampaign;
+  }
+
+  // the earliest end time the rules allow: the minimum duration after the start
+  private earliestEndAt(): string {
+    const startValue = this.campaignForm.get('start_at')?.value;
+    const start = startValue && !isNaN(new Date(startValue).getTime()) ? new Date(startValue) : this.minStartDate();
+    return this.toDateTimeLocal(
+      new Date(start.getTime() + CampaignFormOrderSetupComponent.MIN_DURATION_HOURS * 60 * 60 * 1000),
+    );
   }
 
   private minStartDate(): Date {
@@ -786,9 +839,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     } else {
       this.campaignService.createPurchaseOrder(this.campaign.id, true).subscribe((data) => {
         if (data) {
-          this.toasterService.warningDialog(
-            'You do not have enough balance to submit for approval. Please add more balance to your wallet.',
-          );
+          // the payment screen is the way to cover the shortfall, so no warning here
           this.router.navigate(['/checkout', data.uuid]);
         }
       });
@@ -824,6 +875,9 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     if (endDateControl) {
       if (setEndDate) {
         endDateControl.setValidators([Validators.required]);
+        if (!endDateControl.value) {
+          endDateControl.setValue(this.earliestEndAt());
+        }
       } else {
         endDateControl.clearValidators();
         endDateControl.setValue('');

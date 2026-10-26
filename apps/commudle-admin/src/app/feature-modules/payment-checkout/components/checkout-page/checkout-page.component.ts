@@ -1188,6 +1188,11 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     this.gtm.dataLayerPushEvent(eventName, eventData);
   }
 
+  // after paying for a campaign the user needs a way back to the campaigns dashboard
+  goToCampaigns(): void {
+    this.router.navigate(['/campaigns']);
+  }
+
   private celebratePurchase(): void {
     if (this.purchaseOrder?.orderable_type === EDbModels.PRODUCT_PRICE) {
       this.confettiService.celebrate();
