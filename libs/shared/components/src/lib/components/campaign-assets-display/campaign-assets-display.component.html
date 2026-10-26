@@ -9,7 +9,7 @@
     <span class="promoted-badge">
       Promoted<a [routerLink]="['/campaigns/new']" target="_blank"><fa-icon [icon]="faCircleQuestion"></fa-icon></a>
     </span>
-    <div class="ad-menu" *ngIf="layout === 'horizontal'">
+    <div class="ad-menu">
       <button type="button" class="ad-menu-button" aria-label="Ad options" (click)="toggleMenu($event)">
         <fa-icon [icon]="faEllipsisVertical"></fa-icon>
       </button>
@@ -22,7 +22,7 @@
     </div>
   </div>
 
-  <div class="why-panel" *ngIf="showWhy && layout === 'horizontal'">
+  <div class="why-panel" *ngIf="showWhy">
     <p>
       This is a promoted post from an advertiser. Advertisers can choose who sees their ads, for example by location or
       community, so we show ads that may be relevant to the page you are on. You can hide it any time from the menu.

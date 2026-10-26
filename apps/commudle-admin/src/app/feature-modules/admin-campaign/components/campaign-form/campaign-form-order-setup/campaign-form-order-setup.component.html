@@ -688,7 +688,7 @@
             comButton
             size="tiny"
             shape="semi-round"
-            [outline]="previewDevice !== 'desktop'"
+            [appearance]="previewDevice === 'desktop' ? 'filled' : 'outline'"
             status="primary"
             (click)="setPreviewDevice('desktop')"
           >
@@ -698,7 +698,7 @@
             comButton
             size="tiny"
             shape="semi-round"
-            [outline]="previewDevice !== 'mobile'"
+            [appearance]="previewDevice === 'mobile' ? 'filled' : 'outline'"
             status="primary"
             (click)="setPreviewDevice('mobile')"
           >

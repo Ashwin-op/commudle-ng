@@ -123,7 +123,10 @@
   .learn-more-button {
     @apply com-mt-1 com-py-2 com-text-sm;
   }
+}
 
+// the ad menu is shared by both layouts
+.carousel {
   .ad-menu {
     @apply com-relative;
   }
