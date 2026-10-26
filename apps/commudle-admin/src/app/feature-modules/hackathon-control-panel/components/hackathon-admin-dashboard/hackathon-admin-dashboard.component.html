@@ -268,42 +268,64 @@
           <fa-icon [icon]="icons.faChartPie" class="heading-icon-snapshot"></fa-icon> Hackathon Snapshot
         </h3>
       </div>
-      <app-loading-spinner *ngIf="isSnapshotLoading && !snapshot" class="section-loader"></app-loading-spinner>
-      <div class="snapshot-grid" *ngIf="!isSnapshotLoading || snapshot">
+      <div class="snapshot-grid" *ngIf="snapshot; else snapshotEmpty">
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faUsers" class="snapshot-stat-icon registrations-icon"></fa-icon>
-          <span class="snapshot-stat-label">Applications</span>
-          <span class="snapshot-stat-value">{{ snapshot?.applications?.total ?? 0 | number }}</span>
+          <div class="snapshot-stat-info">
+            <span class="snapshot-stat-label">Applications</span>
+            <span class="snapshot-stat-value">{{ snapshot?.applications?.total ?? 0 | number }}</span>
+          </div>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faUserGroup" class="snapshot-stat-icon team-icon"></fa-icon>
-          <span class="snapshot-stat-label">Teams</span>
-          <span class="snapshot-stat-value">{{ snapshot?.teams?.count ?? 0 | number }}</span>
+          <div class="snapshot-stat-info">
+            <span class="snapshot-stat-label">Teams</span>
+            <span class="snapshot-stat-value">{{ snapshot?.teams?.count ?? 0 | number }}</span>
+          </div>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faCode" class="snapshot-stat-icon tracks-icon"></fa-icon>
-          <span class="snapshot-stat-label">Projects Submitted</span>
-          <span class="snapshot-stat-value">{{ snapshot?.projects_submitted?.count ?? 0 | number }}</span>
+          <div class="snapshot-stat-info">
+            <span class="snapshot-stat-label">Projects Submitted</span>
+            <span class="snapshot-stat-value">{{ snapshot?.projects_submitted?.count ?? 0 | number }}</span>
+          </div>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faMicrophone" class="snapshot-stat-icon judges-icon"></fa-icon>
-          <span class="snapshot-stat-label">Judges Assigned</span>
-          <span class="snapshot-stat-value">{{ snapshot?.judges?.assigned_count ?? 0 | number }}</span>
-          <span class="snapshot-stat-sub" *ngIf="snapshot?.judges?.pending_count">
-            {{ snapshot.judges.pending_count | number }} pending
-          </span>
+          <div class="snapshot-stat-info">
+            <span class="snapshot-stat-label">Judges Assigned</span>
+            <span class="snapshot-stat-value-row">
+              <span class="snapshot-stat-value">{{ snapshot?.judges?.assigned_count ?? 0 | number }}</span>
+              <span class="snapshot-stat-sub" *ngIf="snapshot?.judges?.pending_count">
+                · {{ snapshot.judges.pending_count | number }} pending
+              </span>
+            </span>
+          </div>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faHandshakeSimple" class="snapshot-stat-icon sponsors-icon"></fa-icon>
-          <span class="snapshot-stat-label">Sponsors</span>
-          <span class="snapshot-stat-value">{{ snapshot?.sponsors?.count ?? 0 | number }}</span>
+          <div class="snapshot-stat-info">
+            <span class="snapshot-stat-label">Sponsors</span>
+            <span class="snapshot-stat-value">{{ snapshot?.sponsors?.count ?? 0 | number }}</span>
+          </div>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faTrophy" class="snapshot-stat-icon prize-icon"></fa-icon>
-          <span class="snapshot-stat-label">Prize Pool</span>
-          <span class="snapshot-stat-value">{{ prizePoolDisplay || '–' }}</span>
+          <div class="snapshot-stat-info">
+            <span class="snapshot-stat-label">Prize Pool</span>
+            <span class="snapshot-stat-value">{{ prizePoolDisplay || '–' }}</span>
+          </div>
         </div>
       </div>
+      <ng-template #snapshotEmpty>
+        <div class="snapshot-empty" *ngIf="!isSnapshotLoading">
+          <span class="snapshot-empty-icon">
+            <fa-icon [icon]="icons.faChartPie"></fa-icon>
+          </span>
+          <span class="snapshot-empty-text">No snapshot data yet.</span>
+        </div>
+        <app-loading-spinner *ngIf="isSnapshotLoading" class="section-loader"></app-loading-spinner>
+      </ng-template>
     </div>
 
     <!-- Recent Activity -->
@@ -315,7 +337,8 @@
       </div>
       <app-loading-spinner *ngIf="isActivityLoading" class="section-loader"></app-loading-spinner>
       <ul class="activity-list" *ngIf="!isActivityLoading">
-        <li *ngFor="let item of recentActivity" class="activity-item">
+        <li *ngFor="let item of recentActivity" class="activity-item" [class.is-clickable]="!!activityItemLink(item)"
+          [routerLink]="activityItemLink(item)" (keydown.enter)="onActivityRowClick(item)">
           <span class="activity-avatar" [ngClass]="activityAvatarClass(item.type)">
             <fa-icon [icon]="activityIcon(item.type)"></fa-icon>
           </span>
@@ -335,10 +358,11 @@
           </p>
           <time class="activity-time">{{ activityTime(item) }}</time>
         </li>
-        <li *ngIf="recentActivity.length === 0" class="activity-item">
-          <p class="activity-content">
-            <span class="activity-text">No recent activity yet</span>
-          </p>
+        <li *ngIf="recentActivity.length === 0" class="activity-empty">
+          <span class="activity-empty-icon">
+            <fa-icon [icon]="icons.faBolt"></fa-icon>
+          </span>
+          <span class="activity-empty-text">No recent activity yet.</span>
         </li>
       </ul>
       <commudle-pagination-compact *ngIf="activityTotal > activityCount" [page]="activityPage" [count]="activityCount"
@@ -346,7 +370,7 @@
     </div>
   </section>
 
-  <!-- Row 3: Competition Progress + People & Judging -->
+  <!-- Row 3: Competition Progress + People & Judging + Quick Actions -->
   <section class="progress-people-row">
     <!-- Competition Progress -- driven by stage_progress -->
     <article class="competition-progress-card">
@@ -372,7 +396,15 @@
         <div class="progress-card" *ngIf="!stageProgress?.stages?.length">
           <span class="progress-card-value">No rounds yet</span>
         </div>
-      </div>
+        <ng-template #progressEmpty>
+          <div class="progress-empty">
+            <span class="progress-empty-icon">
+              <fa-icon [icon]="icons.faTrophy"></fa-icon>
+            </span>
+            <span class="progress-empty-text">No rounds yet</span>
+          </div>
+        </ng-template>
+        </ng-container>
     </article>
 
     <!-- People & Judging -->
@@ -417,11 +449,47 @@
         </div>
       </ng-container>
     </article>
+
+    <!-- Quick Actions -->
+    <article class="quick-actions-card">
+      <div class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faBolt" class="heading-icon-actions"></fa-icon> Quick Actions
+        </h3>
+      </div>
+      <div class="actions-grid">
+        <a class="action-card" [routerLink]="['applications-dashboard']">
+          <fa-icon [icon]="icons.faUsers" class="action-icon"></fa-icon>
+          <span class="action-label">View Applications</span>
+        </a>
+        <a class="action-card" [routerLink]="['score-dashboard']">
+          <fa-icon [icon]="icons.faTrophy" class="action-icon"></fa-icon>
+          <span class="action-label">Review Projects</span>
+        </a>
+        <a class="action-card" [routerLink]="['speakers']">
+          <fa-icon [icon]="icons.faUserGroup" class="action-icon"></fa-icon>
+          <span class="action-label">Assign Judges</span>
+        </a>
+        <a class="action-card" [routerLink]="['updates']">
+          <fa-icon [icon]="icons.faEnvelope" class="action-icon"></fa-icon>
+          <span class="action-label">Send Announcement</span>
+        </a>
+        <a class="action-card" [routerLink]="['/communities', hackathon.community.slug, 'hackathons', hackathon.slug]"
+          target="_blank">
+          <fa-icon [icon]="icons.faArrowTrendUp" class="action-icon"></fa-icon>
+          <span class="action-label">Public Page</span>
+        </a>
+        <a class="action-card" [routerLink]="['entry-pass-scan']">
+          <fa-icon [icon]="icons.faChartPie" class="action-icon"></fa-icon>
+          <span class="action-label">Entry Scanner</span>
+        </a>
+      </div>
+    </article>
   </section>
 
-  <!-- Row 4: Setup Progress + Quick Actions -->
-  <section class="actions-setup-row">
-    <article class="setup-progress-card" *ngIf="setupProgress?.visible || hackathon.status === EHackathonStatus.DRAFT">
+  <!-- Row 4: Setup Progress (shown only while draft / setup incomplete) -->
+  <section class="actions-setup-row" *ngIf="setupProgress?.visible || hackathon.status === EHackathonStatus.DRAFT">
+    <article class="setup-progress-card">
       <div class="section-header">
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faChartPie" class="heading-icon-setup"></fa-icon> Setup Progress

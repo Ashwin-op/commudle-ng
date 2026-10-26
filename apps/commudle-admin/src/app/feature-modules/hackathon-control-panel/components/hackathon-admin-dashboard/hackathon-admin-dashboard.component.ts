@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   IHackathon,
   ICommunity,
@@ -103,6 +103,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
   isSetupProgressLoading = false;
 
   constructor(
+    private router: Router,
     private activatedRoute: ActivatedRoute,
     private seoService: SeoService,
     private communitiesService: CommunitiesService,
@@ -380,9 +381,39 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  activityInitial(item: IHackathonDashboardActivityItem): string {
-    const name = this.activityActorName(item);
-    return name ? name.charAt(0).toUpperCase() : '';
+  /**
+   * Only some actors are individual people with a profile page -- a judge/mentor
+   * is a platform user, while team/sponsor/track are not. Falls back to `user`
+   * for any activity type that carries the actor there directly.
+   */
+  activityActorUser(item: IHackathonDashboardActivityItem): { id: number; username: string } | null {
+    const actor = item?.judge || item?.user;
+    return actor?.id ? actor : null;
+  }
+
+  /** Where clicking the row (outside the actor's name) should navigate to. */
+  activityItemLink(item: IHackathonDashboardActivityItem): any[] | null {
+    switch (item?.type) {
+      case 'project_submitted':
+        return ['applications-dashboard'];
+      case 'judge_accepted':
+        return ['speakers'];
+      case 'sponsor_added':
+        return ['sponsors'];
+      case 'track_added':
+        return ['tracks'];
+      case 'registrations_received':
+        return ['applications-dashboard'];
+      default:
+        return null;
+    }
+  }
+
+  onActivityRowClick(item: IHackathonDashboardActivityItem): void {
+    const link = this.activityItemLink(item);
+    if (link) {
+      this.router.navigate(link, { relativeTo: this.activatedRoute });
+    }
   }
 
   activityTime(item: IHackathonDashboardActivityItem): string {
