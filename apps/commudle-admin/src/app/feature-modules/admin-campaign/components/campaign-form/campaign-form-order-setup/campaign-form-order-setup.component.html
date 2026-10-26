@@ -379,6 +379,7 @@
                       </div>
                       <div class="saved-asset-details">
                         <p class="saved-url" [title]="asset.url"><strong>URL:</strong> {{ asset.url }}</p>
+                        <p class="saved-title" *ngIf="asset.headline">{{ asset.headline }}</p>
                         <p class="small-info-text" *ngIf="asset.active === false">Inactive - not being served</p>
                       </div>
                       <button
@@ -434,7 +435,7 @@
                           />
                           <div class="images">
                             <p class="image-size-text">
-                              <span class="image-size">1000 x 1000px or higher recommended</span
+                              <span class="image-size">1200 x 900px (4:3) or higher recommended</span
                               ><span class="image-type">JPG, JPEG, PNG</span>
                             </p>
                           </div>
@@ -494,6 +495,58 @@
                           </div>
                           <p class="small-info-text">
                             The call to action button will take the user on this destination
+                          </p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label class="label">Title <span class="small-info-text">(optional)</span></label>
+                        <div class="creative-assets-input">
+                          <commudle-input
+                            [inputValue]="
+                              campaignForm.get('campaign_assets.' + (campaignAssets.length - 1) + '.headline')?.value
+                            "
+                            (valueChange)="
+                              handleArrayFormInput($event, 'headline', campaignAssets.length - 1, 'campaign_assets')
+                            "
+                            placeholder="eg: What's next for AI builders?"
+                            [type]="'text'"
+                          ></commudle-input>
+                          <p class="small-info-text">
+                            {{
+                              campaignForm.get('campaign_assets.' + (campaignAssets.length - 1) + '.headline')?.value
+                                ?.length || 0
+                            }}/{{ maxTitleLength }}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label class="label">Description <span class="small-info-text">(optional)</span></label>
+                        <div class="creative-assets-input">
+                          <textarea
+                            nbInput
+                            fullWidth
+                            rows="3"
+                            [attr.maxlength]="maxDescriptionLength"
+                            placeholder="One or two short lines about the offer"
+                            [value]="
+                              campaignForm.get('campaign_assets.' + (campaignAssets.length - 1) + '.description')?.value
+                            "
+                            (input)="
+                              handleArrayFormInput(
+                                $any($event.target).value,
+                                'description',
+                                campaignAssets.length - 1,
+                                'campaign_assets'
+                              )
+                            "
+                          ></textarea>
+                          <p class="small-info-text">
+                            {{
+                              campaignForm.get('campaign_assets.' + (campaignAssets.length - 1) + '.description')?.value
+                                ?.length || 0
+                            }}/{{ maxDescriptionLength }}
                           </p>
                         </div>
                       </div>
@@ -628,7 +681,7 @@
       <div class="right-column">
         <h3 class="heading">Campaign Preview</h3>
         <p class="small-info-text preview-caption">
-          Vertical view: the ad fills the width of its slot. Images are cropped to a square around the centre.
+          Vertical view: the ad fills the width of its slot. Images are cropped to 4:3 around the centre.
         </p>
         <div class="preview-device-toggle">
           <button

@@ -108,6 +108,11 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
   minStartLeadHours = 1;
   // keep in sync with Campaign::MIN_CAMPAIGN_DURATION on the backend
   static readonly MIN_DURATION_HOURS = 12;
+  // keep in sync with the backend limits on CampaignAsset
+  static readonly MAX_TITLE_LENGTH = 80;
+  static readonly MAX_DESCRIPTION_LENGTH = 160;
+  readonly maxTitleLength = CampaignFormOrderSetupComponent.MAX_TITLE_LENGTH;
+  readonly maxDescriptionLength = CampaignFormOrderSetupComponent.MAX_DESCRIPTION_LENGTH;
   static readonly DEFAULT_START_LEAD_HOURS = 3;
   readonly maxActiveAssets = 5;
   changeLog: ICampaignChangeLogEntry[] = [];
@@ -272,6 +277,9 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
   private appendAssets(formData: FormData, assets: ICampaignAsset[]): number {
     assets.forEach((asset, idx) => {
       formData.append(`campaign[campaign_assets][${idx}][url]`, asset.url ?? '');
+      // resend the stored text so saving other creatives never blanks it
+      formData.append(`campaign[campaign_assets][${idx}][headline]`, asset.headline ?? '');
+      formData.append(`campaign[campaign_assets][${idx}][description]`, asset.description ?? '');
       if (asset.id != null) {
         formData.append(`campaign[campaign_assets][${idx}][id]`, asset.id.toString());
       }
@@ -372,8 +380,16 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     const draftIndex = this.campaignAssets.length - 1;
     const draftPreviewUrl = this.imagePreview[draftIndex];
     const draftUrl = this.campaignAssets.at(draftIndex)?.get('url')?.value;
+    const draftTitle = this.campaignAssets.at(draftIndex)?.get('headline')?.value;
+    const draftDescription = this.campaignAssets.at(draftIndex)?.get('description')?.value;
     if (draftPreviewUrl) {
-      assets.push({ id: null, headline: '', url: draftUrl || '', image: { url: draftPreviewUrl } } as ICampaignAsset);
+      assets.push({
+        id: null,
+        headline: draftTitle || '',
+        description: draftDescription || '',
+        url: draftUrl || '',
+        image: { url: draftPreviewUrl },
+      } as ICampaignAsset);
     }
     this.previewCampaign = {
       ...this.campaign,
@@ -463,6 +479,11 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
       id: [asset ? asset?.id : ''],
       image: [asset ? asset?.image?.url : null, Validators.required],
       url: [asset ? asset?.url : '', [Validators.required, Validators.pattern(/^(http|https):\/\/[^ "]+$/)]], // Ensure URL is valid
+      headline: [asset?.headline ?? '', Validators.maxLength(CampaignFormOrderSetupComponent.MAX_TITLE_LENGTH)],
+      description: [
+        asset?.description ?? '',
+        Validators.maxLength(CampaignFormOrderSetupComponent.MAX_DESCRIPTION_LENGTH),
+      ],
     });
   }
 
@@ -519,6 +540,8 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
 
     // Append the new asset at the next index
     formData.append(`campaign[campaign_assets][${nextIndex}][url]`, url);
+    formData.append(`campaign[campaign_assets][${nextIndex}][headline]`, (assetData.headline ?? '').trim());
+    formData.append(`campaign[campaign_assets][${nextIndex}][description]`, (assetData.description ?? '').trim());
     if (assetData.id) {
       formData.append(`campaign[campaign_assets][${nextIndex}][id]`, assetData.id);
     }

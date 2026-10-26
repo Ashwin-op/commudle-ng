@@ -4,8 +4,10 @@
   *ngIf="campaign && campaign.campaign_assets && campaign.campaign_assets.length > 0"
   #campaignImageContainer
 >
-  <div class="promoted-badge">
-    Promoted<a [routerLink]="['/campaigns/new']" target="_blank"><fa-icon [icon]="faCircleQuestion"></fa-icon></a>
+  <div class="card-top">
+    <span class="promoted-badge">
+      Promoted<a [routerLink]="['/campaigns/new']" target="_blank"><fa-icon [icon]="faCircleQuestion"></fa-icon></a>
+    </span>
   </div>
 
   <div
@@ -22,6 +24,10 @@
         (click)="createUserEngagementForCampaign(UserActivityEventType.CLICK, ca.id)"
       >
         <img [src]="ca.image?.url" class="slider-image" [alt]="ca.headline" [title]="ca.headline" />
+        <div class="slide-text" *ngIf="ca.headline || ca.description">
+          <p class="slide-title" *ngIf="ca.headline">{{ ca.headline }}</p>
+          <p class="slide-description" *ngIf="ca.description">{{ ca.description }}</p>
+        </div>
         <div class="campaign-image-footer">
           <a [href]="ca.url" target="_blank" rel="noopener noreferrer" class="learn-more-button">{{
             campaign?.cta_label

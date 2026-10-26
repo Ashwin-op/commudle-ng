@@ -2,8 +2,13 @@
   // Vertical card: bordered, the image on top, a full-width button underneath. It fills whatever width its slot gives it.
   @apply com-overflow-hidden com-w-full com-relative com-bg-tWhite com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-shadow-sm;
 
+  // the label sits above the image, inside the card
+  .card-top {
+    @apply com-px-3 com-pt-3;
+  }
+
   .promoted-badge {
-    @apply com-flex com-items-center com-gap-1 com-no-underline com-absolute com-right-3 com-top-3 com-rounded-md com-bg-blue-100 com-z-30 com-p-0.5 com-text-tYankees-Blue com-text-xs com-leading-none;
+    @apply com-inline-flex com-items-center com-gap-1 com-no-underline com-rounded-md com-bg-blue-100 com-px-1.5 com-py-0.5 com-text-tYankees-Blue com-text-xs com-leading-none;
 
     fa-icon {
       @apply com-text-gray-500;
@@ -25,10 +30,31 @@
       @apply com-no-underline com-flex com-flex-col com-gap-2;
     }
 
-    // a fixed square crop around the centre, so images of any shape keep the card the same size
+    // a fixed 4:3 crop around the centre, so images of any shape keep the card the same size
     .slider-image {
       @apply com-w-full com-cursor-pointer com-object-cover com-object-center com-overflow-hidden com-rounded-lg;
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 4 / 3;
+    }
+
+    .slide-text {
+      @apply com-px-1 com-flex com-flex-col com-gap-1;
+    }
+
+    // titles and descriptions are clamped so cards stay a predictable height
+    .slide-title {
+      @apply com-m-0 com-text-base com-font-semibold com-leading-snug com-text-Yankees-Blue;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .slide-description {
+      @apply com-m-0 com-text-sm com-leading-snug com-text-gray-500;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
   }
 }
@@ -52,6 +78,14 @@
 
   .component-container-wrapper {
     background-color: #1e1e1e;
+  }
+
+  .slide-title {
+    color: #ffffff;
+  }
+
+  .slide-description {
+    color: #9ca3af;
   }
 
   .promoted-badge {

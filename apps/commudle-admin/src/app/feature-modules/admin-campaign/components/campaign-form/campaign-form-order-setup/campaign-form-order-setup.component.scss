@@ -260,6 +260,10 @@ nb-accordion {
         @apply com-m-0 com-text-sm com-font-medium com-text-Yankees-Blue;
       }
 
+      .saved-title {
+        @apply com-m-0 com-text-sm com-font-medium com-text-Yankees-Blue com-truncate;
+      }
+
       .saved-url {
         @apply com-m-0 com-text-xs com-font-medium com-text-gray-custom-1 com-truncate;
       }
