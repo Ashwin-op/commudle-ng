@@ -49,6 +49,7 @@ import { AppSharedComponentsModule } from 'apps/commudle-admin/src/app/app-share
 import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-components/help-section/help-section.component';
 import { UserPersonalConnectComponent } from 'libs/shared/components/src/lib/components/user-personal-connect/user-personal-connect.component';
 import { ListingPageHeaderComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-header/listing-page-header.component';
+import { ListingPageCampaignComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-campaign/listing-page-campaign.component';
 import { UserExpertTickComponent } from 'apps/commudle-admin/src/app/app-shared-components/user-expert-tick.component';
 import { RecaptchaModule } from 'ng-recaptcha-2';
 import { CommudleInputModule, CommudleCardModule } from '@commudle/commudle-theme';
@@ -93,6 +94,7 @@ import { CommudleInputModule, CommudleCardModule } from '@commudle/commudle-them
     HelpSectionComponent,
     UserPersonalConnectComponent,
     ListingPageHeaderComponent,
+    ListingPageCampaignComponent,
     CommudleCardModule,
     // Nebular
     NbCardModule,

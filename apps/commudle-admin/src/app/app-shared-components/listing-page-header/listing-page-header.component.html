@@ -12,9 +12,19 @@
         </div>
         <div class="image-wrapper" *ngIf="headerImgUrl">
           <commudle-campaign-assets-display
+            *ngIf="showAd; else plainHeaderImage"
             [defaultImage]="headerImgUrl"
             [defaultImageUrl]="header.image_link"
           ></commudle-campaign-assets-display>
+          <ng-template #plainHeaderImage>
+            <a
+              class="header-image"
+              [href]="header.image_link"
+              [ngClass]="{ 'com-pointer-events-none': !header.image_link }"
+            >
+              <img [src]="headerImgUrl" alt="" />
+            </a>
+          </ng-template>
         </div>
       </div>
     </div>

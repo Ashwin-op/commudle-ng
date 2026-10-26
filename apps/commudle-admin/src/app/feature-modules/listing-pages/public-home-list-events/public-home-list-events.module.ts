@@ -21,6 +21,7 @@ import { SkeletonCardsComponent } from 'apps/commudle-admin/src/app/feature-modu
 import { ListingPagesLayoutComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-pages-layout/listing-pages-layout.component';
 import { EventsVolunteerListComponent } from './components/events-volunteer-list/events-volunteer-list.component';
 import { ListingPageHeaderComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-header/listing-page-header.component';
+import { ListingPageCampaignComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-campaign/listing-page-campaign.component';
 import { AppSharedComponentsModule } from 'apps/commudle-admin/src/app/app-shared-components/app-shared-components.module';
 import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-theme';
 @NgModule({
@@ -51,6 +52,7 @@ import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-the
     SkeletonCardsComponent,
     ListingPagesLayoutComponent,
     ListingPageHeaderComponent,
+    ListingPageCampaignComponent,
     AppSharedComponentsModule,
   ],
   exports: [

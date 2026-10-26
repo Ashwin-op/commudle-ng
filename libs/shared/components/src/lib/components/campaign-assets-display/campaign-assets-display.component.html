@@ -15,11 +15,15 @@
         }"
   >
     <div class="component-container-wrapper" *ngFor="let ca of campaign?.campaign_assets">
-      <a [href]="ca?.url" target="_blank" (click)="createUserEngagementForCampaign(UserActivityEventType.CLICK, ca.id)">
+      <a
+        [href]="ca?.url"
+        target="_blank"
+        rel="noopener noreferrer"
+        (click)="createUserEngagementForCampaign(UserActivityEventType.CLICK, ca.id)"
+      >
         <img [src]="ca.image?.url" class="slider-image" [alt]="ca.headline" [title]="ca.headline" />
         <div class="campaign-image-footer">
-          <p class="campaign-url">{{ ca.url }}</p>
-          <a [href]="ca.url" class="learn-more-button" size="small" outline nbButton shape="semi-round">{{
+          <a [href]="ca.url" target="_blank" rel="noopener noreferrer" class="learn-more-button">{{
             campaign?.cta_label
           }}</a>
         </div>

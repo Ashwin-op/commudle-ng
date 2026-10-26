@@ -5,6 +5,7 @@
         *ngIf="!isCampaignPage"
         (seoPreviewImageRetrieved)="onSeoPreviewImageRetrieved($event)"
         [parentType]="'builds'"
+        [showAd]="false"
       ></commudle-listing-page-header>
       <commudle-section-hero-6 *ngIf="isCampaignPage" [config]="campaignHeroConfig"></commudle-section-hero-6>
     </div>
@@ -47,6 +48,7 @@
         </a>
         <commudle-help-section [helpDictionaryName]="'build-publish'"></commudle-help-section>
       </div>
+      <div *ngIf="!isCampaignPage"><commudle-listing-page-campaign></commudle-listing-page-campaign></div>
       <div>
         <div *ngIf="!isCampaignPage" class="top-builders">
           <commudle-builds-top-builders

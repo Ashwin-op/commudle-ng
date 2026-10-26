@@ -45,6 +45,7 @@ import { FeaturedProjectsComponent } from 'apps/commudle-admin/src/app/app-share
 import { AppSharedComponentsModule } from 'apps/commudle-admin/src/app/app-shared-components/app-shared-components.module';
 import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-components/help-section/help-section.component';
 import { ListingPageHeaderComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-header/listing-page-header.component';
+import { ListingPageCampaignComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-campaign/listing-page-campaign.component';
 import { FeaturedBuildsComponent } from 'apps/commudle-admin/src/app/app-shared-components/featured-builds/featured-builds.component';
 import { SectionHero6Component } from 'apps/commudle-admin/src/app/app-shared-components/page-sections/section-hero-6/section-hero-6.component';
 import { SectionHero7Component } from 'apps/commudle-admin/src/app/app-shared-components/page-sections/section-hero-7/section-hero-7.component';
@@ -109,6 +110,7 @@ import { RecaptchaModule } from 'ng-recaptcha-2';
     FontAwesomeModule,
     AppSharedComponentsModule,
     ListingPageHeaderComponent,
+    ListingPageCampaignComponent,
     FeaturedBuildsComponent,
   ],
 })

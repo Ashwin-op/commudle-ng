@@ -1,8 +1,9 @@
 .carousel {
-  @apply com-overflow-hidden com-w-full com-relative com-h-full;
+  // Vertical card: bordered, the image on top, a full-width button underneath. It fills whatever width its slot gives it.
+  @apply com-overflow-hidden com-w-full com-relative com-bg-tWhite com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-shadow-sm;
 
   .promoted-badge {
-    @apply com-flex com-items-center com-gap-1 com-no-underline com-absolute com-right-0 com-top-0 com-rounded-md com-bg-blue-100 com-z-30 com-p-0.5 com-text-tYankees-Blue com-text-xs com-leading-none;
+    @apply com-flex com-items-center com-gap-1 com-no-underline com-absolute com-right-3 com-top-3 com-rounded-md com-bg-blue-100 com-z-30 com-p-0.5 com-text-tYankees-Blue com-text-xs com-leading-none;
 
     fa-icon {
       @apply com-text-gray-500;
@@ -10,28 +11,30 @@
   }
 
   .container {
-    @apply com-flex com-transition-transform com-duration-700 com-h-full;
+    @apply com-flex com-transition-transform com-duration-700;
     width: 100%;
     /* Ensure width adapts dynamically */
   }
 
   .component-container-wrapper {
-    @apply com-w-full com-flex-shrink-0 com-flex-grow-0 com-rounded-md com-bg-tWhite;
+    @apply com-w-full com-flex-shrink-0 com-flex-grow-0 com-p-2 com-bg-tWhite;
     flex: 0 0 100%;
     /* Each slide takes full width */
 
     a {
-      @apply com-no-underline com-flex com-flex-col com-h-full com-justify-between com-gap-3;
+      @apply com-no-underline com-flex com-flex-col com-gap-2;
     }
 
+    // a fixed square crop around the centre, so images of any shape keep the card the same size
     .slider-image {
-      @apply com-w-full com-cursor-pointer com-object-contain com-overflow-hidden com-rounded-md;
+      @apply com-w-full com-cursor-pointer com-object-cover com-object-center com-overflow-hidden com-rounded-lg;
+      aspect-ratio: 1 / 1;
     }
   }
 }
 
 .carousel .slide-dots {
-  @apply com-flex com-justify-center com-gap-2 com-py-2;
+  @apply com-flex com-justify-center com-gap-2 com-pb-3 com-pt-1;
 
   .slide-dot {
     @apply com-h-2 com-w-2 com-rounded-full com-border-0 com-p-0 com-cursor-pointer com-bg-gray-300;
@@ -42,8 +45,11 @@
   }
 }
 
-// Preview-only dark styling: the ad card stays a light card in dark mode, which looks harsh in the form
-:host-context([data-theme='dark']) .carousel.preview {
+// Dark mode: the card colour is a fixed white, so it has to be overridden explicitly (live ads and the form preview)
+:host-context([data-theme='dark']) .carousel {
+  background-color: #1e1e1e;
+  border-color: #374151;
+
   .component-container-wrapper {
     background-color: #1e1e1e;
   }
@@ -55,15 +61,6 @@
     fa-icon {
       color: #d1d5db;
     }
-  }
-
-  .campaign-url {
-    color: #e5e7eb;
-  }
-
-  .learn-more-button {
-    border-color: #ffffff !important;
-    color: #ffffff !important;
   }
 
   .slide-dots .slide-dot {
@@ -84,15 +81,15 @@
 }
 
 .campaign-image-footer {
-  @apply com-flex com-flex-row com-justify-between com-items-center com-gap-4 com-px-2 com-pb-2;
-}
-
-.campaign-url {
-  @apply com-m-0 com-min-w-0 com-flex-1 com-text-xs com-font-normal com-text-tYankees-Blue com-break-all;
+  @apply com-w-full;
 }
 
 .learn-more-button {
-  @apply com-shrink-0 com-whitespace-nowrap com-border-tYankees-Blue com-text-tYankees-Blue #{!important};
+  @apply com-block com-w-full com-text-center com-rounded-lg com-bg-primary-500 com-text-white com-font-medium com-py-2.5 com-no-underline com-whitespace-nowrap com-overflow-hidden com-text-ellipsis com-cursor-pointer;
+
+  &:hover {
+    @apply com-opacity-90;
+  }
 }
 
 .default-image-container {
