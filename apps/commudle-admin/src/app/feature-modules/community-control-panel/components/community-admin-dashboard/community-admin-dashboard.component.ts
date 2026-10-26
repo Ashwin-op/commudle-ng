@@ -328,6 +328,10 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  activityTime(activity: ICommunityDashboardActivityItem): string {
+    return activity?.created_at ? moment(activity.created_at).fromNow() : '';
+  }
+
   scheduleDateLabel(scheduledAt: string): string {
     const date = moment(scheduledAt);
     if (date.isSame(moment(), 'day')) {
