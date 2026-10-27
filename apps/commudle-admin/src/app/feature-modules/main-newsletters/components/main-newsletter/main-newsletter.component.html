@@ -1,16 +1,16 @@
 <div class="base-layout thin">
   <div class="container">
     <div class="one-column-layout">
-      <nb-card [nbSpinner]="!mainNewsletter">
-        <nb-card-header>
+      <com-card [nbSpinner]="!mainNewsletter">
+        <com-card-header>
           <h1 class="newsletter-title">
             {{ mainNewsletter?.title || 'Loading...' }}
           </h1>
-        </nb-card-header>
-        <nb-card-body>
+        </com-card-header>
+        <com-card-body>
           <div *ngIf="mainNewsletter" [innerHTML]="sanitizedContent"></div>
-        </nb-card-body>
-      </nb-card>
+        </com-card-body>
+      </com-card>
     </div>
   </div>
 </div>
