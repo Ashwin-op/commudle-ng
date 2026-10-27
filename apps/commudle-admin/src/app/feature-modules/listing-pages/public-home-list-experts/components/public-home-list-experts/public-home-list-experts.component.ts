@@ -5,10 +5,10 @@ import { FooterService } from 'apps/commudle-admin/src/app/services/footer.servi
 import { IBadge } from 'apps/shared-models/badge.model';
 import { SeoService } from '@commudle/shared-services';
 @Component({
-    selector: 'commudle-public-home-list-experts',
-    templateUrl: './public-home-list-experts.component.html',
-    styleUrls: ['./public-home-list-experts.component.scss'],
-    standalone: false
+  selector: 'commudle-public-home-list-experts',
+  templateUrl: './public-home-list-experts.component.html',
+  styleUrls: ['./public-home-list-experts.component.scss'],
+  standalone: false,
 })
 export class PublicHomeListExpertsComponent implements OnInit, OnDestroy {
   isMobileView: boolean;
@@ -28,7 +28,7 @@ export class PublicHomeListExpertsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.footerService.changeFooterStatus(true);
-    this.isMobileView = this.isBrowser ? window.innerWidth <= 640 : false;
+    this.isMobileView = this.isBrowser ? window.innerWidth <= 1024 : false;
     this.getBadges();
     this.setMeta();
   }

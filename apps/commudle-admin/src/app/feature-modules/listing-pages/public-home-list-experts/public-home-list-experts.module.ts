@@ -15,9 +15,11 @@ import { SharedComponentsModule } from 'apps/shared-components/shared-components
 import { SharedPipesModule } from 'apps/shared-pipes/pipes.module';
 import { ListingPageHeaderComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-header/listing-page-header.component';
 
+import { ListingPageCampaignComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-campaign/listing-page-campaign.component';
 @NgModule({
   declarations: [PublicHomeListExpertsComponent, ExpertsFeaturedComponent, ExpertsComponent, ExpertsUsersComponent],
   imports: [
+    ListingPageCampaignComponent,
     CommonModule,
     PublicHomeListExpertsRoutingModule,
     ListingPagesLayoutComponent,

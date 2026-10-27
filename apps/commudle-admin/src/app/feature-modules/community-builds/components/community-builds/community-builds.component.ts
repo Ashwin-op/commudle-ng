@@ -32,7 +32,7 @@ export class CommunityBuildsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.footerService.changeFooterStatus(true);
-    this.isMobileView = this.isBrowser ? window.innerWidth <= 640 : false;
+    this.isMobileView = this.isBrowser ? window.innerWidth <= 1024 : false;
     this.queryParamsSubscription = this.activatedRoute.queryParams.subscribe((params) => {
       this.isCampaignPage = !!params['campaign'];
       this.campaignName = params['campaign'] ? params['campaign'] : 'Build Campaign';

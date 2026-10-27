@@ -3,6 +3,7 @@
     <commudle-listing-page-header
       (seoPreviewImageRetrieved)="onSeoPreviewImageRetrieved($event)"
       [parentType]="'speakers'"
+      [showAd]="false"
     ></commudle-listing-page-header>
   </div>
   <div one-column *ngIf="isMobileView">
@@ -34,6 +35,7 @@
     <router-outlet (activate)="onActivate($event)"></router-outlet>
   </div>
   <div right-column>
+    <commudle-listing-page-campaign></commudle-listing-page-campaign>
     <div class="speakers-upcoming">
       <commudle-public-home-list-speakers-upcoming></commudle-public-home-list-speakers-upcoming>
     </div>

@@ -4,10 +4,10 @@ import { FooterService } from 'apps/commudle-admin/src/app/services/footer.servi
 import { SeoService } from 'apps/shared-services/seo.service';
 
 @Component({
-    selector: 'app-labs',
-    templateUrl: './labs.component.html',
-    styleUrls: ['./labs.component.scss'],
-    standalone: false
+  selector: 'app-labs',
+  templateUrl: './labs.component.html',
+  styleUrls: ['./labs.component.scss'],
+  standalone: false,
 })
 export class LabsComponent implements OnInit, OnDestroy {
   isMobileView: boolean;
@@ -15,13 +15,17 @@ export class LabsComponent implements OnInit, OnDestroy {
   seoPreviewImage: string;
   private readonly isBrowser: boolean;
 
-  constructor(private seoService: SeoService, private footerService: FooterService, @Inject(PLATFORM_ID) private platformId: object) {
+  constructor(
+    private seoService: SeoService,
+    private footerService: FooterService,
+    @Inject(PLATFORM_ID) private platformId: object,
+  ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
   ngOnInit() {
     this.footerService.changeFooterStatus(true);
-    this.isMobileView = this.isBrowser ? window.innerWidth <= 640 : false;
+    this.isMobileView = this.isBrowser ? window.innerWidth <= 1024 : false;
     this.setMeta();
   }
 
