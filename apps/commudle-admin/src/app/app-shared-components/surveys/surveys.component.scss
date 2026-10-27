@@ -164,7 +164,7 @@
 }
 
 com-card.create-survey-card {
-  @apply com-flex com-flex-col com-overflow-y-auto com-w-[95vw] com-max-h-[90dvh] md:com-w-[700px];
+  @apply com-flex com-flex-col com-overflow-y-auto com-w-[95dvw] com-max-h-[90dvh] md:com-w-[60dvw];
   .create-survey-header {
     @apply com-flex com-items-center com-justify-between com-gap-2;
   }
