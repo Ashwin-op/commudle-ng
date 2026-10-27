@@ -375,7 +375,7 @@
                   <div *ngFor="let asset of campaign.campaign_assets; let i = index" class="saved-asset-item">
                     <div class="saved-asset-content">
                       <div class="saved-image-preview" *ngIf="asset.image?.url">
-                        <img [src]="asset.image.url" alt="Asset preview" />
+                        <img [src]="asset.image.i1280 || asset.image.url" alt="Asset preview" />
                       </div>
                       <div class="saved-asset-details">
                         <p class="saved-url" [title]="asset.url"><strong>URL:</strong> {{ asset.url }}</p>

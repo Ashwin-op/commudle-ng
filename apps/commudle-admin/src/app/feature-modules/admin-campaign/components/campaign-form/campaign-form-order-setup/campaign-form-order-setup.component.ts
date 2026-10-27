@@ -596,7 +596,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
         campaignAssetsFormArray.push(assetForm);
         // Set image preview if available
         if (asset.image?.url) {
-          this.imagePreview.push(asset.image.url);
+          this.imagePreview.push(asset.image.i1280 || asset.image.url);
         } else {
           this.imagePreview.push(null);
         }

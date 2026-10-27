@@ -46,7 +46,12 @@
           (click)="createUserEngagementForCampaign(UserActivityEventType.CLICK, ca.id)"
         >
           <ng-container *ngIf="layout === 'vertical'; else horizontalSlide">
-            <img [src]="ca.image?.url" class="slider-image" [alt]="ca.headline" [title]="ca.headline" />
+            <img
+              [src]="ca.image?.i1280 || ca.image?.url"
+              class="slider-image"
+              [alt]="ca.headline"
+              [title]="ca.headline"
+            />
             <div class="slide-text" *ngIf="ca.headline || ca.description">
               <p class="slide-title" *ngIf="ca.headline">{{ ca.headline }}</p>
               <p class="slide-description" *ngIf="ca.description">{{ ca.description }}</p>
@@ -58,7 +63,12 @@
             </div>
           </ng-container>
           <ng-template #horizontalSlide>
-            <img [src]="ca.image?.url" class="slider-image" [alt]="ca.headline" [title]="ca.headline" />
+            <img
+              [src]="ca.image?.i1280 || ca.image?.url"
+              class="slider-image"
+              [alt]="ca.headline"
+              [title]="ca.headline"
+            />
             <div class="slide-body">
               <p
                 class="slide-title"
