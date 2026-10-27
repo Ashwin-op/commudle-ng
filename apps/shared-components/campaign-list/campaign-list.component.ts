@@ -210,7 +210,8 @@ export class CampaignListComponent implements OnChanges {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `${topUp.invoice_number || 'invoice'}.pdf`;
+        // invoice numbers contain slashes, which are not allowed in a file name
+        link.download = `${(topUp.invoice_number || 'invoice').replace(/\//g, '_')}.pdf`;
         link.click();
         setTimeout(() => URL.revokeObjectURL(url), 60_000);
       },
