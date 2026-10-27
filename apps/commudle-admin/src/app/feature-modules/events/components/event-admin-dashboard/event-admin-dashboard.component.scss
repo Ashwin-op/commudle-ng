@@ -1551,13 +1551,13 @@
 }
 
 .audience-content {
-  @apply com-grid com-grid-cols-1 md:com-grid-cols-2 md:com-gap-6 com-gap-3 com-mt-2 com-items-start;
+  @apply com-flex com-flex-col com-gap-5 com-mt-4;
 
   .audience-chart {
-    @apply com-flex com-flex-col com-items-center com-gap-3;
+    @apply com-flex com-flex-row com-items-center com-gap-4 com-w-full;
 
     .chart-donut {
-      @apply com-w-20 com-h-20;
+      @apply com-w-20 com-h-20 com-shrink-0;
 
       .chart-donut-track {
         fill: none;
@@ -1572,15 +1572,15 @@
     }
 
     .chart-donut-empty {
-      @apply com-w-24 com-h-24 com-rounded-full com-border-solid com-border-gray-200;
+      @apply com-w-24 com-h-24 com-rounded-full com-border-solid com-border-gray-200 com-shrink-0;
       border-width: 12px;
     }
 
     .chart-legend {
-      @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-1 com-w-full;
+      @apply com-m-0 com-p-0 com-list-none com-grid com-grid-cols-2 com-gap-x-6 com-gap-y-1 com-flex-1 com-min-w-0;
 
       li {
-        @apply com-flex com-items-center com-gap-2 com-text-xs com-text-Yankees-Blue;
+        @apply com-flex com-items-center com-gap-2 com-text-xs com-text-Yankees-Blue com-min-w-0;
       }
 
       .legend-dot {
@@ -1702,7 +1702,7 @@
   }
 
   .post-event-charts {
-    @apply com-grid com-grid-cols-1 sm:com-grid-cols-2 md:com-gap-6 com-gap-3 com-mt-2;
+    @apply com-flex com-flex-col com-gap-3 md:com-gap-6 com-mt-4;
 
     .post-event-chart {
       @apply com-flex com-flex-col com-gap-2;
@@ -1711,8 +1711,12 @@
         @apply com-m-0 com-text-xs com-font-medium com-text-tYankees-Blue com-mb-1;
       }
 
+      .audience-chart {
+        @apply com-flex com-flex-row com-items-center com-gap-3;
+      }
+
       .chart-donut {
-        @apply com-w-24 com-h-24;
+        @apply com-w-24 com-h-24 com-shrink-0;
 
         .chart-donut-track {
           fill: none;
@@ -1727,10 +1731,10 @@
       }
 
       .chart-legend {
-        @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-1;
+        @apply com-m-0 com-p-0 com-list-none com-grid com-grid-cols-2 com-gap-x-6 com-gap-y-1 com-flex-1 com-min-w-0;
 
         li {
-          @apply com-flex com-items-center com-gap-2 com-text-xs com-text-gray-600 dark:com-text-gray-800;
+          @apply com-flex com-items-center com-gap-2 com-text-xs com-text-gray-600 dark:com-text-gray-800 com-min-w-0;
         }
 
         .legend-dot {

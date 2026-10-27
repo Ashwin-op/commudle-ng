@@ -118,6 +118,10 @@
     </div>
   </section>
 
+  <!-- Audience Snapshot + Post-Event Snapshot move up here once the event is completed -->
+  <ng-container *ngIf="eventHeader?.event_status === 'completed'"
+    [ngTemplateOutlet]="audiencePostEventRow"></ng-container>
+
   <!-- Row 2: Needs Attention + Event Snapshot + Recent Activity -->
   <section class="three-col-row">
     <!-- Needs Attention -->

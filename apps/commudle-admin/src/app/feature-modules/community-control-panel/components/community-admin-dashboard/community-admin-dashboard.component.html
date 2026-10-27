@@ -5,9 +5,9 @@
     <span class="hero-blob hero-blob-2"></span>
     <span class="hero-blob hero-blob-3"></span>
     <header class="greeting-content">
-      <span class="greeting-eyebrow">{{ greeting }} {{ timeTheme.emoji }}</span>
       <h2 class="greeting-text">
-        Welcome back, <span class="greeting-name">{{ currentUser?.name?.split(' ')[0] }}</span>
+        {{ greeting }}, <span class="greeting-name">{{ currentUser?.name?.split(' ')[0] }}</span>
+        <span class="greeting-emoji">{{ timeTheme.emoji }}</span>
       </h2>
       <p class="greeting-sub">
         Here's what's happening in <strong>{{ community?.name }}</strong> today.
