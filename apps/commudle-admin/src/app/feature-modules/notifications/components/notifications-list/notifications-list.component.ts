@@ -34,6 +34,8 @@ import { Subject, Subscription, takeUntil } from 'rxjs';
 export class NotificationsListComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
   @Input() markAllAsRead: boolean;
   @Input() showLoaderButton = true;
+  // only the notifications page turns this on; the same list is also used in the navbar dropdown
+  @Input() showAd = false;
   @Input() notificationsCount: number;
   @Output() closePopover: EventEmitter<any> = new EventEmitter();
   @Output() notificationLoaded: EventEmitter<boolean> = new EventEmitter();

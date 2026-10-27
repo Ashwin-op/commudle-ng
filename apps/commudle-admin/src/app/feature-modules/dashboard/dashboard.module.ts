@@ -20,12 +20,14 @@ import { MiniUserProfileModule } from 'apps/shared-modules/mini-user-profile/min
 import { EventContentCardComponent } from 'apps/commudle-admin/src/app/app-shared-components/event-content-card/event-content-card.component';
 import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives.module';
 import { UserDashboardCampaignComponent } from 'apps/commudle-admin/src/app/feature-modules/dashboard/components/user-dashboard-campaign/user-dashboard-campaign.component';
+import { ListingPageCampaignComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-campaign/listing-page-campaign.component';
 import { SharedComponentsModule as newSharedComponentsModule } from '@commudle/shared-components';
 import { TechSessionsCardComponent } from 'apps/commudle-admin/src/app/app-shared-components/tech-sessions-card/tech-sessions-card.component';
 import { CommudleCardModule } from '@commudle/commudle-theme';
 @NgModule({
   declarations: [UserDashboardComponent, DashboardUpdatesComponent, UserDashboardCampaignComponent],
   imports: [
+    ListingPageCampaignComponent,
     CommonModule,
     DashboardRoutingModule,
     SharedComponentsModule,

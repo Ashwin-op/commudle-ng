@@ -39,9 +39,16 @@
 
     <div *appBreakpoints="'<=lg'">
       <div class="labs">
-        <div *ngFor="let lab of labs.slice(0, 5)" class="labs-card">
-          <app-labs-card [lab]="lab"></app-labs-card>
-        </div>
+        <ng-container *ngFor="let lab of labs.slice(0, 5); let i = index">
+          <div class="labs-card">
+            <app-labs-card [lab]="lab"></app-labs-card>
+          </div>
+          <!-- one ad after the 3rd lab, only when there are at least 4 -->
+          <commudle-listing-page-campaign
+            *ngIf="i === 2 && labs.length >= 4"
+            [layout]="'horizontal'"
+          ></commudle-listing-page-campaign>
+        </ng-container>
       </div>
       <div class="top-builders">
         <commudle-builds-top-builders
@@ -66,7 +73,7 @@
         ></commudle-public-home-list-speakers-content>
       </div>
       <div class="labs">
-        <div *ngFor="let lab of labs.slice(3)" class="labs-card">
+        <div *ngFor="let lab of labs.slice(5)" class="labs-card">
           <app-labs-card [lab]="lab"></app-labs-card>
         </div>
       </div>

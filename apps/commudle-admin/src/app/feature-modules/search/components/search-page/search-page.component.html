@@ -22,6 +22,10 @@
     <p class="query-searched">
       You searched for <strong>{{ query }}</strong>
     </p>
+    <!-- mobile only: one ad right under the query line, and only when there are results -->
+    <div *appBreakpoints="'<=lg'" class="com-px-4">
+      <commudle-listing-page-campaign *ngIf="total > 0" [layout]="'horizontal'"></commudle-listing-page-campaign>
+    </div>
     <div>
       <div class="tag-list">
         <app-tag
@@ -511,7 +515,7 @@
               </nb-list>
             </div>
           </div>
-          <div class="right-column" *appBreakpoints="'>md'">
+          <div class="right-column" *appBreakpoints="'>lg'">
             <commudle-search-page-campaign></commudle-search-page-campaign>
           </div>
         </div>

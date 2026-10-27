@@ -71,6 +71,7 @@ import { AccountManagementComponent } from './components/public-profile/user-bas
 import { EventMiniCardComponent } from 'apps/commudle-admin/src/app/app-shared-components/event-mini-card/event-mini-card.component';
 import { Recap2025Component } from './components/recap-2025/recap-2025.component';
 import { PublicProfileCampaignComponent } from 'apps/commudle-admin/src/app/feature-modules/users/components/public-profile/public-profile-campaign/public-profile-campaign.component';
+import { ListingPageCampaignComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-campaign/listing-page-campaign.component';
 import { SharedComponentsModule as newSharedComponentsModule } from '@commudle/shared-components';
 import { UserExpertTickComponent } from 'apps/commudle-admin/src/app/app-shared-components/user-expert-tick.component';
 import { RecaptchaModule } from 'ng-recaptcha-2';
@@ -126,6 +127,7 @@ import { UserProfileQrCardComponent } from 'apps/commudle-admin/src/app/app-shar
   imports: [
     CommonModule,
     UsersRoutingModule,
+    ListingPageCampaignComponent,
     SharedPipesModule,
     FontAwesomeModule,
     ReactiveFormsModule,

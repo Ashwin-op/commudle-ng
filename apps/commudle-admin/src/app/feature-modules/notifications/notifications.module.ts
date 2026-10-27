@@ -12,6 +12,7 @@ import {
 import { InfiniteScrollModule } from 'apps/shared-modules/infinite-scroll/infinite-scroll.module';
 import { NotificationsListItemComponent } from './components/notifications-list-item/notifications-list-item.component';
 import { NotificationsListComponent } from './components/notifications-list/notifications-list.component';
+import { ListingPageCampaignComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-campaign/listing-page-campaign.component';
 import { NotificationsPageComponent } from './components/notifications-page/notifications-page.component';
 import { NotificationsPopoverComponent } from './components/notifications-popover/notifications-popover.component';
 import { NotificationRoutingModule } from './notification-routing.module';
@@ -33,6 +34,7 @@ import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives
     UserNotificationsCampaignComponent,
   ],
   imports: [
+    ListingPageCampaignComponent,
     CommonModule,
     NotificationRoutingModule,
     InfiniteScrollModule,
