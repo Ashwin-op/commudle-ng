@@ -1119,26 +1119,7 @@ export const API_ROUTES = {
     USER_CAMPAIGNS_STATS: 'api/v2/campaigns/stats/user_campaigns', //GET
     STATS_USER_DISTRIBUTION: 'api/v2/campaigns/stats/user_distribution', //GET
 
-    STATS: 'api/v2/campaigns/stats', //GET //NOT USING THESE ANYMORE
-    UPDATE_TAGS: 'api/v2/campaigns/update_tags', //PUT //NOT USING THESE ANYMORE
-    CALC_ESTIMATED_PRICE: 'api/v2/campaigns/calc_estimated_price', //GET //NOT USING THESE ANYMORE
-    CAMPAIGN_ADMIN_UPDATE_NEWSLETTER: 'api/v2/campaigns/campaign_admin_update_newsletter', //PUT //NOT USING THESE ANYMORE
-    MAIN_NEWSLETTER_CAMPAIGN_STATS: 'api/v2/campaigns/main_newsletter_campaign_stats', //GET //NOT USING THESE ANYMORE
-    CAMPAIGN_RESEND_PAYMENT_LINK: 'api/v2/campaigns/campaign_resend_payment_link', //POST //NOT USING THESE ANYMORE
-    CAMPAIGN_UNAPPROVED_CHANGES_MAIL: 'api/v2/campaigns/campaign_unapproved_changes_mail', //POST //NOT USING THESE ANYMORE
-    DESTROY: 'api/v2/campaigns', //DELETE //NOT USING THESE ANYMORE
-    PUBLIC: {
-      ONGOING_CAMPAIGN: 'api/v2/campaigns/public/ongoing_campaign', //GET //NOT USING THESE ANYMORE
-    },
-    CAMPAIGNS_TYPES: {
-      INDEX: 'api/v2/campaigns/campaign_types', //GET //NOT USING THESE ANYMORE
-      CREATE: 'api/v2/campaigns/campaign_types', //POST //NOT USING THESE ANYMORE
-      TOGGLE_STATUS: 'api/v2/campaigns/campaign_types/toggle_status', //PUT //NOT USING THESE ANYMORE
-      UPDATE: 'api/v2/campaigns/campaign_types', //PUT //NOT USING THESE ANYMORE
-      PUBLIC: {
-        INDEX: 'api/v2/campaigns/campaign_types/public', //GET //NOT USING THESE ANYMORE
-      },
-    },
+    CAMPAIGN_UNAPPROVED_CHANGES_MAIL: 'api/v2/campaigns/campaign_unapproved_changes_mail', //POST
   },
 
   WALLET: {

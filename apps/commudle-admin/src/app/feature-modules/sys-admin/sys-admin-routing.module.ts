@@ -26,7 +26,6 @@ import { AdminFeaturedCommunitiesChannelsComponent } from 'apps/commudle-admin/s
 import { PaymentLogsComponent } from 'apps/commudle-admin/src/app/feature-modules/sys-admin/components/payment-logs/payment-logs.component';
 import { PaymentDetailComponent } from 'apps/shared-components/payment-detail/payment-detail.component';
 import { AdminProfanityComponent } from './components/admin-profanity/admin-profanity.component';
-import { CampaignTypesComponent } from './components/admin-campaigns/campaign-types/campaign-types.component';
 import { AdminCampaignsComponent } from 'apps/commudle-admin/src/app/feature-modules/sys-admin/components/admin-campaigns/admin-campaigns.component';
 import { AdminCampaignsListComponent } from 'apps/commudle-admin/src/app/feature-modules/sys-admin/components/admin-campaigns/admin-campaigns-list/admin-campaigns-list.component';
 import { CampaignPurchaseOrdersComponent } from 'apps/commudle-admin/src/app/feature-modules/sys-admin/components/admin-campaigns/campaign-purchase-orders/campaign-purchase-orders.component';
