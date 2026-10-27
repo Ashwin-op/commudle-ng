@@ -343,6 +343,19 @@
                 Stop
               </button>
               <button
+                *ngFor="let topUp of campaign.top_ups"
+                comButton
+                outline
+                size="small"
+                shape="semi-round"
+                class="action-btn-icon"
+                [title]="'Invoice ' + topUp.invoice_number"
+                [disabled]="downloadingInvoices.has(topUp.purchase_order_uuid)"
+                (click)="$event.stopPropagation(); downloadInvoice(topUp)"
+              >
+                Download invoice &nbsp;<fa-icon [icon]="icons.faDownload"></fa-icon>
+              </button>
+              <button
                 *ngIf="isCampaignAdmin && canStop(campaign)"
                 comButton
                 outline

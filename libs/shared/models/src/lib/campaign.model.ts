@@ -5,6 +5,18 @@ import { IPurchaseOrder } from './purchase-order.model';
 import { INote } from './note.model';
 import { ICampaignStats } from './campaign-stats.model';
 
+// a paid wallet top-up that funded the campaign, it carries the tax invoice
+export interface ICampaignTopUp {
+  purchase_order_uuid: string;
+  invoice_number: string;
+  currency: string;
+  // minor units
+  amount_paid: number;
+  tax_amount: number;
+  total_credited: number;
+  paid_at: string;
+}
+
 export interface ICampaign {
   id: string;
   name: string;
@@ -34,6 +46,7 @@ export interface ICampaign {
   unapproved_reasons?: INote[];
   cta_label?: string;
   statsOverview?: ICampaignStats;
+  top_ups?: ICampaignTopUp[];
 }
 
 export enum ECampaignStatus {

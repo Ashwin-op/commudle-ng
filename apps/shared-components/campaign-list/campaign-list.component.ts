@@ -1,7 +1,15 @@
 import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges, TemplateRef } from '@angular/core';
-import { ICampaign, ECampaignStatus, ICampaignStats, IWallet } from '@commudle/shared-models';
-import { CampaignService, ToastrService, WalletService } from '@commudle/shared-services';
-import { faEdit, faArrowRight, faSync, faTrash, faFilter, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { ICampaign, ICampaignTopUp, ECampaignStatus, ICampaignStats, IWallet } from '@commudle/shared-models';
+import { CampaignService, PurchaseOrderService, ToastrService, WalletService } from '@commudle/shared-services';
+import {
+  faEdit,
+  faArrowRight,
+  faDownload,
+  faSync,
+  faTrash,
+  faFilter,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { NbDialogRef, NbDialogService } from '@commudle/theme';
 import * as moment from 'moment';
 
@@ -18,7 +26,7 @@ export class CampaignListComponent implements OnChanges {
   @Input() selectedStatus: ECampaignStatus | null = null;
   @Output() refreshRequested = new EventEmitter<ECampaignStatus | null>();
   moment = moment;
-  icons = { faEdit, faArrowRight, faSync, faTrash, faFilter, faXmark };
+  icons = { faEdit, faArrowRight, faDownload, faSync, faTrash, faFilter, faXmark };
   ECampaignStatus = ECampaignStatus;
   readonly adminStatusOptions: ECampaignStatus[] = [
     ECampaignStatus.PAUSED,
@@ -41,6 +49,7 @@ export class CampaignListComponent implements OnChanges {
   emailSubject = '';
   emailMessage = '';
   isSubmitting = false;
+  downloadingInvoices = new Set<string>();
   statusFilter: ECampaignStatus | null = null;
   statsUserCampaigns: ICampaignStats;
   statsOverview: ICampaignStats[] = [];
@@ -72,6 +81,7 @@ export class CampaignListComponent implements OnChanges {
     private toasterService: ToastrService,
     private dialogService: NbDialogService,
     private walletService: WalletService,
+    private purchaseOrderService: PurchaseOrderService,
   ) {}
 
   ngOnInit(): void {
@@ -189,6 +199,35 @@ export class CampaignListComponent implements OnChanges {
   // openDestroyCampaignPopup(dialog, campaign) {
   //   this.dialogService.open(dialog, { context: { campaign: campaign } });
   // }
+
+  // downloads the tax invoice of a paid top-up right away
+  downloadInvoice(topUp: ICampaignTopUp) {
+    if (this.downloadingInvoices.has(topUp.purchase_order_uuid)) return;
+    this.downloadingInvoices.add(topUp.purchase_order_uuid);
+    this.purchaseOrderService.downloadInvoice(topUp.purchase_order_uuid).subscribe({
+      next: (blob) => {
+        this.downloadingInvoices.delete(topUp.purchase_order_uuid);
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${topUp.invoice_number || 'invoice'}.pdf`;
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(url), 60_000);
+      },
+      error: async (err) => {
+        this.downloadingInvoices.delete(topUp.purchase_order_uuid);
+        // the error body of a blob request is a Blob too, so read the message out of it
+        let message = 'Failed to download the invoice.';
+        try {
+          const body = err?.error instanceof Blob ? JSON.parse(await err.error.text()) : err?.error;
+          message = body?.message || message;
+        } catch {
+          // keep the default message
+        }
+        this.toasterService.errorDialog(message);
+      },
+    });
+  }
 
   openAdminStopDialog(dialog: TemplateRef<unknown>, campaign: ICampaign) {
     this.stopReason = '';

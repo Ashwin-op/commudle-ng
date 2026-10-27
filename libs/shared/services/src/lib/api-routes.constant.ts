@@ -1135,6 +1135,7 @@ export const API_ROUTES = {
     UPDATE: 'api/v2/purchase_orders', //PUT
     MARK_PAID_FOR_FULLY_DISCOUNTED: 'api/v2/purchase_orders/mark_paid_for_fully_discounted', //PUT
     SEND_INVOICE: 'api/v2/purchase_orders/send_invoice', //POST — buyer-only, takes purchase_order_uuid as a query param
+    DOWNLOAD_INVOICE: 'api/v2/purchase_orders/download_invoice', //GET — owner or admin, takes purchase_order_uuid, returns the PDF
   },
 
   USER_ENGAGEMENT_RECORDS: {

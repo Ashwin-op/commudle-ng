@@ -102,4 +102,13 @@ export class PurchaseOrderService {
       { params },
     );
   }
+
+  // authenticated through HttpClient, a plain link would drop the auth headers
+  downloadInvoice(purchaseOrderUuid: string): Observable<Blob> {
+    const params = new HttpParams().set('purchase_order_uuid', purchaseOrderUuid);
+    return this.http.get(this.baseApiService.getRoute(API_ROUTES.PURCHASE_ORDER.DOWNLOAD_INVOICE), {
+      params,
+      responseType: 'blob',
+    });
+  }
 }
