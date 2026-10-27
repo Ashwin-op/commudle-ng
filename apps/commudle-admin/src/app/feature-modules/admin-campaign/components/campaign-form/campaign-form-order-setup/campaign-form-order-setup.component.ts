@@ -117,6 +117,9 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
   // minimum budget per currency in major units; keep in sync with the backend (USD 10, INR 300)
   static readonly MIN_BUDGET: Record<string, number> = { USD: 10, INR: 300 };
   readonly currencies = ['USD', 'INR'];
+  changingCurrency = false;
+  // the currency the form was last in sync with, so a refused change can be put back
+  private lastCurrency = 'USD';
   readonly maxActiveAssets = 5;
   changeLog: ICampaignChangeLogEntry[] = [];
   liveEndAt = '';
@@ -457,6 +460,70 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     return this.campaign?.currency_type || this.campaignForm?.get('currency')?.value || 'USD';
   }
 
+  // the currency can be changed until the campaign is paid for and live
+  get canChangeCurrency(): boolean {
+    return (
+      !this.campaign?.id || [ECampaignStatus.DRAFT, ECampaignStatus.PENDING_PAYMENT].includes(this.campaign.status)
+    );
+  }
+
+  get hasPendingPayment(): boolean {
+    return this.campaign?.status === ECampaignStatus.PENDING_PAYMENT;
+  }
+
+  onCurrencyChange(confirmDialog: TemplateRef<unknown>) {
+    const next = this.campaignForm.get('currency').value;
+    if (next === this.lastCurrency) return;
+    if (!this.campaign?.id) {
+      // nothing is saved yet. A typed budget would silently change meaning, so it restarts at the new minimum
+      this.lastCurrency = next;
+      if (this.campaignForm.get('budget').value) {
+        this.campaignForm.patchValue({ budget: CampaignFormOrderSetupComponent.MIN_BUDGET[next] });
+      }
+      return;
+    }
+    if (this.hasPendingPayment) {
+      this.dialogService
+        .open(confirmDialog, { context: { previous: this.lastCurrency, next } })
+        .onClose.subscribe((confirmed) => (confirmed ? this.changeCurrency(next) : this.revertCurrency()));
+      return;
+    }
+    this.changeCurrency(next);
+  }
+
+  private revertCurrency() {
+    this.campaignForm.get('currency').setValue(this.lastCurrency, { emitEvent: false });
+  }
+
+  // the server resets the budget to the new currency's minimum and returns the campaign back in draft
+  private changeCurrency(next: string) {
+    this.changingCurrency = true;
+    const formData = new FormData();
+    formData.append('campaign[currency_type]', next);
+    this.campaignService.updateCampaign(formData, this.campaign.id).subscribe({
+      next: (updated: ICampaign) => {
+        this.changingCurrency = false;
+        if (!updated) {
+          this.revertCurrency();
+          return;
+        }
+        this.applyUpdatedCampaign(updated);
+        this.lastCurrency = updated.currency_type || next;
+        this.campaignForm.patchValue({
+          currency: this.lastCurrency,
+          budget: this.toMajorUnits(updated.budget),
+        });
+        this.getFundStatus();
+        this.getEstimatedImpressions();
+        this.toasterService.successDialog('Currency changed. Your budget was reset to the new minimum.');
+      },
+      error: () => {
+        this.changingCurrency = false;
+        this.revertCurrency();
+      },
+    });
+  }
+
   get minBudget(): number {
     return (
       CampaignFormOrderSetupComponent.MIN_BUDGET[this.currencyCode] ?? CampaignFormOrderSetupComponent.MIN_BUDGET['USD']
@@ -465,8 +532,10 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
 
   // keeps the 'min' error key so the existing budget alert keeps working
   budgetMinValidator(control: AbstractControl): ValidationErrors | null {
+    // like Validators.min: an empty field is left to Validators.required, but 0 is below the minimum
+    if (control.value === null || control.value === undefined || control.value === '') return null;
     const value = Number(control.value);
-    return value && value < this.minBudget ? { min: { min: this.minBudget, actual: value } } : null;
+    return value < this.minBudget ? { min: { min: this.minBudget, actual: value } } : null;
   }
 
   private createCampaignRequest(): Observable<ICampaign> {
@@ -483,6 +552,11 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
       tap((res: ICampaign) => {
         if (res) {
           this.campaign = res;
+          this.lastCurrency = res.currency_type || this.lastCurrency;
+          // the server starts a new campaign at its currency's minimum budget, so the form shows the same value
+          if (res.budget && !this.campaignForm.get('budget').value) {
+            this.campaignForm.patchValue({ budget: this.toMajorUnits(res.budget) });
+          }
           this.getFundStatus();
           this.gtmDataLayerPushEvent('new-campaign-step-1-created', {
             com_campaign_id: res.id,
@@ -705,6 +779,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
         communitySlugs = this.selectedCommunities.map((c) => c.slug);
       }
 
+      this.lastCurrency = this.campaign.currency_type || 'USD';
       this.campaignForm.patchValue({
         name: this.campaign.name,
         currency: this.campaign.currency_type || 'USD',

@@ -53,7 +53,14 @@
                       [max]="maxEndAt"
                       (valueChange)="liveEndAt = $any($event)"
                     ></commudle-input>
-                    <p class="small-info-text">The end date can only be shortened, not extended.</p>
+                    <p class="small-info-text" *ngIf="maxEndAt; else noEndDateNote">
+                      The end date can only be shortened, not extended.
+                    </p>
+                    <ng-template #noEndDateNote>
+                      <p class="small-info-text">
+                        This campaign has no end date. You can add one here. Once set, it can only be shortened.
+                      </p>
+                    </ng-template>
                   </div>
                   <button comButton status="primary" size="small" shape="semi-round" (click)="saveLiveEndDate()">
                     Save end date
@@ -102,15 +109,19 @@
                       id="currency"
                       class="currency-select"
                       formControlName="currency"
-                      [attr.disabled]="campaign?.id ? '' : null"
+                      [attr.disabled]="!canChangeCurrency || changingCurrency ? '' : null"
+                      (change)="onCurrencyChange(currencyChangeDialog)"
                     >
                       <option *ngFor="let code of currencies" [value]="code">{{ code }}</option>
                     </select>
                     <p class="small-info-text">
                       Wallets are per currency. A wallet in one currency can't fund a campaign in another.
-                      <ng-container *ngIf="campaign?.id"
-                        >The currency can't be changed after the campaign is created.</ng-container
-                      >
+                    </p>
+                    <p class="small-info-text" *ngIf="canChangeCurrency">
+                      Changing the currency will reset the budget to the new minimum.
+                    </p>
+                    <p class="small-info-text" *ngIf="!canChangeCurrency">
+                      The currency can't be changed once the campaign is live.
                     </p>
                   </div>
                   <div>
@@ -772,6 +783,37 @@
       <button comButton outline size="small" shape="semi-round" (click)="ref.close()">Cancel</button>
       <button comButton status="primary" size="small" shape="semi-round" (click)="confirmGoLive(ref)">
         Yes, submit campaign
+      </button>
+    </com-card-footer>
+  </com-card>
+</ng-template>
+
+<ng-template #currencyChangeDialog let-data let-ref="dialogRef">
+  <com-card class="confirm-dialog">
+    <com-card-header class="confirm-dialog-header">
+      <h3>Change the currency?</h3>
+      <button comButton ghost size="small" shape="round" aria-label="Close" (click)="ref.close(false)">
+        <fa-icon [icon]="icons.faXmark"></fa-icon>
+      </button>
+    </com-card-header>
+    <com-card-body class="confirm-dialog-body">
+      <p class="confirm-dialog-question">Switch this campaign from {{ data.previous }} to {{ data.next }}?</p>
+      <ul class="confirm-dialog-list">
+        <li>Your budget is reset to the minimum for {{ data.next }}.</li>
+        <li>
+          The payment you started for this campaign is no longer used. You will pay again in {{ data.next }} when you
+          submit.
+        </li>
+        <li>
+          If you already paid in another tab, that money stays in your {{ data.previous }} wallet and can fund a
+          {{ data.previous }} campaign.
+        </li>
+      </ul>
+    </com-card-body>
+    <com-card-footer class="confirm-dialog-footer">
+      <button comButton outline size="small" shape="semi-round" (click)="ref.close(false)">Cancel</button>
+      <button comButton status="primary" size="small" shape="semi-round" (click)="ref.close(true)">
+        Yes, change currency
       </button>
     </com-card-footer>
   </com-card>
