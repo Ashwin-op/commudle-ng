@@ -96,6 +96,23 @@
                       </div>
                     </div>
                   </div>
+                  <div class="currency-field">
+                    <label class="label" for="currency">Currency</label>
+                    <select
+                      id="currency"
+                      class="currency-select"
+                      formControlName="currency"
+                      [attr.disabled]="campaign?.id ? '' : null"
+                    >
+                      <option *ngFor="let code of currencies" [value]="code">{{ code }}</option>
+                    </select>
+                    <p class="small-info-text">
+                      Wallets are per currency. A wallet in one currency can't fund a campaign in another.
+                      <ng-container *ngIf="campaign?.id"
+                        >The currency can't be changed after the campaign is created.</ng-container
+                      >
+                    </p>
+                  </div>
                   <div>
                     <div class="info-container">
                       <commudle-alert
@@ -209,7 +226,9 @@
                   <!-- Total Budget -->
                   <div class="total-budget-container">
                     <label for="budget">
-                      Total Budget<span class="small-info-text"> (Min budget should be atleast $10)</span
+                      Total Budget<span class="small-info-text">
+                        (Min budget should be at least
+                        {{ minBudget | currency : currencyCode : 'symbol' : '1.0-0' }})</span
                       ><span class="required"> *</span></label
                     >
                     <div class="input-budget">
@@ -232,7 +251,10 @@
                     ></commudle-alert>
                     <commudle-alert
                       [error]="campaignForm.get('budget')?.touched && campaignForm.get('budget')?.hasError('min')"
-                      errorMessage="Minimum budget should be at least $10"
+                      [errorMessage]="
+                        'Minimum budget should be at least ' +
+                        (minBudget | currency : currencyCode : 'symbol' : '1.0-0')
+                      "
                     ></commudle-alert>
                   </div>
 

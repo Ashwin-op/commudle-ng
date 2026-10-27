@@ -342,3 +342,15 @@ nb-accordion {
 .wallet-budget-line {
   @apply com-my-2 com-text-sm;
 }
+
+.currency-field {
+  @apply com-mt-4;
+
+  .currency-select {
+    @apply com-w-full com-p-2 com-text-sm com-rounded-[4px] com-border com-border-solid com-border-[#E4E9F2] com-bg-white;
+
+    &:disabled {
+      @apply com-bg-gray-100 com-cursor-not-allowed;
+    }
+  }
+}

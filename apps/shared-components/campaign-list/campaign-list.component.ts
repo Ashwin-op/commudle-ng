@@ -44,15 +44,20 @@ export class CampaignListComponent implements OnChanges {
   statusFilter: ECampaignStatus | null = null;
   statsUserCampaigns: ICampaignStats;
   statsOverview: ICampaignStats[] = [];
-  wallet: IWallet;
-  walletCurrency: string;
+  // one wallet per currency, a campaign can only be funded from the wallet of its own currency
+  wallets: { currency: string; wallet: IWallet }[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['selectedStatus']) {
       this.statusFilter = this.selectedStatus;
     }
     if (changes['campaigns'] && this.campaigns?.length) {
-      this.loadWallet(this.campaigns[0].currency_type);
+      // an admin looks at other people's campaigns, so their own wallets do not belong here
+      if (!this.isCampaignAdmin) {
+        new Set(this.campaigns.map((campaign) => campaign.currency_type || 'USD')).forEach((currency) =>
+          this.loadWallet(currency),
+        );
+      }
       this.campaigns.forEach((campaign) => {
         if (this.statsOverview[campaign.id]) return;
         this.campaignService.getStatsOverview(campaign.id).subscribe((stats: ICampaignStats) => {
@@ -73,17 +78,17 @@ export class CampaignListComponent implements OnChanges {
     this.getUserCampaignsStats();
   }
 
-  // the wallet is per currency, and an owner's campaigns share one currency in practice
   // the API deals in minor units (cents/paise)
   toMajorUnits(minorAmount: number): number {
     return (minorAmount ?? 0) / 100;
   }
 
   private loadWallet(currency: string) {
-    const walletCurrency = currency || 'USD';
-    if (this.walletCurrency === walletCurrency) return;
-    this.walletCurrency = walletCurrency;
-    this.walletService.getFundStatus(walletCurrency).subscribe((wallet) => (this.wallet = wallet));
+    if (this.wallets.some((entry) => entry.currency === currency)) return;
+    // reserve the slot first so a second ngOnChanges does not request the same wallet again
+    const entry = { currency, wallet: null as IWallet | null };
+    this.wallets.push(entry);
+    this.walletService.getFundStatus(currency).subscribe((wallet) => (entry.wallet = wallet));
   }
 
   // a campaign flips to 'live' at submit, which can be well before its start time

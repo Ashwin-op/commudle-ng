@@ -114,6 +114,9 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
   readonly maxTitleLength = CampaignFormOrderSetupComponent.MAX_TITLE_LENGTH;
   readonly maxDescriptionLength = CampaignFormOrderSetupComponent.MAX_DESCRIPTION_LENGTH;
   static readonly DEFAULT_START_LEAD_HOURS = 3;
+  // minimum budget per currency in major units; keep in sync with the backend (USD 10, INR 300)
+  static readonly MIN_BUDGET: Record<string, number> = { USD: 10, INR: 300 };
+  readonly currencies = ['USD', 'INR'];
   readonly maxActiveAssets = 5;
   changeLog: ICampaignChangeLogEntry[] = [];
   liveEndAt = '';
@@ -140,6 +143,8 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     this.campaignForm = this._fb.group(
       {
         name: ['', Validators.required],
+        // chosen when the campaign is created, it can't be changed afterwards
+        currency: ['USD'],
         // new campaigns start 3 hours from now by default (the minimum allowed is 1 hour)
         start_at: [
           this.toDateTimeLocal(
@@ -150,7 +155,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
         end_at: [''],
         set_end_date: [false],
         cta_label: [''],
-        budget: [0, [Validators.required, Validators.min(10)]],
+        budget: [0, [Validators.required, (c: AbstractControl) => this.budgetMinValidator(c)]],
         locations: [],
         communities: [],
         campaign_assets: this._fb.array([this.createCampaignAsset()]),
@@ -163,6 +168,12 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
 
   ngOnInit() {
     this.subscriptions.add(this.campaignForm.valueChanges.subscribe(() => this.refreshPreview()));
+    // the minimum budget depends on the currency
+    this.subscriptions.add(
+      this.campaignForm
+        .get('currency')
+        .valueChanges.subscribe(() => this.campaignForm.get('budget').updateValueAndValidity()),
+    );
     this.refreshPreview();
     if (this.router.url.includes('/edit/')) {
       const campaignId = this.activatedRoute.parent?.snapshot?.paramMap?.get('campaign_id');
@@ -441,10 +452,28 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
     return new Date(control.value) < this.minStartDate() ? { startAtTooSoon: true } : null;
   }
 
+  // the campaign's own currency once it exists, otherwise the one picked in the form
+  get currencyCode(): string {
+    return this.campaign?.currency_type || this.campaignForm?.get('currency')?.value || 'USD';
+  }
+
+  get minBudget(): number {
+    return (
+      CampaignFormOrderSetupComponent.MIN_BUDGET[this.currencyCode] ?? CampaignFormOrderSetupComponent.MIN_BUDGET['USD']
+    );
+  }
+
+  // keeps the 'min' error key so the existing budget alert keeps working
+  budgetMinValidator(control: AbstractControl): ValidationErrors | null {
+    const value = Number(control.value);
+    return value && value < this.minBudget ? { min: { min: this.minBudget, actual: value } } : null;
+  }
+
   private createCampaignRequest(): Observable<ICampaign> {
     const formData = new FormData();
     formData.append('campaign[name]', this.campaignForm.value.name);
     formData.append('campaign[start_at]', this.campaignForm.value.start_at || null);
+    formData.append('campaign[currency_type]', this.campaignForm.value.currency || 'USD');
 
     if (this.campaignForm.get('set_end_date')?.value) {
       formData.append('campaign[end_at]', this.campaignForm.value.end_at || null);
@@ -678,6 +707,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
 
       this.campaignForm.patchValue({
         name: this.campaign.name,
+        currency: this.campaign.currency_type || 'USD',
         start_at: this.formatDateTimeForInput(this.campaign.start_at),
         end_at: this.formatDateTimeForInput(this.campaign.end_at),
         set_end_date: !!this.campaign.end_at,

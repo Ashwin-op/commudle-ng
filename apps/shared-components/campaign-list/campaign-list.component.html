@@ -1,17 +1,19 @@
-<!-- Wallet -->
-<div class="wallet-summary" *ngIf="wallet">
-  <span class="wallet-summary-title">Wallet</span>
-  <span
-    >Available: <strong>{{ toMajorUnits(wallet.available_balance) | currency : walletCurrency }}</strong></span
-  >
-  <span
-    >Reserved for campaigns:
-    <strong>{{ toMajorUnits(wallet.reserved_balance) | currency : walletCurrency }}</strong></span
-  >
-  <span
-    >Total: <strong>{{ toMajorUnits(wallet.balance) | currency : walletCurrency }}</strong></span
-  >
-</div>
+<!-- Wallets, one per currency -->
+<ng-container *ngFor="let entry of wallets">
+  <div class="wallet-summary" *ngIf="entry.wallet">
+    <span class="wallet-summary-title">Wallet ({{ entry.currency }})</span>
+    <span
+      >Available: <strong>{{ toMajorUnits(entry.wallet.available_balance) | currency : entry.currency }}</strong></span
+    >
+    <span
+      >Reserved for campaigns:
+      <strong>{{ toMajorUnits(entry.wallet.reserved_balance) | currency : entry.currency }}</strong></span
+    >
+    <span
+      >Total: <strong>{{ toMajorUnits(entry.wallet.balance) | currency : entry.currency }}</strong></span
+    >
+  </div>
+</ng-container>
 
 <!-- KPI Cards -->
 <div class="kpi-cards" *ngIf="statsUserCampaigns">
