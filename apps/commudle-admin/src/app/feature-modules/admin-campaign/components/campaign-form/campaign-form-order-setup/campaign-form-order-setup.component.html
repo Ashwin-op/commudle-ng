@@ -636,62 +636,76 @@
           <nb-accordion *ngIf="wallet" class="wallet-accordion">
             <nb-accordion-item [expanded]="walletExpanded" (collapsedChange)="walletExpanded = !$event">
               <nb-accordion-item-header>
-                <div class="accordion-header-content">
-                  <span class="accordion-title">Wallet</span>
-                  <span class="small-info-text com-ml-3"
-                    >Available {{ toMajorUnits(wallet.available_balance) | currency : campaign?.currency_type }}</span
+                <div class="wallet-header">
+                  <fa-icon [icon]="icons.faWallet" class="wallet-header-icon"></fa-icon>
+                  <span class="wallet-header-title">Wallet</span>
+                  <span class="wallet-header-available"
+                    >Available
+                    <strong>{{
+                      toMajorUnits(wallet.available_balance) | currency : campaign?.currency_type
+                    }}</strong></span
                   >
                 </div>
               </nb-accordion-item-header>
               <nb-accordion-item-body>
                 <div class="wallet-details-section">
-                  <table class="wallet-details-table">
-                    <tbody>
-                      <tr>
-                        <td class="wallet-details-label">Balance</td>
-                        <td class="wallet-details-label">Available balance</td>
-                        <td class="wallet-details-label">Reserved balance</td>
-                      </tr>
-                      <tr>
-                        <td class="wallet-details-value">
-                          {{ toMajorUnits(wallet.balance) | currency : campaign?.currency_type }}
-                        </td>
-                        <td class="wallet-details-value">
-                          {{ toMajorUnits(wallet.available_balance) | currency : campaign?.currency_type }}
-                        </td>
-                        <td class="wallet-details-value">
-                          {{ toMajorUnits(wallet.reserved_balance) | currency : campaign?.currency_type }}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div class="wallet-stats">
+                    <div class="wallet-stat">
+                      <span class="wallet-stat-label">Balance</span>
+                      <span class="wallet-stat-value">{{
+                        toMajorUnits(wallet.balance) | currency : campaign?.currency_type
+                      }}</span>
+                    </div>
+                    <div class="wallet-stat">
+                      <span class="wallet-stat-label">Available balance</span>
+                      <span class="wallet-stat-value">{{
+                        toMajorUnits(wallet.available_balance) | currency : campaign?.currency_type
+                      }}</span>
+                    </div>
+                    <div class="wallet-stat">
+                      <span class="wallet-stat-label">Reserved balance</span>
+                      <span class="wallet-stat-value">{{
+                        toMajorUnits(wallet.reserved_balance) | currency : campaign?.currency_type
+                      }}</span>
+                    </div>
+                  </div>
                   <ng-container *ngIf="walletAfterSubmit() as after">
-                    <p class="wallet-budget-line">
-                      Selected budget:
-                      <strong>{{ campaignForm.get('budget').value | currency : campaign?.currency_type }}</strong>
-                    </p>
-                    <h4 class="wallet-details-heading">Wallet after submitting</h4>
-                    <table class="wallet-details-table">
-                      <tbody>
-                        <tr>
-                          <td class="wallet-details-label">Available balance</td>
-                          <td class="wallet-details-label">Reserved balance</td>
-                        </tr>
-                        <tr>
-                          <td class="wallet-details-value">
-                            {{ toMajorUnits(after.available) | currency : campaign?.currency_type }}
-                          </td>
-                          <td class="wallet-details-value">
-                            {{ toMajorUnits(after.reserved) | currency : campaign?.currency_type }}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <p class="small-info-text" *ngIf="after.shortfall > 0">
-                      Your available balance is
-                      {{ toMajorUnits(after.shortfall) | currency : campaign?.currency_type }} short. You will pay this
-                      at checkout before the campaign goes live.
-                    </p>
+                    <div class="wallet-budget-row">
+                      <span class="wallet-budget-label">Selected budget</span>
+                      <span class="wallet-budget-value">{{
+                        campaignForm.get('budget').value | currency : campaign?.currency_type
+                      }}</span>
+                    </div>
+                    <div class="wallet-after">
+                      <h4 class="wallet-after-heading">Wallet after submitting</h4>
+                      <div class="wallet-stats">
+                        <div class="wallet-stat">
+                          <span class="wallet-stat-label">Available balance</span>
+                          <span class="wallet-stat-value">{{
+                            toMajorUnits(after.available) | currency : campaign?.currency_type
+                          }}</span>
+                        </div>
+                        <div class="wallet-stat">
+                          <span class="wallet-stat-label">Reserved balance</span>
+                          <span class="wallet-stat-value">{{
+                            toMajorUnits(after.reserved) | currency : campaign?.currency_type
+                          }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="wallet-shortfall" *ngIf="after.shortfall > 0">
+                      <span class="wallet-shortfall-icon"><fa-icon [icon]="icons.faExclamation"></fa-icon></span>
+                      <div>
+                        <p class="wallet-shortfall-title">
+                          {{ toMajorUnits(after.shortfall) | currency : campaign?.currency_type }} more needed
+                        </p>
+                        <p class="wallet-shortfall-text">
+                          Your available balance is
+                          {{ toMajorUnits(after.shortfall) | currency : campaign?.currency_type }} short. You will pay
+                          this at checkout before the campaign goes live.
+                        </p>
+                      </div>
+                    </div>
                   </ng-container>
                 </div>
               </nb-accordion-item-body>

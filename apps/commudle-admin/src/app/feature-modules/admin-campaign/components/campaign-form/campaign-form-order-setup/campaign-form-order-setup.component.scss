@@ -180,22 +180,88 @@ nb-accordion {
   @apply com-flex com-flex-col com-border-0 com-border-t com-border-solid com-border-Bright-Gray com-bg-Ghost-White;
 }
 
-.wallet-details-section {
-  @apply com-px-4 com-pt-3 com-pb-2 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+.wallet-header {
+  @apply com-flex com-items-center com-gap-4;
 
-  .wallet-details-heading {
-    @apply com-text-sm com-font-semibold com-text-Yankees-Blue com-m-0 com-mb-2;
+  .wallet-header-icon {
+    @apply com-text-base com-text-Yankees-Blue;
   }
 
-  .wallet-details-table {
-    @apply com-w-full com-text-sm com-border-collapse;
+  .wallet-header-title {
+    @apply com-text-base com-font-semibold com-text-Yankees-Blue;
+  }
 
-    .wallet-details-label {
-      @apply com-pb-2 com-pr-4 com-text-gray-600;
+  .wallet-header-available {
+    @apply com-ml-4 com-text-sm com-text-gray-600;
+
+    strong {
+      @apply com-ml-1 com-text-base com-font-semibold com-text-Yankees-Blue;
+    }
+  }
+}
+
+.wallet-details-section {
+  @apply com-px-4 com-pt-4 com-pb-4 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+
+  .wallet-stats {
+    @apply com-flex;
+
+    .wallet-stat {
+      @apply com-flex com-flex-col com-gap-1 com-flex-1 com-px-4 com-border-0 com-border-l com-border-solid com-border-Bright-Gray;
+
+      &:first-child {
+        @apply com-pl-0 com-border-l-0;
+      }
     }
 
-    .wallet-details-value {
-      @apply com-text-left com-font-medium;
+    .wallet-stat-label {
+      @apply com-text-xs com-text-gray-600;
+    }
+
+    .wallet-stat-value {
+      @apply com-text-base com-font-semibold com-text-Yankees-Blue;
+    }
+  }
+
+  .wallet-budget-row {
+    @apply com-flex com-items-baseline com-gap-8 com-mt-4 com-pt-4 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+
+    .wallet-budget-label {
+      @apply com-text-sm com-text-gray-600;
+    }
+
+    .wallet-budget-value {
+      @apply com-text-base com-font-semibold com-text-Yankees-Blue;
+    }
+  }
+
+  .wallet-after {
+    @apply com-mt-4 com-p-4 com-rounded-lg com-bg-[#F5F6FB];
+
+    .wallet-after-heading {
+      @apply com-text-sm com-font-semibold com-text-Yankees-Blue com-m-0 com-mb-3;
+    }
+
+    .wallet-stat {
+      &:first-child {
+        @apply com-pr-4;
+      }
+    }
+  }
+
+  .wallet-shortfall {
+    @apply com-flex com-gap-3 com-mt-4 com-p-4 com-rounded-lg com-border com-border-solid com-border-[#F6DDB8] com-bg-[#FFF8EF];
+
+    .wallet-shortfall-icon {
+      @apply com-flex com-items-center com-justify-center com-shrink-0 com-w-6 com-h-6 com-text-xs com-rounded-full com-bg-[#F0A83C] com-text-white;
+    }
+
+    .wallet-shortfall-title {
+      @apply com-m-0 com-text-sm com-font-semibold com-text-Yankees-Blue;
+    }
+
+    .wallet-shortfall-text {
+      @apply com-m-0 com-mt-1 com-text-xs com-text-gray-600;
     }
   }
 }
@@ -337,10 +403,6 @@ nb-accordion {
   &.no_end_date {
     @apply com-bg-gray-100 com-border-gray-300 com-text-gray-700;
   }
-}
-
-.wallet-budget-line {
-  @apply com-my-2 com-text-sm;
 }
 
 .currency-field {

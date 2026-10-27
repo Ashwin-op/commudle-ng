@@ -39,7 +39,15 @@ import {
 import { GooglePlacesAutocompleteService } from 'apps/commudle-admin/src/app/services/google-places-autocomplete.service';
 import { SearchService } from 'apps/commudle-admin/src/app/feature-modules/search/services/search.service';
 import { ISearch } from 'apps/shared-models/search.model';
-import { faArrowRight, faFileImage, faRectangleAd, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowRight,
+  faExclamation,
+  faFileImage,
+  faRectangleAd,
+  faTrash,
+  faWallet,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { debounceTime, distinctUntilChanged, EMPTY, Observable, of, Subscription, switchMap, tap } from 'rxjs';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 import { environment } from '@commudle/shared-environments';
@@ -78,9 +86,11 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, O
   campaignForm: FormGroup;
   icons = {
     faArrowRight,
+    faExclamation,
     faFileImage,
     faRectangleAd,
     faTrash,
+    faWallet,
     faXmark,
   };
   campaign: ICampaign;
