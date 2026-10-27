@@ -681,7 +681,13 @@
                   <commudle-alert [info]="true">
                     <div infoContent>
                       Orders above
-                      {{ effectiveBankTransferThreshold | currency : purchaseOrder.currency : 'symbol' : '1.0-0' }}
+                      {{
+                        effectiveBankTransferThreshold
+                          | currency
+                            : purchaseOrder.bank_transfer_threshold_currency || purchaseOrder.currency
+                            : 'symbol'
+                            : '1.0-0'
+                      }}
                       require bank transfer. Request an invoice and our team will send bank details within 24 hours.
                     </div>
                   </commudle-alert>

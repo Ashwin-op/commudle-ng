@@ -122,14 +122,16 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   readonly cardVerificationCharge = 1;
 
   /**
-   * Threshold read from the purchase order (set by the backend constant
-   * PurchaseOrder::BANK_TRANSFER_THRESHOLD_USD). Falls back to the local
-   * value only if the PO hasn't loaded yet — the PO value is always authoritative.
+   * Threshold read from the purchase order, in the order's own currency (USD 20000, INR 500000). null means
+   * bank transfer is not offered for that currency. The local value is only used while the PO hasn't loaded,
+   * and an older backend without the per-currency field falls back to its USD figure.
    */
   readonly bankTransferThreshold = 4500; // fallback only; real value comes from purchaseOrder
 
-  get effectiveBankTransferThreshold(): number {
-    return this.purchaseOrder?.bank_transfer_threshold_usd ?? this.bankTransferThreshold;
+  get effectiveBankTransferThreshold(): number | null {
+    if (!this.purchaseOrder) return this.bankTransferThreshold;
+    if (this.purchaseOrder.bank_transfer_threshold !== undefined) return this.purchaseOrder.bank_transfer_threshold;
+    return this.purchaseOrder.bank_transfer_threshold_usd ?? this.bankTransferThreshold;
   }
 
   private destroy$ = new Subject<void>();
@@ -607,6 +609,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     return (
       !this.isProratedAddon &&
       !(this.hasTrial && this.withTrial) &&
+      this.effectiveBankTransferThreshold !== null &&
       this.totalPrice >= this.effectiveBankTransferThreshold
     );
   }
