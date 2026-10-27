@@ -218,7 +218,7 @@
                 <nb-card-body>
                   <table>
                     <tr>
-                      <th>Note</th>
+                      <th>Reason</th>
                       <th>Created At</th>
                       <th *ngIf="isCampaignAdmin">Created By</th>
                     </tr>
@@ -236,38 +236,6 @@
                   </table>
                 </nb-card-body>
               </nb-card>
-              <div
-                *ngIf="
-                  isCampaignAdmin &&
-                  (campaign.status === ECampaignStatus.CHANGES_REQUIRED || campaign.status === ECampaignStatus.REJECTED)
-                "
-                class="notes-container"
-              >
-                <label for="notes">
-                  <input
-                    fieldSize="small"
-                    type="text"
-                    placeholder="Write Note"
-                    nbInput
-                    [(ngModel)]="noteTexts[campaign.id]"
-                    (click)="$event.stopPropagation()"
-                  />
-                </label>
-                <button nbButton size="tiny" (click)="updateNotes(campaign.id); $event.stopPropagation()">Save</button>
-              </div>
-              <button
-                class="resend-payment-button"
-                *ngIf="
-                  isCampaignAdmin &&
-                  (campaign.status === ECampaignStatus.CHANGES_REQUIRED || campaign.status === ECampaignStatus.REJECTED)
-                "
-                nbButton
-                status="info"
-                [disabled]="campaign.unapproved_reasons.length === 0"
-                (click)="campaignUnapprovedChangesMail(campaign.id); $event.stopPropagation()"
-              >
-                Send mail
-              </button>
             </td>
             <td>{{ campaign.budget ? (toMajorUnits(campaign.budget) | currency : campaign.currency_type) : '-' }}</td>
             <td class="duration-time">
@@ -372,6 +340,29 @@
               >
                 Stop
               </button>
+              <button
+                *ngIf="isCampaignAdmin && canStop(campaign)"
+                comButton
+                outline
+                status="danger"
+                size="small"
+                shape="semi-round"
+                class="action-btn-icon"
+                (click)="$event.stopPropagation(); openAdminStopDialog(adminStopDialog, campaign)"
+              >
+                Stop
+              </button>
+              <button
+                *ngIf="isCampaignAdmin"
+                comButton
+                outline
+                size="small"
+                shape="semi-round"
+                class="action-btn-icon"
+                (click)="$event.stopPropagation(); openEmailDialog(emailOwnerDialog, campaign)"
+              >
+                Email owner
+              </button>
               <a *ngIf="hasStats(campaign)" [routerLink]="['stats', campaign.id]" (click)="$event.stopPropagation()">
                 <button comButton status="success" size="small" shape="semi-round" class="action-btn-icon" outline>
                   Stats &nbsp;<fa-icon [icon]="icons.faArrowRight"></fa-icon>
@@ -475,6 +466,98 @@
       <button comButton outline size="small" shape="semi-round" (click)="ref.close()">Cancel</button>
       <button comButton status="danger" size="small" shape="semi-round" (click)="confirmStop(ref, data.campaign)">
         Yes, stop campaign
+      </button>
+    </com-card-footer>
+  </com-card>
+</ng-template>
+
+<ng-template #adminStopDialog let-data let-ref="dialogRef">
+  <com-card class="confirm-dialog">
+    <com-card-header class="confirm-dialog-header">
+      <h3>Stop this campaign?</h3>
+      <button comButton ghost size="small" shape="round" aria-label="Close" (click)="ref.close()">
+        <fa-icon [icon]="icons.faXmark"></fa-icon>
+      </button>
+    </com-card-header>
+    <com-card-body class="confirm-dialog-body">
+      <p class="confirm-dialog-question">
+        Stopping <strong>{{ data.campaign.name }}</strong
+        >, started by <strong>{{ data.campaign.user?.name }}</strong
+        >, is permanent.
+      </p>
+      <ul class="confirm-dialog-list">
+        <li>The campaign stops serving right away and cannot be restarted.</li>
+        <li>Its unspent reserved budget is released back to the owner's wallet.</li>
+        <li>The owner will see the reason on their campaign list. No email is sent. Use Email owner for that.</li>
+      </ul>
+      <label class="dialog-field">
+        <span class="dialog-label">Reason</span>
+        <select class="dialog-input" [(ngModel)]="stopReason">
+          <option value="">Select a reason</option>
+          <option *ngFor="let reason of stopReasons" [value]="reason">{{ reason }}</option>
+        </select>
+      </label>
+      <label class="dialog-field">
+        <span class="dialog-label"
+          >Message <ng-container *ngIf="stopReason !== otherStopReason">(optional)</ng-container></span
+        >
+        <textarea
+          class="dialog-input"
+          rows="3"
+          maxlength="500"
+          placeholder="Add a short explanation for the owner"
+          [(ngModel)]="stopMessage"
+        ></textarea>
+      </label>
+    </com-card-body>
+    <com-card-footer class="confirm-dialog-footer">
+      <button comButton outline size="small" shape="semi-round" (click)="ref.close()">Cancel</button>
+      <button
+        comButton
+        status="danger"
+        size="small"
+        shape="semi-round"
+        [disabled]="!canSubmitAdminStop() || isSubmitting"
+        (click)="confirmAdminStop(ref, data.campaign)"
+      >
+        Stop campaign
+      </button>
+    </com-card-footer>
+  </com-card>
+</ng-template>
+
+<ng-template #emailOwnerDialog let-data let-ref="dialogRef">
+  <com-card class="confirm-dialog">
+    <com-card-header class="confirm-dialog-header">
+      <h3>Email the campaign owner</h3>
+      <button comButton ghost size="small" shape="round" aria-label="Close" (click)="ref.close()">
+        <fa-icon [icon]="icons.faXmark"></fa-icon>
+      </button>
+    </com-card-header>
+    <com-card-body class="confirm-dialog-body">
+      <p class="confirm-dialog-question">
+        To <strong>{{ data.campaign.user?.name }}</strong> about <strong>{{ data.campaign.name }}</strong>
+      </p>
+      <label class="dialog-field">
+        <span class="dialog-label">Subject</span>
+        <input class="dialog-input" type="text" maxlength="150" [(ngModel)]="emailSubject" />
+      </label>
+      <label class="dialog-field">
+        <span class="dialog-label">Message</span>
+        <textarea class="dialog-input" rows="6" maxlength="2000" [(ngModel)]="emailMessage"></textarea>
+      </label>
+    </com-card-body>
+    <com-card-footer class="confirm-dialog-footer">
+      <button comButton outline size="small" shape="semi-round" (click)="ref.close()">Cancel</button>
+      <button
+        comButton
+        status="primary"
+        size="small"
+        shape="semi-round"
+        [disabled]="!canSendEmail() || isSubmitting"
+        (click)="sendEmailToOwner(ref, data.campaign)"
+      >
+        Send email
       </button>
     </com-card-footer>
   </com-card>

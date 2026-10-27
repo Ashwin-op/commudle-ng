@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges, TemplateRef } from '@angular/core';
-import { ICampaign, ECampaignStatus, EDbModels, ICampaignStats, IWallet } from '@commudle/shared-models';
-import { CampaignService, NoteService, ToastrService, WalletService } from '@commudle/shared-services';
+import { ICampaign, ECampaignStatus, ICampaignStats, IWallet } from '@commudle/shared-models';
+import { CampaignService, ToastrService, WalletService } from '@commudle/shared-services';
 import { faEdit, faArrowRight, faSync, faTrash, faFilter, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { NbDialogRef, NbDialogService } from '@commudle/theme';
 import * as moment from 'moment';
@@ -25,7 +25,22 @@ export class CampaignListComponent implements OnChanges {
     ECampaignStatus.STOPPED,
     ECampaignStatus.RESUMED,
   ];
-  noteTexts: { [campaignId: string]: string } = {};
+  // preset reasons an admin picks from when stopping someone else's campaign
+  readonly stopReasons = [
+    'Offensive or inappropriate content',
+    'Misleading or false claims',
+    'Spam or irrelevant',
+    'Prohibited product or service',
+    'Copyright or trademark issue',
+    'Broken or unsafe link',
+    'Other',
+  ];
+  readonly otherStopReason = 'Other';
+  stopReason = '';
+  stopMessage = '';
+  emailSubject = '';
+  emailMessage = '';
+  isSubmitting = false;
   statusFilter: ECampaignStatus | null = null;
   statsUserCampaigns: ICampaignStats;
   statsOverview: ICampaignStats[] = [];
@@ -51,7 +66,6 @@ export class CampaignListComponent implements OnChanges {
     private campaignService: CampaignService,
     private toasterService: ToastrService,
     private dialogService: NbDialogService,
-    private noteService: NoteService,
     private walletService: WalletService,
   ) {}
 
@@ -87,7 +101,7 @@ export class CampaignListComponent implements OnChanges {
 
   getStatusOptionsForCampaign(campaign: ICampaign): ECampaignStatus[] {
     if (campaign?.status === ECampaignStatus.LIVE) {
-      return [ECampaignStatus.PAUSED, ECampaignStatus.STOPPED];
+      return [ECampaignStatus.PAUSED];
     }
     if (campaign?.status === ECampaignStatus.PAUSED) {
       return [ECampaignStatus.RESUMED];
@@ -171,23 +185,57 @@ export class CampaignListComponent implements OnChanges {
   //   this.dialogService.open(dialog, { context: { campaign: campaign } });
   // }
 
-  updateNotes(campaignId: string) {
-    if (!this.noteTexts[campaignId]) return;
-
-    const formData = new FormData();
-    formData.append('note[text]', this.noteTexts[campaignId]);
-    this.noteService.createNote(formData, EDbModels.CAMPAIGN, campaignId).subscribe((note) => {
-      const index = this.campaigns.findIndex((campaign) => campaign.id === campaignId);
-      this.campaigns[index].unapproved_reasons.push(note);
-      this.noteTexts[campaignId] = '';
-    });
+  openAdminStopDialog(dialog: TemplateRef<unknown>, campaign: ICampaign) {
+    this.stopReason = '';
+    this.stopMessage = '';
+    this.dialogService.open(dialog, { context: { campaign } });
   }
 
-  campaignUnapprovedChangesMail(campaignId) {
-    this.campaignService.campaignUnapprovedChangesMail(campaignId).subscribe((res) => {
-      if (res) {
-        this.toasterService.successDialog('Mail Sent');
-      }
+  canSubmitAdminStop(): boolean {
+    return !!this.stopReason && (this.stopReason !== this.otherStopReason || !!this.stopMessage.trim());
+  }
+
+  confirmAdminStop(ref: NbDialogRef<unknown>, campaign: ICampaign) {
+    if (!this.canSubmitAdminStop() || this.isSubmitting) return;
+    this.isSubmitting = true;
+    this.campaignService
+      .campaignAdminUpdateStatusStop(campaign.id, this.stopReason, this.stopMessage.trim())
+      .subscribe({
+        next: (res) => {
+          const index = this.campaigns.findIndex((c) => c.id === campaign.id);
+          this.campaigns[index] = {
+            ...this.campaigns[index],
+            status: ECampaignStatus.STOPPED,
+            unapproved_reasons: res?.unapproved_reasons ?? this.campaigns[index].unapproved_reasons,
+          };
+          this.toasterService.successDialog('Campaign stopped');
+          this.isSubmitting = false;
+          ref.close();
+        },
+        error: () => (this.isSubmitting = false),
+      });
+  }
+
+  openEmailDialog(dialog: TemplateRef<unknown>, campaign: ICampaign) {
+    this.emailSubject = `Your Commudle ad campaign "${campaign.name}"`;
+    this.emailMessage = `Hi ${campaign.user?.name || ''},\n\n`;
+    this.dialogService.open(dialog, { context: { campaign } });
+  }
+
+  canSendEmail(): boolean {
+    return !!this.emailSubject.trim() && !!this.emailMessage.trim();
+  }
+
+  sendEmailToOwner(ref: NbDialogRef<unknown>, campaign: ICampaign) {
+    if (!this.canSendEmail() || this.isSubmitting) return;
+    this.isSubmitting = true;
+    this.campaignService.emailOwner(campaign.id, this.emailSubject.trim(), this.emailMessage.trim()).subscribe({
+      next: () => {
+        this.toasterService.successDialog('Email sent to the campaign owner');
+        this.isSubmitting = false;
+        ref.close();
+      },
+      error: () => (this.isSubmitting = false),
     });
   }
 

@@ -52,10 +52,11 @@ export class CampaignService {
     return this.http.get<ICampaign>(this.baseApiService.getRoute(API_ROUTES.CAMPAIGNS.SHOW), { params });
   }
 
-  campaignAdminUpdateStatusStop(campaignId: string): Observable<ICampaign> {
+  // an admin stopping someone else's campaign must give a reason (a preset label) and may add a message
+  campaignAdminUpdateStatusStop(campaignId: string, reason?: string, message?: string): Observable<ICampaign> {
     return this.http.put<ICampaign>(
       this.baseApiService.getRoute(API_ROUTES.CAMPAIGNS.CAMPAIGN_ADMIN_STATUS_UPDATE_STOP),
-      { campaign_id: campaignId },
+      { campaign_id: campaignId, ...(reason ? { reason } : {}), ...(message ? { message } : {}) },
     );
   }
 
@@ -73,13 +74,12 @@ export class CampaignService {
     );
   }
 
-  campaignUnapprovedChangesMail(campaignId: number): Observable<boolean> {
-    return this.http.post<boolean>(
-      this.baseApiService.getRoute(API_ROUTES.CAMPAIGNS.CAMPAIGN_UNAPPROVED_CHANGES_MAIL),
-      {
-        campaign_id: campaignId,
-      },
-    );
+  emailOwner(campaignId: string, subject: string, message: string): Observable<boolean> {
+    return this.http.post<boolean>(this.baseApiService.getRoute(API_ROUTES.CAMPAIGNS.EMAIL_OWNER), {
+      campaign_id: campaignId,
+      subject,
+      message,
+    });
   }
 
   getEstimatedImpressions(campaignId: string): Observable<ICampaignEstimate> {

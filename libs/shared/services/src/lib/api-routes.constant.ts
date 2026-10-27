@@ -1119,7 +1119,7 @@ export const API_ROUTES = {
     USER_CAMPAIGNS_STATS: 'api/v2/campaigns/stats/user_campaigns', //GET
     STATS_USER_DISTRIBUTION: 'api/v2/campaigns/stats/user_distribution', //GET
 
-    CAMPAIGN_UNAPPROVED_CHANGES_MAIL: 'api/v2/campaigns/campaign_unapproved_changes_mail', //POST
+    EMAIL_OWNER: 'api/v2/campaigns/email_owner', //POST
   },
 
   WALLET: {

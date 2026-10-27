@@ -163,10 +163,6 @@
   }
 }
 
-.resend-payment-button {
-  @apply com-mt-2;
-}
-
 .notes-table {
   @apply com-mx-0 com-mt-4 com-mb-0 com-rounded;
   nb-card-body {
@@ -185,10 +181,6 @@
       @apply hover:com-bg-gray-50;
     }
   }
-}
-
-.notes-container {
-  @apply com-flex com-gap-2 com-mt-2;
 }
 
 .filter-by-status {
@@ -226,6 +218,18 @@
 
   .confirm-dialog-footer {
     @apply com-flex com-justify-end com-gap-2;
+  }
+}
+
+.dialog-field {
+  @apply com-flex com-flex-col com-gap-1 com-mt-3;
+
+  .dialog-label {
+    @apply com-text-sm com-font-medium;
+  }
+
+  .dialog-input {
+    @apply com-w-full com-p-2 com-text-sm com-rounded-[4px] com-border com-border-solid com-border-[#E4E9F2] com-bg-white;
   }
 }
 
