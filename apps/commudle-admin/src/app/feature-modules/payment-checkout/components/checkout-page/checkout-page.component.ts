@@ -710,9 +710,28 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  // One last order update with the billing country and state right before paying, so the amount
+  // Razorpay charges always carries the tax for the country on the form.
   private proceedWithPayment(): void {
     this.isLoadingPayment = true;
 
+    this.purchaseOrderService
+      .updatePurchaseOrder(this.purchaseOrder.uuid, this.orderUpdatePayload())
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (po: IPurchaseOrder) => {
+          this.purchaseOrder = po;
+          this.updateTotalPrice();
+          this.continuePayment();
+        },
+        error: (err) => {
+          this.isLoadingPayment = false;
+          this.toastrService.errorDialog(err?.error?.message || 'Failed to update purchase order');
+        },
+      });
+  }
+
+  private continuePayment(): void {
     if (this.collectsCompanyDetails) {
       // Always persist the current form state — contact info can only be
       // *created* once (unique parent_id/parent_type), so if it already exists
@@ -1173,17 +1192,22 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     this.totalPrice = Math.max(0, basePrice - discountAmount);
   }
 
+  // the tax follows the country, so every order update carries the billing country and state
+  private orderUpdatePayload() {
+    return {
+      quantity: this.quantity,
+      subscription_months: this.subscriptionMonths,
+      discount_code: this.discountCode,
+      country_code: this.billingCountryCode,
+      state: this.isIndiaSelected ? this.contactInfoForm.get('state')?.value || '' : '',
+    };
+  }
+
   private updatePurchaseOrder(): void {
     if (!this.purchaseOrder?.uuid) return;
 
     this.purchaseOrderService
-      .updatePurchaseOrder(this.purchaseOrder.uuid, {
-        quantity: this.quantity,
-        subscription_months: this.subscriptionMonths,
-        discount_code: this.discountCode,
-        country_code: this.billingCountryCode,
-        state: this.isIndiaSelected ? this.contactInfoForm.get('state')?.value || '' : '',
-      })
+      .updatePurchaseOrder(this.purchaseOrder.uuid, this.orderUpdatePayload())
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (po: IPurchaseOrder) => {

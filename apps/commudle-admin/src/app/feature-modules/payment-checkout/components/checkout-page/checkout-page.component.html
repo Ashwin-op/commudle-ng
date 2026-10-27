@@ -224,8 +224,8 @@
             >
               <!--
                 Two-column responsive grid on ≥sm screens, single column on mobile.
-                Field order matches natural tab flow: Name → Email → Phone →
-                Country → State/PIN → Address → GSTIN.
+                Field order matches natural tab flow: Name → Country → Company →
+                Email → Phone → State/PIN → Address → GSTIN.
               -->
               <div class="business-fields">
                 <!-- Full Name (own row, full width) -->
@@ -235,6 +235,22 @@
                   <commudle-alert
                     [error]="!!(contactInfoForm.get('name')?.invalid && contactInfoForm.get('name')?.touched)"
                     errorMessage="Full name is required"
+                  >
+                  </commudle-alert>
+                </div>
+
+                <!-- Country (own row, full width, required for everyone, it decides the tax) -->
+                <div class="form-field">
+                  <label for="country">Country <span class="required">*</span></label>
+                  <div class="native-select">
+                    <select id="country" formControlName="country">
+                      <option value="" disabled>Select country</option>
+                      <option *ngFor="let country of countries" [value]="country.code">{{ country.name }}</option>
+                    </select>
+                  </div>
+                  <commudle-alert
+                    [error]="!!(contactInfoForm.get('country')?.invalid && contactInfoForm.get('country')?.touched)"
+                    errorMessage="Country is required"
                   >
                   </commudle-alert>
                 </div>
@@ -311,25 +327,10 @@
                 </div>
 
                 <!--
-                  Row: Country | (State for India) OR Country | PIN/Zip (rest of world).
-                  Keeps the row balanced whether or not the state field applies.
+                  Row: State (India) OR PIN/Zip (rest of world), next to an empty spacer
+                  so the row stays balanced now that Country sits above Company Name.
                 -->
                 <div class="form-row">
-                  <div class="form-field">
-                    <label for="country">Country <span class="required">*</span></label>
-                    <div class="native-select">
-                      <select id="country" formControlName="country">
-                        <option value="" disabled>Select country</option>
-                        <option *ngFor="let country of countries" [value]="country.code">{{ country.name }}</option>
-                      </select>
-                    </div>
-                    <commudle-alert
-                      [error]="!!(contactInfoForm.get('country')?.invalid && contactInfoForm.get('country')?.touched)"
-                      errorMessage="Country is required"
-                    >
-                    </commudle-alert>
-                  </div>
-
                   <div class="form-field" *ngIf="isIndiaSelected; else zipInCountryRow">
                     <label for="state">State <span class="required">*</span></label>
                     <div class="native-select">
@@ -362,6 +363,7 @@
                       </commudle-alert>
                     </div>
                   </ng-template>
+                  <div class="form-field-spacer"></div>
                 </div>
 
                 <!--
