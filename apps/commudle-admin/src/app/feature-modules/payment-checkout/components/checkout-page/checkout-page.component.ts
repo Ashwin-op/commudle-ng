@@ -402,6 +402,11 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     return !!this.contactInfoForm.get('isGstRegistered')?.value;
   }
 
+  // Product orders and campaign top-ups (wallet orders) both collect the company and GST details
+  get collectsCompanyDetails(): boolean {
+    return [EDbModels.PRODUCT_PRICE, EDbModels.WALLET].includes(this.purchaseOrder?.orderable_type);
+  }
+
   // The billing country used to compute tax. Must mirror buildContactInfoPayload so the
   // displayed (tax-inclusive) total matches what is charged at payment time.
   private get billingCountryCode(): string {
@@ -624,7 +629,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.purchaseOrder.orderable_type === EDbModels.PRODUCT_PRICE) {
+    if (this.collectsCompanyDetails) {
       if (this.contactInfoForm.invalid) {
         this.contactInfoForm.markAllAsTouched();
         this.toastrService.errorDialog('Please fill all the required fields');
@@ -676,17 +681,17 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.purchaseOrder.orderable_type === EDbModels.PRODUCT_PRICE) {
+    if (this.collectsCompanyDetails) {
       if (this.contactInfoForm.invalid) {
         this.contactInfoForm.markAllAsTouched();
         this.toastrService.errorDialog('Please fill all the required fields');
         return;
       }
+    }
 
-      if (this.quantity < this.minQuantity) {
-        this.toastrService.errorDialog(`Minimum quantity required is ${this.minQuantity}`);
-        return;
-      }
+    if (this.purchaseOrder.orderable_type === EDbModels.PRODUCT_PRICE && this.quantity < this.minQuantity) {
+      this.toastrService.errorDialog(`Minimum quantity required is ${this.minQuantity}`);
+      return;
     }
 
     if (this.discountCode && this.discountCodeApplied) {
@@ -708,7 +713,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   private proceedWithPayment(): void {
     this.isLoadingPayment = true;
 
-    if (this.purchaseOrder.orderable_type === EDbModels.PRODUCT_PRICE) {
+    if (this.collectsCompanyDetails) {
       // Always persist the current form state — contact info can only be
       // *created* once (unique parent_id/parent_type), so if it already exists
       // this must go through the update endpoint instead of being skipped.
@@ -1091,7 +1096,11 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
         usersCount: 1,
         edfegId: null,
         eventId: null,
-        objectType: this.purchaseOrder.orderable_type,
+        // a campaign top-up is a wallet order, and its discount codes are created for campaigns
+        objectType:
+          this.purchaseOrder.orderable_type === EDbModels.WALLET
+            ? EDbModels.CAMPAIGN
+            : this.purchaseOrder.orderable_type,
       })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -1181,8 +1190,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
           this.purchaseOrder = po;
           this.updateTotalPrice();
         },
-        error: () => {
-          this.toastrService.errorDialog('Failed to update purchase order');
+        error: (err) => {
+          this.toastrService.errorDialog(err?.error?.message || 'Failed to update purchase order');
         },
       });
   }

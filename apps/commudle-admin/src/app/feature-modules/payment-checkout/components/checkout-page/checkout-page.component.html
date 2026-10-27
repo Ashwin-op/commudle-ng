@@ -211,7 +211,7 @@
         </com-card>
 
         <!-- Company Details Card -->
-        <com-card *ngIf="purchaseOrder?.orderable_type === EDbModels.PRODUCT_PRICE" class="company-details-card">
+        <com-card *ngIf="collectsCompanyDetails" class="company-details-card">
           <com-card-header class="card-title">
             <span class="card-title-icon"><fa-icon [icon]="icons.faBuilding"></fa-icon></span>
             <span>Billing details</span>
