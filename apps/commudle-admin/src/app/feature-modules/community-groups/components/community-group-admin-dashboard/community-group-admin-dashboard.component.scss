@@ -388,14 +388,14 @@
     }
 
     .footprint-map-heading {
-      @apply com-m-0 com-mt-3 com-mb-1.5 com-text-xs com-font-medium com-text-Yankees-Blue;
+      @apply com-m-0 com-mt-6 com-mb-1.5 com-text-xs com-font-medium com-text-Yankees-Blue;
     }
 
     .footprint-map {
       @apply com-border com-border-solid com-border-Bright-Gray com-rounded-xl com-p-2 com-overflow-hidden;
 
       #footprint_map {
-        @apply com-w-full com-h-64;
+        @apply com-w-full com-h-48;
       }
     }
 
@@ -525,7 +525,7 @@
   }
 
   .email-trends {
-    @apply com-flex com-flex-col com-gap-2 com-mt-3;
+    @apply com-flex com-flex-col com-gap-2 com-mt-6;
 
     .email-chart-row {
       @apply com-flex com-items-stretch com-gap-2;
@@ -692,7 +692,7 @@
     @apply com-grid com-grid-cols-2 com-gap-2 com-mt-2;
 
     .action-card {
-      @apply com-flex com-items-center com-gap-1.5 com-px-2 com-py-1.5 com-rounded-md com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-no-underline com-transition-all com-duration-200 com-cursor-pointer;
+      @apply com-flex com-items-center com-gap-1.5 com-px-2 com-py-1 com-rounded-md com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-no-underline com-transition-all com-duration-200 com-cursor-pointer;
 
       &:hover {
         @apply com-border-primary-300 com-bg-blue-50;
