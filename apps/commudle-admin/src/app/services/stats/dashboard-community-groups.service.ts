@@ -64,10 +64,7 @@ export class DashboardCommunityGroupsService {
     page = 1,
     count = 10,
   ): Observable<IPaginationCount<ICommunityGroupDashboardActivityItem>> {
-    const params = new HttpParams()
-      .set('community_group_id', communityGroupId)
-      .set('page_no', page)
-      .set('page_items_count', count);
+    const params = new HttpParams().set('community_group_id', communityGroupId).set('page', page).set('count', count);
     return this.http.get<IPaginationCount<ICommunityGroupDashboardActivityItem>>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITY_GROUPS.RECENT_ACTIVITY),
       { params },
@@ -82,8 +79,21 @@ export class DashboardCommunityGroupsService {
     );
   }
 
-  audienceDemographics(communityGroupId): Observable<ICommunityGroupDashboardAudienceDemographics> {
-    const params = new HttpParams().set('community_group_id', communityGroupId);
+  audienceDemographics(
+    communityGroupId,
+    pages: {
+      top_locations_page?: number;
+      top_locations_count?: number;
+      top_skills_page?: number;
+      top_skills_count?: number;
+    } = {},
+  ): Observable<ICommunityGroupDashboardAudienceDemographics> {
+    let params = new HttpParams().set('community_group_id', communityGroupId);
+    Object.entries(pages).forEach(([key, value]) => {
+      if (value != null) {
+        params = params.set(key, value);
+      }
+    });
     return this.http.get<ICommunityGroupDashboardAudienceDemographics>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITY_GROUPS.AUDIENCE_DEMOGRAPHICS),
       { params },
@@ -98,27 +108,32 @@ export class DashboardCommunityGroupsService {
     );
   }
 
-  latestChannelActivity(communityGroupId): Observable<ICommunityGroupDashboardChannelActivityItem[]> {
-    const params = new HttpParams().set('community_group_id', communityGroupId);
-    return this.http.get<ICommunityGroupDashboardChannelActivityItem[]>(
+  latestChannelActivity(
+    communityGroupId,
+    page = 1,
+    count = 10,
+  ): Observable<IPaginationCount<ICommunityGroupDashboardChannelActivityItem>> {
+    const params = new HttpParams().set('community_group_id', communityGroupId).set('page', page).set('count', count);
+    return this.http.get<IPaginationCount<ICommunityGroupDashboardChannelActivityItem>>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITY_GROUPS.LATEST_CHANNEL_ACTIVITY),
       { params },
     );
   }
 
-  latestForumActivity(communityGroupId): Observable<ICommunityGroupDashboardChannelActivityItem[]> {
-    const params = new HttpParams().set('community_group_id', communityGroupId);
-    return this.http.get<ICommunityGroupDashboardChannelActivityItem[]>(
+  latestForumActivity(
+    communityGroupId,
+    page = 1,
+    count = 10,
+  ): Observable<IPaginationCount<ICommunityGroupDashboardChannelActivityItem>> {
+    const params = new HttpParams().set('community_group_id', communityGroupId).set('page', page).set('count', count);
+    return this.http.get<IPaginationCount<ICommunityGroupDashboardChannelActivityItem>>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITY_GROUPS.LATEST_FORUM_ACTIVITY),
       { params },
     );
   }
 
   communities(communityGroupId, page = 1, count = 10): Observable<IPaginationCount<ICommunityGroupDashboardCommunity>> {
-    const params = new HttpParams()
-      .set('community_group_id', communityGroupId)
-      .set('page_no', page)
-      .set('page_items_count', count);
+    const params = new HttpParams().set('community_group_id', communityGroupId).set('page', page).set('count', count);
     return this.http.get<IPaginationCount<ICommunityGroupDashboardCommunity>>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITY_GROUPS.COMMUNITIES),
       { params },

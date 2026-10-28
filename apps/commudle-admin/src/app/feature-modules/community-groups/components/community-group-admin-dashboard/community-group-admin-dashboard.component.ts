@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SeoService } from '@commudle/shared-services';
 import { DashboardCommunityGroupsService } from 'apps/commudle-admin/src/app/services/stats/dashboard-community-groups.service';
 import {
@@ -10,6 +10,11 @@ import {
   ICommunityGroupDashboardChannelActivityItem,
   ICommunityGroupDashboardCommunity,
   ICommunityGroupDashboardEmailCommunication,
+  ICommunityGroupDashboardEmailTrendChart,
+  ICommunityGroupDashboardEmailTrendChartBar,
+  ICommunityGroupDashboardEmailTrendChartSeries,
+  ICommunityGroupDashboardEmailTrendChartTick,
+  ICommunityGroupDashboardEmailTrendChartWeek,
   ICommunityGroupDashboardEngagementSnapshot,
   ICommunityGroupDashboardFootprint,
   ICommunityGroupDashboardNeedsAttention,
@@ -36,6 +41,7 @@ import {
   faNewspaper,
   faScroll,
   faCircleXmark,
+  faCircleCheck,
   faUserPlus,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
@@ -71,6 +77,7 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     faNewspaper,
     faScroll,
     faCircleXmark,
+    faCircleCheck,
     faUserPlus,
   };
 
@@ -81,7 +88,7 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   // Needs Attention -- GET .../needs_attention
   needsAttention: ICommunityGroupDashboardNeedsAttention;
   isNeedsAttentionLoading = false;
-  readonly needsAttentionCount = 10;
+  readonly needsAttentionCount = 5;
   communityProfilesPage = 1;
   surveysPage = 1;
 
@@ -92,7 +99,7 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   // Recent Activity (Organization Activity) -- GET .../recent_activity (paginated)
   recentActivity: ICommunityGroupDashboardActivityItem[] = [];
   activityPage = 1;
-  readonly activityCount = 10;
+  readonly activityCount = 5;
   activityTotal = 0;
   isActivityLoading = false;
 
@@ -103,20 +110,27 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   // Audience & Demographics -- GET .../audience_demographics
   audienceDemographics: ICommunityGroupDashboardAudienceDemographics;
   isAudienceLoading = false;
-  // Top Locations client-side pagination (backend pagination to be added later).
   topLocationsPage = 1;
   readonly topLocationsCount = 10;
+  topSkillsPage = 1;
+  readonly topSkillsCount = 10;
 
   // Email & Communication -- GET .../email_communication
   emailCommunication: ICommunityGroupDashboardEmailCommunication;
   isEmailLoading = false;
 
-  // Latest Channel Activity -- GET .../latest_channel_activity (sent as data.values here)
+  // Latest Channel Activity -- GET .../latest_channel_activity (paginated)
   latestChannelActivity: ICommunityGroupDashboardChannelActivityItem[] = [];
+  channelActivityPage = 1;
+  readonly channelActivityCount = 5;
+  channelActivityTotal = 0;
   isChannelActivityLoading = false;
 
-  // Latest Forum Activity -- GET .../latest_forum_activity
+  // Latest Forum Activity -- GET .../latest_forum_activity (paginated)
   latestForumActivity: ICommunityGroupDashboardChannelActivityItem[] = [];
+  forumActivityPage = 1;
+  readonly forumActivityCount = 5;
+  forumActivityTotal = 0;
   isForumActivityLoading = false;
 
   // Your Communities -- GET .../communities (paginated)
@@ -134,6 +148,7 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private seoService: SeoService,
     private dashboardCommunityGroupsService: DashboardCommunityGroupsService,
   ) { }
@@ -306,16 +321,28 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   loadAudienceDemographics(): void {
     this.isAudienceLoading = true;
     this.subscriptions.push(
-      this.dashboardCommunityGroupsService.audienceDemographics(this.communityGroup.id).subscribe({
-        next: (data) => {
-          this.audienceDemographics = data;
-          this.isAudienceLoading = false;
-        },
-        error: () => {
-          this.isAudienceLoading = false;
-        },
-      }),
+      this.dashboardCommunityGroupsService
+        .audienceDemographics(this.communityGroup.id, {
+          top_locations_page: this.topLocationsPage,
+          top_locations_count: this.topLocationsCount,
+          top_skills_page: this.topSkillsPage,
+          top_skills_count: this.topSkillsCount,
+        })
+        .subscribe({
+          next: (data) => {
+            this.audienceDemographics = data;
+            this.isAudienceLoading = false;
+          },
+          error: () => {
+            this.isAudienceLoading = false;
+          },
+        }),
     );
+  }
+
+  onTopSkillsPageChange(page: number): void {
+    this.topSkillsPage = page;
+    this.loadAudienceDemographics();
   }
 
   loadEmailCommunication(): void {
@@ -336,31 +363,47 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   loadLatestChannelActivity(): void {
     this.isChannelActivityLoading = true;
     this.subscriptions.push(
-      this.dashboardCommunityGroupsService.latestChannelActivity(this.communityGroup.id).subscribe({
-        next: (data) => {
-          this.latestChannelActivity = data;
-          this.isChannelActivityLoading = false;
-        },
-        error: () => {
-          this.isChannelActivityLoading = false;
-        },
-      }),
+      this.dashboardCommunityGroupsService
+        .latestChannelActivity(this.communityGroup.id, this.channelActivityPage, this.channelActivityCount)
+        .subscribe({
+          next: (data) => {
+            this.latestChannelActivity = data.values;
+            this.channelActivityTotal = data.total;
+            this.isChannelActivityLoading = false;
+          },
+          error: () => {
+            this.isChannelActivityLoading = false;
+          },
+        }),
     );
+  }
+
+  onChannelActivityPageChange(page: number): void {
+    this.channelActivityPage = page;
+    this.loadLatestChannelActivity();
   }
 
   loadLatestForumActivity(): void {
     this.isForumActivityLoading = true;
     this.subscriptions.push(
-      this.dashboardCommunityGroupsService.latestForumActivity(this.communityGroup.id).subscribe({
-        next: (data) => {
-          this.latestForumActivity = data;
-          this.isForumActivityLoading = false;
-        },
-        error: () => {
-          this.isForumActivityLoading = false;
-        },
-      }),
+      this.dashboardCommunityGroupsService
+        .latestForumActivity(this.communityGroup.id, this.forumActivityPage, this.forumActivityCount)
+        .subscribe({
+          next: (data) => {
+            this.latestForumActivity = data.values;
+            this.forumActivityTotal = data.total;
+            this.isForumActivityLoading = false;
+          },
+          error: () => {
+            this.isForumActivityLoading = false;
+          },
+        }),
     );
+  }
+
+  onForumActivityPageChange(page: number): void {
+    this.forumActivityPage = page;
+    this.loadLatestForumActivity();
   }
 
   loadCommunities(): void {
@@ -394,6 +437,119 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     const max = Math.max(...trend, 1);
     const step = trend.length > 1 ? 60 / (trend.length - 1) : 0;
     return trend.map((value, i) => `${i * step},${20 - (value / max) * 18}`).join(' ');
+  }
+
+  communityTrendSparkline(trend: { week_start: string; count: number }[]): string {
+    return this.sparklinePoints(trend?.map((point) => point.count) ?? []);
+  }
+
+  /**
+   * A grouped bar chart (Sent/Opens/Clicks per week) in viewBox-0-0-100-40 coordinates, on a
+   * LOG-SCALE y-axis. Sent/Opens/Clicks differ by orders of magnitude in real data (e.g. 11531 vs
+   * 3266 vs 275) -- on a linear shared axis the smaller two flatten near zero, misrepresenting
+   * their actual trend. A log axis (powers of ten, sized to the data's own max order of magnitude)
+   * keeps all three bars readable off ONE real count axis instead of indexing each to its own peak.
+   */
+  get emailTrendChart(): ICommunityGroupDashboardEmailTrendChart | null {
+    const trends = this.emailCommunication?.trends;
+    if (!trends) {
+      return null;
+    }
+
+    const seriesDefs = [
+      { key: 'sent', label: 'Sent', colorClass: 'bar-sent', pattern: 'none' as const, data: trends.sent ?? [] },
+      { key: 'opens', label: 'Opens', colorClass: 'bar-opens', pattern: 'stripes' as const, data: trends.opens ?? [] },
+      { key: 'clicks', label: 'Clicks', colorClass: 'bar-clicks', pattern: 'dots' as const, data: trends.clicks ?? [] },
+    ].filter((s) => s.data.length);
+
+    const allPoints = seriesDefs.flatMap((s) => s.data);
+    if (!allPoints.length) {
+      return null;
+    }
+
+    const weekLabelsByTime = new Map<number, string>();
+    allPoints.forEach((p) => {
+      const t = new Date(p.week_start).getTime();
+      if (!weekLabelsByTime.has(t)) {
+        weekLabelsByTime.set(t, moment(p.week_start).format('MMM D'));
+      }
+    });
+    const weekTimes = Array.from(weekLabelsByTime.keys()).sort((a, b) => a - b);
+
+    const plotLeft = 4;
+    const plotRight = 92;
+    const plotTop = 4;
+    const plotBottom = 36;
+    const plotHeight = plotBottom - plotTop;
+
+    const tickSpacing = weekTimes.length > 1 ? (plotRight - plotLeft) / (weekTimes.length - 1) : plotRight - plotLeft;
+    const clusterWidth = Math.min(tickSpacing * 0.55, 24);
+    const barGap = 0.8;
+    const barWidth = (clusterWidth - barGap * (seriesDefs.length - 1)) / seriesDefs.length;
+
+    // Log scale: 1 at the bottom, 10^topExponent at the top -- topExponent sized to the data's
+    // own max so the axis never has unused decades (a bar can slightly exceed the top tick, same
+    // as a linear axis' max point can sit above its last gridline).
+    const maxValue = Math.max(...allPoints.map((p) => p.count), 1);
+    const topExponent = Math.max(Math.floor(Math.log10(maxValue)), 1);
+    const yForValue = (value: number) => {
+      const fraction = Math.log10(Math.max(value, 1)) / topExponent;
+      return plotBottom - fraction * plotHeight;
+    };
+
+    const valueByKeyAndTime = new Map<string, number>();
+    seriesDefs.forEach((s) => {
+      s.data.forEach((p) => valueByKeyAndTime.set(`${s.key}:${new Date(p.week_start).getTime()}`, p.count));
+    });
+
+    const weeks: ICommunityGroupDashboardEmailTrendChartWeek[] = weekTimes.map((time, weekIndex) => {
+      const weekX = weekTimes.length > 1 ? plotLeft + weekIndex * tickSpacing : (plotLeft + plotRight) / 2;
+      const bars: ICommunityGroupDashboardEmailTrendChartBar[] = [];
+      seriesDefs.forEach((s, seriesIndex) => {
+        const value = valueByKeyAndTime.get(`${s.key}:${time}`);
+        if (value == null) {
+          return;
+        }
+        const y = yForValue(value);
+        bars.push({
+          colorClass: s.colorClass,
+          pattern: s.pattern,
+          x: weekX - clusterWidth / 2 + seriesIndex * (barWidth + barGap),
+          y,
+          width: barWidth,
+          height: plotBottom - y,
+          value,
+        });
+      });
+      return { label: weekLabelsByTime.get(time) ?? '', bars };
+    });
+
+    const series: ICommunityGroupDashboardEmailTrendChartSeries[] = seriesDefs.map((s) => ({
+      label: s.label,
+      colorClass: s.colorClass,
+      pattern: s.pattern,
+      endLabel: this.formatCompactNumber(s.data[s.data.length - 1].count),
+    }));
+
+    const yTicksDesc: ICommunityGroupDashboardEmailTrendChartTick[] = Array.from(
+      { length: topExponent + 1 },
+      (_, i) => topExponent - i,
+    ).map((exponent) => {
+      const tickValue = 10 ** exponent;
+      return { y: yForValue(tickValue), label: tickValue.toLocaleString('en-US') };
+    });
+
+    return { weeks, series, yTicksDesc };
+  }
+
+  formatCompactNumber(value: number): string {
+    if (value >= 10000) {
+      return `${Math.round(value / 1000)}K`;
+    }
+    if (value >= 1000) {
+      return `${+(value / 1000).toFixed(1)}K`;
+    }
+    return `${Math.round(value)}`;
   }
 
   loadEngagementSnapshot(): void {
@@ -433,6 +589,10 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     return item?.created_at ? moment(item.created_at).fromNow() : '';
   }
 
+  activityTime(item: ICommunityGroupDashboardActivityItem): string {
+    return item?.created_at ? moment(item.created_at).fromNow() : '';
+  }
+
   private readonly palette = ['#3b82f6', '#22c55e', '#f97316', '#a855f7', '#eab308', '#ec4899'];
 
   paletteColor(index: number): string {
@@ -465,26 +625,16 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     return this.buildSegments(this.audienceDemographics?.gender_distribution);
   }
 
-  get topLocationsTotal(): number {
-    return this.audienceDemographics?.top_locations?.length || 0;
-  }
-
-  /** Current page slice of top_locations (client-side until backend pagination exists). */
-  get pagedTopLocations(): IDashboardDistributionItem[] {
-    const all = this.audienceDemographics?.top_locations || [];
-    const start = (this.topLocationsPage - 1) * this.topLocationsCount;
-    return all.slice(start, start + this.topLocationsCount);
-  }
-
   onTopLocationsPageChange(page: number): void {
     this.topLocationsPage = page;
+    this.loadAudienceDemographics();
   }
 
   activityIcon(type: string): IconDefinition {
     switch (type) {
       case 'new_members':
         return this.icons.faUsers;
-      case 'events_published':
+      case 'event_published':
         return this.icons.faCalendarPlus;
       case 'hackathon_activity':
         return this.icons.faTrophy;
@@ -505,7 +655,7 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     switch (type) {
       case 'new_members':
         return 'members-avatar';
-      case 'events_published':
+      case 'event_published':
         return 'events-avatar';
       case 'hackathon_activity':
         return 'hackathon-avatar';
@@ -527,8 +677,10 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     switch (item.type) {
       case 'new_members':
         return `${count} new member${count === 1 ? '' : 's'} joined`;
-      case 'events_published':
-        return `${count} event${count === 1 ? '' : 's'} published`;
+      case 'event_published':
+        return item.event_name
+          ? `${item.event_name} published${item.community_name ? ' in ' + item.community_name : ''}`
+          : 'A new event was published';
       case 'hackathon_activity':
         return `${count} update${count === 1 ? '' : 's'} in ${item.hackathon_name || 'a hackathon'}`;
       case 'channel_discussions':
@@ -542,6 +694,26 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
         return `${count} new admin${count === 1 ? '' : 's'} added`;
       default:
         return 'New activity';
+    }
+  }
+
+  activityItemLink(item: ICommunityGroupDashboardActivityItem): any[] | null {
+    switch (item?.type) {
+      case 'new_members':
+        return item.community_ids?.length === 1 ? ['/admin', 'communities', item.community_ids[0], 'members'] : null;
+      case 'survey_responses':
+        return ['/admin', 'orgs', this.communityGroup.slug, 'surveys'];
+      case 'new_admins':
+        return ['/admin', 'orgs', this.communityGroup.slug, 'admin-team'];
+      default:
+        return null;
+    }
+  }
+
+  onActivityRowClick(item: ICommunityGroupDashboardActivityItem): void {
+    const link = this.activityItemLink(item);
+    if (link) {
+      this.router.navigate(link);
     }
   }
 

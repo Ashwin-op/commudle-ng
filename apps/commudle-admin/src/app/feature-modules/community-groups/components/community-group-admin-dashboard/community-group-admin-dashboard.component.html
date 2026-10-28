@@ -8,8 +8,10 @@
             aspectRatio="1/1"></commudle-banner-image>
         </div>
         <div class="hero-info">
-          <span class="hero-eyebrow">Organization Dashboard</span>
-          <h1 class="hero-name">{{ communityGroup.name }}</h1>
+          <div class="hero-name-row">
+            <span class="hero-eyebrow">Organization Dashboard</span>
+            <h1 class="hero-name">{{ communityGroup.name }}</h1>
+          </div>
           <p class="hero-sub" *ngIf="communityGroup.mini_description">{{ communityGroup.mini_description }}</p>
         </div>
       </div>
@@ -26,16 +28,21 @@
         <span class="pulse-icon communities-icon"><fa-icon [icon]="icons.faUsers"></fa-icon></span>
         <div class="pulse-body">
           <span class="pulse-label">Communities</span>
-          <span class="pulse-value">{{ pulse?.communities?.count ?? 0 | number }}</span>
-          <span class="pulse-growth" *ngIf="pulse?.communities?.growth">+{{ pulse.communities.growth | number }}</span>
+          <span class="pulse-value-row">
+            <span class="pulse-value">{{ pulse?.communities?.count ?? 0 | number }}</span>
+            <span class="pulse-growth" *ngIf="pulse?.communities?.growth">+{{ pulse.communities.growth | number
+              }}</span>
+          </span>
         </div>
       </li>
       <li class="pulse-stat">
         <span class="pulse-icon members-icon"><fa-icon [icon]="icons.faUserGroup"></fa-icon></span>
         <div class="pulse-body">
           <span class="pulse-label">Members</span>
-          <span class="pulse-value">{{ pulse?.members?.count ?? 0 | number }}</span>
-          <span class="pulse-growth" *ngIf="pulse?.members?.growth">+{{ pulse.members.growth | number }}</span>
+          <span class="pulse-value-row">
+            <span class="pulse-value">{{ pulse?.members?.count ?? 0 | number }}</span>
+            <span class="pulse-growth" *ngIf="pulse?.members?.growth">+{{ pulse.members.growth | number }}</span>
+          </span>
         </div>
       </li>
       <li class="pulse-stat">
@@ -56,9 +63,11 @@
         <span class="pulse-icon hackathons-icon"><fa-icon [icon]="icons.faTrophy"></fa-icon></span>
         <div class="pulse-body">
           <span class="pulse-label">Hackathons</span>
-          <span class="pulse-value">{{ pulse?.upcoming_hackathons?.total ?? 0 | number }}</span>
-          <span class="pulse-sub" *ngIf="pulse?.upcoming_hackathons?.live_now">
-            {{ pulse.upcoming_hackathons.live_now | number }} live now
+          <span class="pulse-value-row">
+            <span class="pulse-value">{{ pulse?.upcoming_hackathons?.total ?? 0 | number }}</span>
+            <span class="pulse-sub" *ngIf="pulse?.upcoming_hackathons?.live_now">
+              {{ pulse.upcoming_hackathons.live_now | number }} live now
+            </span>
           </span>
         </div>
       </li>
@@ -66,9 +75,11 @@
         <span class="pulse-icon engagement-icon"><fa-icon [icon]="icons.faArrowTrendUp"></fa-icon></span>
         <div class="pulse-body">
           <span class="pulse-label">Engagement</span>
-          <span class="pulse-value">{{ pulse?.engagement?.value ?? 0 | number }}</span>
-          <span class="pulse-growth" *ngIf="pulse?.engagement?.growth_percent">
-            ↑ {{ pulse.engagement.growth_percent | number }}%
+          <span class="pulse-value-row">
+            <span class="pulse-value">{{ pulse?.engagement?.value ?? 0 | number }}</span>
+            <span class="pulse-growth" *ngIf="pulse?.engagement?.growth_percent">
+              ↑ {{ pulse.engagement.growth_percent | number }}%
+            </span>
           </span>
         </div>
       </li>
@@ -76,9 +87,11 @@
         <span class="pulse-icon reach-icon"><fa-icon [icon]="icons.faBullseye"></fa-icon></span>
         <div class="pulse-body">
           <span class="pulse-label">Total Reach</span>
-          <span class="pulse-value">{{ pulse?.reach?.value ?? 0 | number }}</span>
-          <span class="pulse-growth" *ngIf="pulse?.reach?.growth_percent">
-            ↑ {{ pulse.reach.growth_percent | number }}%
+          <span class="pulse-value-row">
+            <span class="pulse-value">{{ pulse?.reach?.value ?? 0 | number }}</span>
+            <span class="pulse-growth" *ngIf="pulse?.reach?.growth_percent">
+              ↑ {{ pulse.reach.growth_percent | number }}%
+            </span>
           </span>
         </div>
       </li>
@@ -180,7 +193,12 @@
               <span class="timeline-event-sub" *ngIf="item.community_name">{{ item.community_name }}</span>
             </p>
           </li>
-          <li *ngIf="upcomingSchedule.length === 0" class="timeline-empty">Nothing scheduled yet.</li>
+          <li *ngIf="upcomingSchedule.length === 0" class="timeline-empty">
+            <span class="timeline-empty-icon">
+              <fa-icon [icon]="icons.faCalendarDay"></fa-icon>
+            </span>
+            <span class="timeline-empty-text">Nothing scheduled yet.</span>
+          </li>
         </ng-container>
       </ol>
     </article>
@@ -194,16 +212,22 @@
       </header>
       <app-loading-spinner *ngIf="isActivityLoading" class="section-loader"></app-loading-spinner>
       <ul class="activity-list" *ngIf="!isActivityLoading">
-        <li *ngFor="let item of recentActivity" class="activity-item">
+        <li *ngFor="let item of recentActivity" class="activity-item" [class.is-clickable]="!!activityItemLink(item)"
+          [routerLink]="activityItemLink(item)" (keydown.enter)="onActivityRowClick(item)">
           <span class="activity-avatar" [ngClass]="activityAvatarClass(item.type)">
             <fa-icon [icon]="activityIcon(item.type)"></fa-icon>
           </span>
           <p class="activity-content">
             <span class="activity-text">{{ activityLabel(item) }}</span>
           </p>
-          <time class="activity-time">{{ item.created_at | date : 'd MMM y' }}</time>
+          <time class="activity-time">{{ activityTime(item) }}</time>
         </li>
-        <li *ngIf="recentActivity.length === 0" class="activity-empty">No recent activity yet.</li>
+        <li *ngIf="recentActivity.length === 0" class="activity-empty">
+          <span class="activity-empty-icon">
+            <fa-icon [icon]="icons.faBolt"></fa-icon>
+          </span>
+          <span class="activity-empty-text">No recent activity yet.</span>
+        </li>
       </ul>
       <commudle-pagination-compact *ngIf="activityTotal > activityCount" [page]="activityPage" [count]="activityCount"
         [total]="activityTotal" (pageChange)="onActivityPageChange($event)"></commudle-pagination-compact>
@@ -244,7 +268,12 @@
         <div class="footprint-map" *ngIf="footprint?.top_locations?.length">
           <div id="footprint_map"></div>
         </div>
-        <p *ngIf="!footprint?.top_locations?.length" class="footprint-location-empty">No location data yet.</p>
+        <p *ngIf="!footprint?.top_locations?.length" class="footprint-location-empty">
+          <span class="footprint-empty-icon">
+            <fa-icon [icon]="icons.faEarthAmericas"></fa-icon>
+          </span>
+          <span class="footprint-empty-text">No location data yet.</span>
+        </p>
       </div>
     </article>
 
@@ -260,11 +289,11 @@
         <div class="demographics-col">
           <h6 class="demographics-col-heading">Top Locations</h6>
           <ul class="demographics-list">
-            <li *ngFor="let loc of pagedTopLocations">
+            <li *ngFor="let loc of audienceDemographics?.top_locations?.values">
               <span class="demographics-name" [title]="loc.name">{{ loc.name }}</span>
               <span class="demographics-pct">{{ loc.percentage }}%</span>
             </li>
-            <li *ngIf="!audienceDemographics?.top_locations?.length" class="demographics-empty">No data yet</li>
+            <li *ngIf="!audienceDemographics?.top_locations?.values?.length" class="demographics-empty">No data yet</li>
           </ul>
           <commudle-pagination-compact *ngIf="topLocationsTotal > topLocationsCount" [page]="topLocationsPage"
             [count]="topLocationsCount" [total]="topLocationsTotal"
@@ -282,7 +311,8 @@
             <ul class="chart-legend">
               <li *ngFor="let g of audienceDemographics?.gender_distribution; let i = index">
                 <span class="legend-dot" [style.--dot-color]="paletteColor(i)"></span>
-                {{ g.name | capitalizeAndRemoveUnderscore }} <span class="legend-pct">{{ g.percentage }}%</span>
+                <span class="legend-name">{{ g.name | capitalizeAndRemoveUnderscore }}</span>
+                <span class="legend-pct">{{ g.percentage }}%</span>
               </li>
               <li *ngIf="!audienceDemographics?.gender_distribution?.length">No data yet</li>
             </ul>
@@ -291,9 +321,14 @@
         <div class="demographics-col demographics-col-full">
           <h6 class="demographics-col-heading">Top Skills</h6>
           <ul class="skills-list">
-            <li *ngFor="let skill of audienceDemographics?.top_skills?.tags" class="skill-chip">{{ skill.name }}</li>
-            <li *ngIf="!audienceDemographics?.top_skills?.tags?.length" class="demographics-empty">No data yet</li>
+            <li *ngFor="let skill of audienceDemographics?.top_skills?.values" class="skill-chip">{{ skill.name }}</li>
+            <li *ngIf="!audienceDemographics?.top_skills?.values?.length" class="demographics-empty">No data yet</li>
           </ul>
+          <commudle-pagination-compact
+            *ngIf="audienceDemographics?.top_skills?.total > audienceDemographics?.top_skills?.count"
+            [page]="topSkillsPage" [count]="audienceDemographics.top_skills.count"
+            [total]="audienceDemographics.top_skills.total"
+            (pageChange)="onTopSkillsPageChange($event)"></commudle-pagination-compact>
         </div>
       </div>
     </article>
@@ -345,6 +380,53 @@
           <span class="email-label">Newsletters This Month</span>
         </li>
       </ul>
+      <div class="email-trends" *ngIf="!isEmailLoading && emailTrendChart as chart">
+        <div class="email-chart-row">
+          <svg class="email-chart-svg" viewBox="0 0 100 40" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <pattern id="emailChartStripes" patternUnits="userSpaceOnUse" width="1.6" height="1.6"
+                patternTransform="rotate(45)">
+                <rect width="0.8" height="1.6" fill="white" opacity="0.4"></rect>
+              </pattern>
+              <pattern id="emailChartDots" patternUnits="userSpaceOnUse" width="2" height="2">
+                <circle cx="1" cy="1" r="0.45" fill="white" opacity="0.5"></circle>
+              </pattern>
+            </defs>
+            <line *ngFor="let t of chart.yTicksDesc" class="email-chart-gridline" x1="4" [attr.y1]="t.y" x2="92"
+              [attr.y2]="t.y" />
+            <ng-container *ngFor="let week of chart.weeks">
+              <ng-container *ngFor="let bar of week.bars">
+                <rect class="email-chart-bar" [ngClass]="bar.colorClass" [attr.x]="bar.x" [attr.y]="bar.y"
+                  [attr.width]="bar.width" [attr.height]="bar.height" rx="0.5">
+                  <title>{{ bar.value | number }}</title>
+                </rect>
+                <rect *ngIf="bar.pattern === 'stripes'" class="email-chart-bar-pattern" [attr.x]="bar.x"
+                  [attr.y]="bar.y" [attr.width]="bar.width" [attr.height]="bar.height" rx="0.5"
+                  fill="url(#emailChartStripes)"></rect>
+                <rect *ngIf="bar.pattern === 'dots'" class="email-chart-bar-pattern" [attr.x]="bar.x" [attr.y]="bar.y"
+                  [attr.width]="bar.width" [attr.height]="bar.height" rx="0.5" fill="url(#emailChartDots)"></rect>
+              </ng-container>
+            </ng-container>
+          </svg>
+          <div class="email-chart-yaxis">
+            <span *ngFor="let t of chart.yTicksDesc">{{ t.label }}</span>
+          </div>
+        </div>
+        <div class="email-chart-xaxis">
+          <span *ngFor="let week of chart.weeks">{{ week.label }}</span>
+        </div>
+        <ul class="email-chart-legend">
+          <li *ngFor="let s of chart.series" [ngClass]="s.colorClass">
+            <span class="legend-marker" [ngClass]="'pattern-' + s.pattern"></span>
+            <span class="legend-label">{{ s.label }}</span>
+            <span class="legend-value">{{ s.endLabel }}</span>
+          </li>
+        </ul>
+        <p class="email-chart-caption">
+          Axis is log-scaled (powers of ten) so Sent/Opens/Clicks stay readable together despite the gap in scale --
+          hover a bar for the exact count.
+        </p>
+      </div>
     </article>
   </section>
 
@@ -364,14 +446,28 @@
             }}</span>
           <span class="channel-message" [innerHTML]="msg.message | stripHtmlExceptLinks"></span>
           <span class="channel-meta">
-            <span class="channel-author">{{ msg.user?.name }}</span>
+            <a *ngIf="msg.user?.username; else channelAuthorPlain" class="channel-author"
+              [routerLink]="['/users', msg.user.username]">{{ msg.user?.name }}</a>
+            <ng-template #channelAuthorPlain>
+              <span class="channel-author">{{ msg.user?.name }}</span>
+            </ng-template>
             <span class="channel-sep" *ngIf="msg.community_name">·</span>
-            <span class="channel-community" *ngIf="msg.community_name">{{ msg.community_name }}</span>
+            <span class="channel-community" *ngIf="msg.community_name" [title]="msg.community_name">{{
+              msg.community_name
+              }}</span>
             <time class="channel-time">{{ channelActivityTime(msg) }}</time>
           </span>
         </li>
-        <li *ngIf="latestChannelActivity.length === 0" class="channel-empty">No channel activity yet.</li>
+        <li *ngIf="latestChannelActivity.length === 0" class="channel-empty">
+          <span class="channel-empty-icon com-bg-blue-50 com-text-primary-500">
+            <fa-icon [icon]="icons.faHashtag"></fa-icon>
+          </span>
+          <span class="channel-empty-text">No channel activity yet.</span>
+        </li>
       </ul>
+      <commudle-pagination-compact *ngIf="channelActivityTotal > channelActivityCount" [page]="channelActivityPage"
+        [count]="channelActivityCount" [total]="channelActivityTotal"
+        (pageChange)="onChannelActivityPageChange($event)"></commudle-pagination-compact>
     </article>
 
     <!-- Latest Forum Activity -->
@@ -388,14 +484,28 @@
             }}</span>
           <span class="channel-message" [innerHTML]="msg.message | stripHtmlExceptLinks"></span>
           <span class="channel-meta">
-            <span class="channel-author">{{ msg.user?.name }}</span>
+            <a *ngIf="msg.user?.username; else forumAuthorPlain" class="channel-author"
+              [routerLink]="['/users', msg.user.username]">{{ msg.user?.name }}</a>
+            <ng-template #forumAuthorPlain>
+              <span class="channel-author">{{ msg.user?.name }}</span>
+            </ng-template>
             <span class="channel-sep" *ngIf="msg.community_name">·</span>
-            <span class="channel-community" *ngIf="msg.community_name">{{ msg.community_name }}</span>
+            <span class="channel-community" *ngIf="msg.community_name" [title]="msg.community_name">{{
+              msg.community_name
+              }}</span>
             <time class="channel-time">{{ channelActivityTime(msg) }}</time>
           </span>
         </li>
-        <li *ngIf="latestForumActivity.length === 0" class="channel-empty">No forum activity yet.</li>
+        <li *ngIf="latestForumActivity.length === 0" class="channel-empty">
+          <span class="channel-empty-icon com-bg-cyan-50 com-text-cyan-600">
+            <fa-icon [icon]="icons.faMessage"></fa-icon>
+          </span>
+          <span class="channel-empty-text">No forum activity yet.</span>
+        </li>
       </ul>
+      <commudle-pagination-compact *ngIf="forumActivityTotal > forumActivityCount" [page]="forumActivityPage"
+        [count]="forumActivityCount" [total]="forumActivityTotal"
+        (pageChange)="onForumActivityPageChange($event)"></commudle-pagination-compact>
     </article>
 
     <!-- Quick Actions -->
@@ -430,11 +540,16 @@
           <span class="community-stat">{{ c.members_count | number }} members</span>
           <span class="community-stat">{{ c.upcoming_events_count | number }} upcoming</span>
           <svg class="community-sparkline" viewBox="0 0 60 20" preserveAspectRatio="none">
-            <polyline [attr.points]="sparklinePoints(c.activity_trend)" />
+            <polyline [attr.points]="communityTrendSparkline(c.activity_trend)" />
           </svg>
           <span class="community-status" [ngClass]="c.status">{{ c.status | capitalizeAndRemoveUnderscore }}</span>
         </li>
-        <li *ngIf="communities.length === 0" class="communities-empty">No communities yet.</li>
+        <li *ngIf="communities.length === 0" class="communities-empty">
+          <span class="communities-empty-icon">
+            <fa-icon [icon]="icons.faUserGroup"></fa-icon>
+          </span>
+          <span class="communities-empty-text">No communities yet.</span>
+        </li>
       </ul>
       <commudle-pagination-compact *ngIf="communitiesTotal > communitiesCount" [page]="communitiesPage"
         [count]="communitiesCount" [total]="communitiesTotal"
@@ -451,24 +566,30 @@
       <app-loading-spinner *ngIf="isEngagementLoading" class="section-loader"></app-loading-spinner>
       <ul class="engagement-stats" *ngIf="!isEngagementLoading">
         <li class="engagement-stat">
-          <span class="engagement-value">{{ engagementSnapshot?.members?.count ?? 0 | number }}</span>
           <span class="engagement-label">Members</span>
-          <span class="engagement-growth" *ngIf="engagementSnapshot?.members?.growth">
-            +{{ engagementSnapshot.members.growth | number }}
+          <span class="engagement-value-row">
+            <span class="engagement-value">{{ engagementSnapshot?.members?.count ?? 0 | number }}</span>
+            <span class="engagement-growth" *ngIf="engagementSnapshot?.members?.growth">
+              +{{ engagementSnapshot.members.growth | number }}
+            </span>
           </span>
         </li>
         <li class="engagement-stat">
-          <span class="engagement-value">{{ engagementSnapshot?.event_registrations?.count ?? 0 | number }}</span>
           <span class="engagement-label">Event Registrations</span>
-          <span class="engagement-growth" *ngIf="engagementSnapshot?.event_registrations?.growth">
-            +{{ engagementSnapshot.event_registrations.growth | number }}
+          <span class="engagement-value-row">
+            <span class="engagement-value">{{ engagementSnapshot?.event_registrations?.count ?? 0 | number }}</span>
+            <span class="engagement-growth" *ngIf="engagementSnapshot?.event_registrations?.growth">
+              +{{ engagementSnapshot.event_registrations.growth | number }}
+            </span>
           </span>
         </li>
         <li class="engagement-stat">
-          <span class="engagement-value">{{ engagementSnapshot?.hackathon_registrations?.count ?? 0 | number }}</span>
           <span class="engagement-label">Hackathon Registrations</span>
-          <span class="engagement-growth" *ngIf="engagementSnapshot?.hackathon_registrations?.growth">
-            +{{ engagementSnapshot.hackathon_registrations.growth | number }}
+          <span class="engagement-value-row">
+            <span class="engagement-value">{{ engagementSnapshot?.hackathon_registrations?.count ?? 0 | number }}</span>
+            <span class="engagement-growth" *ngIf="engagementSnapshot?.hackathon_registrations?.growth">
+              +{{ engagementSnapshot.hackathon_registrations.growth | number }}
+            </span>
           </span>
         </li>
         <li class="engagement-stat">
@@ -479,7 +600,6 @@
             {{ engagementSnapshot?.community_activity?.growth > 0 ? '↑' : '↓' }}
             {{ Math.abs(engagementSnapshot?.community_activity?.growth ?? 0) }}%
           </span>
-          <span class="engagement-label">Community Activity</span>
         </li>
         <li class="engagement-stat">
           <span class="engagement-value" [ngClass]="{
@@ -489,7 +609,6 @@
             {{ engagementSnapshot?.content_engagement?.growth > 0 ? '↑' : '↓' }}
             {{ Math.abs(engagementSnapshot?.content_engagement?.growth ?? 0) }}%
           </span>
-          <span class="engagement-label">Content Engagement</span>
         </li>
       </ul>
     </article>

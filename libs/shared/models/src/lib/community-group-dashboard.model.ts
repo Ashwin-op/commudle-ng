@@ -43,7 +43,7 @@ export interface ICommunityGroupDashboardNeedsAttention {
 // recent_activity -> data.values (paginated)
 export type ECommunityGroupDashboardActivityType =
   | 'new_members'
-  | 'events_published'
+  | 'event_published'
   | 'hackathon_activity'
   | 'channel_discussions'
   | 'forum_discussions'
@@ -77,22 +77,22 @@ export interface ICommunityGroupDashboardSkillTag {
   count: number;
 }
 
-export interface ICommunityGroupDashboardTopSkills {
-  total: number;
-  tags: ICommunityGroupDashboardSkillTag[];
-}
-
 export interface ICommunityGroupDashboardAudienceDemographics {
-  top_locations: IDashboardDistributionItem[];
+  top_locations: IPaginationCount<IDashboardDistributionItem>;
   gender_distribution: IDashboardDistributionItem[];
-  top_skills: ICommunityGroupDashboardTopSkills;
+  top_skills: IPaginationCount<ICommunityGroupDashboardSkillTag>;
 }
 
 // email_communication
+export interface ICommunityGroupDashboardEmailTrendPoint {
+  week_start: string;
+  count: number;
+}
+
 export interface ICommunityGroupDashboardEmailTrends {
-  sent: number[];
-  opens: number[];
-  clicks: number[];
+  sent: ICommunityGroupDashboardEmailTrendPoint[];
+  opens: ICommunityGroupDashboardEmailTrendPoint[];
+  clicks: ICommunityGroupDashboardEmailTrendPoint[];
 }
 
 export interface ICommunityGroupDashboardEmailCommunication {
@@ -108,7 +108,8 @@ export type ECommunityGroupDashboardChannelOwner = 'community' | 'organization';
 
 export interface ICommunityGroupDashboardChannelActivityItem {
   type: string;
-  user: { id: number; name: string };
+  // username is needed to link to /users/:username -- not present in the current API response
+  user: { id: number; name: string; username?: string };
   channel_name: string;
   community_name: string;
   owned_by: ECommunityGroupDashboardChannelOwner;
@@ -125,7 +126,8 @@ export interface ICommunityGroupDashboardCommunity {
   name: string;
   members_count: number;
   upcoming_events_count: number;
-  activity_trend: number[];
+  // 4-week message-activity trend, same {week_start, count} shape as email_communication's trends
+  activity_trend: ICommunityGroupDashboardEmailTrendPoint[];
   status: ECommunityGroupDashboardCommunityStatus;
 }
 
@@ -136,4 +138,38 @@ export interface ICommunityGroupDashboardEngagementSnapshot {
   hackathon_registrations: IDashboardCountWithGrowth;
   community_activity: { growth: number };
   content_engagement: { growth: number };
+}
+
+// email_communication -- Email Trends chart view-model (derived client-side, not an API shape)
+export interface ICommunityGroupDashboardEmailTrendChartBar {
+  colorClass: string;
+  pattern: 'none' | 'stripes' | 'dots';
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  value: number;
+}
+
+export interface ICommunityGroupDashboardEmailTrendChartWeek {
+  label: string;
+  bars: ICommunityGroupDashboardEmailTrendChartBar[];
+}
+
+export interface ICommunityGroupDashboardEmailTrendChartSeries {
+  label: string;
+  colorClass: string;
+  pattern: 'none' | 'stripes' | 'dots';
+  endLabel: string;
+}
+
+export interface ICommunityGroupDashboardEmailTrendChartTick {
+  y: number;
+  label: string;
+}
+
+export interface ICommunityGroupDashboardEmailTrendChart {
+  weeks: ICommunityGroupDashboardEmailTrendChartWeek[];
+  series: ICommunityGroupDashboardEmailTrendChartSeries[];
+  yTicksDesc: ICommunityGroupDashboardEmailTrendChartTick[];
 }
