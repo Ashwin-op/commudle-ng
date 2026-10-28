@@ -388,6 +388,14 @@ nb-accordion {
 .estimate-status {
   @apply com-mt-3 com-px-3 com-py-2 com-rounded-md com-text-sm com-border com-border-solid;
 
+  .estimate-status-message {
+    @apply com-m-0;
+  }
+
+  .estimate-status-hint {
+    @apply com-mt-1 com-mb-0;
+  }
+
   &.deliverable {
     @apply com-bg-green-100 com-border-green-500 com-text-green-700;
   }
@@ -415,4 +423,8 @@ nb-accordion {
       @apply com-bg-gray-100 com-cursor-not-allowed;
     }
   }
+}
+
+.asset-toggle-button {
+  @apply com-shrink-0;
 }

@@ -117,6 +117,6 @@
     (click)="createUserEngagementForDefaultImage(UserActivityEventType.CLICK)"
     [ngClass]="{ 'com-pointer-events-none': !defaultImageUrl }"
   >
-    <img [src]="defaultImage" class="com-w-full" />
+    <img [src]="defaultImage" [alt]="defaultImageAlt" class="default-image" />
   </a>
 </div>

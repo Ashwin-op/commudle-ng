@@ -314,6 +314,10 @@
       .sub-message {
         @apply com-text-sm com-text-gray-500 com-m-0 com-text-center;
       }
+
+      .back-to-campaigns {
+        @apply com-mt-3;
+      }
     }
 
     .summary-body {

@@ -378,8 +378,8 @@
                   </p>
 
                   <div *ngIf="estimate?.delivery_status" class="estimate-status" [ngClass]="estimate.delivery_status">
-                    <p class="com-m-0">{{ estimateStatusMessage() }}</p>
-                    <p class="small-info-text com-mt-1 com-mb-0" *ngIf="estimate.required_daily_impressions != null">
+                    <p class="estimate-status-message">{{ estimateStatusMessage() }}</p>
+                    <p class="small-info-text estimate-status-hint" *ngIf="estimate.required_daily_impressions != null">
                       Spending the full budget by the end date needs about
                       {{ estimate.required_daily_impressions | number : '1.0-0' }} impressions per day.
                     </p>
@@ -408,7 +408,10 @@
                   <div *ngFor="let asset of campaign.campaign_assets; let i = index" class="saved-asset-item">
                     <div class="saved-asset-content">
                       <div class="saved-image-preview" *ngIf="asset.image?.url">
-                        <img [src]="asset.image.i1280 || asset.image.url" alt="Asset preview" />
+                        <img
+                          [src]="asset.image.i1280 || asset.image.url"
+                          [alt]="asset.headline || 'Creative ' + (i + 1)"
+                        />
                       </div>
                       <div class="saved-asset-details">
                         <p class="saved-url" [title]="asset.url"><strong>URL:</strong> {{ asset.url }}</p>
@@ -421,7 +424,7 @@
                         outline
                         size="small"
                         shape="semi-round"
-                        class="com-shrink-0"
+                        class="asset-toggle-button"
                         (click)="toggleAssetActive(asset)"
                       >
                         {{ asset.active === false ? 'Activate' : 'Deactivate' }}
@@ -477,7 +480,7 @@
 
                       <div *ngIf="imagePreview[campaignAssets.length - 1]" class="image">
                         <div class="image-preview">
-                          <img [src]="imagePreview[campaignAssets.length - 1]" alt="Asset preview" />
+                          <img [src]="imagePreview[campaignAssets.length - 1]" alt="Preview of the new creative" />
                         </div>
                         <p class="clickable">
                           <nb-icon

@@ -26,6 +26,7 @@ import { faCircleQuestion, faEllipsisVertical, faXmark } from '@fortawesome/free
 })
 export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   @Input() defaultImage: string;
+  @Input() defaultImageAlt = '';
   @Input() defaultImageUrl: string;
   @Input() campaignType: 'preview' | 'live' = 'live';
   @Input() campaignPreview: ICampaign;

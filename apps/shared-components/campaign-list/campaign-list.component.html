@@ -196,7 +196,7 @@
                       : 'com-text-gray-700'
                   "
                 ></app-badge>
-                <div class="small-info-text com-mt-1" *ngIf="isScheduled(campaign)">
+                <div class="small-info-text scheduled-note" *ngIf="isScheduled(campaign)">
                   Starts {{ campaign.start_at | date : 'medium' }}
                 </div>
               </div>

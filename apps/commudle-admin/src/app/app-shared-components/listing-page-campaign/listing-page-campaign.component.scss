@@ -1,6 +1,5 @@
 :host {
-  display: block;
-  width: 100%;
+  @apply com-block com-w-full;
 }
 
 .listing-page-campaign {

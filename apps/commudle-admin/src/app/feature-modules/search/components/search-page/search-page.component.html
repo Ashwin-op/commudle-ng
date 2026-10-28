@@ -23,7 +23,7 @@
       You searched for <strong>{{ query }}</strong>
     </p>
     <!-- mobile only: one ad right under the query line, and only when there are results -->
-    <div *appBreakpoints="'<=lg'" class="com-px-4">
+    <div *appBreakpoints="'<=lg'" class="search-page-ad">
       <commudle-listing-page-campaign *ngIf="total > 0" [layout]="'horizontal'"></commudle-listing-page-campaign>
     </div>
     <div>
