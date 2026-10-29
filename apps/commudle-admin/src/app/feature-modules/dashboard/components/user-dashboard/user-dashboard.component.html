@@ -73,6 +73,13 @@
                 [total]="total"
               ></app-pagination>
             </div>
+            <!-- mobile only: one ad between Upcoming and Recent Activity, and only when the page has content -->
+            <div *appBreakpoints="'<=md'">
+              <commudle-listing-page-campaign
+                *ngIf="!loading && (upcomingEventsHackathons.length > 0 || activityFeed.length > 0)"
+                [layout]="'horizontal'"
+              ></commudle-listing-page-campaign>
+            </div>
             <div class="recent-activity">
               <h2 class="recent-activity-heading">Recent Activity</h2>
               <app-loading-spinner *ngIf="loadActivity"></app-loading-spinner>

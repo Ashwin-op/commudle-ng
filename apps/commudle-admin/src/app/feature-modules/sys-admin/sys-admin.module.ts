@@ -52,7 +52,6 @@ import { AdminFeaturedUsersComponent } from './components/admin-featured/admin-f
 import { AdminFeaturedCommunitiesChannelsComponent } from './components/admin-featured/admin-featured-communities-channels/admin-featured-communities-channels.component';
 import { PaymentLogsComponent } from './components/payment-logs/payment-logs.component';
 import { AdminProfanityComponent } from './components/admin-profanity/admin-profanity.component';
-import { CampaignTypesComponent } from './components/admin-campaigns/campaign-types/campaign-types.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AdminCampaignsComponent } from './components/admin-campaigns/admin-campaigns.component';
 import { AdminCampaignsListComponent } from './components/admin-campaigns/admin-campaigns-list/admin-campaigns-list.component';
@@ -94,7 +93,6 @@ import { CommudleCardModule } from '@commudle/commudle-theme';
     AdminFeaturedCommunitiesChannelsComponent,
     PaymentLogsComponent,
     AdminProfanityComponent,
-    CampaignTypesComponent,
     AdminCampaignsComponent,
     AdminCampaignsListComponent,
     CampaignPurchaseOrdersComponent,

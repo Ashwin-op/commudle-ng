@@ -77,9 +77,16 @@
     <app-loading-spinner *ngIf="loading" class="com-mt-4"></app-loading-spinner>
   </div>
   <div *appBreakpoints="'<=lg'">
-    <div *ngFor="let communityBuild of communityBuilds" class="builds-card">
-      <app-community-build-card [communityBuild]="communityBuild"></app-community-build-card>
-    </div>
+    <ng-container *ngFor="let communityBuild of communityBuilds; let i = index">
+      <div class="builds-card">
+        <app-community-build-card [communityBuild]="communityBuild"></app-community-build-card>
+      </div>
+      <!-- one ad after the 3rd build; the first mobile page holds 5 and more may be coming. No ad on campaign pages. -->
+      <commudle-listing-page-campaign
+        *ngIf="!isCampaignMode && i === 2 && (communityBuilds.length >= 4 || page_info?.has_next_page)"
+        [layout]="'horizontal'"
+      ></commudle-listing-page-campaign>
+    </ng-container>
     <app-loading-spinner *ngIf="loading" class="com-mt-4"></app-loading-spinner>
     <button
       (click)="getCommunityBuilds()"

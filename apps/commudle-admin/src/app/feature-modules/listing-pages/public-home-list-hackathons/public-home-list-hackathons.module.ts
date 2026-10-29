@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { PublicHomeListHackathonsHomeageComponent } from './components/public-home-list-hackathons-homeage.component';
 import { ListingPagesLayoutComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-pages-layout/listing-pages-layout.component';
 import { ListingPageHeaderComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-header/listing-page-header.component';
+import { ListingPageCampaignComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-campaign/listing-page-campaign.component';
 import { PublicHomeListHackathonsRoutingModule } from 'apps/commudle-admin/src/app/feature-modules/listing-pages/public-home-list-hackathons/public-home-list-hackathons-routing.module';
 import { HackathonHorizontalCardComponent } from 'apps/commudle-admin/src/app/app-shared-components/hackathon-horizontal-card/hackathon-horizontal-card.component';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
@@ -19,6 +20,7 @@ import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives
     CommonModule,
     ListingPagesLayoutComponent,
     ListingPageHeaderComponent,
+    ListingPageCampaignComponent,
     PublicHomeListHackathonsRoutingModule,
     HackathonHorizontalCardComponent,
     CommunityBuildsModule,

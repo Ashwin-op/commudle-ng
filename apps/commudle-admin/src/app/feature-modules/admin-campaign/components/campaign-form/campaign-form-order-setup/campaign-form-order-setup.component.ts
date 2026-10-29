@@ -1,4 +1,13 @@
-import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  TemplateRef,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  AfterViewInit,
+  ChangeDetectorRef,
+} from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -9,9 +18,19 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ICampaign, ICampaignAsset, ICampaignEstimate, EDbModels, IWallet } from '@commudle/shared-models';
+import { NbDialogRef, NbDialogService } from '@commudle/theme';
+import {
+  ECampaignStatus,
+  ICampaign,
+  ICampaignAsset,
+  ICampaignChangeLogEntry,
+  ICampaignEstimate,
+  EDbModels,
+  IWallet,
+} from '@commudle/shared-models';
 import {
   CampaignService,
+  ConfettiService,
   GoogleTagManagerService,
   SeoService,
   ToastrService,
@@ -20,8 +39,16 @@ import {
 import { GooglePlacesAutocompleteService } from 'apps/commudle-admin/src/app/services/google-places-autocomplete.service';
 import { SearchService } from 'apps/commudle-admin/src/app/feature-modules/search/services/search.service';
 import { ISearch } from 'apps/shared-models/search.model';
-import { faArrowRight, faFileImage, faRectangleAd, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { debounceTime, distinctUntilChanged, EMPTY, switchMap } from 'rxjs';
+import {
+  faArrowRight,
+  faExclamation,
+  faFileImage,
+  faRectangleAd,
+  faTrash,
+  faWallet,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
+import { debounceTime, distinctUntilChanged, EMPTY, Observable, of, Subscription, switchMap, tap } from 'rxjs';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 import { environment } from '@commudle/shared-environments';
 
@@ -31,16 +58,44 @@ import { environment } from '@commudle/shared-environments';
   styleUrls: ['./campaign-form-order-setup.component.scss'],
   standalone: false,
 })
-export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
+export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('locationSearchInput', { read: ElementRef }) locationSearchInput: ElementRef;
+  // how wide the preview card is drawn: a desktop sidebar slot or a phone-width feed
+  previewDevice: 'desktop' | 'mobile' = 'desktop';
+  walletExpanded = false;
+  private walletAutoOpened = false;
+  private footerObserver?: IntersectionObserver;
+
+  // The wallet accordion stays minimised until the user scrolls down to the footer, then opens once by itself.
+  // The footer sits behind an *ngIf, so this is a setter rather than something wired up in ngAfterViewInit.
+  @ViewChild('formFooter') set formFooter(footer: ElementRef<HTMLElement> | undefined) {
+    this.footerObserver?.disconnect();
+    if (!footer || typeof IntersectionObserver === 'undefined') return;
+    this.footerObserver = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !this.walletAutoOpened) {
+          this.walletAutoOpened = true;
+          this.walletExpanded = true;
+          this.cdr.detectChanges();
+        }
+      },
+      { threshold: 0.3 },
+    );
+    this.footerObserver.observe(footer.nativeElement);
+  }
   campaignForm: FormGroup;
   icons = {
     faArrowRight,
+    faExclamation,
     faFileImage,
     faRectangleAd,
     faTrash,
+    faWallet,
+    faXmark,
   };
   campaign: ICampaign;
+  // built from the form (not the saved campaign) so the preview updates as the user types
+  previewCampaign: ICampaign;
   wallet: IWallet;
   estimate: ICampaignEstimate;
   form1Invalid = true;
@@ -58,6 +113,30 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
   imagePreview = [];
   staticAssets = staticAssets;
   defaultUrl = environment.app_url + '/campaigns/new';
+  savingAsset = false;
+  private dateSaveTimer: ReturnType<typeof setTimeout>;
+  minStartLeadHours = 1;
+  // keep in sync with Campaign::MIN_CAMPAIGN_DURATION on the backend
+  static readonly MIN_DURATION_HOURS = 12;
+  // keep in sync with the backend limits on CampaignAsset
+  static readonly MAX_TITLE_LENGTH = 80;
+  static readonly MAX_DESCRIPTION_LENGTH = 80;
+  readonly maxTitleLength = CampaignFormOrderSetupComponent.MAX_TITLE_LENGTH;
+  readonly maxDescriptionLength = CampaignFormOrderSetupComponent.MAX_DESCRIPTION_LENGTH;
+  static readonly DEFAULT_START_LEAD_HOURS = 3;
+  // minimum budget per currency in major units; keep in sync with the backend (USD 10, INR 300)
+  static readonly MIN_BUDGET: Record<string, number> = { USD: 10, INR: 300 };
+  readonly currencies = ['USD', 'INR'];
+  changingCurrency = false;
+  // the currency the form was last in sync with, so a refused change can be put back
+  private lastCurrency = 'USD';
+  readonly maxActiveAssets = 5;
+  changeLog: ICampaignChangeLogEntry[] = [];
+  liveEndAt = '';
+  maxEndAt: string | null = null;
+  minEndAt = '';
+  minStartAt = this.toDateTimeLocal(this.minStartDate());
+  private subscriptions = new Subscription();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -71,15 +150,25 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
     private googlePlacesAutocompleteService: GooglePlacesAutocompleteService,
     private searchService: SearchService,
     private cdr: ChangeDetectorRef,
+    private dialogService: NbDialogService,
+    private confettiService: ConfettiService,
   ) {
     this.campaignForm = this._fb.group(
       {
         name: ['', Validators.required],
-        start_at: ['', Validators.required],
+        // chosen when the campaign is created, it can't be changed afterwards
+        currency: ['USD'],
+        // new campaigns start 3 hours from now by default (the minimum allowed is 1 hour)
+        start_at: [
+          this.toDateTimeLocal(
+            new Date(Date.now() + CampaignFormOrderSetupComponent.DEFAULT_START_LEAD_HOURS * 3600000),
+          ),
+          [Validators.required, (c: AbstractControl) => this.startAtValidator(c)],
+        ],
         end_at: [''],
         set_end_date: [false],
         cta_label: [''],
-        budget: [0, [Validators.required, Validators.min(50)]],
+        budget: [0, [Validators.required, (c: AbstractControl) => this.budgetMinValidator(c)]],
         locations: [],
         communities: [],
         campaign_assets: this._fb.array([this.createCampaignAsset()]),
@@ -91,6 +180,14 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.subscriptions.add(this.campaignForm.valueChanges.subscribe(() => this.refreshPreview()));
+    // the minimum budget depends on the currency
+    this.subscriptions.add(
+      this.campaignForm
+        .get('currency')
+        .valueChanges.subscribe(() => this.campaignForm.get('budget').updateValueAndValidity()),
+    );
+    this.refreshPreview();
     if (this.router.url.includes('/edit/')) {
       const campaignId = this.activatedRoute.parent?.snapshot?.paramMap?.get('campaign_id');
       this.campaignService.fetchCampaign(campaignId).subscribe((campaign) => {
@@ -98,9 +195,17 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
           this.campaign = campaign;
           this.patchCampaignForm();
           this.getFundStatus();
+          this.getEstimatedImpressions();
+          if (this.isLaunched) {
+            this.liveEndAt = this.formatDateTimeForInput(this.campaign.end_at);
+            // the end date can only be shortened, never extended past what it was at launch
+            this.maxEndAt = this.liveEndAt || null;
+            this.minEndAt = this.toDateTimeLocal(new Date());
+            this.loadChangeLog();
+          }
           setTimeout(() => {
             if (this.campaignForm.get('set_end_date')?.value) {
-              this.onSetEndDateChange();
+              this.onSetEndDateChange(false); // initial load must not write to the campaign
             }
             if (!this.isForm1Invalid()) {
               this.form1Invalid = false;
@@ -130,41 +235,371 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
     this.observeCommunitiesInput();
   }
 
-  createCampaign() {
+  // Once launched, only the end date (shorten only) and creatives can change; everything else is locked server-side
+  get isLaunched(): boolean {
+    return [ECampaignStatus.LIVE, ECampaignStatus.PAUSED, ECampaignStatus.COMPLETE, ECampaignStatus.STOPPED].includes(
+      this.campaign?.status,
+    );
+  }
+
+  // complete / stopped campaigns are read-only
+  get isLocked(): boolean {
+    return [ECampaignStatus.COMPLETE, ECampaignStatus.STOPPED].includes(this.campaign?.status);
+  }
+
+  get activeAssetsCount(): number {
+    return (this.campaign?.campaign_assets ?? []).filter((asset) => asset.active !== false).length;
+  }
+
+  // The API deals in minor units everywhere (cents/paise): budget, spend, wallet balances and pricing.
+  // The form works in major units (what the advertiser types), so convert at the boundary.
+  setPreviewDevice(device: 'desktop' | 'mobile'): void {
+    this.previewDevice = device;
+    this.refreshPreview();
+  }
+
+  toMajorUnits(minorAmount: number): number {
+    return (minorAmount ?? 0) / 100;
+  }
+
+  toMinorUnits(majorAmount: number | string): number {
+    return Math.round(Number(majorAmount || 0) * 100);
+  }
+
+  // What the wallet looks like once this campaign is submitted (all in minor units). A shortfall is paid at
+  // checkout first, so the available balance is used up and the whole budget ends up reserved.
+  walletAfterSubmit(): { available: number; reserved: number; shortfall: number } | null {
+    const budget = this.toMinorUnits(this.campaignForm?.get('budget')?.value);
+    if (!this.wallet || !budget) return null;
+    const shortfall = Math.max(budget - this.wallet.available_balance, 0);
+    return {
+      available: Math.max(this.wallet.available_balance - budget, 0),
+      reserved: this.wallet.reserved_balance + budget,
+      shortfall,
+    };
+  }
+
+  // wallet balances are in minor units, the budget field is in major units
+  walletCoversBudget(): boolean {
+    return !!this.wallet && this.wallet.available_balance >= this.toMinorUnits(this.campaignForm?.get('budget')?.value);
+  }
+
+  estimateStatusMessage(): string {
+    switch (this.estimate?.delivery_status) {
+      case 'deliverable':
+        return 'On track: your budget and schedule should be fully delivered.';
+      case 'borderline':
+        return 'Borderline: this budget may not fully deliver by the end date. Consider a smaller budget, a later end date, or broader targeting.';
+      case 'undeliverable':
+        return "Unlikely to deliver: with the current targeting, this budget and timeline can't realistically be met. Broaden your targeting, lower the budget, or extend the end date.";
+      case 'no_end_date':
+        return 'No end date is set, so there is no delivery verdict. The ranges above are daily estimates.';
+      default:
+        return '';
+    }
+  }
+
+  selectedCommunityNames(): string {
+    return this.selectedCommunities.map((community) => community.name).join(' | ');
+  }
+
+  private appendAssets(formData: FormData, assets: ICampaignAsset[]): number {
+    assets.forEach((asset, idx) => {
+      formData.append(`campaign[campaign_assets][${idx}][url]`, asset.url ?? '');
+      // resend the stored text so saving other creatives never blanks it
+      formData.append(`campaign[campaign_assets][${idx}][headline]`, asset.headline ?? '');
+      formData.append(`campaign[campaign_assets][${idx}][description]`, asset.description ?? '');
+      if (asset.id != null) {
+        formData.append(`campaign[campaign_assets][${idx}][id]`, asset.id.toString());
+      }
+      // every saved asset has to be sent (inactive ones too) or the API deletes the ones left out
+      if (asset.active !== undefined) {
+        formData.append(`campaign[campaign_assets][${idx}][active]`, String(asset.active));
+      }
+    });
+    return assets.length;
+  }
+
+  toggleAssetActive(asset: ICampaignAsset) {
+    const makeActive = asset.active === false;
+    if (makeActive && this.activeAssetsCount >= this.maxActiveAssets) {
+      this.toasterService.warningDialog(
+        `Maximum ${this.maxActiveAssets} active creatives allowed. Deactivate one first.`,
+      );
+      return;
+    }
+    const formData = new FormData();
+    this.appendAssets(
+      formData,
+      this.campaign.campaign_assets.map((a) => (a.id === asset.id ? { ...a, active: makeActive } : a)),
+    );
+    this.campaignService.updateCampaign(formData, this.campaign.id).subscribe((updated: ICampaign) => {
+      if (updated) {
+        this.applyUpdatedCampaign(updated);
+        this.toasterService.successDialog(makeActive ? 'Creative activated.' : 'Creative deactivated.');
+        this.loadChangeLog();
+      }
+    });
+  }
+
+  saveLiveEndDate() {
+    if (!this.liveEndAt) {
+      this.toasterService.warningDialog('Select an end date.');
+      return;
+    }
+    const end = new Date(this.liveEndAt);
+    if (end <= new Date()) {
+      this.toasterService.warningDialog('End date must be in the future. To end the campaign now, use Stop.');
+      return;
+    }
+    if (this.maxEndAt && end > new Date(this.maxEndAt)) {
+      this.toasterService.warningDialog('The end date can only be shortened, not extended.');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('campaign[end_at]', this.liveEndAt);
+    this.campaignService.updateCampaign(formData, this.campaign.id).subscribe((updated: ICampaign) => {
+      if (updated) {
+        this.applyUpdatedCampaign(updated);
+        this.maxEndAt = this.formatDateTimeForInput(updated.end_at);
+        this.toasterService.successDialog('End date updated.');
+        this.loadChangeLog();
+      }
+    });
+  }
+
+  private applyUpdatedCampaign(updated: ICampaign) {
+    this.campaign = { ...updated, campaign_assets: updated.campaign_assets ? [...updated.campaign_assets] : [] };
+    this.loadCampaignAssetsFromApi();
+    this.cdr.detectChanges();
+  }
+
+  loadChangeLog() {
+    if (!this.campaign?.id) return;
+    this.campaignService.getChangeLog(this.campaign.id).subscribe((entries) => {
+      this.changeLog = entries ?? [];
+      this.cdr.detectChanges();
+    });
+  }
+
+  changeLogLabel(entry: ICampaignChangeLogEntry): string {
+    if (entry.item_type === 'Campaign') return 'End date';
+    const asset = this.campaign?.campaign_assets?.find((a) => a.id === entry.item_id);
+    const name = asset?.url ? ` (${asset.url})` : '';
+    return (entry.field === 'active' ? 'Creative status' : 'Creative ' + entry.field) + name;
+  }
+
+  changeLogValue(entry: ICampaignChangeLogEntry, value: string | boolean | null): string {
+    if (value === null || value === undefined || value === '') return 'none';
+    if (entry.field === 'active') return value === false || value === 'false' ? 'Inactive' : 'Active';
+    return String(value);
+  }
+
+  ngOnDestroy() {
+    clearTimeout(this.dateSaveTimer);
+    this.footerObserver?.disconnect();
+    // placeChanged lives on a root singleton service, so a stale subscription would fire for a destroyed form
+    this.subscriptions.unsubscribe();
+  }
+
+  private refreshPreview(): void {
+    const saved = (this.campaign?.campaign_assets ?? []).filter((asset) => asset.active !== false);
+    const assets = [...saved];
+    // the last form row is the draft asset still being filled in
+    const draftIndex = this.campaignAssets.length - 1;
+    const draftPreviewUrl = this.imagePreview[draftIndex];
+    const draftUrl = this.campaignAssets.at(draftIndex)?.get('url')?.value;
+    const draftTitle = this.campaignAssets.at(draftIndex)?.get('headline')?.value;
+    const draftDescription = this.campaignAssets.at(draftIndex)?.get('description')?.value;
+    if (draftPreviewUrl) {
+      assets.push({
+        id: null,
+        headline: draftTitle || '',
+        description: draftDescription || '',
+        url: draftUrl || '',
+        image: { url: draftPreviewUrl },
+      } as ICampaignAsset);
+    }
+    // the mobile card has no empty-state artwork, so show a sample one until a creative exists
+    if (assets.length === 0 && this.previewDevice === 'mobile') {
+      assets.push({
+        id: null,
+        headline: '',
+        description: '',
+        url: '#',
+        image: { url: this.staticAssets.campaign_default_image },
+      } as ICampaignAsset);
+    }
+    this.previewCampaign = {
+      ...this.campaign,
+      cta_label: this.campaignForm.get('cta_label')?.value || 'Learn more',
+      campaign_assets: assets,
+    } as ICampaign;
+  }
+
+  // the earliest end time the rules allow: the minimum duration after the start
+  private earliestEndAt(): string {
+    const startValue = this.campaignForm.get('start_at')?.value;
+    const start = startValue && !isNaN(new Date(startValue).getTime()) ? new Date(startValue) : this.minStartDate();
+    return this.toDateTimeLocal(
+      new Date(start.getTime() + CampaignFormOrderSetupComponent.MIN_DURATION_HOURS * 60 * 60 * 1000),
+    );
+  }
+
+  private minStartDate(): Date {
+    return new Date(Date.now() + this.minStartLeadHours * 60 * 60 * 1000);
+  }
+
+  private toDateTimeLocal(date: Date): string {
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(
+      date.getMinutes(),
+    )}`;
+  }
+
+  // Start must be at least minStartLeadHours from now so there is time for a manual review.
+  // An unchanged start on an existing campaign is left alone, so already-started campaigns stay editable.
+  startAtValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+    if (this.campaign?.start_at && control.value === this.formatDateTimeForInput(this.campaign.start_at)) return null;
+    return new Date(control.value) < this.minStartDate() ? { startAtTooSoon: true } : null;
+  }
+
+  // the campaign's own currency once it exists, otherwise the one picked in the form
+  get currencyCode(): string {
+    return this.campaign?.currency_type || this.campaignForm?.get('currency')?.value || 'USD';
+  }
+
+  // the currency can be changed until the campaign is paid for and live
+  get canChangeCurrency(): boolean {
+    return (
+      !this.campaign?.id || [ECampaignStatus.DRAFT, ECampaignStatus.PENDING_PAYMENT].includes(this.campaign.status)
+    );
+  }
+
+  get hasPendingPayment(): boolean {
+    return this.campaign?.status === ECampaignStatus.PENDING_PAYMENT;
+  }
+
+  onCurrencyChange(confirmDialog: TemplateRef<unknown>) {
+    const next = this.campaignForm.get('currency').value;
+    if (next === this.lastCurrency) return;
+    if (!this.campaign?.id) {
+      // nothing is saved yet. A typed budget would silently change meaning, so it restarts at the new minimum
+      this.lastCurrency = next;
+      if (this.campaignForm.get('budget').value) {
+        this.campaignForm.patchValue({ budget: CampaignFormOrderSetupComponent.MIN_BUDGET[next] });
+      }
+      return;
+    }
+    if (this.hasPendingPayment) {
+      this.dialogService
+        .open(confirmDialog, { context: { previous: this.lastCurrency, next } })
+        .onClose.subscribe((confirmed) => (confirmed ? this.changeCurrency(next) : this.revertCurrency()));
+      return;
+    }
+    this.changeCurrency(next);
+  }
+
+  private revertCurrency() {
+    this.campaignForm.get('currency').setValue(this.lastCurrency, { emitEvent: false });
+  }
+
+  // the server resets the budget to the new currency's minimum and returns the campaign back in draft
+  private changeCurrency(next: string) {
+    this.changingCurrency = true;
+    const formData = new FormData();
+    formData.append('campaign[currency_type]', next);
+    this.campaignService.updateCampaign(formData, this.campaign.id).subscribe({
+      next: (updated: ICampaign) => {
+        this.changingCurrency = false;
+        if (!updated) {
+          this.revertCurrency();
+          return;
+        }
+        this.applyUpdatedCampaign(updated);
+        this.lastCurrency = updated.currency_type || next;
+        this.campaignForm.patchValue({
+          currency: this.lastCurrency,
+          budget: this.toMajorUnits(updated.budget),
+        });
+        this.getFundStatus();
+        this.getEstimatedImpressions();
+        this.toasterService.successDialog('Currency changed. Your budget was reset to the new minimum.');
+      },
+      error: () => {
+        this.changingCurrency = false;
+        this.revertCurrency();
+      },
+    });
+  }
+
+  get minBudget(): number {
+    return (
+      CampaignFormOrderSetupComponent.MIN_BUDGET[this.currencyCode] ?? CampaignFormOrderSetupComponent.MIN_BUDGET['USD']
+    );
+  }
+
+  // keeps the 'min' error key so the existing budget alert keeps working
+  budgetMinValidator(control: AbstractControl): ValidationErrors | null {
+    // like Validators.min: an empty field is left to Validators.required, but 0 is below the minimum
+    if (control.value === null || control.value === undefined || control.value === '') return null;
+    const value = Number(control.value);
+    return value < this.minBudget ? { min: { min: this.minBudget, actual: value } } : null;
+  }
+
+  private createCampaignRequest(): Observable<ICampaign> {
     const formData = new FormData();
     formData.append('campaign[name]', this.campaignForm.value.name);
     formData.append('campaign[start_at]', this.campaignForm.value.start_at || null);
+    formData.append('campaign[currency_type]', this.campaignForm.value.currency || 'USD');
 
     if (this.campaignForm.get('set_end_date')?.value) {
       formData.append('campaign[end_at]', this.campaignForm.value.end_at || null);
     }
 
-    this.campaignService.createCampaign(formData).subscribe((res: ICampaign) => {
+    return this.campaignService.createCampaign(formData).pipe(
+      tap((res: ICampaign) => {
+        if (res) {
+          this.campaign = res;
+          this.lastCurrency = res.currency_type || this.lastCurrency;
+          // the server starts a new campaign at its currency's minimum budget, so the form shows the same value
+          if (res.budget && !this.campaignForm.get('budget').value) {
+            this.campaignForm.patchValue({ budget: this.toMajorUnits(res.budget) });
+          }
+          this.getFundStatus();
+          this.gtmDataLayerPushEvent('new-campaign-step-1-created', {
+            com_campaign_id: res.id,
+          });
+        }
+      }),
+    );
+  }
+
+  createCampaign() {
+    this.createCampaignRequest().subscribe((res: ICampaign) => {
       if (res) {
-        this.campaign = res;
-        this.getFundStatus();
         this.router.navigate(['campaigns', 'edit', res.id], { replaceUrl: true });
-        this.gtmDataLayerPushEvent('new-campaign-step-1-created', {
-          com_campaign_id: res.id,
-        });
       }
     });
   }
 
+  // Mirrors the server rules: end after start, not in the past, and at least minCampaignDurationHours after the start.
   endDateValidator(formGroup: AbstractControl): ValidationErrors | null {
     const startDate = formGroup.get('start_at')?.value;
     const endDate = formGroup.get('end_at')?.value;
 
-    if (!startDate || !endDate) return null; // No validation if either date is missing
+    if (!formGroup.get('set_end_date')?.value || !endDate) return null; // end date is optional
+
+    const end = new Date(endDate);
+    if (end < new Date()) return { endDateValidator: 'past' };
+    if (!startDate) return null;
 
     const start = new Date(startDate);
-    const end = new Date(endDate);
+    if (end <= start) return { endDateValidator: 'beforeStart' };
 
-    // Ensure end date is at least 3 days after the start date
-    const minEndDate = new Date(start);
-    minEndDate.setDate(minEndDate.getDate() + 3);
-
-    return end < minEndDate ? { endDateValidator: true } : null;
+    const minEndDate = new Date(start.getTime() + CampaignFormOrderSetupComponent.MIN_DURATION_HOURS * 60 * 60 * 1000);
+    return end < minEndDate ? { endDateValidator: 'tooSoon' } : null;
   }
 
   createCampaignAsset(asset?: ICampaignAsset): FormGroup {
@@ -172,6 +607,11 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
       id: [asset ? asset?.id : ''],
       image: [asset ? asset?.image?.url : null, Validators.required],
       url: [asset ? asset?.url : '', [Validators.required, Validators.pattern(/^(http|https):\/\/[^ "]+$/)]], // Ensure URL is valid
+      headline: [asset?.headline ?? '', Validators.maxLength(CampaignFormOrderSetupComponent.MAX_TITLE_LENGTH)],
+      description: [
+        asset?.description ?? '',
+        Validators.maxLength(CampaignFormOrderSetupComponent.MAX_DESCRIPTION_LENGTH),
+      ],
     });
   }
 
@@ -180,9 +620,11 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
   }
 
   addAsset(index: number) {
-    const savedCount = this.campaign?.campaign_assets?.length ?? 0;
-    if (savedCount >= 5) {
-      this.toasterService.warningDialog(`Maximum 5 campaign assets allowed. Remove an asset to add a new one.`);
+    if (this.savingAsset) return;
+    if (this.activeAssetsCount >= this.maxActiveAssets) {
+      this.toasterService.warningDialog(
+        `Maximum ${this.maxActiveAssets} active creatives allowed. Deactivate or remove one to add a new one.`,
+      );
       return;
     }
 
@@ -192,23 +634,42 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    const formData = new FormData();
+    // all sections are open, so the campaign may not exist yet - create it first from the details above
+    if (!this.campaign?.id && this.isForm1Invalid()) {
+      this.toasterService.warningDialog('Fill in the campaign name and start date first.');
+      return;
+    }
+
+    this.savingAsset = true;
+    const wasNew = !this.campaign?.id;
+    const created$ = wasNew ? this.createCampaignRequest() : of(this.campaign);
+    created$.subscribe({
+      next: (campaign) => {
+        if (!campaign?.id) {
+          this.savingAsset = false;
+          return;
+        }
+        this.saveAssetWithCampaign(currentGroup, wasNew);
+      },
+      error: () => (this.savingAsset = false),
+    });
+  }
+
+  // Saves the campaign's other fields together with the new asset, so the campaign is up to date when the asset lands
+  private saveAssetWithCampaign(currentGroup: FormGroup, wasNew: boolean) {
+    // once launched the server rejects everything except end date and creatives
+    const formData = this.isLaunched ? new FormData() : this.buildCampaignFormData();
     const assetData = currentGroup.value;
     const url = (currentGroup.get('url')?.value ?? assetData.url ?? '') as string;
     const existingAssets = this.campaign?.campaign_assets ?? [];
-    let nextIndex = 0;
 
     // Include all existing assets so the API replaces the array with existing + new, not just the new one
-    existingAssets.forEach((asset, idx) => {
-      formData.append(`campaign[campaign_assets][${idx}][url]`, asset.url ?? '');
-      if (asset.id) {
-        formData.append(`campaign[campaign_assets][${idx}][id]`, asset.id.toString());
-      }
-      nextIndex = idx + 1;
-    });
+    const nextIndex = this.appendAssets(formData, existingAssets);
 
     // Append the new asset at the next index
     formData.append(`campaign[campaign_assets][${nextIndex}][url]`, url);
+    formData.append(`campaign[campaign_assets][${nextIndex}][headline]`, (assetData.headline ?? '').trim());
+    formData.append(`campaign[campaign_assets][${nextIndex}][description]`, (assetData.description ?? '').trim());
     if (assetData.id) {
       formData.append(`campaign[campaign_assets][${nextIndex}][id]`, assetData.id);
     }
@@ -216,14 +677,23 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
       formData.append(`campaign[campaign_assets][${nextIndex}][image]`, assetData.image);
     }
 
-    this.campaignService.updateCampaign(formData, this.campaign.id).subscribe((updatedCampaign: ICampaign) => {
-      this.campaign = {
-        ...updatedCampaign,
-        campaign_assets: updatedCampaign.campaign_assets ? [...updatedCampaign.campaign_assets] : [],
-      };
-      this.loadCampaignAssetsFromApi();
-      this.resetAssetForm();
-      this.cdr.detectChanges();
+    this.campaignService.updateCampaign(formData, this.campaign.id).subscribe({
+      next: (updatedCampaign: ICampaign) => {
+        this.savingAsset = false;
+        if (!updatedCampaign) return;
+        this.campaign = {
+          ...updatedCampaign,
+          campaign_assets: updatedCampaign.campaign_assets ? [...updatedCampaign.campaign_assets] : [],
+        };
+        this.loadCampaignAssetsFromApi();
+        this.resetAssetForm();
+        this.getEstimatedImpressions();
+        this.cdr.detectChanges();
+        if (wasNew) {
+          this.router.navigate(['campaigns', 'edit', this.campaign.id], { replaceUrl: true });
+        }
+      },
+      error: () => (this.savingAsset = false),
     });
   }
 
@@ -239,7 +709,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
         campaignAssetsFormArray.push(assetForm);
         // Set image preview if available
         if (asset.image?.url) {
-          this.imagePreview.push(asset.image.url);
+          this.imagePreview.push(asset.image.i1280 || asset.image.url);
         } else {
           this.imagePreview.push(null);
         }
@@ -250,6 +720,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
     campaignAssetsFormArray.push(this.createCampaignAsset());
     this.imagePreview.push(null);
 
+    this.refreshPreview();
     this.cdr.detectChanges();
   }
 
@@ -261,6 +732,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
       // Reset the last form (the empty one)
       campaignAssetsFormArray.at(lastIndex).reset();
       this.imagePreview[lastIndex] = null;
+      this.refreshPreview();
     } else {
       // If no forms exist, create one
       campaignAssetsFormArray.push(this.createCampaignAsset());
@@ -286,12 +758,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
     const remainingAssets = this.campaign.campaign_assets.filter((asset) => asset.id !== assetId);
 
     // Rebuild FormData: all remaining assets, or explicitly empty so backend clears the list
-    remainingAssets.forEach((asset, idx) => {
-      formData.append(`campaign[campaign_assets][${idx}][url]`, asset.url ?? '');
-      if (asset.id != null) {
-        formData.append(`campaign[campaign_assets][${idx}][id]`, asset.id.toString());
-      }
-    });
+    this.appendAssets(formData, remainingAssets);
 
     this.campaignService.updateCampaign(formData, this.campaign.id).subscribe((updatedCampaign: ICampaign) => {
       // Create a new object reference with a new array reference to ensure change detection
@@ -322,13 +789,15 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
         communitySlugs = this.selectedCommunities.map((c) => c.slug);
       }
 
+      this.lastCurrency = this.campaign.currency_type || 'USD';
       this.campaignForm.patchValue({
         name: this.campaign.name,
+        currency: this.campaign.currency_type || 'USD',
         start_at: this.formatDateTimeForInput(this.campaign.start_at),
         end_at: this.formatDateTimeForInput(this.campaign.end_at),
         set_end_date: !!this.campaign.end_at,
         cta_label: this.campaign.cta_label,
-        budget: this.campaign.budget,
+        budget: this.toMajorUnits(this.campaign.budget),
         locations: this.selectedLocations,
         communities: communitySlugs,
       });
@@ -339,11 +808,12 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
   }
 
   getEstimatedImpressions(): void {
-    if (!this.campaign?.id) return;
-    // this.campaignService.getEstimatedImpressions(this.campaign.id).subscribe((res) => {
-    //   this.estimate = res.data;
-    //   this.cdr.detectChanges();
-    // });
+    // a launched campaign can't change targeting or budget, so an estimate would only mislead
+    if (!this.campaign?.id || this.isLaunched) return;
+    this.campaignService.getEstimatedImpressions(this.campaign.id).subscribe((estimate) => {
+      this.estimate = estimate;
+      this.cdr.detectChanges();
+    });
   }
 
   private formatDateTimeForInput(dateString: string): string {
@@ -396,6 +866,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
     const reader = new FileReader();
     reader.onload = () => {
       this.imagePreview[i] = reader.result as string;
+      this.refreshPreview();
       this.cdr.detectChanges();
     };
     reader.readAsDataURL(file);
@@ -406,6 +877,25 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
     if (this.campaign?.id && key === 'budget') {
       this.updateCampaign();
     }
+    if (key === 'start_at' || key === 'end_at') {
+      this.saveDatesForEstimate();
+    }
+  }
+
+  // The estimate is computed from the saved campaign, so a date change has to be saved before it can refresh.
+  // Debounced, and skipped while the dates are invalid so the server isn't sent a range it will reject.
+  private saveDatesForEstimate() {
+    if (!this.campaign?.id || this.isLaunched) return;
+    clearTimeout(this.dateSaveTimer);
+    this.dateSaveTimer = setTimeout(() => {
+      const datesValid =
+        this.campaignForm.get('start_at')?.valid &&
+        this.campaignForm.get('end_at')?.valid &&
+        !this.campaignForm.errors?.['endDateValidator'];
+      if (datesValid) {
+        this.updateCampaign();
+      }
+    }, 800);
   }
 
   handleArrayFormInput(value: string | number, key: string, index: number, formArrayName: string) {
@@ -416,13 +906,16 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
     }
   }
 
-  updateCampaign(callSubmitButton = false) {
-    // Validation
-    if (!this.campaign?.id) {
-      this.toasterService.warningDialog('Campaign ID is missing.');
+  private appendList(formData: FormData, key: string, values: string[]) {
+    if (values.length === 0) {
+      formData.append(key, '');
       return;
     }
+    values.forEach((value) => formData.append(key, value));
+  }
 
+  // campaign fields only (no assets) - what a full draft save sends
+  private buildCampaignFormData(): FormData {
     const formData = new FormData();
     const formValue = this.campaignForm.value;
 
@@ -431,7 +924,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
     if (formValue.cta_label) {
       formData.append('campaign[cta_label]', formValue.cta_label);
     }
-    if (formValue.budget) formData.append('campaign[budget]', formValue.budget.toString());
+    if (formValue.budget) formData.append('campaign[budget]', this.toMinorUnits(formValue.budget).toString());
     if (formValue.start_at) formData.append('campaign[start_at]', formValue.start_at);
     if (formValue.set_end_date && formValue.end_at) {
       formData.append('campaign[end_at]', formValue.end_at);
@@ -439,23 +932,30 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
       formData.append('campaign[end_at]', '');
     }
 
-    // Append locations and communities
+    // Append locations and communities. FormData can't carry an empty array, and the server only touches targeting
+    // when the key is present, so an empty list is sent as one blank entry (the server strips blanks and clears).
     const locations = Array.isArray(formValue.locations) ? formValue.locations : [];
-    locations.forEach((loc) => formData.append('campaign[locations][]', loc));
+    this.appendList(formData, 'campaign[locations][]', locations);
 
     const communitySlugs = this.selectedCommunities.map((c) => c.slug);
-    communitySlugs.forEach((slug) => formData.append('campaign[communities][]', slug));
+    this.appendList(formData, 'campaign[communities][]', communitySlugs);
+    return formData;
+  }
+
+  updateCampaign(callSubmitButton = false) {
+    // the live-edit form never sends the full campaign - the server rejects locked fields
+    if (this.isLaunched) return;
+    // Validation
+    if (!this.campaign?.id) {
+      this.toasterService.warningDialog('Campaign ID is missing.');
+      return;
+    }
+
+    const formData = this.buildCampaignFormData();
 
     // Send saved assets from API
     if (this.campaign?.campaign_assets) {
-      this.campaign.campaign_assets.forEach((asset, index) => {
-        if (asset.url) {
-          formData.append(`campaign[campaign_assets][${index}][url]`, asset.url ?? '');
-          if (asset.id) {
-            formData.append(`campaign[campaign_assets][${index}][id]`, asset.id.toString());
-          }
-        }
-      });
+      this.appendAssets(formData, this.campaign.campaign_assets);
     }
 
     this.campaignService.updateCampaign(formData, this.campaign.id).subscribe((data) => {
@@ -471,20 +971,28 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
     });
   }
 
+  openGoLiveConfirmation(dialog: TemplateRef<unknown>) {
+    this.dialogService.open(dialog);
+  }
+
+  confirmGoLive(dialogRef: NbDialogRef<unknown>) {
+    dialogRef.close();
+    this.updateCampaign(true);
+  }
+
   callSubmitForApproval() {
-    if (this.wallet && this.wallet.available_balance >= this.campaignForm?.get('budget')?.value) {
+    if (this.walletCoversBudget()) {
       this.campaignService.submitForApproval(this.campaign.id).subscribe((data) => {
         if (data) {
           this.toasterService.successDialog('Campaign submitted');
+          this.confettiService.celebrate();
           this.router.navigate(['/campaigns']);
         }
       });
     } else {
       this.campaignService.createPurchaseOrder(this.campaign.id, true).subscribe((data) => {
         if (data) {
-          this.toasterService.warningDialog(
-            'You do not have enough balance to submit for approval. Please add more balance to your wallet.',
-          );
+          // the payment screen is the way to cover the shortfall, so no warning here
           this.router.navigate(['/checkout', data.uuid]);
         }
       });
@@ -500,7 +1008,8 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
     const startAt = this.campaignForm.get('start_at')?.valid;
     const budget = this.campaignForm.get('budget')?.valid;
     const locations = this.campaignForm.get('locations')?.valid;
-    const campaignAssets = (this.campaignForm.get('campaign_assets') as FormArray).length > 0;
+    // the form array always holds an empty draft row, so only assets already saved to the campaign count
+    const campaignAssets = (this.campaign?.campaign_assets?.length ?? 0) > 0;
     const setEndDate = this.campaignForm.get('set_end_date')?.value;
     const communities = this.campaignForm.get('communities')?.valid;
     const endAt = this.campaignForm.get('end_at');
@@ -512,18 +1021,24 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
     return true;
   }
 
-  onSetEndDateChange() {
+  onSetEndDateChange(save = true) {
     const setEndDate = this.campaignForm.get('set_end_date')?.value;
     const endDateControl = this.campaignForm.get('end_at');
 
     if (endDateControl) {
       if (setEndDate) {
         endDateControl.setValidators([Validators.required]);
+        if (!endDateControl.value) {
+          endDateControl.setValue(this.earliestEndAt());
+        }
       } else {
         endDateControl.clearValidators();
         endDateControl.setValue('');
       }
       endDateControl.updateValueAndValidity();
+    }
+    if (save) {
+      this.saveDatesForEstimate();
     }
   }
 
@@ -548,6 +1063,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
   }
 
   onAccordion2Click(event: MouseEvent) {
+    if (this.isLaunched) return;
     if (this.router.url.includes('/edit/')) {
       return;
     }
@@ -577,6 +1093,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
   }
 
   onAccordion3Click(event: MouseEvent) {
+    if (this.isLaunched) return;
     if (this.isForm1Invalid() || this.isForm2Invalid()) {
       if (this.isForm1Invalid()) {
         this.form1Invalid = true;
@@ -603,9 +1120,11 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
         types: ['locality', 'administrative_area_level_1', 'country'],
       });
 
-      this.googlePlacesAutocompleteService.placeChanged.subscribe((place: google.maps.places.PlaceResult) => {
-        this.onLocationPlaceSelected(place);
-      });
+      this.subscriptions.add(
+        this.googlePlacesAutocompleteService.placeChanged.subscribe((place: google.maps.places.PlaceResult) => {
+          this.onLocationPlaceSelected(place);
+        }),
+      );
     }
   }
 
@@ -637,7 +1156,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
   }
 
   observeCommunitiesInput() {
-    this.communitiesFormControl.valueChanges
+    const communitiesSub = this.communitiesFormControl.valueChanges
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
@@ -659,6 +1178,7 @@ export class CampaignFormOrderSetupComponent implements OnInit, AfterViewInit {
         this.searchingCommunities = false;
         this.cdr.detectChanges();
       });
+    this.subscriptions.add(communitiesSub);
   }
 
   onCommunitySelected(communityId: number, communityName: string, communitySlug: string) {

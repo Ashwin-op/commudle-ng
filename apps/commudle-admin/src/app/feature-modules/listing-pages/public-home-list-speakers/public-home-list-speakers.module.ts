@@ -35,6 +35,7 @@ import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-com
 import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-theme';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
+import { ListingPageCampaignComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-campaign/listing-page-campaign.component';
 @NgModule({
   declarations: [
     PublicHomeListSpeakersComponent,
@@ -46,6 +47,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     SpeakerCfpComponent,
   ],
   imports: [
+    ListingPageCampaignComponent,
     CommonModule,
     PublicHomeListSpeakersRoutingModule,
     ListingPagesLayoutComponent,

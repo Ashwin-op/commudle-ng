@@ -7,10 +7,10 @@ import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
 @Component({
-    selector: 'commudle-public-home-list-speakers',
-    templateUrl: './public-home-list-speakers.component.html',
-    styleUrls: ['./public-home-list-speakers.component.scss'],
-    standalone: false
+  selector: 'commudle-public-home-list-speakers',
+  templateUrl: './public-home-list-speakers.component.html',
+  styleUrls: ['./public-home-list-speakers.component.scss'],
+  standalone: false,
 })
 export class PublicHomeListSpeakersComponent implements OnInit, OnDestroy {
   isMobileView: boolean;
@@ -33,7 +33,7 @@ export class PublicHomeListSpeakersComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.footerService.changeFooterStatus(true);
-    this.isMobileView = this.isBrowser ? window.innerWidth <= 640 : false;
+    this.isMobileView = this.isBrowser ? window.innerWidth <= 1024 : false;
 
     this.setTitle();
     this.router.events

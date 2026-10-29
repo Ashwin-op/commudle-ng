@@ -73,21 +73,28 @@
 
   <div *appBreakpoints="'<=lg'">
     <div class="speakers">
-      <div *ngFor="let speaker of speakers.slice(0, 3)" class="speakers-card">
-        <app-user-profile-card-large
-          [showFollowButton]="true"
-          [alignFollowToRight]="true"
-          [showAbout]="true"
-          [user]="speaker"
-          [showSpeakersCount]="true"
-          [maxUserNameLength]="15"
-          [showHiringLookingTags]="false"
-          [appearanceOfFollowButton]="'outline'"
-          [showHiringLookingTags]="false"
-          [showFollowersCount]="true"
-          [showLeaderBadgeToSpeakerCount]="true"
-        ></app-user-profile-card-large>
-      </div>
+      <ng-container *ngFor="let speaker of speakers.slice(0, 3); let i = index">
+        <div class="speakers-card">
+          <app-user-profile-card-large
+            [showFollowButton]="true"
+            [alignFollowToRight]="true"
+            [showAbout]="true"
+            [user]="speaker"
+            [showSpeakersCount]="true"
+            [maxUserNameLength]="15"
+            [showHiringLookingTags]="false"
+            [appearanceOfFollowButton]="'outline'"
+            [showHiringLookingTags]="false"
+            [showFollowersCount]="true"
+            [showLeaderBadgeToSpeakerCount]="true"
+          ></app-user-profile-card-large>
+        </div>
+        <!-- one ad after the 2nd speaker, only when there are at least 3 so it is never the last thing -->
+        <commudle-listing-page-campaign
+          *ngIf="i === 1 && speakers.length >= 3"
+          [layout]="'horizontal'"
+        ></commudle-listing-page-campaign>
+      </ng-container>
     </div>
     <div class="speakers-upcoming">
       <commudle-public-home-list-speakers-upcoming></commudle-public-home-list-speakers-upcoming>

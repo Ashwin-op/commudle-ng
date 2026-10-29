@@ -16,6 +16,8 @@ import { Output, EventEmitter } from '@angular/core';
 })
 export class ListingPageHeaderComponent implements OnInit {
   @Input() parentType: string;
+  // the header image can carry a paid ad; listing pages that show the ad in the sidebar turn it off here
+  @Input() showAd = true;
   header: IListingPageHeader;
   headerImgUrl: string;
   richText: string;

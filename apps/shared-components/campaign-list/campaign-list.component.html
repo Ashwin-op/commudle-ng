@@ -1,3 +1,20 @@
+<!-- Wallets, one per currency -->
+<ng-container *ngFor="let entry of wallets">
+  <div class="wallet-summary" *ngIf="entry.wallet">
+    <span class="wallet-summary-title">Wallet ({{ entry.currency }})</span>
+    <span
+      >Available: <strong>{{ toMajorUnits(entry.wallet.available_balance) | currency : entry.currency }}</strong></span
+    >
+    <span
+      >Reserved for campaigns:
+      <strong>{{ toMajorUnits(entry.wallet.reserved_balance) | currency : entry.currency }}</strong></span
+    >
+    <span
+      >Total: <strong>{{ toMajorUnits(entry.wallet.balance) | currency : entry.currency }}</strong></span
+    >
+  </div>
+</ng-container>
+
 <!-- KPI Cards -->
 <div class="kpi-cards" *ngIf="statsUserCampaigns">
   <div class="kpi-card">
@@ -125,11 +142,13 @@
             <td class="status-cell">
               <div *ngIf="campaign.status">
                 <app-badge
-                  [text]="campaign.status | capitalizeAndRemoveUnderscore"
+                  [text]="statusLabel(campaign)"
                   [fontSize]="'small'"
                   [borderRadius]="'round'"
                   [color]="
-                    campaign.status === ECampaignStatus.PENDING_PAYMENT
+                    isScheduled(campaign)
+                      ? 'com-bg-blue-100'
+                      : campaign.status === ECampaignStatus.PENDING_PAYMENT
                       ? 'com-bg-gray-100'
                       : campaign.status === ECampaignStatus.DRAFT
                       ? 'com-bg-gray-100'
@@ -152,7 +171,9 @@
                       : 'com-bg-gray-100'
                   "
                   [fontColor]="
-                    campaign.status === ECampaignStatus.PENDING_PAYMENT
+                    isScheduled(campaign)
+                      ? 'com-text-blue-700'
+                      : campaign.status === ECampaignStatus.PENDING_PAYMENT
                       ? 'com-text-gray-700'
                       : campaign.status === ECampaignStatus.DRAFT
                       ? 'com-text-gray-700'
@@ -175,6 +196,9 @@
                       : 'com-text-gray-700'
                   "
                 ></app-badge>
+                <div class="small-info-text scheduled-note" *ngIf="isScheduled(campaign)">
+                  Starts {{ campaign.start_at | date : 'medium' }}
+                </div>
               </div>
               <div
                 *ngIf="isCampaignAdmin && campaign.status"
@@ -196,7 +220,7 @@
                 <nb-card-body>
                   <table>
                     <tr>
-                      <th>Note</th>
+                      <th>Reason</th>
                       <th>Created At</th>
                       <th *ngIf="isCampaignAdmin">Created By</th>
                     </tr>
@@ -214,40 +238,8 @@
                   </table>
                 </nb-card-body>
               </nb-card>
-              <div
-                *ngIf="
-                  isCampaignAdmin &&
-                  (campaign.status === ECampaignStatus.CHANGES_REQUIRED || campaign.status === ECampaignStatus.REJECTED)
-                "
-                class="notes-container"
-              >
-                <label for="notes">
-                  <input
-                    fieldSize="small"
-                    type="text"
-                    placeholder="Write Note"
-                    nbInput
-                    [(ngModel)]="noteTexts[campaign.id]"
-                    (click)="$event.stopPropagation()"
-                  />
-                </label>
-                <button nbButton size="tiny" (click)="updateNotes(campaign.id); $event.stopPropagation()">Save</button>
-              </div>
-              <button
-                class="resend-payment-button"
-                *ngIf="
-                  isCampaignAdmin &&
-                  (campaign.status === ECampaignStatus.CHANGES_REQUIRED || campaign.status === ECampaignStatus.REJECTED)
-                "
-                nbButton
-                status="info"
-                [disabled]="campaign.unapproved_reasons.length === 0"
-                (click)="campaignUnapprovedChangesMail(campaign.id); $event.stopPropagation()"
-              >
-                Send mail
-              </button>
             </td>
-            <td>{{ campaign.budget ? (campaign.budget | currency : campaign.currency_type) : '-' }}</td>
+            <td>{{ campaign.budget ? (toMajorUnits(campaign.budget) | currency : campaign.currency_type) : '-' }}</td>
             <td class="duration-time">
               <div *ngIf="campaign.start_at">
                 <span>{{ moment(campaign.start_at).format('MMM Do, YYYY') }}</span
@@ -286,17 +278,13 @@
             <td class="data-cell com-text-right border-right">
               {{
                 statsOverview[campaign.id]?.budget_remaining != null
-                  ? (statsOverview[campaign.id]?.budget_remaining | currency : campaign.currency_type)
+                  ? (toMajorUnits(statsOverview[campaign.id]?.budget_remaining) | currency : campaign.currency_type)
                   : '--'
               }}
             </td>
             <td class="action-buttons">
               <a
-                *ngIf="
-                  !isCampaignAdmin &&
-                  campaign.status !== ECampaignStatus.LIVE &&
-                  campaign.status !== ECampaignStatus.COMPLETE
-                "
+                *ngIf="!isCampaignAdmin && canCompleteSetup(campaign)"
                 [routerLink]="['/campaigns/edit', campaign.id]"
                 (click)="$event.stopPropagation()"
               >
@@ -311,11 +299,87 @@
                 </button>
               </a>
               <a
-                *ngIf="campaign.status === ECampaignStatus.LIVE || campaign.status === ECampaignStatus.COMPLETE"
-                [routerLink]="['stats', campaign.id]"
+                *ngIf="!isCampaignAdmin && canEditLive(campaign)"
+                [routerLink]="['/campaigns/edit', campaign.id]"
                 (click)="$event.stopPropagation()"
               >
-                <button nbButton status="success" size="small" class="action-btn-icon" outline>
+                <button comButton outline size="small" shape="semi-round" class="action-btn-icon">
+                  Edit &nbsp;<fa-icon [icon]="icons.faEdit"></fa-icon>
+                </button>
+              </a>
+              <button
+                *ngIf="!isCampaignAdmin && canPause(campaign)"
+                comButton
+                outline
+                size="small"
+                shape="semi-round"
+                class="action-btn-icon"
+                (click)="$event.stopPropagation(); updateStatus(ECampaignStatus.PAUSED, campaign.id, i)"
+              >
+                Pause
+              </button>
+              <button
+                *ngIf="!isCampaignAdmin && canResume(campaign)"
+                comButton
+                outline
+                status="success"
+                size="small"
+                shape="semi-round"
+                class="action-btn-icon"
+                (click)="$event.stopPropagation(); updateStatus(ECampaignStatus.RESUMED, campaign.id, i)"
+              >
+                Resume
+              </button>
+              <button
+                *ngIf="!isCampaignAdmin && canStop(campaign)"
+                comButton
+                outline
+                status="danger"
+                size="small"
+                shape="semi-round"
+                class="action-btn-icon"
+                (click)="$event.stopPropagation(); openStopConfirmation(stopCampaignDialog, campaign)"
+              >
+                Stop
+              </button>
+              <button
+                *ngFor="let topUp of campaign.top_ups"
+                comButton
+                outline
+                size="small"
+                shape="semi-round"
+                class="action-btn-icon"
+                [title]="'Invoice ' + topUp.invoice_number"
+                [disabled]="downloadingInvoices.has(topUp.purchase_order_uuid)"
+                (click)="$event.stopPropagation(); downloadInvoice(topUp)"
+              >
+                Download invoice &nbsp;<fa-icon [icon]="icons.faDownload"></fa-icon>
+              </button>
+              <button
+                *ngIf="isCampaignAdmin && canStop(campaign)"
+                comButton
+                outline
+                status="danger"
+                size="small"
+                shape="semi-round"
+                class="action-btn-icon"
+                (click)="$event.stopPropagation(); openAdminStopDialog(adminStopDialog, campaign)"
+              >
+                Stop
+              </button>
+              <button
+                *ngIf="isCampaignAdmin"
+                comButton
+                outline
+                size="small"
+                shape="semi-round"
+                class="action-btn-icon"
+                (click)="$event.stopPropagation(); openEmailDialog(emailOwnerDialog, campaign)"
+              >
+                Email owner
+              </button>
+              <a *ngIf="hasStats(campaign)" [routerLink]="['stats', campaign.id]" (click)="$event.stopPropagation()">
+                <button comButton status="success" size="small" shape="semi-round" class="action-btn-icon" outline>
                   Stats &nbsp;<fa-icon [icon]="icons.faArrowRight"></fa-icon>
                 </button>
               </a>
@@ -382,3 +446,134 @@
     </nb-card-footer>
   </nb-card>
 </ng-template> -->
+
+<ng-template #stopCampaignDialog let-data let-ref="dialogRef">
+  <com-card class="confirm-dialog">
+    <com-card-header class="confirm-dialog-header">
+      <h3>Stop this campaign?</h3>
+      <button comButton ghost size="small" shape="round" aria-label="Close" (click)="ref.close()">
+        <fa-icon [icon]="icons.faXmark"></fa-icon>
+      </button>
+    </com-card-header>
+    <com-card-body class="confirm-dialog-body">
+      <p class="confirm-dialog-question">
+        Stopping <strong>{{ data.campaign.name }}</strong> is permanent.
+      </p>
+      <ul class="confirm-dialog-list">
+        <li>
+          Its remaining reserved budget
+          <ng-container *ngIf="statsOverview[data.campaign.id]?.budget_remaining != null"
+            >(<strong>{{
+              toMajorUnits(statsOverview[data.campaign.id].budget_remaining) | currency : data.campaign.currency_type
+            }}</strong
+            >)</ng-container
+          >
+          is released back to your wallet's available balance.
+        </li>
+        <li>The campaign stops serving right away and cannot be restarted. You would create a new campaign instead.</li>
+        <li>
+          Just need a break? Use <strong>Pause</strong> instead. A paused campaign keeps its budget reserved and can be
+          resumed any time.
+        </li>
+      </ul>
+    </com-card-body>
+    <com-card-footer class="confirm-dialog-footer">
+      <button comButton outline size="small" shape="semi-round" (click)="ref.close()">Cancel</button>
+      <button comButton status="danger" size="small" shape="semi-round" (click)="confirmStop(ref, data.campaign)">
+        Yes, stop campaign
+      </button>
+    </com-card-footer>
+  </com-card>
+</ng-template>
+
+<ng-template #adminStopDialog let-data let-ref="dialogRef">
+  <com-card class="confirm-dialog">
+    <com-card-header class="confirm-dialog-header">
+      <h3>Stop this campaign?</h3>
+      <button comButton ghost size="small" shape="round" aria-label="Close" (click)="ref.close()">
+        <fa-icon [icon]="icons.faXmark"></fa-icon>
+      </button>
+    </com-card-header>
+    <com-card-body class="confirm-dialog-body">
+      <p class="confirm-dialog-question">
+        Stopping <strong>{{ data.campaign.name }}</strong
+        >, started by <strong>{{ data.campaign.user?.name }}</strong
+        >, is permanent.
+      </p>
+      <ul class="confirm-dialog-list">
+        <li>The campaign stops serving right away and cannot be restarted.</li>
+        <li>Its unspent reserved budget is released back to the owner's wallet.</li>
+        <li>The owner will see the reason on their campaign list. No email is sent. Use Email owner for that.</li>
+      </ul>
+      <label class="dialog-field">
+        <span class="dialog-label">Reason</span>
+        <select class="dialog-input" [(ngModel)]="stopReason">
+          <option value="">Select a reason</option>
+          <option *ngFor="let reason of stopReasons" [value]="reason">{{ reason }}</option>
+        </select>
+      </label>
+      <label class="dialog-field">
+        <span class="dialog-label"
+          >Message <ng-container *ngIf="stopReason !== otherStopReason">(optional)</ng-container></span
+        >
+        <textarea
+          class="dialog-input"
+          rows="3"
+          maxlength="500"
+          placeholder="Add a short explanation for the owner"
+          [(ngModel)]="stopMessage"
+        ></textarea>
+      </label>
+    </com-card-body>
+    <com-card-footer class="confirm-dialog-footer">
+      <button comButton outline size="small" shape="semi-round" (click)="ref.close()">Cancel</button>
+      <button
+        comButton
+        status="danger"
+        size="small"
+        shape="semi-round"
+        [disabled]="!canSubmitAdminStop() || isSubmitting"
+        (click)="confirmAdminStop(ref, data.campaign)"
+      >
+        Stop campaign
+      </button>
+    </com-card-footer>
+  </com-card>
+</ng-template>
+
+<ng-template #emailOwnerDialog let-data let-ref="dialogRef">
+  <com-card class="confirm-dialog">
+    <com-card-header class="confirm-dialog-header">
+      <h3>Email the campaign owner</h3>
+      <button comButton ghost size="small" shape="round" aria-label="Close" (click)="ref.close()">
+        <fa-icon [icon]="icons.faXmark"></fa-icon>
+      </button>
+    </com-card-header>
+    <com-card-body class="confirm-dialog-body">
+      <p class="confirm-dialog-question">
+        To <strong>{{ data.campaign.user?.name }}</strong> about <strong>{{ data.campaign.name }}</strong>
+      </p>
+      <label class="dialog-field">
+        <span class="dialog-label">Subject</span>
+        <input class="dialog-input" type="text" maxlength="150" [(ngModel)]="emailSubject" />
+      </label>
+      <label class="dialog-field">
+        <span class="dialog-label">Message</span>
+        <textarea class="dialog-input" rows="6" maxlength="2000" [(ngModel)]="emailMessage"></textarea>
+      </label>
+    </com-card-body>
+    <com-card-footer class="confirm-dialog-footer">
+      <button comButton outline size="small" shape="semi-round" (click)="ref.close()">Cancel</button>
+      <button
+        comButton
+        status="primary"
+        size="small"
+        shape="semi-round"
+        [disabled]="!canSendEmail() || isSubmitting"
+        (click)="sendEmailToOwner(ref, data.campaign)"
+      >
+        Send email
+      </button>
+    </com-card-footer>
+  </com-card>
+</ng-template>

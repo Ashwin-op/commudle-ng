@@ -24,7 +24,8 @@
     </p>
 
     <p class="campaign-item">
-      <strong>Budget:</strong> {{ campaign.budget ? (campaign.budget | currency : campaign.currency_type) : '--' }}
+      <strong>Budget:</strong>
+      {{ campaign.budget ? (campaign.budget / 100 | currency : campaign.currency_type) : '--' }}
     </p>
 
     <p class="campaign-item">
@@ -49,7 +50,11 @@
     <h6>Campaign Assets</h6>
     <ul *ngIf="campaign.campaign_assets?.length; else noAssets" class="assets-list">
       <li *ngFor="let asset of campaign.campaign_assets" class="asset-item">
-        <img [src]="asset.image.url ? asset.image.url : '--'" [alt]="asset.headline" class="asset-image" />
+        <img
+          [src]="asset.image.i1280 || asset.image.url || '--'"
+          [alt]="asset.headline || 'Campaign creative'"
+          class="asset-image"
+        />
         <p>
           Url:
           <a [href]="asset.url ? asset.url : '--'">{{ asset.url ? asset.url : '--' }}</a>

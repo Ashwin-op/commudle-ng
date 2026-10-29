@@ -4,23 +4,27 @@ import { FooterService } from 'apps/commudle-admin/src/app/services/footer.servi
 import { SeoService } from 'apps/shared-services/seo.service';
 
 @Component({
-    selector: 'commudle-public-home-list-events',
-    templateUrl: './public-home-list-events.component.html',
-    styleUrls: ['./public-home-list-events.component.scss'],
-    standalone: false
+  selector: 'commudle-public-home-list-events',
+  templateUrl: './public-home-list-events.component.html',
+  styleUrls: ['./public-home-list-events.component.scss'],
+  standalone: false,
 })
 export class PublicHomeListEventsComponent implements OnInit, OnDestroy {
   isMobileView: boolean;
   seoPreviewImage: string;
   private readonly isBrowser: boolean;
 
-  constructor(private seoService: SeoService, private footerService: FooterService, @Inject(PLATFORM_ID) private platformId: object) {
+  constructor(
+    private seoService: SeoService,
+    private footerService: FooterService,
+    @Inject(PLATFORM_ID) private platformId: object,
+  ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
   ngOnInit(): void {
     this.footerService.changeFooterStatus(true);
-    this.isMobileView = this.isBrowser ? window.innerWidth <= 640 : false;
+    this.isMobileView = this.isBrowser ? window.innerWidth <= 1024 : false;
     this.setMeta();
   }
 

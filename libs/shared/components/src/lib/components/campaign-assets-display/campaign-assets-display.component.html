@@ -1,34 +1,115 @@
 <div
   class="carousel"
-  *ngIf="campaign && campaign.campaign_assets && campaign.campaign_assets.length > 0"
+  [class.preview]="campaignType === 'preview'"
+  [class.horizontal]="layout === 'horizontal'"
+  *ngIf="campaign && campaign.campaign_assets && campaign.campaign_assets.length > 0 && !adHidden"
   #campaignImageContainer
 >
-  <div class="promoted-badge">
-    Promoted<a [routerLink]="['/campaigns/new']" target="_blank"><fa-icon [icon]="faCircleQuestion"></fa-icon></a>
+  <div class="card-top">
+    <span class="promoted-badge">
+      Promoted<a [routerLink]="['/campaigns/new']" target="_blank"><fa-icon [icon]="faCircleQuestion"></fa-icon></a>
+    </span>
+    <div class="ad-menu">
+      <button type="button" class="ad-menu-button" aria-label="Ad options" (click)="toggleMenu($event)">
+        <fa-icon [icon]="faEllipsisVertical"></fa-icon>
+      </button>
+      <div class="ad-menu-panel" *ngIf="menuOpen" (click)="$event.stopPropagation()">
+        <button type="button" (click)="openWhy()">Why am I seeing this ad?</button>
+        <button type="button" (click)="hideAd()">Hide this ad</button>
+        <a [routerLink]="['/campaigns/new']" target="_blank">Run my own campaign</a>
+        <a [href]="reportHref">Report</a>
+      </div>
+    </div>
   </div>
 
-  <div
-    class="container"
-    [ngStyle]="{
+  <div class="why-panel" *ngIf="showWhy">
+    <p>
+      This is a promoted post from an advertiser. Advertisers can choose who sees their ads, for example by location or
+      community, so we show ads that may be relevant to the page you are on. You can hide it any time from the menu.
+    </p>
+    <button type="button" (click)="showWhy = false">Got it</button>
+  </div>
+
+  <div class="slides-viewport">
+    <div
+      class="container"
+      [ngStyle]="{
           transform: 'translateX(-' + currentSlide * 100 + '%)',
         }"
-  >
-    <div class="component-container-wrapper" *ngFor="let ca of campaign?.campaign_assets">
-      <a [href]="ca?.url" target="_blank" (click)="createUserEngagementForCampaign(UserActivityEventType.CLICK)">
-        <img [src]="ca.image?.url" class="slider-image" [alt]="ca.headline" [title]="ca.headline" />
-        <div class="campaign-image-footer">
-          <p class="campaign-url">{{ ca.url }}</p>
-          <a [href]="ca.url" class="learn-more-button" size="small" outline nbButton shape="semi-round">{{
-            campaign?.cta_label
-          }}</a>
-        </div>
-      </a>
+    >
+      <div class="component-container-wrapper" *ngFor="let ca of campaign?.campaign_assets">
+        <a
+          [href]="ca?.url"
+          target="_blank"
+          rel="noopener noreferrer"
+          [class.horizontal-slide]="layout === 'horizontal'"
+          (click)="createUserEngagementForCampaign(UserActivityEventType.CLICK, ca.id)"
+        >
+          <ng-container *ngIf="layout === 'vertical'; else horizontalSlide">
+            <img
+              [src]="ca.image?.i1280 || ca.image?.url"
+              class="slider-image"
+              [alt]="ca.headline"
+              [title]="ca.headline"
+            />
+            <div class="slide-text" *ngIf="ca.headline || ca.description">
+              <p class="slide-title" *ngIf="ca.headline">{{ ca.headline }}</p>
+              <p class="slide-description" *ngIf="ca.description">{{ ca.description }}</p>
+            </div>
+            <div class="campaign-image-footer">
+              <a [href]="ca.url" target="_blank" rel="noopener noreferrer" class="learn-more-button">{{
+                campaign?.cta_label
+              }}</a>
+            </div>
+          </ng-container>
+          <ng-template #horizontalSlide>
+            <img
+              [src]="ca.image?.i1280 || ca.image?.url"
+              class="slider-image"
+              [alt]="ca.headline"
+              [title]="ca.headline"
+            />
+            <div class="slide-body">
+              <p
+                class="slide-title"
+                *ngIf="ca.headline || campaignType === 'preview'"
+                [class.sample-text]="!ca.headline"
+              >
+                {{ ca.headline || 'Your title goes here' }}
+              </p>
+              <p
+                class="slide-description"
+                *ngIf="ca.description || campaignType === 'preview'"
+                [class.sample-text]="!ca.description"
+              >
+                {{ ca.description || 'A short description of your offer goes here' }}
+              </p>
+              <span class="learn-more-button">{{ campaign?.cta_label }}</span>
+            </div>
+          </ng-template>
+        </a>
+      </div>
     </div>
+  </div>
+
+  <div class="slide-dots" *ngIf="(campaignType === 'preview' || layout === 'horizontal') && slidesCount > 1">
+    <button
+      type="button"
+      class="slide-dot"
+      *ngFor="let ca of campaign.campaign_assets; let i = index"
+      [class.active]="i === currentSlide"
+      [attr.aria-label]="'Show asset ' + (i + 1)"
+      (click)="goToSlide(i)"
+    ></button>
   </div>
 </div>
 
 <div
-  *ngIf="!campaign || campaign?.campaign_assets?.length === 0"
+  *ngIf="
+    (!campaign || campaign?.campaign_assets?.length === 0) &&
+    (layout === 'vertical' || campaignType === 'preview') &&
+    !hideWhenEmpty
+  "
   class="default-image-container"
   #defaultImageContainer
 >
@@ -38,6 +119,6 @@
     (click)="createUserEngagementForDefaultImage(UserActivityEventType.CLICK)"
     [ngClass]="{ 'com-pointer-events-none': !defaultImageUrl }"
   >
-    <img [src]="defaultImage" class="com-w-full" />
+    <img [src]="defaultImage" [alt]="defaultImageAlt" class="default-image" />
   </a>
 </div>

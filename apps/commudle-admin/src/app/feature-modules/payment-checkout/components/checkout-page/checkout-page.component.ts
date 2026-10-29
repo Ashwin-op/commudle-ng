@@ -122,14 +122,16 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   readonly cardVerificationCharge = 1;
 
   /**
-   * Threshold read from the purchase order (set by the backend constant
-   * PurchaseOrder::BANK_TRANSFER_THRESHOLD_USD). Falls back to the local
-   * value only if the PO hasn't loaded yet — the PO value is always authoritative.
+   * Threshold read from the purchase order, in the order's own currency (USD 20000, INR 500000). null means
+   * bank transfer is not offered for that currency. The local value is only used while the PO hasn't loaded,
+   * and an older backend without the per-currency field falls back to its USD figure.
    */
   readonly bankTransferThreshold = 4500; // fallback only; real value comes from purchaseOrder
 
-  get effectiveBankTransferThreshold(): number {
-    return this.purchaseOrder?.bank_transfer_threshold_usd ?? this.bankTransferThreshold;
+  get effectiveBankTransferThreshold(): number | null {
+    if (!this.purchaseOrder) return this.bankTransferThreshold;
+    if (this.purchaseOrder.bank_transfer_threshold !== undefined) return this.purchaseOrder.bank_transfer_threshold;
+    return this.purchaseOrder.bank_transfer_threshold_usd ?? this.bankTransferThreshold;
   }
 
   private destroy$ = new Subject<void>();
@@ -400,6 +402,11 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     return !!this.contactInfoForm.get('isGstRegistered')?.value;
   }
 
+  // Product orders and campaign top-ups (wallet orders) both collect the company and GST details
+  get collectsCompanyDetails(): boolean {
+    return [EDbModels.PRODUCT_PRICE, EDbModels.WALLET].includes(this.purchaseOrder?.orderable_type);
+  }
+
   // The billing country used to compute tax. Must mirror buildContactInfoPayload so the
   // displayed (tax-inclusive) total matches what is charged at payment time.
   private get billingCountryCode(): string {
@@ -607,6 +614,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     return (
       !this.isProratedAddon &&
       !(this.hasTrial && this.withTrial) &&
+      this.effectiveBankTransferThreshold !== null &&
       this.totalPrice >= this.effectiveBankTransferThreshold
     );
   }
@@ -621,7 +629,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.purchaseOrder.orderable_type === EDbModels.PRODUCT_PRICE) {
+    if (this.collectsCompanyDetails) {
       if (this.contactInfoForm.invalid) {
         this.contactInfoForm.markAllAsTouched();
         this.toastrService.errorDialog('Please fill all the required fields');
@@ -673,17 +681,17 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.purchaseOrder.orderable_type === EDbModels.PRODUCT_PRICE) {
+    if (this.collectsCompanyDetails) {
       if (this.contactInfoForm.invalid) {
         this.contactInfoForm.markAllAsTouched();
         this.toastrService.errorDialog('Please fill all the required fields');
         return;
       }
+    }
 
-      if (this.quantity < this.minQuantity) {
-        this.toastrService.errorDialog(`Minimum quantity required is ${this.minQuantity}`);
-        return;
-      }
+    if (this.purchaseOrder.orderable_type === EDbModels.PRODUCT_PRICE && this.quantity < this.minQuantity) {
+      this.toastrService.errorDialog(`Minimum quantity required is ${this.minQuantity}`);
+      return;
     }
 
     if (this.discountCode && this.discountCodeApplied) {
@@ -702,10 +710,29 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  // One last order update with the billing country and state right before paying, so the amount
+  // Razorpay charges always carries the tax for the country on the form.
   private proceedWithPayment(): void {
     this.isLoadingPayment = true;
 
-    if (this.purchaseOrder.orderable_type === EDbModels.PRODUCT_PRICE) {
+    this.purchaseOrderService
+      .updatePurchaseOrder(this.purchaseOrder.uuid, this.orderUpdatePayload())
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (po: IPurchaseOrder) => {
+          this.purchaseOrder = po;
+          this.updateTotalPrice();
+          this.continuePayment();
+        },
+        error: (err) => {
+          this.isLoadingPayment = false;
+          this.toastrService.errorDialog(err?.error?.message || 'Failed to update purchase order');
+        },
+      });
+  }
+
+  private continuePayment(): void {
+    if (this.collectsCompanyDetails) {
       // Always persist the current form state — contact info can only be
       // *created* once (unique parent_id/parent_type), so if it already exists
       // this must go through the update endpoint instead of being skipped.
@@ -1088,7 +1115,11 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
         usersCount: 1,
         edfegId: null,
         eventId: null,
-        objectType: this.purchaseOrder.orderable_type,
+        // a campaign top-up is a wallet order, and its discount codes are created for campaigns
+        objectType:
+          this.purchaseOrder.orderable_type === EDbModels.WALLET
+            ? EDbModels.CAMPAIGN
+            : this.purchaseOrder.orderable_type,
       })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -1161,31 +1192,41 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     this.totalPrice = Math.max(0, basePrice - discountAmount);
   }
 
+  // the tax follows the country, so every order update carries the billing country and state
+  private orderUpdatePayload() {
+    return {
+      quantity: this.quantity,
+      subscription_months: this.subscriptionMonths,
+      discount_code: this.discountCode,
+      country_code: this.billingCountryCode,
+      state: this.isIndiaSelected ? this.contactInfoForm.get('state')?.value || '' : '',
+    };
+  }
+
   private updatePurchaseOrder(): void {
     if (!this.purchaseOrder?.uuid) return;
 
     this.purchaseOrderService
-      .updatePurchaseOrder(this.purchaseOrder.uuid, {
-        quantity: this.quantity,
-        subscription_months: this.subscriptionMonths,
-        discount_code: this.discountCode,
-        country_code: this.billingCountryCode,
-        state: this.isIndiaSelected ? this.contactInfoForm.get('state')?.value || '' : '',
-      })
+      .updatePurchaseOrder(this.purchaseOrder.uuid, this.orderUpdatePayload())
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (po: IPurchaseOrder) => {
           this.purchaseOrder = po;
           this.updateTotalPrice();
         },
-        error: () => {
-          this.toastrService.errorDialog('Failed to update purchase order');
+        error: (err) => {
+          this.toastrService.errorDialog(err?.error?.message || 'Failed to update purchase order');
         },
       });
   }
 
   private gtmDataLayerPushEvent(eventName: string, eventData: Record<string, string | number> = {}): void {
     this.gtm.dataLayerPushEvent(eventName, eventData);
+  }
+
+  // after paying for a campaign the user needs a way back to the campaigns dashboard
+  goToCampaigns(): void {
+    this.router.navigate(['/campaigns']);
   }
 
   private celebratePurchase(): void {

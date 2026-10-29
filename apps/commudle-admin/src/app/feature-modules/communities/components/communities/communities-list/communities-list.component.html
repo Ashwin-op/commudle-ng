@@ -79,7 +79,14 @@
     </div>
     <div *appBreakpoints="'<=lg'">
       <div class="communities-list-cards">
-        <app-communities-card *ngFor="let community of communities" [community]="community"></app-communities-card>
+        <ng-container *ngFor="let community of communities; let i = index">
+          <app-communities-card [community]="community"></app-communities-card>
+          <!-- one ad after the 3rd community. The first mobile page only holds 3, so it also counts when more are coming -->
+          <commudle-listing-page-campaign
+            *ngIf="i === 2 && (communities.length >= 4 || pageInfo?.has_next_page)"
+            [layout]="'horizontal'"
+          ></commudle-listing-page-campaign>
+        </ng-container>
       </div>
       <div *ngIf="showSpinner" class="loading-spinner">
         <app-loading-spinner></app-loading-spinner>

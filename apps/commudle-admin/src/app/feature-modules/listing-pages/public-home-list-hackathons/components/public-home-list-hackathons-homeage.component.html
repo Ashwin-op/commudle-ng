@@ -1,6 +1,6 @@
 <commudle-listing-pages-layout>
   <div header>
-    <commudle-listing-page-header [parentType]="'hackathons'"></commudle-listing-page-header>
+    <commudle-listing-page-header [parentType]="'hackathons'" [showAd]="false"></commudle-listing-page-header>
   </div>
 
   <div one-column *appBreakpoints="'<=lg'">
@@ -36,12 +36,19 @@
         </div>
       </h2>
 
-      <div *ngFor="let upcomingHackathon of upcomingHackathons" class="event-horizontal-card" id="upcoming-hackathons">
-        <commudle-hackathon-horizontal-card
-          [hackathon]="upcomingHackathon"
-          [showHackathonBadge]="false"
-        ></commudle-hackathon-horizontal-card>
-      </div>
+      <ng-container *ngFor="let upcomingHackathon of upcomingHackathons; let i = index">
+        <div class="event-horizontal-card" id="upcoming-hackathons">
+          <commudle-hackathon-horizontal-card
+            [hackathon]="upcomingHackathon"
+            [showHackathonBadge]="false"
+          ></commudle-hackathon-horizontal-card>
+        </div>
+        <!-- one ad after the 3rd upcoming hackathon, only when there are at least 4 -->
+        <commudle-listing-page-campaign
+          *ngIf="i === 2 && upcomingHackathons.length >= 4"
+          [layout]="'horizontal'"
+        ></commudle-listing-page-campaign>
+      </ng-container>
     </div>
 
     <div class="featured-communities">
@@ -86,9 +93,16 @@
       </h2>
 
       <div class="past-hackathons">
-        <div *ngFor="let hackathon of pastHackathons" id="past-hackathons">
-          <commudle-hackathon-medium-card [hackathon]="hackathon"></commudle-hackathon-medium-card>
-        </div>
+        <ng-container *ngFor="let hackathon of pastHackathons; let i = index">
+          <div id="past-hackathons">
+            <commudle-hackathon-medium-card [hackathon]="hackathon"></commudle-hackathon-medium-card>
+          </div>
+          <!-- fallback so the page still gets its one ad when there are fewer than 4 upcoming hackathons -->
+          <commudle-listing-page-campaign
+            *ngIf="i === 2 && upcomingHackathons.length < 4 && pastHackathons.length >= 4"
+            [layout]="'horizontal'"
+          ></commudle-listing-page-campaign>
+        </ng-container>
       </div>
     </div>
   </div>
@@ -167,6 +181,8 @@
         Start your hackathon
       </a>
     </div>
+
+    <commudle-listing-page-campaign></commudle-listing-page-campaign>
 
     <div class="featured-communities">
       <commudle-public-home-list-events-featured-communities></commudle-public-home-list-events-featured-communities>

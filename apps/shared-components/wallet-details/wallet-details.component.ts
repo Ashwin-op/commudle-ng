@@ -28,4 +28,9 @@ export class WalletDetailsComponent implements OnInit {
       });
     }
   }
+
+  // wallet balances come from the API in minor units (cents/paise)
+  toMajorUnits(minorAmount: number): number {
+    return (minorAmount ?? 0) / 100;
+  }
 }

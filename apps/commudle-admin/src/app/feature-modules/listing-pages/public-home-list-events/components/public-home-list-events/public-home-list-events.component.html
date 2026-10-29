@@ -3,10 +3,11 @@
     <commudle-listing-page-header
       (seoPreviewImageRetrieved)="onSeoPreviewImageRetrieved($event)"
       [parentType]="'event-listing-page'"
+      [showAd]="false"
     ></commudle-listing-page-header>
   </div>
   <div one-column *ngIf="isMobileView">
-    <commudle-public-home-list-events-upcoming></commudle-public-home-list-events-upcoming>
+    <commudle-public-home-list-events-upcoming [showAd]="true"></commudle-public-home-list-events-upcoming>
     <div class="featured-communities">
       <commudle-public-home-list-events-featured-communities></commudle-public-home-list-events-featured-communities>
     </div>
@@ -28,6 +29,7 @@
     <commudle-public-home-list-events-past></commudle-public-home-list-events-past>
   </div>
   <div right-column class="right-column">
+    <commudle-listing-page-campaign></commudle-listing-page-campaign>
     <div class="featured-communities">
       <commudle-public-home-list-events-featured-communities></commudle-public-home-list-events-featured-communities>
     </div>

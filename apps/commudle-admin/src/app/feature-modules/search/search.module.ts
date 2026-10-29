@@ -34,6 +34,7 @@ import { LocationHeaderComponent } from 'apps/commudle-admin/src/app/feature-mod
 import { EventHorizontalCardComponent } from 'apps/commudle-admin/src/app/app-shared-components/event-horizontal-card/event-horizontal-card.component';
 import { TechSessionsCardComponent } from 'apps/commudle-admin/src/app/app-shared-components/tech-sessions-card/tech-sessions-card.component';
 import { UserPersonalConnectComponent } from 'libs/shared/components/src/lib/components/user-personal-connect/user-personal-connect.component';
+import { ListingPageCampaignComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-campaign/listing-page-campaign.component';
 import { SearchPageCampaignComponent } from 'apps/commudle-admin/src/app/feature-modules/search/components/search-page-campaign/search-page-campaign.component';
 import { SharedComponentsModule as newSharedComponentsModule } from '@commudle/shared-components';
 import { UserExpertTickComponent } from 'apps/commudle-admin/src/app/app-shared-components/user-expert-tick.component';
@@ -49,6 +50,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   ],
   exports: [SearchBoxComponent],
   imports: [
+    ListingPageCampaignComponent,
     CommonModule,
     SearchRoutingModule,
     NbInputModule,

@@ -1,8 +1,14 @@
 .carousel {
-  @apply com-overflow-hidden com-w-full com-relative com-h-full;
+  // Vertical card: bordered, the image on top, a full-width button underneath. It fills whatever width its slot gives it.
+  @apply com-overflow-hidden com-w-full com-relative com-bg-tWhite com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-shadow-sm;
+
+  // the label sits above the image, inside the card
+  .card-top {
+    @apply com-px-3 com-pt-3 com-flex com-items-center com-justify-between com-relative;
+  }
 
   .promoted-badge {
-    @apply com-flex com-items-center com-gap-1 com-no-underline com-absolute com-right-0 com-top-0 com-rounded-md com-bg-blue-100 com-z-30 com-p-0.5 com-text-tYankees-Blue com-text-xs com-leading-none;
+    @apply com-inline-flex com-items-center com-gap-1 com-no-underline com-rounded-md com-bg-blue-100 com-px-1.5 com-py-0.5 com-text-tYankees-Blue com-text-xs com-leading-none;
 
     fa-icon {
       @apply com-text-gray-500;
@@ -10,22 +16,175 @@
   }
 
   .container {
-    @apply com-flex com-transition-transform com-duration-700 com-h-full;
+    @apply com-flex com-transition-transform com-duration-700;
     width: 100%;
     /* Ensure width adapts dynamically */
   }
 
   .component-container-wrapper {
-    @apply com-w-full com-flex-shrink-0 com-flex-grow-0 com-rounded-md com-bg-tWhite;
+    @apply com-w-full com-flex-shrink-0 com-flex-grow-0 com-p-2 com-bg-tWhite;
     flex: 0 0 100%;
     /* Each slide takes full width */
 
     a {
-      @apply com-no-underline com-flex com-flex-col com-h-full com-justify-between com-gap-3;
+      @apply com-no-underline com-flex com-flex-col com-gap-2;
     }
 
+    // a fixed 4:3 crop around the centre, so images of any shape keep the card the same size
     .slider-image {
-      @apply com-w-full com-cursor-pointer com-object-contain com-overflow-hidden com-rounded-md;
+      @apply com-w-full com-cursor-pointer com-object-cover com-object-center com-overflow-hidden com-rounded-lg com-aspect-[4/3];
+    }
+
+    .slide-text {
+      @apply com-px-1 com-flex com-flex-col com-gap-1;
+    }
+
+    // titles and descriptions are clamped so cards stay a predictable height
+    .slide-title {
+      @apply com-m-0 com-text-base com-font-semibold com-leading-snug com-text-Yankees-Blue com-line-clamp-2;
+    }
+
+    .slide-description {
+      @apply com-m-0 com-text-sm com-leading-snug com-text-gray-500 com-line-clamp-3;
+    }
+  }
+}
+
+// the slides are clipped by the viewport, so the card itself can show the menu that drops out of it
+.slides-viewport {
+  @apply com-overflow-hidden;
+}
+
+.carousel .slide-dots {
+  @apply com-flex com-justify-center com-gap-2 com-pb-3 com-pt-1;
+
+  .slide-dot {
+    @apply com-h-2 com-w-2 com-rounded-full com-border-0 com-p-0 com-cursor-pointer com-bg-gray-300;
+
+    &.active {
+      @apply com-bg-primary-500;
+    }
+  }
+}
+
+// Horizontal layout (inside mobile lists): thumbnail on the left, text and button on the right
+.carousel.horizontal {
+  @apply com-overflow-visible com-my-3;
+
+  .slides-viewport {
+    @apply com-rounded-xl;
+  }
+
+  .component-container-wrapper a.horizontal-slide {
+    @apply com-flex-row com-items-start com-gap-3;
+  }
+
+  // written through .component-container-wrapper like the base rule it overrides: Angular scopes every part of a
+  // selector, so a shorter selector here would lose to the base width: 100% no matter where it sits in the file
+  .component-container-wrapper .slider-image {
+    @apply com-shrink-0 com-w-[38%];
+  }
+
+  .slide-body {
+    @apply com-flex com-flex-col com-gap-1.5 com-min-w-0 com-flex-1;
+  }
+
+  .slide-title {
+    @apply com-m-0 com-text-base com-font-semibold com-leading-snug com-text-Yankees-Blue com-line-clamp-2;
+  }
+
+  .slide-description {
+    @apply com-m-0 com-text-sm com-leading-snug com-text-gray-500 com-line-clamp-3;
+  }
+
+  // preview-only stand-ins, so the whole layout is visible before the advertiser has typed anything
+  .sample-text {
+    @apply com-opacity-50 com-italic;
+  }
+
+  .learn-more-button {
+    @apply com-mt-1 com-py-2 com-text-sm;
+  }
+}
+
+// the ad menu is shared by both layouts
+.carousel {
+  .ad-menu {
+    @apply com-relative;
+  }
+
+  .ad-menu-button {
+    @apply com-flex com-items-center com-justify-center com-h-7 com-w-7 com-rounded-full com-border-0 com-bg-transparent com-text-gray-500 com-cursor-pointer;
+  }
+
+  .ad-menu-panel {
+    @apply com-absolute com-right-0 com-top-8 com-z-40 com-flex com-flex-col com-min-w-[200px] com-py-1 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-white com-shadow-md;
+
+    button,
+    a {
+      @apply com-block com-w-full com-text-left com-px-3 com-py-2 com-text-sm com-border-0 com-bg-transparent com-text-Yankees-Blue com-no-underline com-cursor-pointer;
+    }
+  }
+
+  .why-panel {
+    @apply com-mx-3 com-mt-2 com-p-3 com-rounded-lg com-bg-gray-100 com-text-sm com-text-gray-600;
+
+    p {
+      @apply com-m-0 com-mb-2;
+    }
+
+    button {
+      @apply com-border-0 com-bg-transparent com-text-primary-500 com-font-medium com-p-0 com-cursor-pointer;
+    }
+  }
+}
+
+// Dark mode: the card colour is a fixed white, so it has to be overridden explicitly (live ads and the form preview)
+:host-context([data-theme='dark']) .carousel {
+  @apply com-bg-[#1e1e1e] com-border-[#374151];
+
+  .component-container-wrapper {
+    @apply com-bg-[#1e1e1e];
+  }
+
+  .slide-title {
+    @apply com-text-white;
+  }
+
+  .slide-description {
+    @apply com-text-[#9ca3af];
+  }
+
+  .ad-menu-button {
+    @apply com-text-[#9ca3af];
+  }
+
+  .ad-menu-panel {
+    @apply com-bg-[#1f2937] com-border-[#374151];
+
+    button,
+    a {
+      @apply com-text-white;
+    }
+  }
+
+  .why-panel {
+    @apply com-bg-[#111827] com-text-[#d1d5db];
+  }
+
+  .promoted-badge {
+    @apply com-bg-[#374151] com-text-white;
+
+    fa-icon {
+      @apply com-text-gray-300;
+    }
+  }
+
+  .slide-dots .slide-dot {
+    @apply com-bg-[#4b5563];
+
+    &.active {
+      @apply com-bg-white;
     }
   }
 }
@@ -38,16 +197,20 @@
   }
 }
 
-.campaign-image-footer {
-  @apply com-flex com-flex-row com-justify-between com-items-center com-gap-4 com-px-2 com-pb-2;
+.default-image {
+  @apply com-w-full;
 }
 
-.campaign-url {
-  @apply com-m-0 com-min-w-0 com-flex-1 com-text-xs com-font-normal com-text-tYankees-Blue com-break-all;
+.campaign-image-footer {
+  @apply com-w-full;
 }
 
 .learn-more-button {
-  @apply com-shrink-0 com-whitespace-nowrap com-border-tYankees-Blue com-text-tYankees-Blue #{!important};
+  @apply com-block com-w-full com-text-center com-rounded-lg com-bg-primary-500 com-text-white com-font-medium com-py-2.5 com-no-underline com-whitespace-nowrap com-overflow-hidden com-text-ellipsis com-cursor-pointer;
+
+  &:hover {
+    @apply com-opacity-90;
+  }
 }
 
 .default-image-container {

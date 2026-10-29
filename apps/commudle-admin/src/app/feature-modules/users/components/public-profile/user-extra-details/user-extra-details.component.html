@@ -4,6 +4,11 @@
     <commudle-user-features-stats *appBreakpoints="'<=md'" [user]="user"></commudle-user-features-stats>
   </div>
 
+  <!-- the mobile ad sits right after the stats block; nothing is shown when no ad is available -->
+  <div *appBreakpoints="'<=md'">
+    <commudle-listing-page-campaign [layout]="'horizontal'"></commudle-listing-page-campaign>
+  </div>
+
   <!-- 7. Badges (mobile) -->
   <app-user-badges *appBreakpoints="'<=md'" [user]="user"></app-user-badges>
 

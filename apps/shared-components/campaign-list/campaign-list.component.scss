@@ -163,10 +163,6 @@
   }
 }
 
-.resend-payment-button {
-  @apply com-mt-2;
-}
-
 .notes-table {
   @apply com-mx-0 com-mt-4 com-mb-0 com-rounded;
   nb-card-body {
@@ -187,10 +183,6 @@
   }
 }
 
-.notes-container {
-  @apply com-flex com-gap-2 com-mt-2;
-}
-
 .filter-by-status {
   @apply com-flex com-items-center com-gap-2;
   .filter-icon {
@@ -199,4 +191,60 @@
   .status-filter-select {
     @apply com-h-8 com-min-w-[140px] com-text-sm com-rounded com-border com-border-solid com-border-Bright-Gray com-bg-white com-text-Yankees-Blue com-cursor-pointer com-px-2 com-py-1;
   }
+}
+
+.confirm-dialog {
+  @apply com-w-[90vw] com-max-w-md;
+
+  .confirm-dialog-header {
+    @apply com-flex com-items-center com-justify-between;
+
+    h3 {
+      @apply com-m-0 com-text-lg com-font-semibold;
+    }
+  }
+
+  .confirm-dialog-body {
+    @apply com-max-h-[60vh] com-overflow-y-auto;
+
+    .confirm-dialog-question {
+      @apply com-mt-0 com-mb-3 com-font-medium;
+    }
+
+    .confirm-dialog-list {
+      @apply com-m-0 com-pl-5 com-flex com-flex-col com-gap-2 com-text-sm com-text-gray-600;
+    }
+  }
+
+  .confirm-dialog-footer {
+    @apply com-flex com-justify-end com-gap-2;
+  }
+}
+
+.dialog-field {
+  @apply com-flex com-flex-col com-gap-1 com-mt-3;
+
+  .dialog-label {
+    @apply com-text-sm com-font-medium;
+  }
+
+  .dialog-input {
+    @apply com-w-full com-p-2 com-text-sm com-rounded-[4px] com-border com-border-solid com-border-[#E4E9F2] com-bg-white;
+  }
+}
+
+.wallet-summary {
+  @apply com-flex com-flex-wrap com-items-center com-gap-x-6 com-gap-y-1 com-mb-4 com-px-4 com-py-3 com-text-sm com-rounded-md com-border com-border-solid com-border-Bright-Gray com-bg-white;
+
+  .wallet-summary-title {
+    @apply com-font-semibold;
+  }
+}
+
+.small-info-text {
+  @apply com-text-xs com-text-gray-500;
+}
+
+.scheduled-note {
+  @apply com-mt-1;
 }

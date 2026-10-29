@@ -3,6 +3,7 @@
     <commudle-listing-page-header
       (seoPreviewImageRetrieved)="onSeoPreviewImageRetrieved($event)"
       [parentType]="'communities'"
+      [showAd]="false"
     ></commudle-listing-page-header>
   </div>
   <div one-column *appBreakpoints="'<=lg'">
@@ -45,6 +46,7 @@
         Start your community
       </a>
     </div>
+    <commudle-listing-page-campaign></commudle-listing-page-campaign>
     <div class="hackathons-upcoming">
       <commudle-upcoming-hackathons></commudle-upcoming-hackathons>
     </div>

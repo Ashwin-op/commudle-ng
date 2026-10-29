@@ -70,8 +70,14 @@ export interface IPurchaseOrder {
     };
   };
   total_amount: number;
-  /** Backend-controlled threshold above which bank transfer is required instead of Razorpay. */
+  /** Always the USD figure, kept for older clients. Use bank_transfer_threshold instead. */
   bank_transfer_threshold_usd?: number;
+  /**
+   * Backend-controlled threshold, in major units of this order's own currency, from which bank transfer is
+   * required instead of Razorpay. null means bank transfer is not offered for this order's currency.
+   */
+  bank_transfer_threshold?: number | null;
+  bank_transfer_threshold_currency?: string;
 }
 
 export enum EPurchaseOrderStatus {

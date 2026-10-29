@@ -176,26 +176,92 @@ nb-accordion {
   @apply com-hidden;
 }
 
-.sticky-footer {
-  @apply com-flex com-flex-col com-border-0 com-border-t com-border-solid com-border-Bright-Gray com-sticky md:com-bottom-0 com-bottom-[68px] com-bg-Ghost-White com-z-10;
+.form-footer {
+  @apply com-flex com-flex-col com-border-0 com-border-t com-border-solid com-border-Bright-Gray com-bg-Ghost-White;
+}
+
+.wallet-header {
+  @apply com-flex com-items-center com-gap-4;
+
+  .wallet-header-icon {
+    @apply com-text-base com-text-Yankees-Blue;
+  }
+
+  .wallet-header-title {
+    @apply com-text-base com-font-semibold com-text-Yankees-Blue;
+  }
+
+  .wallet-header-available {
+    @apply com-ml-4 com-text-sm com-text-gray-600;
+
+    strong {
+      @apply com-ml-1 com-text-base com-font-semibold com-text-Yankees-Blue;
+    }
+  }
 }
 
 .wallet-details-section {
-  @apply com-px-4 com-pt-3 com-pb-2 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+  @apply com-px-4 com-pt-4 com-pb-4 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
 
-  .wallet-details-heading {
-    @apply com-text-sm com-font-semibold com-text-Yankees-Blue com-m-0 com-mb-2;
-  }
+  .wallet-stats {
+    @apply com-flex;
 
-  .wallet-details-table {
-    @apply com-w-full com-text-sm com-border-collapse;
+    .wallet-stat {
+      @apply com-flex com-flex-col com-gap-1 com-flex-1 com-px-4 com-border-0 com-border-l com-border-solid com-border-Bright-Gray;
 
-    .wallet-details-label {
-      @apply com-pb-2 com-pr-4 com-text-gray-600;
+      &:first-child {
+        @apply com-pl-0 com-border-l-0;
+      }
     }
 
-    .wallet-details-value {
-      @apply com-text-left com-font-medium;
+    .wallet-stat-label {
+      @apply com-text-xs com-text-gray-600;
+    }
+
+    .wallet-stat-value {
+      @apply com-text-base com-font-semibold com-text-Yankees-Blue;
+    }
+  }
+
+  .wallet-budget-row {
+    @apply com-flex com-items-baseline com-gap-8 com-mt-4 com-pt-4 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+
+    .wallet-budget-label {
+      @apply com-text-sm com-text-gray-600;
+    }
+
+    .wallet-budget-value {
+      @apply com-text-base com-font-semibold com-text-Yankees-Blue;
+    }
+  }
+
+  .wallet-after {
+    @apply com-mt-4 com-p-4 com-rounded-lg com-bg-[#F5F6FB];
+
+    .wallet-after-heading {
+      @apply com-text-sm com-font-semibold com-text-Yankees-Blue com-m-0 com-mb-3;
+    }
+
+    .wallet-stat {
+      &:first-child {
+        @apply com-pr-4;
+      }
+    }
+  }
+
+  .wallet-shortfall {
+    @apply com-flex com-gap-3 com-mt-4 com-p-4 com-rounded-lg com-border com-border-solid com-border-[#F6DDB8] com-bg-[#FFF8EF];
+
+    .wallet-shortfall-icon {
+      @apply com-flex com-items-center com-justify-center com-shrink-0 com-w-6 com-h-6 com-text-xs com-rounded-full com-bg-[#F0A83C] com-text-white;
+    }
+
+    .wallet-shortfall-title {
+      @apply com-m-0 com-text-sm com-font-semibold com-text-Yankees-Blue;
+    }
+
+    .wallet-shortfall-text {
+      @apply com-m-0 com-mt-1 com-text-xs com-text-gray-600;
     }
   }
 }
@@ -217,7 +283,23 @@ nb-accordion {
 }
 
 .right-column-container {
-  @apply com-aspect-1 com-rounded-md;
+  @apply com-rounded-md com-w-full com-mx-auto;
+
+  &.preview-desktop {
+    @apply com-max-w-[300px];
+  }
+
+  &.preview-mobile {
+    @apply com-max-w-[360px];
+  }
+}
+
+.preview-caption {
+  @apply com-mt-0 com-mb-3;
+}
+
+.preview-device-toggle {
+  @apply com-flex com-gap-2 com-mb-3;
 }
 
 .saved-assets-container {
@@ -238,14 +320,18 @@ nb-accordion {
     }
 
     .saved-asset-details {
-      @apply com-flex com-flex-col com-gap-2;
+      @apply com-flex com-flex-col com-gap-2 com-min-w-0 com-flex-1;
 
       .saved-headline {
         @apply com-m-0 com-text-sm com-font-medium com-text-Yankees-Blue;
       }
 
+      .saved-title {
+        @apply com-m-0 com-text-sm com-font-medium com-text-Yankees-Blue com-truncate;
+      }
+
       .saved-url {
-        @apply com-m-0 com-text-xs com-font-medium com-text-gray-custom-1;
+        @apply com-m-0 com-text-xs com-font-medium com-text-gray-custom-1 com-truncate;
       }
     }
   }
@@ -253,4 +339,92 @@ nb-accordion {
 
 .action-btn {
   @apply com-ml-auto;
+}
+
+.confirm-dialog {
+  @apply com-w-[90vw] com-max-w-md;
+
+  .confirm-dialog-header {
+    @apply com-flex com-items-center com-justify-between;
+
+    h3 {
+      @apply com-m-0 com-text-lg com-font-semibold;
+    }
+  }
+
+  .confirm-dialog-body {
+    @apply com-max-h-[60vh] com-overflow-y-auto;
+
+    .confirm-dialog-question {
+      @apply com-mt-0 com-mb-3 com-font-medium;
+    }
+
+    .confirm-dialog-list {
+      @apply com-m-0 com-pl-5 com-flex com-flex-col com-gap-2 com-text-sm com-text-gray-600;
+    }
+  }
+
+  .confirm-dialog-footer {
+    @apply com-flex com-justify-end com-gap-2;
+  }
+}
+
+.live-summary-list {
+  @apply com-grid com-grid-cols-[120px_1fr] com-gap-x-4 com-gap-y-1 com-my-3 com-text-sm;
+
+  dt {
+    @apply com-font-medium;
+  }
+
+  dd {
+    @apply com-m-0 com-break-words;
+  }
+}
+
+.change-log-list {
+  @apply com-list-none com-m-0 com-p-0 com-flex com-flex-col com-gap-2 com-text-sm;
+}
+
+.estimate-status {
+  @apply com-mt-3 com-px-3 com-py-2 com-rounded-md com-text-sm com-border com-border-solid;
+
+  .estimate-status-message {
+    @apply com-m-0;
+  }
+
+  .estimate-status-hint {
+    @apply com-mt-1 com-mb-0;
+  }
+
+  &.deliverable {
+    @apply com-bg-green-100 com-border-green-500 com-text-green-700;
+  }
+
+  &.borderline {
+    @apply com-bg-yellow-100 com-border-yellow-500 com-text-yellow-800;
+  }
+
+  &.undeliverable {
+    @apply com-bg-red-100 com-border-red-500 com-text-red-700;
+  }
+
+  &.no_end_date {
+    @apply com-bg-gray-100 com-border-gray-300 com-text-gray-700;
+  }
+}
+
+.currency-field {
+  @apply com-mt-4;
+
+  .currency-select {
+    @apply com-w-full com-p-2 com-text-sm com-rounded-[4px] com-border com-border-solid com-border-[#E4E9F2] com-bg-white;
+
+    &:disabled {
+      @apply com-bg-gray-100 com-cursor-not-allowed;
+    }
+  }
+}
+
+.asset-toggle-button {
+  @apply com-shrink-0;
 }

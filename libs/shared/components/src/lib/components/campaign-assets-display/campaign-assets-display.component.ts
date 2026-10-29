@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  HostListener,
   Inject,
   PLATFORM_ID,
   Input,
@@ -15,7 +16,7 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { EDbModels, ICampaign, EUserActivityEventType } from '@commudle/shared-models';
 import { CampaignService, GoogleTagManagerService, SeoService } from '@commudle/shared-services';
-import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
+import { faCircleQuestion, faEllipsisVertical, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'commudle-campaign-assets-display',
@@ -25,11 +26,17 @@ import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 })
 export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   @Input() defaultImage: string;
+  @Input() defaultImageAlt = '';
   @Input() defaultImageUrl: string;
   @Input() campaignType: 'preview' | 'live' = 'live';
   @Input() campaignPreview: ICampaign;
+  // vertical: image on top (sidebars). horizontal: thumbnail on the left (inside mobile lists), with a menu
+  @Input() layout: 'vertical' | 'horizontal' = 'vertical';
+  // show nothing, not the default image, when no campaign is eligible (e.g. inside an article)
+  @Input() hideWhenEmpty = false;
 
   campaign: ICampaign;
+  private serveToken: string | null = null;
   currentSlide = 0;
   slidesCount = 0;
   private intervalId: any;
@@ -40,7 +47,15 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
   private campaignObserver!: IntersectionObserver;
   private defaultImageObserver!: IntersectionObserver;
   faCircleQuestion = faCircleQuestion;
+  faEllipsisVertical = faEllipsisVertical;
+  faXmark = faXmark;
 
+  // ad menu state (horizontal layout). Hiding only removes the ad until the page is loaded again.
+  menuOpen = false;
+  showWhy = false;
+  adHidden = false;
+
+  private viewInitialized = false;
   private hasTrackedCampaignView = false;
   private hasTrackedDefaultImageView = false;
   private isBrowser: boolean;
@@ -65,8 +80,8 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
   ngOnInit() {
     if (this.campaignPreview && this.campaignType === 'preview') {
       this.applyCampaignPreview();
-    } else if (!this.campaign && this.campaignType === 'live') {
-      // this.fetchCampaign();
+    } else if (this.isBrowser && !this.campaign && this.campaignType === 'live') {
+      this.fetchCampaign();
     }
   }
 
@@ -81,6 +96,9 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
     this.campaign = source;
     if (source && source.campaign_assets && source.campaign_assets.length > 0) {
       this.slidesCount = source.campaign_assets.length;
+      if (this.currentSlide >= this.slidesCount) {
+        this.currentSlide = 0;
+      }
       this.startAutoSlide();
     } else {
       this.slidesCount = 0;
@@ -90,14 +108,21 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
 
   private fetchCampaign(): void {
     this.campaignService.serveCampaign().subscribe((data) => {
-      if (data && data.campaign_assets && data.campaign_assets.length > 0) {
-        this.campaign = data;
+      const served = data?.campaign;
+      if (served && served.campaign_assets && served.campaign_assets.length > 0) {
+        this.campaign = served;
+        this.serveToken = data.serve_token || null;
         this.slidesCount = this.campaign.campaign_assets.length;
         this.startAutoSlide();
         this.userEngagementRecordForm.patchValue({
           parent_id: this.campaign.id,
           parent_type: EDbModels.CAMPAIGN,
         });
+        // the 500ms check in ngAfterViewInit may have already run before serve responded
+        if (this.viewInitialized) {
+          this.defaultImageObserver?.disconnect();
+          setTimeout(() => this.observeCampaignImage());
+        }
       }
     });
   }
@@ -106,6 +131,7 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
     if (!this.isBrowser || typeof IntersectionObserver === 'undefined') {
       return;
     }
+    this.viewInitialized = true;
     if (this.campaignType === 'live') {
       this.campaignObserver = new IntersectionObserver(
         (entries) => {
@@ -146,6 +172,14 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
     }
   }
 
+  private observeCampaignImage(): void {
+    const campaignEl = this.campaignImageContainerDiv?.nativeElement;
+    if (campaignEl && this.campaignObserver && !this.hasTrackedCampaignView) {
+      this.campaignObserver.observe(campaignEl);
+      this.checkAndTriggerIfVisible(campaignEl, this.campaignObserver);
+    }
+  }
+
   private checkAndTriggerIfVisible(element: HTMLElement, observer: IntersectionObserver) {
     if (!this.isBrowser) {
       return;
@@ -162,6 +196,52 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
     }
   }
 
+  toggleMenu(event: Event): void {
+    event.stopPropagation();
+    this.menuOpen = !this.menuOpen;
+  }
+
+  @HostListener('document:click')
+  closeMenu(): void {
+    this.menuOpen = false;
+  }
+
+  openWhy(): void {
+    this.showWhy = true;
+    this.menuOpen = false;
+  }
+
+  hideAd(): void {
+    // in the campaign form preview the menu is only there to show how it looks
+    if (this.campaignType === 'preview') {
+      this.menuOpen = false;
+      return;
+    }
+    this.adHidden = true;
+    this.menuOpen = false;
+    this.showWhy = false;
+    this.clearAutoSlide();
+  }
+
+  // opens the person's email app with the ad's details filled in
+  get reportHref(): string {
+    const page = this.isBrowser ? window.location.href : '';
+    const creative = this.campaign?.campaign_assets?.[this.currentSlide]?.id ?? '';
+    const body = [
+      'Hi Commudle team,',
+      '',
+      'I would like to report this ad.',
+      '',
+      `Campaign: ${this.campaign?.id ?? ''}`,
+      `Creative: ${creative}`,
+      `Page: ${page}`,
+      '',
+      'What is wrong with this ad:',
+      '',
+    ].join('\n');
+    return `mailto:support@commudle.com?subject=${encodeURIComponent('Report an ad')}&body=${encodeURIComponent(body)}`;
+  }
+
   ngOnDestroy(): void {
     this.clearAutoSlide();
     if (this.campaignObserver) {
@@ -176,6 +256,11 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
     if (this.slidesCount > 0) {
       this.currentSlide = (this.currentSlide + 1) % this.slidesCount; // Loop back to first slide
     }
+  }
+
+  goToSlide(index: number) {
+    this.currentSlide = index;
+    this.startAutoSlide(); // restart the timer so the chosen slide isn't skipped right away
   }
 
   private startAutoSlide() {
@@ -196,12 +281,20 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
     this.createUserEngagementForCampaign(EUserActivityEventType.CLICK);
   }
 
-  createUserEngagementForCampaign(eventType) {
+  // assetId is the creative that was clicked; for an impression it falls back to the slide currently on screen
+  createUserEngagementForCampaign(eventType, assetId?: number) {
     if (this.campaignType === 'live' && this.campaign) {
       const currentUrl = this.isBrowser ? window.location.href : '';
       const formData = new FormData();
       formData.append('campaign_engagement[event_type]', eventType);
       formData.append('campaign_engagement[url]', currentUrl);
+      if (this.serveToken) {
+        formData.append('campaign_engagement[serve_token]', this.serveToken);
+      }
+      const campaignAssetId = assetId ?? this.campaign.campaign_assets?.[this.currentSlide]?.id;
+      if (campaignAssetId != null) {
+        formData.append('campaign_engagement[campaign_asset_id]', String(campaignAssetId));
+      }
 
       if (!this.seoService.isBot) {
         this.campaignService.recordImpression(formData, this.campaign.id).subscribe(() => {

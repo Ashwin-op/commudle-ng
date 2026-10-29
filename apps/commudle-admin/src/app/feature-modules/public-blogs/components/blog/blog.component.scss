@@ -60,7 +60,7 @@
         }
 
         article {
-          div {
+          > div {
             ::ng-deep {
               p {
                 @apply com-text-black #{!important};

@@ -11,6 +11,7 @@ import { BlogCardComponent } from './components/blog-card/blog-card.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives.module';
 import { AiAssistantSelectorComponent } from '@commudle/shared-components';
+import { ListingPageCampaignComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-campaign/listing-page-campaign.component';
 import { CommudleCardModule } from '@commudle/commudle-theme';
 
 @NgModule({
@@ -29,6 +30,7 @@ import { CommudleCardModule } from '@commudle/commudle-theme';
     FontAwesomeModule,
     SharedDirectivesModule,
     AiAssistantSelectorComponent,
+    ListingPageCampaignComponent,
     CommudleCardModule,
   ],
 })

@@ -2,10 +2,6 @@
   <div class="container">
     <div class="two-column-layout medium">
       <div class="main-column">
-        <div *appBreakpoints="'<=lg'">
-          <commudle-user-notifications-campaign></commudle-user-notifications-campaign>
-        </div>
-
         <nb-card class="notifications-container">
           <nb-card-header>
             <h6>Notifications</h6>
@@ -23,6 +19,7 @@
           </nb-card-header>
           <nb-card-body>
             <app-notifications-list
+              [showAd]="true"
               [markAllAsRead]="trackMarkAllAsRead"
               [notificationsCount]="20"
             ></app-notifications-list>
@@ -30,7 +27,7 @@
         </nb-card>
       </div>
       <div class="right-column">
-        <commudle-user-notifications-campaign></commudle-user-notifications-campaign>
+        <commudle-user-notifications-campaign *appBreakpoints="'>lg'"></commudle-user-notifications-campaign>
         <div *ngIf="currentUser" class="user">
           <commudle-user-profile [currentUser]="currentUser"></commudle-user-profile>
           <commudle-userprofile-details

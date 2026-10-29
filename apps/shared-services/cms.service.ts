@@ -29,13 +29,7 @@ export class CmsService {
     return from(this.client.fetch(`*[_type == "${type}"]`));
   }
 
-  getDataByTypeWithFilter(
-    type: string,
-    filterType: string,
-    keyword: string,
-    finalCount: number,
-    initialCount = 0,
-  ) {
+  getDataByTypeWithFilter(type: string, filterType: string, keyword: string, finalCount: number, initialCount = 0) {
     return from(
       this.client.fetch(`*[_type == "${type}" && $keyword in ${filterType}] [${initialCount}...${finalCount}]`, {
         keyword,
@@ -61,13 +55,7 @@ export class CmsService {
     );
   }
 
-  getDataByTypeFieldOrderCount(
-    type: string,
-    fields: string,
-    order: string,
-    finalCount: number,
-    initialCount = 0,
-  ) {
+  getDataByTypeFieldOrderCount(type: string, fields: string, order: string, finalCount: number, initialCount = 0) {
     return from(
       this.client.fetch(`*[_type == "${type}"]{${fields}} | order(${order}) [${initialCount}...${finalCount}]`),
     );
