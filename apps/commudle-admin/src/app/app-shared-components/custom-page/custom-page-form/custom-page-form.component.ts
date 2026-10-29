@@ -11,10 +11,10 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { EDbModels } from '@commudle/shared-models';
 
 @Component({
-    selector: 'app-custom-page-form',
-    templateUrl: './custom-page-form.component.html',
-    styleUrls: ['./custom-page-form.component.scss'],
-    standalone: false
+  selector: 'app-custom-page-form',
+  templateUrl: './custom-page-form.component.html',
+  styleUrls: ['./custom-page-form.component.scss'],
+  standalone: false,
 })
 export class CustomPageFormComponent implements OnInit, OnDestroy {
   customPageForm: FormGroup;
@@ -36,8 +36,7 @@ export class CustomPageFormComponent implements OnInit, OnDestroy {
     menubar: false,
     convert_urls: false,
     placeholder: 'Write content for custom page',
-    content_style:
-      "@import url('https://fonts.googleapis.com/css?family=Inter'); body {font-family: 'Inter'; font-size: 16px !important;}",
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 16px !important;}',
     plugins: [
       'emoticons',
       'advlist',

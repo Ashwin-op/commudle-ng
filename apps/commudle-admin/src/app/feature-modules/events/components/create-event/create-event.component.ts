@@ -58,8 +58,7 @@ export class CreateEventComponent implements OnInit {
     height: 300,
     menubar: false,
     convert_urls: false,
-    content_style:
-      "@import url('https://fonts.googleapis.com/css?family=Inter'); body {font-family: 'Inter'; font-size: 16px !important;}",
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 16px !important;}',
     plugins: [
       'advlist',
       'autolink',
@@ -173,9 +172,7 @@ export class CreateEventComponent implements OnInit {
         // Wait for the header image upload to finish before navigating, otherwise the
         // dashboard resolver re-fetches the event before the banner is persisted and
         // shows no banner until a manual refresh.
-        const headerImage$: Observable<any> = this.uploadedHeaderImageFile
-          ? this.uploadHeaderImage(data.id)
-          : of(null);
+        const headerImage$: Observable<any> = this.uploadedHeaderImageFile ? this.uploadHeaderImage(data.id) : of(null);
 
         headerImage$.subscribe({
           next: () => this.finishEventCreation(data, publish),

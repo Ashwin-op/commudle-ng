@@ -13,10 +13,10 @@ import { removeHtmlTags } from '@commudle/shared-services';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-    selector: 'app-edit-lab',
-    templateUrl: './edit-lab.component.html',
-    styleUrls: ['./edit-lab.component.scss'],
-    standalone: false
+  selector: 'app-edit-lab',
+  templateUrl: './edit-lab.component.html',
+  styleUrls: ['./edit-lab.component.scss'],
+  standalone: false,
 })
 export class EditLabComponent implements OnInit, OnDestroy {
   EPublishStatus = EPublishStatus;
@@ -39,8 +39,7 @@ export class EditLabComponent implements OnInit, OnDestroy {
     min_height: 500,
     menubar: false,
     convert_urls: false,
-    content_style:
-      "@import url('https://fonts.googleapis.com/css?family=Inter'); body {font-family: 'Inter'; font-size: 20px !important;}",
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 20px !important;}',
     plugins: [
       'emoticons',
       'advlist',
@@ -268,7 +267,7 @@ export class EditLabComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateLab(publishStatus, forceSubmit: boolean = false) {
+  updateLab(publishStatus, forceSubmit = false) {
     if (this.tags.length < 5) {
       this.showTagsValidation = true;
       return;

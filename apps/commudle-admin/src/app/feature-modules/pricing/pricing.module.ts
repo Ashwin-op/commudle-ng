@@ -16,6 +16,7 @@ import { SharedComponentsModule } from '@commudle/shared-components';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CommudleCardModule } from '@commudle/commudle-theme';
 
 @NgModule({
   declarations: [PricingComponent, CommudleFeaturesComponent],
@@ -25,6 +26,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     AppSharedComponentsModule,
     FontAwesomeModule,
     ReactiveFormsModule,
+    CommudleCardModule,
 
     // Nebular
     NbCardModule,

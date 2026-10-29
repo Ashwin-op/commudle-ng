@@ -7,10 +7,10 @@ import { HackathonService } from 'apps/commudle-admin/src/app/services/hackathon
 import { EmailPreviewComponent } from 'apps/commudle-admin/src/app/app-shared-components/email-preview/email-preview.component';
 
 @Component({
-    selector: 'commudle-hackathon-round-general-mailer',
-    templateUrl: './hackathon-round-general-mailer.component.html',
-    styleUrls: ['./hackathon-round-general-mailer.component.scss'],
-    standalone: false
+  selector: 'commudle-hackathon-round-general-mailer',
+  templateUrl: './hackathon-round-general-mailer.component.html',
+  styleUrls: ['./hackathon-round-general-mailer.component.scss'],
+  standalone: false,
 })
 export class HackathonRoundGeneralMailerComponent implements OnInit {
   @Input() hackathonId: number | string;
@@ -26,8 +26,7 @@ export class HackathonRoundGeneralMailerComponent implements OnInit {
     menubar: false,
     convert_urls: false,
     placeholder: 'Write Message',
-    content_style:
-      "@import url('https://fonts.googleapis.com/css?family=Inter'); body {font-family: 'Inter'; font-size: 16px !important;}",
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 16px !important;}',
     plugins: [
       'emoticons',
       'advlist',
@@ -84,16 +83,18 @@ export class HackathonRoundGeneralMailerComponent implements OnInit {
 
   roundGeneralMailer() {
     this.isLoading = true;
-    this.hackathonService.roundGeneralEmail(this.roundGeneralMailerForm.value).subscribe((data) => {
-      if (data) {
-        this.toastrService.successDialog('Emails are being delivered!');
-        this.closePopup();
-      }
-      this.isLoading = false;
-    }),
+    this.hackathonService.roundGeneralEmail(this.roundGeneralMailerForm.value).subscribe(
+      (data) => {
+        if (data) {
+          this.toastrService.successDialog('Emails are being delivered!');
+          this.closePopup();
+        }
+        this.isLoading = false;
+      },
       () => {
         this.isLoading = false;
-      };
+      },
+    );
   }
 
   previewEmail(hackathonId) {

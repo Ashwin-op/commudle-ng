@@ -13,10 +13,10 @@ import { NbDialogService } from '@commudle/theme';
 import { EDbModels } from '@commudle/shared-models';
 
 @Component({
-    selector: 'commudle-newsletter-form',
-    templateUrl: './newsletter-form.component.html',
-    styleUrls: ['./newsletter-form.component.scss'],
-    standalone: false
+  selector: 'commudle-newsletter-form',
+  templateUrl: './newsletter-form.component.html',
+  styleUrls: ['./newsletter-form.component.scss'],
+  standalone: false,
 })
 export class NewsletterFormComponent implements OnInit, AfterViewInit {
   newsletterForm: FormGroup;
@@ -44,8 +44,7 @@ export class NewsletterFormComponent implements OnInit, AfterViewInit {
     menubar: false,
     convert_urls: false,
     placeholder: 'Start typing your newsletter content here...',
-    content_style:
-      "@import url('https://fonts.googleapis.com/css?family=Inter'); body {font-family: 'Inter'; font-size: 16px !important;}",
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 16px !important;}',
     plugins: [
       'emoticons',
       'advlist',

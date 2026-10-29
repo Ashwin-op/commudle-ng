@@ -7,8 +7,8 @@
 
 <!-- Plan detail dialog -->
 <ng-template #planDialog let-ref="dialogRef">
-  <nb-card class="spb-dialog">
-    <nb-card-header>
+  <com-card class="spb-dialog">
+    <com-card-header>
       <div class="spb-dialog-header">
         <div class="spb-dialog-title-row">
           <nb-icon icon="star" class="spb-dialog-icon"></nb-icon>
@@ -31,9 +31,9 @@
           </ng-container>
         </span>
       </div>
-    </nb-card-header>
+    </com-card-header>
 
-    <nb-card-body>
+    <com-card-body>
       <div class="spb-status-row">
         <span class="spb-status-pill" [ngClass]="getStatusClass()">
           <span class="spb-status-dot"></span>
@@ -70,9 +70,9 @@
         <nb-icon icon="alert-triangle-outline"></nb-icon>
         <span>Your subscription has {{ subscription.status }}. Renew to continue creating communities.</span>
       </div>
-    </nb-card-body>
+    </com-card-body>
 
-    <nb-card-footer>
+    <com-card-footer>
       <div class="spb-dialog-footer">
         <a
           [routerLink]="['/subscriptions']"
@@ -86,6 +86,6 @@
         </a>
         <button nbButton ghost size="small" (click)="ref.close()">Close</button>
       </div>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

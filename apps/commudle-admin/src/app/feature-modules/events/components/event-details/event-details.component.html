@@ -1,19 +1,19 @@
 <div *appBreakpoints="'<=md'">
-  <nb-card class="!com-rounded-none">
-    <nb-card-header>
+  <com-card class="!com-rounded-none">
+    <com-card-header>
       <h6>
         <nb-icon icon="clipboard-outline"></nb-icon>
         Status
       </h6>
-    </nb-card-header>
-    <nb-card-body class="com-px-2">
+    </com-card-header>
+    <com-card-body class="com-px-2">
       <commudle-event-status (updatedEventStatus)="event.event_status = $event" [event]="event"></commudle-event-status>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </div>
 
-<nb-card class="event-details-container">
-  <nb-card-body class="image-container">
+<com-card class="event-details-container">
+  <com-card-body class="image-container">
     <ng-container *ngIf="event.header_image_path">
       <div class="com-w-2/3">
         <commudle-banner-image [headerImagePath]="event.header_image_path"></commudle-banner-image>
@@ -68,8 +68,8 @@
         ></div>
       </div>
     </div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
 
 <div class="next-step-section" *ngIf="event.event_status.id !== 5">
   <a>

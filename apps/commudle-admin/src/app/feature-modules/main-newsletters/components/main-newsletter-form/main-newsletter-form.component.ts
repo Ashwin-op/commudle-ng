@@ -11,10 +11,10 @@ import { SeoService } from 'apps/shared-services/seo.service';
 import { Observable } from 'rxjs';
 
 @Component({
-    selector: 'app-main-newsletter-form',
-    templateUrl: './main-newsletter-form.component.html',
-    styleUrls: ['./main-newsletter-form.component.scss'],
-    standalone: false
+  selector: 'app-main-newsletter-form',
+  templateUrl: './main-newsletter-form.component.html',
+  styleUrls: ['./main-newsletter-form.component.scss'],
+  standalone: false,
 })
 export class MainNewsletterFormComponent implements OnInit, OnDestroy, AfterViewInit, CanComponentDeactivate {
   newsLetter: IMainNewsletter;
@@ -32,7 +32,7 @@ export class MainNewsletterFormComponent implements OnInit, OnDestroy, AfterView
     width: '650',
     menubar: false,
     convert_urls: false,
-    content_style: "@import url('https://fonts.googleapis.com/css?family=Inter'); body {font-family: 'Inter';}",
+    content_style: 'body {font-family: system-ui, sans-serif;}',
     font_size_formats: '8pt 10pt 12pt 14pt 16pt 18pt 24pt 28pt 36pt',
     plugins: [
       'emoticons',

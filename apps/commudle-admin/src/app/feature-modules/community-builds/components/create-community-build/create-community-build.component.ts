@@ -100,8 +100,7 @@ export class CreateCommunityBuildComponent implements OnInit, OnDestroy {
       'wordcount',
       'autoresize',
     ],
-    content_style:
-      "@import url('https://fonts.googleapis.com/css?family=Inter'); body {font-family: 'Inter'; font-size: 16px !important;}",
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 16px !important;}',
     toolbar:
       'formatselect | bold italic backcolor | link | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table | charmap | removeformat | help',
     default_link_target: '_blank',
@@ -117,8 +116,7 @@ export class CreateCommunityBuildComponent implements OnInit, OnDestroy {
     statusbar: false,
     toolbar: false,
     plugins: ['autoresize'],
-    content_style:
-      "@import url('https://fonts.googleapis.com/css?family=Inter'); body {font-family: 'Inter'; font-size: 16px !important;}",
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 16px !important;}',
     convert_urls: false,
     branding: false,
     license_key: 'gpl',

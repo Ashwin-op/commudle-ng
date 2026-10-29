@@ -13,10 +13,10 @@ enum EFormPurposes {
 }
 
 @Component({
-    selector: 'app-new-data-form',
-    templateUrl: './new-data-form.component.html',
-    styleUrls: ['./new-data-form.component.scss'],
-    standalone: false
+  selector: 'app-new-data-form',
+  templateUrl: './new-data-form.component.html',
+  styleUrls: ['./new-data-form.component.scss'],
+  standalone: false,
 })
 export class NewDataFormComponent implements OnInit {
   @Input() showDescriptionField = true;
@@ -33,7 +33,7 @@ export class NewDataFormComponent implements OnInit {
   @Input() formPurpose;
   @Input() stickSubmitButtonBottom = false;
   @Input() showNameDescriptionFiled = true;
-  @Input() formName: string = '';
+  @Input() formName = '';
   @Input() showSubmitButton = true;
 
   @Output() newDataForm = new EventEmitter();
@@ -72,8 +72,7 @@ export class NewDataFormComponent implements OnInit {
     statusbar: false,
     toolbar: false,
     plugins: ['autoresize'],
-    content_style:
-      "@import url('https://fonts.googleapis.com/css?family=Inter'); body {font-family: 'Inter'; font-size: 16px !important;}",
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 16px !important;}',
     license_key: 'gpl',
   };
 

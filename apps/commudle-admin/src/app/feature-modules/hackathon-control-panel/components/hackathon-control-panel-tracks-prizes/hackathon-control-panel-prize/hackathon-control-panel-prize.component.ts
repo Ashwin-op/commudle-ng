@@ -79,8 +79,7 @@ export class HackathonControlPanelPrizeComponent implements OnInit, OnDestroy {
     menubar: false,
     convert_urls: false,
     placeholder: 'Write description for Prize',
-    content_style:
-      "@import url('https://fonts.googleapis.com/css?family=Inter'); body {font-family: 'Inter'; font-size: 16px !important;}",
+    content_style: 'body {font-family: system-ui, sans-serif; font-size: 16px !important;}',
     plugins: [
       'emoticons',
       'advlist',

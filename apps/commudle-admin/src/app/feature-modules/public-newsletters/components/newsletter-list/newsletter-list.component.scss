@@ -1,5 +1,11 @@
 .newsletter-list-container {
-  nb-card-body {
+  @apply com-mx-0 com-my-4;
+  com-card-header {
+    h1 {
+      @apply com-m-0;
+    }
+  }
+  com-card-body {
     .newsletter-cards {
       @apply com-grid sm:com-grid-cols-2 lg:com-grid-cols-3 com-gap-4 lg:com-gap-8;
 

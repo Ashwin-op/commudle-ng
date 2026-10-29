@@ -1,5 +1,5 @@
-<nb-card>
-  <nb-card-body *ngIf="newsletter">
+<com-card>
+  <com-card-body *ngIf="newsletter">
     <commudle-back-button
       text="Back to list of newsletters"
       [router]="'/communities/' + community.slug + '/newsletters'"
@@ -10,5 +10,5 @@
       [headerImagePath]="newsletter.banner_image?.url"
     ></commudle-banner-image>
     <div [innerHTML]="newsletter.content | safeHtml"></div>
-  </nb-card-body>
-</nb-card>
+  </com-card-body>
+</com-card>
