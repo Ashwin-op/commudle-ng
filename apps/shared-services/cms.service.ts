@@ -21,8 +21,6 @@ export class CmsService {
 
   imageUrlBuilder = imageUrlBuilder(this.client);
 
-  constructor() {}
-
   getDataBySlug(slug: string) {
     return from(this.client.fetch(`*[slug.current == "${slug}"]`)).pipe(map((data) => data[0]));
   }
@@ -31,13 +29,7 @@ export class CmsService {
     return from(this.client.fetch(`*[_type == "${type}"]`));
   }
 
-  getDataByTypeWithFilter(
-    type: string,
-    filterType: string,
-    keyword: string,
-    finalCount: number,
-    initialCount: number = 0,
-  ) {
+  getDataByTypeWithFilter(type: string, filterType: string, keyword: string, finalCount: number, initialCount = 0) {
     return from(
       this.client.fetch(`*[_type == "${type}" && $keyword in ${filterType}] [${initialCount}...${finalCount}]`, {
         keyword,
@@ -51,7 +43,7 @@ export class CmsService {
     keyword: string,
     orderBy: string,
     finalCount: number,
-    initialCount: number = 0,
+    initialCount = 0,
   ) {
     return from(
       this.client.fetch(
@@ -63,13 +55,7 @@ export class CmsService {
     );
   }
 
-  getDataByTypeFieldOrderCount(
-    type: string,
-    fields: string,
-    order: string,
-    finalCount: number,
-    initialCount: number = 0,
-  ) {
+  getDataByTypeFieldOrderCount(type: string, fields: string, order: string, finalCount: number, initialCount = 0) {
     return from(
       this.client.fetch(`*[_type == "${type}"]{${fields}} | order(${order}) [${initialCount}...${finalCount}]`),
     );
@@ -82,7 +68,7 @@ export class CmsService {
     filterType: string,
     keyword: boolean,
     finalCount: number,
-    initialCount: number = 0,
+    initialCount = 0,
   ) {
     return from(
       this.client.fetch(
@@ -99,7 +85,7 @@ export class CmsService {
     return from(this.client.fetch(`*[_type == "${type}" && date >= "${passDate}"]| order(${order}) `));
   }
 
-  getHtmlFromBlock(value: any, field: string = 'content'): any {
+  getHtmlFromBlock(value: any, field = 'content'): any {
     return toHTML(value[field], {
       components: {
         types: {
@@ -135,7 +121,7 @@ export class CmsService {
   }
 
   getImageUrl(source: SanityImageSource): ImageUrlBuilder {
-    return this.imageUrlBuilder.image(source);
+    return this.imageUrlBuilder.image(source).auto('format').quality(80);
   }
 
   getCountOfType(type: string) {

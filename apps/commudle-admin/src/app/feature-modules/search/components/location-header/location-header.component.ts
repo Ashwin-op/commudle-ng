@@ -33,15 +33,15 @@ export class LocationHeaderComponent implements OnInit, OnChanges {
 
   private setHeaderContent(): void {
     this.headerImagePath = this.locationPageHeader?.background_image
-      ? this.imageUrl(this.locationPageHeader.background_image).url()
+      ? this.imageUrl(this.locationPageHeader.background_image, 1600).url()
       : this.staticAssets.search_page_background;
     if (this.locationPageHeader) {
       this.richText = this.cmsService.getHtmlFromBlock(this.locationPageHeader);
     }
   }
 
-  imageUrl(source: any) {
-    return this.cmsService.getImageUrl(source);
+  imageUrl(source: any, maxWidth = 1000) {
+    return this.cmsService.getImageUrl(source).width(maxWidth);
   }
 
   getHeaderText() {

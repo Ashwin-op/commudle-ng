@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { NbDialogRef, NbDialogService, NbTagComponent, NbTagInputAddEvent, NbToastrService } from '@commudle/theme';
+import { NbDialogRef, NbDialogService, NbToastrService } from '@commudle/theme';
 import { UserProfileManagerService } from 'apps/commudle-admin/src/app/feature-modules/users/services/user-profile-manager.service';
 import { UserProfileMenuService } from 'apps/commudle-admin/src/app/feature-modules/users/services/user-profile-menu.service';
 import { GoogleTagManagerService } from 'apps/commudle-admin/src/app/services/google-tag-manager.service';
@@ -247,18 +247,15 @@ export class UserJobComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  onTagAdd({ value, input }: NbTagInputAddEvent): void {
-    const finalValue = value.trim();
-    const isDuplicateTag = this.tags.indexOf(finalValue) !== -1;
-
-    if (finalValue && !isDuplicateTag) {
-      this.tags.push(value);
+  onTagAdd(value: string): void {
+    const tag = value.trim();
+    if (tag && !this.tags.includes(tag)) {
+      this.tags.push(tag);
     }
-    input.nativeElement.value = '';
   }
 
-  onTagRemove(tagToRemove: NbTagComponent): void {
-    this.tags = this.tags.filter((tag) => tag !== tagToRemove.text);
+  onTagRemove(tagToRemove: string): void {
+    this.tags = this.tags.filter((tag) => tag !== tagToRemove);
   }
 
   updateJob() {

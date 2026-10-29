@@ -195,7 +195,7 @@
 
 <ng-template #createTeamConfirmDialog>
   <com-card class="create-team-confirm-dialog">
-    <com-card-header class="com-flex com-justify-between com-items-center">
+    <com-card-header>
       <span>Create New Team</span>
       <button ghost nbButton size="small" (click)="cancelCreateNewTeam()" shape="round">
         <nb-icon icon="close"></nb-icon>
@@ -219,7 +219,7 @@
         </div>
       </div>
     </com-card-body>
-    <com-card-footer class="com-flex com-justify-end com-gap-3">
+    <com-card-footer>
       <button nbButton ghost (click)="cancelCreateNewTeam()">Cancel</button>
       <button nbButton status="danger" (click)="confirmCreateNewTeam()">Yes, Create My Team</button>
     </com-card-footer>

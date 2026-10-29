@@ -108,13 +108,13 @@
   </section>
 </div>
 <ng-template #cancelDialogBox let-ref="dialogRef">
-  <nb-card>
-    <nb-card-body>
+  <com-card class="cancel-dialog-box">
+    <com-card-body>
       <div>Are you sure you want to discard changes?</div>
-    </nb-card-body>
-    <nb-card-footer class="action-buttons !com-my-0">
+    </com-card-body>
+    <com-card-footer class="action-buttons !com-my-0">
       <button (click)="backPage(); ref.close()" nbButton status="primary">Yes</button>
       <button (click)="ref.close()" nbButton status="danger">No</button>
-    </nb-card-footer>
-  </nb-card>
+    </com-card-footer>
+  </com-card>
 </ng-template>

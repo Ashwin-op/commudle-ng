@@ -25,11 +25,11 @@ import { LibErrorHandlerService } from 'apps/lib-error-handler/src/lib/lib-error
 import { EnumFormatPipe } from 'apps/shared-pipes/enum-format.pipe';
 import { DatePipe } from '@angular/common';
 @Component({
-    selector: 'app-job',
-    templateUrl: './job.component.html',
-    styleUrls: ['./job.component.scss'],
-    providers: [EnumFormatPipe],
-    standalone: false
+  selector: 'app-job',
+  templateUrl: './job.component.html',
+  styleUrls: ['./job.component.scss'],
+  providers: [EnumFormatPipe],
+  standalone: false,
 })
 export class JobComponent implements OnInit, OnDestroy {
   @ViewChild('createJobApplicationDialog') createJobApplicationDialog: TemplateRef<any>;
@@ -75,10 +75,10 @@ export class JobComponent implements OnInit, OnDestroy {
       this.authWatchService.currentUser$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
         this.currentUser = data;
       }),
-    ),
-      this.activatedRoute.params.subscribe((data) => {
-        this.getJob(data.id);
-      });
+    );
+    this.activatedRoute.params.subscribe((data) => {
+      this.getJob(data.id);
+    });
   }
 
   ngOnDestroy(): void {

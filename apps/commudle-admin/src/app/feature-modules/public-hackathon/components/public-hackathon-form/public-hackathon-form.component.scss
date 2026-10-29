@@ -159,7 +159,13 @@ nb-stepper {
 }
 
 .create-team-confirm-dialog {
-  @apply com-m-0 com-w-auto com-max-w-md;
+  @apply com-m-0 com-w-auto com-max-w-md com-flex;
+  com-card-header {
+    @apply com-flex com-justify-between com-items-center;
+  }
+  com-card-footer {
+    @apply com-flex com-justify-end com-gap-3;
+  }
 
   .dialog-content {
     @apply com-text-center com-py-2;

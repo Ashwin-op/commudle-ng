@@ -1,3 +1,15 @@
+.discount-coupon-dialog {
+  @apply com-max-h-[80dvh] com-w-full md:com-w-[40vw] com-flex;
+}
+
+.dialog-header {
+  @apply com-flex com-justify-between;
+}
+
+.dialog-actions {
+  @apply com-flex com-gap-6 com-mx-4;
+}
+
 .select {
   @apply com-flex com-items-center com-gap-1 com-h-10 com-p-1 com-text-sm com-rounded-[4px] com-cursor-pointer com-bg-[#F6F9FC] hover:com-bg-[#eef2f7]/50  com-border com-border-solid com-border-[#E4E9F2]  com-w-full;
   select {

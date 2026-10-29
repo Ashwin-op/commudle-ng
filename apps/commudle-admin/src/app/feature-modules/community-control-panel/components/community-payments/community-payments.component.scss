@@ -1,3 +1,19 @@
 .routes {
   @apply com-px-6;
+
+  .route-tabs {
+    @apply com-relative com-top-0 com-flex com-items-center com-gap-3 com-mb-4 com-border-0 com-border-b com-border-Bright-Gray com-border-solid;
+
+    a {
+      @apply com-text-gunmetal com-no-underline com-border-0;
+    }
+
+    .route-tab-option {
+      @apply com-text-base com-font-medium com-px-2 com-py-3 com-cursor-pointer;
+    }
+
+    .active {
+      @apply com-border-0 com-border-b-4 com-border-Azure com-border-solid com-text-Azure;
+    }
+  }
 }
