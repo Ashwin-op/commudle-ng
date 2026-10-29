@@ -6,7 +6,8 @@
   @apply com-w-full;
 
   // sidebar ads need space above and below; the in-list card brings its own spacing and takes none when empty
-  &:not(.horizontal) {
+  // only when the ad component rendered something
+  &:not(.horizontal):has(> commudle-campaign-assets-display > *) {
     @apply com-mt-4 com-mb-4;
   }
 }

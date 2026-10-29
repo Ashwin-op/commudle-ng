@@ -32,6 +32,8 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
   @Input() campaignPreview: ICampaign;
   // vertical: image on top (sidebars). horizontal: thumbnail on the left (inside mobile lists), with a menu
   @Input() layout: 'vertical' | 'horizontal' = 'vertical';
+  // show nothing, not the default image, when no campaign is eligible (e.g. inside an article)
+  @Input() hideWhenEmpty = false;
 
   campaign: ICampaign;
   private serveToken: string | null = null;

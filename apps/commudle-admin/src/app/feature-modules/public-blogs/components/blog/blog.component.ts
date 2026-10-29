@@ -12,6 +12,10 @@ import { CmsService } from 'apps/shared-services/cms.service';
 import { SeoService } from 'apps/shared-services/seo.service';
 import { Subscription } from 'rxjs';
 
+// the mobile ad goes after this many text paragraphs, and only if enough of the post is left below it
+const MOBILE_AD_AFTER_PARAGRAPH = 1;
+const MOBILE_AD_MIN_BLOCKS_BELOW = 3;
+
 @Component({
   selector: 'app-blog',
   templateUrl: './blog.component.html',
@@ -23,6 +27,9 @@ export class BlogComponent implements OnInit, OnDestroy {
   blog: IBlog;
   similarBlogs: IBlog[] = [];
   richText: string;
+  // the post split around the mobile ad. richTextBottom is empty when the post is too short for an ad
+  richTextTop: string;
+  richTextBottom = '';
   user: IUser;
   faqSchemaData: any;
   faqSchemaDataMainEntity = [];
@@ -82,6 +89,7 @@ export class BlogComponent implements OnInit, OnDestroy {
         if (value) {
           this.blog = value;
           this.richText = this.cmsService.getHtmlFromBlock(value);
+          this.splitForMobileAd(value);
           this.setUser();
           this.setMeta();
           this.isLoading = false;
@@ -101,6 +109,29 @@ export class BlogComponent implements OnInit, OnDestroy {
         }
       }),
     );
+  }
+
+  // Splits the post's content blocks after the Nth text paragraph, so the ad never lands inside a list or a sentence
+  private splitForMobileAd(blog: IBlog) {
+    this.richTextTop = this.richText;
+    this.richTextBottom = '';
+    const blocks: any[] = blog.content || [];
+    let paragraphs = 0;
+    for (let i = 0; i < blocks.length; i++) {
+      const block = blocks[i];
+      const isText =
+        block?._type === 'block' &&
+        !block.listItem &&
+        (!block.style || block.style === 'normal') &&
+        block.children?.some((child: any) => child?.text?.trim());
+      if (isText && ++paragraphs === MOBILE_AD_AFTER_PARAGRAPH) {
+        if (blocks.length - (i + 1) >= MOBILE_AD_MIN_BLOCKS_BELOW) {
+          this.richTextTop = this.cmsService.getHtmlFromBlock({ content: blocks.slice(0, i + 1) });
+          this.richTextBottom = this.cmsService.getHtmlFromBlock({ content: blocks.slice(i + 1) });
+        }
+        return;
+      }
+    }
   }
 
   getSimilarBlogs(similarBlogsSlug) {

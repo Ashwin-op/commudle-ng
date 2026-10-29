@@ -41,7 +41,15 @@
                 </div>
 
                 <article>
-                  <div [innerHTML]="richText" class="!com-max-w-full content"></div>
+                  <div [innerHTML]="richTextTop" class="!com-max-w-full content"></div>
+                  <ng-container *ngIf="richTextBottom">
+                    <commudle-listing-page-campaign
+                      *appBreakpoints="'<=lg'"
+                      [layout]="'horizontal'"
+                      [hideWhenEmpty]="true"
+                    ></commudle-listing-page-campaign>
+                    <div [innerHTML]="richTextBottom" class="!com-max-w-full content"></div>
+                  </ng-container>
                 </article>
 
                 <!-- AI Assistant Selector Component -->
@@ -57,6 +65,7 @@
         </div>
 
         <div class="right-column" *appBreakpoints="'>lg'">
+          <commudle-listing-page-campaign [hideWhenEmpty]="true"></commudle-listing-page-campaign>
           <nb-card class="latest-blog">
             <h1 class="heading">Latest Blogs</h1>
             <div class="latest-blog-cards">

@@ -106,7 +106,9 @@
 
 <div
   *ngIf="
-    (!campaign || campaign?.campaign_assets?.length === 0) && (layout === 'vertical' || campaignType === 'preview')
+    (!campaign || campaign?.campaign_assets?.length === 0) &&
+    (layout === 'vertical' || campaignType === 'preview') &&
+    !hideWhenEmpty
   "
   class="default-image-container"
   #defaultImageContainer

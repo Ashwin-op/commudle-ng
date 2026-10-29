@@ -15,6 +15,8 @@ import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 export class ListingPageCampaignComponent {
   // vertical in sidebars, horizontal inside lists on mobile
   @Input() layout: 'vertical' | 'horizontal' = 'vertical';
+  // blog pages show nothing when no campaign is eligible
+  @Input() hideWhenEmpty = false;
   staticAssets = staticAssets;
   defaultUrl = environment.app_url + '/campaigns/new';
 }
