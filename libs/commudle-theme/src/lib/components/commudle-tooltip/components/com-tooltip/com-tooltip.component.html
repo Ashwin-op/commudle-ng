@@ -1,0 +1,28 @@
+<div
+  role="tooltip"
+  class="tooltip-box"
+  [class.tooltip-card]="variant === 'card'"
+  [class.tooltip-rich]="!!template"
+  [id]="id"
+  [style]="boxStyle"
+  (mouseenter)="hoverChange.emit(true)"
+  (mouseleave)="hoverChange.emit(false)"
+>
+  @if (variant === 'card') {
+  <com-card><ng-container *ngTemplateOutlet="contentTpl"></ng-container></com-card>
+  } @else {
+  <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
+  }
+
+  <ng-template #contentTpl>
+    @if (template) {
+    <ng-container *ngTemplateOutlet="template"></ng-container>
+    } @else {
+    <span class="tooltip-text">{{ content }}</span>
+    }
+  </ng-template>
+
+  @if (dot) {
+  <span class="tooltip-dot" [style]="dotStyle"></span>
+  }
+</div>

@@ -63,6 +63,7 @@ import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-com
 import { CommudleButtonModule } from '@commudle/commudle-theme';
 import { CommudleInputModule } from '@commudle/commudle-theme';
 import { CommudleCardModule } from '@commudle/commudle-theme';
+import { CommudleTooltipModule } from '@commudle/commudle-theme';
 @NgModule({
   declarations: [
     CommunityControlPanelComponent,
@@ -110,6 +111,7 @@ import { CommudleCardModule } from '@commudle/commudle-theme';
     HelpSectionComponent,
     CommudleButtonModule,
     CommudleCardModule,
+    CommudleTooltipModule,
     //standalone
     SidebarComponent,
 

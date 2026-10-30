@@ -52,7 +52,7 @@ import { ListingPageHeaderComponent } from 'apps/commudle-admin/src/app/app-shar
 import { ListingPageCampaignComponent } from 'apps/commudle-admin/src/app/app-shared-components/listing-page-campaign/listing-page-campaign.component';
 import { UserExpertTickComponent } from 'apps/commudle-admin/src/app/app-shared-components/user-expert-tick.component';
 import { RecaptchaModule } from 'ng-recaptcha-2';
-import { CommudleInputModule, CommudleCardModule } from '@commudle/commudle-theme';
+import { CommudleInputModule, CommudleCardModule, CommudleTooltipModule } from '@commudle/commudle-theme';
 
 @NgModule({
   declarations: [
@@ -96,6 +96,7 @@ import { CommudleInputModule, CommudleCardModule } from '@commudle/commudle-them
     ListingPageHeaderComponent,
     ListingPageCampaignComponent,
     CommudleCardModule,
+    CommudleTooltipModule,
     // Nebular
     NbCardModule,
     NbInputModule,
