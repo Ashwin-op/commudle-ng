@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Chart } from 'chart.js';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ICommunity } from '@commudle/shared-models';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
@@ -10,6 +11,7 @@ import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
 import {
   ICommunityDashboardActivityItem,
   ICommunityDashboardLiveVisitors,
+  ICommunityDashboardLiveVisitorsBucket,
   ICommunityDashboardNeedsAttention,
   ICommunityDashboardOrganizerBriefing,
   ICommunityDashboardScheduleItem,
@@ -71,8 +73,10 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   recentActivityLoading = false;
   readonly recentActivityCount = 5;
 
-  // Live Visitors -- polled every 30s per spec (Redis-cached 30s TTL server-side)
+  // Polled every 30s (Redis-cached 30s TTL server-side); each poll
+  // re-resamples history and updates the chart in place.
   liveVisitors: ICommunityDashboardLiveVisitors;
+  liveVisitorsChart: Chart;
 
   // Top Pages
   topPages: ICommunityDashboardTopPage[] = [];
@@ -145,6 +149,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.seoService.noIndex(false);
     this.subscriptions.forEach((s) => s.unsubscribe());
+    this.liveVisitorsChart?.destroy();
   }
 
   setGreeting(): void {
@@ -261,9 +266,9 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
             this.needsAttention.collaboration_requests.total -= 1;
           }
         },
-        error: () => {
+        error: (err) => {
           this.collaborationActionLoading[request.id] = false;
-          this.toastLogService.errorDialog('Something went wrong, please try again');
+          this.toastLogService.errorDialog(err?.error?.message || 'Something went wrong, please try again');
         },
       }),
     );
@@ -275,8 +280,29 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
       : ['/admin/communities', this.community.slug, 'events', 'event-dashboard', request.slug, 'collaborations'];
   }
 
+  // Public page of the *inviting* community's event/hackathon -- this admin
+  // doesn't own it, so there's no dashboard link to send them to. Null until
+  // the backend starts sending community_slug for incoming requests.
+  incomingCollaborationLink(request: IDashboardCollaborationRequest): any[] | null {
+    if (!request.community_slug) {
+      return null;
+    }
+    return request.type === 'hackathon'
+      ? ['/communities', request.community_slug, 'hackathons', request.slug]
+      : ['/communities', request.community_slug, 'events', request.slug];
+  }
+
+  collaborationRowLink(request: IDashboardCollaborationRequest): any[] | null {
+    return request.direction === 'outgoing'
+      ? this.outgoingCollaborationLink(request)
+      : this.incomingCollaborationLink(request);
+  }
+
   onCollaborationRowClick(request: IDashboardCollaborationRequest): void {
-    this.router.navigate(this.outgoingCollaborationLink(request));
+    const link = this.collaborationRowLink(request);
+    if (link) {
+      this.router.navigate(link);
+    }
   }
 
   loadUpcomingSchedule(): void {
@@ -311,7 +337,9 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     switch (activity.type) {
       case 'channel_message':
       case 'forum_message':
-        return ['/admin/communities', this.community.slug, 'channels'];
+        return activity.community_channel_id
+          ? ['/admin/communities', this.community.slug, 'channels', activity.community_channel_id]
+          : ['/admin/communities', this.community.slug, 'channels'];
       case 'survey_response_milestone':
         return ['/admin/communities', this.community.slug, 'surveys'];
       case 'new_member':
@@ -380,6 +408,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.dashboardCommunitiesService.liveVisitors(this.community.slug).subscribe((data) => {
         this.liveVisitors = data;
+        this.renderLiveVisitorsChart();
       }),
     );
   }
@@ -387,6 +416,107 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   // Poll live visitors every 30s, matching the server-side Redis TTL.
   startLiveVisitorsPolling(): void {
     this.subscriptions.push(interval(30000).subscribe(() => this.loadLiveVisitors()));
+  }
+
+  private resampleLiveVisitorsHistory(
+    history: ICommunityDashboardLiveVisitorsBucket[] | undefined,
+    bucketMinutes = 5,
+    windowMinutes = 30,
+  ): { label: string; count: number }[] {
+    if (!history?.length) {
+      return [];
+    }
+    const bucketMs = bucketMinutes * 60000;
+    const bucketCount = windowMinutes / bucketMinutes;
+    const windowStart = new Date(history[history.length - 1].bucket_end).getTime() - bucketCount * bucketMs;
+
+    const sums = new Array(bucketCount).fill(0);
+    const hits = new Array(bucketCount).fill(0);
+
+    history.forEach(({ bucket_start, bucket_end, count }) => {
+      const midpoint = (new Date(bucket_start).getTime() + new Date(bucket_end).getTime()) / 2;
+      const i = Math.floor((midpoint - windowStart) / bucketMs);
+      if (i >= 0 && i < bucketCount) {
+        sums[i] += count;
+        hits[i] += 1;
+      }
+    });
+
+    return sums.map((sum, i) => ({
+      label: moment(windowStart + (i + 1) * bucketMs).format('h:mm a'),
+      count: hits[i] ? Math.round(sum / hits[i]) : 0,
+    }));
+  }
+
+  // Chart.js schedules its own requestAnimationFrame loop for rendering and
+  // responsive resize. Zone.js patches requestAnimationFrame, so without
+  // runOutsideAngular every one of those frames re-enters Angular change
+  // detection -- on a component polling every 30s that compounds into the
+  // runaway detectChangesInEmbeddedViews/requestAnimationFrame stack seen in
+  // the console. Also disabling animation, since this chart updates silently
+  // in the background and doesn't need a draw-in effect every poll.
+  private renderLiveVisitorsChart(): void {
+    const points = this.resampleLiveVisitorsHistory(this.liveVisitors?.history);
+    if (!points.length) {
+      return;
+    }
+    const labels = points.map((p) => p.label);
+    const data = points.map((p) => p.count);
+
+    this.ngZone.runOutsideAngular(() => {
+      if (this.liveVisitorsChart) {
+        this.liveVisitorsChart.data.labels = labels;
+        this.liveVisitorsChart.data.datasets[0].data = data;
+        this.liveVisitorsChart.update();
+        return;
+      }
+
+      this.liveVisitorsChart = new Chart('live-visitors-chart', {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Live Visitors',
+              data,
+              borderColor: '#3366ff',
+              backgroundColor: 'rgba(51, 102, 255, 0.08)',
+              borderWidth: 2,
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              pointHoverBorderWidth: 2,
+              pointHoverBackgroundColor: '#ffffff',
+              pointHoverBorderColor: '#3366ff',
+              lineTension: 0.3,
+              fill: true,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 0 },
+          responsiveAnimationDuration: 0,
+          legend: { display: false },
+          scales: {
+            xAxes: [{ gridLines: { display: false } }],
+            yAxes: [
+              {
+                ticks: { beginAtZero: true, precision: 0 },
+                gridLines: { color: '#f1f1f1', drawBorder: false },
+              },
+            ],
+          },
+          tooltips: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: (tooltipItem) => `${tooltipItem.yLabel} visitor${tooltipItem.yLabel === '1' ? '' : 's'}`,
+            },
+          },
+        },
+      });
+    });
   }
 
   loadTopPages(): void {

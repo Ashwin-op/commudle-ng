@@ -35,14 +35,20 @@ export interface ICommunityDashboardOrganizerBriefing {
   };
 }
 
+export interface IDashboardPersonBrief {
+  id: number;
+  name: string;
+  username: string;
+  thumbnail?: string;
+}
+
 // needs_attention
 export interface IDashboardCollaborationRequest {
   id: number;
   type: string;
   slug: string;
-  requester: string;
-  requester_id?: number;
-  requester_slug?: string;
+  community_slug?: string;
+  requester: IDashboardPersonBrief;
   direction: 'incoming' | 'outgoing';
   status: string;
   created_at: string;
@@ -97,16 +103,11 @@ export interface ICommunityDashboardScheduleItem {
 // recent_activity -> data.values (paginated)
 export type EDashboardActivityType = 'channel_message' | 'forum_message' | 'new_member' | 'survey_response_milestone';
 
-export interface IDashboardActivityUser {
-  id: number;
-  name: string;
-  slug: string;
-}
-
 export interface ICommunityDashboardActivityItem {
   type: EDashboardActivityType;
   created_at: string;
-  user?: IDashboardActivityUser;
+  user?: IDashboardPersonBrief;
+  community_channel_id?: number;
   channel?: string;
   forum?: string;
   message?: string;
@@ -114,10 +115,17 @@ export interface ICommunityDashboardActivityItem {
   response_count?: number;
 }
 
+export interface ICommunityDashboardLiveVisitorsBucket {
+  bucket_start: string;
+  bucket_end: string;
+  count: number;
+}
+
 // live_visitors
 export interface ICommunityDashboardLiveVisitors {
   live_count: number;
   last_30_min_count: number;
+  history?: ICommunityDashboardLiveVisitorsBucket[];
 }
 
 // top_pages -> data.values

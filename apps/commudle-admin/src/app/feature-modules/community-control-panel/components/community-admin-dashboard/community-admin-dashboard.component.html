@@ -420,6 +420,12 @@
             <span class="live-count-value">{{ liveVisitors?.last_30_min_count ?? '—' }}</span>
           </div>
         </div>
+        <div class="live-visitors-chart-wrap" [class.is-empty]="!liveVisitors?.history?.length">
+          <canvas id="live-visitors-chart"></canvas>
+          <span *ngIf="!liveVisitors?.history?.length" class="live-visitors-chart-empty">
+            Not enough data yet to chart.
+          </span>
+        </div>
       </div>
     </article>
 
