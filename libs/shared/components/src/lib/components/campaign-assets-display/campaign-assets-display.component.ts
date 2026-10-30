@@ -18,6 +18,9 @@ import { EDbModels, ICampaign, EUserActivityEventType } from '@commudle/shared-m
 import { CampaignService, GoogleTagManagerService, SeoService } from '@commudle/shared-services';
 import { faCircleQuestion, faEllipsisVertical, faXmark } from '@fortawesome/free-solid-svg-icons';
 
+// an impression counts only after the ad has been at least half visible, in a visible tab, for this long without a break
+const IMPRESSION_VIEW_TIME_MS = 1000;
+
 @Component({
   selector: 'commudle-campaign-assets-display',
   templateUrl: './campaign-assets-display.component.html',
@@ -57,6 +60,9 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
 
   private viewInitialized = false;
   private hasTrackedCampaignView = false;
+  private campaignInView = false;
+  private impressionTimer: ReturnType<typeof setTimeout> | null = null;
+  private onVisibilityChange = () => this.evaluateCampaignImpression();
   private hasTrackedDefaultImageView = false;
   private isBrowser: boolean;
 
@@ -136,14 +142,12 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
       this.campaignObserver = new IntersectionObserver(
         (entries) => {
           const entry = entries[0];
-          if (entry.isIntersecting && !this.hasTrackedCampaignView) {
-            this.createUserEngagementForCampaign(EUserActivityEventType.IMPRESSION);
-            this.hasTrackedCampaignView = true;
-            this.campaignObserver.disconnect(); // Stop observing after first call
-          }
+          this.campaignInView = entry.isIntersecting && entry.intersectionRatio >= 0.5;
+          this.evaluateCampaignImpression();
         },
         { threshold: 0.5 },
       );
+      document.addEventListener('visibilitychange', this.onVisibilityChange);
 
       this.defaultImageObserver = new IntersectionObserver(
         (entries) => {
@@ -169,6 +173,38 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
           this.checkAndTriggerIfVisible(defaultEl, this.defaultImageObserver);
         }
       }, 500);
+    }
+  }
+
+  // Starts the view timer while the ad is in view in a visible tab, and cancels it as soon as either stops being true
+  private evaluateCampaignImpression(): void {
+    if (this.hasTrackedCampaignView) {
+      return;
+    }
+    const canCount = this.campaignInView && document.visibilityState === 'visible';
+    if (!canCount) {
+      this.clearImpressionTimer();
+      return;
+    }
+    if (this.impressionTimer) {
+      return;
+    }
+    this.impressionTimer = setTimeout(() => {
+      this.impressionTimer = null;
+      if (this.hasTrackedCampaignView || !this.campaignInView || document.visibilityState !== 'visible') {
+        return;
+      }
+      this.hasTrackedCampaignView = true;
+      this.createUserEngagementForCampaign(EUserActivityEventType.IMPRESSION);
+      this.campaignObserver?.disconnect();
+      document.removeEventListener('visibilitychange', this.onVisibilityChange);
+    }, IMPRESSION_VIEW_TIME_MS);
+  }
+
+  private clearImpressionTimer(): void {
+    if (this.impressionTimer) {
+      clearTimeout(this.impressionTimer);
+      this.impressionTimer = null;
     }
   }
 
@@ -244,6 +280,10 @@ export class CampaignAssetsDisplayComponent implements OnInit, OnChanges, OnDest
 
   ngOnDestroy(): void {
     this.clearAutoSlide();
+    this.clearImpressionTimer();
+    if (this.isBrowser) {
+      document.removeEventListener('visibilitychange', this.onVisibilityChange);
+    }
     if (this.campaignObserver) {
       this.campaignObserver.disconnect();
     }
