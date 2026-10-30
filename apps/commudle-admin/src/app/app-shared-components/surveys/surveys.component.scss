@@ -162,3 +162,13 @@
     @apply com-rounded-lg;
   }
 }
+
+com-card.create-survey-card {
+  @apply com-flex com-flex-col com-overflow-y-auto com-w-[95dvw] com-max-h-[90dvh] md:com-w-[60dvw];
+  .create-survey-header {
+    @apply com-flex com-items-center com-justify-between com-gap-2;
+  }
+  .create-survey-body {
+    @apply com-px-3 md:com-px-6 com-bg-Ghost-White com-scrollbar-hide;
+  }
+}

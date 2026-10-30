@@ -168,9 +168,9 @@ a {
 
 .event-dashboard-menu {
   @apply com-sticky com-top-[var(--mobile-navbar-offset,52px)] com-z-10 com-my-4;
-  nb-card {
+  com-card {
     @apply com-mx-0;
-    nb-card-body {
+    com-card-body {
       @apply com-p-0;
 
       div {

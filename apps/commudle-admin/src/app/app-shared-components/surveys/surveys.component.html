@@ -225,19 +225,20 @@
 </ng-container>
 
 <ng-template #newCommunitySurveyForm let-data let-ref="dialogRef">
-  <nb-card class="com-h-[90dvh] md:com-w-[50dvw]">
-    <nb-card-header class="com-flex com-items-center com-justify-between">
+  <com-card class="create-survey-card">
+    <com-card-header class="create-survey-header">
       <div>Create New Survey Form</div>
       <button
         (click)="ref.close(); createSurveyForm.controls.survey.get('data_form_id').setValue('')"
         ghost
         nbButton
+        shape="round"
         size="small"
       >
         <nb-icon icon="close"></nb-icon>
       </button>
-    </nb-card-header>
-    <nb-card-body class="com-p-0 com-bg-zinc-100">
+    </com-card-header>
+    <com-card-body class="create-survey-body">
       <div class="new-data-form-template">
         <app-new-data-form
           (newDataForm)="createAndSelectForm($event)"
@@ -245,6 +246,6 @@
           [stickSubmitButtonBottom]="true"
         ></app-new-data-form>
       </div>
-    </nb-card-body>
-  </nb-card>
+    </com-card-body>
+  </com-card>
 </ng-template>
