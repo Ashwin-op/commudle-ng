@@ -49,7 +49,7 @@
         @apply com-transition-colors hover:com-bg-gray-200;
 
         .cf-logo-img {
-          @apply com-w-full com-h-full com-object-cover;
+          @apply com-w-full com-h-full com-object-contain;
         }
 
         .cf-logo-icon {
