@@ -487,9 +487,40 @@
     </article>
   </section>
 
-  <!-- Row 4: Setup Progress (shown only while draft / setup incomplete) -->
-  <section class="actions-setup-row" *ngIf="setupProgress?.visible || hackathon.status === EHackathonStatus.DRAFT">
-    <article class="setup-progress-card">
+  <!-- Row 4: Live Visitors (+ Setup Progress alongside it while draft / setup incomplete) -->
+  <section class="live-traffic-row"
+    [class.with-setup]="setupProgress?.visible || hackathon.status === EHackathonStatus.DRAFT">
+    <article class="live-visitors-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faEye" class="heading-icon-visitors"></fa-icon> Live Visitors
+        </h3>
+      </header>
+      <div class="live-visitors-body">
+        <div class="live-visitors-counts">
+          <div class="live-count">
+            <span class="live-count-label">
+              <span class="live-dot"></span>
+              Live now
+            </span>
+            <span class="live-count-value">{{ liveVisitors?.live_count ?? '—' }}</span>
+          </div>
+          <div class="live-count">
+            <span class="live-count-label">Last 30 min</span>
+            <span class="live-count-value">{{ liveVisitors?.last_30_min_count ?? '—' }}</span>
+          </div>
+        </div>
+        <div class="live-visitors-chart-wrap" [class.is-empty]="!liveVisitors?.history?.length">
+          <canvas id="hackathon-live-visitors-chart"></canvas>
+          <span *ngIf="!liveVisitors?.history?.length" class="live-visitors-chart-empty">
+            Not enough data yet to chart.
+          </span>
+        </div>
+      </div>
+    </article>
+
+    <!-- Setup Progress (shown only while draft / setup incomplete) -->
+    <article class="setup-progress-card" *ngIf="setupProgress?.visible || hackathon.status === EHackathonStatus.DRAFT">
       <div class="section-header">
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faChartPie" class="heading-icon-setup"></fa-icon> Setup Progress

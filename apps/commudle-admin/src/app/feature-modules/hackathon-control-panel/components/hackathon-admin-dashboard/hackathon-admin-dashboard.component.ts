@@ -1,9 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Chart } from 'chart.js';
 import {
   IHackathon,
   ICommunity,
   EHackathonStatus,
+  IDashboardLiveVisitors,
+  IDashboardLiveVisitorsBucket,
+  IHackathonDashboardActivityActor,
   IHackathonDashboardActivityItem,
   IHackathonDashboardNeedsAttention,
   IHackathonDashboardPeopleJudging,
@@ -14,7 +18,7 @@ import {
   EHackathonDashboardStageStatus,
 } from '@commudle/shared-models';
 import { SeoService, countries_details } from '@commudle/shared-services';
-import { Subscription } from 'rxjs';
+import { Subscription, interval } from 'rxjs';
 import * as moment from 'moment';
 import {
   faCalendarDay,
@@ -32,6 +36,7 @@ import {
   faCode,
   faMicrophone,
   faFileLines,
+  faEye,
 } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
@@ -73,6 +78,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     faCode,
     faMicrophone,
     faFileLines,
+    faEye,
   };
 
   // Stage Progress -- GET /api/v2/dashboards/hackathons/stage_progress
@@ -101,6 +107,10 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
   // Setup Progress -- GET /api/v2/dashboards/hackathons/setup_progress
   setupProgress: IHackathonDashboardSetupProgress;
   isSetupProgressLoading = false;
+
+  // Live Visitors -- GET /api/v2/dashboards/hackathons/live_visitors (polled every 30s)
+  liveVisitors: IDashboardLiveVisitors;
+  liveVisitorsChart: Chart;
 
   constructor(
     private router: Router,
@@ -134,6 +144,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe());
+    this.liveVisitorsChart?.destroy();
   }
 
   loadDashboard(): void {
@@ -143,6 +154,8 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     this.getRecentActivity();
     this.getPeopleJudging();
     this.getSetupProgress();
+    this.getLiveVisitors();
+    this.startLiveVisitorsPolling();
   }
 
   get hasPendingApplications(): boolean {
@@ -386,9 +399,9 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
    * is a platform user, while team/sponsor/track are not. Falls back to `user`
    * for any activity type that carries the actor there directly.
    */
-  activityActorUser(item: IHackathonDashboardActivityItem): { id: number; username: string } | null {
+  activityActorUser(item: IHackathonDashboardActivityItem): IHackathonDashboardActivityActor | null {
     const actor = item?.judge || item?.user;
-    return actor?.id ? actor : null;
+    return actor?.id && actor?.username ? actor : null;
   }
 
   /** Where clicking the row (outside the actor's name) should navigate to. */
@@ -448,6 +461,114 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
         },
       }),
     );
+  }
+
+  getLiveVisitors(): void {
+    this.subscriptions.push(
+      this.dashboardHackathonsService.liveVisitors(this.hackathon.id).subscribe((data) => {
+        this.liveVisitors = data;
+        this.renderLiveVisitorsChart();
+      }),
+    );
+  }
+
+  // Poll live visitors every 30s, matching the server-side Redis TTL.
+  startLiveVisitorsPolling(): void {
+    this.subscriptions.push(interval(30000).subscribe(() => this.getLiveVisitors()));
+  }
+
+  private resampleLiveVisitorsHistory(
+    history: IDashboardLiveVisitorsBucket[] | undefined,
+    bucketMinutes = 5,
+    windowMinutes = 30,
+  ): { label: string; count: number }[] {
+    if (!history?.length) {
+      return [];
+    }
+    const bucketMs = bucketMinutes * 60000;
+    const bucketCount = windowMinutes / bucketMinutes;
+    const windowStart = new Date(history[history.length - 1].bucket_end).getTime() - bucketCount * bucketMs;
+
+    const sums = new Array(bucketCount).fill(0);
+    const hits = new Array(bucketCount).fill(0);
+
+    history.forEach(({ bucket_start, bucket_end, count }) => {
+      const midpoint = (new Date(bucket_start).getTime() + new Date(bucket_end).getTime()) / 2;
+      const i = Math.floor((midpoint - windowStart) / bucketMs);
+      if (i >= 0 && i < bucketCount) {
+        sums[i] += count;
+        hits[i] += 1;
+      }
+    });
+
+    return sums.map((sum, i) => ({
+      label: moment(windowStart + (i + 1) * bucketMs).format('h:mm a'),
+      count: hits[i] ? Math.round(sum / hits[i]) : 0,
+    }));
+  }
+
+  private renderLiveVisitorsChart(): void {
+    const points = this.resampleLiveVisitorsHistory(this.liveVisitors?.history);
+    if (!points.length) {
+      return;
+    }
+    const labels = points.map((p) => p.label);
+    const data = points.map((p) => p.count);
+
+    this.ngZone.runOutsideAngular(() => {
+      if (this.liveVisitorsChart) {
+        this.liveVisitorsChart.data.labels = labels;
+        this.liveVisitorsChart.data.datasets[0].data = data;
+        this.liveVisitorsChart.update();
+        return;
+      }
+
+      this.liveVisitorsChart = new Chart('hackathon-live-visitors-chart', {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Live Visitors',
+              data,
+              borderColor: '#3366ff',
+              backgroundColor: 'rgba(51, 102, 255, 0.08)',
+              borderWidth: 2,
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              pointHoverBorderWidth: 2,
+              pointHoverBackgroundColor: '#ffffff',
+              pointHoverBorderColor: '#3366ff',
+              lineTension: 0.3,
+              fill: true,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 0 },
+          responsiveAnimationDuration: 0,
+          legend: { display: false },
+          scales: {
+            xAxes: [{ gridLines: { display: false } }],
+            yAxes: [
+              {
+                ticks: { beginAtZero: true, precision: 0 },
+                gridLines: { color: '#f1f1f1', drawBorder: false },
+              },
+            ],
+          },
+          tooltips: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: (tooltipItem) => `${tooltipItem.yLabel} visitor${tooltipItem.yLabel === '1' ? '' : 's'}`,
+            },
+          },
+        },
+      });
+    });
   }
 
   /** Next mentor session time, formatted; empty when none scheduled. */

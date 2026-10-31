@@ -114,10 +114,20 @@ export type EHackathonDashboardActivityType =
   | 'track_added'
   | 'registrations_received';
 
+export interface IHackathonDashboardActivityActor {
+  id: number;
+  name: string;
+  username?: string;
+  thumbnail?: string;
+  judge_type?: string;
+}
+
 export interface IHackathonDashboardActivityItem {
   type: EHackathonDashboardActivityType;
   id: number;
   created_at: string;
+  judge?: IHackathonDashboardActivityActor;
+  user?: IHackathonDashboardActivityActor;
   [key: string]: any;
 }
 

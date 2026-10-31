@@ -782,6 +782,7 @@ export const API_ROUTES = {
       NEEDS_ATTENTION: 'api/v2/dashboards/hackathons/needs_attention', //GET
       SNAPSHOT: 'api/v2/dashboards/hackathons/snapshot', //GET
       RECENT_ACTIVITY: 'api/v2/dashboards/hackathons/recent_activity', //GET
+      LIVE_VISITORS: 'api/v2/dashboards/hackathons/live_visitors', //GET
       PEOPLE_JUDGING: 'api/v2/dashboards/hackathons/people_judging', //GET
       SETUP_PROGRESS: 'api/v2/dashboards/hackathons/setup_progress', //GET
     },

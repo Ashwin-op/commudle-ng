@@ -41,6 +41,10 @@
   .heading-icon-actions {
     @apply com-bg-orange-50 com-text-orange-600;
   }
+
+  .heading-icon-visitors {
+    @apply com-bg-blue-50 com-text-blue-500;
+  }
 }
 
 @keyframes iconPulse {
@@ -549,6 +553,10 @@
             &:hover {
               @apply com-text-primary-600 com-underline;
             }
+
+            .inline-avatar {
+              @apply com-inline-block com-w-4 com-h-4 com-rounded-full com-object-cover com-align-middle com-mr-1;
+            }
           }
         }
 
@@ -772,9 +780,21 @@
   }
 }
 
-// Row 4: Setup Progress (shown only while draft / setup incomplete)
-.actions-setup-row {
+// Row 4: Live Visitors (+ Setup Progress alongside it while draft / setup incomplete)
+.live-traffic-row {
   @apply com-grid com-grid-cols-1 com-gap-4;
+
+  &.with-setup {
+    @apply lg:com-grid-cols-4;
+
+    .live-visitors-card {
+      @apply lg:com-col-span-1;
+    }
+
+    .setup-progress-card {
+      @apply lg:com-col-span-3;
+    }
+  }
 
   .setup-progress-card {
     @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;

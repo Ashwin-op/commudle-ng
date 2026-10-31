@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { API_ROUTES, BaseApiService } from '@commudle/shared-services';
 import {
+  IDashboardLiveVisitors,
   IHackathonDashboardActivityItem,
   IHackathonDashboardNeedsAttention,
   IHackathonDashboardPeopleJudging,
@@ -46,6 +47,14 @@ export class DashboardHackathonsService {
     const params = new HttpParams().set('hackathon_id', hackathonId).set('page', page).set('count', count);
     return this.http.get<IPaginationCount<IHackathonDashboardActivityItem>>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.HACKATHONS.RECENT_ACTIVITY),
+      { params },
+    );
+  }
+
+  liveVisitors(hackathonId): Observable<IDashboardLiveVisitors> {
+    const params = new HttpParams().set('hackathon_id', hackathonId);
+    return this.http.get<IDashboardLiveVisitors>(
+      this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.HACKATHONS.LIVE_VISITORS),
       { params },
     );
   }
