@@ -8,6 +8,7 @@ import {
   ICommunityDashboardLiveVisitors,
   ICommunityDashboardNeedsAttention,
   ICommunityDashboardOrganizerBriefing,
+  ICommunityDashboardRecentMember,
   ICommunityDashboardScheduleItem,
   ICommunityDashboardSnapshot,
   ICommunityDashboardTopCity,
@@ -99,6 +100,14 @@ export class DashboardCommunitiesService {
     const params = new HttpParams().set('community_id', communityId).set('page', page).set('count', count);
     return this.http.get<IPaginationCount<ICommunityDashboardTopCity>>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITIES.TOP_CITIES),
+      { params },
+    );
+  }
+
+  recentMembers(communityId, page = 1, count = 10): Observable<IPaginationCount<ICommunityDashboardRecentMember>> {
+    const params = new HttpParams().set('community_id', communityId).set('page', page).set('count', count);
+    return this.http.get<IPaginationCount<ICommunityDashboardRecentMember>>(
+      this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITIES.RECENT_MEMBERS),
       { params },
     );
   }

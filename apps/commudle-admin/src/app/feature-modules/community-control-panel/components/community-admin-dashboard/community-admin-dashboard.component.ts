@@ -12,6 +12,7 @@ import {
   ICommunityDashboardLiveVisitorsBucket,
   ICommunityDashboardNeedsAttention,
   ICommunityDashboardOrganizerBriefing,
+  ICommunityDashboardRecentMember,
   ICommunityDashboardScheduleItem,
   ICommunityDashboardSnapshot,
   ICommunityDashboardTopCity,
@@ -87,6 +88,13 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   readonly topCitiesCount = 5;
   topCitiesLoading = false;
 
+  // Recent Members (paginated)
+  recentMembers: ICommunityDashboardRecentMember[] = [];
+  recentMembersPage = 1;
+  recentMembersTotal = 0;
+  readonly recentMembersCount = 5;
+  recentMembersLoading = false;
+
   icons = {
     faCalendarPlus,
     faTrophy,
@@ -134,6 +142,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         this.startLiveVisitorsPolling();
         this.loadTopPages();
         this.loadTopCities();
+        this.loadRecentMembers();
         this.setQuickActions();
       }),
     );
@@ -322,6 +331,10 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
 
   activityTime(activity: ICommunityDashboardActivityItem): string {
     return activity?.created_at ? moment(activity.created_at).fromNow() : '';
+  }
+
+  memberJoinedTime(member: ICommunityDashboardRecentMember): string {
+    return member?.joined_at ? moment(member.joined_at).fromNow() : '';
   }
 
   scheduleDateLabel(scheduledAt: string): string {
@@ -519,6 +532,29 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   onTopCitiesPageChange(page: number): void {
     this.topCitiesPage = page;
     this.loadTopCities();
+  }
+
+  loadRecentMembers(): void {
+    this.recentMembersLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunitiesService
+        .recentMembers(this.community.slug, this.recentMembersPage, this.recentMembersCount)
+        .subscribe({
+          next: (data) => {
+            this.recentMembers = data.values;
+            this.recentMembersTotal = data.total;
+            this.recentMembersLoading = false;
+          },
+          error: () => {
+            this.recentMembersLoading = false;
+          },
+        }),
+    );
+  }
+
+  onRecentMembersPageChange(page: number): void {
+    this.recentMembersPage = page;
+    this.loadRecentMembers();
   }
 
   /** Largest view/member count across top pages / cities, for proportional bar widths. */

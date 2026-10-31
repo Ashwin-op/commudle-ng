@@ -384,6 +384,57 @@
       </ul>
     </article>
 
+    <article class="activity-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faUsers" class="heading-icon-activity"></fa-icon> Recent Members
+        </h3>
+      </header>
+      <div class="top-list-header">
+        <span>Member</span>
+        <span>Joined At</span>
+      </div>
+      <ul class="activity-list">
+        <li *ngIf="recentMembersLoading" class="section-loader">
+          <app-loading-spinner></app-loading-spinner>
+        </li>
+        <ng-container *ngIf="!recentMembersLoading">
+          <li *ngFor="let member of recentMembers">
+            <div
+              class="activity-item"
+              [class.is-clickable]="!!member.username"
+              [routerLink]="member.username ? ['/users', member.username] : null"
+            >
+              <span class="activity-avatar members-avatar">
+                <img
+                  *ngIf="member.thumbnail"
+                  [src]="member.thumbnail"
+                  [alt]="member.name"
+                  class="activity-avatar-img"
+                />
+                <fa-icon *ngIf="!member.thumbnail" [icon]="icons.faUsers"></fa-icon>
+              </span>
+              <p class="activity-content">
+                <span class="activity-text">{{ member.name || 'A member' }}</span>
+              </p>
+              <time class="activity-time">{{ memberJoinedTime(member) }}</time>
+            </div>
+          </li>
+          <li *ngIf="recentMembers.length === 0" class="activity-empty">
+            <span class="activity-empty-icon"><fa-icon [icon]="icons.faUsers"></fa-icon></span>
+            <span class="activity-empty-text">No recent members yet.</span>
+          </li>
+        </ng-container>
+      </ul>
+      <commudle-pagination-compact
+        *ngIf="recentMembersTotal > recentMembersCount"
+        [page]="recentMembersPage"
+        [count]="recentMembersCount"
+        [total]="recentMembersTotal"
+        (pageChange)="onRecentMembersPageChange($event)"
+      ></commudle-pagination-compact>
+    </article>
+
     <article class="actions-section">
       <h3 class="section-heading">
         <fa-icon [icon]="icons.faRocket" class="heading-icon-actions"></fa-icon> Quick Actions

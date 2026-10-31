@@ -142,3 +142,7 @@ export interface ICommunityDashboardTopCity {
   city: string;
   member_count: number;
 }
+
+export interface ICommunityDashboardRecentMember extends IDashboardPersonBrief {
+  joined_at: string;
+}
