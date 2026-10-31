@@ -6,6 +6,10 @@
   @apply com-flex com-justify-center com-w-full com-py-3;
 }
 
+.inline-avatar {
+  @apply com-inline-block com-w-4 com-h-4 com-rounded-full com-object-cover com-align-middle com-mr-1;
+}
+
 .section-heading {
   @apply com-m-0 com-text-base com-font-medium com-text-Yankees-Blue com-flex md:com-items-center com-items-start com-gap-2;
 
@@ -426,6 +430,14 @@
 
         .speaker-names {
           @apply com-truncate com-text-gray-400;
+
+          .speaker-link {
+            @apply com-text-inherit com-no-underline com-cursor-pointer com-transition-colors com-duration-200;
+
+            &:hover {
+              @apply com-text-primary-600 com-underline;
+            }
+          }
         }
       }
 
@@ -554,6 +566,18 @@
           strong {
             @apply com-font-medium;
           }
+
+          .activity-user-link {
+            @apply com-text-inherit com-no-underline com-cursor-pointer com-transition-colors com-duration-200;
+
+            &:hover {
+              @apply com-text-primary-600 com-underline;
+            }
+          }
+        }
+
+        .activity-sub {
+          @apply com-text-xs com-text-gray-500 com-line-clamp-1;
         }
       }
 
@@ -1789,6 +1813,22 @@
             }
           }
         }
+      }
+    }
+
+    .live-visitors-chart-wrap {
+      @apply com-relative com-h-36 com-mt-1;
+
+      &.is-empty {
+        @apply com-flex com-items-center com-justify-center;
+
+        canvas {
+          @apply com-hidden;
+        }
+      }
+
+      .live-visitors-chart-empty {
+        @apply com-text-xs com-text-gray-400;
       }
     }
   }

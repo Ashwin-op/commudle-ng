@@ -193,11 +193,11 @@
               </span>
             </div>
             <span class="attention-arrow">›</span>
-          </a>
+      </div>
 
-          <!-- RSVP emails -->
-          <a [routerLink]="['updates']" class="attention-item">
-            <fa-icon [icon]="
+      <!-- RSVP emails -->
+      <a [routerLink]="['updates']" class="attention-item">
+        <fa-icon [icon]="
                 needsAttention?.rsvp?.eligible_count > 0 && needsAttention?.rsvp?.not_sent_count === 0
                   ? icons.faCircleCheck
                   : icons.faCircleXmark
@@ -206,22 +206,22 @@
                   ? 'attention-icon-check'
                   : 'attention-icon-cross'
               "></fa-icon>
-            <div class="attention-content">
-              <span class="attention-title">RSVP emails</span>
-              <span class="attention-sub">
-                <ng-container *ngIf="needsAttention?.rsvp?.eligible_count > 0; else rsvpNotSent">
-                  RSVP sent ({{ needsAttention.rsvp.sent_count || 0 | number }} out of
-                  {{ needsAttention.rsvp.eligible_count | number }})
-                </ng-container>
-                <ng-template #rsvpNotSent>RSVP has not been sent</ng-template>
-              </span>
-            </div>
-            <span class="attention-arrow">›</span>
-          </a>
+        <div class="attention-content">
+          <span class="attention-title">RSVP emails</span>
+          <span class="attention-sub">
+            <ng-container *ngIf="needsAttention?.rsvp?.eligible_count > 0; else rsvpNotSent">
+              RSVP sent ({{ needsAttention.rsvp.sent_count || 0 | number }} out of
+              {{ needsAttention.rsvp.eligible_count | number }})
+            </ng-container>
+            <ng-template #rsvpNotSent>RSVP has not been sent</ng-template>
+          </span>
+        </div>
+        <span class="attention-arrow">›</span>
+      </a>
 
-          <!-- Entry passes -->
-          <a [routerLink]="['updates']" class="attention-item">
-            <fa-icon [icon]="
+      <!-- Entry passes -->
+      <a [routerLink]="['updates']" class="attention-item">
+        <fa-icon [icon]="
                 needsAttention?.entry_pass?.eligible_count > 0 && needsAttention?.entry_pass?.not_sent_count === 0
                   ? icons.faCircleCheck
                   : icons.faCircleXmark
@@ -230,440 +230,443 @@
                   ? 'attention-icon-check'
                   : 'attention-icon-cross'
               "></fa-icon>
-            <div class="attention-content">
-              <span class="attention-title">Entry passes</span>
-              <span class="attention-sub">
-                <ng-container *ngIf="needsAttention?.entry_pass?.eligible_count > 0; else entryPassNotSent">
-                  Entry passes sent ({{ needsAttention.entry_pass.sent_count || 0 | number }} out of
-                  {{ needsAttention.entry_pass.eligible_count | number }})
-                </ng-container>
-                <ng-template #entryPassNotSent>Entry passes have not been sent</ng-template>
-              </span>
-            </div>
-            <span class="attention-arrow">›</span>
-          </a>
+        <div class="attention-content">
+          <span class="attention-title">Entry passes</span>
+          <span class="attention-sub">
+            <ng-container *ngIf="needsAttention?.entry_pass?.eligible_count > 0; else entryPassNotSent">
+              Entry passes sent ({{ needsAttention.entry_pass.sent_count || 0 | number }} out of
+              {{ needsAttention.entry_pass.eligible_count | number }})
+            </ng-container>
+            <ng-template #entryPassNotSent>Entry passes have not been sent</ng-template>
+          </span>
+        </div>
+        <span class="attention-arrow">›</span>
+      </a>
 
-          <!-- Speaker form -->
-          <a [routerLink]="['registrations']" class="attention-item">
-            <fa-icon [icon]="needsAttention?.speaker_form?.created ? icons.faCircleCheck : icons.faCircleXmark"
-              [ngClass]="needsAttention?.speaker_form?.created ? 'attention-icon-check' : 'attention-icon-cross'"></fa-icon>
-            <div class="attention-content">
-              <span class="attention-title">Speaker form</span>
-              <span class="attention-sub">
-                {{
-                needsAttention?.speaker_form?.created ? 'Speaker form is created' : 'Speaker form needs to be created'
-                }}
-              </span>
-            </div>
-            <span class="attention-arrow">›</span>
-          </a>
+      <!-- Speaker form -->
+      <a [routerLink]="['registrations']" class="attention-item">
+        <fa-icon [icon]="needsAttention?.speaker_form?.created ? icons.faCircleCheck : icons.faCircleXmark"
+          [ngClass]="needsAttention?.speaker_form?.created ? 'attention-icon-check' : 'attention-icon-cross'"></fa-icon>
+        <div class="attention-content">
+          <span class="attention-title">Speaker form</span>
+          <span class="attention-sub">
+            {{
+            needsAttention?.speaker_form?.created ? 'Speaker form is created' : 'Speaker form needs to be created'
+            }}
+          </span>
+        </div>
+        <span class="attention-arrow">›</span>
+      </a>
 
-          <!-- Streaming -->
-          <a [routerLink]="['edit']" class="attention-item">
-            <fa-icon
-              [icon]="needsAttention?.streaming?.status !== 'missing' ? icons.faCircleCheck : icons.faCircleXmark"
-              [ngClass]="
+      <!-- Streaming -->
+      <a [routerLink]="['edit']" class="attention-item">
+        <fa-icon [icon]="needsAttention?.streaming?.status !== 'missing' ? icons.faCircleCheck : icons.faCircleXmark"
+          [ngClass]="
                 needsAttention?.streaming?.status !== 'missing' ? 'attention-icon-check' : 'attention-icon-cross'
               "></fa-icon>
-            <div class="attention-content">
-              <span class="attention-title">Streaming</span>
-              <span class="attention-sub">
-                {{
-                needsAttention?.streaming?.status !== 'missing'
-                ? 'Streaming is set up'
-                : 'Streaming needs to be set up'
-                }}
-              </span>
-            </div>
-            <span class="attention-arrow">›</span>
-          </a>
+        <div class="attention-content">
+          <span class="attention-title">Streaming</span>
+          <span class="attention-sub">
+            {{
+            needsAttention?.streaming?.status !== 'missing'
+            ? 'Streaming is set up'
+            : 'Streaming needs to be set up'
+            }}
+          </span>
+        </div>
+        <span class="attention-arrow">›</span>
+      </a>
 
-          <!-- Attendance -->
-          <a [routerLink]="['scan-entry-pass']" class="attention-item">
-            <fa-icon [icon]="needsAttention?.attendance?.started ? icons.faCircleCheck : icons.faCircleXmark"
-              [ngClass]="needsAttention?.attendance?.started ? 'attention-icon-check' : 'attention-icon-cross'"></fa-icon>
-            <div class="attention-content">
-              <span class="attention-title">Attendance</span>
-              <span class="attention-sub">
-                {{
-                needsAttention?.attendance?.started ? 'Marking attendance in progress' : 'Start marking attendance'
-                }}
-              </span>
-            </div>
-            <span class="attention-arrow">›</span>
-          </a>
-        </ng-container>
+      <!-- Attendance -->
+      <a [routerLink]="['scan-entry-pass']" class="attention-item">
+        <fa-icon [icon]="needsAttention?.attendance?.started ? icons.faCircleCheck : icons.faCircleXmark"
+          [ngClass]="needsAttention?.attendance?.started ? 'attention-icon-check' : 'attention-icon-cross'"></fa-icon>
+        <div class="attention-content">
+          <span class="attention-title">Attendance</span>
+          <span class="attention-sub">
+            {{
+            needsAttention?.attendance?.started ? 'Marking attendance in progress' : 'Start marking attendance'
+            }}
+          </span>
+        </div>
+        <span class="attention-arrow">›</span>
+      </a>
+      </ng-container>
+    </div>
+</div>
+
+<!-- Event Snapshot -->
+<div class="snapshot-card">
+  <div class="section-header">
+    <h3 class="section-heading">
+      <fa-icon [icon]="icons.faChartPie" class="heading-icon-snapshot"></fa-icon> Event Snapshot
+    </h3>
+  </div>
+  <div class="snapshot-grid" *ngIf="eventSnapshot; else snapshotEmpty">
+    <div class="snapshot-stat">
+      <fa-icon [icon]="icons.faUsers" class="snapshot-stat-icon registrations-icon"></fa-icon>
+      <span class="snapshot-stat-label">Registrations</span>
+      <span class="snapshot-stat-value">{{ eventSnapshot.registrations?.total ?? 0 }}</span>
+      <span class="snapshot-stat-sub">
+        {{ eventSnapshot.registrations?.confirmed ?? 0 }} confirmed
+        <ng-container *ngIf="eventSnapshot.registrations?.today">· {{ eventSnapshot.registrations.today }}
+          today</ng-container>
+      </span>
+    </div>
+    <div class="snapshot-stat">
+      <fa-icon [icon]="icons.faMicrophone" class="snapshot-stat-icon speakers-icon"></fa-icon>
+      <div class="snapshot-stat-info">
+        <span class="snapshot-stat-label">Speakers</span>
+        <span class="snapshot-stat-value">{{ eventSnapshot.speakers_count ?? 0 }}</span>
       </div>
     </div>
-
-    <!-- Event Snapshot -->
-    <div class="snapshot-card">
-      <div class="section-header">
-        <h3 class="section-heading">
-          <fa-icon [icon]="icons.faChartPie" class="heading-icon-snapshot"></fa-icon> Event Snapshot
-        </h3>
+    <div class="snapshot-stat">
+      <fa-icon [icon]="icons.faHandshakeSimple" class="snapshot-stat-icon sponsors-icon"></fa-icon>
+      <div class="snapshot-stat-info">
+        <span class="snapshot-stat-label">Sponsors</span>
+        <span class="snapshot-stat-value">{{ eventSnapshot.sponsors_count ?? 0 }}</span>
       </div>
-      <div class="snapshot-grid" *ngIf="eventSnapshot; else snapshotEmpty">
-        <div class="snapshot-stat">
-          <fa-icon [icon]="icons.faUsers" class="snapshot-stat-icon registrations-icon"></fa-icon>
-          <span class="snapshot-stat-label">Registrations</span>
-          <span class="snapshot-stat-value">{{ eventSnapshot.registrations?.total ?? 0 }}</span>
-          <span class="snapshot-stat-sub">
-            {{ eventSnapshot.registrations?.confirmed ?? 0 }} confirmed
-            <ng-container *ngIf="eventSnapshot.registrations?.today">· {{ eventSnapshot.registrations.today }}
-              today</ng-container>
-          </span>
-        </div>
-        <div class="snapshot-stat">
-          <fa-icon [icon]="icons.faMicrophone" class="snapshot-stat-icon speakers-icon"></fa-icon>
-          <div class="snapshot-stat-info">
-            <span class="snapshot-stat-label">Speakers</span>
-            <span class="snapshot-stat-value">{{ eventSnapshot.speakers_count ?? 0 }}</span>
-          </div>
-        </div>
-        <div class="snapshot-stat">
-          <fa-icon [icon]="icons.faHandshakeSimple" class="snapshot-stat-icon sponsors-icon"></fa-icon>
-          <div class="snapshot-stat-info">
-            <span class="snapshot-stat-label">Sponsors</span>
-            <span class="snapshot-stat-value">{{ eventSnapshot.sponsors_count ?? 0 }}</span>
-          </div>
-        </div>
-        <div class="snapshot-stat">
-          <fa-icon [icon]="icons.faUserGroup" class="snapshot-stat-icon team-icon"></fa-icon>
-          <div class="snapshot-stat-info">
-            <span class="snapshot-stat-label">Team</span>
-            <span class="snapshot-stat-value">{{ eventSnapshot.team_members_count ?? 0 }}</span>
-          </div>
-        </div>
-      </div>
-      <ng-template #snapshotEmpty>
-        <div class="snapshot-empty" *ngIf="!isSnapshotLoading">
-          <span class="snapshot-empty-icon">
-            <fa-icon [icon]="icons.faChartPie"></fa-icon>
-          </span>
-          <span class="snapshot-empty-text">No snapshot data yet.</span>
-        </div>
-        <app-loading-spinner *ngIf="isSnapshotLoading" class="section-loader"></app-loading-spinner>
-      </ng-template>
     </div>
-
-    <!-- Recent Activity -->
-    <div class="activity-card">
-      <div class="section-header">
-        <h3 class="section-heading">
-          <fa-icon [icon]="icons.faBolt" class="heading-icon-activity"></fa-icon> Recent Activity
-        </h3>
+    <div class="snapshot-stat">
+      <fa-icon [icon]="icons.faUserGroup" class="snapshot-stat-icon team-icon"></fa-icon>
+      <div class="snapshot-stat-info">
+        <span class="snapshot-stat-label">Team</span>
+        <span class="snapshot-stat-value">{{ eventSnapshot.team_members_count ?? 0 }}</span>
       </div>
-      <app-loading-spinner *ngIf="isActivityLoading" class="section-loader"></app-loading-spinner>
-      <ul class="activity-list" *ngIf="!isActivityLoading">
-        <li *ngFor="let item of recentActivity" class="activity-item">
-          <span class="activity-avatar" [ngClass]="activityAvatarClass(item.type)">
-            <fa-icon [icon]="activityIcon(item.type)"></fa-icon>
-          </span>
-          <p class="activity-content">
-            <span class="activity-text" [title]="activityActorName(item) + ' ' + activityLabel(item.type)">
-              <ng-container *ngIf="activityActorName(item)">
-                <span class="activity-name-avatar">{{ activityInitial(item) }}</span><strong>{{ activityActorName(item)
-                  }}</strong>
-                {{ activityLabel(item.type) }}
-              </ng-container>
-              <ng-container *ngIf="!activityActorName(item)">{{ activityLabel(item.type) }}</ng-container>
-            </span>
-          </p>
-          <time class="activity-time">{{ activityTime(item) }}</time>
-        </li>
-        <li *ngIf="recentActivity.length === 0" class="activity-empty">
-          <span class="activity-empty-icon">
-            <fa-icon [icon]="icons.faBolt"></fa-icon>
-          </span>
-          <span class="activity-empty-text">No recent activity yet.</span>
-        </li>
-      </ul>
-      <commudle-pagination-compact *ngIf="activityTotal > activityCount" [page]="activityPage" [count]="activityCount"
-        [total]="activityTotal" (pageChange)="onActivityPageChange($event)"></commudle-pagination-compact>
     </div>
-  </section>
+  </div>
+  <ng-template #snapshotEmpty>
+    <div class="snapshot-empty" *ngIf="!isSnapshotLoading">
+      <span class="snapshot-empty-icon">
+        <fa-icon [icon]="icons.faChartPie"></fa-icon>
+      </span>
+      <span class="snapshot-empty-text">No snapshot data yet.</span>
+    </div>
+    <app-loading-spinner *ngIf="isSnapshotLoading" class="section-loader"></app-loading-spinner>
+  </ng-template>
+</div>
 
-  <!-- Row 3: Live Visitors + Top Pages -->
-  <section class="live-traffic-row">
-    <!-- Live Visitors -->
-    <article class="live-visitors-card">
-      <header class="section-header">
-        <h3 class="section-heading">
-          <fa-icon [icon]="icons.faEye" class="heading-icon-visitors"></fa-icon> Live Visitors
-        </h3>
-      </header>
-      <div class="live-visitors-body">
-        <div class="live-visitors-counts">
-          <div class="live-count">
-            <span class="live-count-label">
-              <span class="live-dot"></span>
-              Live now
-            </span>
-            <span class="live-count-value">{{ liveVisitors?.live_count ?? '—' }}</span>
-          </div>
-          <div class="live-count">
-            <span class="live-count-label">Last 30 min</span>
-            <span class="live-count-value">{{ liveVisitors?.last_30_min_count ?? '—' }}</span>
-          </div>
+<!-- Recent Activity -->
+<div class="activity-card">
+  <div class="section-header">
+    <h3 class="section-heading">
+      <fa-icon [icon]="icons.faBolt" class="heading-icon-activity"></fa-icon> Recent Activity
+    </h3>
+  </div>
+  <app-loading-spinner *ngIf="isActivityLoading" class="section-loader"></app-loading-spinner>
+  <ul class="activity-list" *ngIf="!isActivityLoading">
+    <li *ngFor="let item of recentActivity" class="activity-item">
+      <span class="activity-avatar" [ngClass]="activityAvatarClass(item.type)">
+        <fa-icon [icon]="activityIcon(item.type)"></fa-icon>
+      </span>
+      <p class="activity-content">
+        <span class="activity-text" [title]="activityActorName(item) + ' ' + activityLabel(item.type)">
+          <ng-container *ngIf="activityActorName(item)">
+            <span class="activity-name-avatar">{{ activityInitial(item) }}</span><strong>{{ activityActorName(item)
+              }}</strong>
+            {{ activityLabel(item.type) }}
+          </ng-container>
+          <ng-container *ngIf="!activityActorName(item)">{{ activityLabel(item.type) }}</ng-container>
+        </span>
+      </p>
+      <time class="activity-time">{{ activityTime(item) }}</time>
+    </li>
+    <li *ngIf="recentActivity.length === 0" class="activity-empty">
+      <span class="activity-empty-icon">
+        <fa-icon [icon]="icons.faBolt"></fa-icon>
+      </span>
+      <span class="activity-empty-text">No recent activity yet.</span>
+    </li>
+  </ul>
+  <commudle-pagination-compact *ngIf="activityTotal > activityCount" [page]="activityPage" [count]="activityCount"
+    [total]="activityTotal" (pageChange)="onActivityPageChange($event)"></commudle-pagination-compact>
+</div>
+</section>
+
+<!-- Row 3: Live Visitors + Top Pages -->
+<section class="live-traffic-row">
+  <!-- Live Visitors -->
+  <article class="live-visitors-card">
+    <header class="section-header">
+      <h3 class="section-heading">
+        <fa-icon [icon]="icons.faEye" class="heading-icon-visitors"></fa-icon> Live Visitors
+      </h3>
+    </header>
+    <div class="live-visitors-body">
+      <div class="live-visitors-counts">
+        <div class="live-count">
+          <span class="live-count-label">
+            <span class="live-dot"></span>
+            Live now
+          </span>
+          <span class="live-count-value">{{ liveVisitors?.live_count ?? '—' }}</span>
+        </div>
+        <div class="live-count">
+          <span class="live-count-label">Last 30 min</span>
+          <span class="live-count-value">{{ liveVisitors?.last_30_min_count ?? '—' }}</span>
         </div>
       </div>
-    </article>
-
-    <!-- Top Pages -->
-    <article class="top-list-card">
-      <header class="section-header">
-        <h3 class="section-heading">
-          <fa-icon [icon]="icons.faFileLines" class="heading-icon-pages"></fa-icon> Top Pages
-        </h3>
-      </header>
-      <div class="top-list-header">
-        <span>Page Title</span>
-        <span>Views</span>
+      <div class="live-visitors-chart-wrap" [class.is-empty]="!liveVisitors?.history?.length">
+        <canvas id="event-live-visitors-chart"></canvas>
+        <span *ngIf="!liveVisitors?.history?.length" class="live-visitors-chart-empty">
+          Not enough data yet to chart.
+        </span>
       </div>
-      <ul class="top-list">
-        <li *ngIf="topPagesLoading" class="section-loader">
-          <app-loading-spinner></app-loading-spinner>
+    </div>
+  </article>
+
+  <!-- Top Pages -->
+  <article class="top-list-card">
+    <header class="section-header">
+      <h3 class="section-heading">
+        <fa-icon [icon]="icons.faFileLines" class="heading-icon-pages"></fa-icon> Top Pages
+      </h3>
+    </header>
+    <div class="top-list-header">
+      <span>Page Title</span>
+      <span>Views</span>
+    </div>
+    <ul class="top-list">
+      <li *ngIf="topPagesLoading" class="section-loader">
+        <app-loading-spinner></app-loading-spinner>
+      </li>
+      <ng-container *ngIf="!topPagesLoading">
+        <li *ngFor="let page of topPages" class="top-list-item">
+          <a [href]="page.url" target="_blank" rel="noopener noreferrer" class="top-list-name" [title]="page.url">{{
+            page.page_title
+            }}</a>
+          <span class="top-list-track">
+            <span class="top-list-bar top-list-bar-pages"
+              [style.--bar-share.%]="barShare(page.views, topPagesMax)"></span>
+          </span>
+          <span class="top-list-value">{{ page.views | number }}</span>
         </li>
-        <ng-container *ngIf="!topPagesLoading">
-          <li *ngFor="let page of topPages" class="top-list-item">
-            <a [href]="page.url" target="_blank" rel="noopener noreferrer" class="top-list-name" [title]="page.url">{{
-              page.page_title
-              }}</a>
-            <span class="top-list-track">
-              <span class="top-list-bar top-list-bar-pages"
-                [style.--bar-share.%]="barShare(page.views, topPagesMax)"></span>
-            </span>
-            <span class="top-list-value">{{ page.views | number }}</span>
+        <li *ngIf="topPages.length === 0" class="top-list-empty">
+          <span class="top-list-empty-icon pages">
+            <fa-icon [icon]="icons.faFileLines"></fa-icon>
+          </span>
+          <span class="top-list-empty-text">No page views yet.</span>
+        </li>
+      </ng-container>
+    </ul>
+  </article>
+</section>
+
+<!-- Row 4: Audience Snapshot + Post-Event Dashboard -->
+<section class="two-col-row">
+  <!-- Audience Snapshot -->
+  <article class="audience-card">
+    <header class="section-header">
+      <h3 class="section-heading">
+        <fa-icon [icon]="icons.faChartPie" class="heading-icon-audience"></fa-icon> Audience Snapshot
+      </h3>
+      <a [routerLink]="['stats']" class="view-all-link">View Analytics →</a>
+    </header>
+    <commudle-alert class="section-info" [info]="true"
+      message="This data covers people who filled out the registration form."></commudle-alert>
+    <app-loading-spinner *ngIf="isAudienceLoading && !audienceSnapshot" class="section-loader"></app-loading-spinner>
+    <div class="audience-content" *ngIf="!isAudienceLoading || audienceSnapshot">
+      <div class="audience-chart">
+        <svg *ngIf="audienceSnapshot?.experience_levels?.length" class="chart-donut" viewBox="0 0 36 36">
+          <circle class="chart-donut-track" cx="18" cy="18" r="15.9155" />
+          <circle *ngFor="let segment of experienceSegments" class="chart-donut-segment" cx="18" cy="18" r="15.9155"
+            [attr.stroke]="segment.color" [attr.stroke-dasharray]="segment.dashArray"
+            [attr.stroke-dashoffset]="segment.dashOffset" />
+        </svg>
+        <div *ngIf="!isAudienceLoading && !audienceSnapshot?.experience_levels?.length" class="chart-donut-empty">
+        </div>
+        <ul class="chart-legend">
+          <li *ngFor="let level of audienceSnapshot?.experience_levels; let i = index">
+            <span class="legend-dot" [style.--dot-color]="audienceColor(i)"></span>
+            {{ level.name | capitalizeAndRemoveUnderscore }} <span class="legend-pct">{{ level.percentage }}%</span>
           </li>
-          <li *ngIf="topPages.length === 0" class="top-list-empty">
-            <span class="top-list-empty-icon pages">
-              <fa-icon [icon]="icons.faFileLines"></fa-icon>
-            </span>
-            <span class="top-list-empty-text">No page views yet.</span>
-          </li>
-        </ng-container>
-      </ul>
-    </article>
-  </section>
-
-  <!-- Row 4: Audience Snapshot + Post-Event Dashboard -->
-  <section class="two-col-row">
-    <!-- Audience Snapshot -->
-    <article class="audience-card">
-      <header class="section-header">
-        <h3 class="section-heading">
-          <fa-icon [icon]="icons.faChartPie" class="heading-icon-audience"></fa-icon> Audience Snapshot
-        </h3>
-        <a [routerLink]="['stats']" class="view-all-link">View Analytics →</a>
-      </header>
-      <commudle-alert class="section-info" [info]="true"
-        message="This data covers people who filled out the registration form."></commudle-alert>
-      <app-loading-spinner *ngIf="isAudienceLoading && !audienceSnapshot" class="section-loader"></app-loading-spinner>
-      <div class="audience-content" *ngIf="!isAudienceLoading || audienceSnapshot">
-        <div class="audience-chart">
-          <svg *ngIf="audienceSnapshot?.experience_levels?.length" class="chart-donut" viewBox="0 0 36 36">
-            <circle class="chart-donut-track" cx="18" cy="18" r="15.9155" />
-            <circle *ngFor="let segment of experienceSegments" class="chart-donut-segment" cx="18" cy="18" r="15.9155"
-              [attr.stroke]="segment.color" [attr.stroke-dasharray]="segment.dashArray"
-              [attr.stroke-dashoffset]="segment.dashOffset" />
-          </svg>
-          <div *ngIf="!isAudienceLoading && !audienceSnapshot?.experience_levels?.length" class="chart-donut-empty">
-          </div>
-          <ul class="chart-legend">
-            <li *ngFor="let level of audienceSnapshot?.experience_levels; let i = index">
-              <span class="legend-dot" [style.--dot-color]="audienceColor(i)"></span>
-              {{ level.name | capitalizeAndRemoveUnderscore }} <span class="legend-pct">{{ level.percentage }}%</span>
+          <li *ngIf="!isAudienceLoading && !audienceSnapshot?.experience_levels?.length">No data yet</li>
+        </ul>
+      </div>
+      <div class="audience-stats">
+        <div class="audience-col">
+          <h6 class="audience-col-heading">Top Companies / Colleges</h6>
+          <ul class="audience-list">
+            <li *ngFor="let item of audienceSnapshot?.companies?.values">
+              <span class="audience-name">{{ item.name }}</span><span class="audience-bar"
+                [style.--bar-share.%]="item.percentage"></span><span class="audience-pct">{{ item.percentage
+                }}%</span>
             </li>
-            <li *ngIf="!isAudienceLoading && !audienceSnapshot?.experience_levels?.length">No data yet</li>
+            <li *ngIf="!isAudienceLoading && !audienceSnapshot?.companies?.values?.length" class="audience-list-empty">
+              <span class="audience-list-empty-icon">
+                <fa-icon [icon]="icons.faUserGroup"></fa-icon>
+              </span>
+              <span class="audience-list-empty-text">No data yet</span>
+            </li>
           </ul>
-        </div>
-        <div class="audience-stats">
-          <div class="audience-col">
-            <h6 class="audience-col-heading">Top Companies / Colleges</h6>
-            <ul class="audience-list">
-              <li *ngFor="let item of audienceSnapshot?.companies?.values">
-                <span class="audience-name">{{ item.name }}</span><span class="audience-bar"
-                  [style.--bar-share.%]="item.percentage"></span><span class="audience-pct">{{ item.percentage
-                  }}%</span>
-              </li>
-              <li *ngIf="!isAudienceLoading && !audienceSnapshot?.companies?.values?.length"
-                class="audience-list-empty">
-                <span class="audience-list-empty-icon">
-                  <fa-icon [icon]="icons.faUserGroup"></fa-icon>
-                </span>
-                <span class="audience-list-empty-text">No data yet</span>
-              </li>
-            </ul>
-            <commudle-pagination-compact *ngIf="audienceSnapshot?.companies?.total > companiesCount"
-              [page]="companiesPage" [count]="companiesCount" [total]="audienceSnapshot.companies.total"
-              (pageChange)="onCompaniesPageChange($event)"></commudle-pagination-compact>
-          </div>
+          <commudle-pagination-compact *ngIf="audienceSnapshot?.companies?.total > companiesCount"
+            [page]="companiesPage" [count]="companiesCount" [total]="audienceSnapshot.companies.total"
+            (pageChange)="onCompaniesPageChange($event)"></commudle-pagination-compact>
         </div>
       </div>
-    </article>
+    </div>
+  </article>
 
-    <!-- Post-Event Dashboard (only once the event has ended) -->
-    <article class="post-event-card" *ngIf="eventHeader?.event_status === 'completed'">
-      <header class="section-header-post">
-        <h3 class="section-heading-post">
-          <fa-icon [icon]="icons.faChartPie" class="heading-icon-postevent"></fa-icon> Post-Event Dashboard
-        </h3>
-        <span class="post-event-date" *ngIf="event.end_time">Completed on
-          {{
-          moment(event.end_time).format(
-          'D MMM,
-          YYYY'
-          )
-          }}</span>
-      </header>
-      <commudle-alert class="section-info" [info]="true"
-        message="This data covers people who actually attended the event."></commudle-alert>
-      <app-loading-spinner *ngIf="isPostEventLoading && !postEventSnapshot"
-        class="section-loader"></app-loading-spinner>
-      <div class="post-event-content">
-        <div class="post-event-hero">
-          <p class="post-event-title">🎉 Event Completed!</p>
-          <p class="post-event-sub">Thank you for an amazing event.</p>
-          <a [routerLink]="['stats']" class="post-event-link">View Full Report</a>
+  <!-- Post-Event Dashboard (only once the event has ended) -->
+  <article class="post-event-card" *ngIf="eventHeader?.event_status === 'completed'">
+    <header class="section-header-post">
+      <h3 class="section-heading-post">
+        <fa-icon [icon]="icons.faChartPie" class="heading-icon-postevent"></fa-icon> Post-Event Dashboard
+      </h3>
+      <span class="post-event-date" *ngIf="event.end_time">Completed on
+        {{
+        moment(event.end_time).format(
+        'D MMM,
+        YYYY'
+        )
+        }}</span>
+    </header>
+    <commudle-alert class="section-info" [info]="true"
+      message="This data covers people who actually attended the event."></commudle-alert>
+    <app-loading-spinner *ngIf="isPostEventLoading && !postEventSnapshot" class="section-loader"></app-loading-spinner>
+    <div class="post-event-content">
+      <div class="post-event-hero">
+        <p class="post-event-title">🎉 Event Completed!</p>
+        <p class="post-event-sub">Thank you for an amazing event.</p>
+        <a [routerLink]="['stats']" class="post-event-link">View Full Report</a>
+      </div>
+      <div class="post-event-stats">
+        <div class="post-stat">
+          <span class="post-stat-value">{{ postEventSnapshot?.registered_count ?? 0 | number }}</span>
+          <span class="post-stat-label">Registered</span>
         </div>
-        <div class="post-event-stats">
-          <div class="post-stat">
-            <span class="post-stat-value">{{ postEventSnapshot?.registered_count ?? 0 | number }}</span>
-            <span class="post-stat-label">Registered</span>
-          </div>
-          <div class="post-stat">
-            <span class="post-stat-value">{{ postEventSnapshot?.attended_count ?? 0 | number }}</span>
-            <span class="post-stat-label">Attended</span>
-          </div>
-          <div class="post-stat">
-            <span class="post-stat-value">{{ (postEventSnapshot?.attendance_rate ?? 0) + '%' }}</span>
-            <span class="post-stat-label">Attendance Rate</span>
-          </div>
-          <div class="post-stat">
-            <span class="post-stat-value">{{ postEventSnapshot?.speakers_count ?? 0 | number }}</span>
-            <span class="post-stat-label">Speakers</span>
-          </div>
-          <div class="post-stat">
-            <span class="post-stat-value">{{ postEventSnapshot?.entry_passes_count ?? 0 | number }}</span>
-            <span class="post-stat-label">Entry Passes</span>
-          </div>
-          <div class="post-stat">
-            <ng-container *ngIf="
+        <div class="post-stat">
+          <span class="post-stat-value">{{ postEventSnapshot?.attended_count ?? 0 | number }}</span>
+          <span class="post-stat-label">Attended</span>
+        </div>
+        <div class="post-stat">
+          <span class="post-stat-value">{{ (postEventSnapshot?.attendance_rate ?? 0) + '%' }}</span>
+          <span class="post-stat-label">Attendance Rate</span>
+        </div>
+        <div class="post-stat">
+          <span class="post-stat-value">{{ postEventSnapshot?.speakers_count ?? 0 | number }}</span>
+          <span class="post-stat-label">Speakers</span>
+        </div>
+        <div class="post-stat">
+          <span class="post-stat-value">{{ postEventSnapshot?.entry_passes_count ?? 0 | number }}</span>
+          <span class="post-stat-label">Entry Passes</span>
+        </div>
+        <div class="post-stat">
+          <ng-container *ngIf="
                 postEventSnapshot &&
                   !postEventSnapshot.feedback_responses_count &&
                   !postEventSnapshot.feedback_form_created;
                 else feedbackCount
               ">
-              <a [routerLink]="['registrations']" class="post-stat-action" comButton status="basic" size="tiny"
-                shape="semi-round">
-                <nb-icon icon="plus-outline"></nb-icon>
-                Add Form
-              </a>
-              <span class="post-stat-label">Feedback</span>
-            </ng-container>
-            <ng-template #feedbackCount>
-              <span class="post-stat-value">{{ postEventSnapshot?.feedback_responses_count ?? 0 | number }}</span>
-              <span class="post-stat-label">Feedback Responses</span>
-            </ng-template>
-          </div>
+            <a [routerLink]="['registrations']" class="post-stat-action" comButton status="basic" size="tiny"
+              shape="semi-round">
+              <nb-icon icon="plus-outline"></nb-icon>
+              Add Form
+            </a>
+            <span class="post-stat-label">Feedback</span>
+          </ng-container>
+          <ng-template #feedbackCount>
+            <span class="post-stat-value">{{ postEventSnapshot?.feedback_responses_count ?? 0 | number }}</span>
+            <span class="post-stat-label">Feedback Responses</span>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-event-charts">
+      <!-- Experience Level chart -->
+      <div class="post-event-chart">
+        <h6 class="audience-col-heading">Experience Level (attended)</h6>
+        <div class="audience-chart">
+          <svg *ngIf="postEventSnapshot?.experience_distribution?.length" class="chart-donut" viewBox="0 0 36 36">
+            <circle class="chart-donut-track" cx="18" cy="18" r="15.9155" />
+            <circle *ngFor="let segment of postEventExperienceSegments" class="chart-donut-segment" cx="18" cy="18"
+              r="15.9155" [attr.stroke]="segment.color" [attr.stroke-dasharray]="segment.dashArray"
+              [attr.stroke-dashoffset]="segment.dashOffset" />
+          </svg>
+          <ul class="chart-legend">
+            <li *ngFor="let item of postEventSnapshot?.experience_distribution; let i = index">
+              <span class="legend-dot" [style.--dot-color]="audienceColor(i)"></span>
+              {{ item.name | capitalizeAndRemoveUnderscore }}
+              <span class="legend-pct">{{ item.percentage }}%</span>
+            </li>
+            <li *ngIf="!isPostEventLoading && !postEventSnapshot?.experience_distribution?.length">No data yet</li>
+          </ul>
         </div>
       </div>
 
-      <div class="post-event-charts">
-        <!-- Experience Level chart -->
-        <div class="post-event-chart">
-          <h6 class="audience-col-heading">Experience Level (attended)</h6>
-          <div class="audience-chart">
-            <svg *ngIf="postEventSnapshot?.experience_distribution?.length" class="chart-donut" viewBox="0 0 36 36">
-              <circle class="chart-donut-track" cx="18" cy="18" r="15.9155" />
-              <circle *ngFor="let segment of postEventExperienceSegments" class="chart-donut-segment" cx="18" cy="18"
-                r="15.9155" [attr.stroke]="segment.color" [attr.stroke-dasharray]="segment.dashArray"
-                [attr.stroke-dashoffset]="segment.dashOffset" />
-            </svg>
-            <ul class="chart-legend">
-              <li *ngFor="let item of postEventSnapshot?.experience_distribution; let i = index">
-                <span class="legend-dot" [style.--dot-color]="audienceColor(i)"></span>
-                {{ item.name | capitalizeAndRemoveUnderscore }}
-                <span class="legend-pct">{{ item.percentage }}%</span>
-              </li>
-              <li *ngIf="!isPostEventLoading && !postEventSnapshot?.experience_distribution?.length">No data yet</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Domain chart -->
-        <div class="post-event-chart">
-          <h6 class="audience-col-heading">Domain (attended)</h6>
-          <div class="audience-chart">
-            <svg *ngIf="postEventSnapshot?.domain_distribution?.length" class="chart-donut" viewBox="0 0 36 36">
-              <circle class="chart-donut-track" cx="18" cy="18" r="15.9155" />
-              <circle *ngFor="let segment of postEventDomainSegments" class="chart-donut-segment" cx="18" cy="18"
-                r="15.9155" [attr.stroke]="segment.color" [attr.stroke-dasharray]="segment.dashArray"
-                [attr.stroke-dashoffset]="segment.dashOffset" />
-            </svg>
-            <ul class="chart-legend">
-              <li *ngFor="let item of postEventSnapshot?.domain_distribution; let i = index">
-                <span class="legend-dot" [style.--dot-color]="audienceColor(i)"></span>
-                {{ item.name | capitalizeAndRemoveUnderscore }}
-                <span class="legend-pct">{{ item.percentage }}%</span>
-              </li>
-              <li *ngIf="!isPostEventLoading && !postEventSnapshot?.domain_distribution?.length">No data yet</li>
-            </ul>
-          </div>
+      <!-- Domain chart -->
+      <div class="post-event-chart">
+        <h6 class="audience-col-heading">Domain (attended)</h6>
+        <div class="audience-chart">
+          <svg *ngIf="postEventSnapshot?.domain_distribution?.length" class="chart-donut" viewBox="0 0 36 36">
+            <circle class="chart-donut-track" cx="18" cy="18" r="15.9155" />
+            <circle *ngFor="let segment of postEventDomainSegments" class="chart-donut-segment" cx="18" cy="18"
+              r="15.9155" [attr.stroke]="segment.color" [attr.stroke-dasharray]="segment.dashArray"
+              [attr.stroke-dashoffset]="segment.dashOffset" />
+          </svg>
+          <ul class="chart-legend">
+            <li *ngFor="let item of postEventSnapshot?.domain_distribution; let i = index">
+              <span class="legend-dot" [style.--dot-color]="audienceColor(i)"></span>
+              {{ item.name | capitalizeAndRemoveUnderscore }}
+              <span class="legend-pct">{{ item.percentage }}%</span>
+            </li>
+            <li *ngIf="!isPostEventLoading && !postEventSnapshot?.domain_distribution?.length">No data yet</li>
+          </ul>
         </div>
       </div>
-    </article>
-  </section>
+    </div>
+  </article>
+</section>
 
-  <!-- Row 4: Live Visitors + Top Pages -->
-  <section class="live-traffic-row">
-    <!-- Live Visitors -->
-    <article class="live-visitors-card">
-      <header class="section-header">
-        <h3 class="section-heading">
-          <fa-icon [icon]="icons.faEye" class="com-text-blue-500"></fa-icon> Live Visitors
-        </h3>
-      </header>
-      <div class="live-visitors-body">
-        <div class="live-visitors-counts">
-          <div class="live-count">
-            <span class="live-count-value">{{ liveVisitors?.live_count ?? '—' }}</span>
-            <span class="live-count-label">
-              <span class="live-dot"></span>
-              Live now
-            </span>
-          </div>
-          <div class="live-count">
-            <span class="live-count-value">{{ liveVisitors?.last_30_min_count ?? '—' }}</span>
-            <span class="live-count-label">Last 30 min</span>
-          </div>
-        </div>
-      </div>
-    </article>
-
-    <!-- Top Pages -->
-    <article class="top-list-card">
-      <header class="section-header">
-        <h3 class="section-heading">
-          <fa-icon [icon]="icons.faFileLines" class="com-text-primary-500"></fa-icon> Top Pages
-        </h3>
-      </header>
-      <ul class="top-list">
-        <li *ngIf="topPagesLoading" class="section-loader">
-          <app-loading-spinner></app-loading-spinner>
-        </li>
-        <li *ngFor="let page of topPages" class="top-list-item" [hidden]="topPagesLoading">
-          <a [href]="page.url" target="_blank" rel="noopener noreferrer" class="top-list-name" [title]="page.url">{{
-            page.page_title
-            }}</a>
-          <span class="top-list-track">
-            <span class="top-list-bar com-bg-primary-500" [style.width.%]="barShare(page.views, topPagesMax)"></span>
+<!-- Row 4: Live Visitors + Top Pages -->
+<section class="live-traffic-row">
+  <!-- Live Visitors -->
+  <article class="live-visitors-card">
+    <header class="section-header">
+      <h3 class="section-heading">
+        <fa-icon [icon]="icons.faEye" class="com-text-blue-500"></fa-icon> Live Visitors
+      </h3>
+    </header>
+    <div class="live-visitors-body">
+      <div class="live-visitors-counts">
+        <div class="live-count">
+          <span class="live-count-value">{{ liveVisitors?.live_count ?? '—' }}</span>
+          <span class="live-count-label">
+            <span class="live-dot"></span>
+            Live now
           </span>
-          <span class="top-list-value">{{ page.views | number }}</span>
-        </li>
-        <li *ngIf="!topPagesLoading && topPages.length === 0" class="top-list-empty">No page views yet.</li>
-      </ul>
-    </article>
-  </section>
+        </div>
+        <div class="live-count">
+          <span class="live-count-value">{{ liveVisitors?.last_30_min_count ?? '—' }}</span>
+          <span class="live-count-label">Last 30 min</span>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Top Pages -->
+  <article class="top-list-card">
+    <header class="section-header">
+      <h3 class="section-heading">
+        <fa-icon [icon]="icons.faFileLines" class="com-text-primary-500"></fa-icon> Top Pages
+      </h3>
+    </header>
+    <ul class="top-list">
+      <li *ngIf="topPagesLoading" class="section-loader">
+        <app-loading-spinner></app-loading-spinner>
+      </li>
+      <li *ngFor="let page of topPages" class="top-list-item" [hidden]="topPagesLoading">
+        <a [href]="page.url" target="_blank" rel="noopener noreferrer" class="top-list-name" [title]="page.url">{{
+          page.page_title
+          }}</a>
+        <span class="top-list-track">
+          <span class="top-list-bar com-bg-primary-500" [style.width.%]="barShare(page.views, topPagesMax)"></span>
+        </span>
+        <span class="top-list-value">{{ page.views | number }}</span>
+      </li>
+      <li *ngIf="!topPagesLoading && topPages.length === 0" class="top-list-empty">No page views yet.</li>
+    </ul>
+  </article>
+</section>
 </div>

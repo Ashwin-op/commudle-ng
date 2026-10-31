@@ -61,6 +61,8 @@ export interface IEventDashboardSpeaker {
   user: {
     id: number;
     name: string;
+    username?: string;
+    thumbnail?: string;
   };
   created_at: string;
 }
@@ -97,10 +99,22 @@ export type EEventDashboardActivityType =
   | 'update_like'
   | 'email_delivered';
 
+export interface IEventDashboardActivityUser {
+  id: number;
+  name: string;
+  username: string;
+  thumbnail?: string;
+}
+
 export interface IEventDashboardActivityItem {
   type: EEventDashboardActivityType;
   id: number;
   created_at: string;
+  user?: IEventDashboardActivityUser;
+  mail_type?: string;
+  subject?: string;
+  recipient_count?: number;
+  recipients?: IEventDashboardActivityUser[] | null;
   [key: string]: any;
 }
 

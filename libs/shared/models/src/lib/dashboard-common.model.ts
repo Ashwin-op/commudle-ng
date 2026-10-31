@@ -4,10 +4,17 @@ export interface IDashboardDistributionItem {
   percentage: number;
 }
 
+export interface IDashboardLiveVisitorsBucket {
+  bucket_start: string;
+  bucket_end: string;
+  count: number;
+}
+
 // Live Traffic
 export interface IDashboardLiveVisitors {
   live_count: number;
   last_30_min_count: number;
+  history?: IDashboardLiveVisitorsBucket[];
 }
 
 // Live Traffic

@@ -5,8 +5,6 @@ import { ICommunity } from '@commudle/shared-models';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
 import { AuthService, SeoService } from '@commudle/shared-services';
 import { DashboardCommunitiesService } from 'apps/commudle-admin/src/app/services/stats/dashboard-communities.service';
-import { EventCollaborationCommunitiesService } from 'apps/commudle-admin/src/app/services/event-collaboration-communities.service';
-import { HackathonCollaborationCommunitiesService } from '@commudle/shared-services';
 import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
 import {
   ICommunityDashboardActivityItem,
@@ -229,73 +227,39 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     this.loadNeedsAttention();
   }
 
-  collaborationActionLoading: Record<number, boolean> = {};
-
   acceptCollaborationRequest(request: IDashboardCollaborationRequest): void {
-    this.runCollaborationAction(request, (token) =>
-      request.type === 'hackathon'
-        ? this.hackathonCollaborationCommunitiesService.updateStatus(token, 'approved')
-        : this.eventCollaborationCommunitiesService.confirmCollaboration(token),
-    );
+    this.navigateToCollaborationConfirmation(request);
   }
 
   rejectCollaborationRequest(request: IDashboardCollaborationRequest): void {
-    this.runCollaborationAction(request, (token) =>
-      request.type === 'hackathon'
-        ? this.hackathonCollaborationCommunitiesService.updateStatus(token, 'rejected')
-        : this.eventCollaborationCommunitiesService.updateStatus(token, 'rejected'),
-    );
+    this.navigateToCollaborationConfirmation(request, 'rejected');
   }
 
-  private runCollaborationAction(request: IDashboardCollaborationRequest, call: (token: string) => any): void {
+  private navigateToCollaborationConfirmation(request: IDashboardCollaborationRequest, status?: 'rejected'): void {
     if (!request.token) {
       this.toastLogService.errorDialog(
         "This request can't be actioned from the dashboard yet -- use the link from the collaboration email instead.",
       );
       return;
     }
-    this.collaborationActionLoading[request.id] = true;
-    this.subscriptions.push(
-      call(request.token).subscribe({
-        next: () => {
-          this.collaborationActionLoading[request.id] = false;
-          this.toastLogService.successDialog('Response recorded');
-          if (this.needsAttention?.collaboration_requests) {
-            this.needsAttention.collaboration_requests.values =
-              this.needsAttention.collaboration_requests.values.filter((r) => r.id !== request.id);
-            this.needsAttention.collaboration_requests.total -= 1;
-          }
-        },
-        error: (err) => {
-          this.collaborationActionLoading[request.id] = false;
-          this.toastLogService.errorDialog(err?.error?.message || 'Something went wrong, please try again');
-        },
-      }),
-    );
-  }
-
-  outgoingCollaborationLink(request: IDashboardCollaborationRequest): any[] {
-    return request.type === 'hackathon'
-      ? ['/admin/communities', this.community.slug, 'hackathon-dashboard', request.slug, 'collaboration']
-      : ['/admin/communities', this.community.slug, 'events', 'event-dashboard', request.slug, 'collaborations'];
-  }
-
-  // Public page of the *inviting* community's event/hackathon -- this admin
-  // doesn't own it, so there's no dashboard link to send them to. Null until
-  // the backend starts sending community_slug for incoming requests.
-  incomingCollaborationLink(request: IDashboardCollaborationRequest): any[] | null {
-    if (!request.community_slug) {
-      return null;
+    const path =
+      request.type === 'hackathon'
+        ? '/email-confirmations/hackathon-collaboration-community'
+        : '/email-confirmations/collaboration-community';
+    const queryParams: { token: string; status?: string } = { token: request.token };
+    if (status) {
+      queryParams.status = status;
     }
-    return request.type === 'hackathon'
-      ? ['/communities', request.community_slug, 'hackathons', request.slug]
-      : ['/communities', request.community_slug, 'events', request.slug];
+    this.router.navigate([path], { queryParams });
   }
 
   collaborationRowLink(request: IDashboardCollaborationRequest): any[] | null {
-    return request.direction === 'outgoing'
-      ? this.outgoingCollaborationLink(request)
-      : this.incomingCollaborationLink(request);
+    if (!this.community?.slug || !request.slug) {
+      return null;
+    }
+    return request.type === 'hackathon'
+      ? ['/admin/communities', this.community.slug, 'hackathon-dashboard', request.slug, 'collaboration']
+      : ['/admin/communities', this.community.slug, 'events', 'event-dashboard', request.slug, 'collaborations'];
   }
 
   onCollaborationRowClick(request: IDashboardCollaborationRequest): void {

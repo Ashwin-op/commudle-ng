@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Chart } from 'chart.js';
 import {
   IEvent,
   ICommunity,
@@ -12,6 +13,7 @@ import {
   IEventDashboardSnapshot,
   IDashboardDistributionItem,
   IDashboardLiveVisitors,
+  IDashboardLiveVisitorsBucket,
   IDashboardTopPage,
 } from '@commudle/shared-models';
 import { SeoService } from '@commudle/shared-services';
@@ -74,7 +76,10 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   };
 
   needsAttention: IEventDashboardNeedsAttention;
+  // Polled every 30s (Redis-cached 30s TTL server-side); each poll
+  // re-resamples history and updates the chart in place.
   liveVisitors: IDashboardLiveVisitors;
+  liveVisitorsChart: Chart;
   topPages: IDashboardTopPage[] = [];
   topPagesLoading = false;
 
@@ -111,6 +116,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private seoService: SeoService,
     private clipboard: Clipboard,
     private libToastLogService: LibToastLogService,
@@ -145,6 +151,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe());
+    this.liveVisitorsChart?.destroy();
   }
 
   get daysUntilEvent(): string {
@@ -217,6 +224,10 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
 
   get speakerNames(): string {
     return (this.needsAttention?.speakers?.values || []).map((speaker) => speaker.user?.name).join(', ');
+  }
+
+  onSpeakersRowClick(): void {
+    this.router.navigate(['agenda'], { relativeTo: this.activatedRoute });
   }
 
   getEventSnapshot(): void {
@@ -307,8 +318,21 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     return item?.user?.name || item?.user_name || item?.name || '';
   }
 
+  activityActorLink(item: IEventDashboardActivityItem): any[] | null {
+    return item?.user?.username ? ['/users', item.user.username] : null;
+  }
+
   activityTime(item: IEventDashboardActivityItem): string {
     return item?.created_at ? moment(item.created_at).fromNow() : '';
+  }
+
+  emailRecipientSummary(item: IEventDashboardActivityItem): string {
+    const recipients = item.recipients;
+    if (recipients?.length && recipients.length <= 2) {
+      return recipients.map((r) => r.name).join(' and ');
+    }
+    const count = item.recipient_count || recipients?.length || 0;
+    return `${count} ${count === 1 ? 'person' : 'people'}`;
   }
 
   getAudienceSnapshot(): void {
@@ -400,6 +424,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.dashboardEventsService.liveVisitors(this.event.id).subscribe((data) => {
         this.liveVisitors = data;
+        this.renderLiveVisitorsChart();
       }),
     );
   }
@@ -407,6 +432,100 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   // Poll live visitors every 30s, matching the server-side Redis TTL.
   startLiveVisitorsPolling(): void {
     this.subscriptions.push(interval(30000).subscribe(() => this.getLiveVisitors()));
+  }
+
+  private resampleLiveVisitorsHistory(
+    history: IDashboardLiveVisitorsBucket[] | undefined,
+    bucketMinutes = 5,
+    windowMinutes = 30,
+  ): { label: string; count: number }[] {
+    if (!history?.length) {
+      return [];
+    }
+    const bucketMs = bucketMinutes * 60000;
+    const bucketCount = windowMinutes / bucketMinutes;
+    const windowStart = new Date(history[history.length - 1].bucket_end).getTime() - bucketCount * bucketMs;
+
+    const sums = new Array(bucketCount).fill(0);
+    const hits = new Array(bucketCount).fill(0);
+
+    history.forEach(({ bucket_start, bucket_end, count }) => {
+      const midpoint = (new Date(bucket_start).getTime() + new Date(bucket_end).getTime()) / 2;
+      const i = Math.floor((midpoint - windowStart) / bucketMs);
+      if (i >= 0 && i < bucketCount) {
+        sums[i] += count;
+        hits[i] += 1;
+      }
+    });
+
+    return sums.map((sum, i) => ({
+      label: moment(windowStart + (i + 1) * bucketMs).format('h:mm a'),
+      count: hits[i] ? Math.round(sum / hits[i]) : 0,
+    }));
+  }
+
+  private renderLiveVisitorsChart(): void {
+    const points = this.resampleLiveVisitorsHistory(this.liveVisitors?.history);
+    if (!points.length) {
+      return;
+    }
+    const labels = points.map((p) => p.label);
+    const data = points.map((p) => p.count);
+
+    this.ngZone.runOutsideAngular(() => {
+      if (this.liveVisitorsChart) {
+        this.liveVisitorsChart.data.labels = labels;
+        this.liveVisitorsChart.data.datasets[0].data = data;
+        this.liveVisitorsChart.update();
+        return;
+      }
+
+      this.liveVisitorsChart = new Chart('event-live-visitors-chart', {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Live Visitors',
+              data,
+              borderColor: '#3366ff',
+              backgroundColor: 'rgba(51, 102, 255, 0.08)',
+              borderWidth: 2,
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              pointHoverBorderWidth: 2,
+              pointHoverBackgroundColor: '#ffffff',
+              pointHoverBorderColor: '#3366ff',
+              lineTension: 0.3,
+              fill: true,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 0 },
+          responsiveAnimationDuration: 0,
+          legend: { display: false },
+          scales: {
+            xAxes: [{ gridLines: { display: false } }],
+            yAxes: [
+              {
+                ticks: { beginAtZero: true, precision: 0 },
+                gridLines: { color: '#f1f1f1', drawBorder: false },
+              },
+            ],
+          },
+          tooltips: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: (tooltipItem) => `${tooltipItem.yLabel} visitor${tooltipItem.yLabel === '1' ? '' : 's'}`,
+            },
+          },
+        },
+      });
+    });
   }
 
   getTopPages(): void {
