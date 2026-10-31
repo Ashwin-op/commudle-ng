@@ -214,10 +214,77 @@
         <li *ngFor="let item of recentActivity" class="activity-item" [class.is-clickable]="!!activityItemLink(item)"
           [routerLink]="activityItemLink(item)" (keydown.enter)="onActivityRowClick(item)">
           <span class="activity-avatar" [ngClass]="activityAvatarClass(item.type)">
-            <fa-icon [icon]="activityIcon(item.type)"></fa-icon>
+            <img
+              *ngIf="activityLogo(item) as logo; else activityTypeIcon"
+              [src]="logo"
+              [alt]="item.community_name || ''"
+              class="activity-avatar-img"
+            />
+            <ng-template #activityTypeIcon>
+              <fa-icon [icon]="activityIcon(item.type)"></fa-icon>
+            </ng-template>
           </span>
           <p class="activity-content">
-            <span class="activity-text">{{ activityLabel(item) }}</span>
+            <ng-container [ngSwitch]="item.type">
+              <span class="activity-text" *ngSwitchCase="'new_members'">
+                {{ item.count || 0 }} new member{{ item.count === 1 ? '' : 's' }} joined
+                <ng-container *ngIf="item.community_name">
+                  <a
+                    *ngIf="activityItemLink(item) as link; else plainNewMembersCommunity"
+                    [routerLink]="link"
+                    (click)="$event.stopPropagation()"
+                    class="activity-entity-link"
+                    >{{ item.community_name }}</a
+                  >
+                  <ng-template #plainNewMembersCommunity>{{ item.community_name }}</ng-template>
+                </ng-container>
+              </span>
+              <span class="activity-text" *ngSwitchCase="'event_published'">
+                <a
+                  *ngIf="activityItemLink(item) as link; else plainEventName"
+                  [routerLink]="link"
+                  (click)="$event.stopPropagation()"
+                  class="activity-entity-link"
+                  >{{ item.event_name || 'A new event' }}</a
+                >
+                <ng-template #plainEventName>{{ item.event_name || 'A new event' }}</ng-template>
+                event published
+                <ng-container *ngIf="item.community_name">
+                  in
+                  <a
+                    *ngIf="activityItemLink(item) as link; else plainEventCommunity"
+                    [routerLink]="link"
+                    (click)="$event.stopPropagation()"
+                    class="activity-entity-link"
+                    >{{ item.community_name }}</a
+                  >
+                  <ng-template #plainEventCommunity>{{ item.community_name }}</ng-template>
+                </ng-container>
+              </span>
+              <span class="activity-text" *ngSwitchCase="'hackathon_activity'">
+                {{ item.count || 0 }} update{{ item.count === 1 ? '' : 's' }} in
+                <a
+                  *ngIf="activityItemLink(item) as link; else plainHackathonName"
+                  [routerLink]="link"
+                  (click)="$event.stopPropagation()"
+                  class="activity-entity-link"
+                  >{{ item.hackathon_name || 'a hackathon' }}</a
+                >
+                <ng-template #plainHackathonName>{{ item.hackathon_name || 'a hackathon' }}</ng-template>
+              </span>
+              <span class="activity-text" *ngSwitchCase="'survey_responses'">
+                {{ item.response_count || 0 }} response{{ item.response_count === 1 ? '' : 's' }} on
+                <a
+                  *ngIf="activityItemLink(item) as link; else plainSurveyName"
+                  [routerLink]="link"
+                  (click)="$event.stopPropagation()"
+                  class="activity-entity-link"
+                  >{{ item.survey_name || 'a survey' }}</a
+                >
+                <ng-template #plainSurveyName>{{ item.survey_name || 'a survey' }}</ng-template>
+              </span>
+              <span class="activity-text" *ngSwitchDefault>{{ activityLabel(item) }}</span>
+            </ng-container>
           </p>
           <time class="activity-time">{{ activityTime(item) }}</time>
         </li>
@@ -263,11 +330,13 @@
           </li>
         </ul>
 
-        <h6 class="footprint-map-heading" *ngIf="footprint?.top_locations?.length">Map Wise Member Distribution</h6>
-        <div class="footprint-map" *ngIf="footprint?.top_locations?.length">
+        <h6 class="footprint-map-heading" *ngIf="footprint?.top_locations?.values?.length">
+          Map Wise Member Distribution
+        </h6>
+        <div class="footprint-map" *ngIf="footprint?.top_locations?.values?.length">
           <div id="footprint_map"></div>
         </div>
-        <p *ngIf="!footprint?.top_locations?.length" class="footprint-location-empty">
+        <p *ngIf="!footprint?.top_locations?.values?.length" class="footprint-location-empty">
           <span class="footprint-empty-icon">
             <fa-icon [icon]="icons.faEarthAmericas"></fa-icon>
           </span>

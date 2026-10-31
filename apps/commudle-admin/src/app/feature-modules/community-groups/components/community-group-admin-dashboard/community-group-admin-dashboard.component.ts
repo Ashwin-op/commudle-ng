@@ -272,7 +272,7 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
         next: (data) => {
           this.footprint = data;
           this.isFootprintLoading = false;
-          if (this.footprint?.top_locations?.length) {
+          if (this.footprint?.top_locations?.values?.length) {
             // Defer so the #footprint_map div is in the DOM before GeoChart draws into it.
             setTimeout(() => this.initFootprintMap(), 0);
           }
@@ -291,12 +291,12 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
 
   drawFootprintMap(): void {
     const container = document.getElementById('footprint_map');
-    if (!container || !this.footprint?.top_locations?.length) {
+    if (!container || !this.footprint?.top_locations?.values?.length) {
       return;
     }
     const data = google.visualization.arrayToDataTable([
       ['City', 'Members'],
-      ...this.footprint.top_locations.map((location) => [location.city, location.member_count]),
+      ...this.footprint.top_locations.values.map((location) => [location.city, location.member_count]),
     ]);
 
     const options = {
@@ -671,15 +671,22 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     }
   }
 
+  /** Community logo thumbnail for the activity row's avatar, when the API sends one. */
+  activityLogo(item: ICommunityGroupDashboardActivityItem): string | null {
+    return item?.community_logo || null;
+  }
+
   /** Builds a human-readable sentence for each day-bucketed activity type. */
   activityLabel(item: ICommunityGroupDashboardActivityItem): string {
     const count = item.count || 0;
     switch (item.type) {
       case 'new_members':
-        return `${count} new member${count === 1 ? '' : 's'} joined`;
+        return item.community_name
+          ? `${count} new member${count === 1 ? '' : 's'} joined ${item.community_name}`
+          : `${count} new member${count === 1 ? '' : 's'} joined`;
       case 'event_published':
         return item.event_name
-          ? `${item.event_name} published${item.community_name ? ' in ' + item.community_name : ''}`
+          ? `${item.event_name} event published${item.community_name ? ' in ' + item.community_name : ''}`
           : 'A new event was published';
       case 'hackathon_activity':
         return `${count} update${count === 1 ? '' : 's'} in ${item.hackathon_name || 'a hackathon'}`;
@@ -700,9 +707,27 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   activityItemLink(item: ICommunityGroupDashboardActivityItem): any[] | null {
     switch (item?.type) {
       case 'new_members':
-        return item.community_ids?.length === 1 ? ['/admin', 'communities', item.community_ids[0], 'members'] : null;
+        return item.community_slug ? ['/admin', 'communities', item.community_slug, 'members'] : null;
+      case 'event_published':
+        return item.community_slug && item.event_id
+          ? ['/admin', 'communities', item.community_slug, 'events', 'event-dashboard', item.event_id]
+          : null;
+      case 'hackathon_activity':
+        return item.community_slug && item.hackathon_id
+          ? ['/admin', 'communities', item.community_slug, 'hackathon-dashboard', item.hackathon_id, 'updates']
+          : null;
+      case 'channel_discussions':
+        return item.community_slug
+          ? ['/admin', 'communities', item.community_slug, 'channels']
+          : ['/admin', 'orgs', this.communityGroup.slug, 'channels'];
+      case 'forum_discussions':
+        return item.community_slug
+          ? ['/admin', 'communities', item.community_slug, 'forums']
+          : ['/admin', 'orgs', this.communityGroup.slug, 'forums'];
       case 'survey_responses':
-        return ['/admin', 'orgs', this.communityGroup.slug, 'surveys'];
+        return item.community_slug
+          ? ['/admin', 'communities', item.community_slug, 'surveys']
+          : ['/admin', 'orgs', this.communityGroup.slug, 'surveys'];
       case 'new_admins':
         return ['/admin', 'orgs', this.communityGroup.slug, 'admin-team'];
       default:

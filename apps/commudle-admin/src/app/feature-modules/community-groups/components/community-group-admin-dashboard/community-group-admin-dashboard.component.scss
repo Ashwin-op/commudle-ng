@@ -306,7 +306,11 @@
       }
 
       .activity-avatar {
-        @apply com-w-6 com-h-6 com-rounded-full com-flex com-items-center com-justify-center com-text-10px com-font-medium com-shrink-0 com-text-white;
+        @apply com-w-6 com-h-6 com-rounded-full com-flex com-items-center com-justify-center com-text-10px com-font-medium com-shrink-0 com-text-white com-overflow-hidden;
+
+        .activity-avatar-img {
+          @apply com-w-full com-h-full com-rounded-full com-object-cover;
+        }
 
         &.members-avatar {
           @apply com-bg-blue-500;
@@ -338,6 +342,14 @@
 
         .activity-text {
           @apply com-text-xs com-text-Yankees-Blue com-line-clamp-2;
+
+          .activity-entity-link {
+            @apply com-text-inherit com-font-medium com-no-underline com-cursor-pointer com-transition-colors com-duration-200;
+
+            &:hover {
+              @apply com-text-primary-600 com-underline;
+            }
+          }
         }
 
         .activity-sub {

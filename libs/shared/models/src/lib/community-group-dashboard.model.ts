@@ -53,7 +53,12 @@ export type ECommunityGroupDashboardActivityType =
 export interface ICommunityGroupDashboardActivityItem {
   type: ECommunityGroupDashboardActivityType;
   created_at: string;
-  // per-type fields vary: count, community_ids, survey_name, response_count, hackathon_name, etc.
+  community_id?: number;
+  community_slug?: string;
+  community_name?: string;
+  community_logo?: string;
+  event_id?: number;
+  event_name?: string;
   [key: string]: any;
 }
 
@@ -68,7 +73,7 @@ export interface ICommunityGroupDashboardFootprint {
   cities_count: number;
   communities_count: number;
   members_count: number;
-  top_locations: ICommunityGroupDashboardFootprintLocation[];
+  top_locations: IPaginationCount<ICommunityGroupDashboardFootprintLocation>;
 }
 
 // audience_demographics
