@@ -136,7 +136,7 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   // Your Communities -- GET .../communities (paginated)
   communities: ICommunityGroupDashboardCommunity[] = [];
   communitiesPage = 1;
-  readonly communitiesCount = 10;
+  readonly communitiesCount = 5;
   communitiesTotal = 0;
   isCommunitiesLoading = false;
 
@@ -740,6 +740,28 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     if (link) {
       this.router.navigate(link);
     }
+  }
+
+  scheduleItemLink(item: ICommunityGroupDashboardScheduleItem): any[] | null {
+    switch (item?.type) {
+      case 'event':
+        if (item.community_slug && item.event_slug) {
+          return ['/communities', item.community_slug, 'events', item.event_slug];
+        }
+        break;
+      case 'hackathon':
+        // No public hackathon_slug in this payload yet -- link to the admin dashboard by id instead.
+        if (item.community_slug && item.id) {
+          return ['/admin', 'communities', item.community_slug, 'hackathon-dashboard', item.id, 'updates'];
+        }
+        break;
+    }
+    // Fall back to the community page when there's no event/hackathon-specific destination.
+    return item?.community_slug ? ['/communities', item.community_slug] : null;
+  }
+
+  scheduleItemCommunityLink(item: ICommunityGroupDashboardScheduleItem): any[] | null {
+    return item?.community_slug ? ['/communities', item.community_slug] : null;
   }
 
   setQuickActions(): void {

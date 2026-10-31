@@ -22,6 +22,9 @@ export interface ICommunityGroupDashboardScheduleItem {
   id: number;
   title: string;
   community_name: string;
+  community_slug: string;
+  community_logo?: string;
+  event_slug?: string;
   scheduled_at: string;
 }
 
@@ -113,8 +116,9 @@ export type ECommunityGroupDashboardChannelOwner = 'community' | 'organization';
 
 export interface ICommunityGroupDashboardChannelActivityItem {
   type: string;
-  // username is needed to link to /users/:username -- not present in the current API response
-  user: { id: number; name: string; username?: string };
+  user: { id: number; name: string; username?: string; thumbnail?: string };
+  community_channel_id: number;
+  community_id: number;
   channel_name: string;
   community_name: string;
   owned_by: ECommunityGroupDashboardChannelOwner;

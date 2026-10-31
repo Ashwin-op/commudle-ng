@@ -214,12 +214,8 @@
         <li *ngFor="let item of recentActivity" class="activity-item" [class.is-clickable]="!!activityItemLink(item)"
           [routerLink]="activityItemLink(item)" (keydown.enter)="onActivityRowClick(item)">
           <span class="activity-avatar" [ngClass]="activityAvatarClass(item.type)">
-            <img
-              *ngIf="activityLogo(item) as logo; else activityTypeIcon"
-              [src]="logo"
-              [alt]="item.community_name || ''"
-              class="activity-avatar-img"
-            />
+            <img *ngIf="activityLogo(item) as logo; else activityTypeIcon" [src]="logo"
+              [alt]="item.community_name || ''" class="activity-avatar-img" />
             <ng-template #activityTypeIcon>
               <fa-icon [icon]="activityIcon(item.type)"></fa-icon>
             </ng-template>
@@ -229,58 +225,36 @@
               <span class="activity-text" *ngSwitchCase="'new_members'">
                 {{ item.count || 0 }} new member{{ item.count === 1 ? '' : 's' }} joined
                 <ng-container *ngIf="item.community_name">
-                  <a
-                    *ngIf="activityItemLink(item) as link; else plainNewMembersCommunity"
-                    [routerLink]="link"
-                    (click)="$event.stopPropagation()"
-                    class="activity-entity-link"
-                    >{{ item.community_name }}</a
-                  >
+                  <a *ngIf="activityItemLink(item) as link; else plainNewMembersCommunity" [routerLink]="link"
+                    (click)="$event.stopPropagation()" class="activity-entity-link">{{ item.community_name }}</a>
                   <ng-template #plainNewMembersCommunity>{{ item.community_name }}</ng-template>
                 </ng-container>
               </span>
               <span class="activity-text" *ngSwitchCase="'event_published'">
-                <a
-                  *ngIf="activityItemLink(item) as link; else plainEventName"
-                  [routerLink]="link"
-                  (click)="$event.stopPropagation()"
-                  class="activity-entity-link"
-                  >{{ item.event_name || 'A new event' }}</a
-                >
+                <a *ngIf="activityItemLink(item) as link; else plainEventName" [routerLink]="link"
+                  (click)="$event.stopPropagation()" class="activity-entity-link">{{ item.event_name || 'A new event'
+                  }}</a>
                 <ng-template #plainEventName>{{ item.event_name || 'A new event' }}</ng-template>
                 event published
                 <ng-container *ngIf="item.community_name">
                   in
-                  <a
-                    *ngIf="activityItemLink(item) as link; else plainEventCommunity"
-                    [routerLink]="link"
-                    (click)="$event.stopPropagation()"
-                    class="activity-entity-link"
-                    >{{ item.community_name }}</a
-                  >
+                  <a *ngIf="activityItemLink(item) as link; else plainEventCommunity" [routerLink]="link"
+                    (click)="$event.stopPropagation()" class="activity-entity-link">{{ item.community_name }}</a>
                   <ng-template #plainEventCommunity>{{ item.community_name }}</ng-template>
                 </ng-container>
               </span>
               <span class="activity-text" *ngSwitchCase="'hackathon_activity'">
                 {{ item.count || 0 }} update{{ item.count === 1 ? '' : 's' }} in
-                <a
-                  *ngIf="activityItemLink(item) as link; else plainHackathonName"
-                  [routerLink]="link"
-                  (click)="$event.stopPropagation()"
-                  class="activity-entity-link"
-                  >{{ item.hackathon_name || 'a hackathon' }}</a
-                >
+                <a *ngIf="activityItemLink(item) as link; else plainHackathonName" [routerLink]="link"
+                  (click)="$event.stopPropagation()" class="activity-entity-link">{{ item.hackathon_name || 'a
+                  hackathon' }}</a>
                 <ng-template #plainHackathonName>{{ item.hackathon_name || 'a hackathon' }}</ng-template>
               </span>
               <span class="activity-text" *ngSwitchCase="'survey_responses'">
                 {{ item.response_count || 0 }} response{{ item.response_count === 1 ? '' : 's' }} on
-                <a
-                  *ngIf="activityItemLink(item) as link; else plainSurveyName"
-                  [routerLink]="link"
-                  (click)="$event.stopPropagation()"
-                  class="activity-entity-link"
-                  >{{ item.survey_name || 'a survey' }}</a
-                >
+                <a *ngIf="activityItemLink(item) as link; else plainSurveyName" [routerLink]="link"
+                  (click)="$event.stopPropagation()" class="activity-entity-link">{{ item.survey_name || 'a survey'
+                  }}</a>
                 <ng-template #plainSurveyName>{{ item.survey_name || 'a survey' }}</ng-template>
               </span>
               <span class="activity-text" *ngSwitchDefault>{{ activityLabel(item) }}</span>
@@ -495,7 +469,7 @@
     </article>
   </section>
 
-  <!-- Row 4: Latest Channel Activity + Latest Forum Activity + Quick Actions -->
+  <!-- Row 4: Latest Channel Activity + Latest Forum Activity + Engagement Snapshot -->
   <section class="activity-actions-row">
     <!-- Latest Channel Activity -->
     <article class="channel-card">
@@ -676,6 +650,54 @@
           </span>
         </li>
       </ul>
+    </article>
+  </section>
+
+  <!-- Row 5: Your Communities + Quick Actions -->
+  <section class="communities-engagement-row">
+    <!-- Your Communities -->
+    <article class="communities-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faUserGroup" class="heading-icon-communities"></fa-icon> Your Communities
+        </h3>
+      </header>
+      <app-loading-spinner *ngIf="isCommunitiesLoading" class="section-loader communities-loader"></app-loading-spinner>
+      <ul class="communities-list" *ngIf="!isCommunitiesLoading">
+        <li *ngFor="let c of communities" class="community-row">
+          <a [routerLink]="['/admin/communities', c.id]" class="community-name" [title]="c.name">{{ c.name }}</a>
+          <span class="community-stat">{{ c.members_count | number }} members</span>
+          <span class="community-stat">{{ c.upcoming_events_count | number }} upcoming</span>
+          <svg class="community-sparkline" viewBox="0 0 60 20" preserveAspectRatio="none">
+            <polyline [attr.points]="communityTrendSparkline(c.activity_trend)" />
+          </svg>
+          <span class="community-status" [ngClass]="c.status">{{ c.status | capitalizeAndRemoveUnderscore }}</span>
+        </li>
+        <li *ngIf="communities.length === 0" class="communities-empty">
+          <span class="communities-empty-icon">
+            <fa-icon [icon]="icons.faUserGroup"></fa-icon>
+          </span>
+          <span class="communities-empty-text">No communities yet.</span>
+        </li>
+      </ul>
+      <commudle-pagination-compact *ngIf="communitiesTotal > communitiesCount" [page]="communitiesPage"
+        [count]="communitiesCount" [total]="communitiesTotal"
+        (pageChange)="onCommunitiesPageChange($event)"></commudle-pagination-compact>
+    </article>
+
+    <!-- Quick Actions -->
+    <article class="quick-actions-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faBolt" class="heading-icon-actions"></fa-icon> Quick Actions
+        </h3>
+      </header>
+      <nav class="actions-grid">
+        <a *ngFor="let action of quickActions" class="action-card" [routerLink]="action.route">
+          <fa-icon [icon]="action.icon" class="action-icon"></fa-icon>
+          <span class="action-label">{{ action.label }}</span>
+        </a>
+      </nav>
     </article>
   </section>
 </div>
