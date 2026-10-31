@@ -1,6 +1,6 @@
 <div class="fcat-wrap">
   <!-- ── Toolbar ── -->
-  <div class="fcat-toolbar">
+  <div class="fcat-toolbar" *ngIf="categories.length">
     <div class="fcat-search">
       <fa-icon [icon]="icons.faMagnifyingGlass" class="fcat-search-icon"></fa-icon>
       <input

@@ -13,7 +13,15 @@
         <p class="fdis-forum-desc" *ngIf="forum.description">{{ forum.description }}</p>
       </div>
     </div>
-    <button comButton status="primary" shape="semi-round" size="small" (click)="startNewDiscussion()">
+    <!-- Hidden while the forum has no threads; the empty state offers its own CTA -->
+    <button
+      *ngIf="(userMessages$ | async)?.length > 0"
+      comButton
+      status="primary"
+      shape="semi-round"
+      size="small"
+      (click)="startNewDiscussion()"
+    >
       <fa-icon [icon]="icons.faPenToSquare"></fa-icon>
       New Post
     </button>

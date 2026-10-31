@@ -59,11 +59,11 @@
           @apply com-flex com-items-center com-gap-3 com-no-underline com-px-4 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray last:com-border-b-0 com-transition-colors com-duration-150;
 
           &:hover {
-            @apply com-bg-Azureish-White;
+            @apply com-bg-gray-100;
           }
 
           .fcat-forum-icon {
-            @apply com-w-9 com-h-9 com-rounded-lg com-flex-shrink-0 com-flex com-items-center com-justify-center com-bg-primary-100 com-text-primary-500 com-text-lg;
+            @apply com-w-9 com-h-9 com-rounded-lg com-flex-shrink-0 com-flex com-items-center com-justify-center com-bg-Anti-Flash-White com-text-gray-300 com-text-lg;
           }
 
           .fcat-forum-info {
@@ -77,7 +77,7 @@
               @apply com-flex com-items-center com-gap-1 com-m-0 com-mt-0.5 com-text-xs com-text-Cadet-Grey;
 
               .fcat-forum-category {
-                @apply com-text-primary-500 com-font-medium;
+                @apply com-text-Yankees-Blue com-font-semibold;
               }
 
               .fcat-dot {
