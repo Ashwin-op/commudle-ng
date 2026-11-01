@@ -48,7 +48,6 @@
 }
 
 @keyframes iconPulse {
-
   0%,
   100% {
     transform: scale(1) rotate(0deg);
@@ -88,7 +87,6 @@
 }
 
 @keyframes dotPulse {
-
   0%,
   100% {
     opacity: 1;
@@ -466,12 +464,20 @@
       }
 
       .snapshot-stat-sub {
-        @apply com-text-10px com-text-orange-500 com-font-medium;
+        @apply com-text-10px com-text-orange-500;
       }
+    }
+  }
 
-      .snapshot-stat-sub {
-        @apply com-text-xs com-text-orange-500 com-font-medium;
-      }
+  .snapshot-empty {
+    @apply com-flex com-flex-col com-items-center com-gap-2 com-py-4 com-text-xs com-text-gray-500 com-m-0;
+
+    .snapshot-empty-icon {
+      @apply com-flex com-items-center com-justify-center com-w-12 com-h-12 com-rounded-full com-bg-green-50 com-text-green-500 com-text-xl com-mb-1;
+    }
+
+    .snapshot-empty-text {
+      @apply com-text-xs com-font-medium com-text-Yankees-Blue;
     }
   }
 
@@ -851,4 +857,76 @@
       }
     }
   }
+
+  .live-visitors-card {
+    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+    animation: cardFadeIn 0.4s ease-out both;
+
+    &:hover {
+      @apply com-shadow-Card;
+      transform: translateY(-2px);
+    }
+  }
+
+  .live-visitors-body {
+    @apply com-flex com-flex-col com-gap-2;
+
+    .live-visitors-counts {
+      @apply com-flex com-gap-6;
+
+      .live-count {
+        @apply com-flex com-flex-col com-gap-2;
+
+        .live-count-value {
+          @apply com-text-base com-font-medium com-text-Yankees-Blue com-leading-none;
+        }
+
+        .live-count-label {
+          @apply com-flex com-items-center com-gap-1.5 com-text-xs com-font-normal com-text-gray-500;
+
+          .live-dot {
+            @apply com-w-2 com-h-2 com-rounded-full com-bg-green-500 com-relative com-inline-block;
+
+            &::after {
+              content: '';
+              @apply com-absolute com-inset-0 com-rounded-full com-bg-green-500;
+              animation: livePing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+            }
+          }
+        }
+      }
+    }
+
+    .live-visitors-chart-wrap {
+      @apply com-relative com-h-36 com-mt-1;
+
+      &.is-empty {
+        @apply com-flex com-items-center com-justify-center;
+
+        canvas {
+          @apply com-hidden;
+        }
+      }
+
+      .live-visitors-chart-empty {
+        @apply com-text-xs com-text-gray-400;
+      }
+    }
+  }
+}
+
+@keyframes livePing {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+strong {
+  @apply com-font-medium;
 }

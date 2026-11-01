@@ -20,7 +20,6 @@
 }
 
 @keyframes pulse-dot {
-
   0%,
   100% {
     opacity: 1;
@@ -109,7 +108,7 @@ a {
 }
 
 .event-dashboard-menu {
-  @apply com-sticky com-top-[var(--mobile-navbar-offset, 52px)] com-z-10;
+  @apply com-sticky com-top-[var(--mobile-navbar-offset,52px)] com-z-10;
 
   com-card {
     @apply com-my-4 com-mx-2;

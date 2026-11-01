@@ -99,7 +99,6 @@
 }
 
 .disabled {
-
   fa-icon,
   span {
     @apply com-text-gray-400 #{!important};
@@ -107,7 +106,7 @@
 }
 
 .header {
-  @apply com-bg-white md:com-p-4 com-px-3 com-py-4 com-flex md:com-flex-row com-flex-col com-items-center md:com-gap-4 com-gap-0 md:com-sticky com-relative com-z-10 md:com-top-[var(--mobile-navbar-offset, 52px)];
+  @apply com-bg-white md:com-p-4 com-px-3 com-py-4 com-flex md:com-flex-row com-flex-col com-items-center md:com-gap-4 com-gap-0 md:com-sticky com-relative com-z-10 md:com-top-[var(--mobile-navbar-offset,52px)];
 }
 
 .sidebar {
@@ -186,7 +185,7 @@ a {
 }
 
 .event-dashboard-menu {
-  @apply com-sticky com-top-[var(--mobile-navbar-offset, 52px)] com-z-10 com-my-4;
+  @apply com-sticky com-top-[var(--mobile-navbar-offset,52px)] com-z-10 com-my-4;
 
   com-card {
     @apply com-mx-0;
@@ -197,7 +196,7 @@ a {
       .menu {
         @apply com-flex com-flex-nowrap com-overflow-x-auto com-scrollbar-hide;
 
-        >* {
+        > * {
           @apply com-flex-shrink-0;
         }
 

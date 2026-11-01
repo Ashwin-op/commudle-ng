@@ -2,8 +2,11 @@
   <!-- Row 1: Hackathon Hero -->
   <section class="hackathon-hero">
     <div class="hero-banner">
-      <commudle-banner-image [headerImagePath]="hackathon.banner_image?.url" [name]="hackathon.name"
-        aspectRatio="11/10"></commudle-banner-image>
+      <commudle-banner-image
+        [headerImagePath]="hackathon.banner_image?.url"
+        [name]="hackathon.name"
+        aspectRatio="11/10"
+      ></commudle-banner-image>
     </div>
     <div class="hero-content">
       <div class="hero-top-row">
@@ -13,23 +16,32 @@
             <h1 class="hero-hackathon-name">{{ hackathon.name }}</h1>
           </div>
           <div class="hero-meta">
-            <span class="hero-status-badge" [ngClass]="{
+            <span
+              class="hero-status-badge"
+              [ngClass]="{
                 'status-open': hackathon.status === EHackathonStatus.OPEN,
                 'status-completed': hackathon.status === EHackathonStatus.COMPLETED
-              }">
+              }"
+            >
               <span class="status-dot"></span>
               {{ hackathon.status | titlecase }}
             </span>
             <span class="hero-meta-item" *ngIf="daysUntilHackathon">{{ daysUntilHackathon }}</span>
             <span class="hero-meta-dot" *ngIf="hackathon.start_date">·</span>
-            <span class="hero-meta-item" *ngIf="hackathon.start_date">{{ hackathon.start_date | date : 'd MMM, y' }}
-              <ng-container *ngIf="hackathon.end_date">– {{ hackathon.end_date | date : 'd MMM, y'
-                }}</ng-container></span>
+            <span class="hero-meta-item" *ngIf="hackathon.start_date"
+              >{{ hackathon.start_date | date : 'd MMM, y' }}
+              <ng-container *ngIf="hackathon.end_date"
+                >– {{ hackathon.end_date | date : 'd MMM, y' }}</ng-container
+              ></span
+            >
             <span class="hero-meta-dot" *ngIf="hackathon.location_name">·</span>
             <span class="hero-meta-item" *ngIf="hackathon.location_name">{{ hackathon.location_name }}</span>
             <span class="hero-meta-dot">|</span>
-            <a [routerLink]="['/communities', hackathon.community.slug, 'hackathons', hackathon.slug]" target="_blank"
-              class="hero-public-link">
+            <a
+              [routerLink]="['/communities', hackathon.community.slug, 'hackathons', hackathon.slug]"
+              target="_blank"
+              class="hero-public-link"
+            >
               Public Hackathon Page
               <nb-icon icon="external-link-outline" class="hero-external-icon"></nb-icon>
             </a>
@@ -58,19 +70,26 @@
 
       <!-- Timeline Progress -- driven by stage_progress -->
       <div class="hero-timeline">
-        <app-loading-spinner *ngIf="isStageProgressLoading && !stageProgress"
-          class="section-loader"></app-loading-spinner>
+        <app-loading-spinner
+          *ngIf="isStageProgressLoading && !stageProgress"
+          class="section-loader"
+        ></app-loading-spinner>
         <div class="timeline-steps" *ngIf="!isStageProgressLoading || stageProgress">
-          <div class="timeline-step" *ngFor="let stage of stageProgress?.stages" [ngClass]="{
+          <div
+            class="timeline-step"
+            *ngFor="let stage of stageProgress?.stages"
+            [ngClass]="{
               completed: stage.status === EHackathonDashboardStageStatus.COMPLETED,
               active: stage.status === EHackathonDashboardStageStatus.ONGOING
-            }">
+            }"
+          >
             <div class="step-dot"></div>
             <div class="step-info">
               <span class="step-title">{{ stage.name || (stage.type | titlecase) }}</span>
               <span class="step-value" *ngIf="stage.teams_count != null">{{ stage.teams_count }} Teams</span>
-              <span class="step-value" *ngIf="stage.submissions_count != null">{{ stage.submissions_count }}
-                Submissions</span>
+              <span class="step-value" *ngIf="stage.submissions_count != null"
+                >{{ stage.submissions_count }} Submissions</span
+              >
               <span class="step-sub">{{ stage.status | capitalizeAndRemoveUnderscore }}</span>
             </div>
           </div>
@@ -83,8 +102,9 @@
         <div class="timeline-progress-bar">
           <div class="progress-fill" [style.--bar-share.%]="stageProgress?.overall_progress_percent || 0"></div>
         </div>
-        <span class="timeline-progress-label">Overall Progress {{ stageProgress?.overall_progress_percent || 0
-          }}%</span>
+        <span class="timeline-progress-label"
+          >Overall Progress {{ stageProgress?.overall_progress_percent || 0 }}%</span
+        >
       </div>
     </div>
   </section>
@@ -98,8 +118,10 @@
           <fa-icon [icon]="icons.faBell" class="heading-icon-attention"></fa-icon> Needs Attention
         </h3>
       </div>
-      <app-loading-spinner *ngIf="isNeedsAttentionLoading && !needsAttention"
-        class="section-loader"></app-loading-spinner>
+      <app-loading-spinner
+        *ngIf="isNeedsAttentionLoading && !needsAttention"
+        class="section-loader"
+      ></app-loading-spinner>
       <div class="attention-list" *ngIf="!isNeedsAttentionLoading || needsAttention">
         <!-- Judges & mentors -->
         <a [routerLink]="['speakers']" class="attention-item">
@@ -107,7 +129,8 @@
             [icon]="needsAttention?.judges?.without_team?.total === 0 ? icons.faCircleCheck : icons.faCircleXmark"
             [ngClass]="
               needsAttention?.judges?.without_team?.total === 0 ? 'attention-icon-check' : 'attention-icon-cross'
-            "></fa-icon>
+            "
+          ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Judges &amp; Mentors</span>
             <span class="attention-sub">
@@ -116,8 +139,9 @@
               {{ needsAttention?.judges?.teams_assigned_count | number }} teams assigned
               <ng-container *ngIf="needsAttention?.judges?.without_team?.total > 0">
                 · {{ needsAttention.judges.without_team.total | number }} without a team:
-                <ng-container *ngFor="let person of needsAttention.judges.without_team.values; let last = last">{{
-                  person.name }}<ng-container *ngIf="!last">, </ng-container></ng-container>
+                <ng-container *ngFor="let person of needsAttention.judges.without_team.values; let last = last"
+                  >{{ person.name }}<ng-container *ngIf="!last">, </ng-container></ng-container
+                >
               </ng-container>
             </span>
           </div>
@@ -126,8 +150,10 @@
 
         <!-- Round criteria -->
         <a [routerLink]="['rounds']" class="attention-item">
-          <fa-icon [icon]="needsAttention?.round_criteria?.is_complete ? icons.faCircleCheck : icons.faCircleXmark"
-            [ngClass]="needsAttention?.round_criteria?.is_complete ? 'attention-icon-check' : 'attention-icon-cross'"></fa-icon>
+          <fa-icon
+            [icon]="needsAttention?.round_criteria?.is_complete ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="needsAttention?.round_criteria?.is_complete ? 'attention-icon-check' : 'attention-icon-cross'"
+          ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Round Criteria</span>
             <span class="attention-sub">
@@ -137,9 +163,10 @@
               <ng-template #roundCriteriaIncomplete>
                 {{ needsAttention?.round_criteria?.round_name || 'Current round' }} ·
                 {{ needsAttention?.round_criteria?.missing_fields?.length | number }} missing:
-                <ng-container *ngFor="let field of needsAttention?.round_criteria?.missing_fields; let last = last">{{
-                  field | capitalizeAndRemoveUnderscore
-                  }}<ng-container *ngIf="!last">, </ng-container></ng-container>
+                <ng-container *ngFor="let field of needsAttention?.round_criteria?.missing_fields; let last = last"
+                  >{{ field | capitalizeAndRemoveUnderscore
+                  }}<ng-container *ngIf="!last">, </ng-container></ng-container
+                >
               </ng-template>
             </span>
           </div>
@@ -148,18 +175,20 @@
 
         <!-- Tracks / problem statements -->
         <a [routerLink]="['tracks']" class="attention-item">
-          <fa-icon [icon]="needsAttention?.tracks?.track_count > 0 ? icons.faCircleCheck : icons.faCircleXmark"
-            [ngClass]="needsAttention?.tracks?.track_count > 0 ? 'attention-icon-check' : 'attention-icon-cross'"></fa-icon>
+          <fa-icon
+            [icon]="needsAttention?.tracks?.track_count > 0 ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="needsAttention?.tracks?.track_count > 0 ? 'attention-icon-check' : 'attention-icon-cross'"
+          ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Tracks &amp; Problem Statements</span>
             <span class="attention-sub">
               {{
-              needsAttention?.tracks?.track_count > 0
-              ? (needsAttention.tracks.track_count | number) +
-              ' tracks · ' +
-              (needsAttention.tracks.problem_statement_count | number) +
-              ' problem statements'
-              : 'Define tracks for participants'
+                needsAttention?.tracks?.track_count > 0
+                  ? (needsAttention.tracks.track_count | number) +
+                    ' tracks · ' +
+                    (needsAttention.tracks.problem_statement_count | number) +
+                    ' problem statements'
+                  : 'Define tracks for participants'
               }}
             </span>
           </div>
@@ -168,10 +197,12 @@
 
         <!-- Sponsor logo -->
         <a *ngIf="needsAttention?.sponsor_logo" [routerLink]="['sponsors']" class="attention-item">
-          <fa-icon [icon]="needsAttention.sponsor_logo.missing_count === 0 ? icons.faCircleCheck : icons.faCircleXmark"
+          <fa-icon
+            [icon]="needsAttention.sponsor_logo.missing_count === 0 ? icons.faCircleCheck : icons.faCircleXmark"
             [ngClass]="
               needsAttention.sponsor_logo.missing_count === 0 ? 'attention-icon-check' : 'attention-icon-cross'
-            "></fa-icon>
+            "
+          ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Sponsor Logos</span>
             <span class="attention-sub">
@@ -193,7 +224,8 @@
             [icon]="needsAttention?.registration?.registration_closes_at ? icons.faCircleCheck : icons.faCircleXmark"
             [ngClass]="
               needsAttention?.registration?.registration_closes_at ? 'attention-icon-check' : 'attention-icon-cross'
-            "></fa-icon>
+            "
+          ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Registration</span>
             <span class="attention-sub">
@@ -201,14 +233,14 @@
                 <ng-container *ngIf="needsAttention.registration.days_remaining > 0">
                   Closes on {{ moment(needsAttention.registration.registration_closes_at).format('D MMM, YYYY') }} ·
                   {{ needsAttention.registration.days_remaining | number }} day{{
-                  needsAttention.registration.days_remaining === 1 ? '' : 's'
+                    needsAttention.registration.days_remaining === 1 ? '' : 's'
                   }}
                   left
                 </ng-container>
                 <ng-container *ngIf="needsAttention.registration.days_remaining <= 0">
                   Closed on {{ moment(needsAttention.registration.registration_closes_at).format('D MMM, YYYY') }} ·
                   {{ -needsAttention.registration.days_remaining | number }} day{{
-                  needsAttention.registration.days_remaining === -1 ? '' : 's'
+                    needsAttention.registration.days_remaining === -1 ? '' : 's'
                   }}
                   ago
                 </ng-container>
@@ -221,8 +253,10 @@
 
         <!-- Pending applications -->
         <a [routerLink]="['applications-dashboard']" class="attention-item">
-          <fa-icon [icon]="hasPendingApplications ? icons.faCircleXmark : icons.faCircleCheck"
-            [ngClass]="hasPendingApplications ? 'attention-icon-cross' : 'attention-icon-check'"></fa-icon>
+          <fa-icon
+            [icon]="hasPendingApplications ? icons.faCircleXmark : icons.faCircleCheck"
+            [ngClass]="hasPendingApplications ? 'attention-icon-cross' : 'attention-icon-check'"
+          ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Pending Applications</span>
             <span class="attention-sub">
@@ -236,13 +270,16 @@
 
         <!-- Mentor / judge slots -->
         <a [routerLink]="['mentor-slots']" class="attention-item">
-          <fa-icon [icon]="
+          <fa-icon
+            [icon]="
               needsAttention?.mentor_judge_slots?.not_opened?.total === 0 ? icons.faCircleCheck : icons.faCircleXmark
-            " [ngClass]="
+            "
+            [ngClass]="
               needsAttention?.mentor_judge_slots?.not_opened?.total === 0
                 ? 'attention-icon-check'
                 : 'attention-icon-cross'
-            "></fa-icon>
+            "
+          ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Mentor &amp; Judge Slots</span>
             <span class="attention-sub">
@@ -251,8 +288,9 @@
               <ng-container *ngIf="needsAttention?.mentor_judge_slots?.not_opened?.total > 0">
                 :
                 <ng-container
-                  *ngFor="let person of needsAttention.mentor_judge_slots.not_opened.values; let last = last">{{
-                  person.name }}<ng-container *ngIf="!last">, </ng-container></ng-container>
+                  *ngFor="let person of needsAttention.mentor_judge_slots.not_opened.values; let last = last"
+                  >{{ person.name }}<ng-container *ngIf="!last">, </ng-container></ng-container
+                >
               </ng-container>
             </span>
           </div>
@@ -337,21 +375,40 @@
       </div>
       <app-loading-spinner *ngIf="isActivityLoading" class="section-loader"></app-loading-spinner>
       <ul class="activity-list" *ngIf="!isActivityLoading">
-        <li *ngFor="let item of recentActivity" class="activity-item" [class.is-clickable]="!!activityItemLink(item)"
-          [routerLink]="activityItemLink(item)" (keydown.enter)="onActivityRowClick(item)">
+        <li
+          *ngFor="let item of recentActivity"
+          class="activity-item"
+          [class.is-clickable]="!!activityItemLink(item)"
+          [routerLink]="activityItemLink(item)"
+          (keydown.enter)="onActivityRowClick(item)"
+        >
           <span class="activity-avatar" [ngClass]="activityAvatarClass(item.type)">
             <fa-icon [icon]="activityIcon(item.type)"></fa-icon>
           </span>
           <p class="activity-content">
             <span class="activity-text" [title]="activityActorName(item) + ' ' + activityLabel(item.type)">
               <ng-container *ngIf="activityActorName(item)">
-                <span class="activity-name-avatar">{{ activityInitial(item) }}</span><strong>{{ activityActorName(item)
-                  }}</strong>
+                <ng-container *ngIf="activityActorUser(item) as actorUser; else plainActorName">
+                  <a
+                    [routerLink]="['/users', actorUser.username]"
+                    (click)="$event.stopPropagation()"
+                    class="activity-user-link"
+                    ><img
+                      *ngIf="actorUser.thumbnail"
+                      [src]="actorUser.thumbnail"
+                      [alt]="activityActorName(item)"
+                      class="inline-avatar"
+                    /><strong>{{ activityActorName(item) }}</strong></a
+                  >
+                </ng-container>
+                <ng-template #plainActorName
+                  ><strong>{{ activityActorName(item) }}</strong></ng-template
+                >
                 {{ activityLabel(item.type) }}
               </ng-container>
               <ng-container *ngIf="!activityActorName(item)">
-                <ng-container *ngIf="item.count != null">{{ item.count | number }} </ng-container>{{
-                activityLabel(item.type) }}
+                <ng-container *ngIf="item.count != null">{{ item.count | number }} </ng-container
+                >{{ activityLabel(item.type) }}
               </ng-container>
             </span>
             <span class="activity-sub" *ngIf="activitySubtext(item)">{{ activitySubtext(item) }}</span>
@@ -365,8 +422,13 @@
           <span class="activity-empty-text">No recent activity yet.</span>
         </li>
       </ul>
-      <commudle-pagination-compact *ngIf="activityTotal > activityCount" [page]="activityPage" [count]="activityCount"
-        [total]="activityTotal" (pageChange)="onActivityPageChange($event)"></commudle-pagination-compact>
+      <commudle-pagination-compact
+        *ngIf="activityTotal > activityCount"
+        [page]="activityPage"
+        [count]="activityCount"
+        [total]="activityTotal"
+        (pageChange)="onActivityPageChange($event)"
+      ></commudle-pagination-compact>
     </div>
   </section>
 
@@ -380,21 +442,22 @@
         </h3>
         <a [routerLink]="['rounds']" class="view-all-link">Manage Rounds →</a>
       </div>
-      <app-loading-spinner *ngIf="isStageProgressLoading && !stageProgress"
-        class="section-loader"></app-loading-spinner>
-      <div class="progress-cards" *ngIf="!isStageProgressLoading || stageProgress">
-        <ng-container *ngFor="let stage of stageProgress?.stages; let last = last">
-          <div class="progress-card" [ngClass]="{ active: stage.status === EHackathonDashboardStageStatus.ONGOING }">
-            <span class="progress-card-label">{{ stage.name || (stage.type | titlecase) }}</span>
-            <span class="progress-card-value">{{ stageMetric(stage) }}</span>
-            <span class="progress-card-status" [ngClass]="stageStatusClass(stage.status)">{{
-              stage.status | capitalizeAndRemoveUnderscore
+      <app-loading-spinner
+        *ngIf="isStageProgressLoading && !stageProgress"
+        class="section-loader"
+      ></app-loading-spinner>
+      <ng-container *ngIf="!isStageProgressLoading || stageProgress">
+        <div class="progress-cards" *ngIf="stageProgress?.stages?.length; else progressEmpty">
+          <ng-container *ngFor="let stage of stageProgress?.stages; let last = last">
+            <div class="progress-card" [ngClass]="{ active: stage.status === EHackathonDashboardStageStatus.ONGOING }">
+              <span class="progress-card-label">{{ stage.name || (stage.type | titlecase) }}</span>
+              <span class="progress-card-value">{{ stageMetric(stage) }}</span>
+              <span class="progress-card-status" [ngClass]="stageStatusClass(stage.status)">{{
+                stage.status | capitalizeAndRemoveUnderscore
               }}</span>
-          </div>
-          <span class="progress-arrow" *ngIf="!last">→</span>
-        </ng-container>
-        <div class="progress-card" *ngIf="!stageProgress?.stages?.length">
-          <span class="progress-card-value">No rounds yet</span>
+            </div>
+            <span class="progress-arrow" *ngIf="!last">→</span>
+          </ng-container>
         </div>
         <ng-template #progressEmpty>
           <div class="progress-empty">
@@ -404,7 +467,7 @@
             <span class="progress-empty-text">No rounds yet</span>
           </div>
         </ng-template>
-        </ng-container>
+      </ng-container>
     </article>
 
     <!-- People & Judging -->
@@ -415,8 +478,10 @@
         </h3>
         <a [routerLink]="['speakers']" class="view-all-link">Manage →</a>
       </div>
-      <app-loading-spinner *ngIf="isPeopleJudgingLoading && !peopleJudging"
-        class="section-loader"></app-loading-spinner>
+      <app-loading-spinner
+        *ngIf="isPeopleJudgingLoading && !peopleJudging"
+        class="section-loader"
+      ></app-loading-spinner>
       <ng-container *ngIf="!isPeopleJudgingLoading || peopleJudging">
         <div class="people-stats">
           <div class="people-stat">
@@ -474,8 +539,11 @@
           <fa-icon [icon]="icons.faEnvelope" class="action-icon"></fa-icon>
           <span class="action-label">Send Announcement</span>
         </a>
-        <a class="action-card" [routerLink]="['/communities', hackathon.community.slug, 'hackathons', hackathon.slug]"
-          target="_blank">
+        <a
+          class="action-card"
+          [routerLink]="['/communities', hackathon.community.slug, 'hackathons', hackathon.slug]"
+          target="_blank"
+        >
           <fa-icon [icon]="icons.faArrowTrendUp" class="action-icon"></fa-icon>
           <span class="action-label">Public Page</span>
         </a>
@@ -488,8 +556,10 @@
   </section>
 
   <!-- Row 4: Live Visitors (+ Setup Progress alongside it while draft / setup incomplete) -->
-  <section class="live-traffic-row"
-    [class.with-setup]="setupProgress?.visible || hackathon.status === EHackathonStatus.DRAFT">
+  <section
+    class="live-traffic-row"
+    [class.with-setup]="setupProgress?.visible || hackathon.status === EHackathonStatus.DRAFT"
+  >
     <article class="live-visitors-card">
       <header class="section-header">
         <h3 class="section-heading">
@@ -527,8 +597,10 @@
         </h3>
         <span class="setup-note">Only visible until published</span>
       </div>
-      <app-loading-spinner *ngIf="isSetupProgressLoading && !setupProgress"
-        class="section-loader"></app-loading-spinner>
+      <app-loading-spinner
+        *ngIf="isSetupProgressLoading && !setupProgress"
+        class="section-loader"
+      ></app-loading-spinner>
       <div class="setup-content" *ngIf="!isSetupProgressLoading || setupProgress">
         <div class="setup-bar-row">
           <span class="setup-bar-label">Hackathon Readiness</span>
@@ -560,41 +632,6 @@
             {{ setupProgress?.faqs ? '✔' : '⚠' }} FAQs
           </span>
         </div>
-      </div>
-    </article>
-
-    <article class="quick-actions-card">
-      <div class="section-header">
-        <h3 class="section-heading">
-          <fa-icon [icon]="icons.faBolt" class="heading-icon-actions"></fa-icon> Quick Actions
-        </h3>
-      </div>
-      <div class="actions-grid">
-        <a class="action-card" [routerLink]="['applications-dashboard']">
-          <fa-icon [icon]="icons.faUsers" class="action-icon"></fa-icon>
-          <span class="action-label">View Applications</span>
-        </a>
-        <a class="action-card" [routerLink]="['score-dashboard']">
-          <fa-icon [icon]="icons.faTrophy" class="action-icon"></fa-icon>
-          <span class="action-label">Review Projects</span>
-        </a>
-        <a class="action-card" [routerLink]="['speakers']">
-          <fa-icon [icon]="icons.faUserGroup" class="action-icon"></fa-icon>
-          <span class="action-label">Assign Judges</span>
-        </a>
-        <a class="action-card" [routerLink]="['updates']">
-          <fa-icon [icon]="icons.faEnvelope" class="action-icon"></fa-icon>
-          <span class="action-label">Send Announcement</span>
-        </a>
-        <a class="action-card" [routerLink]="['/communities', hackathon.community.slug, 'hackathons', hackathon.slug]"
-          target="_blank">
-          <fa-icon [icon]="icons.faArrowTrendUp" class="action-icon"></fa-icon>
-          <span class="action-label">Public Page</span>
-        </a>
-        <a class="action-card" [routerLink]="['entry-pass-scan']">
-          <fa-icon [icon]="icons.faChartPie" class="action-icon"></fa-icon>
-          <span class="action-label">Entry Scanner</span>
-        </a>
       </div>
     </article>
   </section>

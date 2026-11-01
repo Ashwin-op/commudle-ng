@@ -617,11 +617,13 @@
             content: '';
             position: absolute;
             inset: 0;
-            background-image: repeating-linear-gradient(45deg,
-                rgba(255, 255, 255, 0.55) 0,
-                rgba(255, 255, 255, 0.55) 0.5px,
-                transparent 0.5px,
-                transparent 1.5px);
+            background-image: repeating-linear-gradient(
+              45deg,
+              rgba(255, 255, 255, 0.55) 0,
+              rgba(255, 255, 255, 0.55) 0.5px,
+              transparent 0.5px,
+              transparent 1.5px
+            );
           }
 
           &.pattern-dots::after {
@@ -862,4 +864,8 @@
       @apply com-text-10px com-font-medium com-text-green-600;
     }
   }
+}
+
+strong {
+  @apply com-font-medium;
 }

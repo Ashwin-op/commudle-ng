@@ -21,26 +21,6 @@ export interface IEventDashboardHeader {
   location: IEventDashboardHeaderLocation | null;
 }
 
-// event_header
-export interface IEventDashboardHeaderLocation {
-  name: string;
-  address: string;
-  map_link: string;
-}
-
-export type EEventDashboardEventType = 'online' | 'offline' | 'hybrid';
-
-export interface IEventDashboardHeader {
-  name: string;
-  slug: string;
-  start_time: string;
-  end_time: string;
-  banner: string;
-  event_status: string;
-  event_type: EEventDashboardEventType;
-  location: IEventDashboardHeaderLocation | null;
-}
-
 // event_briefing
 export interface IEventDashboardBriefing {
   registrations_count: number;

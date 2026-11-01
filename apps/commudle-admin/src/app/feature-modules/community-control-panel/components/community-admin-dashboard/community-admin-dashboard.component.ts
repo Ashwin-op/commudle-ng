@@ -124,7 +124,9 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private seoService: SeoService,
     private dashboardCommunitiesService: DashboardCommunitiesService,
-  ) { }
+    private toastLogService: LibToastLogService,
+    private ngZone: NgZone,
+  ) {}
 
   ngOnInit(): void {
     this.setGreeting();

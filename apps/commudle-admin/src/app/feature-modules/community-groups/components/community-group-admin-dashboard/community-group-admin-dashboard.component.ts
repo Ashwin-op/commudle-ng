@@ -110,6 +110,8 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   // Audience & Demographics -- GET .../audience_demographics
   audienceDemographics: ICommunityGroupDashboardAudienceDemographics;
   isAudienceLoading = false;
+  isTopLocationsLoading = false;
+  isTopSkillsLoading = false;
   topLocationsPage = 1;
   readonly topLocationsCount = 10;
   topSkillsPage = 1;
@@ -151,7 +153,7 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     private router: Router,
     private seoService: SeoService,
     private dashboardCommunityGroupsService: DashboardCommunityGroupsService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.subscriptions.push(
@@ -342,7 +344,25 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
 
   onTopSkillsPageChange(page: number): void {
     this.topSkillsPage = page;
-    this.loadAudienceDemographics();
+    this.isTopSkillsLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService
+        .audienceDemographics(this.communityGroup.id, {
+          top_locations_page: this.topLocationsPage,
+          top_locations_count: this.topLocationsCount,
+          top_skills_page: this.topSkillsPage,
+          top_skills_count: this.topSkillsCount,
+        })
+        .subscribe({
+          next: (data) => {
+            this.audienceDemographics = data;
+            this.isTopSkillsLoading = false;
+          },
+          error: () => {
+            this.isTopSkillsLoading = false;
+          },
+        }),
+    );
   }
 
   loadEmailCommunication(): void {
@@ -627,7 +647,25 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
 
   onTopLocationsPageChange(page: number): void {
     this.topLocationsPage = page;
-    this.loadAudienceDemographics();
+    this.isTopLocationsLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService
+        .audienceDemographics(this.communityGroup.id, {
+          top_locations_page: this.topLocationsPage,
+          top_locations_count: this.topLocationsCount,
+          top_skills_page: this.topSkillsPage,
+          top_skills_count: this.topSkillsCount,
+        })
+        .subscribe({
+          next: (data) => {
+            this.audienceDemographics = data;
+            this.isTopLocationsLoading = false;
+          },
+          error: () => {
+            this.isTopLocationsLoading = false;
+          },
+        }),
+    );
   }
 
   activityIcon(type: string): IconDefinition {
@@ -695,8 +733,9 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
       case 'forum_discussions':
         return `${count} new forum discussion${count === 1 ? '' : 's'}`;
       case 'survey_responses':
-        return `${item.response_count || 0} response${item.response_count === 1 ? '' : 's'} on ${item.survey_name || 'a survey'
-          }`;
+        return `${item.response_count || 0} response${item.response_count === 1 ? '' : 's'} on ${
+          item.survey_name || 'a survey'
+        }`;
       case 'new_admins':
         return `${count} new admin${count === 1 ? '' : 's'} added`;
       default:

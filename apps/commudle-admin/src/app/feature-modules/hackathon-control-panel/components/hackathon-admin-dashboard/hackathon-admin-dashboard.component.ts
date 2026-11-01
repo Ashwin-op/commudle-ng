@@ -122,7 +122,8 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     private clipboard: Clipboard,
     private libToastLogService: LibToastLogService,
     private navigatorShareService: NavigatorShareService,
-  ) { }
+    private ngZone: NgZone,
+  ) {}
 
   ngOnInit(): void {
     this.subscriptions.push(
@@ -163,10 +164,6 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     return !!(pending?.awaiting_acceptance_count || pending?.incomplete_leader_application_count);
   }
 
-  get isHackathonDraft(): boolean {
-    return this.hackathon?.status === EHackathonStatus.DRAFT;
-  }
-
   get daysUntilHackathon(): string {
     if (!this.hackathon?.start_date) {
       return '';
@@ -179,36 +176,6 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
       return 'Today';
     }
     return `Starts in ${days} day${days > 1 ? 's' : ''}`;
-  }
-
-  /** CSS class for a stage status: ongoing -> gray, completed -> green, upcoming -> yellow. */
-  stageStatusClass(status: EHackathonDashboardStageStatus | undefined): string {
-    switch (status) {
-      case EHackathonDashboardStageStatus.ONGOING:
-        return 'status-ongoing';
-      case EHackathonDashboardStageStatus.COMPLETED:
-        return 'status-completed';
-      default:
-        return 'status-upcoming';
-    }
-  }
-
-  stageMetric(stage: IHackathonDashboardStage): string {
-    if (!stage) {
-      return '';
-    }
-    switch (stage.type) {
-      case 'registration':
-        return `${(stage.teams_count || 0).toLocaleString('en-IN')} teams`;
-      case 'round':
-        return stage.submissions_count
-          ? `${stage.submissions_count.toLocaleString('en-IN')} submissions`
-          : `${(stage.teams_count || 0).toLocaleString('en-IN')} teams`;
-      case 'winners':
-        return `${(stage.winners_announced_count || 0).toLocaleString('en-IN')} winners`;
-      default:
-        return '';
-    }
   }
 
   /** CSS class for a stage status: ongoing -> gray, completed -> green, upcoming -> yellow. */

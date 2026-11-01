@@ -46,7 +46,6 @@
 }
 
 @keyframes iconPulse {
-
   0%,
   100% {
     transform: scale(1) rotate(0deg);
@@ -164,11 +163,6 @@
         @apply com-font-bold com-text-tWhite;
       }
 
-
-      .greeting-emoji {
-        @apply com-ml-1 com-inline-block;
-      }
-
       .greeting-emoji {
         @apply com-ml-1 com-inline-block;
       }
@@ -270,7 +264,6 @@
 }
 
 @keyframes dotPulse {
-
   0%,
   100% {
     opacity: 1;
@@ -330,7 +323,6 @@
 }
 
 @keyframes blobFloat {
-
   0%,
   100% {
     transform: translate(0, 0) scale(1);

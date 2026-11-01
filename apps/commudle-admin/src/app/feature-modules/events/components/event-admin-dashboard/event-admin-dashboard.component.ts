@@ -100,7 +100,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   // Recent Activity -- GET /api/v2/dashboards/events/recent_activity (paginated)
   recentActivity: IEventDashboardActivityItem[] = [];
   activityPage = 1;
-  readonly activityCount = 10;
+  readonly activityCount = 7;
   activityTotal = 0;
   isActivityLoading = false;
 
@@ -122,7 +122,8 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     private libToastLogService: LibToastLogService,
     private navigatorShareService: NavigatorShareService,
     private dashboardEventsService: DashboardEventsService,
-  ) { }
+    private ngZone: NgZone,
+  ) {}
 
   ngOnInit(): void {
     this.subscriptions.push(
