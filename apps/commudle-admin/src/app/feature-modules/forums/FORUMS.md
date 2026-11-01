@@ -40,14 +40,33 @@ Complete reference for how the forums feature works: triggers, API calls, and st
 
 ## 2. Routes
 
-| URL                                                     | Component                   | Purpose                      |
-| ------------------------------------------------------- | --------------------------- | ---------------------------- |
-| `/forums`                                               | `ForumsCategoriesComponent` | Landing — recent forums list |
-| `/forums/:category_slug`                                | `ForumsByCategoryComponent` | Forums within one category   |
-| `/forums/:category_slug/:topic_slug`                    | `ForumDiscussionComponent`  | Thread list inside a forum   |
-| `/forums/:category_slug/:topic_slug/:user_message_slug` | `ForumMessagesComponent`    | Single thread + replies      |
+Paths below are relative to the mount point, which is **`discussions`**, not `forums`:
 
-Mounted under both `/communities/:slug/forums` and `/admin/communities/:slug/forums`, plus `/orgs/:slug/forums`.
+| Relative URL                                    | Component                   | Purpose                      |
+| ----------------------------------------------- | --------------------------- | ---------------------------- |
+| `''`                                            | `ForumsCategoriesComponent` | Landing — recent forums list |
+| `:category_slug`                                | `ForumsByCategoryComponent` | Forums within one category   |
+| `:category_slug/:topic_slug`                    | `ForumDiscussionComponent`  | Thread list inside a forum   |
+| `:category_slug/:topic_slug/:user_message_slug` | `ForumMessagesComponent`    | Single thread + replies      |
+
+`ForumsModule` is lazy-loaded at the `discussions` path in three routing modules, so the
+full URLs are:
+
+| Full URL                                                                               | Context                 |
+| -------------------------------------------------------------------------------------- | ----------------------- |
+| `/communities/:community_id/discussions/:category_slug/:topic_slug/:user_message_slug` | Public community        |
+| `/admin/communities/:slug/discussions/...`                                             | Community control panel |
+| `/orgs/:slug/discussions/...`                                                          | Community group (org)   |
+
+`:topic_slug` is the forum's own `CommunityChannel` slug; `:user_message_slug` is the
+**root** `UserMessage` of the thread.
+
+> Earlier revisions of this doc listed these as `/forums/...`. That path is not mounted —
+> the commented-out `forums/...` routes in `public-community-routing.module.ts` and
+> `community-control-panel-routing.module.ts` are the legacy channel pages. Backend code
+> that builds forum deep links should use
+> `ForumNotificationLink` (`gdgapp/app/services/forum_notification_link.rb`) rather than
+> assembling paths by hand.
 
 ---
 
