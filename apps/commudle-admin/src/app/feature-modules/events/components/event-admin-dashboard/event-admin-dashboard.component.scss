@@ -878,6 +878,10 @@
         }
       }
 
+      .chart-pie-canvas {
+        @apply com-relative com-w-24 com-h-24 com-shrink-0;
+      }
+
       .chart-legend {
         @apply com-m-0 com-p-0 com-list-none com-grid com-grid-cols-2 com-gap-x-6 com-gap-y-1 com-flex-1 com-min-w-0;
 

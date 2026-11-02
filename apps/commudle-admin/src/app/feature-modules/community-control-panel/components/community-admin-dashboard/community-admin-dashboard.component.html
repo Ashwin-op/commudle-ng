@@ -226,7 +226,7 @@
                   }}
                 </span>
               </p>
-              <span class="attention-arrow">›</span>
+              <span *ngIf="collaborationRowLink(request)" class="attention-arrow">›</span>
             </div>
           </ng-container>
           <commudle-pagination-compact

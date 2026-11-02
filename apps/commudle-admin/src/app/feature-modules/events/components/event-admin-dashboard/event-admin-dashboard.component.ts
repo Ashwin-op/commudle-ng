@@ -156,6 +156,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe());
     this.liveVisitorsChart?.destroy();
+    this.postEventDomainChart?.destroy();
     clearTimeout(this.newActivityBadgeTimer);
   }
 
@@ -435,8 +436,58 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     return this.buildSegments(this.postEventSnapshot?.experience_distribution);
   }
 
-  get postEventDomainSegments(): { color: string; dashArray: string; dashOffset: number }[] {
-    return this.buildSegments(this.postEventSnapshot?.domain_distribution);
+  private postEventDomainChart: Chart;
+
+  private renderPostEventDomainChart(items: IDashboardDistributionItem[] | undefined): void {
+    if (!items?.length) {
+      this.postEventDomainChart?.destroy();
+      this.postEventDomainChart = undefined;
+      return;
+    }
+    const labels = items.map((item) =>
+      item.name
+        .split('_')
+        .map((frag) => frag.charAt(0).toUpperCase() + frag.slice(1))
+        .join(' '),
+    );
+    const data = items.map((item) => item.percentage || 0);
+    const colors = items.map((_, index) => this.audienceColor(index));
+
+    if (this.postEventDomainChart) {
+      this.postEventDomainChart.data.labels = labels;
+      this.postEventDomainChart.data.datasets[0].data = data;
+      this.postEventDomainChart.data.datasets[0].backgroundColor = colors;
+      this.postEventDomainChart.update({ duration: 0 });
+      return;
+    }
+
+    // The canvas only exists once the Post-Event Dashboard article renders (event
+    // completed + data loaded); defer to the next tick so Angular has added it to
+    // the DOM before Chart.js looks it up by id.
+    setTimeout(() => {
+      if (this.postEventDomainChart || !document.getElementById('post-event-domain-chart')) {
+        return;
+      }
+      this.postEventDomainChart = new Chart('post-event-domain-chart', {
+        type: 'pie',
+        data: {
+          labels,
+          datasets: [{ data, backgroundColor: colors, borderWidth: 0 }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 800, easing: 'easeOutQuart' },
+          legend: { display: false },
+          tooltips: {
+            callbacks: {
+              label: (tooltipItem, chartData) =>
+                `${chartData.labels[tooltipItem.index]}: ${chartData.datasets[0].data[tooltipItem.index]}%`,
+            },
+          },
+        },
+      });
+    });
   }
 
   getPostEventSnapshot(): void {
@@ -455,6 +506,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
             experience_distribution: data.experience_distribution,
             domain_distribution: data.domain_distribution,
           };
+          this.renderPostEventDomainChart(data.domain_distribution);
           this.isPostEventLoading = false;
         },
         error: () => {

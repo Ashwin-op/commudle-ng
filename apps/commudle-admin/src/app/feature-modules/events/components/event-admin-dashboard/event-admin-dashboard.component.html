@@ -221,7 +221,9 @@
               <span class="attention-sub">
                 {{
                   needsAttention?.speakers?.total > 0
-                    ? needsAttention.speakers.values.length + '/' + needsAttention.speakers.total + ' speakers added'
+                    ? needsAttention.speakers.total +
+                      (needsAttention.speakers.total === 1 ? ' speaker' : ' speakers') +
+                      ' registered for this event'
                     : 'Speakers have not been added yet'
                 }}
               </span>
@@ -589,81 +591,6 @@
 
   <ng-template #audiencePostEventRow>
     <section class="two-col-row">
-      <!-- Audience Snapshot -->
-      <article class="audience-card">
-        <header class="section-header">
-          <h3 class="section-heading">
-            <fa-icon [icon]="icons.faChartPie" class="heading-icon-audience"></fa-icon> Audience Snapshot
-          </h3>
-          <a [routerLink]="['stats']" class="view-all-link">View Analytics →</a>
-        </header>
-        <commudle-alert
-          class="section-info"
-          [info]="true"
-          message="This data covers people who filled out the registration form."
-        ></commudle-alert>
-        <app-loading-spinner
-          *ngIf="isAudienceLoading && !audienceSnapshot"
-          class="section-loader"
-        ></app-loading-spinner>
-        <div class="audience-content" *ngIf="!isAudienceLoading || audienceSnapshot">
-          <div class="audience-chart">
-            <svg *ngIf="audienceSnapshot?.experience_levels?.length" class="chart-donut" viewBox="0 0 36 36">
-              <circle class="chart-donut-track" cx="18" cy="18" r="15.9155" />
-              <circle
-                *ngFor="let segment of experienceSegments"
-                class="chart-donut-segment"
-                cx="18"
-                cy="18"
-                r="15.9155"
-                [attr.stroke]="segment.color"
-                [attr.stroke-dasharray]="segment.dashArray"
-                [attr.stroke-dashoffset]="segment.dashOffset"
-              />
-            </svg>
-            <div
-              *ngIf="!isAudienceLoading && !audienceSnapshot?.experience_levels?.length"
-              class="chart-donut-empty"
-            ></div>
-            <ul class="chart-legend">
-              <li *ngFor="let level of audienceSnapshot?.experience_levels; let i = index">
-                <span class="legend-dot" [style.--dot-color]="audienceColor(i)"></span>
-                {{ level.name | capitalizeAndRemoveUnderscore }} <span class="legend-pct">{{ level.percentage }}%</span>
-              </li>
-              <li *ngIf="!isAudienceLoading && !audienceSnapshot?.experience_levels?.length">No data yet</li>
-            </ul>
-          </div>
-          <div class="audience-stats">
-            <div class="audience-col">
-              <h6 class="audience-col-heading">Top Companies / Colleges</h6>
-              <ul class="audience-list">
-                <li *ngFor="let item of audienceSnapshot?.companies?.values">
-                  <span class="audience-name">{{ item.name }}</span
-                  ><span class="audience-bar" [style.--bar-share.%]="item.percentage"></span
-                  ><span class="audience-pct">{{ item.percentage }}%</span>
-                </li>
-                <li
-                  *ngIf="!isAudienceLoading && !audienceSnapshot?.companies?.values?.length"
-                  class="audience-list-empty"
-                >
-                  <span class="audience-list-empty-icon">
-                    <fa-icon [icon]="icons.faUserGroup"></fa-icon>
-                  </span>
-                  <span class="audience-list-empty-text">No data yet</span>
-                </li>
-              </ul>
-              <commudle-pagination-compact
-                *ngIf="audienceSnapshot?.companies?.total > companiesCount"
-                [page]="companiesPage"
-                [count]="companiesCount"
-                [total]="audienceSnapshot.companies.total"
-                (pageChange)="onCompaniesPageChange($event)"
-              ></commudle-pagination-compact>
-            </div>
-          </div>
-        </div>
-      </article>
-
       <!-- Post-Event Dashboard (only once the event has ended) -->
       <article class="post-event-card" *ngIf="eventHeader?.event_status === 'completed'">
         <header class="section-header-post">
@@ -779,19 +706,9 @@
           <div class="post-event-chart">
             <h6 class="audience-col-heading">Domain (attended)</h6>
             <div class="audience-chart">
-              <svg *ngIf="postEventSnapshot?.domain_distribution?.length" class="chart-donut" viewBox="0 0 36 36">
-                <circle class="chart-donut-track" cx="18" cy="18" r="15.9155" />
-                <circle
-                  *ngFor="let segment of postEventDomainSegments"
-                  class="chart-donut-segment"
-                  cx="18"
-                  cy="18"
-                  r="15.9155"
-                  [attr.stroke]="segment.color"
-                  [attr.stroke-dasharray]="segment.dashArray"
-                  [attr.stroke-dashoffset]="segment.dashOffset"
-                />
-              </svg>
+              <div class="chart-pie-canvas">
+                <canvas id="post-event-domain-chart"></canvas>
+              </div>
               <ul class="chart-legend">
                 <li *ngFor="let item of postEventSnapshot?.domain_distribution; let i = index">
                   <span class="legend-dot" [style.--dot-color]="audienceColor(i)"></span>
@@ -800,6 +717,81 @@
                 </li>
                 <li *ngIf="!isPostEventLoading && !postEventSnapshot?.domain_distribution?.length">No data yet</li>
               </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Audience Snapshot -->
+      <article class="audience-card">
+        <header class="section-header">
+          <h3 class="section-heading">
+            <fa-icon [icon]="icons.faChartPie" class="heading-icon-audience"></fa-icon> Audience Snapshot
+          </h3>
+          <a [routerLink]="['stats']" class="view-all-link">View Analytics →</a>
+        </header>
+        <commudle-alert
+          class="section-info"
+          [info]="true"
+          message="This data covers people who filled out the registration form."
+        ></commudle-alert>
+        <app-loading-spinner
+          *ngIf="isAudienceLoading && !audienceSnapshot"
+          class="section-loader"
+        ></app-loading-spinner>
+        <div class="audience-content" *ngIf="!isAudienceLoading || audienceSnapshot">
+          <div class="audience-chart">
+            <svg *ngIf="audienceSnapshot?.experience_levels?.length" class="chart-donut" viewBox="0 0 36 36">
+              <circle class="chart-donut-track" cx="18" cy="18" r="15.9155" />
+              <circle
+                *ngFor="let segment of experienceSegments"
+                class="chart-donut-segment"
+                cx="18"
+                cy="18"
+                r="15.9155"
+                [attr.stroke]="segment.color"
+                [attr.stroke-dasharray]="segment.dashArray"
+                [attr.stroke-dashoffset]="segment.dashOffset"
+              />
+            </svg>
+            <div
+              *ngIf="!isAudienceLoading && !audienceSnapshot?.experience_levels?.length"
+              class="chart-donut-empty"
+            ></div>
+            <ul class="chart-legend">
+              <li *ngFor="let level of audienceSnapshot?.experience_levels; let i = index">
+                <span class="legend-dot" [style.--dot-color]="audienceColor(i)"></span>
+                {{ level.name | capitalizeAndRemoveUnderscore }} <span class="legend-pct">{{ level.percentage }}%</span>
+              </li>
+              <li *ngIf="!isAudienceLoading && !audienceSnapshot?.experience_levels?.length">No data yet</li>
+            </ul>
+          </div>
+          <div class="audience-stats">
+            <div class="audience-col">
+              <h6 class="audience-col-heading">Top Companies / Colleges</h6>
+              <ul class="audience-list">
+                <li *ngFor="let item of audienceSnapshot?.companies?.values">
+                  <span class="audience-name">{{ item.name }}</span
+                  ><span class="audience-bar" [style.--bar-share.%]="item.percentage"></span
+                  ><span class="audience-pct">{{ item.percentage }}%</span>
+                </li>
+                <li
+                  *ngIf="!isAudienceLoading && !audienceSnapshot?.companies?.values?.length"
+                  class="audience-list-empty"
+                >
+                  <span class="audience-list-empty-icon">
+                    <fa-icon [icon]="icons.faUserGroup"></fa-icon>
+                  </span>
+                  <span class="audience-list-empty-text">No data yet</span>
+                </li>
+              </ul>
+              <commudle-pagination-compact
+                *ngIf="audienceSnapshot?.companies?.total > companiesCount"
+                [page]="companiesPage"
+                [count]="companiesCount"
+                [total]="audienceSnapshot.companies.total"
+                (pageChange)="onCompaniesPageChange($event)"
+              ></commudle-pagination-compact>
             </div>
           </div>
         </div>
