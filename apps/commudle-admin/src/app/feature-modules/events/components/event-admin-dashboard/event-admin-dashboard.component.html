@@ -385,12 +385,7 @@
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faUsers" class="snapshot-stat-icon registrations-icon"></fa-icon>
           <div class="snapshot-stat-info">
-            <span
-              class="snapshot-stat-label"
-              [comTooltip]="'All-time total, with today\'s count shown below'"
-              tooltipSize="sm"
-              >Registrations</span
-            >
+            <span class="snapshot-stat-label" [comTooltip]="'All-time total'" tooltipSize="sm">Registrations</span>
             <span class="snapshot-stat-value-row">
               <span class="snapshot-stat-value">{{ eventSnapshot.registrations?.total ?? 0 }}</span>
               <span class="snapshot-stat-sub">
@@ -571,14 +566,6 @@
       <header class="section-header">
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faFileLines" class="heading-icon-pages"></fa-icon> Top Pages
-          <fa-icon
-            [icon]="icons.faCircleInfo"
-            class="section-info-icon"
-            [comTooltip]="
-              'Live traffic: pages viewed by sessions still open from the last hour, not an all-time ranking.'
-            "
-            tooltipSize="sm"
-          ></fa-icon>
         </h3>
       </header>
       <div class="top-list-header">

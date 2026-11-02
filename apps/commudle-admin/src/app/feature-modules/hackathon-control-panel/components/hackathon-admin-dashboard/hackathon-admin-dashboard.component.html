@@ -337,12 +337,7 @@
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faMicrophone" class="snapshot-stat-icon judges-icon"></fa-icon>
           <div class="snapshot-stat-info">
-            <span
-              class="snapshot-stat-label"
-              [comTooltip]="'Scoped to the current round only, not the whole hackathon'"
-              tooltipSize="sm"
-              >Judges Assigned</span
-            >
+            <span class="snapshot-stat-label">Judges Assigned</span>
             <span class="snapshot-stat-value-row">
               <span class="snapshot-stat-value">{{ snapshot?.judges?.assigned_count ?? 0 | number }}</span>
               <span class="snapshot-stat-sub" *ngIf="snapshot?.judges?.pending_count">
@@ -666,14 +661,6 @@
       <header class="section-header">
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faFileLines" class="heading-icon-pages"></fa-icon> Top Pages
-          <fa-icon
-            [icon]="icons.faCircleInfo"
-            class="section-info-icon"
-            [comTooltip]="
-              'Live traffic: pages viewed by sessions still open from the last hour, not an all-time ranking.'
-            "
-            tooltipSize="sm"
-          ></fa-icon>
         </h3>
       </header>
       <div class="top-list-header">
