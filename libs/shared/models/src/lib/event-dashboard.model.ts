@@ -102,6 +102,10 @@ export interface IEventDashboardActivityItem {
   subject?: string;
   recipient_count?: number;
   recipients?: IEventDashboardActivityUser[] | null;
+  // speaker_slides
+  embedded_content?: boolean;
+  event_slug?: string;
+  community_slug?: string;
   [key: string]: any;
 }
 

@@ -450,7 +450,12 @@
       </div>
       <app-loading-spinner *ngIf="isActivityLoading" class="section-loader"></app-loading-spinner>
       <ul class="activity-list" *ngIf="!isActivityLoading">
-        <li *ngFor="let item of recentActivity" class="activity-item">
+        <li
+          *ngFor="let item of recentActivity"
+          class="activity-item"
+          [ngClass]="{ 'activity-item-clickable': activityLink(item) }"
+          (click)="onActivityItemClick(item)"
+        >
           <span class="activity-avatar" [ngClass]="activityAvatarClass(item.type)">
             <fa-icon [icon]="activityIcon(item.type)"></fa-icon>
           </span>
@@ -467,6 +472,7 @@
                       class="activity-user-link"
                       [username]="username"
                       appMiniUserProfile
+                      (click)="$event.stopPropagation()"
                       ><img
                         *ngIf="recipient.thumbnail"
                         [src]="recipient.thumbnail"
@@ -498,6 +504,7 @@
                     class="activity-user-link"
                     [username]="item.user?.username"
                     appMiniUserProfile
+                    (click)="$event.stopPropagation()"
                     ><img
                       *ngIf="item.user?.thumbnail"
                       [src]="item.user.thumbnail"

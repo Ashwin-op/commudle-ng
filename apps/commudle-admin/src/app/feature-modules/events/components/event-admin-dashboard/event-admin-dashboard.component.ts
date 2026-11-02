@@ -373,6 +373,24 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     return item?.user?.username ? ['/users', item.user.username] : null;
   }
 
+  activityLink(item: IEventDashboardActivityItem): any[] | null {
+    switch (item?.type) {
+      case 'speaker_slides':
+        return item.embedded_content
+          ? ['/speaker-resources', item.id]
+          : ['/communities', item.community_slug, 'events', item.event_slug];
+      default:
+        return null;
+    }
+  }
+
+  onActivityItemClick(item: IEventDashboardActivityItem): void {
+    const link = this.activityLink(item);
+    if (link) {
+      this.router.navigate(link);
+    }
+  }
+
   activityTime(item: IEventDashboardActivityItem): string {
     return item?.created_at ? moment(item.created_at).fromNow() : '';
   }

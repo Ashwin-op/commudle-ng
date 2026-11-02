@@ -610,6 +610,10 @@
         @apply com-border-b-0;
       }
 
+      &.activity-item-clickable {
+        cursor: pointer;
+      }
+
       .activity-avatar {
         @apply com-w-6 com-h-6 com-rounded-full com-flex com-items-center com-justify-center com-text-10px com-font-medium com-shrink-0 com-text-white com-transition-transform com-duration-200;
 
