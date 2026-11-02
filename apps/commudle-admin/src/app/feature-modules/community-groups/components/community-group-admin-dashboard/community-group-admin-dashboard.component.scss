@@ -47,6 +47,37 @@
   .heading-icon-engagement {
     @apply com-bg-orange-50 com-text-orange-600;
   }
+
+  .activity-new-badge {
+    @apply com-bg-primary-500 com-text-tWhite com-text-[10px] com-font-semibold com-px-1.5 com-py-0.5 com-rounded-full;
+    animation: badgePop 2.4s ease-in-out forwards;
+  }
+}
+
+@keyframes badgePop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(4px);
+  }
+
+  15% {
+    opacity: 1;
+    transform: scale(1.15) translateY(0);
+  }
+
+  25% {
+    transform: scale(1);
+  }
+
+  80% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.9) translateY(-4px);
+  }
 }
 
 .section-header {
@@ -478,19 +509,8 @@
       .gender-chart {
         @apply com-flex com-flex-row com-items-center com-gap-6;
 
-        .chart-donut {
-          @apply com-w-16 com-h-16 com-shrink-0;
-
-          .chart-donut-track {
-            fill: none;
-            stroke: #e5e7eb;
-            stroke-width: 3.8;
-          }
-
-          .chart-donut-segment {
-            fill: none;
-            stroke-width: 3.8;
-          }
+        .chart-donut-canvas {
+          @apply com-relative com-w-16 com-h-16 com-shrink-0;
         }
 
         .chart-legend {

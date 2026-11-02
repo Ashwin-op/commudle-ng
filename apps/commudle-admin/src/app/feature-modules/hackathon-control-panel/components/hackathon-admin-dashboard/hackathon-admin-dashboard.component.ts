@@ -99,6 +99,8 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
   activityCount = 6;
   activityTotal = 0;
   isActivityLoading = false;
+  newActivityCount = 0;
+  private newActivityBadgeTimer: ReturnType<typeof setTimeout>;
 
   // People & Judging -- GET /api/v2/dashboards/hackathons/people_judging
   peopleJudging: IHackathonDashboardPeopleJudging;
@@ -146,6 +148,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe());
     this.liveVisitorsChart?.destroy();
+    clearTimeout(this.newActivityBadgeTimer);
   }
 
   loadDashboard(): void {
@@ -153,6 +156,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     this.getNeedsAttention();
     this.getSnapshot();
     this.getRecentActivity();
+    this.startRecentActivityPolling();
     this.getPeopleJudging();
     this.getSetupProgress();
     this.getLiveVisitors();
@@ -277,6 +281,45 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
   onActivityPageChange(page: number): void {
     this.activityPage = page;
     this.getRecentActivity();
+  }
+
+  // Poll for newer activity every minute; only while viewing page 1, so we never
+  // disturb someone paging through older activity.
+  startRecentActivityPolling(): void {
+    this.subscriptions.push(interval(60000).subscribe(() => this.pollRecentActivity()));
+  }
+
+  pollRecentActivity(): void {
+    if (this.activityPage !== 1 || !this.hackathon) {
+      return;
+    }
+    const latestTimestamp = this.activityTimestamp(this.recentActivity[0]);
+    this.subscriptions.push(
+      this.dashboardHackathonsService.recentActivity(this.hackathon.id, 1, this.activityCount).subscribe({
+        next: (data) => {
+          const newItems = latestTimestamp
+            ? data.values.filter((item) => this.activityTimestamp(item) > latestTimestamp)
+            : [];
+          if (newItems.length) {
+            this.recentActivity = [...newItems, ...this.recentActivity].slice(0, this.activityCount);
+            this.activityTotal = data.total;
+            this.showNewActivityBadge(newItems.length);
+          }
+        },
+      }),
+    );
+  }
+
+  private activityTimestamp(activity: IHackathonDashboardActivityItem): number {
+    return activity?.created_at ? moment(activity.created_at).valueOf() : 0;
+  }
+
+  private showNewActivityBadge(count: number): void {
+    clearTimeout(this.newActivityBadgeTimer);
+    this.newActivityCount = count;
+    this.newActivityBadgeTimer = setTimeout(() => {
+      this.newActivityCount = 0;
+    }, 2400);
   }
 
   activityIcon(type: string): IconDefinition {
@@ -486,7 +529,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
       if (this.liveVisitorsChart) {
         this.liveVisitorsChart.data.labels = labels;
         this.liveVisitorsChart.data.datasets[0].data = data;
-        this.liveVisitorsChart.update();
+        this.liveVisitorsChart.update({ duration: 0 });
         return;
       }
 
@@ -514,7 +557,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          animation: { duration: 0 },
+          animation: { duration: 800, easing: 'easeOutQuart' },
           responsiveAnimationDuration: 0,
           legend: { display: false },
           scales: {

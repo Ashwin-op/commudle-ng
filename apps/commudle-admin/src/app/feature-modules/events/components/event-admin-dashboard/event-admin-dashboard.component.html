@@ -426,6 +426,7 @@
       <div class="section-header">
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faBolt" class="heading-icon-activity"></fa-icon> Recent Activity
+          <span *ngIf="newActivityCount" class="activity-new-badge">+{{ newActivityCount }}</span>
         </h3>
       </div>
       <app-loading-spinner *ngIf="isActivityLoading" class="section-loader"></app-loading-spinner>

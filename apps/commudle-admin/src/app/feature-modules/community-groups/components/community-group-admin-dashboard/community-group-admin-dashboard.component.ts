@@ -21,8 +21,9 @@ import {
   ICommunityGroupDashboardPulse,
   IDashboardDistributionItem,
 } from '@commudle/shared-models';
-import { Subscription } from 'rxjs';
+import { Subscription, interval } from 'rxjs';
 import * as moment from 'moment';
+import { Chart } from 'chart.js';
 import {
   faUsers,
   faUserGroup,
@@ -102,6 +103,8 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   readonly activityCount = 5;
   activityTotal = 0;
   isActivityLoading = false;
+  newActivityCount = 0;
+  private newActivityBadgeTimer: ReturnType<typeof setTimeout>;
 
   // Community Footprint -- GET .../community_footprint
   footprint: ICommunityGroupDashboardFootprint;
@@ -165,6 +168,7 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
         this.loadNeedsAttention();
         this.loadUpcomingSchedule();
         this.loadRecentActivity();
+        this.startRecentActivityPolling();
         this.loadFootprint();
         this.loadAudienceDemographics();
         this.loadEmailCommunication();
@@ -180,6 +184,8 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   ngOnDestroy(): void {
     this.seoService.noIndex(false);
     this.subscriptions.forEach((s) => s.unsubscribe());
+    this.genderChart?.destroy();
+    clearTimeout(this.newActivityBadgeTimer);
   }
 
   loadPulse(): void {
@@ -267,6 +273,45 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     this.loadRecentActivity();
   }
 
+  // Poll for newer activity every minute; only while viewing page 1, so we never
+  // disturb someone paging through older activity.
+  startRecentActivityPolling(): void {
+    this.subscriptions.push(interval(60000).subscribe(() => this.pollRecentActivity()));
+  }
+
+  pollRecentActivity(): void {
+    if (this.activityPage !== 1 || !this.communityGroup) {
+      return;
+    }
+    const latestTimestamp = this.activityTimestamp(this.recentActivity[0]);
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService.recentActivity(this.communityGroup.id, 1, this.activityCount).subscribe({
+        next: (data) => {
+          const newItems = latestTimestamp
+            ? data.values.filter((item) => this.activityTimestamp(item) > latestTimestamp)
+            : [];
+          if (newItems.length) {
+            this.recentActivity = [...newItems, ...this.recentActivity].slice(0, this.activityCount);
+            this.activityTotal = data.total;
+            this.showNewActivityBadge(newItems.length);
+          }
+        },
+      }),
+    );
+  }
+
+  private activityTimestamp(activity: ICommunityGroupDashboardActivityItem): number {
+    return activity?.created_at ? moment(activity.created_at).valueOf() : 0;
+  }
+
+  private showNewActivityBadge(count: number): void {
+    clearTimeout(this.newActivityBadgeTimer);
+    this.newActivityCount = count;
+    this.newActivityBadgeTimer = setTimeout(() => {
+      this.newActivityCount = 0;
+    }, 2400);
+  }
+
   loadFootprint(): void {
     this.isFootprintLoading = true;
     this.subscriptions.push(
@@ -333,6 +378,7 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
         .subscribe({
           next: (data) => {
             this.audienceDemographics = data;
+            this.renderGenderChart(data.gender_distribution);
             this.isAudienceLoading = false;
           },
           error: () => {
@@ -356,6 +402,7 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
         .subscribe({
           next: (data) => {
             this.audienceDemographics = data;
+            this.renderGenderChart(data.gender_distribution);
             this.isTopSkillsLoading = false;
           },
           error: () => {
@@ -619,30 +666,58 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     return this.palette[index % this.palette.length];
   }
 
-  /**
-   * Turns a {name, count, percentage} distribution into SVG donut arc segments.
-   * Ring uses r=15.9155 (circumference ~= 100) so percentage maps directly to a
-   * stroke-dasharray length; dashOffset shifts each segment to start where the
-   * previous ended (25 rotates the first segment's start to 12 o'clock).
-   */
-  private buildSegments(
-    items: IDashboardDistributionItem[] | undefined,
-  ): { color: string; dashArray: string; dashOffset: number }[] {
-    let cumulative = 0;
-    return (items || []).map((item: IDashboardDistributionItem, index: number) => {
-      const pct = item.percentage || 0;
-      const segment = {
-        color: this.paletteColor(index),
-        dashArray: `${pct} ${100 - pct}`,
-        dashOffset: 25 - cumulative,
-      };
-      cumulative += pct;
-      return segment;
-    });
-  }
+  private genderChart: Chart;
 
-  get genderSegments(): { color: string; dashArray: string; dashOffset: number }[] {
-    return this.buildSegments(this.audienceDemographics?.gender_distribution);
+  private renderGenderChart(items: IDashboardDistributionItem[] | undefined): void {
+    if (!items?.length) {
+      this.genderChart?.destroy();
+      this.genderChart = undefined;
+      return;
+    }
+    const labels = items.map((item) =>
+      item.name
+        .split('_')
+        .map((frag) => frag.charAt(0).toUpperCase() + frag.slice(1))
+        .join(' '),
+    );
+    const data = items.map((item) => item.percentage || 0);
+    const colors = items.map((_, index) => this.paletteColor(index));
+
+    if (this.genderChart) {
+      this.genderChart.data.labels = labels;
+      this.genderChart.data.datasets[0].data = data;
+      this.genderChart.data.datasets[0].backgroundColor = colors;
+      this.genderChart.update({ duration: 0 });
+      return;
+    }
+
+    // The canvas sits behind *ngIf="!isAudienceLoading"; defer to the next tick so
+    // Angular has added it to the DOM before Chart.js looks it up by id.
+    setTimeout(() => {
+      if (this.genderChart || !document.getElementById('gender-donut-chart')) {
+        return;
+      }
+      this.genderChart = new Chart('gender-donut-chart', {
+        type: 'doughnut',
+        data: {
+          labels,
+          datasets: [{ data, backgroundColor: colors, borderWidth: 0 }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutoutPercentage: 65,
+          animation: { duration: 800, easing: 'easeOutQuart' },
+          legend: { display: false },
+          tooltips: {
+            callbacks: {
+              label: (tooltipItem, chartData) =>
+                `${chartData.labels[tooltipItem.index]}: ${chartData.datasets[0].data[tooltipItem.index]}%`,
+            },
+          },
+        },
+      });
+    });
   }
 
   onTopLocationsPageChange(page: number): void {
@@ -659,6 +734,7 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
         .subscribe({
           next: (data) => {
             this.audienceDemographics = data;
+            this.renderGenderChart(data.gender_distribution);
             this.isTopLocationsLoading = false;
           },
           error: () => {

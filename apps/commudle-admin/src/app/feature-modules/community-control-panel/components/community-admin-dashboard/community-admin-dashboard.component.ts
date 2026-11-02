@@ -71,6 +71,8 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   recentActivityTotal = 0;
   recentActivityLoading = false;
   readonly recentActivityCount = 5;
+  newActivityCount = 0;
+  private newActivityBadgeTimer: ReturnType<typeof setTimeout>;
 
   // Polled every 30s (Redis-cached 30s TTL server-side); each poll
   // re-resamples history and updates the chart in place.
@@ -139,6 +141,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         this.loadNeedsAttention();
         this.loadUpcomingSchedule();
         this.loadRecentActivity();
+        this.startRecentActivityPolling();
         this.loadSnapshot();
         this.loadLiveVisitors();
         this.startLiveVisitorsPolling();
@@ -159,6 +162,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     this.seoService.noIndex(false);
     this.subscriptions.forEach((s) => s.unsubscribe());
     this.liveVisitorsChart?.destroy();
+    clearTimeout(this.newActivityBadgeTimer);
   }
 
   setGreeting(): void {
@@ -369,6 +373,49 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Poll for newer activity every minute; only while viewing page 1, so we never
+  // disturb someone paging through older activity.
+  startRecentActivityPolling(): void {
+    this.subscriptions.push(interval(60000).subscribe(() => this.pollRecentActivity()));
+  }
+
+  pollRecentActivity(): void {
+    if (this.recentActivityPage !== 1 || !this.community) {
+      return;
+    }
+    const latestTimestamp = this.activityTimestamp(this.recentActivity[0]);
+    this.subscriptions.push(
+      this.dashboardCommunitiesService.recentActivity(this.community.slug, 1, this.recentActivityCount).subscribe({
+        next: (data) => {
+          const newItems = latestTimestamp
+            ? data.values.filter((item) => this.activityTimestamp(item) > latestTimestamp)
+            : [];
+          if (newItems.length) {
+            this.recentActivity = [...newItems, ...this.recentActivity].slice(0, this.recentActivityCount);
+            this.recentActivityTotal = data.total;
+            this.showNewActivityBadge(newItems.length);
+          }
+        },
+      }),
+    );
+  }
+
+  private activityTimestamp(activity: ICommunityDashboardActivityItem): number {
+    if (!activity) {
+      return 0;
+    }
+    const raw = activity.created_at || activity.joined_at;
+    return raw ? moment(raw).valueOf() : 0;
+  }
+
+  private showNewActivityBadge(count: number): void {
+    clearTimeout(this.newActivityBadgeTimer);
+    this.newActivityCount = count;
+    this.newActivityBadgeTimer = setTimeout(() => {
+      this.newActivityCount = 0;
+    }, 2400);
+  }
+
   loadSnapshot(): void {
     this.snapshotLoading = true;
     this.subscriptions.push(
@@ -433,8 +480,9 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   // runOutsideAngular every one of those frames re-enters Angular change
   // detection -- on a component polling every 30s that compounds into the
   // runaway detectChangesInEmbeddedViews/requestAnimationFrame stack seen in
-  // the console. Also disabling animation, since this chart updates silently
-  // in the background and doesn't need a draw-in effect every poll.
+  // the console. Animation stays on for the first draw (see `options.animation`
+  // below) but every silent background poll calls update(0) to redraw instantly
+  // instead of re-animating.
   private renderLiveVisitorsChart(): void {
     const points = this.resampleLiveVisitorsHistory(this.liveVisitors?.history);
     if (!points.length) {
@@ -447,7 +495,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
       if (this.liveVisitorsChart) {
         this.liveVisitorsChart.data.labels = labels;
         this.liveVisitorsChart.data.datasets[0].data = data;
-        this.liveVisitorsChart.update();
+        this.liveVisitorsChart.update({ duration: 0 });
         return;
       }
 
@@ -475,7 +523,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          animation: { duration: 0 },
+          animation: { duration: 800, easing: 'easeOutQuart' },
           responsiveAnimationDuration: 0,
           legend: { display: false },
           scales: {
