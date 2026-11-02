@@ -372,18 +372,22 @@
                 status="primary"
                 appearance="filled"
                 shape="semi-round"
+                class="dashboard-cta-btn"
                 [routerLink]="['/admin', 'communities', community.slug, 'events', 'event-dashboard', 'new']"
               >
+                <fa-icon [icon]="icons.faCalendarPlus"></fa-icon>
                 Create Event
               </a>
               <a
                 comButton
                 size="tiny"
                 status="primary"
-                appearance="outline"
+                appearance="filled"
                 shape="semi-round"
+                class="dashboard-cta-btn"
                 [routerLink]="['/admin', 'communities', community.slug, 'hackathon-dashboard', 'new']"
               >
+                <fa-icon [icon]="icons.faTrophy"></fa-icon>
                 Create Hackathon
               </a>
             </span>
@@ -608,6 +612,9 @@
               class="activity-item"
               [class.is-clickable]="!!member.username"
               [routerLink]="member.username ? ['/users', member.username] : null"
+              [username]="member.username"
+              [activateMiniProfileDirective]="!!member.username"
+              appMiniUserProfile
             >
               <span class="activity-avatar members-avatar">
                 <img

@@ -700,6 +700,8 @@
               class="channel-author"
               [routerLink]="['/users', msg.user.username]"
               (click)="$event.stopPropagation()"
+              [username]="msg.user.username"
+              appMiniUserProfile
               >{{ msg.user?.name }}</a
             >
             <ng-template #channelAuthorPlain>
@@ -766,6 +768,8 @@
               class="channel-author"
               [routerLink]="['/users', msg.user.username]"
               (click)="$event.stopPropagation()"
+              [username]="msg.user.username"
+              appMiniUserProfile
               >{{ msg.user?.name }}</a
             >
             <ng-template #forumAuthorPlain>

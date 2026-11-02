@@ -568,6 +568,25 @@
 
       .timeline-empty-actions {
         @apply com-flex com-gap-1.5 com-mt-1;
+
+        .dashboard-cta-btn {
+          @apply com-relative com-overflow-hidden;
+
+          // Frosted glass
+          backdrop-filter: blur(16px) saturate(180%);
+          -webkit-backdrop-filter: blur(16px) saturate(180%);
+          background: linear-gradient(135deg, rgba(51, 102, 255, 0.85) 0%, rgba(51, 102, 255, 0.55) 100%) !important;
+          border: 1px solid rgba(255, 255, 255, 0.4) !important;
+
+          &:hover {
+            background: linear-gradient(135deg, rgba(51, 102, 255, 0.95) 0%, rgba(51, 102, 255, 0.65) 100%) !important;
+            border-color: rgba(255, 255, 255, 0.55) !important;
+          }
+
+          fa-icon {
+            @apply com-text-[10px];
+          }
+        }
       }
     }
   }

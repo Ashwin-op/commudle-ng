@@ -393,6 +393,8 @@
                     [routerLink]="['/users', actorUser.username]"
                     (click)="$event.stopPropagation()"
                     class="activity-user-link"
+                    [username]="actorUser.username"
+                    appMiniUserProfile
                     ><img
                       *ngIf="actorUser.thumbnail"
                       [src]="actorUser.thumbnail"

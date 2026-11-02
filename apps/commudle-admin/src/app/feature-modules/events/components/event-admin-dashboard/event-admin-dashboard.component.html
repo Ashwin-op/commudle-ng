@@ -236,6 +236,8 @@
                     [routerLink]="['/users', username]"
                     (click)="$event.stopPropagation()"
                     class="speaker-link"
+                    [username]="username"
+                    appMiniUserProfile
                     ><img
                       *ngIf="speaker.user?.thumbnail"
                       [src]="speaker.user.thumbnail"
@@ -443,6 +445,8 @@
                       *ngIf="recipient.username as username; else plainRecipientName"
                       [routerLink]="['/users', username]"
                       class="activity-user-link"
+                      [username]="username"
+                      appMiniUserProfile
                       ><img
                         *ngIf="recipient.thumbnail"
                         [src]="recipient.thumbnail"
@@ -468,6 +472,8 @@
                     *ngIf="activityActorLink(item) as actorLink; else plainActorName"
                     [routerLink]="actorLink"
                     class="activity-user-link"
+                    [username]="item.user?.username"
+                    appMiniUserProfile
                     ><img
                       *ngIf="item.user?.thumbnail"
                       [src]="item.user.thumbnail"
