@@ -146,6 +146,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         this.loadLiveVisitors();
         this.startLiveVisitorsPolling();
         this.loadTopPages();
+        this.startTopPagesPolling();
         this.loadTopCities();
         this.loadRecentMembers();
         this.setQuickActions();
@@ -465,6 +466,11 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   // Poll live visitors every 30s, matching the server-side Redis TTL.
   startLiveVisitorsPolling(): void {
     this.subscriptions.push(interval(30000).subscribe(() => this.loadLiveVisitors()));
+  }
+
+  // Poll top pages every 30s, matching the server-side Redis TTL for the 'current' window.
+  startTopPagesPolling(): void {
+    this.subscriptions.push(interval(30000).subscribe(() => this.loadTopPages()));
   }
 
   private resampleLiveVisitorsHistory(

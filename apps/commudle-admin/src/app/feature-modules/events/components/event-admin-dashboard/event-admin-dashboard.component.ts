@@ -145,6 +145,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
           this.getLiveVisitors();
           this.startLiveVisitorsPolling();
           this.getTopPages();
+          this.startTopPagesPolling();
         } else {
           this.seoService.setTitle(`Event Dashboard | ${this.community?.name || ''}`);
         }
@@ -610,6 +611,11 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   // Poll live visitors every 30s, matching the server-side Redis TTL.
   startLiveVisitorsPolling(): void {
     this.subscriptions.push(interval(30000).subscribe(() => this.getLiveVisitors()));
+  }
+
+  // Poll top pages every 30s, matching the server-side Redis TTL for the 'current' window.
+  startTopPagesPolling(): void {
+    this.subscriptions.push(interval(30000).subscribe(() => this.getTopPages()));
   }
 
   private resampleLiveVisitorsHistory(

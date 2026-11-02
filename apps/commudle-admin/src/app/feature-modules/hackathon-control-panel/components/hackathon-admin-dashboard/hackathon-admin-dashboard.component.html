@@ -648,4 +648,51 @@
       </div>
     </article>
   </section>
+
+  <!-- Row 5: Top Pages -->
+  <section class="top-pages-row">
+    <article class="top-list-card">
+      <header class="section-header">
+        <h3 class="section-heading">
+          <fa-icon [icon]="icons.faFileLines" class="heading-icon-pages"></fa-icon> Top Pages
+        </h3>
+      </header>
+      <div class="top-list-header">
+        <span>Page Title</span>
+        <span>Views</span>
+      </div>
+      <ul class="top-list">
+        <li *ngIf="topPagesLoading" class="section-loader">
+          <app-loading-spinner></app-loading-spinner>
+        </li>
+        <ng-container *ngIf="!topPagesLoading">
+          <li *ngFor="let page of topPages" class="top-list-item">
+            <a
+              [href]="page.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="top-list-name"
+              [comTooltip]="page.url"
+              tooltipPlacement="top"
+              tooltipSize="sm"
+              >{{ page.page_title }}</a
+            >
+            <span class="top-list-track">
+              <span
+                class="top-list-bar top-list-bar-pages"
+                [style.--bar-share.%]="barShare(page.views, topPagesMax)"
+              ></span>
+            </span>
+            <span class="top-list-value">{{ page.views | number }}</span>
+          </li>
+          <li *ngIf="topPages.length === 0" class="top-list-empty">
+            <span class="top-list-empty-icon pages">
+              <fa-icon [icon]="icons.faFileLines"></fa-icon>
+            </span>
+            <span class="top-list-empty-text">No page views yet.</span>
+          </li>
+        </ng-container>
+      </ul>
+    </article>
+  </section>
 </div>

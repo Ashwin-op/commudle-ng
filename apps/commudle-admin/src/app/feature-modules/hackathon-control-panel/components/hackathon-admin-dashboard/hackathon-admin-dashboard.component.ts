@@ -5,7 +5,6 @@ import {
   IHackathon,
   ICommunity,
   EHackathonStatus,
-  EDashboardTopPagesWindow,
   IDashboardLiveVisitors,
   IDashboardLiveVisitorsBucket,
   IDashboardTopPage,
@@ -117,6 +116,10 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
   liveVisitors: IDashboardLiveVisitors;
   liveVisitorsChart: Chart;
 
+  // Top Pages -- GET /api/v2/dashboards/hackathons/top_pages (polled every 30s)
+  topPages: IDashboardTopPage[] = [];
+  topPagesLoading = false;
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -164,6 +167,8 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     this.getSetupProgress();
     this.getLiveVisitors();
     this.startLiveVisitorsPolling();
+    this.getTopPages();
+    this.startTopPagesPolling();
   }
 
   get hasPendingApplications(): boolean {
@@ -603,6 +608,37 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
   // Poll live visitors every 30s, matching the server-side Redis TTL.
   startLiveVisitorsPolling(): void {
     this.subscriptions.push(interval(30000).subscribe(() => this.getLiveVisitors()));
+  }
+
+  getTopPages(): void {
+    this.topPagesLoading = true;
+    this.subscriptions.push(
+      this.dashboardHackathonsService.topPages(this.hackathon.id, 'current').subscribe({
+        next: (data) => {
+          this.topPages = data;
+          this.topPagesLoading = false;
+        },
+        error: () => {
+          this.topPagesLoading = false;
+        },
+      }),
+    );
+  }
+
+  // Poll top pages every 30s, matching the server-side Redis TTL for the 'current' window.
+  startTopPagesPolling(): void {
+    this.subscriptions.push(interval(30000).subscribe(() => this.getTopPages()));
+  }
+
+  get topPagesMax(): number {
+    return Math.max(...this.topPages.map((p) => p.views || 0), 1);
+  }
+
+  barShare(value: number, max: number): number {
+    if (!max) {
+      return 0;
+    }
+    return (value / max) * 100;
   }
 
   private resampleLiveVisitorsHistory(

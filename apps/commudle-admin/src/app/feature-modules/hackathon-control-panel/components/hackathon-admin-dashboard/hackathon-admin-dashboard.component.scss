@@ -958,6 +958,83 @@
   }
 }
 
+.top-pages-row {
+  .top-list-card {
+    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+    animation: cardFadeIn 0.4s ease-out both;
+
+    &:hover {
+      @apply com-shadow-Card;
+      transform: translateY(-2px);
+    }
+  }
+
+  .top-list-header {
+    @apply com-flex com-items-center com-justify-between com-pb-1 com-mb-1 com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-text-10px com-font-medium com-text-gray-400 com-uppercase com-tracking-wide;
+  }
+
+  .top-list {
+    @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-2;
+
+    .top-list-item {
+      @apply com-flex com-items-center com-gap-4 com-text-xs com-text-Yankees-Blue;
+
+      .top-list-name {
+        @apply com-w-28 com-shrink-0 com-truncate com-text-xs com-font-normal com-text-gray-600 com-no-underline com-transition-colors com-duration-200;
+
+        &:hover {
+          @apply com-text-primary-600 com-underline;
+        }
+      }
+
+      .top-list-track {
+        @apply com-h-1 com-flex-1 com-shrink-0 com-rounded-full com-bg-gray-100 com-overflow-hidden;
+      }
+
+      .top-list-bar {
+        @apply com-block com-h-full com-rounded-full com-min-w-1;
+        width: var(--bar-share, 0%);
+        animation: barGrow 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+        transform-origin: left;
+
+        &.top-list-bar-pages {
+          @apply com-bg-primary-500;
+        }
+      }
+
+      .top-list-value {
+        @apply com-ml-auto com-text-xs com-font-medium com-text-Cadet-Grey com-shrink-0;
+      }
+    }
+
+    .top-list-empty {
+      @apply com-flex com-flex-col com-items-center com-gap-2 com-py-4 com-text-xs com-text-gray-500;
+
+      .top-list-empty-icon {
+        @apply com-flex com-items-center com-justify-center com-w-12 com-h-12 com-rounded-full com-text-xl com-mb-1;
+
+        &.pages {
+          @apply com-bg-blue-50 com-text-primary-500;
+        }
+      }
+
+      .top-list-empty-text {
+        @apply com-text-xs com-font-medium com-text-Yankees-Blue;
+      }
+    }
+  }
+}
+
+@keyframes barGrow {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
 strong {
   @apply com-font-medium;
 }
