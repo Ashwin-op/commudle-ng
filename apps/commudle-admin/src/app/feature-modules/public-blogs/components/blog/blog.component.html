@@ -73,9 +73,6 @@
                 <a [routerLink]="['/blogs', latestBlog?.slug.current]">
                   <com-card-body class="blog-card">
                     <h2 class="latest-blog-title">{{ latestBlog.title }}</h2>
-                    <p class="published-on">
-                      Published on <span>{{ latestBlog.publishedAt | date }}</span>
-                    </p>
                   </com-card-body>
                 </a>
               </com-card>
