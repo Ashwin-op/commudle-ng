@@ -507,7 +507,11 @@
                           [src]="activity.user.thumbnail"
                           [alt]="activity.user.name"
                           class="inline-avatar"
-                        /><strong>{{ activity.user?.name || 'A new member' }}</strong></a
+                        /><strong>{{
+                          activity.user?.name ||
+                            'A new
+                          member'
+                        }}</strong></a
                       >
                       joined the community</ng-container
                     >
@@ -700,11 +704,7 @@
       <div class="live-visitors-body">
         <div class="live-visitors-counts">
           <div class="live-count">
-            <span
-              class="live-count-label"
-              [comTooltip]="'Sessions still open that started within the last hour'"
-              tooltipSize="sm"
-            >
+            <span class="live-count-label">
               <span class="live-dot"></span>
               Live now
             </span>
@@ -729,14 +729,6 @@
       <header class="section-header">
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faFileLines" class="heading-icon-pages"></fa-icon> Top Pages
-          <fa-icon
-            [icon]="icons.faCircleInfo"
-            class="section-info-icon"
-            [comTooltip]="
-              'Live traffic: pages viewed by sessions still open from the last hour, not an all-time ranking.'
-            "
-            tooltipSize="sm"
-          ></fa-icon>
         </h3>
       </header>
       <div class="top-list-header">
@@ -785,7 +777,7 @@
           <fa-icon
             [icon]="icons.faCircleInfo"
             class="section-info-icon"
-            [comTooltip]="'All-time member count by city, not limited to a recent period.'"
+            [comTooltip]="'All-time member count by city.'"
             tooltipSize="sm"
           ></fa-icon>
         </h3>

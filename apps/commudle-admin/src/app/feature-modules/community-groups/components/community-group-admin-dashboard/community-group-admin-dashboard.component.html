@@ -647,7 +647,7 @@
           <span
             class="email-label"
             [comTooltip]="
-              'Last 30 days, as a share of emails delivered (not sent). Growth compares to the previous 30-day period.'
+              'Last 30 days, as a share of emails delivered. Growth compares to the previous 30-day period.'
             "
             tooltipSize="sm"
             >Open Rate</span
@@ -669,7 +669,7 @@
           <span
             class="email-label"
             [comTooltip]="
-              'Last 30 days, as a share of emails delivered (not sent). Growth compares to the previous 30-day period.'
+              'Last 30 days, as a share of emails delivered. Growth compares to the previous 30-day period.'
             "
             tooltipSize="sm"
             >Click Rate</span
@@ -688,10 +688,7 @@
         </li>
         <li class="email-stat">
           <span class="email-value">{{ emailCommunication?.newsletters_this_month ?? 0 | number }}</span>
-          <span
-            class="email-label"
-            [comTooltip]="'Published in the last 30 days, not the calendar month'"
-            tooltipSize="sm"
+          <span class="email-label" [comTooltip]="'Published in the last 30 days'" tooltipSize="sm"
             >Newsletters (Last 30 Days)</span
           >
         </li>
@@ -926,7 +923,7 @@
         <li class="engagement-stat">
           <span
             class="engagement-label"
-            [comTooltip]="'All-time total. The +N below is new members in the last 30 days (a count, not a percent).'"
+            [comTooltip]="'All-time total. The +N below is new members in the last 30 days.'"
             tooltipSize="sm"
             >Members</span
           >
@@ -940,9 +937,7 @@
         <li class="engagement-stat">
           <span
             class="engagement-label"
-            [comTooltip]="
-              'All-time total. The +N below is new registrations in the last 30 days (a count, not a percent).'
-            "
+            [comTooltip]="'All-time total. The +N below is new registrations in the last 30 days.'"
             tooltipSize="sm"
             >Event Registrations</span
           >
@@ -956,9 +951,7 @@
         <li class="engagement-stat">
           <span
             class="engagement-label"
-            [comTooltip]="
-              'All-time total. The +N below is new registrations in the last 30 days (a count, not a percent).'
-            "
+            [comTooltip]="'All-time total. The +N below is new registrations in the last 30 days.'"
             tooltipSize="sm"
             >Hackathon Registrations</span
           >
@@ -992,9 +985,7 @@
         <li class="engagement-stat">
           <span
             class="engagement-label"
-            [comTooltip]="
-              'Percent change over the last 30 days vs. the previous 30-day period (unlike the counts above, this is a true percentage).'
-            "
+            [comTooltip]="'Percent change over the last 30 days vs. the previous 30-day period.'"
             tooltipSize="sm"
             >Content Engagement</span
           >

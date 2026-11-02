@@ -129,9 +129,6 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   // Email & Communication -- GET .../email_communication
   emailCommunication: ICommunityGroupDashboardEmailCommunication;
   isEmailLoading = false;
-  // Computed once per load rather than as a template-bound getter, so it isn't
-  // recomputed (and its *ngFor items re-identified/re-animated) on every
-  // unrelated change-detection tick elsewhere on this dashboard.
   emailTrendChart: ICommunityGroupDashboardEmailTrendChart | null = null;
 
   // Latest Channel Activity -- GET .../latest_channel_activity (paginated)
