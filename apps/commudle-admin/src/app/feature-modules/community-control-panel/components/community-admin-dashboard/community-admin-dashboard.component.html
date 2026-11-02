@@ -88,7 +88,7 @@
           <fa-icon [icon]="icons.faBell" class="heading-icon-attention"></fa-icon> Needs Attention
         </h3>
       </header>
-      <nav class="attention-list">
+      <nav class="attention-list custom-scrollbar">
         <app-loading-spinner *ngIf="needsAttentionLoading" class="section-loader"></app-loading-spinner>
         <ng-container *ngIf="!needsAttentionLoading">
           <a
@@ -115,6 +115,9 @@
             <span class="attention-action">Complete Now</span>
             <span class="attention-arrow">›</span>
           </a>
+          <span *ngIf="needsAttention?.collaboration_requests?.values?.length" class="attention-section-label"
+            >Collaboration Requests</span
+          >
           <ng-container *ngFor="let request of needsAttention?.collaboration_requests?.values">
             <!-- Incoming -->
             <div
@@ -136,6 +139,9 @@
                     [routerLink]="request.requester?.username ? ['/users', request.requester.username] : null"
                     (click)="$event.stopPropagation()"
                     class="profile-link"
+                    [username]="request.requester?.username"
+                    [activateMiniProfileDirective]="!!request.requester?.username"
+                    appMiniUserProfile
                     ><img
                       *ngIf="request.requester?.thumbnail"
                       [src]="request.requester.thumbnail"
@@ -200,6 +206,9 @@
                     [routerLink]="request.requester?.username ? ['/users', request.requester.username] : null"
                     (click)="$event.stopPropagation()"
                     class="profile-link"
+                    [username]="request.requester?.username"
+                    [activateMiniProfileDirective]="!!request.requester?.username"
+                    appMiniUserProfile
                     ><img
                       *ngIf="request.requester?.thumbnail"
                       [src]="request.requester.thumbnail"
@@ -228,6 +237,7 @@
             (pageChange)="onCollaborationRequestsPageChange($event)"
           ></commudle-pagination-compact>
 
+          <span *ngIf="needsAttention?.newsletters?.values?.length" class="attention-section-label">Newsletters</span>
           <a
             *ngFor="let newsletter of needsAttention?.newsletters?.values"
             [routerLink]="['/admin/communities', community.slug, 'newsletters', 'edit', newsletter.slug]"
@@ -250,6 +260,7 @@
             (pageChange)="onNewslettersPageChange($event)"
           ></commudle-pagination-compact>
 
+          <span *ngIf="needsAttention?.surveys?.values?.length" class="attention-section-label">Surveys</span>
           <a
             *ngFor="let survey of needsAttention?.surveys?.values"
             [routerLink]="['/admin/communities', community.slug, 'surveys']"
@@ -283,6 +294,7 @@
             <span class="attention-arrow">›</span>
           </a>
 
+          <span *ngIf="needsAttention?.bank_account?.values?.length" class="attention-section-label">Bank Account</span>
           <a
             *ngFor="let account of needsAttention?.bank_account?.values"
             [routerLink]="['/admin/communities', community.slug, 'payments']"
@@ -447,6 +459,9 @@
                         [routerLink]="activity.user?.username ? ['/users', activity.user.username] : null"
                         (click)="$event.stopPropagation()"
                         class="activity-user-link"
+                        [username]="activity.user?.username"
+                        [activateMiniProfileDirective]="!!activity.user?.username"
+                        appMiniUserProfile
                         ><img
                           *ngIf="activity.user?.thumbnail"
                           [src]="activity.user.thumbnail"
@@ -461,6 +476,9 @@
                         [routerLink]="activity.user?.username ? ['/users', activity.user.username] : null"
                         (click)="$event.stopPropagation()"
                         class="activity-user-link"
+                        [username]="activity.user?.username"
+                        [activateMiniProfileDirective]="!!activity.user?.username"
+                        appMiniUserProfile
                         ><img
                           *ngIf="activity.user?.thumbnail"
                           [src]="activity.user.thumbnail"
@@ -480,6 +498,9 @@
                         [routerLink]="activity.user?.username ? ['/users', activity.user.username] : null"
                         (click)="$event.stopPropagation()"
                         class="activity-user-link"
+                        [username]="activity.user?.username"
+                        [activateMiniProfileDirective]="!!activity.user?.username"
+                        appMiniUserProfile
                         ><img
                           *ngIf="activity.user?.thumbnail"
                           [src]="activity.user.thumbnail"
@@ -708,9 +729,15 @@
         </li>
         <ng-container *ngIf="!topPagesLoading">
           <li *ngFor="let page of topPages" class="top-list-item">
-            <a [href]="page.url" target="_blank" rel="noopener noreferrer" class="top-list-name" [title]="page.url">{{
-              page.page_title
-            }}</a>
+            <a
+              [href]="page.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="top-list-name"
+              [comTooltip]="page.url"
+              tooltipPlacement="top"
+              >{{ page.page_title }}</a
+            >
             <span class="top-list-track">
               <span
                 class="top-list-bar top-list-bar-pages"

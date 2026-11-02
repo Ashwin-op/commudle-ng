@@ -105,7 +105,8 @@ export type EDashboardActivityType = 'channel_message' | 'forum_message' | 'new_
 
 export interface ICommunityDashboardActivityItem {
   type: EDashboardActivityType;
-  created_at: string;
+  created_at?: string;
+  joined_at?: string;
   user?: IDashboardPersonBrief;
   community_channel_id?: number;
   channel?: string;

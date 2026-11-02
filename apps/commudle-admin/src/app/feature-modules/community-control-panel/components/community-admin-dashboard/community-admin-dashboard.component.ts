@@ -332,7 +332,8 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   activityTime(activity: ICommunityDashboardActivityItem): string {
-    return activity?.created_at ? moment(activity.created_at).fromNow() : '';
+    const timestamp = activity?.created_at || activity?.joined_at;
+    return timestamp ? moment(timestamp).fromNow() : '';
   }
 
   memberJoinedTime(member: ICommunityDashboardRecentMember): string {
