@@ -730,6 +730,21 @@
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faFileLines" class="heading-icon-pages"></fa-icon> Top Pages
         </h3>
+        <div class="top-pages-window-toggle">
+          <button
+            type="button"
+            [class.active]="topPagesWindow === 'current'"
+            (click)="onTopPagesWindowChange('current')"
+          >
+            Live
+          </button>
+          <button type="button" [class.active]="topPagesWindow === '24h'" (click)="onTopPagesWindowChange('24h')">
+            24h
+          </button>
+          <button type="button" [class.active]="topPagesWindow === '7d'" (click)="onTopPagesWindowChange('7d')">
+            7d
+          </button>
+        </div>
       </header>
       <div class="top-list-header">
         <span>Page Title</span>

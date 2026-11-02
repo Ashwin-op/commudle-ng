@@ -44,20 +44,24 @@ export interface IHackathonDashboardAttentionPeople {
   total: number;
 }
 
+// judges/round_criteria/mentor_judge_slots drop once the hackathon has ended;
+// tracks/registration/pending_applications drop once it has started -- the
+// backend omits each entirely once no longer relevant, rather than returning
+// a zeroed value. sponsor_logo is unrelated to this lifecycle logic.
 export interface IHackathonDashboardNeedsAttention {
-  judges: {
+  judges?: {
     judges_count: number;
     mentors_count: number;
     teams_assigned_count: number;
     without_team: IHackathonDashboardAttentionPeople;
   };
-  round_criteria: {
+  round_criteria?: {
     round_id: number;
     round_name: string;
     is_complete: boolean;
     missing_fields: string[];
   };
-  tracks: {
+  tracks?: {
     track_count: number;
     problem_statement_count: number;
   };
@@ -66,15 +70,15 @@ export interface IHackathonDashboardNeedsAttention {
     total_count: number;
     missing_sponsor_ids: number[];
   };
-  registration: {
+  registration?: {
     registration_closes_at: string | null;
     days_remaining: number;
   };
-  pending_applications: {
+  pending_applications?: {
     awaiting_acceptance_count: number;
     incomplete_leader_application_count: number;
   };
-  mentor_judge_slots: {
+  mentor_judge_slots?: {
     opened: IHackathonDashboardAttentionPeople;
     not_opened: IHackathonDashboardAttentionPeople;
   };

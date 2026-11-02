@@ -15,6 +15,7 @@ import {
   IDashboardLiveVisitors,
   IDashboardLiveVisitorsBucket,
   IDashboardTopPage,
+  EDashboardTopPagesWindow,
 } from '@commudle/shared-models';
 import { SeoService } from '@commudle/shared-services';
 import { DashboardEventsService } from 'apps/commudle-admin/src/app/services/stats/dashboard-events.service';
@@ -714,10 +715,17 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  topPagesWindow: EDashboardTopPagesWindow = 'current';
+
+  onTopPagesWindowChange(window: EDashboardTopPagesWindow): void {
+    this.topPagesWindow = window;
+    this.getTopPages();
+  }
+
   getTopPages(): void {
     this.topPagesLoading = true;
     this.subscriptions.push(
-      this.dashboardEventsService.topPages(this.event.id, 'current').subscribe({
+      this.dashboardEventsService.topPages(this.event.id, this.topPagesWindow).subscribe({
         next: (data) => {
           this.topPages = data;
           this.topPagesLoading = false;

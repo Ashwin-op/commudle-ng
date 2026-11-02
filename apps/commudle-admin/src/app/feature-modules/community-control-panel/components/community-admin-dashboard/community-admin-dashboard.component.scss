@@ -909,6 +909,22 @@
     }
   }
 
+  .top-pages-window-toggle {
+    @apply com-flex com-gap-1 com-bg-gray-100 com-rounded-full com-p-1 com-shrink-0;
+
+    button {
+      @apply com-border-0 com-bg-transparent com-text-xs com-font-medium com-text-gray-500 com-px-3 com-py-1.5 com-rounded-full com-cursor-pointer com-transition-colors com-duration-200;
+
+      &:hover {
+        @apply com-text-primary-600;
+      }
+
+      &.active {
+        @apply com-bg-white com-text-primary-600 com-shadow-sm;
+      }
+    }
+  }
+
   .live-visitors-body {
     @apply com-flex com-flex-col com-gap-2;
 

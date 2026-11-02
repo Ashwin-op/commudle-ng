@@ -5,6 +5,7 @@ import {
   IHackathon,
   ICommunity,
   EHackathonStatus,
+  EDashboardTopPagesWindow,
   IDashboardLiveVisitors,
   IDashboardLiveVisitorsBucket,
   IDashboardTopPage,
@@ -620,10 +621,17 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(interval(30000).subscribe(() => this.getLiveVisitors()));
   }
 
+  topPagesWindow: EDashboardTopPagesWindow = 'current';
+
+  onTopPagesWindowChange(window: EDashboardTopPagesWindow): void {
+    this.topPagesWindow = window;
+    this.getTopPages();
+  }
+
   getTopPages(): void {
     this.topPagesLoading = true;
     this.subscriptions.push(
-      this.dashboardHackathonsService.topPages(this.hackathon.id, 'current').subscribe({
+      this.dashboardHackathonsService.topPages(this.hackathon.id, this.topPagesWindow).subscribe({
         next: (data) => {
           this.topPages = data;
           this.topPagesLoading = false;

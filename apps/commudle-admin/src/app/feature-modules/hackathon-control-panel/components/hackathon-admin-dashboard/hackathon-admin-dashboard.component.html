@@ -123,8 +123,8 @@
         class="section-loader"
       ></app-loading-spinner>
       <div class="attention-list" *ngIf="!isNeedsAttentionLoading || needsAttention">
-        <!-- Judges & mentors -->
-        <a [routerLink]="['speakers']" class="attention-item">
+        <!-- Judges & mentors (omitted by the backend once the hackathon has ended) -->
+        <a *ngIf="needsAttention?.judges" [routerLink]="['speakers']" class="attention-item">
           <fa-icon
             [icon]="needsAttention?.judges?.without_team?.total === 0 ? icons.faCircleCheck : icons.faCircleXmark"
             [ngClass]="
@@ -148,8 +148,8 @@
           <span class="attention-arrow">›</span>
         </a>
 
-        <!-- Round criteria -->
-        <a [routerLink]="['rounds']" class="attention-item">
+        <!-- Round criteria (omitted by the backend once the hackathon has ended) -->
+        <a *ngIf="needsAttention?.round_criteria" [routerLink]="['rounds']" class="attention-item">
           <fa-icon
             [icon]="needsAttention?.round_criteria?.is_complete ? icons.faCircleCheck : icons.faCircleXmark"
             [ngClass]="needsAttention?.round_criteria?.is_complete ? 'attention-icon-check' : 'attention-icon-cross'"
@@ -173,8 +173,8 @@
           <span class="attention-arrow">›</span>
         </a>
 
-        <!-- Tracks / problem statements -->
-        <a [routerLink]="['tracks']" class="attention-item">
+        <!-- Tracks / problem statements (omitted by the backend once the hackathon has started) -->
+        <a *ngIf="needsAttention?.tracks" [routerLink]="['tracks']" class="attention-item">
           <fa-icon
             [icon]="needsAttention?.tracks?.track_count > 0 ? icons.faCircleCheck : icons.faCircleXmark"
             [ngClass]="needsAttention?.tracks?.track_count > 0 ? 'attention-icon-check' : 'attention-icon-cross'"
@@ -218,8 +218,8 @@
           <span class="attention-arrow">›</span>
         </a>
 
-        <!-- Registration -->
-        <a [routerLink]="['basic']" class="attention-item">
+        <!-- Registration (omitted by the backend once the hackathon has started) -->
+        <a *ngIf="needsAttention?.registration" [routerLink]="['basic']" class="attention-item">
           <fa-icon
             [icon]="needsAttention?.registration?.registration_closes_at ? icons.faCircleCheck : icons.faCircleXmark"
             [ngClass]="
@@ -251,8 +251,12 @@
           <span class="attention-arrow">›</span>
         </a>
 
-        <!-- Pending applications -->
-        <a [routerLink]="['applications-dashboard']" class="attention-item">
+        <!-- Pending applications (omitted by the backend once the hackathon has started) -->
+        <a
+          *ngIf="needsAttention?.pending_applications"
+          [routerLink]="['applications-dashboard']"
+          class="attention-item"
+        >
           <fa-icon
             [icon]="hasPendingApplications ? icons.faCircleXmark : icons.faCircleCheck"
             [ngClass]="hasPendingApplications ? 'attention-icon-cross' : 'attention-icon-check'"
@@ -268,8 +272,8 @@
           <span class="attention-arrow">›</span>
         </a>
 
-        <!-- Mentor / judge slots -->
-        <a [routerLink]="['mentor-slots']" class="attention-item">
+        <!-- Mentor / judge slots (omitted by the backend once the hackathon has ended) -->
+        <a *ngIf="needsAttention?.mentor_judge_slots" [routerLink]="['mentor-slots']" class="attention-item">
           <fa-icon
             [icon]="
               needsAttention?.mentor_judge_slots?.not_opened?.total === 0 ? icons.faCircleCheck : icons.faCircleXmark
@@ -296,6 +300,27 @@
           </div>
           <span class="attention-arrow">›</span>
         </a>
+
+        <p
+          *ngIf="
+            !isNeedsAttentionLoading &&
+            !(
+              needsAttention?.judges ||
+              needsAttention?.round_criteria ||
+              needsAttention?.tracks ||
+              needsAttention?.sponsor_logo ||
+              needsAttention?.registration ||
+              needsAttention?.pending_applications ||
+              needsAttention?.mentor_judge_slots
+            )
+          "
+          class="attention-empty"
+        >
+          <span class="attention-empty-icon">
+            <fa-icon [icon]="icons.faCircleCheck"></fa-icon>
+          </span>
+          <span class="attention-empty-text">No attention needed right now.</span>
+        </p>
       </div>
     </div>
 
@@ -574,7 +599,7 @@
     </article>
   </section>
 
-  <!-- Row 4: Live Visitors (+ Setup Progress alongside it while draft / setup incomplete) -->
+  <!-- Row 4: Live Visitors + Top Pages (+ Setup Progress alongside them while draft / setup incomplete) -->
   <section
     class="live-traffic-row"
     [class.with-setup]="setupProgress?.visible || hackathon.status === EHackathonStatus.DRAFT"
@@ -653,15 +678,28 @@
         </div>
       </div>
     </article>
-  </section>
 
-  <!-- Row 5: Top Pages -->
-  <section class="top-pages-row">
+    <!-- Top Pages -->
     <article class="top-list-card">
       <header class="section-header">
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faFileLines" class="heading-icon-pages"></fa-icon> Top Pages
         </h3>
+        <div class="top-pages-window-toggle">
+          <button
+            type="button"
+            [class.active]="topPagesWindow === 'current'"
+            (click)="onTopPagesWindowChange('current')"
+          >
+            Live
+          </button>
+          <button type="button" [class.active]="topPagesWindow === '24h'" (click)="onTopPagesWindowChange('24h')">
+            24h
+          </button>
+          <button type="button" [class.active]="topPagesWindow === '7d'" (click)="onTopPagesWindowChange('7d')">
+            7d
+          </button>
+        </div>
       </header>
       <div class="top-list-header">
         <span>Page Title</span>

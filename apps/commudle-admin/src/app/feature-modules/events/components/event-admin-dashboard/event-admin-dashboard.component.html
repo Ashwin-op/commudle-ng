@@ -168,8 +168,8 @@
           class="section-loader"
         ></app-loading-spinner>
         <ng-container *ngIf="!isNeedsAttentionLoading || needsAttention">
-          <!-- Agenda -->
-          <a [routerLink]="['agenda']" class="attention-item">
+          <!-- Agenda (omitted by the backend once the event has ended) -->
+          <a *ngIf="needsAttention?.agenda" [routerLink]="['agenda']" class="attention-item">
             <fa-icon
               [icon]="needsAttention?.agenda?.status !== 'missing' ? icons.faCircleCheck : icons.faCircleXmark"
               [ngClass]="needsAttention?.agenda?.status !== 'missing' ? 'attention-icon-check' : 'attention-icon-cross'"
@@ -183,8 +183,8 @@
             <span class="attention-arrow">›</span>
           </a>
 
-          <!-- Registration form -->
-          <a [routerLink]="['registrations']" class="attention-item">
+          <!-- Registration form (omitted by the backend once the event has ended) -->
+          <a *ngIf="needsAttention?.registration_form" [routerLink]="['registrations']" class="attention-item">
             <fa-icon
               [icon]="
                 needsAttention?.registration_form?.created && needsAttention?.registration_form?.opened
@@ -212,8 +212,9 @@
             <span class="attention-arrow">›</span>
           </a>
 
-          <!-- Speakers -->
+          <!-- Speakers (omitted by the backend once the event has ended) -->
           <div
+            *ngIf="needsAttention?.speakers"
             class="attention-item com-cursor-pointer"
             [routerLink]="['agenda']"
             (keydown.enter)="onSpeakersRowClick()"
@@ -262,8 +263,8 @@
             <span class="attention-arrow">›</span>
           </div>
 
-          <!-- RSVP emails -->
-          <a [routerLink]="['updates']" class="attention-item">
+          <!-- RSVP emails (omitted by the backend once the event has started) -->
+          <a *ngIf="needsAttention?.rsvp" [routerLink]="['updates']" class="attention-item">
             <fa-icon
               [icon]="
                 needsAttention?.rsvp?.eligible_count > 0 && needsAttention?.rsvp?.not_sent_count === 0
@@ -289,8 +290,8 @@
             <span class="attention-arrow">›</span>
           </a>
 
-          <!-- Entry passes -->
-          <a [routerLink]="['updates']" class="attention-item">
+          <!-- Entry passes (omitted by the backend once the event has ended) -->
+          <a *ngIf="needsAttention?.entry_pass" [routerLink]="['updates']" class="attention-item">
             <fa-icon
               [icon]="
                 needsAttention?.entry_pass?.eligible_count > 0 && needsAttention?.entry_pass?.not_sent_count === 0
@@ -316,8 +317,8 @@
             <span class="attention-arrow">›</span>
           </a>
 
-          <!-- Speaker form -->
-          <a [routerLink]="['registrations']" class="attention-item">
+          <!-- Speaker form (omitted by the backend once the event has started) -->
+          <a *ngIf="needsAttention?.speaker_form" [routerLink]="['registrations']" class="attention-item">
             <fa-icon
               [icon]="needsAttention?.speaker_form?.created ? icons.faCircleCheck : icons.faCircleXmark"
               [ngClass]="needsAttention?.speaker_form?.created ? 'attention-icon-check' : 'attention-icon-cross'"
@@ -333,8 +334,8 @@
             <span class="attention-arrow">›</span>
           </a>
 
-          <!-- Streaming -->
-          <a [routerLink]="['edit']" class="attention-item">
+          <!-- Streaming (omitted by the backend once the event has ended) -->
+          <a *ngIf="needsAttention?.streaming" [routerLink]="['edit']" class="attention-item">
             <fa-icon
               [icon]="needsAttention?.streaming?.status !== 'missing' ? icons.faCircleCheck : icons.faCircleXmark"
               [ngClass]="
@@ -403,7 +404,10 @@
             <span class="snapshot-stat-label" [comTooltip]="'All-time total for this event'" tooltipSize="sm"
               >Speakers</span
             >
-            <span class="snapshot-stat-value">{{ eventSnapshot.speakers_count ?? 0 }}</span>
+            <span class="snapshot-stat-value-row">
+              <span class="snapshot-stat-value">{{ eventSnapshot.speakers?.total ?? 0 }}</span>
+              <span class="snapshot-stat-sub">· {{ eventSnapshot.speakers?.confirmed ?? 0 }} confirmed</span>
+            </span>
           </div>
         </div>
         <div class="snapshot-stat">
@@ -567,6 +571,21 @@
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faFileLines" class="heading-icon-pages"></fa-icon> Top Pages
         </h3>
+        <div class="top-pages-window-toggle">
+          <button
+            type="button"
+            [class.active]="topPagesWindow === 'current'"
+            (click)="onTopPagesWindowChange('current')"
+          >
+            Live
+          </button>
+          <button type="button" [class.active]="topPagesWindow === '24h'" (click)="onTopPagesWindowChange('24h')">
+            24h
+          </button>
+          <button type="button" [class.active]="topPagesWindow === '7d'" (click)="onTopPagesWindowChange('7d')">
+            7d
+          </button>
+        </div>
       </header>
       <div class="top-list-header">
         <span>Page Title</span>

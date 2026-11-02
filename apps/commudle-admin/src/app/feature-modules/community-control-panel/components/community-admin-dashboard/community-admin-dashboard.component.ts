@@ -7,6 +7,7 @@ import { AuthService, SeoService } from '@commudle/shared-services';
 import { DashboardCommunitiesService } from 'apps/commudle-admin/src/app/services/stats/dashboard-communities.service';
 import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
 import {
+  EDashboardTopPagesWindow,
   ICommunityDashboardActivityItem,
   ICommunityDashboardLiveVisitors,
   ICommunityDashboardLiveVisitorsBucket,
@@ -577,10 +578,17 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  topPagesWindow: EDashboardTopPagesWindow = 'current';
+
+  onTopPagesWindowChange(window: EDashboardTopPagesWindow): void {
+    this.topPagesWindow = window;
+    this.loadTopPages();
+  }
+
   loadTopPages(): void {
     this.topPagesLoading = true;
     this.subscriptions.push(
-      this.dashboardCommunitiesService.topPages(this.community.slug, 'current').subscribe({
+      this.dashboardCommunitiesService.topPages(this.community.slug, this.topPagesWindow).subscribe({
         next: (data) => {
           this.topPages = data;
           this.topPagesLoading = false;

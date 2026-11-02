@@ -47,14 +47,18 @@ export interface IEventDashboardSpeaker {
   created_at: string;
 }
 
+// agenda/streaming/speakers/registration_form/entry_pass drop once the event has
+// ended; speaker_form/rsvp drop once the event has started -- the backend omits
+// each entirely once no longer relevant to the event's lifecycle, rather than
+// returning a zeroed/false value. `attendance` is the only field never omitted.
 export interface IEventDashboardNeedsAttention {
-  agenda: { status: string };
-  streaming: { status: string };
-  speakers: IPaginationCount<IEventDashboardSpeaker>;
-  speaker_form: { created: boolean };
-  registration_form: { created: boolean; opened: boolean };
-  rsvp: IEventDashboardEmailBreakdown;
-  entry_pass: IEventDashboardEmailBreakdown;
+  agenda?: { status: string };
+  streaming?: { status: string };
+  speakers?: IPaginationCount<IEventDashboardSpeaker>;
+  speaker_form?: { created: boolean };
+  registration_form?: { created: boolean; opened: boolean };
+  rsvp?: IEventDashboardEmailBreakdown;
+  entry_pass?: IEventDashboardEmailBreakdown;
   attendance: { started: boolean };
 }
 
@@ -65,7 +69,10 @@ export interface IEventDashboardSnapshot {
     confirmed: number;
     today: number;
   };
-  speakers_count: number;
+  speakers: {
+    total: number;
+    confirmed: number;
+  };
   sponsors_count: number;
   team_members_count: number;
 }

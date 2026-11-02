@@ -393,6 +393,19 @@
   .attention-list {
     @apply com-m-0;
 
+    .attention-empty {
+      @apply com-flex com-flex-col com-items-center com-gap-2 com-m-0 com-py-4 com-text-xs com-text-gray-500;
+
+      .attention-empty-icon {
+        @apply com-flex com-items-center com-justify-center com-w-12 com-h-12 com-rounded-full com-bg-green-50 com-text-green-500 com-text-xl com-mb-1;
+        animation: checkPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+
+      .attention-empty-text {
+        @apply com-text-xs com-font-medium com-text-Yankees-Blue;
+      }
+    }
+
     .attention-item {
       @apply com-flex com-items-center com-gap-2 com-p-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
 
@@ -822,20 +835,12 @@
   }
 }
 
-// Row 4: Live Visitors (+ Setup Progress alongside it while draft / setup incomplete)
+// Row 4: Live Visitors + Top Pages (+ Setup Progress alongside them while draft / setup incomplete)
 .live-traffic-row {
-  @apply com-grid com-grid-cols-1 com-gap-4;
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-2 com-gap-4;
 
   &.with-setup {
-    @apply lg:com-grid-cols-4;
-
-    .live-visitors-card {
-      @apply lg:com-col-span-1;
-    }
-
-    .setup-progress-card {
-      @apply lg:com-col-span-3;
-    }
+    @apply lg:com-grid-cols-3;
   }
 
   .setup-progress-card {
@@ -963,7 +968,7 @@
   }
 }
 
-.top-pages-row {
+.live-traffic-row {
   .top-list-card {
     @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
     animation: cardFadeIn 0.4s ease-out both;
@@ -976,6 +981,22 @@
 
   .top-list-header {
     @apply com-flex com-items-center com-justify-between com-pb-1 com-mb-1 com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-text-10px com-font-medium com-text-gray-400 com-uppercase com-tracking-wide;
+  }
+
+  .top-pages-window-toggle {
+    @apply com-flex com-gap-1 com-bg-gray-100 com-rounded-full com-p-1 com-shrink-0;
+
+    button {
+      @apply com-border-0 com-bg-transparent com-text-xs com-font-medium com-text-gray-500 com-px-3 com-py-1.5 com-rounded-full com-cursor-pointer com-transition-colors com-duration-200;
+
+      &:hover {
+        @apply com-text-primary-600;
+      }
+
+      &.active {
+        @apply com-bg-white com-text-primary-600 com-shadow-sm;
+      }
+    }
   }
 
   .top-list {
@@ -1042,4 +1063,16 @@
 
 strong {
   @apply com-font-medium;
+}
+
+@keyframes checkPop {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
