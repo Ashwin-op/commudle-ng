@@ -704,19 +704,8 @@
   .audience-chart {
     @apply com-flex com-flex-row com-items-center com-gap-4 com-w-full;
 
-    .chart-donut {
-      @apply com-w-20 com-h-20 com-shrink-0;
-
-      .chart-donut-track {
-        fill: none;
-        stroke: #e5e7eb;
-        stroke-width: 3.8;
-      }
-
-      .chart-donut-segment {
-        fill: none;
-        stroke-width: 3.8;
-      }
+    .chart-pie-canvas {
+      @apply com-relative com-w-20 com-h-20 com-shrink-0;
     }
 
     .chart-donut-empty {
@@ -861,21 +850,6 @@
 
       .audience-chart {
         @apply com-flex com-flex-row com-items-center com-gap-3;
-      }
-
-      .chart-donut {
-        @apply com-w-24 com-h-24 com-shrink-0;
-
-        .chart-donut-track {
-          fill: none;
-          stroke: #e5e7eb;
-          stroke-width: 3.8;
-        }
-
-        .chart-donut-segment {
-          fill: none;
-          stroke-width: 3.8;
-        }
       }
 
       .chart-pie-canvas {

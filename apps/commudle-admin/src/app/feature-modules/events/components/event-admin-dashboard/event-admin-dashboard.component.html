@@ -561,9 +561,15 @@
         </li>
         <ng-container *ngIf="!topPagesLoading">
           <li *ngFor="let page of topPages" class="top-list-item">
-            <a [href]="page.url" target="_blank" rel="noopener noreferrer" class="top-list-name" [title]="page.url">{{
-              page.page_title
-            }}</a>
+            <a
+              [href]="page.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="top-list-name"
+              [comTooltip]="page.url"
+              tooltipPlacement="top"
+              >{{ page.page_title }}</a
+            >
             <span class="top-list-track">
               <span
                 class="top-list-bar top-list-bar-pages"
@@ -678,19 +684,9 @@
           <div class="post-event-chart">
             <h6 class="audience-col-heading">Experience Level (attended)</h6>
             <div class="audience-chart">
-              <svg *ngIf="postEventSnapshot?.experience_distribution?.length" class="chart-donut" viewBox="0 0 36 36">
-                <circle class="chart-donut-track" cx="18" cy="18" r="15.9155" />
-                <circle
-                  *ngFor="let segment of postEventExperienceSegments"
-                  class="chart-donut-segment"
-                  cx="18"
-                  cy="18"
-                  r="15.9155"
-                  [attr.stroke]="segment.color"
-                  [attr.stroke-dasharray]="segment.dashArray"
-                  [attr.stroke-dashoffset]="segment.dashOffset"
-                />
-              </svg>
+              <div class="chart-pie-canvas">
+                <canvas id="post-event-experience-chart"></canvas>
+              </div>
               <ul class="chart-legend">
                 <li *ngFor="let item of postEventSnapshot?.experience_distribution; let i = index">
                   <span class="legend-dot" [style.--dot-color]="audienceColor(i)"></span>
@@ -741,19 +737,9 @@
         ></app-loading-spinner>
         <div class="audience-content" *ngIf="!isAudienceLoading || audienceSnapshot">
           <div class="audience-chart">
-            <svg *ngIf="audienceSnapshot?.experience_levels?.length" class="chart-donut" viewBox="0 0 36 36">
-              <circle class="chart-donut-track" cx="18" cy="18" r="15.9155" />
-              <circle
-                *ngFor="let segment of experienceSegments"
-                class="chart-donut-segment"
-                cx="18"
-                cy="18"
-                r="15.9155"
-                [attr.stroke]="segment.color"
-                [attr.stroke-dasharray]="segment.dashArray"
-                [attr.stroke-dashoffset]="segment.dashOffset"
-              />
-            </svg>
+            <div class="chart-pie-canvas">
+              <canvas id="audience-experience-chart"></canvas>
+            </div>
             <div
               *ngIf="!isAudienceLoading && !audienceSnapshot?.experience_levels?.length"
               class="chart-donut-empty"

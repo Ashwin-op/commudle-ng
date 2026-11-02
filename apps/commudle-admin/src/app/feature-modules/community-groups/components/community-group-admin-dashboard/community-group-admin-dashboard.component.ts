@@ -707,7 +707,7 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
           responsive: true,
           maintainAspectRatio: false,
           cutoutPercentage: 65,
-          animation: { duration: 800, easing: 'easeOutQuart' },
+          animation: { duration: 4000, easing: 'easeOutQuart' },
           legend: { display: false },
           tooltips: {
             callbacks: {

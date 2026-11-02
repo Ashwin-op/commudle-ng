@@ -557,7 +557,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          animation: { duration: 800, easing: 'easeOutQuart' },
+          animation: { duration: 4000, easing: 'easeOutQuart' },
           responsiveAnimationDuration: 0,
           legend: { display: false },
           scales: {

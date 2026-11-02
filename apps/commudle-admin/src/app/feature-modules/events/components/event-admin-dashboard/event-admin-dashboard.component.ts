@@ -156,6 +156,8 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe());
     this.liveVisitorsChart?.destroy();
+    this.audienceExperienceChart?.destroy();
+    this.postEventExperienceChart?.destroy();
     this.postEventDomainChart?.destroy();
     clearTimeout(this.newActivityBadgeTimer);
   }
@@ -386,6 +388,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
       this.dashboardEventsService.audienceSnapshot(this.event.id, this.companiesPage, this.companiesCount).subscribe({
         next: (data) => {
           this.audienceSnapshot = data;
+          this.renderAudienceExperienceChart(data.experience_levels);
           this.isAudienceLoading = false;
         },
         error: () => {
@@ -406,34 +409,104 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     return this.audiencePalette[index % this.audiencePalette.length];
   }
 
-  /**
-   * Turns a {name, count, percentage} distribution into SVG donut arc segments.
-   * Ring uses r=15.9155 (circumference ~= 100) so percentage maps directly to a
-   * stroke-dasharray length; dashOffset shifts each segment to start where the
-   * previous ended (25 rotates the first segment's start to 12 o'clock).
-   */
-  private buildSegments(
-    items: IDashboardDistributionItem[] | undefined,
-  ): { color: string; dashArray: string; dashOffset: number }[] {
-    let cumulative = 0;
-    return (items || []).map((item: IDashboardDistributionItem, index: number) => {
-      const pct = item.percentage || 0;
-      const segment = {
-        color: this.audienceColor(index),
-        dashArray: `${pct} ${100 - pct}`,
-        dashOffset: 25 - cumulative,
-      };
-      cumulative += pct;
-      return segment;
+  private distributionChartSeries(items: IDashboardDistributionItem[]): {
+    labels: string[];
+    data: number[];
+    colors: string[];
+  } {
+    const labels = items.map((item) =>
+      item.name
+        .split('_')
+        .map((frag) => frag.charAt(0).toUpperCase() + frag.slice(1))
+        .join(' '),
+    );
+    const data = items.map((item) => item.percentage || 0);
+    const colors = items.map((_, index) => this.audienceColor(index));
+    return { labels, data, colors };
+  }
+
+  private audienceExperienceChart: Chart;
+
+  private renderAudienceExperienceChart(items: IDashboardDistributionItem[] | undefined): void {
+    if (!items?.length) {
+      this.audienceExperienceChart?.destroy();
+      this.audienceExperienceChart = undefined;
+      return;
+    }
+    const { labels, data, colors } = this.distributionChartSeries(items);
+
+    if (this.audienceExperienceChart) {
+      this.audienceExperienceChart.data.labels = labels;
+      this.audienceExperienceChart.data.datasets[0].data = data;
+      this.audienceExperienceChart.data.datasets[0].backgroundColor = colors;
+      this.audienceExperienceChart.update({ duration: 0 });
+      return;
+    }
+
+    setTimeout(() => {
+      if (this.audienceExperienceChart || !document.getElementById('audience-experience-chart')) {
+        return;
+      }
+      this.audienceExperienceChart = new Chart('audience-experience-chart', {
+        type: 'doughnut',
+        data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0 }] },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutoutPercentage: 65,
+          animation: { duration: 4000, easing: 'easeOutQuart' },
+          legend: { display: false },
+          tooltips: {
+            callbacks: {
+              label: (tooltipItem, chartData) =>
+                `${chartData.labels[tooltipItem.index]}: ${chartData.datasets[0].data[tooltipItem.index]}%`,
+            },
+          },
+        },
+      });
     });
   }
 
-  get experienceSegments(): { color: string; dashArray: string; dashOffset: number }[] {
-    return this.buildSegments(this.audienceSnapshot?.experience_levels);
-  }
+  private postEventExperienceChart: Chart;
 
-  get postEventExperienceSegments(): { color: string; dashArray: string; dashOffset: number }[] {
-    return this.buildSegments(this.postEventSnapshot?.experience_distribution);
+  private renderPostEventExperienceChart(items: IDashboardDistributionItem[] | undefined): void {
+    if (!items?.length) {
+      this.postEventExperienceChart?.destroy();
+      this.postEventExperienceChart = undefined;
+      return;
+    }
+    const { labels, data, colors } = this.distributionChartSeries(items);
+
+    if (this.postEventExperienceChart) {
+      this.postEventExperienceChart.data.labels = labels;
+      this.postEventExperienceChart.data.datasets[0].data = data;
+      this.postEventExperienceChart.data.datasets[0].backgroundColor = colors;
+      this.postEventExperienceChart.update({ duration: 0 });
+      return;
+    }
+
+    setTimeout(() => {
+      if (this.postEventExperienceChart || !document.getElementById('post-event-experience-chart')) {
+        return;
+      }
+      this.postEventExperienceChart = new Chart('post-event-experience-chart', {
+        type: 'doughnut',
+        data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0 }] },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutoutPercentage: 65,
+          animation: { duration: 4000, easing: 'easeOutQuart' },
+          legend: { display: false },
+          tooltips: {
+            callbacks: {
+              label: (tooltipItem, chartData) =>
+                `${chartData.labels[tooltipItem.index]}: ${chartData.datasets[0].data[tooltipItem.index]}%`,
+            },
+          },
+        },
+      });
+    });
   }
 
   private postEventDomainChart: Chart;
@@ -477,7 +550,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          animation: { duration: 800, easing: 'easeOutQuart' },
+          animation: { duration: 4000, easing: 'easeOutQuart' },
           legend: { display: false },
           tooltips: {
             callbacks: {
@@ -506,6 +579,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
             experience_distribution: data.experience_distribution,
             domain_distribution: data.domain_distribution,
           };
+          this.renderPostEventExperienceChart(data.experience_distribution);
           this.renderPostEventDomainChart(data.domain_distribution);
           this.isPostEventLoading = false;
         },
@@ -600,7 +674,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          animation: { duration: 800, easing: 'easeOutQuart' },
+          animation: { duration: 4000, easing: 'easeOutQuart' },
           responsiveAnimationDuration: 0,
           legend: { display: false },
           scales: {
