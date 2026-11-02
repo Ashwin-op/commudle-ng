@@ -340,6 +340,28 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     return timestamp ? moment(timestamp).fromNow() : '';
   }
 
+  activityFullText(activity: ICommunityDashboardActivityItem): string {
+    const name = activity.user?.name || (activity.type === 'new_member' ? 'A new member' : 'Someone');
+    switch (activity.type) {
+      case 'channel_message':
+        return `${name} posted a message in #${activity.channel}`;
+      case 'forum_message':
+        return `${name} posted in the ${activity.forum} forum`;
+      case 'survey_response_milestone':
+        return `"${activity.survey}" survey reached ${activity.response_count} response${
+          activity.response_count === 1 ? '' : 's'
+        }`;
+      case 'new_member':
+        return `${name} joined the community`;
+      default:
+        return 'New activity';
+    }
+  }
+
+  activityMessageText(activity: ICommunityDashboardActivityItem): string {
+    return (activity.message || '').replace(/<[^>]*>/g, '');
+  }
+
   memberJoinedTime(member: ICommunityDashboardRecentMember): string {
     return member?.joined_at ? moment(member.joined_at).fromNow() : '';
   }

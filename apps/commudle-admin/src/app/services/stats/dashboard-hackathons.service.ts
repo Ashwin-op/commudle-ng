@@ -3,7 +3,9 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { API_ROUTES, BaseApiService } from '@commudle/shared-services';
 import {
+  EDashboardTopPagesWindow,
   IDashboardLiveVisitors,
+  IDashboardTopPage,
   IHackathonDashboardActivityItem,
   IHackathonDashboardNeedsAttention,
   IHackathonDashboardPeopleJudging,
@@ -71,6 +73,14 @@ export class DashboardHackathonsService {
     const params = new HttpParams().set('hackathon_id', hackathonId);
     return this.http.get<IHackathonDashboardSetupProgress>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.HACKATHONS.SETUP_PROGRESS),
+      { params },
+    );
+  }
+
+  topPages(hackathonId, window: EDashboardTopPagesWindow = 'current'): Observable<IDashboardTopPage[]> {
+    const params = new HttpParams().set('hackathon_id', hackathonId).set('window', window);
+    return this.http.get<IDashboardTopPage[]>(
+      this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.HACKATHONS.TOP_PAGES),
       { params },
     );
   }

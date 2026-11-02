@@ -382,6 +382,14 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     return `${count} ${count === 1 ? 'person' : 'people'}`;
   }
 
+  emailDeliveredText(item: IEventDashboardActivityItem): string {
+    const mailType = (item.mail_type || '')
+      .split('_')
+      .map((frag) => frag.charAt(0).toUpperCase() + frag.slice(1))
+      .join(' ');
+    return `${mailType} email delivered to ${this.emailRecipientSummary(item)}`;
+  }
+
   getAudienceSnapshot(): void {
     this.isAudienceLoading = true;
     this.subscriptions.push(

@@ -17,6 +17,7 @@ import {
   ICommunityGroupDashboardEmailTrendChartWeek,
   ICommunityGroupDashboardEngagementSnapshot,
   ICommunityGroupDashboardFootprint,
+  ICommunityGroupDashboardIncompleteProfile,
   ICommunityGroupDashboardNeedsAttention,
   ICommunityGroupDashboardPulse,
   IDashboardDistributionItem,
@@ -788,6 +789,18 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   /** Community logo thumbnail for the activity row's avatar, when the API sends one. */
   activityLogo(item: ICommunityGroupDashboardActivityItem): string | null {
     return item?.community_logo || null;
+  }
+
+  missingFieldsTooltip(profile: ICommunityGroupDashboardIncompleteProfile): string {
+    const fields = (profile.missing_fields || [])
+      .map((field) =>
+        field
+          .split('_')
+          .map((frag) => frag.charAt(0).toUpperCase() + frag.slice(1))
+          .join(' '),
+      )
+      .join(', ');
+    return `Missing ${fields}`;
   }
 
   /** Builds a human-readable sentence for each day-bucketed activity type. */

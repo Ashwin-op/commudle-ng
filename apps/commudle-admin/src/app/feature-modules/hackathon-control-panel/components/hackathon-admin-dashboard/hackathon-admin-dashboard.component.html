@@ -133,7 +133,7 @@
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Judges &amp; Mentors</span>
-            <span class="attention-sub">
+            <span class="attention-sub" [comTooltip]="judgesAttentionTooltip()" tooltipSize="sm">
               {{ needsAttention?.judges?.judges_count | number }} judges ·
               {{ needsAttention?.judges?.mentors_count | number }} mentors ·
               {{ needsAttention?.judges?.teams_assigned_count | number }} teams assigned
@@ -156,7 +156,7 @@
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Round Criteria</span>
-            <span class="attention-sub">
+            <span class="attention-sub" [comTooltip]="roundCriteriaTooltip()" tooltipSize="sm">
               <ng-container *ngIf="needsAttention?.round_criteria?.is_complete; else roundCriteriaIncomplete">
                 {{ needsAttention?.round_criteria?.round_name || 'Current round' }} · Completed
               </ng-container>
@@ -181,7 +181,7 @@
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Tracks &amp; Problem Statements</span>
-            <span class="attention-sub">
+            <span class="attention-sub" [comTooltip]="tracksAttentionTooltip()" tooltipSize="sm">
               {{
                 needsAttention?.tracks?.track_count > 0
                   ? (needsAttention.tracks.track_count | number) +
@@ -205,7 +205,7 @@
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Sponsor Logos</span>
-            <span class="attention-sub">
+            <span class="attention-sub" [comTooltip]="sponsorLogoTooltip()" tooltipSize="sm">
               <ng-container *ngIf="needsAttention.sponsor_logo.missing_count === 0; else sponsorLogoMissing">
                 All {{ needsAttention.sponsor_logo.total_count | number }} sponsors have logos
               </ng-container>
@@ -228,7 +228,7 @@
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Registration</span>
-            <span class="attention-sub">
+            <span class="attention-sub" [comTooltip]="registrationAttentionTooltip()" tooltipSize="sm">
               <ng-container *ngIf="needsAttention?.registration?.registration_closes_at; else registrationNotSet">
                 <ng-container *ngIf="needsAttention.registration.days_remaining > 0">
                   Closes on {{ moment(needsAttention.registration.registration_closes_at).format('D MMM, YYYY') }} ·
@@ -259,7 +259,7 @@
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Pending Applications</span>
-            <span class="attention-sub">
+            <span class="attention-sub" [comTooltip]="pendingApplicationsTooltip()" tooltipSize="sm">
               {{ needsAttention?.pending_applications?.awaiting_acceptance_count | number }} awaiting acceptance ·
               {{ needsAttention?.pending_applications?.incomplete_leader_application_count | number }} leader
               applications incomplete
@@ -282,7 +282,7 @@
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Mentor &amp; Judge Slots</span>
-            <span class="attention-sub">
+            <span class="attention-sub" [comTooltip]="mentorJudgeSlotsTooltip()" tooltipSize="sm">
               {{ needsAttention?.mentor_judge_slots?.opened?.total | number }} opened ·
               {{ needsAttention?.mentor_judge_slots?.not_opened?.total | number }} not opened
               <ng-container *ngIf="needsAttention?.mentor_judge_slots?.not_opened?.total > 0">
@@ -387,7 +387,11 @@
             <fa-icon [icon]="activityIcon(item.type)"></fa-icon>
           </span>
           <p class="activity-content">
-            <span class="activity-text" [title]="activityActorName(item) + ' ' + activityLabel(item.type)">
+            <span
+              class="activity-text"
+              [comTooltip]="activityActorName(item) + ' ' + activityLabel(item.type)"
+              tooltipSize="sm"
+            >
               <ng-container *ngIf="activityActorName(item)">
                 <ng-container *ngIf="activityActorUser(item) as actorUser; else plainActorName">
                   <a
@@ -414,7 +418,13 @@
                 >{{ activityLabel(item.type) }}
               </ng-container>
             </span>
-            <span class="activity-sub" *ngIf="activitySubtext(item)">{{ activitySubtext(item) }}</span>
+            <span
+              class="activity-sub"
+              *ngIf="activitySubtext(item)"
+              [comTooltip]="activitySubtext(item)"
+              tooltipSize="sm"
+              >{{ activitySubtext(item) }}</span
+            >
           </p>
           <time class="activity-time">{{ activityTime(item) }}</time>
         </li>
@@ -450,9 +460,9 @@
         class="section-loader"
       ></app-loading-spinner>
       <ng-container *ngIf="!isStageProgressLoading || stageProgress">
-        <div class="progress-cards" *ngIf="stageProgress?.stages?.length; else progressEmpty">
-          <ng-container *ngFor="let stage of stageProgress?.stages; let last = last">
-            <div class="progress-card" [ngClass]="{ active: stage.status === EHackathonDashboardStageStatus.ONGOING }">
+        <div class="progress-cards" #progressCardsRow *ngIf="stageProgress?.stages?.length; else progressEmpty">
+          <ng-container *ngFor="let stage of stageProgress?.stages; let last = last; let i = index">
+            <div class="progress-card" [ngClass]="{ active: isFocusStage(i) }">
               <span class="progress-card-label">{{ stage.name || (stage.type | titlecase) }}</span>
               <span class="progress-card-value">{{ stageMetric(stage) }}</span>
               <span class="progress-card-status" [ngClass]="stageStatusClass(stage.status)">{{
@@ -552,7 +562,7 @@
         </a>
         <a class="action-card" [routerLink]="['entry-pass-scan']">
           <fa-icon [icon]="icons.faChartPie" class="action-icon"></fa-icon>
-          <span class="action-label">Entry Scanner</span>
+          <span class="action-label">Entry Pass Scanner</span>
         </a>
       </div>
     </article>

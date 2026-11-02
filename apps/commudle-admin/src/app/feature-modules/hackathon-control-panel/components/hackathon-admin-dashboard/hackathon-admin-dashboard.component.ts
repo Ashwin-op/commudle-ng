@@ -1,12 +1,14 @@
-import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chart } from 'chart.js';
 import {
   IHackathon,
   ICommunity,
   EHackathonStatus,
+  EDashboardTopPagesWindow,
   IDashboardLiveVisitors,
   IDashboardLiveVisitorsBucket,
+  IDashboardTopPage,
   IHackathonDashboardActivityActor,
   IHackathonDashboardActivityItem,
   IHackathonDashboardNeedsAttention,
@@ -84,6 +86,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
   // Stage Progress -- GET /api/v2/dashboards/hackathons/stage_progress
   stageProgress: IHackathonDashboardStageProgress;
   isStageProgressLoading = false;
+  @ViewChild('progressCardsRow') progressCardsRow: ElementRef<HTMLElement>;
 
   // Needs Attention -- GET /api/v2/dashboards/hackathons/needs_attention
   needsAttention: IHackathonDashboardNeedsAttention;
@@ -222,12 +225,36 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
             overall_progress_percent: data.overall_progress_percent,
           };
           this.isStageProgressLoading = false;
+          this.scrollToFocusStage();
         },
         error: () => {
           this.isStageProgressLoading = false;
         },
       }),
     );
+  }
+
+  // Index of the ongoing stage, or the first stage as a fallback once every
+  // stage is completed (or before any have started), so there's always a
+  // "current" card to scroll to and highlight.
+  focusStageIndex(): number {
+    const stages = this.stageProgress?.stages || [];
+    const ongoingIndex = stages.findIndex((stage) => stage.status === EHackathonDashboardStageStatus.ONGOING);
+    return ongoingIndex >= 0 ? ongoingIndex : 0;
+  }
+
+  isFocusStage(index: number): boolean {
+    return index === this.focusStageIndex();
+  }
+
+  private scrollToFocusStage(): void {
+    setTimeout(() => {
+      const row = this.progressCardsRow?.nativeElement;
+      // `.progress-arrow` separators sit between cards as siblings, so index
+      // into the `.progress-card` elements specifically, not raw children.
+      const cards = row?.querySelectorAll<HTMLElement>('.progress-card');
+      cards?.[this.focusStageIndex()]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    });
   }
 
   getNeedsAttention(): void {
@@ -371,6 +398,97 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
       default:
         return type;
     }
+  }
+
+  judgesAttentionTooltip(): string {
+    const j = this.needsAttention?.judges;
+    if (!j) {
+      return '';
+    }
+    let text = `${j.judges_count ?? 0} judges · ${j.mentors_count ?? 0} mentors · ${
+      j.teams_assigned_count ?? 0
+    } teams assigned`;
+    if (j.without_team?.total > 0) {
+      const names = (j.without_team.values || []).map((p) => p.name).join(', ');
+      text += ` · ${j.without_team.total} without a team: ${names}`;
+    }
+    return text;
+  }
+
+  roundCriteriaTooltip(): string {
+    const rc = this.needsAttention?.round_criteria;
+    if (!rc) {
+      return '';
+    }
+    const roundName = rc.round_name || 'Current round';
+    if (rc.is_complete) {
+      return `${roundName} · Completed`;
+    }
+    const missing = (rc.missing_fields || [])
+      .map((field) =>
+        field
+          .split('_')
+          .map((frag) => frag.charAt(0).toUpperCase() + frag.slice(1))
+          .join(' '),
+      )
+      .join(', ');
+    return `${roundName} · ${rc.missing_fields?.length ?? 0} missing: ${missing}`;
+  }
+
+  tracksAttentionTooltip(): string {
+    const t = this.needsAttention?.tracks;
+    if (!t) {
+      return '';
+    }
+    return t.track_count > 0
+      ? `${t.track_count} tracks · ${t.problem_statement_count} problem statements`
+      : 'Define tracks for participants';
+  }
+
+  sponsorLogoTooltip(): string {
+    const s = this.needsAttention?.sponsor_logo;
+    if (!s) {
+      return '';
+    }
+    return s.missing_count === 0
+      ? `All ${s.total_count} sponsors have logos`
+      : `${s.missing_count} of ${s.total_count} sponsors missing a logo`;
+  }
+
+  registrationAttentionTooltip(): string {
+    const r = this.needsAttention?.registration;
+    if (!r?.registration_closes_at) {
+      return 'Configure registration settings';
+    }
+    const dateStr = moment(r.registration_closes_at).format('D MMM, YYYY');
+    if (r.days_remaining > 0) {
+      return `Closes on ${dateStr} · ${r.days_remaining} day${r.days_remaining === 1 ? '' : 's'} left`;
+    }
+    const daysAgo = -r.days_remaining;
+    return `Closed on ${dateStr} · ${daysAgo} day${daysAgo === 1 ? '' : 's'} ago`;
+  }
+
+  pendingApplicationsTooltip(): string {
+    const p = this.needsAttention?.pending_applications;
+    if (!p) {
+      return '';
+    }
+    return `${p.awaiting_acceptance_count ?? 0} awaiting acceptance · ${
+      p.incomplete_leader_application_count ?? 0
+    } leader applications incomplete`;
+  }
+
+  mentorJudgeSlotsTooltip(): string {
+    const m = this.needsAttention?.mentor_judge_slots;
+    if (!m) {
+      return '';
+    }
+    let text = `${m.opened?.total ?? 0} opened · ${m.not_opened?.total ?? 0} not opened`;
+    if (m.not_opened?.total > 0) {
+      const names = (m.not_opened.values || []).map((p) => p.name).join(', ');
+      text += `: ${names}`;
+    }
+    return text;
   }
 
   /** Secondary line below the main activity text, showing contextual details. */

@@ -10,7 +10,7 @@ import {
   NbTagModule,
   NbToggleModule,
 } from '@commudle/theme';
-import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-theme';
+import { CommudleButtonModule, CommudleCardModule, CommudleTooltipModule } from '@commudle/commudle-theme';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CommunityGroupsRoutingModule } from './community-groups-routing.module';
@@ -88,6 +88,7 @@ import { CommunityGroupAdminDashboardComponent } from './components/community-gr
     // Commudle Theme
     CommudleCardModule,
     CommudleButtonModule,
+    CommudleTooltipModule,
   ],
   providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }],
 })

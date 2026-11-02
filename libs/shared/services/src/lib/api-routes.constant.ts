@@ -786,6 +786,7 @@ export const API_ROUTES = {
       LIVE_VISITORS: 'api/v2/dashboards/hackathons/live_visitors', //GET
       PEOPLE_JUDGING: 'api/v2/dashboards/hackathons/people_judging', //GET
       SETUP_PROGRESS: 'api/v2/dashboards/hackathons/setup_progress', //GET
+      TOP_PAGES: 'api/v2/dashboards/hackathons/top_pages', //GET
     },
     COMMUNITY_GROUPS: {
       PULSE: 'api/v2/dashboards/community_groups/pulse', //GET

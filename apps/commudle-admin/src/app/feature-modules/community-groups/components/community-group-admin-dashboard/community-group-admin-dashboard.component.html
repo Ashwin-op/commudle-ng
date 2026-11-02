@@ -129,7 +129,7 @@
           <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
           <div class="attention-content">
             <span class="attention-title">{{ profile.community_name }}</span>
-            <span class="attention-sub">
+            <span class="attention-sub" [comTooltip]="missingFieldsTooltip(profile)" tooltipSize="sm">
               Missing
               <ng-container *ngFor="let field of profile.missing_fields; let last = last"
                 >{{ field | capitalizeAndRemoveUnderscore }}<span *ngIf="!last">,&nbsp;</span></ng-container
@@ -154,7 +154,16 @@
           <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Organization</span>
-            <span class="attention-sub">
+            <span
+              class="attention-sub"
+              [comTooltip]="
+                needsAttention.pending_admin_invitations.count +
+                ' admin invitation' +
+                (needsAttention.pending_admin_invitations.count === 1 ? '' : 's') +
+                ' pending'
+              "
+              tooltipSize="sm"
+            >
               {{ needsAttention.pending_admin_invitations.count | number }} admin invitation{{
                 needsAttention.pending_admin_invitations.count === 1 ? '' : 's'
               }}
@@ -172,7 +181,9 @@
           <fa-icon [icon]="icons.faCircleXmark" class="attention-icon-cross"></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Survey needs attention</span>
-            <span class="attention-sub">Response threshold reached</span>
+            <span class="attention-sub" [comTooltip]="'Response threshold reached'" tooltipSize="sm"
+              >Response threshold reached</span
+            >
           </div>
           <span class="attention-arrow">›</span>
         </a>
@@ -320,7 +331,12 @@
           </span>
           <p class="activity-content">
             <ng-container [ngSwitch]="item.type">
-              <span class="activity-text" *ngSwitchCase="'new_members'">
+              <span
+                class="activity-text"
+                *ngSwitchCase="'new_members'"
+                [comTooltip]="activityLabel(item)"
+                tooltipSize="sm"
+              >
                 {{ item.count || 0 }} new member{{ item.count === 1 ? '' : 's' }} joined
                 <ng-container *ngIf="item.community_name">
                   <a
@@ -333,7 +349,12 @@
                   <ng-template #plainNewMembersCommunity>{{ item.community_name }}</ng-template>
                 </ng-container>
               </span>
-              <span class="activity-text" *ngSwitchCase="'event_published'">
+              <span
+                class="activity-text"
+                *ngSwitchCase="'event_published'"
+                [comTooltip]="activityLabel(item)"
+                tooltipSize="sm"
+              >
                 <a
                   *ngIf="activityItemLink(item) as link; else plainEventName"
                   [routerLink]="link"
@@ -355,7 +376,12 @@
                   <ng-template #plainEventCommunity>{{ item.community_name }}</ng-template>
                 </ng-container>
               </span>
-              <span class="activity-text" *ngSwitchCase="'hackathon_activity'">
+              <span
+                class="activity-text"
+                *ngSwitchCase="'hackathon_activity'"
+                [comTooltip]="activityLabel(item)"
+                tooltipSize="sm"
+              >
                 {{ item.count || 0 }} update{{ item.count === 1 ? '' : 's' }} in
                 <a
                   *ngIf="activityItemLink(item) as link; else plainHackathonName"
@@ -370,7 +396,12 @@
                 >
                 <ng-template #plainHackathonName>{{ item.hackathon_name || 'a hackathon' }}</ng-template>
               </span>
-              <span class="activity-text" *ngSwitchCase="'survey_responses'">
+              <span
+                class="activity-text"
+                *ngSwitchCase="'survey_responses'"
+                [comTooltip]="activityLabel(item)"
+                tooltipSize="sm"
+              >
                 {{ item.response_count || 0 }} response{{ item.response_count === 1 ? '' : 's' }} on
                 <a
                   *ngIf="activityItemLink(item) as link; else plainSurveyName"
@@ -381,7 +412,9 @@
                 >
                 <ng-template #plainSurveyName>{{ item.survey_name || 'a survey' }}</ng-template>
               </span>
-              <span class="activity-text" *ngSwitchDefault>{{ activityLabel(item) }}</span>
+              <span class="activity-text" *ngSwitchDefault [comTooltip]="activityLabel(item)" tooltipSize="sm">{{
+                activityLabel(item)
+              }}</span>
             </ng-container>
           </p>
           <time class="activity-time">{{ activityTime(item) }}</time>

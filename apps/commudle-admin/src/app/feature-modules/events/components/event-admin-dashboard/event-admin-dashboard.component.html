@@ -230,7 +230,8 @@
               <span
                 class="attention-sub speaker-names"
                 *ngIf="needsAttention?.speakers?.total > 0"
-                [title]="speakerNames"
+                [comTooltip]="speakerNames"
+                tooltipSize="sm"
               >
                 <ng-container *ngFor="let speaker of needsAttention.speakers.values; let last = last">
                   <a
@@ -439,7 +440,7 @@
           </span>
           <p class="activity-content">
             <ng-container *ngIf="item.type === 'email_delivered'; else defaultActivity">
-              <span class="activity-text">
+              <span class="activity-text" [comTooltip]="emailDeliveredText(item)" tooltipSize="sm">
                 <strong>{{ item.mail_type | capitalizeAndRemoveUnderscore }}</strong> email delivered to
                 <ng-container *ngIf="item.recipients?.length && item.recipients.length <= 2; else recipientCount">
                   <ng-container *ngFor="let recipient of item.recipients; let first = first">
@@ -466,10 +467,14 @@
                   ><strong>{{ emailRecipientSummary(item) }}</strong></ng-template
                 >
               </span>
-              <span class="activity-sub" [title]="item.subject">{{ item.subject }}</span>
+              <span class="activity-sub" [comTooltip]="item.subject" tooltipSize="sm">{{ item.subject }}</span>
             </ng-container>
             <ng-template #defaultActivity>
-              <span class="activity-text" [title]="activityActorName(item) + ' ' + activityLabel(item.type)">
+              <span
+                class="activity-text"
+                [comTooltip]="activityActorName(item) + ' ' + activityLabel(item.type)"
+                tooltipSize="sm"
+              >
                 <ng-container *ngIf="activityActorName(item)">
                   <a
                     *ngIf="activityActorLink(item) as actorLink; else plainActorName"
@@ -567,6 +572,7 @@
               rel="noopener noreferrer"
               class="top-list-name"
               [comTooltip]="page.url"
+              tooltipSize="sm"
               tooltipPlacement="top"
               >{{ page.page_title }}</a
             >

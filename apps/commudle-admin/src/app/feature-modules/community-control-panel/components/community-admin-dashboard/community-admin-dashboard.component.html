@@ -453,7 +453,7 @@
                 ></fa-icon>
               </span>
               <p class="activity-content">
-                <span class="activity-text">
+                <span class="activity-text" [comTooltip]="activityFullText(activity)" tooltipSize="sm">
                   <ng-container [ngSwitch]="activity.type">
                     <ng-container *ngSwitchCase="'channel_message'"
                       ><a
@@ -518,6 +518,8 @@
                   *ngIf="(activity.type === 'channel_message' || activity.type === 'forum_message') && activity.message"
                   class="activity-sub"
                   [innerHTML]="activity.message | stripHtmlExceptLinks"
+                  [comTooltip]="activityMessageText(activity)"
+                  tooltipSize="sm"
                 ></span>
               </p>
               <p class="activity-time">{{ activityTime(activity) }}</p>
@@ -736,6 +738,7 @@
               rel="noopener noreferrer"
               class="top-list-name"
               [comTooltip]="page.url"
+              tooltipSize="sm"
               tooltipPlacement="top"
               >{{ page.page_title }}</a
             >
