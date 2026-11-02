@@ -39,6 +39,7 @@ import {
   faEye,
   faFileLines,
   faLocationDot,
+  faCircleInfo,
 } from '@fortawesome/free-solid-svg-icons';
 import * as moment from 'moment';
 
@@ -116,6 +117,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     faEye,
     faFileLines,
     faLocationDot,
+    faCircleInfo,
   };
 
   quickActions = [];

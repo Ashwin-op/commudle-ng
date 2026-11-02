@@ -46,6 +46,11 @@
     @apply com-bg-blue-50 com-text-blue-500;
   }
 
+  .section-info-icon {
+    @apply com-w-auto com-h-auto com-rounded-none com-bg-transparent com-text-[11px] com-text-gray-300 com-cursor-help;
+    animation: none;
+  }
+
   .activity-new-badge {
     @apply com-bg-primary-500 com-text-tWhite com-text-[10px] com-font-semibold com-px-1.5 com-py-0.5 com-rounded-full;
     animation: badgePop 2.4s ease-in-out forwards;

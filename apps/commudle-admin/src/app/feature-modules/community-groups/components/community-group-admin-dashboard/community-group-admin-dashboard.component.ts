@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SeoService } from '@commudle/shared-services';
+import { NbDialogService } from '@commudle/theme';
 import { DashboardCommunityGroupsService } from 'apps/commudle-admin/src/app/services/stats/dashboard-community-groups.service';
 import {
   ICommunityGroup,
@@ -44,6 +45,8 @@ import {
   faScroll,
   faCircleXmark,
   faCircleCheck,
+  faCircleInfo,
+  faExpand,
   faUserPlus,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
@@ -80,6 +83,8 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     faScroll,
     faCircleXmark,
     faCircleCheck,
+    faCircleInfo,
+    faExpand,
     faUserPlus,
   };
 
@@ -124,6 +129,10 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   // Email & Communication -- GET .../email_communication
   emailCommunication: ICommunityGroupDashboardEmailCommunication;
   isEmailLoading = false;
+  // Computed once per load rather than as a template-bound getter, so it isn't
+  // recomputed (and its *ngFor items re-identified/re-animated) on every
+  // unrelated change-detection tick elsewhere on this dashboard.
+  emailTrendChart: ICommunityGroupDashboardEmailTrendChart | null = null;
 
   // Latest Channel Activity -- GET .../latest_channel_activity (paginated)
   latestChannelActivity: ICommunityGroupDashboardChannelActivityItem[] = [];
@@ -157,6 +166,7 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     private router: Router,
     private seoService: SeoService,
     private dashboardCommunityGroupsService: DashboardCommunityGroupsService,
+    private dialogService: NbDialogService,
   ) {}
 
   ngOnInit(): void {
@@ -337,8 +347,8 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     google.charts.setOnLoadCallback(this.drawFootprintMap.bind(this));
   }
 
-  drawFootprintMap(): void {
-    const container = document.getElementById('footprint_map');
+  drawFootprintMap(containerId = 'footprint_map'): void {
+    const container = document.getElementById(containerId);
     if (!container || !this.footprint?.top_locations?.values?.length) {
       return;
     }
@@ -364,6 +374,13 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
 
     const chart = new google.visualization.GeoChart(container);
     chart.draw(data, options);
+  }
+
+  openMapDialog(templateRef): void {
+    this.dialogService.open(templateRef);
+    // The larger map container only exists once the dialog's template renders;
+    // defer so Google Charts has a real element to draw into.
+    setTimeout(() => this.drawFootprintMap('footprint_map_large'));
   }
 
   loadAudienceDemographics(): void {
@@ -419,6 +436,7 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
       this.dashboardCommunityGroupsService.emailCommunication(this.communityGroup.id).subscribe({
         next: (data) => {
           this.emailCommunication = data;
+          this.emailTrendChart = this.computeEmailTrendChart();
           this.isEmailLoading = false;
         },
         error: () => {
@@ -518,7 +536,7 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
    * their actual trend. A log axis (powers of ten, sized to the data's own max order of magnitude)
    * keeps all three bars readable off ONE real count axis instead of indexing each to its own peak.
    */
-  get emailTrendChart(): ICommunityGroupDashboardEmailTrendChart | null {
+  private computeEmailTrendChart(): ICommunityGroupDashboardEmailTrendChart | null {
     const trends = this.emailCommunication?.trends;
     if (!trends) {
       return null;
@@ -620,6 +638,15 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     return `${Math.round(value)}`;
   }
 
+  emailBarTooltip(
+    week: ICommunityGroupDashboardEmailTrendChartWeek,
+    series: ICommunityGroupDashboardEmailTrendChartSeries | undefined,
+    bar: ICommunityGroupDashboardEmailTrendChartBar,
+  ): string {
+    const label = series?.label || 'Value';
+    return `${week.label} — ${label}: ${bar.value.toLocaleString('en-US')}`;
+  }
+
   loadEngagementSnapshot(): void {
     this.isEngagementLoading = true;
     this.subscriptions.push(
@@ -668,20 +695,31 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   }
 
   private genderChart: Chart;
+  private genderChartItems: IDashboardDistributionItem[] = [];
 
   private renderGenderChart(items: IDashboardDistributionItem[] | undefined): void {
     if (!items?.length) {
       this.genderChart?.destroy();
       this.genderChart = undefined;
+      this.genderChartItems = [];
       return;
     }
+    this.genderChartItems = items;
     const labels = items.map((item) =>
       item.name
         .split('_')
         .map((frag) => frag.charAt(0).toUpperCase() + frag.slice(1))
         .join(' '),
     );
-    const data = items.map((item) => item.percentage || 0);
+    // Chart.js sizes each slice purely by its share of the total, so a real but
+    // tiny category (e.g. "Prefer not to answer" at 0.17%) renders as an
+    // invisible sliver. Clamp the *visual* value only -- the tooltip below still
+    // reports the true percentage from `items`, not this clamped number.
+    const MIN_VISIBLE_SHARE = 2;
+    const data = items.map((item) => {
+      const pct = item.percentage || 0;
+      return pct > 0 && pct < MIN_VISIBLE_SHARE ? MIN_VISIBLE_SHARE : pct;
+    });
     const colors = items.map((_, index) => this.paletteColor(index));
 
     if (this.genderChart) {
@@ -713,7 +751,7 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
           tooltips: {
             callbacks: {
               label: (tooltipItem, chartData) =>
-                `${chartData.labels[tooltipItem.index]}: ${chartData.datasets[0].data[tooltipItem.index]}%`,
+                `${chartData.labels[tooltipItem.index]}: ${this.genderChartItems[tooltipItem.index]?.percentage ?? 0}%`,
             },
           },
         },

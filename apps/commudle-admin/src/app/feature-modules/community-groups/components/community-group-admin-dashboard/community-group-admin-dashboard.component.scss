@@ -54,6 +54,16 @@
   }
 }
 
+@keyframes emailBarGrow {
+  from {
+    transform: scaleY(0);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
+}
+
 @keyframes badgePop {
   0% {
     opacity: 0;
@@ -82,6 +92,15 @@
 
 .section-header {
   @apply com-flex com-items-center com-justify-between com-mb-1.5 com-m-0;
+}
+
+.view-all-link {
+  @apply com-text-xs com-font-medium com-text-primary-500 com-no-underline com-flex-shrink-0 com-transition-transform com-duration-200 com-inline-block;
+
+  &:hover {
+    @apply com-text-primary-700;
+    transform: translateX(2px);
+  }
 }
 
 // Row 1: Organization Hero
@@ -171,7 +190,11 @@
         @apply com-flex com-flex-col com-min-w-0;
 
         .pulse-label {
-          @apply com-text-xs com-text-Cadet-Grey com-leading-tight;
+          @apply com-text-xs com-text-Cadet-Grey com-leading-tight com-inline-flex com-items-center com-gap-1;
+
+          .pulse-info-icon {
+            @apply com-text-[10px] com-text-gray-300 com-cursor-help;
+          }
         }
 
         .pulse-value-row {
@@ -220,7 +243,7 @@
   }
 
   .attention-list {
-    @apply com-m-0;
+    @apply com-m-0 com-max-h-[338px] com-overflow-y-auto;
 
     .attention-item {
       @apply com-flex com-items-center com-gap-2 com-p-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
@@ -335,6 +358,29 @@
 
       .timeline-empty-text {
         @apply com-text-xs com-font-medium com-text-Yankees-Blue;
+      }
+
+      .timeline-empty-actions {
+        @apply com-flex com-flex-wrap com-justify-center com-gap-1.5 com-mt-1;
+
+        .dashboard-cta-btn {
+          @apply com-relative com-overflow-hidden;
+
+          // Frosted glass
+          backdrop-filter: blur(16px) saturate(180%);
+          -webkit-backdrop-filter: blur(16px) saturate(180%);
+          background: linear-gradient(135deg, rgba(51, 102, 255, 0.85) 0%, rgba(51, 102, 255, 0.55) 100%) !important;
+          border: 1px solid rgba(255, 255, 255, 0.4) !important;
+
+          &:hover {
+            background: linear-gradient(135deg, rgba(51, 102, 255, 0.95) 0%, rgba(51, 102, 255, 0.65) 100%) !important;
+            border-color: rgba(255, 255, 255, 0.55) !important;
+          }
+
+          fa-icon {
+            @apply com-text-[10px];
+          }
+        }
       }
     }
   }
@@ -451,8 +497,20 @@
       }
     }
 
+    .footprint-map-heading-row {
+      @apply com-flex com-items-center com-justify-between com-mt-6 com-mb-1.5;
+    }
+
     .footprint-map-heading {
-      @apply com-m-0 com-mt-6 com-mb-1.5 com-text-xs com-font-medium com-text-Yankees-Blue;
+      @apply com-m-0 com-text-xs com-font-medium com-text-Yankees-Blue;
+    }
+
+    .footprint-map-expand {
+      @apply com-flex com-items-center com-justify-center com-w-6 com-h-6 com-rounded-md com-border-0 com-bg-gray-100 com-text-gray-500 com-text-xs com-cursor-pointer com-transition-colors com-duration-200;
+
+      &:hover {
+        @apply com-bg-blue-50 com-text-primary-500;
+      }
     }
 
     .footprint-map {
@@ -460,6 +518,15 @@
 
       #footprint_map {
         @apply com-w-full com-h-48;
+      }
+
+      &.footprint-map-large {
+        @apply com-p-0 com-border-none;
+
+        #footprint_map_large {
+          @apply com-w-full;
+          height: 65vh;
+        }
       }
     }
 
@@ -594,10 +661,17 @@
 
         .email-chart-bar {
           stroke: none;
+          cursor: pointer;
+          transform-box: fill-box;
+          transform-origin: bottom;
+          animation: emailBarGrow 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
 
         .email-chart-bar-pattern {
           pointer-events: none;
+          transform-box: fill-box;
+          transform-origin: bottom;
+          animation: emailBarGrow 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
 
         .bar-sent {
@@ -888,4 +962,12 @@
 
 strong {
   @apply com-font-medium;
+}
+
+.map-dialog {
+  @apply com-w-[90vw] com-max-w-4xl com-m-0;
+
+  .map-dialog-header {
+    @apply com-flex com-justify-between com-items-center;
+  }
 }

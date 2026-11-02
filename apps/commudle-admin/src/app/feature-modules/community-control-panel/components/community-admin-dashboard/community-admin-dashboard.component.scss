@@ -27,6 +27,11 @@
     @apply com-bg-blue-50 com-text-primary-500;
   }
 
+  .section-info-icon {
+    @apply com-w-auto com-h-auto com-rounded-none com-bg-transparent com-text-[11px] com-text-gray-300 com-cursor-help;
+    animation: none;
+  }
+
   .heading-icon-activity {
     @apply com-bg-yellow-50 com-text-yellow-600;
   }

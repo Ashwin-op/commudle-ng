@@ -554,7 +554,12 @@
         <li class="snapshot-card">
           <header class="snapshot-card-header">
             <fa-icon [icon]="icons.faUsers" class="snapshot-icon members-icon"></fa-icon>
-            <span class="snapshot-label">Members</span>
+            <span
+              class="snapshot-label"
+              [comTooltip]="'All-time total; the delta below is new members this week'"
+              tooltipSize="sm"
+              >Members</span
+            >
           </header>
           <span class="snapshot-value-row">
             <span class="snapshot-value">{{
@@ -695,7 +700,11 @@
       <div class="live-visitors-body">
         <div class="live-visitors-counts">
           <div class="live-count">
-            <span class="live-count-label">
+            <span
+              class="live-count-label"
+              [comTooltip]="'Sessions still open that started within the last hour'"
+              tooltipSize="sm"
+            >
               <span class="live-dot"></span>
               Live now
             </span>
@@ -720,6 +729,14 @@
       <header class="section-header">
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faFileLines" class="heading-icon-pages"></fa-icon> Top Pages
+          <fa-icon
+            [icon]="icons.faCircleInfo"
+            class="section-info-icon"
+            [comTooltip]="
+              'Live traffic: pages viewed by sessions still open from the last hour, not an all-time ranking.'
+            "
+            tooltipSize="sm"
+          ></fa-icon>
         </h3>
       </header>
       <div class="top-list-header">
@@ -765,6 +782,12 @@
       <header class="section-header">
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faLocationDot" class="heading-icon-cities"></fa-icon> Top Cities
+          <fa-icon
+            [icon]="icons.faCircleInfo"
+            class="section-info-icon"
+            [comTooltip]="'All-time member count by city, not limited to a recent period.'"
+            tooltipSize="sm"
+          ></fa-icon>
         </h3>
       </header>
       <div class="top-list-header">

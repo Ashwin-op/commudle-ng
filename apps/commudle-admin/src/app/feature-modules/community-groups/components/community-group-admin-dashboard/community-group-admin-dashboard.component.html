@@ -86,7 +86,15 @@
       <li class="pulse-stat">
         <span class="pulse-icon engagement-icon"><fa-icon [icon]="icons.faArrowTrendUp"></fa-icon></span>
         <div class="pulse-body">
-          <span class="pulse-label">Engagement</span>
+          <span
+            class="pulse-label"
+            [comTooltip]="
+              'Total qualifying actions in the last 30 days across all your communities: new members joined, event & hackathon registrations, channel messages, event attendance, and email opens. Counts actions, not unique people.'
+            "
+            tooltipSize="sm"
+            >Engagement
+            <fa-icon [icon]="icons.faCircleInfo" class="pulse-info-icon"></fa-icon>
+          </span>
           <span class="pulse-value-row">
             <span class="pulse-value">{{ pulse?.engagement?.value ?? 0 | number }}</span>
             <span class="pulse-growth" *ngIf="pulse?.engagement?.growth_percent">
@@ -98,7 +106,15 @@
       <li class="pulse-stat">
         <span class="pulse-icon reach-icon"><fa-icon [icon]="icons.faBullseye"></fa-icon></span>
         <div class="pulse-body">
-          <span class="pulse-label">Total Reach</span>
+          <span
+            class="pulse-label"
+            [comTooltip]="
+              'Distinct visitor sessions across all your communities in the last 30 days. Growth compares to the previous 30-day period.'
+            "
+            tooltipSize="sm"
+            >Total Reach
+            <fa-icon [icon]="icons.faCircleInfo" class="pulse-info-icon"></fa-icon>
+          </span>
           <span class="pulse-value-row">
             <span class="pulse-value">{{ pulse?.reach?.value ?? 0 | number }}</span>
             <span class="pulse-growth" *ngIf="pulse?.reach?.growth_percent">
@@ -120,7 +136,7 @@
         </h3>
       </header>
       <app-loading-spinner *ngIf="isNeedsAttentionLoading" class="section-loader"></app-loading-spinner>
-      <div class="attention-list" *ngIf="!isNeedsAttentionLoading">
+      <div class="attention-list custom-scrollbar" *ngIf="!isNeedsAttentionLoading">
         <a
           *ngFor="let profile of needsAttention?.community_profiles?.values"
           [routerLink]="['/admin', 'communities', profile.community_id, 'edit']"
@@ -296,6 +312,44 @@
               <fa-icon [icon]="icons.faCalendarDay"></fa-icon>
             </span>
             <span class="timeline-empty-text">Nothing scheduled yet.</span>
+            <span class="timeline-empty-actions">
+              <a
+                comButton
+                size="tiny"
+                status="primary"
+                appearance="filled"
+                shape="semi-round"
+                class="dashboard-cta-btn"
+                [routerLink]="['/admin/communities/new']"
+              >
+                <fa-icon [icon]="icons.faUsers"></fa-icon>
+                Create Community
+              </a>
+              <a
+                comButton
+                size="tiny"
+                status="primary"
+                appearance="filled"
+                shape="semi-round"
+                class="dashboard-cta-btn"
+                [routerLink]="['/admin', 'orgs', communityGroup.slug, 'events']"
+              >
+                <fa-icon [icon]="icons.faCalendarPlus"></fa-icon>
+                Create Event
+              </a>
+              <a
+                comButton
+                size="tiny"
+                status="primary"
+                appearance="filled"
+                shape="semi-round"
+                class="dashboard-cta-btn"
+                [routerLink]="['/admin', 'orgs', communityGroup.slug, 'hackathons']"
+              >
+                <fa-icon [icon]="icons.faTrophy"></fa-icon>
+                Create Hackathon
+              </a>
+            </span>
           </li>
         </ng-container>
       </ol>
@@ -466,9 +520,18 @@
           </li>
         </ul>
 
-        <h6 class="footprint-map-heading" *ngIf="footprint?.top_locations?.values?.length">
-          Map Wise Member Distribution
-        </h6>
+        <div class="footprint-map-heading-row" *ngIf="footprint?.top_locations?.values?.length">
+          <h6 class="footprint-map-heading">Map Wise Member Distribution</h6>
+          <button
+            type="button"
+            class="footprint-map-expand"
+            (click)="openMapDialog(mapDialog)"
+            [comTooltip]="'Open larger map'"
+            tooltipSize="sm"
+          >
+            <fa-icon [icon]="icons.faExpand"></fa-icon>
+          </button>
+        </div>
         <div class="footprint-map" *ngIf="footprint?.top_locations?.values?.length">
           <div id="footprint_map"></div>
         </div>
@@ -561,7 +624,12 @@
       <ul class="email-stats" *ngIf="!isEmailLoading">
         <li class="email-stat">
           <span class="email-value">{{ emailCommunication?.emails_sent?.value ?? 0 | number }}</span>
-          <span class="email-label">Emails Sent</span>
+          <span
+            class="email-label"
+            [comTooltip]="'Last 30 days. Growth compares to the previous 30-day period.'"
+            tooltipSize="sm"
+            >Emails Sent</span
+          >
           <span
             class="email-growth"
             [ngClass]="{
@@ -576,7 +644,14 @@
         </li>
         <li class="email-stat">
           <span class="email-value">{{ emailCommunication?.open_rate?.value ?? 0 | number }}%</span>
-          <span class="email-label">Open Rate</span>
+          <span
+            class="email-label"
+            [comTooltip]="
+              'Last 30 days, as a share of emails delivered (not sent). Growth compares to the previous 30-day period.'
+            "
+            tooltipSize="sm"
+            >Open Rate</span
+          >
           <span
             class="email-growth"
             [ngClass]="{
@@ -591,7 +666,14 @@
         </li>
         <li class="email-stat">
           <span class="email-value">{{ emailCommunication?.click_rate?.value ?? 0 | number }}%</span>
-          <span class="email-label">Click Rate</span>
+          <span
+            class="email-label"
+            [comTooltip]="
+              'Last 30 days, as a share of emails delivered (not sent). Growth compares to the previous 30-day period.'
+            "
+            tooltipSize="sm"
+            >Click Rate</span
+          >
           <span
             class="email-growth"
             [ngClass]="{
@@ -606,7 +688,12 @@
         </li>
         <li class="email-stat">
           <span class="email-value">{{ emailCommunication?.newsletters_this_month ?? 0 | number }}</span>
-          <span class="email-label">Newsletters This Month</span>
+          <span
+            class="email-label"
+            [comTooltip]="'Published in the last 30 days, not the calendar month'"
+            tooltipSize="sm"
+            >Newsletters (Last 30 Days)</span
+          >
         </li>
       </ul>
       <div class="email-trends" *ngIf="!isEmailLoading && emailTrendChart as chart">
@@ -635,7 +722,7 @@
               [attr.y2]="t.y"
             />
             <ng-container *ngFor="let week of chart.weeks">
-              <ng-container *ngFor="let bar of week.bars">
+              <ng-container *ngFor="let bar of week.bars; let i = index">
                 <rect
                   class="email-chart-bar"
                   [ngClass]="bar.colorClass"
@@ -644,9 +731,9 @@
                   [attr.width]="bar.width"
                   [attr.height]="bar.height"
                   rx="0.5"
-                >
-                  <title>{{ bar.value | number }}</title>
-                </rect>
+                  [comTooltip]="emailBarTooltip(week, chart.series[i], bar)"
+                  tooltipSize="sm"
+                ></rect>
                 <rect
                   *ngIf="bar.pattern === 'stripes'"
                   class="email-chart-bar-pattern"
@@ -837,7 +924,12 @@
       <app-loading-spinner *ngIf="isEngagementLoading" class="section-loader"></app-loading-spinner>
       <ul class="engagement-stats" *ngIf="!isEngagementLoading">
         <li class="engagement-stat">
-          <span class="engagement-label">Members</span>
+          <span
+            class="engagement-label"
+            [comTooltip]="'All-time total. The +N below is new members in the last 30 days (a count, not a percent).'"
+            tooltipSize="sm"
+            >Members</span
+          >
           <span class="engagement-value-row">
             <span class="engagement-value">{{ engagementSnapshot?.members?.count ?? 0 | number }}</span>
             <span class="engagement-growth" *ngIf="engagementSnapshot?.members?.growth">
@@ -846,7 +938,14 @@
           </span>
         </li>
         <li class="engagement-stat">
-          <span class="engagement-label">Event Registrations</span>
+          <span
+            class="engagement-label"
+            [comTooltip]="
+              'All-time total. The +N below is new registrations in the last 30 days (a count, not a percent).'
+            "
+            tooltipSize="sm"
+            >Event Registrations</span
+          >
           <span class="engagement-value-row">
             <span class="engagement-value">{{ engagementSnapshot?.event_registrations?.count ?? 0 | number }}</span>
             <span class="engagement-growth" *ngIf="engagementSnapshot?.event_registrations?.growth">
@@ -855,7 +954,14 @@
           </span>
         </li>
         <li class="engagement-stat">
-          <span class="engagement-label">Hackathon Registrations</span>
+          <span
+            class="engagement-label"
+            [comTooltip]="
+              'All-time total. The +N below is new registrations in the last 30 days (a count, not a percent).'
+            "
+            tooltipSize="sm"
+            >Hackathon Registrations</span
+          >
           <span class="engagement-value-row">
             <span class="engagement-value">{{ engagementSnapshot?.hackathon_registrations?.count ?? 0 | number }}</span>
             <span class="engagement-growth" *ngIf="engagementSnapshot?.hackathon_registrations?.growth">
@@ -864,7 +970,14 @@
           </span>
         </li>
         <li class="engagement-stat">
-          <span class="engagement-label">Community Activity</span>
+          <span
+            class="engagement-label"
+            [comTooltip]="
+              'Percent change over the last 30 days vs. the previous 30-day period (unlike the counts above, this is a true percentage).'
+            "
+            tooltipSize="sm"
+            >Community Activity</span
+          >
           <span
             class="engagement-value"
             [ngClass]="{
@@ -877,7 +990,14 @@
           </span>
         </li>
         <li class="engagement-stat">
-          <span class="engagement-label">Content Engagement</span>
+          <span
+            class="engagement-label"
+            [comTooltip]="
+              'Percent change over the last 30 days vs. the previous 30-day period (unlike the counts above, this is a true percentage).'
+            "
+            tooltipSize="sm"
+            >Content Engagement</span
+          >
           <span
             class="engagement-value"
             [ngClass]="{
@@ -901,6 +1021,7 @@
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faUserGroup" class="heading-icon-communities"></fa-icon> Your Communities
         </h3>
+        <a [routerLink]="['/admin', 'orgs', communityGroup.slug, 'communities']" class="view-all-link">View All →</a>
       </header>
       <app-loading-spinner *ngIf="isCommunitiesLoading" class="section-loader communities-loader"></app-loading-spinner>
       <ul class="communities-list" *ngIf="!isCommunitiesLoading">
@@ -908,7 +1029,13 @@
           <a [routerLink]="['/admin/communities', c.id]" class="community-name" [title]="c.name">{{ c.name }}</a>
           <span class="community-stat">{{ c.members_count | number }} members</span>
           <span class="community-stat">{{ c.upcoming_events_count | number }} upcoming</span>
-          <svg class="community-sparkline" viewBox="0 0 60 20" preserveAspectRatio="none">
+          <svg
+            class="community-sparkline"
+            viewBox="0 0 60 20"
+            preserveAspectRatio="none"
+            [comTooltip]="'Channel activity trend over the last 4 weeks'"
+            tooltipSize="sm"
+          >
             <polyline [attr.points]="communityTrendSparkline(c.activity_trend)" />
           </svg>
           <span class="community-status" [ngClass]="c.status">{{ c.status | capitalizeAndRemoveUnderscore }}</span>
@@ -945,3 +1072,19 @@
     </article>
   </section>
 </div>
+
+<ng-template #mapDialog let-ref="dialogRef">
+  <com-card class="map-dialog">
+    <com-card-header class="map-dialog-header">
+      <span>Map Wise Member Distribution</span>
+      <button (click)="ref.close()" ghost nbButton size="small" shape="round">
+        <nb-icon icon="close"></nb-icon>
+      </button>
+    </com-card-header>
+    <com-card-body>
+      <div class="footprint-map footprint-map-large">
+        <div id="footprint_map_large"></div>
+      </div>
+    </com-card-body>
+  </com-card>
+</ng-template>

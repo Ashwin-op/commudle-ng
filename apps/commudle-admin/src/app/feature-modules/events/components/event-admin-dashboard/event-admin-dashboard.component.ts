@@ -37,6 +37,7 @@ import {
   faTicket,
   faEye,
   faFileLines,
+  faCircleInfo,
 } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -73,6 +74,7 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     faTicket,
     faEye,
     faFileLines,
+    faCircleInfo,
   };
 
   needsAttention: IEventDashboardNeedsAttention;

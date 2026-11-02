@@ -38,6 +38,7 @@ import {
   faMicrophone,
   faFileLines,
   faEye,
+  faCircleInfo,
 } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { CommunitiesService } from 'apps/commudle-admin/src/app/services/communities.service';
@@ -80,6 +81,7 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     faMicrophone,
     faFileLines,
     faEye,
+    faCircleInfo,
   };
 
   // Stage Progress -- GET /api/v2/dashboards/hackathons/stage_progress
@@ -410,12 +412,12 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     if (!j) {
       return '';
     }
-    let text = `${j.judges_count ?? 0} judges · ${j.mentors_count ?? 0} mentors · ${
+    let text = `${j.judges_count ?? 0} judges · ${j.mentors_count ?? 0} mentors (hackathon-wide) · ${
       j.teams_assigned_count ?? 0
-    } teams assigned`;
+    } teams assigned (current round)`;
     if (j.without_team?.total > 0) {
       const names = (j.without_team.values || []).map((p) => p.name).join(', ');
-      text += ` · ${j.without_team.total} without a team: ${names}`;
+      text += ` · ${j.without_team.total} without a team this round: ${names}`;
     }
     return text;
   }
@@ -510,6 +512,14 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
       default:
         return '';
     }
+  }
+
+  /** Same text as activitySubtext(), with extra context for the tooltip where a count could be misread as cumulative. */
+  activitySubtextTooltip(item: IHackathonDashboardActivityItem): string {
+    if (item?.type === 'registrations_received' && item?.count != null) {
+      return `${item.count} registrations received that day, not a running total`;
+    }
+    return this.activitySubtext(item);
   }
 
   /** The feed items carry the actor under different keys depending on the type. */

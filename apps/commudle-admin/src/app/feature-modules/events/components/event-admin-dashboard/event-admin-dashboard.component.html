@@ -89,7 +89,9 @@
           </div>
           <div class="highlight-stat-info">
             <span class="highlight-stat-value">{{ eventBriefing?.registrations_count ?? 0 | number }}</span>
-            <span class="highlight-stat-label">Registrations</span>
+            <span class="highlight-stat-label" [comTooltip]="'All-time total for this event'" tooltipSize="sm"
+              >Registrations</span
+            >
           </div>
           <div class="highlight-stat-visual" *ngIf="eventBriefing?.registrations_count">
             <svg class="sparkline" viewBox="0 0 60 24" fill="none">
@@ -125,7 +127,9 @@
           </div>
           <div class="highlight-stat-info">
             <span class="highlight-stat-value">{{ eventBriefing?.emails_sent_count ?? 0 | number }}</span>
-            <span class="highlight-stat-label">Emails sent</span>
+            <span class="highlight-stat-label" [comTooltip]="'All-time total for this event'" tooltipSize="sm"
+              >Emails sent</span
+            >
           </div>
         </div>
         <div class="highlight-stat">
@@ -134,7 +138,9 @@
           </div>
           <div class="highlight-stat-info">
             <span class="highlight-stat-value">{{ eventBriefing?.entry_passes_sent_count ?? 0 | number }}</span>
-            <span class="highlight-stat-label">Entry passes sent</span>
+            <span class="highlight-stat-label" [comTooltip]="'All-time total for this event'" tooltipSize="sm"
+              >Entry passes sent</span
+            >
           </div>
         </div>
       </div>
@@ -379,7 +385,12 @@
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faUsers" class="snapshot-stat-icon registrations-icon"></fa-icon>
           <div class="snapshot-stat-info">
-            <span class="snapshot-stat-label">Registrations</span>
+            <span
+              class="snapshot-stat-label"
+              [comTooltip]="'All-time total, with today\'s count shown below'"
+              tooltipSize="sm"
+              >Registrations</span
+            >
             <span class="snapshot-stat-value-row">
               <span class="snapshot-stat-value">{{ eventSnapshot.registrations?.total ?? 0 }}</span>
               <span class="snapshot-stat-sub">
@@ -394,21 +405,27 @@
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faMicrophone" class="snapshot-stat-icon speakers-icon"></fa-icon>
           <div class="snapshot-stat-info">
-            <span class="snapshot-stat-label">Speakers</span>
+            <span class="snapshot-stat-label" [comTooltip]="'All-time total for this event'" tooltipSize="sm"
+              >Speakers</span
+            >
             <span class="snapshot-stat-value">{{ eventSnapshot.speakers_count ?? 0 }}</span>
           </div>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faHandshakeSimple" class="snapshot-stat-icon sponsors-icon"></fa-icon>
           <div class="snapshot-stat-info">
-            <span class="snapshot-stat-label">Sponsors</span>
+            <span class="snapshot-stat-label" [comTooltip]="'All-time total for this event'" tooltipSize="sm"
+              >Sponsors</span
+            >
             <span class="snapshot-stat-value">{{ eventSnapshot.sponsors_count ?? 0 }}</span>
           </div>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faUserGroup" class="snapshot-stat-icon team-icon"></fa-icon>
           <div class="snapshot-stat-info">
-            <span class="snapshot-stat-label">Team</span>
+            <span class="snapshot-stat-label" [comTooltip]="'All-time total for this event'" tooltipSize="sm"
+              >Team</span
+            >
             <span class="snapshot-stat-value">{{ eventSnapshot.team_members_count ?? 0 }}</span>
           </div>
         </div>
@@ -554,6 +571,14 @@
       <header class="section-header">
         <h3 class="section-heading">
           <fa-icon [icon]="icons.faFileLines" class="heading-icon-pages"></fa-icon> Top Pages
+          <fa-icon
+            [icon]="icons.faCircleInfo"
+            class="section-info-icon"
+            [comTooltip]="
+              'Live traffic: pages viewed by sessions still open from the last hour, not an all-time ranking.'
+            "
+            tooltipSize="sm"
+          ></fa-icon>
         </h3>
       </header>
       <div class="top-list-header">

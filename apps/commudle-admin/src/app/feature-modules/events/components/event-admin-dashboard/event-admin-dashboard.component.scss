@@ -30,6 +30,11 @@
     @apply com-bg-blue-50 com-text-primary-500;
   }
 
+  .section-info-icon {
+    @apply com-w-auto com-h-auto com-rounded-none com-bg-transparent com-text-[11px] com-text-gray-300 com-cursor-help;
+    animation: none;
+  }
+
   .heading-icon-audience {
     @apply com-bg-purple-50 com-text-purple-600;
   }
