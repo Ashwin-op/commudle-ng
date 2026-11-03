@@ -109,7 +109,7 @@ export interface IEventDashboardActivityItem {
   [key: string]: any;
 }
 
-// audience_snapshot
+// audience_snapshot -- scoped to attendees (entry pass holders), not all registrants
 export interface IEventDashboardAudienceSnapshot {
   companies: IPaginationCount<IDashboardDistributionItem>;
   experience_levels: IDashboardDistributionItem[];

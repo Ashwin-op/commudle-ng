@@ -249,12 +249,16 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   collaborationRequestTime(request: IDashboardCollaborationRequest): string {
-    if (!request?.created_at) {
+    return this.relativeTime(request?.created_at);
+  }
+
+  // "3 days ago"; clamps future timestamps (server/client clock skew) to "a few seconds ago".
+  relativeTime(timestamp?: string | null): string {
+    if (!timestamp) {
       return '';
     }
-    const createdAt = moment(request.created_at);
-    const safeMoment = createdAt.isAfter(moment()) ? moment() : createdAt;
-    return safeMoment.fromNow();
+    const time = moment(timestamp);
+    return (time.isAfter(moment()) ? moment() : time).fromNow();
   }
 
   exactTime(timestamp?: string | null): string {

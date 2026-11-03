@@ -271,7 +271,11 @@
             <fa-icon [icon]="icons.faCircleChevronDown" class="attention-icon-cross"></fa-icon>
             <p class="attention-content">
               <span class="attention-title">Survey needs attention</span>
-              <span class="attention-sub">Check responses</span>
+              <span class="attention-sub"
+                >Check responses<ng-container *ngIf="survey?.created_at">
+                  · Created <span [title]="exactTime(survey.created_at)">{{ relativeTime(survey.created_at) }}</span>
+                </ng-container></span
+              >
             </p>
             <span class="attention-arrow">›</span>
           </a>
@@ -305,7 +309,14 @@
             <fa-icon [icon]="icons.faCircleChevronDown" class="attention-icon-cross"></fa-icon>
             <p class="attention-content">
               <span class="attention-title">Set up bank details</span>
-              <span class="attention-sub">Required for paid events</span>
+              <span class="attention-sub"
+                >Required for paid events<ng-container *ngIf="account?.changed_at || account?.created_at">
+                  · {{ account?.changed_at ? 'Updated' : 'Added' }}
+                  <span [title]="exactTime(account.changed_at || account.created_at)">{{
+                    relativeTime(account.changed_at || account.created_at)
+                  }}</span>
+                </ng-container></span
+              >
             </p>
             <span class="attention-arrow">›</span>
           </a>

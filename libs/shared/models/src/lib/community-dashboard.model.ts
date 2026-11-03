@@ -68,13 +68,26 @@ export interface ICommunityDashboardProfileAttention {
   missing_fields: string[];
 }
 
+export interface ICommunityDashboardSurveyAttention {
+  created_at: string;
+  [key: string]: any;
+}
+
+export interface ICommunityDashboardBankAccountAttention {
+  created_at: string;
+  changed_at: string | null;
+  [key: string]: any;
+}
+
+// pending collaboration requests whose event/hackathon has ended -- or, when the
+// entity has no end date, requests older than 90 days -- are omitted by the backend.
 export interface ICommunityDashboardNeedsAttention {
   collaboration_requests: IPaginationCount<IDashboardCollaborationRequest>;
-  surveys: IPaginationCount<any>;
+  surveys: IPaginationCount<ICommunityDashboardSurveyAttention>;
   newsletters: IPaginationCount<IDashboardNewsletterBrief>;
   profile: ICommunityDashboardProfileAttention;
   refund_policy: any | null;
-  bank_account: IPaginationCount<any>;
+  bank_account: IPaginationCount<ICommunityDashboardBankAccountAttention>;
 }
 
 // snapshot
