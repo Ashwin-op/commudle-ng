@@ -15,3 +15,11 @@ export interface ISpamDetector {
   community_build: ICommunityBuild;
   user: IUser;
 }
+
+export interface ISpamDetectorBulkUpdateResult {
+  updated_ids: number[];
+  updated_count: number;
+  failed: { id: number; error: string }[];
+  failed_count: number;
+  missing_ids: number[];
+}

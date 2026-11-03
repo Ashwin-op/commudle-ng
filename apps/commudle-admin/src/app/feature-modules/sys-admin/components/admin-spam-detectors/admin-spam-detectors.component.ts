@@ -12,8 +12,12 @@ import {
   faRotateLeft,
   faGavel,
   faArrowUpRightFromSquare,
+  faMagnifyingGlass,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'commudle-admin-spam-detectors',
@@ -32,7 +36,13 @@ export class AdminSpamDetectorsComponent implements OnInit, OnDestroy {
 
   isLoading = false;
 
-  // Global stats (all pages, not just current page)
+  searchTerm = '';
+  private searchSubject$ = new Subject<string>();
+  private destroy$ = new Subject<void>();
+
+  selectedIds = new Set<number>();
+  isBulkUpdating = false;
+
   globalTotal = 0;
   globalSpamCount = 0;
   globalSafeCount = 0;
@@ -47,6 +57,8 @@ export class AdminSpamDetectorsComponent implements OnInit, OnDestroy {
     faRotateLeft,
     faGavel,
     faArrowUpRightFromSquare,
+    faMagnifyingGlass,
+    faXmark,
   };
 
   constructor(
@@ -62,6 +74,11 @@ export class AdminSpamDetectorsComponent implements OnInit, OnDestroy {
     this.seoService.setTitle('Spam Detectors | Commudle');
     this.loadGlobalStats();
     this.getSpamDetectorsData();
+
+    this.searchSubject$.pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy$)).subscribe(() => {
+      this.page = 1;
+      this.getSpamDetectorsData();
+    });
   }
 
   private loadGlobalStats(): void {
@@ -91,8 +108,9 @@ export class AdminSpamDetectorsComponent implements OnInit, OnDestroy {
 
   getSpamDetectorsData() {
     this.isLoading = true;
+    this.selectedIds.clear();
     this.spamDetectorService
-      .getSpamResult(this.page, this.count, this.isSpam, this.isSpamDecision)
+      .getSpamResult(this.page, this.count, this.isSpam, this.isSpamDecision, this.searchTerm)
       .subscribe((data) => {
         this.spamDetectors = data.values;
         this.total = data.total;
@@ -102,6 +120,100 @@ export class AdminSpamDetectorsComponent implements OnInit, OnDestroy {
       });
   }
 
+  onSearchChange(term: string) {
+    this.searchTerm = term;
+    this.searchSubject$.next(term);
+  }
+
+  clearSearch() {
+    if (!this.searchTerm) {
+      return;
+    }
+    this.searchTerm = '';
+    this.page = 1;
+    this.getSpamDetectorsData();
+  }
+
+  // ── Bulk selection ──
+
+  isSelected(id: number): boolean {
+    return this.selectedIds.has(id);
+  }
+
+  toggleSelection(id: number) {
+    if (this.selectedIds.has(id)) {
+      this.selectedIds.delete(id);
+    } else {
+      this.selectedIds.add(id);
+    }
+  }
+
+  get selectedCount(): number {
+    return this.selectedIds.size;
+  }
+
+  get allOnPageSelected(): boolean {
+    return this.spamDetectors.length > 0 && this.spamDetectors.every((s) => this.selectedIds.has(s.id));
+  }
+
+  get someOnPageSelected(): boolean {
+    return this.selectedIds.size > 0 && !this.allOnPageSelected;
+  }
+
+  toggleSelectAll() {
+    if (this.allOnPageSelected) {
+      this.selectedIds.clear();
+    } else {
+      this.spamDetectors.forEach((s) => this.selectedIds.add(s.id));
+    }
+  }
+
+  clearSelection() {
+    this.selectedIds.clear();
+  }
+
+  openBulkDialog(isSpamDecision: boolean, dialog: any) {
+    if (this.selectedIds.size === 0) {
+      return;
+    }
+    this.dialogService.open(dialog, {
+      context: {
+        isSpamDecision,
+        count: this.selectedIds.size,
+      },
+    });
+  }
+
+  bulkUpdateSpamDetectors(isSpamDecision: boolean) {
+    const ids = Array.from(this.selectedIds);
+    if (ids.length === 0) {
+      return;
+    }
+
+    this.isBulkUpdating = true;
+    this.spamDetectorService.bulkUpdateSpamDetectors(isSpamDecision, ids).subscribe({
+      next: (result) => {
+        this.isBulkUpdating = false;
+        if (result.failed_count > 0) {
+          this.toastrService.warningDialog(`${result.updated_count} updated, ${result.failed_count} failed`);
+        } else {
+          this.toastrService.successDialog(
+            `${result.updated_count} ${result.updated_count === 1 ? 'record' : 'records'} marked as ${
+              isSpamDecision ? 'spam' : 'safe'
+            }`,
+          );
+        }
+        this.selectedIds.clear();
+        this.loadGlobalStats();
+        this.getSpamDetectorsData();
+      },
+      error: () => {
+        this.isBulkUpdating = false;
+        this.toastrService.warningDialog('Bulk update failed');
+      },
+    });
+  }
+
   updateSpamDetector(selectedValue: string, id: number) {
     const isSpam = selectedValue === 'true';
     this.spamDetectorService.updateSpamDetector(isSpam, id).subscribe(() => {
@@ -109,21 +221,22 @@ export class AdminSpamDetectorsComponent implements OnInit, OnDestroy {
     });
   }
 
-  changeSpamDetectorType(data: EventTarget) {
+  changeSpamDetectorType(value: boolean | null) {
     this.page = 1;
-    this.isSpam = (data as HTMLSelectElement).value === 'true';
+    this.isSpam = value ?? null;
     this.getSpamDetectorsData();
   }
 
-  changeSpamDecisionType(data: EventTarget) {
+  changeSpamDecisionType(value: boolean | null) {
     this.page = 1;
-    this.isSpamDecision = (data as HTMLSelectElement).value === 'true';
+    this.isSpamDecision = value ?? null;
     this.getSpamDetectorsData();
   }
 
   clearFilters() {
     this.isSpam = null;
     this.isSpamDecision = null;
+    this.searchTerm = '';
     this.page = 1;
     this.getSpamDetectorsData();
   }
@@ -157,5 +270,7 @@ export class AdminSpamDetectorsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.seoService.noIndex(false);
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
