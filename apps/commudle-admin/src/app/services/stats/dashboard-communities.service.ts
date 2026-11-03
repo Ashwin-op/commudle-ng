@@ -21,7 +21,7 @@ import {
   providedIn: 'root',
 })
 export class DashboardCommunitiesService {
-  constructor(private http: HttpClient, private apiRoutesService: ApiRoutesService) { }
+  constructor(private http: HttpClient, private apiRoutesService: ApiRoutesService) {}
 
   organizerBriefing(communityId): Observable<ICommunityDashboardOrganizerBriefing> {
     const params = new HttpParams().set('community_id', communityId);
@@ -88,9 +88,18 @@ export class DashboardCommunitiesService {
     );
   }
 
-  topPages(communityId, window: EDashboardTopPagesWindow = 'current'): Observable<ICommunityDashboardTopPage[]> {
-    const params = new HttpParams().set('community_id', communityId).set('window', window);
-    return this.http.get<ICommunityDashboardTopPage[]>(
+  topPages(
+    communityId,
+    window: EDashboardTopPagesWindow = 'current',
+    page = 1,
+    count = 10,
+  ): Observable<IPaginationCount<ICommunityDashboardTopPage>> {
+    const params = new HttpParams()
+      .set('community_id', communityId)
+      .set('window', window)
+      .set('page', page)
+      .set('count', count);
+    return this.http.get<IPaginationCount<ICommunityDashboardTopPage>>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITIES.TOP_PAGES),
       { params },
     );

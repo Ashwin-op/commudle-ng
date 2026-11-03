@@ -77,9 +77,18 @@ export class DashboardHackathonsService {
     );
   }
 
-  topPages(hackathonId, window: EDashboardTopPagesWindow = 'current'): Observable<IDashboardTopPage[]> {
-    const params = new HttpParams().set('hackathon_id', hackathonId).set('window', window);
-    return this.http.get<IDashboardTopPage[]>(
+  topPages(
+    hackathonId,
+    window: EDashboardTopPagesWindow = 'current',
+    page = 1,
+    count = 10,
+  ): Observable<IPaginationCount<IDashboardTopPage>> {
+    const params = new HttpParams()
+      .set('hackathon_id', hackathonId)
+      .set('window', window)
+      .set('page', page)
+      .set('count', count);
+    return this.http.get<IPaginationCount<IDashboardTopPage>>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.HACKATHONS.TOP_PAGES),
       { params },
     );

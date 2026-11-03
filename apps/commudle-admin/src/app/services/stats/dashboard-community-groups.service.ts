@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { API_ROUTES, BaseApiService } from '@commudle/shared-services';
 import {
+  EDashboardTopPagesWindow,
   ICommunityGroupDashboardScheduleItem,
   ICommunityGroupDashboardActivityItem,
   ICommunityGroupDashboardAudienceDemographics,
@@ -13,6 +14,8 @@ import {
   ICommunityGroupDashboardFootprint,
   ICommunityGroupDashboardNeedsAttention,
   ICommunityGroupDashboardPulse,
+  IDashboardLiveVisitors,
+  IDashboardTopPage,
   IPaginationCount,
 } from '@commudle/shared-models';
 
@@ -20,7 +23,7 @@ import {
   providedIn: 'root',
 })
 export class DashboardCommunityGroupsService {
-  constructor(private http: HttpClient, private apiRoutesService: BaseApiService) { }
+  constructor(private http: HttpClient, private apiRoutesService: BaseApiService) {}
 
   pulse(communityGroupId): Observable<ICommunityGroupDashboardPulse> {
     const params = new HttpParams().set('community_group_id', communityGroupId);
@@ -144,6 +147,31 @@ export class DashboardCommunityGroupsService {
     const params = new HttpParams().set('community_group_id', communityGroupId);
     return this.http.get<ICommunityGroupDashboardEngagementSnapshot>(
       this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITY_GROUPS.ENGAGEMENT_SNAPSHOT),
+      { params },
+    );
+  }
+
+  liveVisitors(communityGroupId): Observable<IDashboardLiveVisitors> {
+    const params = new HttpParams().set('community_group_id', communityGroupId);
+    return this.http.get<IDashboardLiveVisitors>(
+      this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITY_GROUPS.LIVE_VISITORS),
+      { params },
+    );
+  }
+
+  topPages(
+    communityGroupId,
+    window: EDashboardTopPagesWindow = 'current',
+    page = 1,
+    count = 10,
+  ): Observable<IPaginationCount<IDashboardTopPage>> {
+    const params = new HttpParams()
+      .set('community_group_id', communityGroupId)
+      .set('window', window)
+      .set('page', page)
+      .set('count', count);
+    return this.http.get<IPaginationCount<IDashboardTopPage>>(
+      this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.COMMUNITY_GROUPS.TOP_PAGES),
       { params },
     );
   }

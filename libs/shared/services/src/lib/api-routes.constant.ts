@@ -800,6 +800,8 @@ export const API_ROUTES = {
       LATEST_FORUM_ACTIVITY: 'api/v2/dashboards/community_groups/latest_forum_activity', //GET
       COMMUNITIES: 'api/v2/dashboards/community_groups/communities', //GET
       ENGAGEMENT_SNAPSHOT: 'api/v2/dashboards/community_groups/engagement_snapshot', //GET
+      LIVE_VISITORS: 'api/v2/dashboards/community_groups/live_visitors', //GET
+      TOP_PAGES: 'api/v2/dashboards/community_groups/top_pages', //GET
     },
   },
 

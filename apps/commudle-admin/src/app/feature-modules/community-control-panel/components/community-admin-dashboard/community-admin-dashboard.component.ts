@@ -81,8 +81,11 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   liveVisitors: ICommunityDashboardLiveVisitors;
   liveVisitorsChart: Chart;
 
-  // Top Pages
+  // Top Pages (paginated)
   topPages: ICommunityDashboardTopPage[] = [];
+  topPagesPage = 1;
+  topPagesTotal = 0;
+  readonly topPagesCount = 5;
   topPagesLoading = false;
 
   // Top Cities (paginated)
@@ -582,22 +585,31 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
 
   onTopPagesWindowChange(window: EDashboardTopPagesWindow): void {
     this.topPagesWindow = window;
+    this.topPagesPage = 1;
     this.loadTopPages();
   }
 
   loadTopPages(): void {
     this.topPagesLoading = true;
     this.subscriptions.push(
-      this.dashboardCommunitiesService.topPages(this.community.slug, this.topPagesWindow).subscribe({
-        next: (data) => {
-          this.topPages = data;
-          this.topPagesLoading = false;
-        },
-        error: () => {
-          this.topPagesLoading = false;
-        },
-      }),
+      this.dashboardCommunitiesService
+        .topPages(this.community.slug, this.topPagesWindow, this.topPagesPage, this.topPagesCount)
+        .subscribe({
+          next: (data) => {
+            this.topPages = data.values;
+            this.topPagesTotal = data.total;
+            this.topPagesLoading = false;
+          },
+          error: () => {
+            this.topPagesLoading = false;
+          },
+        }),
     );
+  }
+
+  onTopPagesPageChange(page: number): void {
+    this.topPagesPage = page;
+    this.loadTopPages();
   }
 
   loadTopCities(): void {

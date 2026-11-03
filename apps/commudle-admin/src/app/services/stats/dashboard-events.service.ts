@@ -70,11 +70,21 @@ export class DashboardEventsService {
     );
   }
 
-  topPages(eventId, window: EDashboardTopPagesWindow = 'current'): Observable<IDashboardTopPage[]> {
-    const params = new HttpParams().set('event_id', eventId).set('window', window);
-    return this.http.get<IDashboardTopPage[]>(this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.EVENTS.TOP_PAGES), {
-      params,
-    });
+  topPages(
+    eventId,
+    window: EDashboardTopPagesWindow = 'current',
+    page = 1,
+    count = 10,
+  ): Observable<IPaginationCount<IDashboardTopPage>> {
+    const params = new HttpParams()
+      .set('event_id', eventId)
+      .set('window', window)
+      .set('page', page)
+      .set('count', count);
+    return this.http.get<IPaginationCount<IDashboardTopPage>>(
+      this.apiRoutesService.getRoute(API_ROUTES.DASHBOARDS.EVENTS.TOP_PAGES),
+      { params },
+    );
   }
 
   audienceSnapshot(eventId, page = 1, count = 10): Observable<IEventDashboardAudienceSnapshot> {

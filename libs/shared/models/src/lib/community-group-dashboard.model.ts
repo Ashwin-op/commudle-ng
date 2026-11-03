@@ -62,6 +62,7 @@ export interface ICommunityGroupDashboardActivityItem {
   community_logo?: string;
   event_id?: number;
   event_name?: string;
+  event_slug?: string;
   [key: string]: any;
 }
 

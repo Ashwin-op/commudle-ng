@@ -121,6 +121,9 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
 
   // Top Pages -- GET /api/v2/dashboards/hackathons/top_pages (polled every 30s)
   topPages: IDashboardTopPage[] = [];
+  topPagesPage = 1;
+  topPagesTotal = 0;
+  readonly topPagesCount = 5;
   topPagesLoading = false;
 
   constructor(
@@ -625,22 +628,31 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
 
   onTopPagesWindowChange(window: EDashboardTopPagesWindow): void {
     this.topPagesWindow = window;
+    this.topPagesPage = 1;
     this.getTopPages();
   }
 
   getTopPages(): void {
     this.topPagesLoading = true;
     this.subscriptions.push(
-      this.dashboardHackathonsService.topPages(this.hackathon.id, this.topPagesWindow).subscribe({
-        next: (data) => {
-          this.topPages = data;
-          this.topPagesLoading = false;
-        },
-        error: () => {
-          this.topPagesLoading = false;
-        },
-      }),
+      this.dashboardHackathonsService
+        .topPages(this.hackathon.id, this.topPagesWindow, this.topPagesPage, this.topPagesCount)
+        .subscribe({
+          next: (data) => {
+            this.topPages = data.values;
+            this.topPagesTotal = data.total;
+            this.topPagesLoading = false;
+          },
+          error: () => {
+            this.topPagesLoading = false;
+          },
+        }),
     );
+  }
+
+  onTopPagesPageChange(page: number): void {
+    this.topPagesPage = page;
+    this.getTopPages();
   }
 
   // Poll top pages every 30s, matching the server-side Redis TTL for the 'current' window.

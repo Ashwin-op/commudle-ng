@@ -84,6 +84,9 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
   liveVisitors: IDashboardLiveVisitors;
   liveVisitorsChart: Chart;
   topPages: IDashboardTopPage[] = [];
+  topPagesPage = 1;
+  topPagesTotal = 0;
+  readonly topPagesCount = 5;
   topPagesLoading = false;
 
   // Hero metadata -- GET /api/v2/dashboards/events/event_header
@@ -737,22 +740,31 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
 
   onTopPagesWindowChange(window: EDashboardTopPagesWindow): void {
     this.topPagesWindow = window;
+    this.topPagesPage = 1;
     this.getTopPages();
   }
 
   getTopPages(): void {
     this.topPagesLoading = true;
     this.subscriptions.push(
-      this.dashboardEventsService.topPages(this.event.id, this.topPagesWindow).subscribe({
-        next: (data) => {
-          this.topPages = data;
-          this.topPagesLoading = false;
-        },
-        error: () => {
-          this.topPagesLoading = false;
-        },
-      }),
+      this.dashboardEventsService
+        .topPages(this.event.id, this.topPagesWindow, this.topPagesPage, this.topPagesCount)
+        .subscribe({
+          next: (data) => {
+            this.topPages = data.values;
+            this.topPagesTotal = data.total;
+            this.topPagesLoading = false;
+          },
+          error: () => {
+            this.topPagesLoading = false;
+          },
+        }),
     );
+  }
+
+  onTopPagesPageChange(page: number): void {
+    this.topPagesPage = page;
+    this.getTopPages();
   }
 
   get topPagesMax(): number {

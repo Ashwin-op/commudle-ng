@@ -737,6 +737,19 @@
           </li>
         </ng-container>
       </ul>
+      <commudle-pagination-compact
+        *ngIf="topPagesTotal > topPagesCount"
+        [page]="topPagesPage"
+        [count]="topPagesCount"
+        [total]="topPagesTotal"
+        (pageChange)="onTopPagesPageChange($event)"
+      ></commudle-pagination-compact>
     </article>
   </section>
+
+  <commudle-alert
+    [info]="true"
+    class="support-note"
+    message="If you think there is a discrepancy in the data, please write an email to support@commudle.com."
+  ></commudle-alert>
 </div>
