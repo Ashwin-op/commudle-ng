@@ -318,6 +318,11 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'communities/:community_id/events/event-dashboard',
+        canActivate: [AuthGuard],
+        loadChildren: () => import('./feature-modules/events/events.module').then((m) => m.EventsModule),
+      },
+      {
         path: 'communities',
         canActivate: [AuthGuard],
         data: {
@@ -331,11 +336,6 @@ const routes: Routes = [
       {
         path: 'forms',
         loadChildren: () => import('./feature-modules/data-forms/data-forms.module').then((m) => m.DataFormsModule),
-      },
-      {
-        path: 'communities/:community_id/event-dashboard',
-        canActivate: [AuthGuard],
-        loadChildren: () => import('./feature-modules/events/events.module').then((m) => m.EventsModule),
       },
       {
         path: 'orgs',
@@ -363,7 +363,7 @@ const routes: Routes = [
   exports: [RouterModule],
   providers: [InitResolver, RedirectToMyProfileGuard],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
 
 // NAMED ROUTER OUTLETS
 // p = popup

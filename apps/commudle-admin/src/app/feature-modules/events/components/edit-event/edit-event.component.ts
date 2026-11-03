@@ -187,6 +187,7 @@ export class EditEventComponent implements OnInit {
         this.router.navigate([
           '/admin/communities',
           this.community ? this.community.slug : this.event.kommunity_id,
+          'events',
           'event-dashboard',
           data.slug,
         ]);

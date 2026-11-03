@@ -31,7 +31,7 @@
       <div *ngIf="!event.start_time">
         <nb-alert accent="info">
           <a
-            [routerLink]="['/admin/communities', community.slug, 'event-dashboard', event.slug, 'edit']"
+            [routerLink]="['/admin/communities', community.slug, 'events', 'event-dashboard', event.slug, 'edit']"
             ghost
             nbButton
             status="info"
@@ -83,7 +83,7 @@
       headingText="Post Updates"
       subHeadingText="Keep your members updated with the latest happening for your event!"
       buttonText="Post now"
-      [routerLink]="'/admin' + '/communities/' + community.slug + '/event-dashboard/' + event.slug + '/update'"
+      [routerLink]="'../updates'"
     ></commudle-next-step-card>
     <commudle-next-step-card
       [nbIcon]="'pricetags-outline'"
@@ -91,7 +91,7 @@
       headingText="Add Collaborations & Teammates"
       subHeadingText="Collaborate with communities, add teammates & volunteers"
       buttonText="add now"
-      [routerLink]="'/admin' + '/communities/' + community.slug + '/event-dashboard/' + event.slug + '/collaborations'"
+      [routerLink]="'../collaborations'"
     ></commudle-next-step-card>
     <commudle-next-step-card
       [nbIcon]="'briefcase-outline'"
@@ -99,7 +99,7 @@
       headingText="Add Sponsors"
       subHeadingText="Add your event sponsors and give the due credits"
       buttonText="add now"
-      [routerLink]="'/admin' + '/communities/' + community.slug + '/event-dashboard/' + event.slug + '/sponsors'"
+      [routerLink]="'../sponsors'"
     ></commudle-next-step-card>
   </div>
 </div>

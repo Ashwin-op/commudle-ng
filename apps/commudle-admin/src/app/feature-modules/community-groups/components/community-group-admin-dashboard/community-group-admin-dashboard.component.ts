@@ -1,0 +1,1125 @@
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SeoService } from '@commudle/shared-services';
+import { NbDialogService } from '@commudle/theme';
+import { DashboardCommunityGroupsService } from 'apps/commudle-admin/src/app/services/stats/dashboard-community-groups.service';
+import {
+  ICommunityGroup,
+  ICommunityGroupDashboardScheduleItem,
+  ICommunityGroupDashboardActivityItem,
+  ICommunityGroupDashboardAudienceDemographics,
+  ICommunityGroupDashboardChannelActivityItem,
+  ICommunityGroupDashboardCommunity,
+  ICommunityGroupDashboardEmailCommunication,
+  ICommunityGroupDashboardEmailTrendChart,
+  ICommunityGroupDashboardEmailTrendChartBar,
+  ICommunityGroupDashboardEmailTrendChartSeries,
+  ICommunityGroupDashboardEmailTrendChartTick,
+  ICommunityGroupDashboardEmailTrendChartWeek,
+  ICommunityGroupDashboardEngagementSnapshot,
+  ICommunityGroupDashboardFootprint,
+  ICommunityGroupDashboardIncompleteProfile,
+  ICommunityGroupDashboardNeedsAttention,
+  ICommunityGroupDashboardPulse,
+  IDashboardDistributionItem,
+  EDashboardTopPagesWindow,
+  IDashboardLiveVisitors,
+  IDashboardLiveVisitorsBucket,
+  IDashboardTopPage,
+} from '@commudle/shared-models';
+import { Subscription, interval } from 'rxjs';
+import * as moment from 'moment';
+import { Chart } from 'chart.js';
+import {
+  faUsers,
+  faUserGroup,
+  faCalendarPlus,
+  faTrophy,
+  faArrowTrendUp,
+  faBullseye,
+  faBell,
+  faCalendarDay,
+  faBolt,
+  faEarthAmericas,
+  faChartPie,
+  faEnvelope,
+  faHashtag,
+  faMessage,
+  faNewspaper,
+  faScroll,
+  faCircleXmark,
+  faCircleCheck,
+  faCircleInfo,
+  faExpand,
+  faUserPlus,
+  faFileLines,
+  faEye,
+  IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
+
+declare let google: any;
+
+@Component({
+  selector: 'commudle-community-group-admin-dashboard',
+  templateUrl: './community-group-admin-dashboard.component.html',
+  styleUrls: ['./community-group-admin-dashboard.component.scss'],
+  standalone: false,
+})
+export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy {
+  communityGroup: ICommunityGroup;
+  subscriptions: Subscription[] = [];
+  Math = Math;
+
+  icons = {
+    faUsers,
+    faUserGroup,
+    faCalendarPlus,
+    faTrophy,
+    faArrowTrendUp,
+    faBullseye,
+    faBell,
+    faCalendarDay,
+    faBolt,
+    faEarthAmericas,
+    faChartPie,
+    faEnvelope,
+    faHashtag,
+    faMessage,
+    faNewspaper,
+    faScroll,
+    faCircleXmark,
+    faCircleCheck,
+    faCircleInfo,
+    faExpand,
+    faUserPlus,
+    faFileLines,
+    faEye,
+  };
+
+  // Organization Pulse -- GET /api/v2/dashboards/community_groups/pulse
+  pulse: ICommunityGroupDashboardPulse;
+  isPulseLoading = false;
+
+  // Needs Attention -- GET .../needs_attention
+  needsAttention: ICommunityGroupDashboardNeedsAttention;
+  isNeedsAttentionLoading = false;
+  readonly needsAttentionCount = 5;
+  communityProfilesPage = 1;
+  surveysPage = 1;
+
+  // Upcoming Schedule -- GET .../upcoming_schedule (non-paginated array)
+  upcomingSchedule: ICommunityGroupDashboardScheduleItem[] = [];
+  isUpcomingScheduleLoading = false;
+
+  // Recent Activity (Organization Activity) -- GET .../recent_activity (paginated)
+  recentActivity: ICommunityGroupDashboardActivityItem[] = [];
+  activityPage = 1;
+  readonly activityCount = 5;
+  activityTotal = 0;
+  isActivityLoading = false;
+  newActivityCount = 0;
+  private newActivityBadgeTimer: ReturnType<typeof setTimeout>;
+
+  // Community Footprint -- GET .../community_footprint
+  footprint: ICommunityGroupDashboardFootprint;
+  isFootprintLoading = false;
+
+  // Audience & Demographics -- GET .../audience_demographics
+  audienceDemographics: ICommunityGroupDashboardAudienceDemographics;
+  isAudienceLoading = false;
+  isTopLocationsLoading = false;
+  isTopSkillsLoading = false;
+  topLocationsPage = 1;
+  readonly topLocationsCount = 10;
+  topSkillsPage = 1;
+  readonly topSkillsCount = 10;
+
+  // Email & Communication -- GET .../email_communication
+  emailCommunication: ICommunityGroupDashboardEmailCommunication;
+  isEmailLoading = false;
+  emailTrendChart: ICommunityGroupDashboardEmailTrendChart | null = null;
+
+  // Latest Channel Activity -- GET .../latest_channel_activity (paginated)
+  latestChannelActivity: ICommunityGroupDashboardChannelActivityItem[] = [];
+  channelActivityPage = 1;
+  readonly channelActivityCount = 5;
+  channelActivityTotal = 0;
+  isChannelActivityLoading = false;
+
+  // Latest Forum Activity -- GET .../latest_forum_activity (paginated)
+  latestForumActivity: ICommunityGroupDashboardChannelActivityItem[] = [];
+  forumActivityPage = 1;
+  readonly forumActivityCount = 5;
+  forumActivityTotal = 0;
+  isForumActivityLoading = false;
+
+  // Your Communities -- GET .../communities (paginated)
+  communities: ICommunityGroupDashboardCommunity[] = [];
+  communitiesPage = 1;
+  readonly communitiesCount = 5;
+  communitiesTotal = 0;
+  isCommunitiesLoading = false;
+
+  // Engagement Snapshot -- GET .../engagement_snapshot
+  engagementSnapshot: ICommunityGroupDashboardEngagementSnapshot;
+  isEngagementLoading = false;
+
+  // Live Visitors -- GET .../live_visitors (polled every 30s)
+  liveVisitors: IDashboardLiveVisitors;
+  liveVisitorsChart: Chart;
+
+  // Top Pages -- GET .../top_pages (polled every 30s, paginated)
+  topPages: IDashboardTopPage[] = [];
+  topPagesPage = 1;
+  topPagesTotal = 0;
+  readonly topPagesCount = 5;
+  topPagesLoading = false;
+  topPagesWindow: EDashboardTopPagesWindow = 'current';
+
+  quickActions = [];
+
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private seoService: SeoService,
+    private dashboardCommunityGroupsService: DashboardCommunityGroupsService,
+    private dialogService: NbDialogService,
+  ) {}
+
+  ngOnInit(): void {
+    this.subscriptions.push(
+      this.activatedRoute.parent.data.subscribe((data) => {
+        this.communityGroup = data.community_group;
+        this.seoService.setTitle(`Organization Dashboard | ${this.communityGroup.name}`);
+        this.seoService.noIndex(true);
+        this.loadPulse();
+        this.loadNeedsAttention();
+        this.loadUpcomingSchedule();
+        this.loadRecentActivity();
+        this.startRecentActivityPolling();
+        this.loadFootprint();
+        this.loadAudienceDemographics();
+        this.loadEmailCommunication();
+        this.loadLatestChannelActivity();
+        this.loadLatestForumActivity();
+        this.loadCommunities();
+        this.loadEngagementSnapshot();
+        this.loadLiveVisitors();
+        this.startLiveVisitorsPolling();
+        this.loadTopPages();
+        this.startTopPagesPolling();
+        this.setQuickActions();
+      }),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.seoService.noIndex(false);
+    this.subscriptions.forEach((s) => s.unsubscribe());
+    this.genderChart?.destroy();
+    this.liveVisitorsChart?.destroy();
+    clearTimeout(this.newActivityBadgeTimer);
+  }
+
+  loadPulse(): void {
+    this.isPulseLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService.pulse(this.communityGroup.id).subscribe({
+        next: (data) => {
+          this.pulse = data;
+          this.isPulseLoading = false;
+        },
+        error: () => {
+          this.isPulseLoading = false;
+        },
+      }),
+    );
+  }
+
+  loadNeedsAttention(): void {
+    this.isNeedsAttentionLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService
+        .needsAttention(this.communityGroup.id, {
+          community_profiles_page: this.communityProfilesPage,
+          community_profiles_count: this.needsAttentionCount,
+          surveys_page: this.surveysPage,
+          surveys_count: this.needsAttentionCount,
+        })
+        .subscribe({
+          next: (data) => {
+            this.needsAttention = data;
+            this.isNeedsAttentionLoading = false;
+          },
+          error: () => {
+            this.isNeedsAttentionLoading = false;
+          },
+        }),
+    );
+  }
+
+  onCommunityProfilesPageChange(page: number): void {
+    this.communityProfilesPage = page;
+    this.loadNeedsAttention();
+  }
+
+  onSurveysPageChange(page: number): void {
+    this.surveysPage = page;
+    this.loadNeedsAttention();
+  }
+
+  loadUpcomingSchedule(): void {
+    this.isUpcomingScheduleLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService.upcomingSchedule(this.communityGroup.id).subscribe({
+        next: (data) => {
+          this.upcomingSchedule = data;
+          this.isUpcomingScheduleLoading = false;
+        },
+        error: () => {
+          this.isUpcomingScheduleLoading = false;
+        },
+      }),
+    );
+  }
+
+  loadRecentActivity(): void {
+    this.isActivityLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService
+        .recentActivity(this.communityGroup.id, this.activityPage, this.activityCount)
+        .subscribe({
+          next: (data) => {
+            this.recentActivity = data.values;
+            this.activityTotal = data.total;
+            this.isActivityLoading = false;
+          },
+          error: () => {
+            this.isActivityLoading = false;
+          },
+        }),
+    );
+  }
+
+  onActivityPageChange(page: number): void {
+    this.activityPage = page;
+    this.loadRecentActivity();
+  }
+
+  // Poll for newer activity every minute; only while viewing page 1, so we never
+  // disturb someone paging through older activity.
+  startRecentActivityPolling(): void {
+    this.subscriptions.push(interval(60000).subscribe(() => this.pollRecentActivity()));
+  }
+
+  pollRecentActivity(): void {
+    if (this.activityPage !== 1 || !this.communityGroup) {
+      return;
+    }
+    const latestTimestamp = this.activityTimestamp(this.recentActivity[0]);
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService.recentActivity(this.communityGroup.id, 1, this.activityCount).subscribe({
+        next: (data) => {
+          const newItems = latestTimestamp
+            ? data.values.filter((item) => this.activityTimestamp(item) > latestTimestamp)
+            : [];
+          if (newItems.length) {
+            this.recentActivity = [...newItems, ...this.recentActivity].slice(0, this.activityCount);
+            this.activityTotal = data.total;
+            this.showNewActivityBadge(newItems.length);
+          }
+        },
+      }),
+    );
+  }
+
+  private activityTimestamp(activity: ICommunityGroupDashboardActivityItem): number {
+    return activity?.created_at ? moment(activity.created_at).valueOf() : 0;
+  }
+
+  private showNewActivityBadge(count: number): void {
+    clearTimeout(this.newActivityBadgeTimer);
+    this.newActivityCount = count;
+    this.newActivityBadgeTimer = setTimeout(() => {
+      this.newActivityCount = 0;
+    }, 2400);
+  }
+
+  loadFootprint(): void {
+    this.isFootprintLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService.communityFootprint(this.communityGroup.id).subscribe({
+        next: (data) => {
+          this.footprint = data;
+          this.isFootprintLoading = false;
+          if (this.footprint?.top_locations?.values?.length) {
+            // Defer so the #footprint_map div is in the DOM before GeoChart draws into it.
+            setTimeout(() => this.initFootprintMap(), 0);
+          }
+        },
+        error: () => {
+          this.isFootprintLoading = false;
+        },
+      }),
+    );
+  }
+
+  initFootprintMap(): void {
+    google.charts.load('current', { packages: ['geochart'] });
+    google.charts.setOnLoadCallback(this.drawFootprintMap.bind(this));
+  }
+
+  drawFootprintMap(containerId = 'footprint_map'): void {
+    const container = document.getElementById(containerId);
+    if (!container || !this.footprint?.top_locations?.values?.length) {
+      return;
+    }
+    const data = google.visualization.arrayToDataTable([
+      ['City', 'Members'],
+      ...this.footprint.top_locations.values.map((location) => [location.city, location.member_count]),
+    ]);
+
+    const options = {
+      displayMode: 'markers',
+      colorAxis: { colors: ['#70a1ff', '#1e90ff'] },
+      backgroundColor: '#f4f4f4',
+      datalessRegionColor: '#dddddd',
+      defaultColor: '#f00',
+      tooltip: { textStyle: { color: '#333' }, showColorCode: true },
+      enableRegionInteractivity: true,
+      explorer: {
+        actions: ['dragToZoom', 'rightClickToReset'],
+        keepInBounds: true,
+        zoomDelta: 1.2,
+      },
+    };
+
+    const chart = new google.visualization.GeoChart(container);
+    chart.draw(data, options);
+  }
+
+  openMapDialog(templateRef): void {
+    this.dialogService.open(templateRef);
+    // The larger map container only exists once the dialog's template renders;
+    // defer so Google Charts has a real element to draw into.
+    setTimeout(() => this.drawFootprintMap('footprint_map_large'));
+  }
+
+  loadAudienceDemographics(): void {
+    this.isAudienceLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService
+        .audienceDemographics(this.communityGroup.id, {
+          top_locations_page: this.topLocationsPage,
+          top_locations_count: this.topLocationsCount,
+          top_skills_page: this.topSkillsPage,
+          top_skills_count: this.topSkillsCount,
+        })
+        .subscribe({
+          next: (data) => {
+            this.audienceDemographics = data;
+            this.renderGenderChart(data.gender_distribution);
+            this.isAudienceLoading = false;
+          },
+          error: () => {
+            this.isAudienceLoading = false;
+          },
+        }),
+    );
+  }
+
+  onTopSkillsPageChange(page: number): void {
+    this.topSkillsPage = page;
+    this.isTopSkillsLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService
+        .audienceDemographics(this.communityGroup.id, {
+          top_locations_page: this.topLocationsPage,
+          top_locations_count: this.topLocationsCount,
+          top_skills_page: this.topSkillsPage,
+          top_skills_count: this.topSkillsCount,
+        })
+        .subscribe({
+          next: (data) => {
+            this.audienceDemographics = data;
+            this.renderGenderChart(data.gender_distribution);
+            this.isTopSkillsLoading = false;
+          },
+          error: () => {
+            this.isTopSkillsLoading = false;
+          },
+        }),
+    );
+  }
+
+  loadEmailCommunication(): void {
+    this.isEmailLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService.emailCommunication(this.communityGroup.id).subscribe({
+        next: (data) => {
+          this.emailCommunication = data;
+          this.emailTrendChart = this.computeEmailTrendChart();
+          this.isEmailLoading = false;
+        },
+        error: () => {
+          this.isEmailLoading = false;
+        },
+      }),
+    );
+  }
+
+  loadLatestChannelActivity(): void {
+    this.isChannelActivityLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService
+        .latestChannelActivity(this.communityGroup.id, this.channelActivityPage, this.channelActivityCount)
+        .subscribe({
+          next: (data) => {
+            this.latestChannelActivity = data.values;
+            this.channelActivityTotal = data.total;
+            this.isChannelActivityLoading = false;
+          },
+          error: () => {
+            this.isChannelActivityLoading = false;
+          },
+        }),
+    );
+  }
+
+  onChannelActivityPageChange(page: number): void {
+    this.channelActivityPage = page;
+    this.loadLatestChannelActivity();
+  }
+
+  loadLatestForumActivity(): void {
+    this.isForumActivityLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService
+        .latestForumActivity(this.communityGroup.id, this.forumActivityPage, this.forumActivityCount)
+        .subscribe({
+          next: (data) => {
+            this.latestForumActivity = data.values;
+            this.forumActivityTotal = data.total;
+            this.isForumActivityLoading = false;
+          },
+          error: () => {
+            this.isForumActivityLoading = false;
+          },
+        }),
+    );
+  }
+
+  onForumActivityPageChange(page: number): void {
+    this.forumActivityPage = page;
+    this.loadLatestForumActivity();
+  }
+
+  loadCommunities(): void {
+    this.isCommunitiesLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService
+        .communities(this.communityGroup.id, this.communitiesPage, this.communitiesCount)
+        .subscribe({
+          next: (data) => {
+            this.communities = data.values;
+            this.communitiesTotal = data.total;
+            this.isCommunitiesLoading = false;
+          },
+          error: () => {
+            this.isCommunitiesLoading = false;
+          },
+        }),
+    );
+  }
+
+  onCommunitiesPageChange(page: number): void {
+    this.communitiesPage = page;
+    this.loadCommunities();
+  }
+
+  /** Normalizes a weekly-activity trend into an SVG polyline `points` string (viewBox 0 0 60 20). */
+  sparklinePoints(trend: number[]): string {
+    if (!trend?.length) {
+      return '';
+    }
+    const max = Math.max(...trend, 1);
+    const step = trend.length > 1 ? 60 / (trend.length - 1) : 0;
+    return trend.map((value, i) => `${i * step},${20 - (value / max) * 18}`).join(' ');
+  }
+
+  communityTrendSparkline(trend: { week_start: string; count: number }[]): string {
+    return this.sparklinePoints(trend?.map((point) => point.count) ?? []);
+  }
+
+  /**
+   * A grouped bar chart (Sent/Opens/Clicks per week) in viewBox-0-0-100-40 coordinates, on a
+   * LOG-SCALE y-axis. Sent/Opens/Clicks differ by orders of magnitude in real data (e.g. 11531 vs
+   * 3266 vs 275) -- on a linear shared axis the smaller two flatten near zero, misrepresenting
+   * their actual trend. A log axis (powers of ten, sized to the data's own max order of magnitude)
+   * keeps all three bars readable off ONE real count axis instead of indexing each to its own peak.
+   */
+  private computeEmailTrendChart(): ICommunityGroupDashboardEmailTrendChart | null {
+    const trends = this.emailCommunication?.trends;
+    if (!trends) {
+      return null;
+    }
+
+    const seriesDefs = [
+      { key: 'sent', label: 'Sent', colorClass: 'bar-sent', pattern: 'none' as const, data: trends.sent ?? [] },
+      { key: 'opens', label: 'Opens', colorClass: 'bar-opens', pattern: 'stripes' as const, data: trends.opens ?? [] },
+      { key: 'clicks', label: 'Clicks', colorClass: 'bar-clicks', pattern: 'dots' as const, data: trends.clicks ?? [] },
+    ].filter((s) => s.data.length);
+
+    const allPoints = seriesDefs.flatMap((s) => s.data);
+    if (!allPoints.length) {
+      return null;
+    }
+
+    const weekLabelsByTime = new Map<number, string>();
+    allPoints.forEach((p) => {
+      const t = new Date(p.week_start).getTime();
+      if (!weekLabelsByTime.has(t)) {
+        weekLabelsByTime.set(t, moment(p.week_start).format('MMM D'));
+      }
+    });
+    const weekTimes = Array.from(weekLabelsByTime.keys()).sort((a, b) => a - b);
+
+    const plotLeft = 4;
+    const plotRight = 92;
+    const plotTop = 4;
+    const plotBottom = 36;
+    const plotHeight = plotBottom - plotTop;
+
+    const tickSpacing = weekTimes.length > 1 ? (plotRight - plotLeft) / (weekTimes.length - 1) : plotRight - plotLeft;
+    const clusterWidth = Math.min(tickSpacing * 0.55, 24);
+    const barGap = 0.8;
+    const barWidth = (clusterWidth - barGap * (seriesDefs.length - 1)) / seriesDefs.length;
+
+    // Log scale: 1 at the bottom, 10^topExponent at the top -- topExponent sized to the data's
+    // own max so the axis never has unused decades (a bar can slightly exceed the top tick, same
+    // as a linear axis' max point can sit above its last gridline).
+    const maxValue = Math.max(...allPoints.map((p) => p.count), 1);
+    const topExponent = Math.max(Math.floor(Math.log10(maxValue)), 1);
+    const yForValue = (value: number) => {
+      const fraction = Math.log10(Math.max(value, 1)) / topExponent;
+      return plotBottom - fraction * plotHeight;
+    };
+
+    const valueByKeyAndTime = new Map<string, number>();
+    seriesDefs.forEach((s) => {
+      s.data.forEach((p) => valueByKeyAndTime.set(`${s.key}:${new Date(p.week_start).getTime()}`, p.count));
+    });
+
+    const weeks: ICommunityGroupDashboardEmailTrendChartWeek[] = weekTimes.map((time, weekIndex) => {
+      const weekX = weekTimes.length > 1 ? plotLeft + weekIndex * tickSpacing : (plotLeft + plotRight) / 2;
+      const bars: ICommunityGroupDashboardEmailTrendChartBar[] = [];
+      seriesDefs.forEach((s, seriesIndex) => {
+        const value = valueByKeyAndTime.get(`${s.key}:${time}`);
+        if (value == null) {
+          return;
+        }
+        const y = yForValue(value);
+        bars.push({
+          colorClass: s.colorClass,
+          pattern: s.pattern,
+          x: weekX - clusterWidth / 2 + seriesIndex * (barWidth + barGap),
+          y,
+          width: barWidth,
+          height: plotBottom - y,
+          value,
+        });
+      });
+      return { label: weekLabelsByTime.get(time) ?? '', bars };
+    });
+
+    const series: ICommunityGroupDashboardEmailTrendChartSeries[] = seriesDefs.map((s) => ({
+      label: s.label,
+      colorClass: s.colorClass,
+      pattern: s.pattern,
+      endLabel: this.formatCompactNumber(s.data[s.data.length - 1].count),
+    }));
+
+    const yTicksDesc: ICommunityGroupDashboardEmailTrendChartTick[] = Array.from(
+      { length: topExponent + 1 },
+      (_, i) => topExponent - i,
+    ).map((exponent) => {
+      const tickValue = 10 ** exponent;
+      return { y: yForValue(tickValue), label: tickValue.toLocaleString('en-US') };
+    });
+
+    return { weeks, series, yTicksDesc };
+  }
+
+  formatCompactNumber(value: number): string {
+    if (value >= 10000) {
+      return `${Math.round(value / 1000)}K`;
+    }
+    if (value >= 1000) {
+      return `${+(value / 1000).toFixed(1)}K`;
+    }
+    return `${Math.round(value)}`;
+  }
+
+  emailBarTooltip(
+    week: ICommunityGroupDashboardEmailTrendChartWeek,
+    series: ICommunityGroupDashboardEmailTrendChartSeries | undefined,
+    bar: ICommunityGroupDashboardEmailTrendChartBar,
+  ): string {
+    const label = series?.label || 'Value';
+    return `${week.label} — ${label}: ${bar.value.toLocaleString('en-US')}`;
+  }
+
+  loadEngagementSnapshot(): void {
+    this.isEngagementLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService.engagementSnapshot(this.communityGroup.id).subscribe({
+        next: (data) => {
+          this.engagementSnapshot = data;
+          this.isEngagementLoading = false;
+        },
+        error: () => {
+          this.isEngagementLoading = false;
+        },
+      }),
+    );
+  }
+
+  loadLiveVisitors(): void {
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService.liveVisitors(this.communityGroup.id).subscribe((data) => {
+        this.liveVisitors = data;
+        this.renderLiveVisitorsChart();
+      }),
+    );
+  }
+
+  // Poll live visitors every 30s, matching the server-side Redis TTL.
+  startLiveVisitorsPolling(): void {
+    this.subscriptions.push(interval(30000).subscribe(() => this.loadLiveVisitors()));
+  }
+
+  onTopPagesWindowChange(window: EDashboardTopPagesWindow): void {
+    this.topPagesWindow = window;
+    this.topPagesPage = 1;
+    this.loadTopPages();
+  }
+
+  loadTopPages(): void {
+    this.topPagesLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService
+        .topPages(this.communityGroup.id, this.topPagesWindow, this.topPagesPage, this.topPagesCount)
+        .subscribe({
+          next: (data) => {
+            this.topPages = data.values;
+            this.topPagesTotal = data.total;
+            this.topPagesLoading = false;
+          },
+          error: () => {
+            this.topPagesLoading = false;
+          },
+        }),
+    );
+  }
+
+  onTopPagesPageChange(page: number): void {
+    this.topPagesPage = page;
+    this.loadTopPages();
+  }
+
+  // Poll top pages every 30s, matching the server-side Redis TTL for the 'current' window.
+  startTopPagesPolling(): void {
+    this.subscriptions.push(interval(30000).subscribe(() => this.loadTopPages()));
+  }
+
+  get topPagesMax(): number {
+    return Math.max(...this.topPages.map((p) => p.views || 0), 1);
+  }
+
+  barShare(value: number, max: number): number {
+    if (!max) {
+      return 0;
+    }
+    return (value / max) * 100;
+  }
+
+  private resampleLiveVisitorsHistory(
+    history: IDashboardLiveVisitorsBucket[] | undefined,
+    bucketMinutes = 5,
+    windowMinutes = 30,
+  ): { label: string; count: number }[] {
+    if (!history?.length) {
+      return [];
+    }
+    const bucketMs = bucketMinutes * 60000;
+    const bucketCount = windowMinutes / bucketMinutes;
+    const windowStart = new Date(history[history.length - 1].bucket_end).getTime() - bucketCount * bucketMs;
+
+    const sums = new Array(bucketCount).fill(0);
+    const hits = new Array(bucketCount).fill(0);
+
+    history.forEach(({ bucket_start, bucket_end, count }) => {
+      const midpoint = (new Date(bucket_start).getTime() + new Date(bucket_end).getTime()) / 2;
+      const i = Math.floor((midpoint - windowStart) / bucketMs);
+      if (i >= 0 && i < bucketCount) {
+        sums[i] += count;
+        hits[i] += 1;
+      }
+    });
+
+    return sums.map((sum, i) => ({
+      label: moment(windowStart + (i + 1) * bucketMs).format('h:mm a'),
+      count: hits[i] ? Math.round(sum / hits[i]) : 0,
+    }));
+  }
+
+  private renderLiveVisitorsChart(): void {
+    const points = this.resampleLiveVisitorsHistory(this.liveVisitors?.history);
+    if (!points.length) {
+      return;
+    }
+    const labels = points.map((p) => p.label);
+    const data = points.map((p) => p.count);
+
+    if (this.liveVisitorsChart) {
+      this.liveVisitorsChart.data.labels = labels;
+      this.liveVisitorsChart.data.datasets[0].data = data;
+      this.liveVisitorsChart.update({ duration: 0 });
+      return;
+    }
+
+    this.liveVisitorsChart = new Chart('community-group-live-visitors-chart', {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Live Visitors',
+            data,
+            borderColor: '#3366ff',
+            backgroundColor: 'rgba(51, 102, 255, 0.08)',
+            borderWidth: 2,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            pointHoverBorderWidth: 2,
+            pointHoverBackgroundColor: '#ffffff',
+            pointHoverBorderColor: '#3366ff',
+            lineTension: 0.3,
+            fill: true,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 4000, easing: 'easeOutQuart' },
+        responsiveAnimationDuration: 0,
+        legend: { display: false },
+        scales: {
+          xAxes: [{ gridLines: { display: false } }],
+          yAxes: [
+            {
+              ticks: { beginAtZero: true, precision: 0 },
+              gridLines: { color: '#f1f1f1', drawBorder: false },
+            },
+          ],
+        },
+        tooltips: {
+          mode: 'index',
+          intersect: false,
+          callbacks: {
+            label: (tooltipItem) => `${tooltipItem.yLabel} visitor${tooltipItem.yLabel === '1' ? '' : 's'}`,
+          },
+        },
+      },
+    });
+  }
+
+  isScheduleToday(scheduledAt: string): boolean {
+    return moment(scheduledAt).isSame(moment(), 'day');
+  }
+
+  isScheduleTomorrow(scheduledAt: string): boolean {
+    return moment(scheduledAt).isSame(moment().add(1, 'day'), 'day');
+  }
+
+  scheduleDateLabel(scheduledAt: string): string {
+    if (this.isScheduleToday(scheduledAt)) {
+      return 'Today';
+    }
+    if (this.isScheduleTomorrow(scheduledAt)) {
+      return 'Tomorrow';
+    }
+    return moment(scheduledAt).format('ddd, MMM D');
+  }
+
+  channelActivityTime(item: ICommunityGroupDashboardChannelActivityItem): string {
+    return item?.created_at ? moment(item.created_at).fromNow() : '';
+  }
+
+  activityTime(item: ICommunityGroupDashboardActivityItem): string {
+    return item?.created_at ? moment(item.created_at).fromNow() : '';
+  }
+
+  private readonly palette = ['#3b82f6', '#22c55e', '#f97316', '#a855f7', '#eab308', '#ec4899'];
+
+  paletteColor(index: number): string {
+    return this.palette[index % this.palette.length];
+  }
+
+  private genderChart: Chart;
+  private genderChartItems: IDashboardDistributionItem[] = [];
+
+  private renderGenderChart(items: IDashboardDistributionItem[] | undefined): void {
+    if (!items?.length) {
+      this.genderChart?.destroy();
+      this.genderChart = undefined;
+      this.genderChartItems = [];
+      return;
+    }
+    this.genderChartItems = items;
+    const labels = items.map((item) =>
+      item.name
+        .split('_')
+        .map((frag) => frag.charAt(0).toUpperCase() + frag.slice(1))
+        .join(' '),
+    );
+    // Chart.js sizes each slice purely by its share of the total, so a real but
+    // tiny category (e.g. "Prefer not to answer" at 0.17%) renders as an
+    // invisible sliver. Clamp the *visual* value only -- the tooltip below still
+    // reports the true percentage from `items`, not this clamped number.
+    const MIN_VISIBLE_SHARE = 2;
+    const data = items.map((item) => {
+      const pct = item.percentage || 0;
+      return pct > 0 && pct < MIN_VISIBLE_SHARE ? MIN_VISIBLE_SHARE : pct;
+    });
+    const colors = items.map((_, index) => this.paletteColor(index));
+
+    if (this.genderChart) {
+      this.genderChart.data.labels = labels;
+      this.genderChart.data.datasets[0].data = data;
+      this.genderChart.data.datasets[0].backgroundColor = colors;
+      this.genderChart.update({ duration: 0 });
+      return;
+    }
+
+    // The canvas sits behind *ngIf="!isAudienceLoading"; defer to the next tick so
+    // Angular has added it to the DOM before Chart.js looks it up by id.
+    setTimeout(() => {
+      if (this.genderChart || !document.getElementById('gender-donut-chart')) {
+        return;
+      }
+      this.genderChart = new Chart('gender-donut-chart', {
+        type: 'doughnut',
+        data: {
+          labels,
+          datasets: [{ data, backgroundColor: colors, borderWidth: 0 }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutoutPercentage: 65,
+          animation: { duration: 4000, easing: 'easeOutQuart' },
+          legend: { display: false },
+          tooltips: {
+            callbacks: {
+              label: (tooltipItem, chartData) =>
+                `${chartData.labels[tooltipItem.index]}: ${this.genderChartItems[tooltipItem.index]?.percentage ?? 0}%`,
+            },
+          },
+        },
+      });
+    });
+  }
+
+  onTopLocationsPageChange(page: number): void {
+    this.topLocationsPage = page;
+    this.isTopLocationsLoading = true;
+    this.subscriptions.push(
+      this.dashboardCommunityGroupsService
+        .audienceDemographics(this.communityGroup.id, {
+          top_locations_page: this.topLocationsPage,
+          top_locations_count: this.topLocationsCount,
+          top_skills_page: this.topSkillsPage,
+          top_skills_count: this.topSkillsCount,
+        })
+        .subscribe({
+          next: (data) => {
+            this.audienceDemographics = data;
+            this.renderGenderChart(data.gender_distribution);
+            this.isTopLocationsLoading = false;
+          },
+          error: () => {
+            this.isTopLocationsLoading = false;
+          },
+        }),
+    );
+  }
+
+  activityIcon(type: string): IconDefinition {
+    switch (type) {
+      case 'new_members':
+        return this.icons.faUsers;
+      case 'event_published':
+        return this.icons.faCalendarPlus;
+      case 'hackathon_activity':
+        return this.icons.faTrophy;
+      case 'channel_discussions':
+        return this.icons.faHashtag;
+      case 'forum_discussions':
+        return this.icons.faMessage;
+      case 'survey_responses':
+        return this.icons.faScroll;
+      case 'new_admins':
+        return this.icons.faUserPlus;
+      default:
+        return this.icons.faBolt;
+    }
+  }
+
+  activityAvatarClass(type: string): string {
+    switch (type) {
+      case 'new_members':
+        return 'members-avatar';
+      case 'event_published':
+        return 'events-avatar';
+      case 'hackathon_activity':
+        return 'hackathon-avatar';
+      case 'channel_discussions':
+      case 'forum_discussions':
+        return 'channel-avatar';
+      case 'survey_responses':
+        return 'survey-avatar';
+      case 'new_admins':
+        return 'admin-avatar';
+      default:
+        return 'members-avatar';
+    }
+  }
+
+  /** Community logo thumbnail for the activity row's avatar, when the API sends one. */
+  activityLogo(item: ICommunityGroupDashboardActivityItem): string | null {
+    return item?.community_logo || null;
+  }
+
+  missingFieldsTooltip(profile: ICommunityGroupDashboardIncompleteProfile): string {
+    const fields = (profile.missing_fields || [])
+      .map((field) =>
+        field
+          .split('_')
+          .map((frag) => frag.charAt(0).toUpperCase() + frag.slice(1))
+          .join(' '),
+      )
+      .join(', ');
+    return `Missing ${fields}`;
+  }
+
+  /** Builds a human-readable sentence for each day-bucketed activity type. */
+  activityLabel(item: ICommunityGroupDashboardActivityItem): string {
+    const count = item.count || 0;
+    switch (item.type) {
+      case 'new_members':
+        return item.community_name
+          ? `${count} new member${count === 1 ? '' : 's'} joined ${item.community_name}`
+          : `${count} new member${count === 1 ? '' : 's'} joined`;
+      case 'event_published':
+        return item.event_name
+          ? `${item.event_name} event published${item.community_name ? ' in ' + item.community_name : ''}`
+          : 'A new event was published';
+      case 'hackathon_activity':
+        return `${count} update${count === 1 ? '' : 's'} in ${item.hackathon_name || 'a hackathon'}`;
+      case 'channel_discussions':
+        return `${count} new channel discussion${count === 1 ? '' : 's'}`;
+      case 'forum_discussions':
+        return `${count} new forum discussion${count === 1 ? '' : 's'}`;
+      case 'survey_responses':
+        return `${item.response_count || 0} response${item.response_count === 1 ? '' : 's'} on ${
+          item.survey_name || 'a survey'
+        }`;
+      case 'new_admins':
+        return `${count} new admin${count === 1 ? '' : 's'} added`;
+      default:
+        return 'New activity';
+    }
+  }
+
+  activityItemLink(item: ICommunityGroupDashboardActivityItem): any[] | null {
+    switch (item?.type) {
+      case 'new_members':
+        return item.community_slug ? ['/admin', 'communities', item.community_slug, 'members'] : null;
+      case 'event_published':
+        return item.community_slug && item.event_slug
+          ? ['/communities', item.community_slug, 'events', item.event_slug]
+          : null;
+      case 'hackathon_activity':
+        return item.community_slug && item.hackathon_id
+          ? ['/admin', 'communities', item.community_slug, 'hackathon-dashboard', item.hackathon_id, 'updates']
+          : null;
+      case 'channel_discussions':
+        return item.community_slug
+          ? ['/admin', 'communities', item.community_slug, 'channels']
+          : ['/admin', 'orgs', this.communityGroup.slug, 'channels'];
+      case 'forum_discussions':
+        return item.community_slug
+          ? ['/admin', 'communities', item.community_slug, 'forums']
+          : ['/admin', 'orgs', this.communityGroup.slug, 'forums'];
+      case 'survey_responses':
+        return item.community_slug
+          ? ['/admin', 'communities', item.community_slug, 'surveys']
+          : ['/admin', 'orgs', this.communityGroup.slug, 'surveys'];
+      case 'new_admins':
+        return ['/admin', 'orgs', this.communityGroup.slug, 'admin-team'];
+      default:
+        return null;
+    }
+  }
+
+  onActivityRowClick(item: ICommunityGroupDashboardActivityItem): void {
+    const link = this.activityItemLink(item);
+    if (link) {
+      this.router.navigate(link);
+    }
+  }
+
+  scheduleItemLink(item: ICommunityGroupDashboardScheduleItem): any[] | null {
+    switch (item?.type) {
+      case 'event':
+        if (item.community_slug && item.event_slug) {
+          return ['/communities', item.community_slug, 'events', item.event_slug];
+        }
+        break;
+      case 'hackathon':
+        // No public hackathon_slug in this payload yet -- link to the admin dashboard by id instead.
+        if (item.community_slug && item.id) {
+          return ['/admin', 'communities', item.community_slug, 'hackathon-dashboard', item.id, 'updates'];
+        }
+        break;
+    }
+    // Fall back to the community page when there's no event/hackathon-specific destination.
+    return item?.community_slug ? ['/communities', item.community_slug] : null;
+  }
+
+  scheduleItemCommunityLink(item: ICommunityGroupDashboardScheduleItem): any[] | null {
+    return item?.community_slug ? ['/communities', item.community_slug] : null;
+  }
+
+  setQuickActions(): void {
+    const slug = this.communityGroup.slug;
+    this.quickActions = [
+      { label: 'Create Community', icon: faUsers, route: ['/admin/communities/new'] },
+      {
+        label: 'Create Event',
+        icon: faCalendarPlus,
+        route: ['/admin', 'orgs', slug, 'events'],
+      },
+      {
+        label: 'Create Hackathon',
+        icon: faTrophy,
+        route: ['/admin', 'orgs', slug, 'hackathons'],
+      },
+      { label: 'Create Survey', icon: faScroll, route: ['/admin', 'orgs', slug, 'surveys'] },
+      { label: 'Create Channel', icon: faHashtag, route: ['/admin', 'orgs', slug, 'channels'] },
+      { label: 'Manage Admins', icon: faUserPlus, route: ['/admin', 'orgs', slug, 'admin-team'] },
+    ];
+  }
+}

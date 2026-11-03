@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ICommunityGroup } from 'apps/shared-models/community-group.model';
 import { SeoService } from '@commudle/shared-services';
 import { Subscription } from 'rxjs';
-import { faUsers, faCalendarDays, faTrophy } from '@fortawesome/free-solid-svg-icons';
+import { faUsers, faCalendarDays, faTrophy, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'commudle-communities',
@@ -15,35 +15,18 @@ export class CommunitiesComponent implements OnInit, OnDestroy {
   communityGroup: ICommunityGroup;
 
   subscriptions: Subscription[] = [];
-  tabs = [
-    {
-      route: './',
-      title: 'Communities',
-      icon: faUsers,
-    },
-    {
-      route: 'events',
-      title: 'Events',
-      icon: faCalendarDays,
-    },
-    {
-      route: 'hackathons',
-      title: 'Hackathons',
-      icon: faTrophy,
-    },
-    // {
-    //   route: 'channels',
-    //   title: 'Channels',
-    //   icon: 'hash',
-    // },
+  tabs: { route: string; title: string; icon: IconDefinition }[] = [
+    { route: 'communities', title: 'Communities', icon: faUsers },
+    { route: 'events', title: 'Events', icon: faCalendarDays },
+    { route: 'hackathons', title: 'Hackathons', icon: faTrophy },
   ];
 
-  constructor(private activatedRoute: ActivatedRoute, private seoService: SeoService) {}
+  constructor(public activatedRoute: ActivatedRoute, private seoService: SeoService) { }
 
   ngOnInit(): void {
     this.seoService.noIndex(true);
     this.subscriptions.push(
-      this.activatedRoute.data.subscribe((data) => {
+      this.activatedRoute.parent.data.subscribe((data) => {
         this.communityGroup = data.community_group;
         this.setMeta();
       }),

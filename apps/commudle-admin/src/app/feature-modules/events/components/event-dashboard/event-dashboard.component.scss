@@ -35,7 +35,9 @@
 }
 
 .sidebar {
-  @apply com-sticky com-top-[var(--mobile-navbar-offset,52px)] com-h-[calc(100vh-70px)];
+  @apply com-sticky;
+  top: var(--mobile-navbar-offset, 52px);
+  height: calc(100vh - 70px);
 
   a {
     @apply com-text-inherit com-no-underline;
@@ -107,6 +109,7 @@ a {
 
 .event-dashboard-menu {
   @apply com-sticky com-top-[var(--mobile-navbar-offset,52px)] com-z-10;
+
   com-card {
     @apply com-my-4 com-mx-2;
 
@@ -141,7 +144,7 @@ a {
 }
 
 .router {
-  @apply com-mx-0 md:com-mx-4;
+  @apply com-m-0 md:com-m-4;
 }
 
 .header-icons {

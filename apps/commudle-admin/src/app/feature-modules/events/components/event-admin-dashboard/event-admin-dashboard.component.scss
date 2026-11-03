@@ -1,0 +1,1035 @@
+.event-overview {
+  @apply com-flex com-flex-col com-gap-4;
+}
+
+.section-loader {
+  @apply com-flex com-justify-center com-w-full com-py-3;
+}
+
+.inline-avatar {
+  @apply com-inline-block com-w-4 com-h-4 com-rounded-full com-object-cover com-align-middle com-mr-1;
+}
+
+.section-heading {
+  @apply com-m-0 com-text-base com-font-medium com-text-Yankees-Blue com-flex md:com-items-center com-items-start com-gap-2;
+
+  fa-icon {
+    @apply com-w-6 com-h-6 com-rounded-md com-flex com-items-center com-justify-center com-text-xs com-shrink-0;
+    animation: iconPulse 1.8s ease-in-out infinite;
+  }
+
+  .heading-icon-attention {
+    @apply com-bg-red-50 com-text-Infra-Red;
+  }
+
+  .heading-icon-snapshot {
+    @apply com-bg-green-50 com-text-green-600;
+  }
+
+  .heading-icon-pages {
+    @apply com-bg-blue-50 com-text-primary-500;
+  }
+
+  .section-info-icon {
+    @apply com-w-auto com-h-auto com-rounded-none com-bg-transparent com-text-[11px] com-text-gray-300 com-cursor-help;
+    animation: none;
+  }
+
+  .heading-icon-audience {
+    @apply com-bg-purple-50 com-text-purple-600;
+  }
+
+  .heading-icon-activity {
+    @apply com-bg-yellow-50 com-text-yellow-600;
+  }
+
+  .heading-icon-visitors {
+    @apply com-bg-blue-50 com-text-blue-500;
+  }
+
+  .activity-new-badge {
+    @apply com-bg-primary-500 com-text-tWhite com-text-[10px] com-font-semibold com-px-1.5 com-py-0.5 com-rounded-full;
+    animation: badgePop 2.4s ease-in-out forwards;
+  }
+}
+
+.section-heading-post {
+  @apply com-m-0 com-text-base com-font-medium com-text-tYankees-Blue com-flex md:com-items-center com-items-start com-gap-2;
+
+  fa-icon {
+    @apply com-w-6 com-h-6 com-rounded-md com-flex com-items-center com-justify-center com-text-xs com-shrink-0;
+    animation: iconPulse 1.8s ease-in-out infinite;
+  }
+
+  .heading-icon-postevent {
+    @apply com-bg-indigo-50 com-text-indigo-600;
+  }
+}
+
+@keyframes iconPulse {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+
+  50% {
+    transform: scale(1.25) rotate(-8deg);
+  }
+}
+
+@keyframes badgePop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(4px);
+  }
+
+  15% {
+    opacity: 1;
+    transform: scale(1.15) translateY(0);
+  }
+
+  25% {
+    transform: scale(1);
+  }
+
+  80% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.9) translateY(-4px);
+  }
+}
+
+.section-header {
+  @apply com-flex com-items-center com-justify-between com-mb-1.5 com-m-0;
+}
+
+.section-header-post {
+  @apply com-flex md:com-flex-row com-flex-col md:com-items-center com-justify-between com-mb-1.5 com-m-0;
+}
+
+.view-all-link {
+  @apply com-text-xs com-font-medium com-text-primary-500 com-no-underline com-flex-shrink-0 com-transition-transform com-duration-200 com-inline-block;
+
+  &:hover {
+    @apply com-text-primary-700;
+    transform: translateX(2px);
+  }
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes barGrow {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes livePing {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+
+  75%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+@keyframes deltaPop {
+  from {
+    opacity: 0;
+    transform: scale(0.6) translateY(2px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes activityItemIn {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .event-overview * {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+// Row 1: Event Hero
+.event-hero {
+  @apply com-relative com-flex com-flex-col md:com-flex-row com-items-stretch com-overflow-hidden com-rounded-xl com-border com-border-solid com-border-Bright-Gray com-bg-white com-p-3 com-gap-2 md:com-gap-3;
+  background: linear-gradient(135deg, #e8f0fe 0%, #f0e6ff 30%, #ffffff 60%, #e8f4ff 100%);
+  animation: cardFadeIn 0.4s ease-out both;
+
+  .hero-banner {
+    @apply com-w-full md:com-w-32 com-h-28 md:com-h-auto com-rounded-xl com-overflow-hidden com-flex-shrink-0 md:com-self-stretch com-min-h-[120px];
+
+    img {
+      @apply com-w-full com-h-full com-object-cover;
+    }
+  }
+
+  .hero-content {
+    @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-gap-2;
+
+    .hero-top-row {
+      @apply com-flex com-flex-col sm:com-flex-row com-items-start sm:com-items-center com-justify-between com-gap-2 sm:com-gap-3;
+
+      .hero-info {
+        @apply com-flex com-flex-col com-gap-1 com-flex-1 com-min-w-0;
+
+        .hero-title-row {
+          @apply com-flex com-items-center com-gap-2;
+
+          .hero-event-name {
+            @apply com-m-0 com-text-lg com-font-medium com-text-tYankees-Blue com-truncate;
+          }
+
+          .hero-edit-btn {
+            @apply com-flex com-text-gray-400 com-no-underline com-flex-shrink-0;
+            @apply hover:com-text-primary-500;
+
+            nb-icon {
+              @apply com-text-sm;
+            }
+          }
+        }
+
+        .hero-meta {
+          @apply com-flex com-flex-wrap com-items-center com-gap-2 com-text-xs com-text-gray-600;
+
+          .hero-status-badge {
+            @apply com-inline-flex com-items-center com-gap-1.5 com-px-2.5 com-py-0.5 com-rounded-full com-text-xs com-font-medium com-bg-green-100 com-text-green-700;
+
+            .status-dot {
+              @apply com-w-1.5 com-h-1.5 com-rounded-full com-bg-green-500;
+            }
+
+            &.status-live,
+            &.status-ongoing {
+              @apply com-bg-red-100 com-text-red-600;
+
+              .status-dot {
+                @apply com-bg-red-500;
+                animation: pulse 2s infinite;
+              }
+            }
+
+            &.status-completed {
+              @apply com-bg-green-100 com-text-green-600;
+            }
+          }
+
+          .hero-type-item {
+            @apply com-inline-flex com-items-center com-gap-1;
+
+            nb-icon {
+              @apply com-text-sm com-w-3 com-h-3;
+            }
+          }
+
+          .hero-meta-dot {
+            @apply com-text-gray-400;
+          }
+
+          .hero-meta-item {
+            @apply com-text-xs com-text-gray-800;
+          }
+        }
+
+        .location-icon {
+          @apply com-text-xs;
+        }
+
+        .hero-location {
+          @apply com-flex com-flex-wrap com-items-center com-gap-2 com-text-xs com-text-gray-800;
+
+          .hero-location-item {
+            @apply com-inline-flex com-items-center com-gap-1 com-no-underline com-font-medium;
+
+            nb-icon {
+              @apply com-text-sm com-w-3 com-h-3;
+            }
+          }
+
+          .hero-divider {
+            @apply com-text-gray-300;
+          }
+
+          .hero-public-link {
+            @apply com-inline-flex com-items-center com-gap-1 com-text-xs com-font-medium com-text-primary-500 com-no-underline com-transition-transform com-duration-200;
+            @apply hover:com-text-primary-700;
+
+            &:hover {
+              transform: translateX(2px);
+            }
+
+            nb-icon {
+              @apply com-text-sm;
+            }
+
+            .hero-external-icon {
+              @apply com-text-xs;
+            }
+          }
+        }
+      }
+
+      .hero-actions {
+        @apply com-flex com-items-center com-gap-2 com-flex-shrink-0;
+      }
+    }
+
+    .hero-highlights {
+      @apply com-grid com-grid-cols-2 md:com-flex md:com-flex-wrap com-gap-0 com-border-0 com-border-t com-border-solid com-border-gray-300 com-pt-2;
+
+      .highlight-stat {
+        @apply com-flex com-items-center com-gap-2 com-flex-1 com-py-1 com-px-2 md:com-px-3 com-border-0 md:com-border-r com-border-solid com-border-gray-300 com-transition-colors com-duration-200;
+
+        &:first-child {
+          @apply com-pl-0;
+        }
+
+        &:last-child {
+          @apply com-border-r-0;
+        }
+
+        &:hover {
+          .highlight-stat-icon {
+            transform: scale(1.15) rotate(-6deg);
+          }
+        }
+
+        .highlight-stat-icon {
+          @apply com-w-7 com-h-7 com-rounded-full com-flex com-items-center com-justify-center com-text-xs com-shrink-0 com-transition-transform com-duration-200;
+
+          &.registrations-icon {
+            @apply com-bg-blue-100 com-text-blue-600;
+          }
+
+          &.progress-icon {
+            @apply com-bg-green-100 com-text-green-600;
+          }
+
+          &.email-icon {
+            @apply com-bg-purple-100 com-text-purple-600;
+          }
+
+          &.passes-icon {
+            @apply com-bg-orange-100 com-text-orange-600;
+          }
+
+          &.health-icon {
+            @apply com-bg-green-50 com-flex com-items-center com-justify-center;
+
+            .health-emoji {
+              @apply com-text-sm;
+            }
+          }
+        }
+
+        .highlight-stat-info {
+          @apply com-flex com-flex-col;
+
+          .highlight-stat-value {
+            @apply com-text-sm com-font-medium com-text-tYankees-Blue;
+          }
+
+          .highlight-stat-label {
+            @apply com-text-xs com-text-Cadet-Grey com-font-normal com-leading-tight;
+          }
+        }
+
+        .highlight-stat-visual {
+          @apply com-ml-auto com-shrink-0 com-hidden md:com-block;
+
+          .sparkline {
+            @apply com-w-[50px] com-h-[20px];
+          }
+
+          .progress-ring {
+            @apply com-w-7 com-h-7;
+
+            .progress-ring-bg {
+              fill: none;
+              stroke: #e5e7eb;
+              stroke-width: 3.5;
+            }
+
+            .progress-ring-fill {
+              @apply -com-rotate-90 com-origin-center;
+              fill: none;
+              stroke: #3b82f6;
+              stroke-width: 3.5;
+              stroke-linecap: round;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+// Row 2: Three-column
+.three-col-row {
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-4;
+
+  .attention-card,
+  .snapshot-card,
+  .activity-card {
+    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+    animation: cardFadeIn 0.4s ease-out both;
+
+    &:hover {
+      @apply com-shadow-Card;
+      transform: translateY(-2px);
+    }
+  }
+
+  .attention-card {
+    animation-delay: 0.05s;
+  }
+
+  .snapshot-card {
+    animation-delay: 0.1s;
+  }
+
+  .activity-card {
+    animation-delay: 0.15s;
+  }
+
+  .activity-card {
+    @apply com-flex com-flex-col;
+
+    commudle-pagination-compact {
+      @apply com-mt-auto;
+    }
+  }
+
+  .attention-list {
+    @apply com-m-0;
+
+    .attention-empty {
+      @apply com-py-2 com-text-center com-text-xs com-text-gray-500 com-m-0;
+    }
+
+    .attention-item {
+      @apply com-flex com-items-center com-gap-2 com-p-1 com-no-underline com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+
+      &:last-child {
+        @apply com-border-b-0;
+      }
+
+      &:hover {
+        @apply com-bg-gray-50 com-rounded-lg;
+
+        .attention-arrow {
+          @apply com-text-primary-500;
+          transform: translateX(3px);
+        }
+
+        .attention-icon-cross {
+          transform: scale(1.15);
+        }
+      }
+
+      .attention-icon-check {
+        @apply com-text-green-500 com-text-sm com-shrink-0;
+      }
+
+      .attention-icon-cross {
+        @apply com-text-red-400 com-text-sm com-shrink-0 com-transition-transform com-duration-200;
+      }
+
+      .attention-content {
+        @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-m-0;
+
+        .attention-title {
+          @apply com-text-xs com-text-Yankees-Blue;
+        }
+
+        .attention-sub {
+          @apply com-text-xs com-font-normal com-text-gray-500;
+        }
+
+        .speaker-names {
+          @apply com-truncate com-text-gray-400;
+
+          .speaker-link {
+            @apply com-text-inherit com-no-underline com-cursor-pointer com-transition-colors com-duration-200;
+
+            &:hover {
+              @apply com-text-primary-600 com-underline;
+            }
+          }
+        }
+      }
+
+      .attention-arrow {
+        @apply com-text-lg com-text-gray-400 com-shrink-0 com-transition-all com-duration-200;
+      }
+    }
+  }
+
+  // Event Snapshot
+  .snapshot-grid {
+    @apply com-grid com-grid-cols-1 com-gap-3 com-m-0;
+
+    .snapshot-stat {
+      @apply com-flex com-items-center com-gap-2 com-p-2.5 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+
+      &:hover {
+        @apply com-border-primary-300 com-shadow-Card;
+        transform: translateY(-2px);
+
+        .snapshot-stat-icon {
+          transform: scale(1.15) rotate(-6deg);
+        }
+      }
+
+      .snapshot-stat-icon {
+        @apply com-w-7 com-h-7 com-rounded-full com-flex com-items-center com-justify-center com-text-xs com-shrink-0 com-transition-transform com-duration-200;
+
+        &.registrations-icon {
+          @apply com-bg-blue-50 com-text-blue-600;
+        }
+
+        &.speakers-icon {
+          @apply com-bg-purple-50 com-text-purple-600;
+        }
+
+        &.sponsors-icon {
+          @apply com-bg-green-50 com-text-green-600;
+        }
+
+        &.team-icon {
+          @apply com-bg-orange-50 com-text-orange-600;
+        }
+      }
+
+      .snapshot-stat-info {
+        @apply com-flex com-flex-col com-min-w-0 com-flex-1 com-gap-6px;
+      }
+
+      .snapshot-stat-label {
+        @apply com-text-xs com-text-gray-500 com-font-normal;
+      }
+
+      .snapshot-stat-value-row {
+        @apply com-flex com-items-center com-gap-1.5;
+      }
+
+      .snapshot-stat-value {
+        @apply com-text-base com-font-medium com-leading-tight com-text-Yankees-Blue;
+      }
+
+      .snapshot-stat-sub {
+        @apply com-text-10px com-text-green-600;
+      }
+    }
+  }
+
+  .snapshot-empty {
+    @apply com-flex com-flex-col com-items-center com-gap-2 com-py-4 com-text-xs com-text-gray-500 com-m-0;
+
+    .snapshot-empty-icon {
+      @apply com-flex com-items-center com-justify-center com-w-12 com-h-12 com-rounded-full com-bg-green-50 com-text-green-500 com-text-xl com-mb-1;
+    }
+
+    .snapshot-empty-text {
+      @apply com-text-xs com-font-medium com-text-Yankees-Blue;
+    }
+  }
+
+  // Recent Activity
+  .activity-list {
+    @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col;
+
+    @for $i from 1 through 8 {
+      .activity-item:nth-child(#{$i}) {
+        animation-delay: #{$i * 0.04}s;
+      }
+    }
+
+    .activity-item {
+      @apply com-flex com-items-start com-gap-2 com-py-1 com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-colors com-duration-200;
+      animation: activityItemIn 0.3s ease-out both;
+
+      &:hover {
+        @apply com-bg-gray-50;
+
+        .activity-avatar {
+          transform: scale(1.1);
+        }
+      }
+
+      &:last-child {
+        @apply com-border-b-0;
+      }
+
+      &.activity-item-clickable {
+        cursor: pointer;
+      }
+
+      .activity-avatar {
+        @apply com-w-6 com-h-6 com-rounded-full com-flex com-items-center com-justify-center com-text-10px com-font-medium com-shrink-0 com-text-white com-transition-transform com-duration-200;
+
+        &.members-avatar {
+          @apply com-bg-blue-500;
+        }
+
+        &.speaker-avatar {
+          @apply com-bg-purple-500;
+        }
+
+        &.submission-avatar {
+          @apply com-bg-green-500;
+        }
+
+        &.heart-avatar {
+          @apply com-bg-red-400;
+        }
+
+        &.email-avatar {
+          @apply com-bg-orange-500;
+        }
+      }
+
+      .activity-content {
+        @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-line-clamp-2 com-m-0;
+
+        .activity-text {
+          @apply com-text-xs com-text-Yankees-Blue com-line-clamp-2 com-cursor-default;
+
+          strong {
+            @apply com-font-medium;
+          }
+
+          .activity-user-link {
+            @apply com-text-inherit com-no-underline com-cursor-pointer com-transition-colors com-duration-200;
+
+            &:hover {
+              @apply com-text-primary-600 com-underline;
+            }
+          }
+        }
+
+        .activity-sub {
+          @apply com-text-xs com-text-gray-500 com-line-clamp-1;
+        }
+      }
+
+      .activity-time {
+        @apply com-text-xs com-text-gray-400 com-shrink-0;
+      }
+    }
+
+    .activity-empty {
+      @apply com-flex com-flex-col com-items-center com-gap-2 com-py-4 com-text-xs com-text-gray-500;
+
+      .activity-empty-icon {
+        @apply com-flex com-items-center com-justify-center com-w-12 com-h-12 com-rounded-full com-bg-yellow-50 com-text-yellow-500 com-text-xl com-mb-1;
+      }
+
+      .activity-empty-text {
+        @apply com-text-xs com-font-medium com-text-Yankees-Blue;
+      }
+    }
+  }
+}
+
+// Row 3: Audience + Post-Event
+.two-col-row {
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-2 com-gap-4;
+
+  .audience-card,
+  .post-event-card {
+    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+    animation: cardFadeIn 0.4s ease-out both;
+
+    &:hover {
+      @apply com-shadow-Card;
+      transform: translateY(-2px);
+    }
+  }
+
+  .audience-card {
+    animation-delay: 0.2s;
+  }
+
+  .post-event-card {
+    animation-delay: 0.25s;
+    background: linear-gradient(135deg, #ede9fe 0%, #f5f3ff 30%, #ffffff 55%, #eef2ff 80%, #e0e7ff 100%);
+    border-color: #a5b4fc;
+  }
+}
+
+.audience-content {
+  @apply com-flex com-flex-col com-gap-5 com-mt-4;
+
+  .audience-chart {
+    @apply com-flex com-flex-row com-items-center com-gap-4 com-w-full;
+
+    .chart-pie-canvas {
+      @apply com-relative com-w-20 com-h-20 com-shrink-0;
+    }
+
+    .chart-donut-empty {
+      @apply com-w-24 com-h-24 com-rounded-full com-border-solid com-border-gray-200 com-shrink-0;
+      border-width: 12px;
+    }
+
+    .chart-legend {
+      @apply com-m-0 com-p-0 com-list-none com-grid com-grid-cols-2 com-gap-x-6 com-gap-y-1 com-flex-1 com-min-w-0;
+
+      li {
+        @apply com-flex com-items-center com-gap-2 com-text-xs com-text-Yankees-Blue com-min-w-0;
+      }
+
+      .legend-dot {
+        @apply com-w-2.5 com-h-2.5 com-rounded-full com-shrink-0;
+        background-color: var(--dot-color);
+      }
+
+      .legend-pct {
+        @apply com-ml-auto com-text-xs com-text-Cadet-Grey;
+      }
+    }
+  }
+
+  .audience-stats {
+    @apply com-flex com-flex-col com-gap-2 com-min-w-0;
+
+    .audience-col {
+      @apply com-flex com-flex-col com-min-w-0 com-bg-gray-50 com-rounded-lg com-p-2;
+
+      .audience-col-heading {
+        @apply com-m-0 com-text-xs com-font-medium com-text-Yankees-Blue com-mb-1.5;
+      }
+
+      .audience-list {
+        @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-1.5;
+
+        li {
+          @apply com-flex com-items-center com-justify-between com-gap-2 com-text-xs com-text-Yankees-Blue;
+        }
+
+        .audience-name {
+          @apply com-flex-1 com-min-w-0 com-truncate com-text-xs com-font-normal com-text-gray-600;
+        }
+
+        .audience-bar {
+          @apply com-h-1.5 com-rounded-full com-shrink com-min-w-[8px] com-max-w-[72px] com-bg-indigo-500;
+          width: var(--bar-share, 0%);
+          animation: barGrow 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+          transform-origin: left;
+        }
+
+        .audience-pct {
+          @apply com-text-xs com-font-semibold com-text-Cadet-Grey com-w-8 com-text-right;
+        }
+
+        .audience-list-empty {
+          @apply com-flex-col com-items-center com-justify-center com-gap-2 com-py-3;
+
+          .audience-list-empty-icon {
+            @apply com-flex com-items-center com-justify-center com-w-12 com-h-12 com-rounded-full com-bg-purple-50 com-text-purple-600 com-text-xl com-mb-1;
+          }
+
+          .audience-list-empty-text {
+            @apply com-text-xs com-font-medium com-text-Yankees-Blue;
+          }
+        }
+      }
+    }
+  }
+}
+
+.post-event-card {
+  .post-event-date {
+    @apply com-text-xs com-text-Cadet-Grey;
+  }
+
+  .post-event-content {
+    @apply com-flex com-flex-col sm:com-flex-row com-gap-2 com-mt-2 com-items-start;
+
+    .post-event-hero {
+      @apply com-flex com-flex-col com-gap-1 com-shrink-0 com-p-2.5;
+
+      .post-event-title {
+        @apply com-m-0 com-text-xs com-font-medium com-text-tYankees-Blue;
+      }
+
+      .post-event-sub {
+        @apply com-m-0 com-text-xs com-text-Cadet-Grey;
+      }
+
+      .post-event-link {
+        @apply com-text-xs com-font-medium com-text-primary-500 com-mt-1 com-cursor-pointer com-no-underline com-transition-transform com-duration-200 com-inline-block;
+        @apply hover:com-text-primary-700;
+
+        &:hover {
+          transform: translateX(2px);
+        }
+      }
+    }
+
+    .post-event-stats {
+      @apply com-grid com-grid-cols-2 sm:com-grid-cols-3 com-gap-1.5 com-flex-1 com-w-full;
+
+      .post-stat {
+        @apply com-flex com-flex-col com-items-center com-justify-center com-gap-0.5 com-py-2 com-px-2 com-min-w-0 com-bg-white com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+
+        &:hover {
+          @apply com-border-primary-300 com-shadow-Card;
+          transform: translateY(-2px);
+        }
+
+        .post-stat-value {
+          @apply com-text-base com-font-medium com-text-Yankees-Blue com-leading-none;
+        }
+
+        .post-stat-label {
+          @apply com-text-xs com-text-Cadet-Grey com-text-center;
+        }
+
+        .post-stat-action {
+          @apply com-inline-flex com-items-center com-justify-center com-gap-1 com-no-underline com-text-center com-max-w-full com-whitespace-normal com-leading-tight;
+
+          nb-icon {
+            @apply com-text-xs com-w-4 com-h-4 com-shrink-0;
+          }
+        }
+      }
+    }
+  }
+
+  .post-event-charts {
+    @apply com-flex com-flex-col com-gap-3 md:com-gap-6 com-mt-4;
+
+    .post-event-chart {
+      @apply com-flex com-flex-col com-gap-2;
+
+      .audience-col-heading {
+        @apply com-m-0 com-text-xs com-font-medium com-text-tYankees-Blue com-mb-1;
+      }
+
+      .audience-chart {
+        @apply com-flex com-flex-col sm:com-flex-row com-items-center com-gap-3;
+      }
+
+      .chart-pie-canvas {
+        @apply com-relative com-w-24 com-h-24 com-shrink-0;
+      }
+
+      .chart-legend {
+        @apply com-m-0 com-p-0 com-list-none com-grid com-grid-cols-1 sm:com-grid-cols-2 com-gap-x-6 com-gap-y-2 com-flex-1 com-min-w-0 com-w-full;
+
+        li {
+          @apply com-flex com-items-center com-gap-2 com-text-xs com-text-gray-600 dark:com-text-gray-800 com-min-w-0;
+        }
+
+        .legend-dot {
+          @apply com-w-2.5 com-h-2.5 com-rounded-full com-shrink-0;
+          background-color: var(--dot-color);
+        }
+
+        .legend-pct {
+          @apply com-ml-auto com-text-xs com-text-Cadet-Grey;
+        }
+      }
+    }
+  }
+}
+
+// Row 4: Live Visitors + Top Pages
+.live-traffic-row {
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-2 com-gap-4;
+
+  .live-visitors-card,
+  .top-list-card {
+    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+    animation: cardFadeIn 0.4s ease-out both;
+
+    &:hover {
+      @apply com-shadow-Card;
+      transform: translateY(-2px);
+    }
+  }
+
+  .live-visitors-card {
+    animation-delay: 0.3s;
+  }
+
+  .top-list-card {
+    animation-delay: 0.35s;
+  }
+
+  .top-pages-window-toggle {
+    @apply com-flex com-gap-1 com-bg-gray-100 com-rounded-full com-p-1 com-shrink-0;
+
+    button {
+      @apply com-border-0 com-bg-transparent com-text-xs com-font-medium com-text-gray-500 com-px-3 com-py-1.5 com-rounded-full com-cursor-pointer com-transition-colors com-duration-200;
+
+      &:hover {
+        @apply com-text-primary-600;
+      }
+
+      &.active {
+        @apply com-bg-white com-text-primary-600 com-shadow-sm;
+      }
+    }
+  }
+
+  .live-visitors-body {
+    @apply com-flex com-flex-col com-gap-2;
+
+    .live-visitors-counts {
+      @apply com-flex com-gap-6;
+
+      .live-count {
+        @apply com-flex com-flex-col com-gap-2;
+
+        &:first-child .live-count-value {
+          animation: deltaPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
+        }
+
+        .live-count-value {
+          @apply com-text-base com-font-medium com-text-Yankees-Blue com-leading-none;
+        }
+
+        .live-count-label {
+          @apply com-flex com-items-center com-gap-1.5 com-text-xs com-font-normal com-text-gray-500;
+
+          .live-dot {
+            @apply com-w-2 com-h-2 com-rounded-full com-bg-green-500 com-relative com-inline-block;
+
+            &::after {
+              content: '';
+              @apply com-absolute com-inset-0 com-rounded-full com-bg-green-500;
+              animation: livePing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+            }
+          }
+        }
+      }
+    }
+
+    .live-visitors-chart-wrap {
+      @apply com-relative com-h-36 com-mt-1;
+
+      &.is-empty {
+        @apply com-flex com-items-center com-justify-center;
+
+        canvas {
+          @apply com-hidden;
+        }
+      }
+
+      .live-visitors-chart-empty {
+        @apply com-text-xs com-text-gray-400;
+      }
+    }
+  }
+
+  .top-list-header {
+    @apply com-flex com-items-center com-justify-between com-pb-1 com-mb-1 com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-text-10px com-font-medium com-text-gray-400 com-uppercase com-tracking-wide;
+  }
+
+  .top-list {
+    @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-2;
+
+    .top-list-item {
+      @apply com-flex com-items-center com-gap-4 com-text-xs com-text-Yankees-Blue;
+
+      .top-list-name {
+        @apply com-w-28 com-shrink-0 com-truncate com-text-xs com-font-normal com-text-gray-600 com-no-underline com-transition-colors com-duration-200;
+
+        &:hover {
+          @apply com-text-primary-600 com-underline;
+        }
+      }
+
+      .top-list-track {
+        @apply com-h-1 com-flex-1 com-shrink-0 com-rounded-full com-bg-gray-100 com-overflow-hidden;
+      }
+
+      .top-list-bar {
+        @apply com-block com-h-full com-rounded-full com-min-w-1;
+        width: var(--bar-share, 0%);
+        animation: barGrow 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+        transform-origin: left;
+
+        &.top-list-bar-pages {
+          @apply com-bg-primary-500;
+        }
+      }
+
+      .top-list-value {
+        @apply com-ml-auto com-text-xs com-font-medium com-text-Cadet-Grey com-shrink-0;
+      }
+    }
+
+    .top-list-empty {
+      @apply com-flex com-flex-col com-items-center com-gap-2 com-py-4 com-text-xs com-text-gray-500;
+
+      .top-list-empty-icon {
+        @apply com-flex com-items-center com-justify-center com-w-12 com-h-12 com-rounded-full com-text-xl com-mb-1;
+
+        &.pages {
+          @apply com-bg-blue-50 com-text-primary-500;
+        }
+      }
+
+      .top-list-empty-text {
+        @apply com-text-xs com-font-medium com-text-Yankees-Blue;
+      }
+    }
+  }
+}
+
+strong {
+  @apply com-font-medium;
+}

@@ -5,6 +5,7 @@ import { HackathonControlPanelRoutes } from './hackathon-control-panel.routing';
 import { HackathonControlPanelDashboardComponent } from './components/hackathon-control-panel-dashboard/hackathon-control-panel-dashboard.component';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
 import { SidebarComponent } from 'apps/shared-components/sidebar/sidebar.component';
+import { PaginationCompactComponent } from 'apps/shared-components/pagination-compact/pagination-compact.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CommudleButtonModule } from '@commudle/commudle-theme';
 import { HackathonControlPanelBasicFormComponent } from './components/hackathon-control-panel-basic-form/hackathon-control-panel-basic-form.component';
@@ -44,7 +45,7 @@ import { HackathonControlPanelUpdatesComponent } from 'apps/commudle-admin/src/a
 import { EditorModule as NewEditorModule } from '@commudle/editor';
 import { HackathonControlPanelReviewComponent } from 'apps/commudle-admin/src/app/feature-modules/hackathon-control-panel/components/hackathon-control-panel-review/hackathon-control-panel-review.component';
 import { HackathonControlPanelRoundsComponent } from 'apps/commudle-admin/src/app/feature-modules/hackathon-control-panel/components/hackathon-control-panel-rounds/hackathon-control-panel-rounds.component';
-import { CommudleCardModule } from '@commudle/commudle-theme';
+import { CommudleCardModule, CommudleTooltipModule } from '@commudle/commudle-theme';
 import { HackathonControlPanelEmailsComponent } from 'apps/commudle-admin/src/app/feature-modules/hackathon-control-panel/components/hackathon-control-panel-emails/hackathon-control-panel-emails.component';
 import { HackathonWinnerAnnouncementEmailerComponent } from 'apps/commudle-admin/src/app/feature-modules/hackathon-control-panel/components/hackathon-control-panel-emails/hackathon-winner-announcement-emailer/hackathon-winner-announcement-emailer.component';
 import { HackathonStatusFilterGeneralEmailsComponent } from 'apps/commudle-admin/src/app/feature-modules/hackathon-control-panel/components/hackathon-control-panel-emails/hackathon-status-filter-general-emails/hackathon-status-filter-general-emails.component';
@@ -81,6 +82,7 @@ import { MentorTeamAssignmentEmailDialogComponent } from 'apps/commudle-admin/sr
 import { MentorMessageToTeamsDialogComponent } from 'apps/commudle-admin/src/app/feature-modules/hackathon-control-panel/components/hackathon-control-panel-emails/mentor-message-to-teams-dialog/mentor-message-to-teams-dialog.component';
 import { HackathonProblemStatementChartComponent } from 'apps/commudle-admin/src/app/feature-modules/hackathon-control-panel/components/hackathon-control-panel-review/hackathon-problem-statement-chart/hackathon-problem-statement-chart.component';
 import { HackathonScoreDashboardComponent } from 'apps/commudle-admin/src/app/feature-modules/hackathon-control-panel/components/hackathon-score-dashboard/hackathon-score-dashboard.component';
+import { HackathonAdminDashboardComponent } from 'apps/commudle-admin/src/app/feature-modules/hackathon-control-panel/components/hackathon-admin-dashboard/hackathon-admin-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -130,6 +132,7 @@ import { HackathonScoreDashboardComponent } from 'apps/commudle-admin/src/app/fe
     MentorMessageToTeamsDialogComponent,
     HackathonProblemStatementChartComponent,
     HackathonScoreDashboardComponent,
+    HackathonAdminDashboardComponent,
   ],
   imports: [
     CommonModule,
@@ -145,9 +148,11 @@ import { HackathonScoreDashboardComponent } from 'apps/commudle-admin/src/app/fe
     SharedPipesModule,
     CommunityChannelsModule,
     CommudleCardModule,
+    CommudleTooltipModule,
     //components
     SidebarComponent,
     HelpSectionComponent,
+    PaginationCompactComponent,
     DataTableComponent,
     //nebular
     NbButtonModule,
@@ -168,6 +173,7 @@ import { HackathonScoreDashboardComponent } from 'apps/commudle-admin/src/app/fe
     ZXingScannerModule,
     MiniUserProfileModule,
     NgxDocViewerModule,
+    CommudleButtonModule,
   ],
   providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }],
 })

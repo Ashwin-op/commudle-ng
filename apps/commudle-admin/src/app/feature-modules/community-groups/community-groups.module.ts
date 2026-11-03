@@ -10,7 +10,7 @@ import {
   NbTagModule,
   NbToggleModule,
 } from '@commudle/theme';
-import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-theme';
+import { CommudleButtonModule, CommudleCardModule, CommudleTooltipModule } from '@commudle/commudle-theme';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CommunityGroupsRoutingModule } from './community-groups-routing.module';
@@ -34,6 +34,9 @@ import { AppSharedComponentsModule } from 'apps/commudle-admin/src/app/app-share
 import { CommunityGroupCustomPagesComponent } from './components/community-group-custom-pages/community-group-custom-pages.component';
 import { CommunityGroupChannelComponent } from 'apps/commudle-admin/src/app/feature-modules/community-groups/components/community-group-channel/community-group-channel.component';
 import { CommunityChannelsModule } from 'apps/commudle-admin/src/app/feature-modules/community-channels/community-channels.module';
+import { SharedPipesModule } from 'apps/shared-pipes/pipes.module';
+import { PaginationCompactComponent } from 'apps/shared-components/pagination-compact/pagination-compact.component';
+import { CommunityGroupAdminDashboardComponent } from './components/community-group-admin-dashboard/community-group-admin-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +52,7 @@ import { CommunityChannelsModule } from 'apps/commudle-admin/src/app/feature-mod
     CommunityGroupsSurveysComponent,
     CommunityGroupCustomPagesComponent,
     CommunityGroupChannelComponent,
+    CommunityGroupAdminDashboardComponent,
   ],
   imports: [
     CommonModule,
@@ -58,6 +62,7 @@ import { CommunityChannelsModule } from 'apps/commudle-admin/src/app/feature-mod
     EditorModule,
     SharedComponentsModule,
     SharedDirectivesModule,
+    SharedPipesModule,
     MiniUserProfileModule,
     AppSharedComponentsModule,
     CommunityChannelsModule,
@@ -65,6 +70,7 @@ import { CommunityChannelsModule } from 'apps/commudle-admin/src/app/feature-mod
     //standalone components
     SidebarComponent,
     SkeletonCardsComponent,
+    PaginationCompactComponent,
 
     //font-awesome
     FontAwesomeModule,
@@ -82,6 +88,7 @@ import { CommunityChannelsModule } from 'apps/commudle-admin/src/app/feature-mod
     // Commudle Theme
     CommudleCardModule,
     CommudleButtonModule,
+    CommudleTooltipModule,
   ],
   providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }],
 })

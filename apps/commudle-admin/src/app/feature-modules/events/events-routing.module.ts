@@ -13,6 +13,7 @@ import { ExitPassScanComponent } from './components/user-event-registrations/exi
 import { UserEventRegistrationsComponent } from './components/user-event-registrations/user-event-registrations.component';
 import { VolunteersComponent } from './components/volunteers/volunteers.component';
 import { EventDetailsComponent } from 'apps/commudle-admin/src/app/feature-modules/events/components/event-details/event-details.component';
+import { EventAdminDashboardComponent } from 'apps/commudle-admin/src/app/feature-modules/events/components/event-admin-dashboard/event-admin-dashboard.component';
 import { EventUpdatesComponent } from 'apps/commudle-admin/src/app/feature-modules/events/components/event-updates/event-updates.component';
 import { EventAgendaComponent } from 'apps/commudle-admin/src/app/feature-modules/events/components/event-agenda/event-agenda.component';
 import { EventRegistrationsComponent } from 'apps/commudle-admin/src/app/feature-modules/events/components/event-registrations/event-registrations.component';
@@ -46,6 +47,10 @@ const routes = [
             children: [
               {
                 path: '',
+                component: EventAdminDashboardComponent,
+              },
+              {
+                path: 'details',
                 component: EventDetailsComponent,
               },
               {

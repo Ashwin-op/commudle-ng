@@ -1,8 +1,9 @@
 .members-list {
-  @apply md:com-p-6 com-p-4;
+  @apply md:com-p-5 com-p-4 com-bg-white com-rounded-lg;
 
   .tab-list {
     @apply md:com-ml-2 com-ml-0;
+
     a {
       @apply com-text-gray-500 com-text-base com-font-medium com-h-fit com-m-0 com-pt-0 com-px-6 com-pb-5 com-cursor-pointer com-no-underline com-mt-4;
 

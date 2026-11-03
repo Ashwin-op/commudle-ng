@@ -59,7 +59,9 @@ import { CommunityBankDetailsComponent } from 'apps/commudle-admin/src/app/featu
 import { SidebarComponent } from 'apps/shared-components/sidebar/sidebar.component';
 import { ReusableComponentsModule } from 'apps/commudle-admin/src/app/feature-modules/reusable-components/reusable-components.module';
 import { CommunityMailsSentStatsComponent } from './components/community-mails-sent-stats/community-mails-sent-stats.component';
+import { CommunityAdminDashboardComponent } from './components/community-admin-dashboard/community-admin-dashboard.component';
 import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-components/help-section/help-section.component';
+import { PaginationCompactComponent } from 'apps/shared-components/pagination-compact/pagination-compact.component';
 import { CommudleButtonModule } from '@commudle/commudle-theme';
 import { CommudleInputModule } from '@commudle/commudle-theme';
 import { CommudleCardModule } from '@commudle/commudle-theme';
@@ -90,6 +92,7 @@ import { CommudleTooltipModule } from '@commudle/commudle-theme';
     CommunityPaymentLogsComponent,
     CommunityBankDetailsComponent,
     CommunityMailsSentStatsComponent,
+    CommunityAdminDashboardComponent,
   ],
   imports: [
     CommonModule,
@@ -114,6 +117,7 @@ import { CommudleTooltipModule } from '@commudle/commudle-theme';
     CommudleTooltipModule,
     //standalone
     SidebarComponent,
+    PaginationCompactComponent,
 
     // Nebular
     NbCardModule,

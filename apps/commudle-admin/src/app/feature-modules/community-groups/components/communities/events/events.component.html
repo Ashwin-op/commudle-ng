@@ -67,7 +67,7 @@
             <td>
               <div class="event-actions">
                 <a
-                  [routerLink]="['/admin', 'communities', event.kommunity_id, 'event-dashboard', event.slug]"
+                  [routerLink]="['/admin', 'communities', event.kommunity_id, 'events', 'event-dashboard', event.slug]"
                   comButton
                   status="primary"
                   size="tiny"
@@ -89,7 +89,15 @@
                   <fa-icon [icon]="icons.faEye"></fa-icon>
                 </a>
                 <a
-                  [routerLink]="['/admin', 'communities', event.kommunity_id, 'event-dashboard', event.slug, 'stats']"
+                  [routerLink]="[
+                    '/admin',
+                    'communities',
+                    event.kommunity_id,
+                    'events',
+                    'event-dashboard',
+                    event.slug,
+                    'stats'
+                  ]"
                   comButton
                   status="success"
                   size="tiny"

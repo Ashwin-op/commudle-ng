@@ -20,11 +20,11 @@ import { EventDataFormEntityGroupsStore } from 'apps/commudle-admin/src/app/feat
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
-    selector: 'commudle-event-status',
-    templateUrl: './event-status.component.html',
-    styleUrls: ['./event-status.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'commudle-event-status',
+  templateUrl: './event-status.component.html',
+  styleUrls: ['./event-status.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class EventStatusComponent implements OnInit, OnDestroy {
   @Input() event: IEvent;
@@ -84,6 +84,7 @@ export class EventStatusComponent implements OnInit, OnDestroy {
                 '/admin',
                 'communities',
                 this.event.kommunity.slug,
+                'events',
                 'event-dashboard',
                 this.event.slug,
                 'registrations',

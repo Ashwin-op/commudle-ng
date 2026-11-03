@@ -192,18 +192,18 @@ export class CreateEventComponent implements OnInit {
         () => {
           this.isPublishing = false;
           this.toastLogService.successDialog('Event published!');
-          this.router.navigate(['/admin/communities', this.community.slug, 'event-dashboard', data.slug]);
+          this.router.navigate(['/admin/communities', this.community.slug, 'events', 'event-dashboard', data.slug]);
         },
         () => {
           this.isPublishing = false;
           this.toastLogService.successDialog('Created as draft, but could not publish.');
-          this.router.navigate(['/admin/communities', this.community.slug, 'event-dashboard', data.slug]);
+          this.router.navigate(['/admin/communities', this.community.slug, 'events', 'event-dashboard', data.slug]);
         },
       );
     } else {
       this.isFormSubmitting = false;
       this.toastLogService.successDialog('Created and Saved as draft!');
-      this.router.navigate(['/admin/communities', this.community.slug, 'event-dashboard', data.slug]);
+      this.router.navigate(['/admin/communities', this.community.slug, 'events', 'event-dashboard', data.slug]);
     }
   }
 

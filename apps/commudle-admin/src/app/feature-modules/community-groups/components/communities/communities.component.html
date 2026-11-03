@@ -1,43 +1,10 @@
 <div class="cg-shell" *ngIf="communityGroup">
-  <!-- Themed org header -->
-  <div class="cg-header" [style.background-color]="communityGroup.theme_color || '#3366ff'">
-    <div class="cg-identity">
-      <div class="cg-logo">
-        <img *ngIf="communityGroup.logo?.url" [src]="communityGroup.logo.url" [alt]="communityGroup.name" />
-        <nb-icon *ngIf="!communityGroup.logo?.url" icon="briefcase-outline"></nb-icon>
-      </div>
-      <div class="cg-meta">
-        <span class="cg-eyebrow">Organization Dashboard</span>
-        <h1 class="cg-name">{{ communityGroup.name }}</h1>
-        <p class="cg-tagline" *ngIf="communityGroup.mini_description">{{ communityGroup.mini_description }}</p>
-      </div>
-    </div>
-
-    <a
-      nbButton
-      status="control"
-      shape="semi-round"
-      size="small"
-      class="cg-public-btn"
-      [routerLink]="['/orgs', communityGroup.slug]"
-      target="_blank"
-    >
-      <nb-icon icon="external-link-outline"></nb-icon>
-      View Public Page
-    </a>
-  </div>
-
   <!-- Section tabs -->
   <com-card class="tabs-section">
     <div class="cg-tabs">
       <nav class="tab-nav">
-        <a
-          *ngFor="let tab of tabs"
-          [routerLink]="[tab.route]"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: tab.route === './' }"
-          class="tab-link"
-        >
+        <a *ngFor="let tab of tabs" [routerLink]="[tab.route]" [relativeTo]="activatedRoute.parent"
+          routerLinkActive="active" class="tab-link">
           <fa-icon [icon]="tab.icon"></fa-icon>
           {{ tab.title }}
         </a>

@@ -1,5 +1,5 @@
 .community-events-list {
-  @apply com-p-4 md:com-p-6 com-bg-white com-min-h-screen com-rounded-10 com-overflow-hidden;
+  @apply com-p-4 md:com-p-5 com-bg-white com-min-h-screen com-rounded-lg com-overflow-hidden;
 
   .header-section {
     @apply com-flex com-justify-between md:com-items-center md:com-mb-6 com-mb-4 com-flex-col md:com-flex-row com-gap-4;
@@ -42,6 +42,7 @@
 
     .table-wrapper {
       @apply com-overflow-scroll;
+
       .events-table {
         @apply com-w-full com-border-collapse;
 
@@ -62,9 +63,11 @@
 
           td {
             @apply com-p-4 com-text-sm com-font-medium com-text-gray-500;
+
             .event-name {
               @apply com-no-underline com-text-Yankees-Blue com-border-0 hover:com-border-b hover:com-border-solid hover:com-border-Yankees-Blue;
             }
+
             &.date-column {
               @apply com-whitespace-nowrap;
             }
@@ -87,9 +90,11 @@
 
 .event-dashboard-actions {
   @apply com-flex com-gap-4 com-items-center;
+
   a {
     @apply com-rounded-lg;
   }
+
   .context-menu-button {
     @apply com-p-2 com-min-w-0 com-flex-shrink-0 com-rounded-lg;
 

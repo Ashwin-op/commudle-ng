@@ -1,5 +1,5 @@
 .forms-list {
-  @apply md:com-p-6 com-p-3 com-rounded-10;
+  @apply md:com-p-5 com-p-3 com-bg-white com-rounded-lg;
 }
 
 .page-header {
@@ -28,19 +28,25 @@
 
   thead {
     @apply com-border-b com-border-solid com-border-Bright-Gray;
+
     .table-header {
       @apply com-border-b com-border-solid com-border-Bright-Gray;
+
       th {
         @apply com-px-4 com-py-2 com-text-left com-text-xs com-font-semibold com-text-gray-500 com-uppercase;
+
         &:nth-child(1) {
           @apply com-w-[40%];
         }
+
         &:nth-child(2) {
           @apply com-w-[20%];
         }
+
         &:nth-child(3) {
           @apply com-w-[20%];
         }
+
         &:nth-child(4) {
           @apply com-w-[20%];
         }
@@ -115,6 +121,7 @@
 
 .no-results-found {
   @apply com-text-center com-text-gray-500 com-py-6;
+
   p {
     @apply com-text-lg com-font-medium com-text-Yankees-Blue com-m-0;
   }

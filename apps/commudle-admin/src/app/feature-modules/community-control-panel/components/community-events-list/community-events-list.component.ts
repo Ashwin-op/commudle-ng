@@ -246,6 +246,7 @@ export class CommunityEventsListComponent implements OnInit, OnDestroy {
             this.router.navigate([
               '/admin/communities/',
               this.activeContextMenuEvent.kommunity_id,
+              'events',
               'event-dashboard',
               this.activeContextMenuEvent.slug,
               'stats',

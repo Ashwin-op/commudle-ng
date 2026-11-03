@@ -25,6 +25,7 @@ import { CommunityBankDetailsComponent } from 'apps/commudle-admin/src/app/featu
 import { CommunityPaymentLogsComponent } from 'apps/commudle-admin/src/app/feature-modules/community-control-panel/components/community-payments/community-payment-logs/community-payment-logs.component';
 import { PaymentLogEdfegComponent } from 'apps/shared-components/payment-detail/payment-log-edfeg/payment-log-edfeg.component';
 import { CommunityMailsSentStatsComponent } from './components/community-mails-sent-stats/community-mails-sent-stats.component';
+import { CommunityAdminDashboardComponent } from './components/community-admin-dashboard/community-admin-dashboard.component';
 
 const routes = [
   {
@@ -47,6 +48,10 @@ const routes = [
     children: [
       {
         path: '',
+        component: CommunityAdminDashboardComponent,
+      },
+      {
+        path: 'events',
         component: CommunityEventsListComponent,
       },
       {

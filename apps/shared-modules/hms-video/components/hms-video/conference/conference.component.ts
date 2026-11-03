@@ -778,8 +778,8 @@ export class ConferenceComponent implements OnInit, OnChanges, OnDestroy {
       meetingUrl = meetingUrl.substring(0, lastSessionIndex) + '/beam';
     } else if (lastAgendaIndex !== -1) {
       meetingUrl = meetingUrl.substring(0, lastAgendaIndex) + '/beam';
-      // replace 'event-dashboard' with 'events' for admin side
-      meetingUrl = meetingUrl.replace('event-dashboard', 'events');
+      // replace 'events/event-dashboard' with 'events' for admin side
+      meetingUrl = meetingUrl.replace('events/event-dashboard', 'events');
     } else {
       meetingUrl = meetingUrl + '/beam';
     }

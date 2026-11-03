@@ -1,0 +1,1040 @@
+.dashboard {
+  @apply com-flex com-flex-col com-gap-4;
+}
+
+.section-loader {
+  @apply com-flex com-justify-center com-w-full com-py-3;
+}
+
+.inline-avatar {
+  @apply com-inline-block com-w-4 com-h-4 com-rounded-full com-object-cover com-align-middle com-mr-1;
+}
+
+.section-heading {
+  @apply com-m-0 com-text-base com-font-medium com-text-Yankees-Blue com-flex md:com-items-center com-items-start com-gap-2;
+
+  fa-icon {
+    @apply com-w-6 com-h-6 com-rounded-md com-flex com-items-center com-justify-center com-text-xs com-shrink-0;
+    animation: iconPulse 1.8s ease-in-out infinite;
+  }
+
+  .heading-icon-attention {
+    @apply com-bg-red-50 com-text-Infra-Red;
+  }
+
+  .heading-icon-schedule,
+  .heading-icon-pages {
+    @apply com-bg-blue-50 com-text-primary-500;
+  }
+
+  .section-info-icon {
+    @apply com-w-auto com-h-auto com-rounded-none com-bg-transparent com-text-[11px] com-text-gray-300 com-cursor-help;
+    animation: none;
+  }
+
+  .heading-icon-activity {
+    @apply com-bg-yellow-50 com-text-yellow-600;
+  }
+
+  .heading-icon-snapshot,
+  .heading-icon-cities {
+    @apply com-bg-green-50 com-text-green-600;
+  }
+
+  .heading-icon-actions {
+    @apply com-bg-purple-50 com-text-purple-600;
+  }
+
+  .heading-icon-visitors {
+    @apply com-bg-blue-50 com-text-blue-500;
+  }
+
+  .activity-new-badge {
+    @apply com-bg-primary-500 com-text-tWhite com-text-[10px] com-font-semibold com-px-1.5 com-py-0.5 com-rounded-full;
+    animation: badgePop 2.4s ease-in-out forwards;
+  }
+}
+
+@keyframes iconPulse {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+
+  50% {
+    transform: scale(1.25) rotate(-8deg);
+  }
+}
+
+@keyframes badgePop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(4px);
+  }
+
+  15% {
+    opacity: 1;
+    transform: scale(1.15) translateY(0);
+  }
+
+  25% {
+    transform: scale(1);
+  }
+
+  80% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.9) translateY(-4px);
+  }
+}
+
+.section-header {
+  @apply com-flex com-items-center com-justify-between com-mb-1.5 com-m-0;
+}
+
+// Row 1: Greeting
+.greeting-section {
+  @apply com-relative com-overflow-hidden com-p-4 md:com-rounded-xl com-rounded-none;
+  background: linear-gradient(135deg, #4a90d9, #2c5f9e);
+  animation: heroFadeUp 0.6s ease-out both;
+
+  &.hero-morning {
+    background: linear-gradient(135deg, #fdb813, #f68b1f);
+
+    .hero-blob {
+      background-color: #ffd985;
+    }
+  }
+
+  &.hero-afternoon {
+    background: linear-gradient(135deg, #4a90d9, #2c5f9e);
+
+    .hero-blob {
+      background-color: #8fc1ee;
+    }
+  }
+
+  &.hero-evening {
+    background: linear-gradient(135deg, #4b3f9e, #1b1464);
+
+    .hero-blob {
+      background-color: #7d72d1;
+    }
+  }
+
+  &.hero-night {
+    background: linear-gradient(135deg, #1a1a2e, #0d0d1a);
+
+    .hero-blob {
+      background-color: #363652;
+    }
+
+    .greeting-content {
+      .greeting-text {
+        @apply com-text-tWhite;
+
+        .greeting-name {
+          @apply com-text-tWhite;
+        }
+      }
+
+      .greeting-sub {
+        @apply com-text-gray-200;
+      }
+    }
+
+    .greeting-highlights .highlight-card {
+      border-color: rgba(0, 0, 0, 0.15);
+      background: rgba(255, 255, 255, 0.25);
+
+      .highlight-info .highlight-primary {
+        @apply com-text-tWhite;
+      }
+
+      .highlight-info .highlight-secondary {
+        @apply com-text-tWhite;
+      }
+
+      .highlight-icon {
+        @apply com-text-tWhite;
+        background: rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+
+  .hero-blob {
+    @apply com-absolute com-rounded-full com-pointer-events-none;
+    filter: blur(2px);
+
+    &.hero-blob-1 {
+      @apply com-w-64 com-h-64 -com-top-24 -com-right-16;
+      animation: blobFloat 9s ease-in-out infinite;
+    }
+
+    &.hero-blob-2 {
+      @apply com-w-40 com-h-40 -com-bottom-20 com-right-32;
+      animation: blobFloat 11s ease-in-out infinite reverse;
+    }
+
+    &.hero-blob-3 {
+      @apply com-w-24 com-h-24 com-top-6;
+      right: 30%;
+      animation: blobFloat 13s ease-in-out infinite;
+    }
+  }
+
+  .greeting-content {
+    @apply com-relative com-flex com-flex-col com-mb-3;
+    z-index: 1;
+
+    .greeting-text {
+      @apply com-m-0 com-text-[22px] com-font-medium com-text-tWhite;
+      animation: heroFadeUp 0.6s ease-out 0.12s both;
+
+      .greeting-name {
+        @apply com-font-bold com-text-tWhite;
+      }
+
+      .greeting-emoji {
+        @apply com-ml-1 com-inline-block;
+      }
+    }
+
+    .greeting-sub {
+      @apply com-m-0 com-text-sm com-text-tWhite com-opacity-90;
+      animation: heroFadeUp 0.6s ease-out 0.18s both;
+    }
+  }
+
+  .greeting-highlights {
+    @apply com-relative com-flex com-flex-col md:com-flex-row com-gap-2 com-flex-wrap com-m-0 com-p-0 com-list-none;
+    z-index: 1;
+
+    .highlight-card {
+      @apply com-flex com-items-center com-gap-2 com-flex-1 com-rounded-lg com-px-2 com-py-1.5 com-relative;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+
+      &::before {
+        content: '';
+        @apply com-absolute com-inset-[-1px] com-rounded-xl com-pointer-events-none com-p-px;
+        background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.8) 50%, transparent 100%);
+        background-size: 200% 100%;
+        animation: borderShimmer 3s linear infinite;
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+      }
+
+      .highlight-icon {
+        @apply com-w-7 com-h-7 com-rounded-md com-flex com-items-center com-justify-center com-text-sm com-shrink-0 com-text-tWhite;
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .highlight-info {
+        @apply com-m-0;
+
+        .highlight-primary {
+          @apply com-text-sm com-font-medium com-text-tWhite;
+        }
+
+        .highlight-secondary {
+          @apply com-text-xs com-text-tWhite com-opacity-75 com-mt-0.5 com-block;
+        }
+      }
+    }
+  }
+}
+
+@keyframes barGrow {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes livePing {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+
+  75%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+@keyframes deltaPop {
+  from {
+    opacity: 0;
+    transform: scale(0.6) translateY(2px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes activityItemIn {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes dotPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes checkPop {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes borderShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes blobFloat {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(-1.5rem, 1rem) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard * {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+// Row 2: Three-column
+.three-col-row {
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-4;
+
+  .attention-card,
+  .schedule-card,
+  .activity-card {
+    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+    animation: cardFadeIn 0.4s ease-out both;
+
+    &:hover {
+      @apply com-shadow-Card;
+      transform: translateY(-2px);
+    }
+  }
+
+  .attention-card {
+    animation-delay: 0.05s;
+  }
+
+  .schedule-card {
+    animation-delay: 0.1s;
+  }
+
+  .activity-card {
+    animation-delay: 0.15s;
+  }
+
+  // Lay the activity card out as a column so the pagination can be pushed to
+  // the bottom; the grid already stretches cards to equal height, so the
+  // pagination stays anchored instead of jumping up when rows reload.
+  .activity-card {
+    @apply com-flex com-flex-col;
+
+    commudle-pagination-compact {
+      @apply com-mt-auto;
+    }
+  }
+
+  .attention-list {
+    @apply com-m-0 com-max-h-[338px] com-overflow-y-auto;
+
+    .attention-section-label {
+      @apply com-flex com-items-center com-text-[10px] com-font-semibold com-uppercase com-tracking-wide com-text-Cadet-Grey com-pt-3 com-pb-1;
+
+      &:first-child {
+        @apply com-pt-0;
+      }
+    }
+
+    .attention-item {
+      @apply com-flex com-items-center com-gap-2 com-p-1 com-no-underline com-cursor-pointer com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+
+      &:last-child {
+        @apply com-border-b-0;
+      }
+
+      &:hover {
+        @apply com-bg-gray-50 com-rounded-lg;
+
+        .attention-arrow {
+          @apply com-text-primary-500;
+          transform: translateX(3px);
+        }
+
+        .attention-icon-cross {
+          transform: scale(1.15);
+        }
+      }
+
+      .attention-icon-check {
+        @apply com-text-green-500 com-text-sm com-shrink-0;
+      }
+
+      .attention-icon-cross {
+        @apply com-text-red-400 com-text-sm com-shrink-0 com-transition-transform com-duration-200;
+      }
+
+      .attention-content {
+        @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-m-0;
+
+        .attention-title {
+          @apply com-text-xs com-text-Yankees-Blue;
+
+          .profile-link {
+            @apply com-text-inherit com-no-underline com-cursor-pointer com-transition-colors com-duration-200;
+
+            &:hover {
+              @apply com-text-primary-600 com-underline;
+            }
+          }
+        }
+
+        .attention-sub {
+          @apply com-text-xs com-font-normal com-text-gray-500;
+        }
+      }
+
+      .attention-action {
+        @apply com-text-xs com-font-medium com-text-Cadet-Grey com-shrink-0 com-px-2 com-py-1 com-rounded com-bg-gray-100;
+      }
+
+      .attention-arrow {
+        @apply com-text-lg com-text-gray-400 com-shrink-0 com-transition-all com-duration-200;
+      }
+
+      // Not every incoming request has somewhere to go yet (needs the
+      // inviting community's slug from the backend) -- only the ones that
+      // do (.is-clickable) get pointer/hover affordance, same convention
+      // as .activity-item above.
+      &.collaboration-item {
+        @apply com-cursor-default;
+
+        &:hover {
+          @apply com-bg-transparent com-rounded-none;
+        }
+
+        &.is-clickable {
+          @apply com-cursor-pointer;
+
+          &:hover {
+            @apply com-bg-gray-50 com-rounded-lg;
+          }
+        }
+      }
+
+      .collaboration-actions {
+        @apply com-flex com-gap-1.5 com-shrink-0;
+      }
+
+      .collaboration-btn {
+        @apply com-text-xs com-font-medium com-px-2.5 com-py-1 com-rounded-md com-border com-border-solid com-cursor-pointer com-transition-all com-duration-200;
+
+        &:disabled {
+          @apply com-opacity-50 com-cursor-not-allowed;
+        }
+
+        &.collaboration-accept {
+          @apply com-text-green-600 com-border-green-300 com-bg-green-50;
+
+          &:hover:not(:disabled) {
+            @apply com-bg-green-100;
+          }
+        }
+
+        &.collaboration-reject {
+          @apply com-text-red-500 com-border-red-300 com-bg-red-50;
+
+          &:hover:not(:disabled) {
+            @apply com-bg-red-100;
+          }
+        }
+      }
+    }
+
+    .attention-empty {
+      @apply com-flex com-flex-col com-items-center com-gap-2 com-m-0 com-py-4 com-text-xs com-text-gray-500;
+
+      .attention-empty-icon {
+        @apply com-flex com-items-center com-justify-center com-w-12 com-h-12 com-rounded-full com-bg-green-50 com-text-green-500 com-text-xl com-mb-1;
+        animation: checkPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+
+      .attention-empty-text {
+        @apply com-text-xs com-font-medium com-text-Yankees-Blue;
+      }
+    }
+  }
+
+  .schedule-timeline {
+    @apply com-flex com-flex-col com-m-0 com-p-0 com-list-none;
+
+    .timeline-item {
+      @apply com-flex com-items-start com-gap-3 com-transition-transform com-duration-200;
+
+      &:hover {
+        transform: translateX(2px);
+
+        .timeline-event {
+          @apply com-border-primary-300;
+        }
+
+        .timeline-event-icon {
+          transform: scale(1.2) rotate(-8deg);
+        }
+      }
+
+      .timeline-date {
+        @apply com-text-xs com-text-gray-500 com-w-16 com-shrink-0 com-py-1 com-whitespace-nowrap;
+
+        &.today {
+          @apply com-text-primary-500 com-font-medium;
+
+          &::before {
+            content: '';
+            @apply com-inline-block com-w-1.5 com-h-1.5 com-rounded-full com-bg-primary-500 com-mr-1;
+            animation: dotPulse 1.6s ease-in-out infinite;
+          }
+        }
+
+        &.tomorrow {
+          @apply com-text-green-600;
+        }
+      }
+
+      .timeline-event {
+        @apply com-flex com-flex-col com-flex-1 com-pl-2 com-py-1 com-border-0 com-border-l-2 com-border-solid com-border-Bright-Gray com-m-0 com-no-underline com-text-inherit com-transition-colors com-duration-200;
+
+        .timeline-event-name {
+          @apply com-text-xs com-text-Yankees-Blue;
+
+          .timeline-event-icon {
+            @apply com-mr-1.5 com-text-xs com-text-primary-500 com-transition-transform com-duration-200 com-inline-block;
+          }
+        }
+
+        .timeline-event-time {
+          @apply com-text-xs com-text-gray-500;
+        }
+      }
+    }
+
+    .timeline-empty {
+      @apply com-flex com-flex-col com-items-center com-gap-2 com-py-4 com-text-xs com-text-gray-500;
+
+      .timeline-empty-icon {
+        @apply com-flex com-items-center com-justify-center com-w-12 com-h-12 com-rounded-full com-bg-blue-50 com-text-primary-300 com-text-xl com-mb-1;
+      }
+
+      .timeline-empty-text {
+        @apply com-text-xs com-font-medium com-text-Yankees-Blue;
+      }
+
+      .timeline-empty-actions {
+        @apply com-flex com-gap-1.5 com-mt-1;
+
+        .dashboard-cta-btn {
+          @apply com-relative com-overflow-hidden;
+
+          // Frosted glass
+          backdrop-filter: blur(16px) saturate(180%);
+          -webkit-backdrop-filter: blur(16px) saturate(180%);
+          background: linear-gradient(135deg, rgba(51, 102, 255, 0.85) 0%, rgba(51, 102, 255, 0.55) 100%) !important;
+          border: 1px solid rgba(255, 255, 255, 0.4) !important;
+
+          &:hover {
+            background: linear-gradient(135deg, rgba(51, 102, 255, 0.95) 0%, rgba(51, 102, 255, 0.65) 100%) !important;
+            border-color: rgba(255, 255, 255, 0.55) !important;
+          }
+
+          fa-icon {
+            @apply com-text-[10px];
+          }
+        }
+      }
+    }
+  }
+}
+
+// Row 3: Snapshot + Recent Members + Quick Actions
+.snapshot-actions-row {
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-4;
+
+  .activity-card {
+    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray com-flex com-flex-col;
+
+    commudle-pagination-compact {
+      @apply com-mt-auto;
+    }
+  }
+}
+
+.snapshot-section,
+.actions-section {
+  .section-heading {
+    @apply com-mb-1.5;
+  }
+}
+
+.snapshot-section {
+  @apply com-bg-white com-rounded-xl com-p-4 com-border com-border-solid com-border-Bright-Gray;
+  animation: cardFadeIn 0.4s ease-out 0.2s both;
+
+  .snapshot-cards {
+    @apply com-grid com-grid-cols-1 com-gap-1.5 com-m-0 com-p-0 com-list-none;
+
+    .snapshot-card {
+      @apply com-flex com-flex-row com-items-center com-justify-between com-bg-white com-rounded-lg com-py-2 com-px-2.5 com-border com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+
+      &:hover {
+        @apply com-border-primary-300 com-shadow-Card;
+        transform: translateY(-2px);
+
+        .snapshot-icon {
+          transform: scale(1.15) rotate(-6deg);
+        }
+      }
+
+      .snapshot-card-header {
+        @apply com-flex com-items-center com-gap-1.5 com-min-w-0;
+
+        // A pale icon chip instead of a bare saturated glyph -- same
+        // reasoning as the section-heading icons: keep the per-metric color
+        // coding, lose the "rainbow of bold icons" busyness.
+        .snapshot-icon {
+          @apply com-flex com-items-center com-justify-center com-w-5 com-h-5 com-rounded-full com-text-[10px] com-transition-transform com-duration-200;
+
+          &.members-icon {
+            @apply com-bg-blue-50 com-text-blue-600;
+          }
+
+          &.events-icon {
+            @apply com-bg-green-50 com-text-green-600;
+          }
+
+          &.newsletter-icon {
+            @apply com-bg-purple-50 com-text-purple-600;
+          }
+
+          &.analytics-icon {
+            @apply com-bg-orange-50 com-text-orange-600;
+          }
+        }
+
+        .snapshot-label {
+          @apply com-text-xs com-font-normal com-text-gray-500 com-truncate;
+        }
+      }
+
+      .snapshot-value-row {
+        @apply com-flex com-items-center com-gap-1.5 com-shrink-0;
+      }
+
+      .snapshot-value {
+        @apply com-text-sm com-font-medium com-text-Yankees-Blue;
+      }
+
+      .snapshot-delta {
+        @apply com-text-xs com-font-medium com-text-green-600;
+        animation: deltaPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+
+        &.negative {
+          @apply com-text-red-500;
+        }
+      }
+    }
+  }
+}
+
+.actions-section {
+  @apply com-bg-white com-rounded-xl com-p-4 com-border com-border-solid com-border-Bright-Gray;
+  animation: cardFadeIn 0.4s ease-out 0.25s both;
+
+  .actions-grid {
+    @apply com-grid com-grid-cols-2 com-gap-2;
+
+    .action-card {
+      @apply com-flex com-items-center com-gap-1.5 com-px-2 com-py-1.5 com-rounded-md com-border com-border-solid com-border-Bright-Gray com-bg-gray-50 com-no-underline com-transition-all com-duration-200 com-cursor-pointer;
+
+      &:hover {
+        @apply com-border-primary-300 com-bg-blue-50;
+        transform: translateY(-1px);
+
+        .action-icon {
+          transform: scale(1.2) rotate(8deg);
+        }
+      }
+
+      &:active {
+        transform: translateY(0) scale(0.97);
+      }
+
+      .action-icon {
+        @apply com-text-sm com-text-indigo-500 com-transition-transform com-duration-200;
+      }
+
+      .action-label {
+        @apply com-text-xs com-font-normal com-text-Yankees-Blue com-truncate;
+      }
+    }
+  }
+}
+
+// Activity list
+.activity-list {
+  @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col;
+
+  li:last-child .activity-item {
+    @apply com-border-b-0;
+  }
+
+  // Positional stagger has to key off the <li>, not the anchor -- each
+  // anchor is always its own li's only child, so nth-child on the anchor
+  // itself would always resolve to 1 and never actually stagger.
+  @for $i from 1 through 8 {
+    li:nth-child(#{$i}) .activity-item {
+      animation-delay: #{$i * 0.04}s;
+    }
+  }
+
+  .activity-item {
+    @apply com-flex com-items-center com-gap-2 com-py-1 com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-no-underline com-text-inherit com-transition-colors com-duration-200;
+    animation: activityItemIn 0.3s ease-out both;
+
+    // Only rows with somewhere to go (i.e. a real activityRowLink) get the
+    // pointer/hover affordance -- the rest render identically but inert.
+    &.is-clickable {
+      @apply com-cursor-pointer;
+
+      &:hover {
+        @apply com-bg-gray-50;
+
+        .activity-avatar {
+          transform: scale(1.1);
+        }
+      }
+
+      &:focus-visible {
+        @apply com-bg-gray-50 com-outline-none com-ring-2 com-ring-primary-300;
+      }
+    }
+
+    .activity-avatar {
+      @apply com-w-6 com-h-6 com-rounded-full com-flex com-items-center com-justify-center com-text-10px com-font-medium com-shrink-0 com-text-white com-transition-transform com-duration-200 com-overflow-hidden;
+
+      &.members-avatar {
+        @apply com-bg-blue-500;
+      }
+
+      &.channel-avatar {
+        @apply com-bg-purple-500;
+      }
+
+      &.survey-avatar {
+        @apply com-bg-green-500;
+      }
+
+      .activity-avatar-img {
+        @apply com-w-full com-h-full com-rounded-full com-object-cover;
+      }
+    }
+
+    .activity-content {
+      @apply com-flex com-flex-col com-flex-1 com-min-w-0 com-m-0;
+
+      .activity-text {
+        @apply com-text-xs com-text-Yankees-Blue com-line-clamp-2 com-cursor-default;
+
+        .activity-user-link {
+          @apply com-text-inherit com-no-underline com-cursor-pointer com-transition-colors com-duration-200;
+
+          &:hover {
+            @apply com-text-primary-600 com-underline;
+          }
+        }
+      }
+
+      .activity-sub {
+        @apply com-text-xs com-text-gray-500 com-line-clamp-1;
+      }
+    }
+
+    .activity-time {
+      @apply com-text-xs com-text-gray-400 com-shrink-0;
+    }
+
+    .activity-badge {
+      @apply com-text-xs com-font-medium com-text-primary-500 com-bg-blue-50 com-px-2 com-py-1 com-rounded-full com-shrink-0;
+    }
+
+    .activity-name-avatar {
+      @apply com-inline-flex com-items-center com-justify-center com-w-5 com-h-5 com-rounded-full com-bg-primary-500 com-text-white com-text-[10px] com-font-medium com-mr-0.5 com-align-middle;
+    }
+  }
+
+  .activity-empty {
+    @apply com-flex com-flex-col com-items-center com-gap-2 com-py-4 com-text-xs com-text-gray-500;
+
+    .activity-empty-icon {
+      @apply com-flex com-items-center com-justify-center com-w-12 com-h-12 com-rounded-full com-bg-yellow-50 com-text-yellow-500 com-text-xl com-mb-1;
+    }
+
+    .activity-empty-text {
+      @apply com-text-xs com-font-medium com-text-Yankees-Blue;
+    }
+  }
+}
+
+.activity-load-more {
+  @apply com-mt-3 com-w-full com-py-2 com-text-sm com-font-medium com-text-primary-500 com-bg-white com-border com-border-solid com-border-Bright-Gray com-rounded-lg com-cursor-pointer;
+  @apply hover:com-bg-gray-50 disabled:com-opacity-50 disabled:com-cursor-not-allowed;
+}
+
+.top-list-header {
+  @apply com-flex com-items-center com-justify-between com-pb-1 com-mb-1 com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-text-10px com-font-medium com-text-gray-400 com-uppercase com-tracking-wide;
+}
+
+// Row 4: Live Visitors + Top Pages + Top Cities
+.live-traffic-row {
+  @apply com-grid com-grid-cols-1 lg:com-grid-cols-3 com-gap-4;
+
+  .live-visitors-card,
+  .top-list-card {
+    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
+    animation: cardFadeIn 0.4s ease-out both;
+
+    &:hover {
+      @apply com-shadow-Card;
+      transform: translateY(-2px);
+    }
+  }
+
+  .live-visitors-card {
+    animation-delay: 0.3s;
+  }
+
+  .top-list-card:nth-of-type(2) {
+    animation-delay: 0.35s;
+  }
+
+  .top-list-card:nth-of-type(3) {
+    animation-delay: 0.4s;
+  }
+
+  .top-list-card {
+    @apply com-flex com-flex-col;
+
+    commudle-pagination-compact {
+      @apply com-mt-auto;
+    }
+  }
+
+  .top-pages-window-toggle {
+    @apply com-flex com-gap-1 com-bg-gray-100 com-rounded-full com-p-1 com-shrink-0;
+
+    button {
+      @apply com-border-0 com-bg-transparent com-text-xs com-font-medium com-text-gray-500 com-px-3 com-py-1.5 com-rounded-full com-cursor-pointer com-transition-colors com-duration-200;
+
+      &:hover {
+        @apply com-text-primary-600;
+      }
+
+      &.active {
+        @apply com-bg-white com-text-primary-600 com-shadow-sm;
+      }
+    }
+  }
+
+  .live-visitors-body {
+    @apply com-flex com-flex-col com-gap-2;
+
+    .live-visitors-counts {
+      @apply com-flex com-gap-6;
+
+      .live-count {
+        @apply com-flex com-flex-col com-gap-2;
+
+        &:first-child .live-count-value {
+          animation: deltaPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
+        }
+
+        .live-count-value {
+          @apply com-text-base com-font-medium com-text-Yankees-Blue com-leading-none;
+        }
+
+        .live-count-label {
+          @apply com-flex com-items-center com-gap-1.5 com-text-xs com-font-normal com-text-gray-500;
+
+          .live-dot {
+            @apply com-w-2 com-h-2 com-rounded-full com-bg-green-500 com-relative com-inline-block;
+
+            &::after {
+              content: '';
+              @apply com-absolute com-inset-0 com-rounded-full com-bg-green-500;
+              animation: livePing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+            }
+          }
+        }
+      }
+    }
+
+    .live-visitors-chart-wrap {
+      @apply com-relative com-h-36 com-mt-1;
+
+      &.is-empty {
+        @apply com-flex com-items-center com-justify-center;
+
+        canvas {
+          @apply com-hidden;
+        }
+      }
+
+      .live-visitors-chart-empty {
+        @apply com-text-xs com-text-gray-400;
+      }
+    }
+  }
+
+  .top-list {
+    @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-2;
+
+    .top-list-item {
+      @apply com-flex com-items-center com-gap-4 com-text-xs com-text-Yankees-Blue;
+
+      .top-list-name {
+        @apply com-w-28 com-shrink-0 com-truncate com-text-xs com-font-normal com-text-gray-600 com-no-underline com-transition-colors com-duration-200;
+
+        &:hover {
+          @apply com-text-primary-600 com-underline;
+        }
+      }
+
+      .top-list-track {
+        @apply com-h-1 com-flex-1 com-shrink-0 com-rounded-full com-bg-gray-100 com-overflow-hidden;
+      }
+
+      .top-list-bar {
+        @apply com-block com-h-full com-rounded-full com-min-w-1;
+        width: var(--bar-share, 0%);
+        animation: barGrow 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+        transform-origin: left;
+
+        &.top-list-bar-pages {
+          @apply com-bg-primary-500;
+        }
+
+        &.top-list-bar-cities {
+          @apply com-bg-green-500;
+        }
+      }
+
+      .top-list-value {
+        @apply com-ml-auto com-text-xs com-font-medium com-text-Cadet-Grey com-shrink-0;
+      }
+    }
+
+    .top-list-empty {
+      @apply com-flex com-flex-col com-items-center com-gap-2 com-py-4 com-text-xs com-text-gray-500;
+
+      .top-list-empty-icon {
+        @apply com-flex com-items-center com-justify-center com-w-12 com-h-12 com-rounded-full com-text-xl com-mb-1;
+
+        &.pages {
+          @apply com-bg-blue-50 com-text-primary-500;
+        }
+
+        &.cities {
+          @apply com-bg-green-50 com-text-green-600;
+        }
+      }
+
+      .top-list-empty-text {
+        @apply com-text-xs com-font-medium com-text-Yankees-Blue;
+      }
+    }
+  }
+}
+
+strong {
+  @apply com-font-medium;
+}

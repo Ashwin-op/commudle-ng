@@ -23,7 +23,14 @@
             >
               <nb-option *ngIf="eventLocationTracks.length === 0">
                 <a
-                  [routerLink]="['./admin/communities', community.slug, 'event-dashboard', event.slug, 'agenda']"
+                  [routerLink]="[
+                    './admin/communities',
+                    community.slug,
+                    'events',
+                    'event-dashboard',
+                    event.slug,
+                    'agenda'
+                  ]"
                   (click)="close()"
                   class="com-text-blac com-no-underline"
                   >+ Add Location /Tracks</a

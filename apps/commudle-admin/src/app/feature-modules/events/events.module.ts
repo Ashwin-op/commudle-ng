@@ -36,6 +36,7 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { BackButtonComponent } from 'apps/shared-components/back-button/back-button.component';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
 import { SidebarComponent } from 'apps/shared-components/sidebar/sidebar.component';
+import { PaginationCompactComponent } from 'apps/shared-components/pagination-compact/pagination-compact.component';
 import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives.module';
 import { MiniUserProfileModule } from 'apps/shared-modules/mini-user-profile/mini-user-profile.module';
 import { SharedPipesModule } from 'apps/shared-pipes/pipes.module';
@@ -49,6 +50,7 @@ import { EventAgendaComponent } from './components/event-agenda/event-agenda.com
 import { EventCommentsComponent } from './components/event-comments/event-comments.component';
 import { EventDashboardComponent } from './components/event-dashboard/event-dashboard.component';
 import { EventDetailsComponent } from './components/event-details/event-details.component';
+import { EventAdminDashboardComponent } from './components/event-admin-dashboard/event-admin-dashboard.component';
 import { EventEmbeddedVideoStreamComponent } from './components/event-embedded-video-stream/event-embedded-video-stream.component';
 import { SegmentedControlComponent } from './components/segmented-control/segmented-control.component';
 import { EventSearchMultiSelectComponent } from './components/event-search-multi-select/event-search-multi-select.component';
@@ -89,7 +91,7 @@ import { EventCheckedInListComponent } from './components/event-checked-in-list/
 import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-components/help-section/help-section.component';
 import { BadgeComponent } from 'apps/shared-components/badge/badge.component';
 import { DataTableComponent } from '../../app-shared-components/data-table/data-table.component';
-import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-theme';
+import { CommudleButtonModule, CommudleCardModule, CommudleTooltipModule } from '@commudle/commudle-theme';
 
 @NgModule({
   declarations: [
@@ -118,6 +120,7 @@ import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-the
     EventSpeakersComponent,
     EventRecordingsComponent,
     EventDetailsComponent,
+    EventAdminDashboardComponent,
     EntryPassScanComponent,
     UserEngagementDataComponent,
     TimeBlocksComponent,
@@ -150,6 +153,7 @@ import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-the
     SharedComponentsModule,
     SharedPipesModule,
     CommudleButtonModule,
+    CommudleTooltipModule,
     CommudleCardModule,
 
     // External
@@ -162,6 +166,7 @@ import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-the
     BackButtonComponent,
     HelpSectionComponent,
     BadgeComponent,
+    PaginationCompactComponent,
     DataTableComponent,
     EventStreamingComponent,
 

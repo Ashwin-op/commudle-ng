@@ -943,6 +943,7 @@ export class EventFormResponsesComponent implements OnInit, OnDestroy, AfterView
     this.router.navigate([
       '/admin/communities',
       this.community.slug,
+      'events',
       'event-dashboard',
       this.event.slug,
       'registrations',
