@@ -19,6 +19,7 @@ export class UserVisitsChannel {
 
   private isBrowser: boolean = isPlatformBrowser(this.platformId);
   private isPageVisible = true;
+  private visibilityHandler: (() => void) | null = null;
 
   private cableConnection;
 
@@ -70,6 +71,7 @@ export class UserVisitsChannel {
         );
       });
 
+      this.isPageVisible = !document.hidden;
       this.setupVisibilityHandler();
       this.clientPings();
     }
@@ -77,6 +79,9 @@ export class UserVisitsChannel {
   }
 
   sendData(action, data) {
+    if (!this.subscription) {
+      return;
+    }
     this.subscription.send({
       perform: action,
       data,
@@ -94,12 +99,19 @@ export class UserVisitsChannel {
     }
     if (this.pingInterval) {
       clearInterval(this.pingInterval);
+      this.pingInterval = null;
     }
+    if (this.visibilityHandler) {
+      document.removeEventListener('visibilitychange', this.visibilityHandler);
+      this.visibilityHandler = null;
+    }
+    this.subscription = null;
   }
 
   clientPings() {
     if (this.pingInterval) {
       clearInterval(this.pingInterval);
+      this.pingInterval = null;
     }
 
     if (this.isBrowser && this.isPageVisible) {
@@ -114,18 +126,22 @@ export class UserVisitsChannel {
   }
 
   setupVisibilityHandler() {
-    if (this.isBrowser) {
-      document.addEventListener('visibilitychange', () => {
-        this.isPageVisible = !document.hidden;
-
-        if (this.isPageVisible) {
-          this.clientPings();
-        } else {
-          if (this.pingInterval) {
-            clearInterval(this.pingInterval);
-          }
-        }
-      });
+    if (!this.isBrowser || this.visibilityHandler) {
+      return;
     }
+
+    this.visibilityHandler = () => {
+      this.isPageVisible = !document.hidden;
+
+      if (this.isPageVisible) {
+        // Ping right away on refocus so presence doesn't lapse while waiting for the next tick
+        this.sendData(this.ACTIONS.PING, {});
+        this.clientPings();
+      } else if (this.pingInterval) {
+        clearInterval(this.pingInterval);
+        this.pingInterval = null;
+      }
+    };
+    document.addEventListener('visibilitychange', this.visibilityHandler);
   }
 }
