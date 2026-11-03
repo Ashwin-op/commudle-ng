@@ -2,6 +2,11 @@
   @apply com-fixed com-inset-0 com-z-[9999] com-pointer-events-none;
 }
 
+// Drawn behind the host page's content: the page gives its own content a higher z-index.
+:host(.diwali-fireworks--background) {
+  @apply com-z-0;
+}
+
 .diwali-fireworks-canvas {
   @apply com-block com-w-full com-h-full;
 }

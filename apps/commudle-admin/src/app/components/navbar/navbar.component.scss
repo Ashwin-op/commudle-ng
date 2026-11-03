@@ -22,7 +22,7 @@
   }
 }
 
-// The shared diya sits beside the logo with a clear gap. Hovering it shows a small greeting.
+// The shared diya sits beside the logo with a clear gap.
 .navbar-diya {
   position: absolute;
   right: -18px;
@@ -33,46 +33,6 @@
     right: -20px;
     transform: scale(1.33);
     transform-origin: bottom left;
-  }
-
-  // A slightly larger hover target than the 12px lamp.
-  &::before {
-    content: '';
-    position: absolute;
-    inset: -6px;
-  }
-
-  &::after {
-    content: 'Happy Diwali!';
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 50%;
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: linear-gradient(90deg, #ff8a00, #ff5f6d);
-    box-shadow: 0 4px 12px rgba(255, 120, 40, 0.35);
-    color: #ffffff;
-    font-size: 12px;
-    font-weight: 600;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(-50%) translateY(-4px);
-    transition: opacity 150ms ease, transform 150ms ease;
-    z-index: 5;
-  }
-
-  &:hover::after {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-
-  // The desktop diya is scaled up, so shrink the greeting's own size to compensate.
-  @screen lg {
-    &::after {
-      font-size: 9px;
-      padding: 3px 8px;
-    }
   }
 }
 
@@ -267,17 +227,20 @@
 
 // Strand of lights hanging just below the header's bottom border, edge to edge.
 // No positioned ancestor in this template, so it anchors to the fixed header itself.
+// z-index -1 puts it under the header's own background, so on page load it drops down from behind the navbar.
 .diwali-navbar-lights {
   --wire: rgba(110, 78, 46, 0.65);
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
+  z-index: -1;
   height: 16px;
   display: flex;
   overflow: hidden;
   pointer-events: none;
   transition: opacity 160ms ease;
+  animation: diwaliNavbarLightsDrop 900ms cubic-bezier(0.34, 1.4, 0.64, 1) 300ms both;
 }
 
 .diwali-navbar-light {
@@ -363,6 +326,16 @@
   opacity: 0;
 }
 
+// Slides down out of the header, overshoots a little and settles, like a strand being hung.
+@keyframes diwaliNavbarLightsDrop {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
 // Hard stops give the crisp on/off tick of real serial lights rather than a fade.
 @keyframes diwaliNavbarLightRun {
   0%,
@@ -385,6 +358,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .diwali-navbar-lights,
   .diwali-navbar-light::after,
   .diwali-toran-leaf,
   .diwali-hang,

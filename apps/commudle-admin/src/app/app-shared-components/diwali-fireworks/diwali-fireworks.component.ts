@@ -4,15 +4,18 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  HostBinding,
   Inject,
+  Input,
   NgZone,
   OnDestroy,
   PLATFORM_ID,
-  Renderer2,
   ViewChild,
 } from '@angular/core';
 import { SeoService } from 'apps/shared-services/seo.service';
 import { CookieService } from 'ngx-cookie-service';
+import { Subscription } from 'rxjs';
+import { DiwaliFireworksService } from './diwali-fireworks.service';
 
 interface IDiwaliStar {
   x: number;
@@ -38,7 +41,6 @@ interface IDiwaliStar {
 
 const GRAVITY = 0.00028;
 const DRAG = 0.985;
-const DIWALI_LIGHT_COLORS = ['#FFC72C', '#FF5F6D', '#2EC4B6', '#FF8A00', '#F9C846'];
 const DIWALI_COLORS = ['#FF0043', '#14FC56', '#1E7FFF', '#E60AFF', '#FFBF36', '#FFFFFF'];
 const SHELL_COLORS = DIWALI_COLORS.filter((color) => color !== '#FFFFFF');
 const SHELL_STYLES = ['peony', 'glitter', 'fallingStars'] as const;
@@ -73,7 +75,10 @@ const FINALE_CRACKER_ROLL_COUNT = 6;
 const SHOW_SOUND_URL = 'assets/sounds/diwali-fireworks.m4a';
 const SHOW_SOUND_LENGTH_MS = 7000;
 const SHOW_SOUND_VOLUME = 0.7;
-const AUDIO_UNLOCK_EVENTS = ['pointerdown', 'pointerup', 'keydown'];
+// The show (and its sound) is over by the time the clip ends; replays are ignored until then.
+const SHOW_LENGTH_MS = SHOW_SOUND_LENGTH_MS;
+// Side gutters narrower than this can't fit a burst beside the content, so bursts go anywhere.
+const MIN_GUTTER_PX = 120;
 
 @Component({
   selector: 'commudle-diwali-fireworks',
@@ -86,6 +91,16 @@ const AUDIO_UNLOCK_EVENTS = ['pointerdown', 'pointerup', 'keydown'];
 export class DiwaliFireworksComponent implements AfterViewInit, OnDestroy {
   @ViewChild('canvas', { static: true }) canvasRef: ElementRef<HTMLCanvasElement>;
 
+  // 'overlay' (default): the site-wide canvas above everything, playing the once-a-day show on load.
+  // 'background': drawn behind the host page's content. Same once-a-day show and replays, just behind the page.
+  @Input() stage: 'overlay' | 'background' = 'overlay';
+  // Background stage only: width (px) of the centred content; bursts aim at the gutters beside it.
+  @Input() clearWidth = 0;
+
+  @HostBinding('class.diwali-fireworks--background') get isBackground(): boolean {
+    return this.stage === 'background';
+  }
+
   private ctx: CanvasRenderingContext2D;
   private stars: IDiwaliStar[] = [];
   private rafId: number | null = null;
@@ -97,17 +112,17 @@ export class DiwaliFireworksComponent implements AfterViewInit, OnDestroy {
   private viewportWidth = 0;
   private viewportHeight = 0;
   private pendingTimeouts: ReturnType<typeof setTimeout>[] = [];
-  private removeClickListener: (() => void) | null = null;
   private showSound: HTMLAudioElement | null = null;
+  private showRunning = false;
   private showStartedAt = 0;
-  private removeAudioUnlockListeners: (() => void)[] = [];
+  private subscriptions: Subscription[] = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private seoService: SeoService,
     private cookieService: CookieService,
-    private renderer: Renderer2,
     private ngZone: NgZone,
+    private diwaliFireworksService: DiwaliFireworksService,
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
@@ -121,72 +136,81 @@ export class DiwaliFireworksComponent implements AfterViewInit, OnDestroy {
     this.resizeCanvas();
     window.addEventListener('resize', this.resizeCanvas);
 
-    // Bursts only touch the canvas, so there's no need to trigger change detection on every click.
-    this.ngZone.runOutsideAngular(() => {
-      this.removeClickListener = this.renderer.listen('document', 'click', (event: MouseEvent) =>
-        this.burstAt(event.clientX, event.clientY),
-      );
-    });
+    // Subscribers run synchronously inside the button's click, which browsers count as permission to play sound.
+    this.subscriptions.push(
+      this.diwaliFireworksService.replay$.subscribe(() => {
+        if (this.isActiveStage()) this.ngZone.runOutsideAngular(() => this.runEntranceSequence());
+      }),
+      this.diwaliFireworksService.soundOn$.subscribe((soundOn) => this.onSoundToggled(soundOn)),
+    );
 
+    if (this.isBackground) this.diwaliFireworksService.backgroundStages++;
     this.maybePlayEntranceSequence();
   }
 
+  // The overlay stands down while a page is showing the fireworks behind its own content.
+  private isActiveStage(): boolean {
+    return this.isBackground || this.diwaliFireworksService.backgroundStages === 0;
+  }
+
+  // Both stages share one cookie, so a visitor sees the show once per day, whether over the page or
+  // behind a page's content (e.g. fill-form). Replays from the play button are not limited.
   private maybePlayEntranceSequence(): void {
-    if (this.cookieService.check(DIWALI_ENTRANCE_SEEN_COOKIE)) return;
+    if (!this.cookieService.check(DIWALI_ENTRANCE_SEEN_COOKIE)) {
+      // Expires at the visitor's next local midnight, so the show plays once per day.
+      const nextMidnight = new Date();
+      nextMidnight.setHours(24, 0, 0, 0);
+      this.cookieService.set(DIWALI_ENTRANCE_SEEN_COOKIE, new Date().toISOString(), nextMidnight, '/');
+      this.diwaliFireworksService.entranceDue = true;
+    }
+    if (!this.diwaliFireworksService.entranceDue) return;
 
-    // Expires at the visitor's next local midnight, so the show plays once per day.
-    const nextMidnight = new Date();
-    nextMidnight.setHours(24, 0, 0, 0);
-    this.cookieService.set(DIWALI_ENTRANCE_SEEN_COOKIE, new Date().toISOString(), nextMidnight, '/');
-
-    // Created only when the show will play, so visitors who already saw it today download nothing.
-    this.showSound = new Audio(SHOW_SOUND_URL);
-    this.showSound.preload = 'auto';
-    this.showSound.volume = SHOW_SOUND_VOLUME;
-
-    const timeout = setTimeout(() => this.runEntranceSequence(), ENTRANCE_SEQUENCE_START_DELAY_MS);
+    const timeout = setTimeout(() => {
+      const service = this.diwaliFireworksService;
+      // Whichever stage gets here first while active plays today's show; a slow page that opens while
+      // the overlay's show is already on doesn't stack a second one.
+      if (!service.entranceDue || !this.isActiveStage() || service.showPlaying$.value) return;
+      service.entranceDue = false;
+      this.runEntranceSequence();
+    }, ENTRANCE_SEQUENCE_START_DELAY_MS);
     this.pendingTimeouts.push(timeout);
   }
 
-  // Browsers usually block sound until the visitor interacts with the page. The clip plays right away
-  // when allowed; otherwise the first tap, click or key press during the show starts it, in step with the show.
-  private playShowSound(): void {
-    const sound = this.showSound;
-    if (!sound) return;
-
-    this.showStartedAt = performance.now();
-    sound.play().catch(() => {
-      this.ngZone.runOutsideAngular(() => {
-        this.removeAudioUnlockListeners = AUDIO_UNLOCK_EVENTS.map((eventName) =>
-          this.renderer.listen('document', eventName, () => this.resumeShowSound()),
-        );
-      });
-    });
-
-    const timeout = setTimeout(() => this.stopShowSound(), SHOW_SOUND_LENGTH_MS);
-    this.pendingTimeouts.push(timeout);
+  // Sound is opt-in through the sound button. Turning it on mid-show joins the clip at the show's current point.
+  private onSoundToggled(soundOn: boolean): void {
+    if (!this.showRunning) return;
+    if (soundOn) {
+      this.playShowSound(performance.now() - this.showStartedAt);
+    } else {
+      this.showSound?.pause();
+    }
   }
 
-  private resumeShowSound(): void {
-    const sound = this.showSound;
-    if (!sound) return;
-
-    sound.currentTime = (performance.now() - this.showStartedAt) / 1000;
-    sound
-      .play()
-      .then(() => this.clearAudioUnlockListeners())
-      .catch(() => undefined);
+  private playShowSound(offsetMs: number): void {
+    // Created on first use and reused, so visitors who never turn sound on download nothing.
+    if (!this.showSound) {
+      this.showSound = new Audio(SHOW_SOUND_URL);
+      this.showSound.preload = 'auto';
+      this.showSound.volume = SHOW_SOUND_VOLUME;
+    }
+    this.showSound.currentTime = offsetMs / 1000;
+    this.showSound.play().catch(() => undefined);
   }
 
-  private clearAudioUnlockListeners(): void {
-    this.removeAudioUnlockListeners.forEach((remove) => remove());
-    this.removeAudioUnlockListeners = [];
-  }
-
-  private stopShowSound(): void {
-    this.clearAudioUnlockListeners();
+  private endShow(): void {
+    this.showRunning = false;
     this.showSound?.pause();
-    this.showSound = null;
+    this.ngZone.run(() => this.diwaliFireworksService.showPlaying$.next(false));
+  }
+
+  // Maps a 0-1 position across the screen to an x. On a background stage with centred content, the
+  // left half of the range lands in the left gutter and the right half in the right one, so bursts stay visible.
+  private showX(fraction: number): number {
+    const gutter = (this.viewportWidth - this.clearWidth) / 2;
+    if (!this.isBackground || !this.clearWidth || gutter < MIN_GUTTER_PX) return this.viewportWidth * fraction;
+
+    const withinGutter = gutter * (0.15 + 0.7 * ((fraction * 2) % 1));
+    return fraction < 0.5 ? withinGutter : this.viewportWidth - gutter + withinGutter;
   }
 
   private resizeCanvas = (): void => {
@@ -202,49 +226,54 @@ export class DiwaliFireworksComponent implements AfterViewInit, OnDestroy {
   };
 
   private runEntranceSequence(): void {
-    this.playShowSound();
+    if (this.showRunning) return;
+    this.showRunning = true;
+    this.showStartedAt = performance.now();
+    this.ngZone.run(() => this.diwaliFireworksService.showPlaying$.next(true));
+    if (this.diwaliFireworksService.soundOn$.value) this.playShowSound(0);
+    this.pendingTimeouts.push(setTimeout(() => this.endShow(), SHOW_LENGTH_MS));
 
     // Every burst in the show starts as a single glowing line rising from the bottom of the screen.
     for (let i = 0; i < ENTRANCE_SEQUENCE_LAUNCH_COUNT; i++) {
       const timeout = setTimeout(() => {
-        const x = this.viewportWidth * (0.25 + Math.random() * 0.5);
+        const x = this.showX(0.25 + Math.random() * 0.5);
         const y = this.viewportHeight * (0.2 + Math.random() * 0.3);
-        this.launchRocket(x, y, SHOT_RISE_MS, () => this.burstAt(x, y, true));
+        this.launchRocket(x, y, SHOT_RISE_MS, () => this.burstAt(x, y));
       }, i * ENTRANCE_SEQUENCE_LAUNCH_GAP_MS);
       this.pendingTimeouts.push(timeout);
     }
 
     const leftShotTimeout = setTimeout(() => {
-      const x = this.viewportWidth * 0.14;
+      const x = this.showX(0.14);
       const y = this.viewportHeight * (0.22 + Math.random() * 0.15);
-      this.launchRocket(x, y, SHOT_RISE_MS, () => this.burstAt(x, y, true));
+      this.launchRocket(x, y, SHOT_RISE_MS, () => this.burstAt(x, y));
     }, 250);
     this.pendingTimeouts.push(leftShotTimeout);
 
     const rightShotTimeout = setTimeout(() => {
-      const x = this.viewportWidth * 0.86;
+      const x = this.showX(0.86);
       const y = this.viewportHeight * (0.22 + Math.random() * 0.15);
-      this.launchRocket(x, y, SHOT_RISE_MS, () => this.burstAt(x, y, true));
+      this.launchRocket(x, y, SHOT_RISE_MS, () => this.burstAt(x, y));
     }, 1350);
     this.pendingTimeouts.push(rightShotTimeout);
 
     // Smaller cracker rockets go up evenly through the whole show, under the big bursts.
     let launchAt = CRACKER_START_MS;
     while (launchAt < CRACKER_END_MS) {
-      this.scheduleCrackerRocket(launchAt, this.viewportWidth * (0.08 + Math.random() * 0.84));
+      this.scheduleCrackerRocket(launchAt, this.showX(0.08 + Math.random() * 0.84));
       launchAt += CRACKER_AVERAGE_GAP_MS * (0.6 + Math.random() * 0.8);
     }
 
     // Grand finale: a big centre rocket with a quick volley of cracker rockets around it.
     const finaleAt = CRACKER_END_MS + 200;
     const finaleTimeout = setTimeout(() => {
-      const x = this.viewportWidth * 0.5;
+      const x = this.showX(0.5);
       const y = this.viewportHeight * 0.3;
-      this.launchRocket(x, y, SHOT_RISE_MS, () => this.burstAt(x, y, true));
+      this.launchRocket(x, y, SHOT_RISE_MS, () => this.burstAt(x, y));
     }, finaleAt);
     this.pendingTimeouts.push(finaleTimeout);
     for (let i = 0; i < FINALE_CRACKER_ROLL_COUNT; i++) {
-      this.scheduleCrackerRocket(finaleAt + 60 + i * 90, this.viewportWidth * (0.3 + Math.random() * 0.4));
+      this.scheduleCrackerRocket(finaleAt + 60 + i * 90, this.showX(0.3 + Math.random() * 0.4));
     }
   }
 
@@ -346,32 +375,9 @@ export class DiwaliFireworksComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private burstAt(x: number, y: number, heavy = false): void {
+  private burstAt(x: number, y: number): void {
     if (!this.enabled) return;
     this.ensureLoop();
-
-    if (!heavy) {
-      const starCount = 40 + Math.floor(Math.random() * 20);
-      const color1 = DIWALI_LIGHT_COLORS[Math.floor(Math.random() * DIWALI_LIGHT_COLORS.length)];
-      const color2 =
-        Math.random() < 0.4 ? DIWALI_LIGHT_COLORS[Math.floor(Math.random() * DIWALI_LIGHT_COLORS.length)] : color1;
-      for (let i = 0; i < starCount; i++) {
-        const angle = (Math.PI * 2 * i) / starCount + Math.random() * 0.1;
-        const speed = 0.08 + Math.random() * 0.1;
-        const fullLife = 900 + Math.random() * 400;
-        this.stars.push({
-          x,
-          y,
-          speedX: Math.cos(angle) * speed,
-          speedY: Math.sin(angle) * speed,
-          color: i % 2 === 0 ? color1 : color2,
-          life: fullLife,
-          fullLife,
-          size: 1.1,
-        });
-      }
-      return;
-    }
 
     this.burstFlash(x, y, 16);
 
@@ -617,9 +623,12 @@ export class DiwaliFireworksComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
-    this.removeClickListener?.();
-    this.stopShowSound();
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
     this.pendingTimeouts.forEach((timeout) => clearTimeout(timeout));
+    if (this.showRunning) this.endShow();
+    this.showSound?.pause();
+    this.showSound = null;
+    if (this.enabled && this.isBackground) this.diwaliFireworksService.backgroundStages--;
     if (this.isBrowser) {
       window.removeEventListener('resize', this.resizeCanvas);
     }

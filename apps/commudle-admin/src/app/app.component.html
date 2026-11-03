@@ -41,5 +41,9 @@
   <app-sw-update></app-sw-update>
   <commudle-whats-new></commudle-whats-new>
   <commudle-diwali-fireworks></commudle-diwali-fireworks>
+  <commudle-diwali-fireworks-controls
+    [aboveChat]="!!(currentUser && cookieAccepted && showGlobalChatPopup)"
+    [ngClass]="{ 'mobile-navbar-hidden': isMobileNavbarHidden }"
+  ></commudle-diwali-fireworks-controls>
   <!-- <app-push-notification></app-push-notification> -->
 </div>
