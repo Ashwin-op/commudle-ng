@@ -356,7 +356,7 @@
           </a>
 
           <!-- Attendance -->
-          <a [routerLink]="['scan-entry-pass']" class="attention-item">
+          <a [routerLink]="attendanceLink" class="attention-item">
             <fa-icon
               [icon]="needsAttention?.attendance?.started ? icons.faCircleCheck : icons.faCircleXmark"
               [ngClass]="needsAttention?.attendance?.started ? 'attention-icon-check' : 'attention-icon-cross'"

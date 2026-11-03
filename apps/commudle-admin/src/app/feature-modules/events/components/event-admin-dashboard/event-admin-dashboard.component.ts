@@ -218,11 +218,18 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     return (this.needsAttention?.speakers?.values || []).map((speaker) => speaker.user?.name).join(', ');
   }
 
+  // Once the event has ended, scanning entry passes live is no longer a
+  // valid action -- link to the read-only checked-in list instead of the
+  // live scanner.
+  get attendanceLink(): any[] {
+    return this.needsAttention?.attendance?.ended ? ['scan-entry-pass', 'checked-in-list'] : ['scan-entry-pass'];
+  }
+
   get attendanceStatusText(): string {
     const started = this.needsAttention?.attendance?.started;
-    const eventCompleted = this.eventHeader?.event_status === 'completed';
+    const ended = this.needsAttention?.attendance?.ended;
 
-    if (eventCompleted) {
+    if (ended) {
       return started ? 'Attendance was marked' : 'Attendance was not marked';
     }
 

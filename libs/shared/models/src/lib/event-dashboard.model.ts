@@ -59,7 +59,7 @@ export interface IEventDashboardNeedsAttention {
   registration_form?: { created: boolean; opened: boolean };
   rsvp?: IEventDashboardEmailBreakdown;
   entry_pass?: IEventDashboardEmailBreakdown;
-  attendance: { started: boolean };
+  attendance: { started: boolean; ended: boolean };
 }
 
 // snapshot

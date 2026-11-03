@@ -7,7 +7,9 @@
         &nbsp;Share
       </button>
     </h1>
-    <a *ngIf="isEventLive" [routerLink]="[
+    <a
+      *ngIf="isEventLive"
+      [routerLink]="[
         '/admin',
         'communities',
         community.slug,
@@ -15,15 +17,28 @@
         'event-dashboard',
         event.slug,
         'scan-entry-pass'
-      ]" target="_blank" class="checkin-banner" nbButton fullWidth status="success" size="tiny" shape="round">
+      ]"
+      target="_blank"
+      class="checkin-banner"
+      nbButton
+      fullWidth
+      status="success"
+      size="tiny"
+      shape="round"
+    >
       <span class="checkin-dot"></span>
       LIVE
     </a>
   </div>
   <div *appBreakpoints="'<=md'" class="mobile-header-action-btns">
     <div class="container-public-page-stats-btn">
-      <a [routerLink]="['/communities', community.slug, 'events', event.slug]" nbButton size="tiny" status="info"
-        target="_blank">
+      <a
+        [routerLink]="['/communities', community.slug, 'events', event.slug]"
+        nbButton
+        size="tiny"
+        status="info"
+        target="_blank"
+      >
         Public Event Page
         <nb-icon icon="external-link"></nb-icon>
       </a>
@@ -33,8 +48,15 @@
         <nb-icon icon="external-link"></nb-icon>
       </a>
     </div>
-    <a [routerLink]="['/communities', community.slug, 'events', event.slug, 'attended-members']" target="_blank"
-      nbButton outline size="small" status="primary" fullWidth>
+    <a
+      [routerLink]="['/communities', community.slug, 'events', event.slug, 'attended-members']"
+      target="_blank"
+      nbButton
+      outline
+      size="small"
+      status="primary"
+      fullWidth
+    >
       View attended members
     </a>
   </div>
@@ -43,14 +65,25 @@
 
 <section class="md:com-flex">
   <div class="sidebar" *appBreakpoints="'>md'">
-    <commudle-sidebar [expandedWidth]="sidebarExpanded ? ESidebarWidth.XL : ESidebarWidth.XSMALL" [forWindow]="false"
-      [eventName]="sidebarEventName" [showExpandedButton]="true" [heading]="'Event Dashboard'"
-      [textSize]="ESidebarHeading.MEDIUM">
+    <commudle-sidebar
+      [expandedWidth]="sidebarExpanded ? ESidebarWidth.XL : ESidebarWidth.XSMALL"
+      [forWindow]="false"
+      [eventName]="sidebarEventName"
+      [showExpandedButton]="true"
+      [heading]="'Event Dashboard'"
+      [textSize]="ESidebarHeading.MEDIUM"
+    >
       <div class="action-buttons">
-        <div class="header-icons"
-          [ngClass]="{ 'header-icons-non-expanded': !sidebarExpanded, 'header-icons-expanded': sidebarExpanded }">
+        <div
+          class="header-icons"
+          [ngClass]="{ 'header-icons-non-expanded': !sidebarExpanded, 'header-icons-expanded': sidebarExpanded }"
+        >
           <div>
-            <a *ngIf="sidebarExpanded" [routerLink]="['/admin', 'communities', community.slug]" class="back-admin">
+            <a
+              *ngIf="sidebarExpanded"
+              [routerLink]="['/admin', 'communities', community.slug, 'events']"
+              class="back-admin"
+            >
               <div class="icon">
                 <fa-icon [icon]="icons.faArrowLeft"></fa-icon>
               </div>
@@ -59,16 +92,22 @@
           </div>
         </div>
         <div *ngIf="sidebarExpanded" class="!com-px-0 com-my-4">
-          <commudle-event-status (updatedEventStatus)="event.event_status = $event"
-            [event]="event"></commudle-event-status>
+          <commudle-event-status
+            (updatedEventStatus)="event.event_status = $event"
+            [event]="event"
+          ></commudle-event-status>
         </div>
         <div class="categories">
           <div class="category">
             <div *ngIf="sidebarExpanded" class="category-heading">
               <span>SETUP</span>
             </div>
-            <a class="action-button" [routerLink]="['./']" [routerLinkActive]="'active'"
-              [routerLinkActiveOptions]="{ exact: true }">
+            <a
+              class="action-button"
+              [routerLink]="['./']"
+              [routerLinkActive]="'active'"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
               <div class="icon">
                 <nb-icon icon="grid-outline"></nb-icon>
               </div>
@@ -109,15 +148,22 @@
             <div *ngIf="sidebarExpanded" class="category-heading">
               <span>PROMOTE</span>
             </div>
-            <a [routerLink]="['/communities', community.slug, 'events', event.slug]" target="_blank"
-              class="action-button public-event-page">
+            <a
+              [routerLink]="['/communities', community.slug, 'events', event.slug]"
+              target="_blank"
+              class="action-button public-event-page"
+            >
               <div class="icon">
                 <fa-icon [icon]="icons.faArrowUpRightFromSquare"></fa-icon>
               </div>
               <div *ngIf="sidebarExpanded" class="heading">Public Event Page</div>
             </a>
-            <a *ngIf="event.event_status.name !== EEventStatuses.DRAFT" [routerLink]="['updates']"
-              [routerLinkActive]="'active'" class="action-button">
+            <a
+              *ngIf="event.event_status.name !== EEventStatuses.DRAFT"
+              [routerLink]="['updates']"
+              [routerLinkActive]="'active'"
+              class="action-button"
+            >
               <div class="icon">
                 <fa-icon [icon]="icons.faStar"></fa-icon>
               </div>
@@ -134,14 +180,18 @@
             <div *ngIf="sidebarExpanded" class="category-heading">
               <span>RUN EVENT</span>
             </div>
-            <a class="action-button"
-              [routerLink]="['/communities', community.slug, 'events', event.slug, 'attended-members']" target="_blank">
+            <a
+              class="action-button"
+              [routerLink]="['/communities', community.slug, 'events', event.slug, 'attended-members']"
+              target="_blank"
+            >
               <div class="icon">
                 <fa-icon [icon]="icons.faListCheck"></fa-icon>
               </div>
               <div *ngIf="sidebarExpanded" class="heading">Attendees</div>
             </a>
-            <a [routerLink]="[
+            <a
+              [routerLink]="[
                 '/admin',
                 'communities',
                 community.slug,
@@ -149,7 +199,10 @@
                 'event-dashboard',
                 event.slug,
                 'scan-entry-pass'
-              ]" target="_blank" class="action-button public-event-page">
+              ]"
+              target="_blank"
+              class="action-button public-event-page"
+            >
               <div class="icon">
                 <fa-icon [icon]="icons.faExpand"></fa-icon>
               </div>
@@ -183,8 +236,12 @@
       <com-card>
         <com-card-body>
           <div class="com-scrollbar-hide">
-            <a class="action-button" [routerLink]="['./']" [routerLinkActive]="'active'"
-              [routerLinkActiveOptions]="{ exact: true }">
+            <a
+              class="action-button"
+              [routerLink]="['./']"
+              [routerLinkActive]="'active'"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
               <div class="icon">
                 <nb-icon icon="info-outline"></nb-icon>
               </div>
@@ -214,21 +271,29 @@
               </div>
               <div class="heading">Team</div>
             </a>
-            <a *ngIf="event.event_status.name !== EEventStatuses.DRAFT" [routerLink]="['updates']"
-              [routerLinkActive]="'active'" class="action-button">
+            <a
+              *ngIf="event.event_status.name !== EEventStatuses.DRAFT"
+              [routerLink]="['updates']"
+              [routerLinkActive]="'active'"
+              class="action-button"
+            >
               <div class="icon">
                 <nb-icon icon="star-outline"></nb-icon>
               </div>
               <div class="heading">Send Updates</div>
             </a>
-            <a class="action-button"
-              [routerLink]="['/communities', community.slug, 'events', event.slug, 'attended-members']" target="_blank">
+            <a
+              class="action-button"
+              [routerLink]="['/communities', community.slug, 'events', event.slug, 'attended-members']"
+              target="_blank"
+            >
               <div class="icon">
                 <nb-icon icon="people-outline"></nb-icon>
               </div>
               <div class="heading">Attendees</div>
             </a>
-            <a [routerLink]="[
+            <a
+              [routerLink]="[
                 '/admin',
                 'communities',
                 community.slug,
@@ -236,7 +301,10 @@
                 'event-dashboard',
                 event.slug,
                 'scan-entry-pass'
-              ]" target="_blank" class="action-button">
+              ]"
+              target="_blank"
+              class="action-button"
+            >
               <div class="icon">
                 <nb-icon icon="expand-outline"></nb-icon>
               </div>

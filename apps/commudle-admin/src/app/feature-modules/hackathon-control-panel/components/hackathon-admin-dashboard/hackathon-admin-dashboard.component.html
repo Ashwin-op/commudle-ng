@@ -126,10 +126,8 @@
         <!-- Judges & mentors (omitted by the backend once the hackathon has ended) -->
         <a *ngIf="needsAttention?.judges" [routerLink]="['speakers']" class="attention-item">
           <fa-icon
-            [icon]="needsAttention?.judges?.without_team?.total === 0 ? icons.faCircleCheck : icons.faCircleXmark"
-            [ngClass]="
-              needsAttention?.judges?.without_team?.total === 0 ? 'attention-icon-check' : 'attention-icon-cross'
-            "
+            [icon]="judgesAttentionResolved() ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="judgesAttentionResolved() ? 'attention-icon-check' : 'attention-icon-cross'"
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Judges &amp; Mentors</span>
@@ -275,14 +273,8 @@
         <!-- Mentor / judge slots (omitted by the backend once the hackathon has ended) -->
         <a *ngIf="needsAttention?.mentor_judge_slots" [routerLink]="['mentor-slots']" class="attention-item">
           <fa-icon
-            [icon]="
-              needsAttention?.mentor_judge_slots?.not_opened?.total === 0 ? icons.faCircleCheck : icons.faCircleXmark
-            "
-            [ngClass]="
-              needsAttention?.mentor_judge_slots?.not_opened?.total === 0
-                ? 'attention-icon-check'
-                : 'attention-icon-cross'
-            "
+            [icon]="mentorJudgeSlotsResolved() ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="mentorJudgeSlotsResolved() ? 'attention-icon-check' : 'attention-icon-cross'"
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Mentor &amp; Judge Slots</span>
@@ -362,27 +354,48 @@
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faMicrophone" class="snapshot-stat-icon judges-icon"></fa-icon>
           <div class="snapshot-stat-info">
-            <span class="snapshot-stat-label">Judges Assigned</span>
-            <span class="snapshot-stat-value-row">
-              <span class="snapshot-stat-value">{{ snapshot?.judges?.assigned_count ?? 0 | number }}</span>
-              <span class="snapshot-stat-sub" *ngIf="snapshot?.judges?.pending_count">
-                · {{ snapshot.judges.pending_count | number }} pending
-              </span>
-            </span>
+            <span class="snapshot-stat-label">Judges</span>
+            <span class="snapshot-stat-value">{{ snapshot?.judges?.count ?? 0 | number }}</span>
           </div>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faHandshakeSimple" class="snapshot-stat-icon sponsors-icon"></fa-icon>
           <div class="snapshot-stat-info">
             <span class="snapshot-stat-label">Sponsors</span>
-            <span class="snapshot-stat-value">{{ snapshot?.sponsors?.count ?? 0 | number }}</span>
+            <a
+              *ngIf="!snapshot?.sponsors?.count && hackathon.status !== EHackathonStatus.COMPLETED; else sponsorsCount"
+              comButton
+              size="tiny"
+              status="primary"
+              appearance="filled"
+              shape="semi-round"
+              class="snapshot-stat-cta"
+              [routerLink]="['sponsors']"
+              >Add Sponsors</a
+            >
+            <ng-template #sponsorsCount>
+              <span class="snapshot-stat-value">{{ snapshot?.sponsors?.count ?? 0 | number }}</span>
+            </ng-template>
           </div>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faTrophy" class="snapshot-stat-icon prize-icon"></fa-icon>
           <div class="snapshot-stat-info">
             <span class="snapshot-stat-label">Prize Pool</span>
-            <span class="snapshot-stat-value">{{ prizePoolDisplay || '–' }}</span>
+            <a
+              *ngIf="!prizePoolDisplay && hackathon.status !== EHackathonStatus.COMPLETED; else prizePoolValue"
+              comButton
+              size="tiny"
+              status="primary"
+              appearance="filled"
+              shape="semi-round"
+              class="snapshot-stat-cta"
+              [routerLink]="['tracks', 'prizes']"
+              >Add Prizes</a
+            >
+            <ng-template #prizePoolValue>
+              <span class="snapshot-stat-value">{{ prizePoolDisplay || '–' }}</span>
+            </ng-template>
           </div>
         </div>
       </div>
@@ -545,8 +558,13 @@
           </div>
           <div class="people-stat">
             <fa-icon [icon]="icons.faCode" class="people-stat-icon projects-icon"></fa-icon>
-            <span class="people-stat-value">{{ peopleJudging?.unassigned_projects_count ?? 0 | number }}</span>
-            <span class="people-stat-label">Unassigned Projects</span>
+            <span class="people-stat-value">{{ peopleJudging?.total_ppt_submissions ?? 0 | number }}</span>
+            <span class="people-stat-label">PPT Submissions</span>
+          </div>
+          <div class="people-stat">
+            <fa-icon [icon]="icons.faCode" class="people-stat-icon projects-icon"></fa-icon>
+            <span class="people-stat-value">{{ peopleJudging?.total_project_submissions ?? 0 | number }}</span>
+            <span class="people-stat-label">Project Submissions</span>
           </div>
         </div>
         <div class="mentor-session-banner" *ngIf="nextMentorSession">

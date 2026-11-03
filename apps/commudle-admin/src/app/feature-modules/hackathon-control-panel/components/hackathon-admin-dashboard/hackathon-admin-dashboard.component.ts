@@ -385,6 +385,15 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Green only once judges actually exist and none are left without a team --
+  // `without_team.total === 0` alone is trivially true when there are zero
+  // judges to begin with, which was showing a green tick for "0 judges · 0
+  // mentors · 0 teams assigned."
+  judgesAttentionResolved(): boolean {
+    const j = this.needsAttention?.judges;
+    return (j?.judges_count ?? 0) > 0 && (j?.without_team?.total ?? 0) === 0;
+  }
+
   judgesAttentionTooltip(): string {
     const j = this.needsAttention?.judges;
     if (!j) {
@@ -461,6 +470,15 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     return `${p.awaiting_acceptance_count ?? 0} awaiting acceptance · ${
       p.incomplete_leader_application_count ?? 0
     } leader applications incomplete`;
+  }
+
+  // Green only once some slots actually exist and none are left unopened --
+  // `not_opened.total === 0` alone is trivially true when there are zero
+  // slots to begin with, which was showing a green tick for "0 opened · 0
+  // not opened."
+  mentorJudgeSlotsResolved(): boolean {
+    const m = this.needsAttention?.mentor_judge_slots;
+    return (m?.opened?.total ?? 0) > 0 && (m?.not_opened?.total ?? 0) === 0;
   }
 
   mentorJudgeSlotsTooltip(): string {

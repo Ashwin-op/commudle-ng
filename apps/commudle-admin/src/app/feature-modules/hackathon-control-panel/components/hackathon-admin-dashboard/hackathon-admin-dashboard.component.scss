@@ -515,6 +515,21 @@
       .snapshot-stat-sub {
         @apply com-text-10px com-text-orange-500;
       }
+
+      .snapshot-stat-cta {
+        @apply com-relative com-overflow-hidden com-mt-2 com-self-start;
+
+        // Frosted glass -- matches the "Create Event"/"Create Hackathon" CTAs
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        background: linear-gradient(135deg, rgba(51, 102, 255, 0.85) 0%, rgba(51, 102, 255, 0.55) 100%) !important;
+        border: 1px solid rgba(255, 255, 255, 0.4) !important;
+
+        &:hover {
+          background: linear-gradient(135deg, rgba(51, 102, 255, 0.95) 0%, rgba(51, 102, 255, 0.65) 100%) !important;
+          border-color: rgba(255, 255, 255, 0.55) !important;
+        }
+      }
     }
   }
 
@@ -736,7 +751,7 @@
   }
 
   .people-stats {
-    @apply com-grid com-grid-cols-4 com-gap-1.5 com-mt-1.5;
+    @apply com-grid com-grid-cols-2 sm:com-grid-cols-5 com-gap-1.5 com-mt-1.5;
 
     .people-stat {
       @apply com-flex com-flex-col com-items-center com-gap-1 com-p-1.5 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-white com-transition-all com-duration-200;
