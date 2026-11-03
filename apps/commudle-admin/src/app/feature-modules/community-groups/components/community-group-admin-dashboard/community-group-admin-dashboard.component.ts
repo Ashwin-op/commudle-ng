@@ -22,10 +22,6 @@ import {
   ICommunityGroupDashboardNeedsAttention,
   ICommunityGroupDashboardPulse,
   IDashboardDistributionItem,
-  EDashboardTopPagesWindow,
-  IDashboardLiveVisitors,
-  IDashboardLiveVisitorsBucket,
-  IDashboardTopPage,
 } from '@commudle/shared-models';
 import { Subscription, interval } from 'rxjs';
 import * as moment from 'moment';
@@ -52,8 +48,6 @@ import {
   faCircleInfo,
   faExpand,
   faUserPlus,
-  faFileLines,
-  faEye,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -92,8 +86,6 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     faCircleInfo,
     faExpand,
     faUserPlus,
-    faFileLines,
-    faEye,
   };
 
   // Organization Pulse -- GET /api/v2/dashboards/community_groups/pulse
@@ -164,18 +156,6 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   engagementSnapshot: ICommunityGroupDashboardEngagementSnapshot;
   isEngagementLoading = false;
 
-  // Live Visitors -- GET .../live_visitors (polled every 30s)
-  liveVisitors: IDashboardLiveVisitors;
-  liveVisitorsChart: Chart;
-
-  // Top Pages -- GET .../top_pages (polled every 30s, paginated)
-  topPages: IDashboardTopPage[] = [];
-  topPagesPage = 1;
-  topPagesTotal = 0;
-  readonly topPagesCount = 5;
-  topPagesLoading = false;
-  topPagesWindow: EDashboardTopPagesWindow = 'current';
-
   quickActions = [];
 
   constructor(
@@ -204,10 +184,6 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
         this.loadLatestForumActivity();
         this.loadCommunities();
         this.loadEngagementSnapshot();
-        this.loadLiveVisitors();
-        this.startLiveVisitorsPolling();
-        this.loadTopPages();
-        this.startTopPagesPolling();
         this.setQuickActions();
       }),
     );
@@ -217,7 +193,6 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     this.seoService.noIndex(false);
     this.subscriptions.forEach((s) => s.unsubscribe());
     this.genderChart?.destroy();
-    this.liveVisitorsChart?.destroy();
     clearTimeout(this.newActivityBadgeTimer);
   }
 
@@ -684,157 +659,6 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
     );
   }
 
-  loadLiveVisitors(): void {
-    this.subscriptions.push(
-      this.dashboardCommunityGroupsService.liveVisitors(this.communityGroup.id).subscribe((data) => {
-        this.liveVisitors = data;
-        this.renderLiveVisitorsChart();
-      }),
-    );
-  }
-
-  // Poll live visitors every 30s, matching the server-side Redis TTL.
-  startLiveVisitorsPolling(): void {
-    this.subscriptions.push(interval(30000).subscribe(() => this.loadLiveVisitors()));
-  }
-
-  onTopPagesWindowChange(window: EDashboardTopPagesWindow): void {
-    this.topPagesWindow = window;
-    this.topPagesPage = 1;
-    this.loadTopPages();
-  }
-
-  loadTopPages(): void {
-    this.topPagesLoading = true;
-    this.subscriptions.push(
-      this.dashboardCommunityGroupsService
-        .topPages(this.communityGroup.id, this.topPagesWindow, this.topPagesPage, this.topPagesCount)
-        .subscribe({
-          next: (data) => {
-            this.topPages = data.values;
-            this.topPagesTotal = data.total;
-            this.topPagesLoading = false;
-          },
-          error: () => {
-            this.topPagesLoading = false;
-          },
-        }),
-    );
-  }
-
-  onTopPagesPageChange(page: number): void {
-    this.topPagesPage = page;
-    this.loadTopPages();
-  }
-
-  // Poll top pages every 30s, matching the server-side Redis TTL for the 'current' window.
-  startTopPagesPolling(): void {
-    this.subscriptions.push(interval(30000).subscribe(() => this.loadTopPages()));
-  }
-
-  get topPagesMax(): number {
-    return Math.max(...this.topPages.map((p) => p.views || 0), 1);
-  }
-
-  barShare(value: number, max: number): number {
-    if (!max) {
-      return 0;
-    }
-    return (value / max) * 100;
-  }
-
-  private resampleLiveVisitorsHistory(
-    history: IDashboardLiveVisitorsBucket[] | undefined,
-    bucketMinutes = 5,
-    windowMinutes = 30,
-  ): { label: string; count: number }[] {
-    if (!history?.length) {
-      return [];
-    }
-    const bucketMs = bucketMinutes * 60000;
-    const bucketCount = windowMinutes / bucketMinutes;
-    const windowStart = new Date(history[history.length - 1].bucket_end).getTime() - bucketCount * bucketMs;
-
-    const sums = new Array(bucketCount).fill(0);
-    const hits = new Array(bucketCount).fill(0);
-
-    history.forEach(({ bucket_start, bucket_end, count }) => {
-      const midpoint = (new Date(bucket_start).getTime() + new Date(bucket_end).getTime()) / 2;
-      const i = Math.floor((midpoint - windowStart) / bucketMs);
-      if (i >= 0 && i < bucketCount) {
-        sums[i] += count;
-        hits[i] += 1;
-      }
-    });
-
-    return sums.map((sum, i) => ({
-      label: moment(windowStart + (i + 1) * bucketMs).format('h:mm a'),
-      count: hits[i] ? Math.round(sum / hits[i]) : 0,
-    }));
-  }
-
-  private renderLiveVisitorsChart(): void {
-    const points = this.resampleLiveVisitorsHistory(this.liveVisitors?.history);
-    if (!points.length) {
-      return;
-    }
-    const labels = points.map((p) => p.label);
-    const data = points.map((p) => p.count);
-
-    if (this.liveVisitorsChart) {
-      this.liveVisitorsChart.data.labels = labels;
-      this.liveVisitorsChart.data.datasets[0].data = data;
-      this.liveVisitorsChart.update({ duration: 0 });
-      return;
-    }
-
-    this.liveVisitorsChart = new Chart('community-group-live-visitors-chart', {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [
-          {
-            label: 'Live Visitors',
-            data,
-            borderColor: '#3366ff',
-            backgroundColor: 'rgba(51, 102, 255, 0.08)',
-            borderWidth: 2,
-            pointRadius: 0,
-            pointHoverRadius: 4,
-            pointHoverBorderWidth: 2,
-            pointHoverBackgroundColor: '#ffffff',
-            pointHoverBorderColor: '#3366ff',
-            lineTension: 0.3,
-            fill: true,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: { duration: 4000, easing: 'easeOutQuart' },
-        responsiveAnimationDuration: 0,
-        legend: { display: false },
-        scales: {
-          xAxes: [{ gridLines: { display: false } }],
-          yAxes: [
-            {
-              ticks: { beginAtZero: true, precision: 0 },
-              gridLines: { color: '#f1f1f1', drawBorder: false },
-            },
-          ],
-        },
-        tooltips: {
-          mode: 'index',
-          intersect: false,
-          callbacks: {
-            label: (tooltipItem) => `${tooltipItem.yLabel} visitor${tooltipItem.yLabel === '1' ? '' : 's'}`,
-          },
-        },
-      },
-    });
-  }
-
   isScheduleToday(scheduledAt: string): boolean {
     return moment(scheduledAt).isSame(moment(), 'day');
   }
@@ -858,7 +682,18 @@ export class CommunityGroupAdminDashboardComponent implements OnInit, OnDestroy 
   }
 
   activityTime(item: ICommunityGroupDashboardActivityItem): string {
-    return item?.created_at ? moment(item.created_at).fromNow() : '';
+    if (!item?.created_at) {
+      return '';
+    }
+    const createdAt = moment(item.created_at);
+    // Clamp to "now" so clock skew / timezone drift never renders a past
+    // activity as upcoming (e.g. "in 11 hours" instead of "11 hours ago").
+    const safeMoment = createdAt.isAfter(moment()) ? moment() : createdAt;
+    return safeMoment.fromNow();
+  }
+
+  exactTime(timestamp?: string | null): string {
+    return timestamp ? moment(timestamp).format('Do MMM, YYYY, h:mm A') : '';
   }
 
   private readonly palette = ['#3b82f6', '#22c55e', '#f97316', '#a855f7', '#eab308', '#ec4899'];

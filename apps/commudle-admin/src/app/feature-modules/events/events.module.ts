@@ -37,6 +37,7 @@ import { BackButtonComponent } from 'apps/shared-components/back-button/back-but
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
 import { SidebarComponent } from 'apps/shared-components/sidebar/sidebar.component';
 import { PaginationCompactComponent } from 'apps/shared-components/pagination-compact/pagination-compact.component';
+import { LiveTrafficRowComponent } from 'apps/commudle-admin/src/app/app-shared-components/live-traffic-row/live-traffic-row.component';
 import { SharedDirectivesModule } from 'apps/shared-directives/shared-directives.module';
 import { MiniUserProfileModule } from 'apps/shared-modules/mini-user-profile/mini-user-profile.module';
 import { SharedPipesModule } from 'apps/shared-pipes/pipes.module';
@@ -169,6 +170,7 @@ import { CommudleButtonModule, CommudleCardModule, CommudleTooltipModule } from 
     PaginationCompactComponent,
     DataTableComponent,
     EventStreamingComponent,
+    LiveTrafficRowComponent,
 
     //Nebular
     NbButtonModule,

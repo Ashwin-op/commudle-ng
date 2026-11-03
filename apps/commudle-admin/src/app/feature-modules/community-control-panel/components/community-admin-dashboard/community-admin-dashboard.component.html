@@ -157,6 +157,7 @@
                       ? 'Needs your response'
                       : (request.status | capitalizeAndRemoveUnderscore)
                   }}
+                  · <span [title]="exactTime(request.created_at)">{{ collaborationRequestTime(request) }}</span>
                 </span>
               </p>
               <span class="collaboration-actions" *ngIf="request.status === 'pending'">
@@ -224,6 +225,7 @@
                       ? 'Awaiting their response'
                       : (request.status | capitalizeAndRemoveUnderscore)
                   }}
+                  · <span [title]="exactTime(request.created_at)">{{ collaborationRequestTime(request) }}</span>
                 </span>
               </p>
               <span *ngIf="collaborationRowLink(request)" class="attention-arrow">›</span>
@@ -526,7 +528,9 @@
                   tooltipSize="sm"
                 ></span>
               </p>
-              <p class="activity-time">{{ activityTime(activity) }}</p>
+              <p class="activity-time" [title]="exactTime(activity?.created_at || activity?.joined_at)">
+                {{ activityTime(activity) }}
+              </p>
             </div>
           </li>
           <li *ngIf="recentActivity.length === 0" class="activity-empty">
@@ -661,7 +665,7 @@
               <p class="activity-content">
                 <span class="activity-text">{{ member.name || 'A member' }}</span>
               </p>
-              <time class="activity-time">{{ memberJoinedTime(member) }}</time>
+              <time class="activity-time" [title]="exactTime(member?.joined_at)">{{ memberJoinedTime(member) }}</time>
             </div>
           </li>
           <li *ngIf="recentMembers.length === 0" class="activity-empty">
@@ -694,102 +698,7 @@
 
   <!-- Row 4: Live Visitors + Top Pages + Top Cities -->
   <section class="live-traffic-row">
-    <!-- Live Visitors -->
-    <article class="live-visitors-card">
-      <header class="section-header">
-        <h3 class="section-heading">
-          <fa-icon [icon]="icons.faEye" class="heading-icon-visitors"></fa-icon> Live Visitors
-        </h3>
-      </header>
-      <div class="live-visitors-body">
-        <div class="live-visitors-counts">
-          <div class="live-count">
-            <span class="live-count-label">
-              <span class="live-dot"></span>
-              Live now
-            </span>
-            <span class="live-count-value">{{ liveVisitors?.live_count ?? '—' }}</span>
-          </div>
-          <div class="live-count">
-            <span class="live-count-label">Last 30 min</span>
-            <span class="live-count-value">{{ liveVisitors?.last_30_min_count ?? '—' }}</span>
-          </div>
-        </div>
-        <div class="live-visitors-chart-wrap" [class.is-empty]="!liveVisitors?.history?.length">
-          <canvas id="live-visitors-chart"></canvas>
-          <span *ngIf="!liveVisitors?.history?.length" class="live-visitors-chart-empty">
-            Not enough data yet to chart.
-          </span>
-        </div>
-      </div>
-    </article>
-
-    <!-- Top Pages -->
-    <article class="top-list-card">
-      <header class="section-header">
-        <h3 class="section-heading">
-          <fa-icon [icon]="icons.faFileLines" class="heading-icon-pages"></fa-icon> Top Pages
-        </h3>
-        <div class="top-pages-window-toggle">
-          <button
-            type="button"
-            [class.active]="topPagesWindow === 'current'"
-            (click)="onTopPagesWindowChange('current')"
-          >
-            Live
-          </button>
-          <button type="button" [class.active]="topPagesWindow === '24h'" (click)="onTopPagesWindowChange('24h')">
-            24h
-          </button>
-          <button type="button" [class.active]="topPagesWindow === '7d'" (click)="onTopPagesWindowChange('7d')">
-            7d
-          </button>
-        </div>
-      </header>
-      <div class="top-list-header">
-        <span>Page Title</span>
-        <span>Views</span>
-      </div>
-      <ul class="top-list">
-        <li *ngIf="topPagesLoading" class="section-loader">
-          <app-loading-spinner></app-loading-spinner>
-        </li>
-        <ng-container *ngIf="!topPagesLoading">
-          <li *ngFor="let page of topPages" class="top-list-item">
-            <a
-              [href]="page.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="top-list-name"
-              [comTooltip]="page.url"
-              tooltipSize="sm"
-              tooltipPlacement="top"
-              >{{ page.page_title }}</a
-            >
-            <span class="top-list-track">
-              <span
-                class="top-list-bar top-list-bar-pages"
-                [style.--bar-share.%]="barShare(page.views, topPagesMax)"
-              ></span>
-            </span>
-            <span class="top-list-value">{{ page.views | number }}</span>
-          </li>
-          <li *ngIf="topPages.length === 0" class="top-list-empty">
-            <span class="top-list-empty-icon pages">
-              <fa-icon [icon]="icons.faFileLines"></fa-icon>
-            </span>
-            <span class="top-list-empty-text">No page views yet.</span>
-          </li>
-        </ng-container>
-      </ul>
-      <commudle-pagination-compact
-        *ngIf="topPagesTotal > topPagesCount"
-        [page]="topPagesPage"
-        [count]="topPagesCount"
-        [total]="topPagesTotal"
-        (pageChange)="onTopPagesPageChange($event)"
-      ></commudle-pagination-compact>
-    </article>
+    <commudle-live-traffic-row entityType="community" [entityId]="community.slug"></commudle-live-traffic-row>
 
     <!-- Top Cities -->
     <article class="top-list-card">

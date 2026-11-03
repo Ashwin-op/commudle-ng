@@ -36,6 +36,7 @@ import { CommunityGroupChannelComponent } from 'apps/commudle-admin/src/app/feat
 import { CommunityChannelsModule } from 'apps/commudle-admin/src/app/feature-modules/community-channels/community-channels.module';
 import { SharedPipesModule } from 'apps/shared-pipes/pipes.module';
 import { PaginationCompactComponent } from 'apps/shared-components/pagination-compact/pagination-compact.component';
+import { LiveTrafficRowComponent } from 'apps/commudle-admin/src/app/app-shared-components/live-traffic-row/live-traffic-row.component';
 import { CommunityGroupAdminDashboardComponent } from './components/community-group-admin-dashboard/community-group-admin-dashboard.component';
 
 @NgModule({
@@ -71,6 +72,7 @@ import { CommunityGroupAdminDashboardComponent } from './components/community-gr
     SidebarComponent,
     SkeletonCardsComponent,
     PaginationCompactComponent,
+    LiveTrafficRowComponent,
 
     //font-awesome
     FontAwesomeModule,
