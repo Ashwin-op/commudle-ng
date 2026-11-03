@@ -39,6 +39,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   notificationCount = 0;
   ENotificationSenderTypes = ENotificationSenderTypes;
   faBell = faBell;
+  // Enough 28px swags to span ultra-wide screens; extras are clipped.
+  readonly diwaliLightBulbs = Array.from({ length: 80 }, (_, i) => i);
 
   private destroy$ = new Subject<void>();
 
