@@ -1,18 +1,108 @@
 <div class="com-flex com-justify-between com-items-center com-gap-3 com-container com-max-w-screen-xl">
-  <a [routerLink]="['/']">
-    <!--
-      Render both variants and let CSS decide based on [data-theme].
-      This prevents SSR/client mismatches caused by theme being resolved only after bootstrap.
-    -->
-    <div class="navbar-logo logo-light">
-      <img *appBreakpoints="'<=lg'" alt="Commudle" src="{{ staticAssets.commudle_logo_72 }}" title="Commudle" />
-      <img *appBreakpoints="'>lg'" alt="Commudle" src="{{ staticAssets.commudle_logo_full }}" title="Commudle" />
-    </div>
+  <a class="home-navbar-logo-link" [routerLink]="['/']">
+    <span class="diwali-lanterns" aria-hidden="true">
+      <span class="diwali-hang diwali-hang--lantern-1">
+        <svg viewBox="0 0 20 28" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="10" cy="1.5" r="1.2" fill="none" stroke="#8A5A2B" stroke-width="0.8" />
+          <path d="M7 3.5H13L15.5 7H4.5Z" fill="#A9521A" />
+          <path d="M4.5 7H15.5L19 12.5L15.5 18H4.5L1 12.5Z" fill="#C8681F" />
+          <path d="M6 8.5H14L16.8 12.5L14 16.5H6L3.2 12.5Z" fill="#FFC15E" />
+          <ellipse cx="10" cy="12.5" rx="3.2" ry="2.6" fill="#FFF1C2" />
+          <path
+            d="M6 8.5L10 12.5L14 8.5M6 16.5L10 12.5L14 16.5M3.2 12.5H16.8M10 8.5V16.5"
+            fill="none"
+            stroke="#9C4A12"
+            stroke-width="0.9"
+            stroke-linecap="round"
+          />
+          <path d="M4.5 18H15.5L12.5 21.5H7.5Z" fill="#A9521A" />
+          <path d="M8.5 21.5H11.5L10 24Z" fill="#8A3F10" />
+          <path d="M10 24V27.5" stroke="#E2453C" stroke-width="1.3" stroke-linecap="round" />
+        </svg>
+      </span>
+      <span class="diwali-hang diwali-hang--bulb"><i class="diwali-bulb"></i></span>
+      <span class="diwali-hang diwali-hang--lantern-2">
+        <svg viewBox="0 0 20 28" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="10" cy="1.5" r="1.2" fill="none" stroke="#8A5A2B" stroke-width="0.8" />
+          <path d="M7 3.5H13L15.5 7H4.5Z" fill="#A9521A" />
+          <path d="M4.5 7H15.5L19 12.5L15.5 18H4.5L1 12.5Z" fill="#C8681F" />
+          <path d="M6 8.5H14L16.8 12.5L14 16.5H6L3.2 12.5Z" fill="#FFC15E" />
+          <ellipse cx="10" cy="12.5" rx="3.2" ry="2.6" fill="#FFF1C2" />
+          <path
+            d="M6 8.5L10 12.5L14 8.5M6 16.5L10 12.5L14 16.5M3.2 12.5H16.8M10 8.5V16.5"
+            fill="none"
+            stroke="#9C4A12"
+            stroke-width="0.9"
+            stroke-linecap="round"
+          />
+          <path d="M4.5 18H15.5L12.5 21.5H7.5Z" fill="#A9521A" />
+          <path d="M8.5 21.5H11.5L10 24Z" fill="#8A3F10" />
+          <path d="M10 24V27.5" stroke="#E2453C" stroke-width="1.3" stroke-linecap="round" />
+        </svg>
+      </span>
+    </span>
+    <span class="navbar-logo-wrap">
+      <svg
+        class="diwali-toran diwali-toran--compact"
+        viewBox="0 0 40 13"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <path class="diwali-toran-thread" d="M2 2Q20 12 38 2" />
+        <path class="diwali-toran-leaf" d="M2 4q1.4 2.4 0 5q-1.4-2.6 0-5z" />
+        <path class="diwali-toran-leaf" d="M20 8.5q1.2 2 0 4.2q-1.2-2.2 0-4.2z" />
+        <path class="diwali-toran-leaf" d="M38 4q1.4 2.4 0 5q-1.4-2.6 0-5z" />
+        <circle class="diwali-marigold diwali-marigold--orange" cx="2" cy="2" r="2.2" />
+        <circle class="diwali-marigold diwali-marigold--yellow" cx="11" cy="5.75" r="2.2" />
+        <circle class="diwali-marigold diwali-marigold--orange" cx="20" cy="7" r="2.2" />
+        <circle class="diwali-marigold diwali-marigold--yellow" cx="29" cy="5.75" r="2.2" />
+        <circle class="diwali-marigold diwali-marigold--orange" cx="38" cy="2" r="2.2" />
+      </svg>
+      <svg
+        class="diwali-toran diwali-toran--full"
+        viewBox="0 0 150 14"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <path class="diwali-toran-thread" d="M3 2Q27 12 51 2Q75 12 99 2Q123 12 147 2" />
+        <path class="diwali-toran-leaf" d="M3 4q1.4 2.4 0 5q-1.4-2.6 0-5z" />
+        <path class="diwali-toran-leaf" d="M27 8.5q1.2 2 0 4.5q-1.2-2.5 0-4.5z" />
+        <path class="diwali-toran-leaf" d="M51 4q1.4 2.4 0 5q-1.4-2.6 0-5z" />
+        <path class="diwali-toran-leaf" d="M75 8.5q1.2 2 0 4.5q-1.2-2.5 0-4.5z" />
+        <path class="diwali-toran-leaf" d="M99 4q1.4 2.4 0 5q-1.4-2.6 0-5z" />
+        <path class="diwali-toran-leaf" d="M123 8.5q1.2 2 0 4.5q-1.2-2.5 0-4.5z" />
+        <path class="diwali-toran-leaf" d="M147 4q1.4 2.4 0 5q-1.4-2.6 0-5z" />
+        <circle class="diwali-marigold diwali-marigold--orange" cx="3" cy="2" r="2.4" />
+        <circle class="diwali-marigold diwali-marigold--yellow" cx="15" cy="5.75" r="2.4" />
+        <circle class="diwali-marigold diwali-marigold--orange" cx="27" cy="7" r="2.4" />
+        <circle class="diwali-marigold diwali-marigold--yellow" cx="39" cy="5.75" r="2.4" />
+        <circle class="diwali-marigold diwali-marigold--orange" cx="51" cy="2" r="2.4" />
+        <circle class="diwali-marigold diwali-marigold--yellow" cx="63" cy="5.75" r="2.4" />
+        <circle class="diwali-marigold diwali-marigold--orange" cx="75" cy="7" r="2.4" />
+        <circle class="diwali-marigold diwali-marigold--yellow" cx="87" cy="5.75" r="2.4" />
+        <circle class="diwali-marigold diwali-marigold--orange" cx="99" cy="2" r="2.4" />
+        <circle class="diwali-marigold diwali-marigold--yellow" cx="111" cy="5.75" r="2.4" />
+        <circle class="diwali-marigold diwali-marigold--orange" cx="123" cy="7" r="2.4" />
+        <circle class="diwali-marigold diwali-marigold--yellow" cx="135" cy="5.75" r="2.4" />
+        <circle class="diwali-marigold diwali-marigold--orange" cx="147" cy="2" r="2.4" />
+      </svg>
 
-    <div class="navbar-logo logo-dark">
-      <img *appBreakpoints="'<=lg'" alt="Commudle" src="{{ staticAssets.commudle_logo_72 }}" title="Commudle" />
-      <img *appBreakpoints="'>lg'" alt="Commudle" src="{{ staticAssets.commudle_logo_dark_mode }}" title="Commudle" />
-    </div>
+      <!--
+        Render both variants and let CSS decide based on [data-theme].
+        This prevents SSR/client mismatches caused by theme being resolved only after bootstrap.
+      -->
+      <div class="navbar-logo logo-light">
+        <img *appBreakpoints="'<=lg'" alt="Commudle" src="{{ staticAssets.commudle_logo_72 }}" title="Commudle" />
+        <img *appBreakpoints="'>lg'" alt="Commudle" src="{{ staticAssets.commudle_logo_full }}" title="Commudle" />
+      </div>
+
+      <div class="navbar-logo logo-dark">
+        <img *appBreakpoints="'<=lg'" alt="Commudle" src="{{ staticAssets.commudle_logo_72 }}" title="Commudle" />
+        <img *appBreakpoints="'>lg'" alt="Commudle" src="{{ staticAssets.commudle_logo_dark_mode }}" title="Commudle" />
+      </div>
+
+      <commudle-diwali-diya class="navbar-diya"></commudle-diwali-diya>
+    </span>
   </a>
 
   <div class="home-navbar">
@@ -109,4 +199,10 @@
       Login
     </button>
   </div>
+</div>
+
+<div class="diwali-navbar-lights" aria-hidden="true">
+  @for (bulb of diwaliLightBulbs; track bulb) {
+  <i class="diwali-navbar-light"></i>
+  }
 </div>

@@ -1,0 +1,215 @@
+// Breathing glow, flickering flame, rising embers and a lamp whose rim and dots catch the light.
+:host {
+  display: block;
+  position: relative;
+  width: 12px;
+  height: 26px;
+}
+
+.diwali-diya-glow {
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 190, 80, 0.55) 0%, rgba(255, 140, 30, 0.2) 45%, transparent 70%);
+  animation: diwaliDiyaGlow 2.4s ease-in-out infinite;
+}
+
+.diwali-diya-flame {
+  position: absolute;
+  left: 50%;
+  bottom: 5px;
+  width: 5px;
+  height: 10px;
+  margin-left: -2.5px;
+  background: radial-gradient(circle at 50% 78%, #fff6c8 0%, #ffd34d 40%, #ff8a00 72%, #ff5f1f 100%);
+  border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+  box-shadow: 0 0 4px 1px rgba(255, 170, 40, 0.85), 0 0 9px 3px rgba(255, 100, 0, 0.45);
+  transform-origin: 50% 95%;
+  animation: diwaliFlameFlicker 1.2s ease-in-out infinite, diwaliFlameColour 2.4s ease-in-out infinite;
+
+  // White-hot core at the base of the flame.
+  &::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 1px;
+    width: 2px;
+    height: 4px;
+    margin-left: -1px;
+    border-radius: 50%;
+    background: #fffbe8;
+    animation: diwaliFlameCore 0.9s ease-in-out infinite alternate;
+  }
+}
+
+.diwali-diya-spark {
+  position: absolute;
+  left: 50%;
+  bottom: 13px;
+  width: 1.5px;
+  height: 1.5px;
+  margin-left: -0.75px;
+  border-radius: 50%;
+  background: #ffd27a;
+  box-shadow: 0 0 2px 1px rgba(255, 170, 50, 0.8);
+  opacity: 0;
+  animation: diwaliDiyaEmber 1.8s ease-out infinite;
+
+  &--1 {
+    --drift: -3px;
+  }
+
+  &--2 {
+    --drift: 2px;
+    animation-delay: -0.6s;
+  }
+
+  &--3 {
+    --drift: 4px;
+    animation-delay: -1.2s;
+  }
+}
+
+.diwali-diya-lamp {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 12px;
+  height: 7px;
+  background: linear-gradient(180deg, #e0a23f 0%, #7a3e10 100%);
+  border-radius: 50% 50% 50% 50% / 0% 0% 100% 100%;
+  animation: diwaliDiyaRim 2.4s ease-in-out infinite;
+
+  // Three decorative dots on the lamp that twinkle in turn.
+  &::after {
+    content: '';
+    position: absolute;
+    top: 2.5px;
+    left: 3px;
+    width: 1px;
+    height: 1px;
+    border-radius: 50%;
+    animation: diwaliDiyaDots 1.8s ease-in-out infinite;
+  }
+}
+
+@keyframes diwaliFlameFlicker {
+  0%,
+  100% {
+    transform: scale(1, 1) rotate(-2deg);
+    opacity: 0.95;
+  }
+  20% {
+    transform: scale(0.92, 1.06) rotate(2deg);
+    opacity: 1;
+  }
+  40% {
+    transform: scale(1.06, 0.94) rotate(-3deg);
+    opacity: 0.9;
+  }
+  60% {
+    transform: scale(0.94, 1.08) rotate(3deg);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(1.03, 0.97) rotate(-1deg);
+    opacity: 0.95;
+  }
+}
+
+@keyframes diwaliFlameColour {
+  0%,
+  100% {
+    filter: brightness(1) hue-rotate(0deg);
+  }
+  50% {
+    filter: brightness(1.25) hue-rotate(12deg);
+  }
+}
+
+@keyframes diwaliFlameCore {
+  from {
+    opacity: 0.7;
+    transform: scaleY(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1.1);
+  }
+}
+
+@keyframes diwaliDiyaGlow {
+  0%,
+  100% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+@keyframes diwaliDiyaEmber {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--drift, 0px), -12px) scale(0.4);
+    opacity: 0;
+  }
+}
+
+@keyframes diwaliDiyaRim {
+  0%,
+  100% {
+    box-shadow: inset 0 -1px 1px rgba(255, 224, 160, 0.55), 0 1px 2px rgba(0, 0, 0, 0.35),
+      0 -1px 3px rgba(255, 170, 50, 0.3);
+  }
+  50% {
+    box-shadow: inset 0 -1px 1px rgba(255, 224, 160, 0.8), 0 1px 2px rgba(0, 0, 0, 0.35),
+      0 -1px 5px rgba(255, 190, 70, 0.75);
+  }
+}
+
+@keyframes diwaliDiyaDots {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0.6px rgba(255, 240, 180, 1), 3px 0 0 0.6px rgba(255, 240, 180, 0.35),
+      6px 0 0 0.6px rgba(255, 240, 180, 0.35);
+  }
+  33% {
+    box-shadow: 0 0 0 0.6px rgba(255, 240, 180, 0.35), 3px 0 0 0.6px rgba(255, 240, 180, 1),
+      6px 0 0 0.6px rgba(255, 240, 180, 0.35);
+  }
+  66% {
+    box-shadow: 0 0 0 0.6px rgba(255, 240, 180, 0.35), 3px 0 0 0.6px rgba(255, 240, 180, 0.35),
+      6px 0 0 0.6px rgba(255, 240, 180, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .diwali-diya-glow,
+  .diwali-diya-flame,
+  .diwali-diya-flame::after,
+  .diwali-diya-spark,
+  .diwali-diya-lamp,
+  .diwali-diya-lamp::after {
+    animation: none;
+  }
+  .diwali-diya-lamp {
+    box-shadow: inset 0 -1px 1px rgba(255, 224, 160, 0.55), 0 1px 2px rgba(0, 0, 0, 0.35);
+  }
+  .diwali-diya-lamp::after {
+    box-shadow: 0 0 0 0.6px rgba(255, 240, 180, 0.8), 3px 0 0 0.6px rgba(255, 240, 180, 0.8),
+      6px 0 0 0.6px rgba(255, 240, 180, 0.8);
+  }
+}
