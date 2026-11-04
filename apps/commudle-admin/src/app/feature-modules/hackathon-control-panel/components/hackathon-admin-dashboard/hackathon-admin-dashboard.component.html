@@ -126,10 +126,8 @@
         <!-- Judges & mentors (omitted by the backend once the hackathon has ended) -->
         <a *ngIf="needsAttention?.judges" [routerLink]="['speakers']" class="attention-item">
           <fa-icon
-            [icon]="needsAttention?.judges?.without_team?.total === 0 ? icons.faCircleCheck : icons.faCircleXmark"
-            [ngClass]="
-              needsAttention?.judges?.without_team?.total === 0 ? 'attention-icon-check' : 'attention-icon-cross'
-            "
+            [icon]="judgesAttentionResolved() ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="judgesAttentionResolved() ? 'attention-icon-check' : 'attention-icon-cross'"
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Judges &amp; Mentors</span>
@@ -275,14 +273,8 @@
         <!-- Mentor / judge slots (omitted by the backend once the hackathon has ended) -->
         <a *ngIf="needsAttention?.mentor_judge_slots" [routerLink]="['mentor-slots']" class="attention-item">
           <fa-icon
-            [icon]="
-              needsAttention?.mentor_judge_slots?.not_opened?.total === 0 ? icons.faCircleCheck : icons.faCircleXmark
-            "
-            [ngClass]="
-              needsAttention?.mentor_judge_slots?.not_opened?.total === 0
-                ? 'attention-icon-check'
-                : 'attention-icon-cross'
-            "
+            [icon]="mentorJudgeSlotsResolved() ? icons.faCircleCheck : icons.faCircleXmark"
+            [ngClass]="mentorJudgeSlotsResolved() ? 'attention-icon-check' : 'attention-icon-cross'"
           ></fa-icon>
           <div class="attention-content">
             <span class="attention-title">Mentor &amp; Judge Slots</span>
@@ -362,27 +354,48 @@
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faMicrophone" class="snapshot-stat-icon judges-icon"></fa-icon>
           <div class="snapshot-stat-info">
-            <span class="snapshot-stat-label">Judges Assigned</span>
-            <span class="snapshot-stat-value-row">
-              <span class="snapshot-stat-value">{{ snapshot?.judges?.assigned_count ?? 0 | number }}</span>
-              <span class="snapshot-stat-sub" *ngIf="snapshot?.judges?.pending_count">
-                · {{ snapshot.judges.pending_count | number }} pending
-              </span>
-            </span>
+            <span class="snapshot-stat-label">Judges</span>
+            <span class="snapshot-stat-value">{{ snapshot?.judges?.count ?? 0 | number }}</span>
           </div>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faHandshakeSimple" class="snapshot-stat-icon sponsors-icon"></fa-icon>
           <div class="snapshot-stat-info">
             <span class="snapshot-stat-label">Sponsors</span>
-            <span class="snapshot-stat-value">{{ snapshot?.sponsors?.count ?? 0 | number }}</span>
+            <a
+              *ngIf="!snapshot?.sponsors?.count && hackathon.status !== EHackathonStatus.COMPLETED; else sponsorsCount"
+              comButton
+              size="tiny"
+              status="primary"
+              appearance="filled"
+              shape="semi-round"
+              class="snapshot-stat-cta"
+              [routerLink]="['sponsors']"
+              >Add Sponsors</a
+            >
+            <ng-template #sponsorsCount>
+              <span class="snapshot-stat-value">{{ snapshot?.sponsors?.count ?? 0 | number }}</span>
+            </ng-template>
           </div>
         </div>
         <div class="snapshot-stat">
           <fa-icon [icon]="icons.faTrophy" class="snapshot-stat-icon prize-icon"></fa-icon>
           <div class="snapshot-stat-info">
             <span class="snapshot-stat-label">Prize Pool</span>
-            <span class="snapshot-stat-value">{{ prizePoolDisplay || '–' }}</span>
+            <a
+              *ngIf="!prizePoolDisplay && hackathon.status !== EHackathonStatus.COMPLETED; else prizePoolValue"
+              comButton
+              size="tiny"
+              status="primary"
+              appearance="filled"
+              shape="semi-round"
+              class="snapshot-stat-cta"
+              [routerLink]="['tracks', 'prizes']"
+              >Add Prizes</a
+            >
+            <ng-template #prizePoolValue>
+              <span class="snapshot-stat-value">{{ prizePoolDisplay || '–' }}</span>
+            </ng-template>
           </div>
         </div>
       </div>
@@ -457,7 +470,7 @@
               >{{ activitySubtext(item) }}</span
             >
           </p>
-          <time class="activity-time">{{ activityTime(item) }}</time>
+          <time class="activity-time" [title]="exactTime(item?.created_at)">{{ activityTime(item) }}</time>
         </li>
         <li *ngIf="recentActivity.length === 0" class="activity-empty">
           <span class="activity-empty-icon">
@@ -545,8 +558,13 @@
           </div>
           <div class="people-stat">
             <fa-icon [icon]="icons.faCode" class="people-stat-icon projects-icon"></fa-icon>
-            <span class="people-stat-value">{{ peopleJudging?.unassigned_projects_count ?? 0 | number }}</span>
-            <span class="people-stat-label">Unassigned Projects</span>
+            <span class="people-stat-value">{{ peopleJudging?.total_ppt_submissions ?? 0 | number }}</span>
+            <span class="people-stat-label">PPT Submissions</span>
+          </div>
+          <div class="people-stat">
+            <fa-icon [icon]="icons.faCode" class="people-stat-icon projects-icon"></fa-icon>
+            <span class="people-stat-value">{{ peopleJudging?.total_project_submissions ?? 0 | number }}</span>
+            <span class="people-stat-label">Project Submissions</span>
           </div>
         </div>
         <div class="mentor-session-banner" *ngIf="nextMentorSession">
@@ -604,147 +622,56 @@
     class="live-traffic-row"
     [class.with-setup]="setupProgress?.visible || hackathon.status === EHackathonStatus.DRAFT"
   >
-    <article class="live-visitors-card">
-      <header class="section-header">
-        <h3 class="section-heading">
-          <fa-icon [icon]="icons.faEye" class="heading-icon-visitors"></fa-icon> Live Visitors
-        </h3>
-      </header>
-      <div class="live-visitors-body">
-        <div class="live-visitors-counts">
-          <div class="live-count">
-            <span class="live-count-label">
-              <span class="live-dot"></span>
-              Live now
-            </span>
-            <span class="live-count-value">{{ liveVisitors?.live_count ?? '—' }}</span>
+    <commudle-live-traffic-row entityType="hackathon" [entityId]="hackathon.id">
+      <!-- Setup Progress (shown only while draft / setup incomplete) -->
+      <article
+        class="setup-progress-card"
+        *ngIf="setupProgress?.visible || hackathon.status === EHackathonStatus.DRAFT"
+      >
+        <div class="section-header">
+          <h3 class="section-heading">
+            <fa-icon [icon]="icons.faChartPie" class="heading-icon-setup"></fa-icon> Setup Progress
+          </h3>
+          <span class="setup-note">Only visible until published</span>
+        </div>
+        <app-loading-spinner
+          *ngIf="isSetupProgressLoading && !setupProgress"
+          class="section-loader"
+        ></app-loading-spinner>
+        <div class="setup-content" *ngIf="!isSetupProgressLoading || setupProgress">
+          <div class="setup-bar-row">
+            <span class="setup-bar-label">Hackathon Readiness</span>
+            <span class="setup-bar-pct">{{ setupProgress?.readiness_percent || 0 }}%</span>
           </div>
-          <div class="live-count">
-            <span class="live-count-label">Last 30 min</span>
-            <span class="live-count-value">{{ liveVisitors?.last_30_min_count ?? '—' }}</span>
+          <div class="setup-bar">
+            <div class="setup-bar-fill" [style.--bar-share.%]="setupProgress?.readiness_percent || 0"></div>
+          </div>
+          <div class="setup-checklist">
+            <span class="setup-item" [ngClass]="setupProgress?.basic_information ? 'done' : 'pending'">
+              {{ setupProgress?.basic_information ? '✔' : '⚠' }} Basic Information
+            </span>
+            <span class="setup-item" [ngClass]="setupProgress?.dates ? 'done' : 'pending'">
+              {{ setupProgress?.dates ? '✔' : '⚠' }} Dates
+            </span>
+            <span class="setup-item" [ngClass]="setupProgress?.registration ? 'done' : 'pending'">
+              {{ setupProgress?.registration ? '✔' : '⚠' }} Registration
+            </span>
+            <span class="setup-item" [ngClass]="setupProgress?.tracks ? 'done' : 'pending'">
+              {{ setupProgress?.tracks ? '✔' : '⚠' }} Tracks
+            </span>
+            <span class="setup-item" [ngClass]="setupProgress?.sponsors ? 'done' : 'pending'">
+              {{ setupProgress?.sponsors ? '✔' : '⚠' }} Sponsors
+            </span>
+            <span class="setup-item" [ngClass]="setupProgress?.judges ? 'done' : 'pending'">
+              {{ setupProgress?.judges ? '✔' : '⚠' }} Judges
+            </span>
+            <span class="setup-item" [ngClass]="setupProgress?.faqs ? 'done' : 'pending'">
+              {{ setupProgress?.faqs ? '✔' : '⚠' }} FAQs
+            </span>
           </div>
         </div>
-        <div class="live-visitors-chart-wrap" [class.is-empty]="!liveVisitors?.history?.length">
-          <canvas id="hackathon-live-visitors-chart"></canvas>
-          <span *ngIf="!liveVisitors?.history?.length" class="live-visitors-chart-empty">
-            Not enough data yet to chart.
-          </span>
-        </div>
-      </div>
-    </article>
-
-    <!-- Setup Progress (shown only while draft / setup incomplete) -->
-    <article class="setup-progress-card" *ngIf="setupProgress?.visible || hackathon.status === EHackathonStatus.DRAFT">
-      <div class="section-header">
-        <h3 class="section-heading">
-          <fa-icon [icon]="icons.faChartPie" class="heading-icon-setup"></fa-icon> Setup Progress
-        </h3>
-        <span class="setup-note">Only visible until published</span>
-      </div>
-      <app-loading-spinner
-        *ngIf="isSetupProgressLoading && !setupProgress"
-        class="section-loader"
-      ></app-loading-spinner>
-      <div class="setup-content" *ngIf="!isSetupProgressLoading || setupProgress">
-        <div class="setup-bar-row">
-          <span class="setup-bar-label">Hackathon Readiness</span>
-          <span class="setup-bar-pct">{{ setupProgress?.readiness_percent || 0 }}%</span>
-        </div>
-        <div class="setup-bar">
-          <div class="setup-bar-fill" [style.--bar-share.%]="setupProgress?.readiness_percent || 0"></div>
-        </div>
-        <div class="setup-checklist">
-          <span class="setup-item" [ngClass]="setupProgress?.basic_information ? 'done' : 'pending'">
-            {{ setupProgress?.basic_information ? '✔' : '⚠' }} Basic Information
-          </span>
-          <span class="setup-item" [ngClass]="setupProgress?.dates ? 'done' : 'pending'">
-            {{ setupProgress?.dates ? '✔' : '⚠' }} Dates
-          </span>
-          <span class="setup-item" [ngClass]="setupProgress?.registration ? 'done' : 'pending'">
-            {{ setupProgress?.registration ? '✔' : '⚠' }} Registration
-          </span>
-          <span class="setup-item" [ngClass]="setupProgress?.tracks ? 'done' : 'pending'">
-            {{ setupProgress?.tracks ? '✔' : '⚠' }} Tracks
-          </span>
-          <span class="setup-item" [ngClass]="setupProgress?.sponsors ? 'done' : 'pending'">
-            {{ setupProgress?.sponsors ? '✔' : '⚠' }} Sponsors
-          </span>
-          <span class="setup-item" [ngClass]="setupProgress?.judges ? 'done' : 'pending'">
-            {{ setupProgress?.judges ? '✔' : '⚠' }} Judges
-          </span>
-          <span class="setup-item" [ngClass]="setupProgress?.faqs ? 'done' : 'pending'">
-            {{ setupProgress?.faqs ? '✔' : '⚠' }} FAQs
-          </span>
-        </div>
-      </div>
-    </article>
-
-    <!-- Top Pages -->
-    <article class="top-list-card">
-      <header class="section-header">
-        <h3 class="section-heading">
-          <fa-icon [icon]="icons.faFileLines" class="heading-icon-pages"></fa-icon> Top Pages
-        </h3>
-        <div class="top-pages-window-toggle">
-          <button
-            type="button"
-            [class.active]="topPagesWindow === 'current'"
-            (click)="onTopPagesWindowChange('current')"
-          >
-            Live
-          </button>
-          <button type="button" [class.active]="topPagesWindow === '24h'" (click)="onTopPagesWindowChange('24h')">
-            24h
-          </button>
-          <button type="button" [class.active]="topPagesWindow === '7d'" (click)="onTopPagesWindowChange('7d')">
-            7d
-          </button>
-        </div>
-      </header>
-      <div class="top-list-header">
-        <span>Page Title</span>
-        <span>Views</span>
-      </div>
-      <ul class="top-list">
-        <li *ngIf="topPagesLoading" class="section-loader">
-          <app-loading-spinner></app-loading-spinner>
-        </li>
-        <ng-container *ngIf="!topPagesLoading">
-          <li *ngFor="let page of topPages" class="top-list-item">
-            <a
-              [href]="page.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="top-list-name"
-              [comTooltip]="page.url"
-              tooltipPlacement="top"
-              tooltipSize="sm"
-              >{{ page.page_title }}</a
-            >
-            <span class="top-list-track">
-              <span
-                class="top-list-bar top-list-bar-pages"
-                [style.--bar-share.%]="barShare(page.views, topPagesMax)"
-              ></span>
-            </span>
-            <span class="top-list-value">{{ page.views | number }}</span>
-          </li>
-          <li *ngIf="topPages.length === 0" class="top-list-empty">
-            <span class="top-list-empty-icon pages">
-              <fa-icon [icon]="icons.faFileLines"></fa-icon>
-            </span>
-            <span class="top-list-empty-text">No page views yet.</span>
-          </li>
-        </ng-container>
-      </ul>
-      <commudle-pagination-compact
-        *ngIf="topPagesTotal > topPagesCount"
-        [page]="topPagesPage"
-        [count]="topPagesCount"
-        [total]="topPagesTotal"
-        (pageChange)="onTopPagesPageChange($event)"
-      ></commudle-pagination-compact>
-    </article>
+      </article>
+    </commudle-live-traffic-row>
   </section>
 
   <commudle-alert

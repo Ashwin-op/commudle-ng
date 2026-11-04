@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chart } from 'chart.js';
 import {
@@ -12,10 +12,6 @@ import {
   IEventDashboardPostEventSnapshot,
   IEventDashboardSnapshot,
   IDashboardDistributionItem,
-  IDashboardLiveVisitors,
-  IDashboardLiveVisitorsBucket,
-  IDashboardTopPage,
-  EDashboardTopPagesWindow,
 } from '@commudle/shared-models';
 import { SeoService } from '@commudle/shared-services';
 import { DashboardEventsService } from 'apps/commudle-admin/src/app/services/stats/dashboard-events.service';
@@ -36,8 +32,6 @@ import {
   faBell,
   faBolt,
   faTicket,
-  faEye,
-  faFileLines,
   faCircleInfo,
 } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
@@ -73,21 +67,10 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     faBell,
     faBolt,
     faTicket,
-    faEye,
-    faFileLines,
     faCircleInfo,
   };
 
   needsAttention: IEventDashboardNeedsAttention;
-  // Polled every 30s (Redis-cached 30s TTL server-side); each poll
-  // re-resamples history and updates the chart in place.
-  liveVisitors: IDashboardLiveVisitors;
-  liveVisitorsChart: Chart;
-  topPages: IDashboardTopPage[] = [];
-  topPagesPage = 1;
-  topPagesTotal = 0;
-  readonly topPagesCount = 5;
-  topPagesLoading = false;
 
   // Hero metadata -- GET /api/v2/dashboards/events/event_header
   eventHeader: IEventDashboardHeader;
@@ -130,7 +113,6 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
     private libToastLogService: LibToastLogService,
     private navigatorShareService: NavigatorShareService,
     private dashboardEventsService: DashboardEventsService,
-    private ngZone: NgZone,
   ) {}
 
   ngOnInit(): void {
@@ -148,10 +130,6 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
           this.startRecentActivityPolling();
           this.getAudienceSnapshot();
           this.getPostEventSnapshot();
-          this.getLiveVisitors();
-          this.startLiveVisitorsPolling();
-          this.getTopPages();
-          this.startTopPagesPolling();
         } else {
           this.seoService.setTitle(`Event Dashboard | ${this.community?.name || ''}`);
         }
@@ -162,7 +140,6 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe());
-    this.liveVisitorsChart?.destroy();
     this.audienceExperienceChart?.destroy();
     this.postEventExperienceChart?.destroy();
     this.postEventDomainChart?.destroy();
@@ -239,6 +216,24 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
 
   get speakerNames(): string {
     return (this.needsAttention?.speakers?.values || []).map((speaker) => speaker.user?.name).join(', ');
+  }
+
+  // Once the event has ended, scanning entry passes live is no longer a
+  // valid action -- link to the read-only checked-in list instead of the
+  // live scanner.
+  get attendanceLink(): any[] {
+    return this.needsAttention?.attendance?.ended ? ['scan-entry-pass', 'checked-in-list'] : ['scan-entry-pass'];
+  }
+
+  get attendanceStatusText(): string {
+    const started = this.needsAttention?.attendance?.started;
+    const ended = this.needsAttention?.attendance?.ended;
+
+    if (ended) {
+      return started ? 'Attendance was marked' : 'Attendance was not marked';
+    }
+
+    return started ? 'Marking attendance in progress' : 'Start marking attendance';
   }
 
   onSpeakersRowClick(): void {
@@ -396,6 +391,10 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
 
   activityTime(item: IEventDashboardActivityItem): string {
     return item?.created_at ? moment(item.created_at).fromNow() : '';
+  }
+
+  exactTime(timestamp?: string | null): string {
+    return timestamp ? moment(timestamp).format('Do MMM, YYYY, h:mm A') : '';
   }
 
   emailRecipientSummary(item: IEventDashboardActivityItem): string {
@@ -621,161 +620,6 @@ export class EventAdminDashboardComponent implements OnInit, OnDestroy {
         },
       }),
     );
-  }
-
-  getLiveVisitors(): void {
-    this.subscriptions.push(
-      this.dashboardEventsService.liveVisitors(this.event.id).subscribe((data) => {
-        this.liveVisitors = data;
-        this.renderLiveVisitorsChart();
-      }),
-    );
-  }
-
-  // Poll live visitors every 30s, matching the server-side Redis TTL.
-  startLiveVisitorsPolling(): void {
-    this.subscriptions.push(interval(30000).subscribe(() => this.getLiveVisitors()));
-  }
-
-  // Poll top pages every 30s, matching the server-side Redis TTL for the 'current' window.
-  startTopPagesPolling(): void {
-    this.subscriptions.push(interval(30000).subscribe(() => this.getTopPages()));
-  }
-
-  private resampleLiveVisitorsHistory(
-    history: IDashboardLiveVisitorsBucket[] | undefined,
-    bucketMinutes = 5,
-    windowMinutes = 30,
-  ): { label: string; count: number }[] {
-    if (!history?.length) {
-      return [];
-    }
-    const bucketMs = bucketMinutes * 60000;
-    const bucketCount = windowMinutes / bucketMinutes;
-    const windowStart = new Date(history[history.length - 1].bucket_end).getTime() - bucketCount * bucketMs;
-
-    const sums = new Array(bucketCount).fill(0);
-    const hits = new Array(bucketCount).fill(0);
-
-    history.forEach(({ bucket_start, bucket_end, count }) => {
-      const midpoint = (new Date(bucket_start).getTime() + new Date(bucket_end).getTime()) / 2;
-      const i = Math.floor((midpoint - windowStart) / bucketMs);
-      if (i >= 0 && i < bucketCount) {
-        sums[i] += count;
-        hits[i] += 1;
-      }
-    });
-
-    return sums.map((sum, i) => ({
-      label: moment(windowStart + (i + 1) * bucketMs).format('h:mm a'),
-      count: hits[i] ? Math.round(sum / hits[i]) : 0,
-    }));
-  }
-
-  private renderLiveVisitorsChart(): void {
-    const points = this.resampleLiveVisitorsHistory(this.liveVisitors?.history);
-    if (!points.length) {
-      return;
-    }
-    const labels = points.map((p) => p.label);
-    const data = points.map((p) => p.count);
-
-    this.ngZone.runOutsideAngular(() => {
-      if (this.liveVisitorsChart) {
-        this.liveVisitorsChart.data.labels = labels;
-        this.liveVisitorsChart.data.datasets[0].data = data;
-        this.liveVisitorsChart.update({ duration: 0 });
-        return;
-      }
-
-      this.liveVisitorsChart = new Chart('event-live-visitors-chart', {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: 'Live Visitors',
-              data,
-              borderColor: '#3366ff',
-              backgroundColor: 'rgba(51, 102, 255, 0.08)',
-              borderWidth: 2,
-              pointRadius: 0,
-              pointHoverRadius: 4,
-              pointHoverBorderWidth: 2,
-              pointHoverBackgroundColor: '#ffffff',
-              pointHoverBorderColor: '#3366ff',
-              lineTension: 0.3,
-              fill: true,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: { duration: 4000, easing: 'easeOutQuart' },
-          responsiveAnimationDuration: 0,
-          legend: { display: false },
-          scales: {
-            xAxes: [{ gridLines: { display: false } }],
-            yAxes: [
-              {
-                ticks: { beginAtZero: true, precision: 0 },
-                gridLines: { color: '#f1f1f1', drawBorder: false },
-              },
-            ],
-          },
-          tooltips: {
-            mode: 'index',
-            intersect: false,
-            callbacks: {
-              label: (tooltipItem) => `${tooltipItem.yLabel} visitor${tooltipItem.yLabel === '1' ? '' : 's'}`,
-            },
-          },
-        },
-      });
-    });
-  }
-
-  topPagesWindow: EDashboardTopPagesWindow = 'current';
-
-  onTopPagesWindowChange(window: EDashboardTopPagesWindow): void {
-    this.topPagesWindow = window;
-    this.topPagesPage = 1;
-    this.getTopPages();
-  }
-
-  getTopPages(): void {
-    this.topPagesLoading = true;
-    this.subscriptions.push(
-      this.dashboardEventsService
-        .topPages(this.event.id, this.topPagesWindow, this.topPagesPage, this.topPagesCount)
-        .subscribe({
-          next: (data) => {
-            this.topPages = data.values;
-            this.topPagesTotal = data.total;
-            this.topPagesLoading = false;
-          },
-          error: () => {
-            this.topPagesLoading = false;
-          },
-        }),
-    );
-  }
-
-  onTopPagesPageChange(page: number): void {
-    this.topPagesPage = page;
-    this.getTopPages();
-  }
-
-  get topPagesMax(): number {
-    return Math.max(...this.topPages.map((p) => p.views || 0), 1);
-  }
-
-  barShare(value: number, max: number): number {
-    if (!max) {
-      return 0;
-    }
-    return (value / max) * 100;
   }
 
   copyTextToClipboard(): void {

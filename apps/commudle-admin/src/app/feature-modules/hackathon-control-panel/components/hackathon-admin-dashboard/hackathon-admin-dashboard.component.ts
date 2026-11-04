@@ -1,14 +1,9 @@
-import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Chart } from 'chart.js';
 import {
   IHackathon,
   ICommunity,
   EHackathonStatus,
-  EDashboardTopPagesWindow,
-  IDashboardLiveVisitors,
-  IDashboardLiveVisitorsBucket,
-  IDashboardTopPage,
   IHackathonDashboardActivityActor,
   IHackathonDashboardActivityItem,
   IHackathonDashboardNeedsAttention,
@@ -37,8 +32,6 @@ import {
   faTrophy,
   faCode,
   faMicrophone,
-  faFileLines,
-  faEye,
   faCircleInfo,
 } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
@@ -80,8 +73,6 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     faTrophy,
     faCode,
     faMicrophone,
-    faFileLines,
-    faEye,
     faCircleInfo,
   };
 
@@ -115,17 +106,6 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
   setupProgress: IHackathonDashboardSetupProgress;
   isSetupProgressLoading = false;
 
-  // Live Visitors -- GET /api/v2/dashboards/hackathons/live_visitors (polled every 30s)
-  liveVisitors: IDashboardLiveVisitors;
-  liveVisitorsChart: Chart;
-
-  // Top Pages -- GET /api/v2/dashboards/hackathons/top_pages (polled every 30s)
-  topPages: IDashboardTopPage[] = [];
-  topPagesPage = 1;
-  topPagesTotal = 0;
-  readonly topPagesCount = 5;
-  topPagesLoading = false;
-
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -136,7 +116,6 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     private clipboard: Clipboard,
     private libToastLogService: LibToastLogService,
     private navigatorShareService: NavigatorShareService,
-    private ngZone: NgZone,
   ) {}
 
   ngOnInit(): void {
@@ -159,7 +138,6 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe());
-    this.liveVisitorsChart?.destroy();
     clearTimeout(this.newActivityBadgeTimer);
   }
 
@@ -171,10 +149,6 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     this.startRecentActivityPolling();
     this.getPeopleJudging();
     this.getSetupProgress();
-    this.getLiveVisitors();
-    this.startLiveVisitorsPolling();
-    this.getTopPages();
-    this.startTopPagesPolling();
   }
 
   get hasPendingApplications(): boolean {
@@ -411,6 +385,15 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Green only once judges actually exist and none are left without a team --
+  // `without_team.total === 0` alone is trivially true when there are zero
+  // judges to begin with, which was showing a green tick for "0 judges · 0
+  // mentors · 0 teams assigned."
+  judgesAttentionResolved(): boolean {
+    const j = this.needsAttention?.judges;
+    return (j?.judges_count ?? 0) > 0 && (j?.without_team?.total ?? 0) === 0;
+  }
+
   judgesAttentionTooltip(): string {
     const j = this.needsAttention?.judges;
     if (!j) {
@@ -487,6 +470,15 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     return `${p.awaiting_acceptance_count ?? 0} awaiting acceptance · ${
       p.incomplete_leader_application_count ?? 0
     } leader applications incomplete`;
+  }
+
+  // Green only once some slots actually exist and none are left unopened --
+  // `not_opened.total === 0` alone is trivially true when there are zero
+  // slots to begin with, which was showing a green tick for "0 opened · 0
+  // not opened."
+  mentorJudgeSlotsResolved(): boolean {
+    const m = this.needsAttention?.mentor_judge_slots;
+    return (m?.opened?.total ?? 0) > 0 && (m?.not_opened?.total ?? 0) === 0;
   }
 
   mentorJudgeSlotsTooltip(): string {
@@ -580,6 +572,10 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
     return item?.created_at ? moment(item.created_at).fromNow() : '';
   }
 
+  exactTime(timestamp?: string | null): string {
+    return timestamp ? moment(timestamp).format('Do MMM, YYYY, h:mm A') : '';
+  }
+
   getPeopleJudging(): void {
     this.isPeopleJudgingLoading = true;
     this.subscriptions.push(
@@ -608,161 +604,6 @@ export class HackathonAdminDashboardComponent implements OnInit, OnDestroy {
         },
       }),
     );
-  }
-
-  getLiveVisitors(): void {
-    this.subscriptions.push(
-      this.dashboardHackathonsService.liveVisitors(this.hackathon.id).subscribe((data) => {
-        this.liveVisitors = data;
-        this.renderLiveVisitorsChart();
-      }),
-    );
-  }
-
-  // Poll live visitors every 30s, matching the server-side Redis TTL.
-  startLiveVisitorsPolling(): void {
-    this.subscriptions.push(interval(30000).subscribe(() => this.getLiveVisitors()));
-  }
-
-  topPagesWindow: EDashboardTopPagesWindow = 'current';
-
-  onTopPagesWindowChange(window: EDashboardTopPagesWindow): void {
-    this.topPagesWindow = window;
-    this.topPagesPage = 1;
-    this.getTopPages();
-  }
-
-  getTopPages(): void {
-    this.topPagesLoading = true;
-    this.subscriptions.push(
-      this.dashboardHackathonsService
-        .topPages(this.hackathon.id, this.topPagesWindow, this.topPagesPage, this.topPagesCount)
-        .subscribe({
-          next: (data) => {
-            this.topPages = data.values;
-            this.topPagesTotal = data.total;
-            this.topPagesLoading = false;
-          },
-          error: () => {
-            this.topPagesLoading = false;
-          },
-        }),
-    );
-  }
-
-  onTopPagesPageChange(page: number): void {
-    this.topPagesPage = page;
-    this.getTopPages();
-  }
-
-  // Poll top pages every 30s, matching the server-side Redis TTL for the 'current' window.
-  startTopPagesPolling(): void {
-    this.subscriptions.push(interval(30000).subscribe(() => this.getTopPages()));
-  }
-
-  get topPagesMax(): number {
-    return Math.max(...this.topPages.map((p) => p.views || 0), 1);
-  }
-
-  barShare(value: number, max: number): number {
-    if (!max) {
-      return 0;
-    }
-    return (value / max) * 100;
-  }
-
-  private resampleLiveVisitorsHistory(
-    history: IDashboardLiveVisitorsBucket[] | undefined,
-    bucketMinutes = 5,
-    windowMinutes = 30,
-  ): { label: string; count: number }[] {
-    if (!history?.length) {
-      return [];
-    }
-    const bucketMs = bucketMinutes * 60000;
-    const bucketCount = windowMinutes / bucketMinutes;
-    const windowStart = new Date(history[history.length - 1].bucket_end).getTime() - bucketCount * bucketMs;
-
-    const sums = new Array(bucketCount).fill(0);
-    const hits = new Array(bucketCount).fill(0);
-
-    history.forEach(({ bucket_start, bucket_end, count }) => {
-      const midpoint = (new Date(bucket_start).getTime() + new Date(bucket_end).getTime()) / 2;
-      const i = Math.floor((midpoint - windowStart) / bucketMs);
-      if (i >= 0 && i < bucketCount) {
-        sums[i] += count;
-        hits[i] += 1;
-      }
-    });
-
-    return sums.map((sum, i) => ({
-      label: moment(windowStart + (i + 1) * bucketMs).format('h:mm a'),
-      count: hits[i] ? Math.round(sum / hits[i]) : 0,
-    }));
-  }
-
-  private renderLiveVisitorsChart(): void {
-    const points = this.resampleLiveVisitorsHistory(this.liveVisitors?.history);
-    if (!points.length) {
-      return;
-    }
-    const labels = points.map((p) => p.label);
-    const data = points.map((p) => p.count);
-
-    this.ngZone.runOutsideAngular(() => {
-      if (this.liveVisitorsChart) {
-        this.liveVisitorsChart.data.labels = labels;
-        this.liveVisitorsChart.data.datasets[0].data = data;
-        this.liveVisitorsChart.update({ duration: 0 });
-        return;
-      }
-
-      this.liveVisitorsChart = new Chart('hackathon-live-visitors-chart', {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: 'Live Visitors',
-              data,
-              borderColor: '#3366ff',
-              backgroundColor: 'rgba(51, 102, 255, 0.08)',
-              borderWidth: 2,
-              pointRadius: 0,
-              pointHoverRadius: 4,
-              pointHoverBorderWidth: 2,
-              pointHoverBackgroundColor: '#ffffff',
-              pointHoverBorderColor: '#3366ff',
-              lineTension: 0.3,
-              fill: true,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: { duration: 4000, easing: 'easeOutQuart' },
-          responsiveAnimationDuration: 0,
-          legend: { display: false },
-          scales: {
-            xAxes: [{ gridLines: { display: false } }],
-            yAxes: [
-              {
-                ticks: { beginAtZero: true, precision: 0 },
-                gridLines: { color: '#f1f1f1', drawBorder: false },
-              },
-            ],
-          },
-          tooltips: {
-            mode: 'index',
-            intersect: false,
-            callbacks: {
-              label: (tooltipItem) => `${tooltipItem.yLabel} visitor${tooltipItem.yLabel === '1' ? '' : 's'}`,
-            },
-          },
-        },
-      });
-    });
   }
 
   /** Next mentor session time, formatted; empty when none scheduled. */

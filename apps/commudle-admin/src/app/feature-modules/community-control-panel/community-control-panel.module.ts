@@ -62,6 +62,7 @@ import { CommunityMailsSentStatsComponent } from './components/community-mails-s
 import { CommunityAdminDashboardComponent } from './components/community-admin-dashboard/community-admin-dashboard.component';
 import { HelpSectionComponent } from 'apps/commudle-admin/src/app/app-shared-components/help-section/help-section.component';
 import { PaginationCompactComponent } from 'apps/shared-components/pagination-compact/pagination-compact.component';
+import { LiveTrafficRowComponent } from 'apps/commudle-admin/src/app/app-shared-components/live-traffic-row/live-traffic-row.component';
 import { CommudleButtonModule } from '@commudle/commudle-theme';
 import { CommudleInputModule } from '@commudle/commudle-theme';
 import { CommudleCardModule } from '@commudle/commudle-theme';
@@ -118,6 +119,7 @@ import { CommudleTooltipModule } from '@commudle/commudle-theme';
     //standalone
     SidebarComponent,
     PaginationCompactComponent,
+    LiveTrafficRowComponent,
 
     // Nebular
     NbCardModule,

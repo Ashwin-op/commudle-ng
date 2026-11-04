@@ -96,9 +96,7 @@ export interface IHackathonDashboardApplicationsCount {
 }
 
 export interface IHackathonDashboardJudgesSnapshot {
-  assigned_count: number;
-  total_teams_count: number;
-  pending_count: number;
+  count: number;
 }
 
 export interface IHackathonDashboardSnapshot {
@@ -140,7 +138,8 @@ export interface IHackathonDashboardPeopleJudging {
   judges_count: number;
   mentors_count: number;
   pending_invitations_count: number;
-  unassigned_projects_count: number;
+  total_ppt_submissions: number;
+  total_project_submissions: number;
   next_mentor_session: any | null;
 }
 

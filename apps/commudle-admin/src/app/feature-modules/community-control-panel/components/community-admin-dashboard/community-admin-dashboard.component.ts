@@ -1,5 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { Chart } from 'chart.js';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ICommunity } from '@commudle/shared-models';
 import { ICurrentUser } from 'apps/shared-models/current_user.model';
@@ -7,17 +6,13 @@ import { AuthService, SeoService } from '@commudle/shared-services';
 import { DashboardCommunitiesService } from 'apps/commudle-admin/src/app/services/stats/dashboard-communities.service';
 import { LibToastLogService } from 'apps/shared-services/lib-toastlog.service';
 import {
-  EDashboardTopPagesWindow,
   ICommunityDashboardActivityItem,
-  ICommunityDashboardLiveVisitors,
-  ICommunityDashboardLiveVisitorsBucket,
   ICommunityDashboardNeedsAttention,
   ICommunityDashboardOrganizerBriefing,
   ICommunityDashboardRecentMember,
   ICommunityDashboardScheduleItem,
   ICommunityDashboardSnapshot,
   ICommunityDashboardTopCity,
-  ICommunityDashboardTopPage,
   IDashboardCollaborationRequest,
 } from '@commudle/shared-models';
 import { Subscription, interval } from 'rxjs';
@@ -37,8 +32,6 @@ import {
   faCalendarDay,
   faBolt,
   faRocket,
-  faEye,
-  faFileLines,
   faLocationDot,
   faCircleInfo,
 } from '@fortawesome/free-solid-svg-icons';
@@ -76,18 +69,6 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   newActivityCount = 0;
   private newActivityBadgeTimer: ReturnType<typeof setTimeout>;
 
-  // Polled every 30s (Redis-cached 30s TTL server-side); each poll
-  // re-resamples history and updates the chart in place.
-  liveVisitors: ICommunityDashboardLiveVisitors;
-  liveVisitorsChart: Chart;
-
-  // Top Pages (paginated)
-  topPages: ICommunityDashboardTopPage[] = [];
-  topPagesPage = 1;
-  topPagesTotal = 0;
-  readonly topPagesCount = 5;
-  topPagesLoading = false;
-
   // Top Cities (paginated)
   topCities: ICommunityDashboardTopCity[] = [];
   topCitiesPage = 1;
@@ -118,8 +99,6 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     faCalendarDay,
     faBolt,
     faRocket,
-    faEye,
-    faFileLines,
     faLocationDot,
     faCircleInfo,
   };
@@ -133,7 +112,6 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     private seoService: SeoService,
     private dashboardCommunitiesService: DashboardCommunitiesService,
     private toastLogService: LibToastLogService,
-    private ngZone: NgZone,
   ) {}
 
   ngOnInit(): void {
@@ -149,10 +127,6 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
         this.loadRecentActivity();
         this.startRecentActivityPolling();
         this.loadSnapshot();
-        this.loadLiveVisitors();
-        this.startLiveVisitorsPolling();
-        this.loadTopPages();
-        this.startTopPagesPolling();
         this.loadTopCities();
         this.loadRecentMembers();
         this.setQuickActions();
@@ -168,7 +142,6 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.seoService.noIndex(false);
     this.subscriptions.forEach((s) => s.unsubscribe());
-    this.liveVisitorsChart?.destroy();
     clearTimeout(this.newActivityBadgeTimer);
   }
 
@@ -273,6 +246,23 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
       queryParams.status = status;
     }
     this.router.navigate([path], { queryParams });
+  }
+
+  collaborationRequestTime(request: IDashboardCollaborationRequest): string {
+    return this.relativeTime(request?.created_at);
+  }
+
+  // "3 days ago"; clamps future timestamps (server/client clock skew) to "a few seconds ago".
+  relativeTime(timestamp?: string | null): string {
+    if (!timestamp) {
+      return '';
+    }
+    const time = moment(timestamp);
+    return (time.isAfter(moment()) ? moment() : time).fromNow();
+  }
+
+  exactTime(timestamp?: string | null): string {
+    return timestamp ? moment(timestamp).format('Do MMM, YYYY, h:mm A') : '';
   }
 
   collaborationRowLink(request: IDashboardCollaborationRequest): any[] | null {
@@ -460,158 +450,6 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  loadLiveVisitors(): void {
-    this.subscriptions.push(
-      this.dashboardCommunitiesService.liveVisitors(this.community.slug).subscribe((data) => {
-        this.liveVisitors = data;
-        this.renderLiveVisitorsChart();
-      }),
-    );
-  }
-
-  // Poll live visitors every 30s, matching the server-side Redis TTL.
-  startLiveVisitorsPolling(): void {
-    this.subscriptions.push(interval(30000).subscribe(() => this.loadLiveVisitors()));
-  }
-
-  // Poll top pages every 30s, matching the server-side Redis TTL for the 'current' window.
-  startTopPagesPolling(): void {
-    this.subscriptions.push(interval(30000).subscribe(() => this.loadTopPages()));
-  }
-
-  private resampleLiveVisitorsHistory(
-    history: ICommunityDashboardLiveVisitorsBucket[] | undefined,
-    bucketMinutes = 5,
-    windowMinutes = 30,
-  ): { label: string; count: number }[] {
-    if (!history?.length) {
-      return [];
-    }
-    const bucketMs = bucketMinutes * 60000;
-    const bucketCount = windowMinutes / bucketMinutes;
-    const windowStart = new Date(history[history.length - 1].bucket_end).getTime() - bucketCount * bucketMs;
-
-    const sums = new Array(bucketCount).fill(0);
-    const hits = new Array(bucketCount).fill(0);
-
-    history.forEach(({ bucket_start, bucket_end, count }) => {
-      const midpoint = (new Date(bucket_start).getTime() + new Date(bucket_end).getTime()) / 2;
-      const i = Math.floor((midpoint - windowStart) / bucketMs);
-      if (i >= 0 && i < bucketCount) {
-        sums[i] += count;
-        hits[i] += 1;
-      }
-    });
-
-    return sums.map((sum, i) => ({
-      label: moment(windowStart + (i + 1) * bucketMs).format('h:mm a'),
-      count: hits[i] ? Math.round(sum / hits[i]) : 0,
-    }));
-  }
-
-  // Chart.js schedules its own requestAnimationFrame loop for rendering and
-  // responsive resize. Zone.js patches requestAnimationFrame, so without
-  // runOutsideAngular every one of those frames re-enters Angular change
-  // detection -- on a component polling every 30s that compounds into the
-  // runaway detectChangesInEmbeddedViews/requestAnimationFrame stack seen in
-  // the console. Animation stays on for the first draw (see `options.animation`
-  // below) but every silent background poll calls update(0) to redraw instantly
-  // instead of re-animating.
-  private renderLiveVisitorsChart(): void {
-    const points = this.resampleLiveVisitorsHistory(this.liveVisitors?.history);
-    if (!points.length) {
-      return;
-    }
-    const labels = points.map((p) => p.label);
-    const data = points.map((p) => p.count);
-
-    this.ngZone.runOutsideAngular(() => {
-      if (this.liveVisitorsChart) {
-        this.liveVisitorsChart.data.labels = labels;
-        this.liveVisitorsChart.data.datasets[0].data = data;
-        this.liveVisitorsChart.update({ duration: 0 });
-        return;
-      }
-
-      this.liveVisitorsChart = new Chart('live-visitors-chart', {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: 'Live Visitors',
-              data,
-              borderColor: '#3366ff',
-              backgroundColor: 'rgba(51, 102, 255, 0.08)',
-              borderWidth: 2,
-              pointRadius: 0,
-              pointHoverRadius: 4,
-              pointHoverBorderWidth: 2,
-              pointHoverBackgroundColor: '#ffffff',
-              pointHoverBorderColor: '#3366ff',
-              lineTension: 0.3,
-              fill: true,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: { duration: 4000, easing: 'easeOutQuart' },
-          responsiveAnimationDuration: 0,
-          legend: { display: false },
-          scales: {
-            xAxes: [{ gridLines: { display: false } }],
-            yAxes: [
-              {
-                ticks: { beginAtZero: true, precision: 0 },
-                gridLines: { color: '#f1f1f1', drawBorder: false },
-              },
-            ],
-          },
-          tooltips: {
-            mode: 'index',
-            intersect: false,
-            callbacks: {
-              label: (tooltipItem) => `${tooltipItem.yLabel} visitor${tooltipItem.yLabel === '1' ? '' : 's'}`,
-            },
-          },
-        },
-      });
-    });
-  }
-
-  topPagesWindow: EDashboardTopPagesWindow = 'current';
-
-  onTopPagesWindowChange(window: EDashboardTopPagesWindow): void {
-    this.topPagesWindow = window;
-    this.topPagesPage = 1;
-    this.loadTopPages();
-  }
-
-  loadTopPages(): void {
-    this.topPagesLoading = true;
-    this.subscriptions.push(
-      this.dashboardCommunitiesService
-        .topPages(this.community.slug, this.topPagesWindow, this.topPagesPage, this.topPagesCount)
-        .subscribe({
-          next: (data) => {
-            this.topPages = data.values;
-            this.topPagesTotal = data.total;
-            this.topPagesLoading = false;
-          },
-          error: () => {
-            this.topPagesLoading = false;
-          },
-        }),
-    );
-  }
-
-  onTopPagesPageChange(page: number): void {
-    this.topPagesPage = page;
-    this.loadTopPages();
-  }
-
   loadTopCities(): void {
     this.topCitiesLoading = true;
     this.subscriptions.push(
@@ -658,11 +496,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     this.loadRecentMembers();
   }
 
-  /** Largest view/member count across top pages / cities, for proportional bar widths. */
-  get topPagesMax(): number {
-    return Math.max(...this.topPages.map((p) => p.views || 0), 1);
-  }
-
+  /** Largest member count across top cities, for proportional bar widths. */
   get topCitiesMax(): number {
     return Math.max(...this.topCities.map((c) => c.member_count || 0), 1);
   }

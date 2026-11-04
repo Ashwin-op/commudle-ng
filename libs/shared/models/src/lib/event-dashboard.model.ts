@@ -59,7 +59,7 @@ export interface IEventDashboardNeedsAttention {
   registration_form?: { created: boolean; opened: boolean };
   rsvp?: IEventDashboardEmailBreakdown;
   entry_pass?: IEventDashboardEmailBreakdown;
-  attendance: { started: boolean };
+  attendance: { started: boolean; ended: boolean };
 }
 
 // snapshot
@@ -109,7 +109,7 @@ export interface IEventDashboardActivityItem {
   [key: string]: any;
 }
 
-// audience_snapshot
+// audience_snapshot -- scoped to attendees (entry pass holders), not all registrants
 export interface IEventDashboardAudienceSnapshot {
   companies: IPaginationCount<IDashboardDistributionItem>;
   experience_levels: IDashboardDistributionItem[];

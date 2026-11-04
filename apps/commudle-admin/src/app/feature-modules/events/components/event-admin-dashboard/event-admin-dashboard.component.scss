@@ -15,7 +15,6 @@
 
   fa-icon {
     @apply com-w-6 com-h-6 com-rounded-md com-flex com-items-center com-justify-center com-text-xs com-shrink-0;
-    animation: iconPulse 1.8s ease-in-out infinite;
   }
 
   .heading-icon-attention {
@@ -24,10 +23,6 @@
 
   .heading-icon-snapshot {
     @apply com-bg-green-50 com-text-green-600;
-  }
-
-  .heading-icon-pages {
-    @apply com-bg-blue-50 com-text-primary-500;
   }
 
   .section-info-icon {
@@ -43,10 +38,6 @@
     @apply com-bg-yellow-50 com-text-yellow-600;
   }
 
-  .heading-icon-visitors {
-    @apply com-bg-blue-50 com-text-blue-500;
-  }
-
   .activity-new-badge {
     @apply com-bg-primary-500 com-text-tWhite com-text-[10px] com-font-semibold com-px-1.5 com-py-0.5 com-rounded-full;
     animation: badgePop 2.4s ease-in-out forwards;
@@ -58,11 +49,18 @@
 
   fa-icon {
     @apply com-w-6 com-h-6 com-rounded-md com-flex com-items-center com-justify-center com-text-xs com-shrink-0;
-    animation: iconPulse 1.8s ease-in-out infinite;
   }
 
   .heading-icon-postevent {
     @apply com-bg-indigo-50 com-text-indigo-600;
+  }
+}
+
+// Card header icons pulse only while the card they belong to is hovered.
+[class$='-card']:hover {
+  .section-heading [class*='heading-icon-'],
+  .section-heading-post [class*='heading-icon-'] {
+    animation: iconPulse 1.8s ease-in-out infinite;
   }
 }
 
@@ -139,31 +137,6 @@
 
   to {
     transform: scaleX(1);
-  }
-}
-
-@keyframes livePing {
-  0% {
-    transform: scale(1);
-    opacity: 0.6;
-  }
-
-  75%,
-  100% {
-    transform: scale(2.4);
-    opacity: 0;
-  }
-}
-
-@keyframes deltaPop {
-  from {
-    opacity: 0;
-    transform: scale(0.6) translateY(2px);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
   }
 }
 
@@ -424,7 +397,7 @@
     animation: cardFadeIn 0.4s ease-out both;
 
     &:hover {
-      @apply com-shadow-Card;
+      @apply com-shadow-Card dark:com-shadow-none;
       transform: translateY(-2px);
     }
   }
@@ -522,7 +495,7 @@
       @apply com-flex com-items-center com-gap-2 com-p-2.5 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
 
       &:hover {
-        @apply com-border-primary-300 com-shadow-Card;
+        @apply com-border-primary-300 com-shadow-Card dark:com-shadow-none;
         transform: translateY(-2px);
 
         .snapshot-stat-icon {
@@ -691,7 +664,7 @@
     animation: cardFadeIn 0.4s ease-out both;
 
     &:hover {
-      @apply com-shadow-Card;
+      @apply com-shadow-Card dark:com-shadow-none;
       transform: translateY(-2px);
     }
   }
@@ -824,7 +797,7 @@
         @apply com-flex com-flex-col com-items-center com-justify-center com-gap-0.5 com-py-2 com-px-2 com-min-w-0 com-bg-white com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
 
         &:hover {
-          @apply com-border-primary-300 com-shadow-Card;
+          @apply com-border-primary-300 com-shadow-Card dark:com-shadow-none;
           transform: translateY(-2px);
         }
 
@@ -885,149 +858,10 @@
   }
 }
 
-// Row 4: Live Visitors + Top Pages
+// Row 4: Live Visitors + Top Pages (card styling lives in the shared
+// commudle-live-traffic-row component; this rule only lays out its grid row)
 .live-traffic-row {
   @apply com-grid com-grid-cols-1 lg:com-grid-cols-2 com-gap-4;
-
-  .live-visitors-card,
-  .top-list-card {
-    @apply com-rounded-xl com-p-4 com-bg-white com-border com-border-solid com-border-Bright-Gray com-transition-all com-duration-200;
-    animation: cardFadeIn 0.4s ease-out both;
-
-    &:hover {
-      @apply com-shadow-Card;
-      transform: translateY(-2px);
-    }
-  }
-
-  .live-visitors-card {
-    animation-delay: 0.3s;
-  }
-
-  .top-list-card {
-    animation-delay: 0.35s;
-  }
-
-  .top-pages-window-toggle {
-    @apply com-flex com-gap-1 com-bg-gray-100 com-rounded-full com-p-1 com-shrink-0;
-
-    button {
-      @apply com-border-0 com-bg-transparent com-text-xs com-font-medium com-text-gray-500 com-px-3 com-py-1.5 com-rounded-full com-cursor-pointer com-transition-colors com-duration-200;
-
-      &:hover {
-        @apply com-text-primary-600;
-      }
-
-      &.active {
-        @apply com-bg-white com-text-primary-600 com-shadow-sm;
-      }
-    }
-  }
-
-  .live-visitors-body {
-    @apply com-flex com-flex-col com-gap-2;
-
-    .live-visitors-counts {
-      @apply com-flex com-gap-6;
-
-      .live-count {
-        @apply com-flex com-flex-col com-gap-2;
-
-        &:first-child .live-count-value {
-          animation: deltaPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
-        }
-
-        .live-count-value {
-          @apply com-text-base com-font-medium com-text-Yankees-Blue com-leading-none;
-        }
-
-        .live-count-label {
-          @apply com-flex com-items-center com-gap-1.5 com-text-xs com-font-normal com-text-gray-500;
-
-          .live-dot {
-            @apply com-w-2 com-h-2 com-rounded-full com-bg-green-500 com-relative com-inline-block;
-
-            &::after {
-              content: '';
-              @apply com-absolute com-inset-0 com-rounded-full com-bg-green-500;
-              animation: livePing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
-            }
-          }
-        }
-      }
-    }
-
-    .live-visitors-chart-wrap {
-      @apply com-relative com-h-36 com-mt-1;
-
-      &.is-empty {
-        @apply com-flex com-items-center com-justify-center;
-
-        canvas {
-          @apply com-hidden;
-        }
-      }
-
-      .live-visitors-chart-empty {
-        @apply com-text-xs com-text-gray-400;
-      }
-    }
-  }
-
-  .top-list-header {
-    @apply com-flex com-items-center com-justify-between com-pb-1 com-mb-1 com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-text-10px com-font-medium com-text-gray-400 com-uppercase com-tracking-wide;
-  }
-
-  .top-list {
-    @apply com-m-0 com-p-0 com-list-none com-flex com-flex-col com-gap-2;
-
-    .top-list-item {
-      @apply com-flex com-items-center com-gap-4 com-text-xs com-text-Yankees-Blue;
-
-      .top-list-name {
-        @apply com-w-28 com-shrink-0 com-truncate com-text-xs com-font-normal com-text-gray-600 com-no-underline com-transition-colors com-duration-200;
-
-        &:hover {
-          @apply com-text-primary-600 com-underline;
-        }
-      }
-
-      .top-list-track {
-        @apply com-h-1 com-flex-1 com-shrink-0 com-rounded-full com-bg-gray-100 com-overflow-hidden;
-      }
-
-      .top-list-bar {
-        @apply com-block com-h-full com-rounded-full com-min-w-1;
-        width: var(--bar-share, 0%);
-        animation: barGrow 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-        transform-origin: left;
-
-        &.top-list-bar-pages {
-          @apply com-bg-primary-500;
-        }
-      }
-
-      .top-list-value {
-        @apply com-ml-auto com-text-xs com-font-medium com-text-Cadet-Grey com-shrink-0;
-      }
-    }
-
-    .top-list-empty {
-      @apply com-flex com-flex-col com-items-center com-gap-2 com-py-4 com-text-xs com-text-gray-500;
-
-      .top-list-empty-icon {
-        @apply com-flex com-items-center com-justify-center com-w-12 com-h-12 com-rounded-full com-text-xl com-mb-1;
-
-        &.pages {
-          @apply com-bg-blue-50 com-text-primary-500;
-        }
-      }
-
-      .top-list-empty-text {
-        @apply com-text-xs com-font-medium com-text-Yankees-Blue;
-      }
-    }
-  }
 }
 
 strong {
