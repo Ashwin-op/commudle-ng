@@ -1,0 +1,24 @@
+@if (visible) { @let soundOn = diwaliFireworksService.soundOn$ | async;
+<button
+  (click)="diwaliFireworksService.toggleSound()"
+  [attr.aria-pressed]="soundOn"
+  [title]="soundOn ? 'Turn fireworks sound off' : 'Turn fireworks sound on'"
+  [attr.aria-label]="soundOn ? 'Turn fireworks sound off' : 'Turn fireworks sound on'"
+  class="diwali-control"
+  nbButton
+  shape="round"
+>
+  <nb-icon [icon]="soundOn ? 'volume-up-outline' : 'volume-off-outline'"></nb-icon>
+</button>
+<button
+  (click)="diwaliFireworksService.replay()"
+  [disabled]="diwaliFireworksService.showPlaying$ | async"
+  title="Play Diwali fireworks"
+  aria-label="Play Diwali fireworks"
+  class="diwali-control diwali-control--play"
+  nbButton
+  shape="round"
+>
+  <nb-icon icon="play-circle-outline"></nb-icon>
+</button>
+}

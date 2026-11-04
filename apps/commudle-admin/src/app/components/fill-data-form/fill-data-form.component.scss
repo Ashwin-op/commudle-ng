@@ -4,6 +4,9 @@
   div.data-form-container {
     max-width: 920px;
     margin: 0 auto;
+    // Keeps the form above the Diwali fireworks drawn behind it.
+    position: relative;
+    z-index: 1;
 
     .fill-data-form {
       .container {

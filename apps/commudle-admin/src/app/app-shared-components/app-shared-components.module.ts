@@ -63,6 +63,7 @@ import { CreateCommunityFormComponent } from 'apps/commudle-admin/src/app/app-sh
 import { CreateCommunityGroupFormComponent } from 'apps/commudle-admin/src/app/app-shared-components/create-community-group-form/create-community-group-form.component';
 import { DiwaliFireworksComponent } from 'apps/commudle-admin/src/app/app-shared-components/diwali-fireworks/diwali-fireworks.component';
 import { DiwaliDiyaComponent } from 'apps/commudle-admin/src/app/app-shared-components/diwali-diya/diwali-diya.component';
+import { DiwaliFireworksControlsComponent } from 'apps/commudle-admin/src/app/app-shared-components/diwali-fireworks/diwali-fireworks-controls/diwali-fireworks-controls.component';
 
 @NgModule({
   declarations: [
@@ -119,6 +120,7 @@ import { DiwaliDiyaComponent } from 'apps/commudle-admin/src/app/app-shared-comp
     CreateCommunityGroupFormComponent,
     DiwaliFireworksComponent,
     DiwaliDiyaComponent,
+    DiwaliFireworksControlsComponent,
   ],
   imports: [
     CommonModule,
@@ -154,6 +156,7 @@ import { DiwaliDiyaComponent } from 'apps/commudle-admin/src/app/app-shared-comp
     CreateCommunityGroupFormComponent,
     DiwaliFireworksComponent,
     DiwaliDiyaComponent,
+    DiwaliFireworksControlsComponent,
 
     // Nebular
     NbRadioModule,

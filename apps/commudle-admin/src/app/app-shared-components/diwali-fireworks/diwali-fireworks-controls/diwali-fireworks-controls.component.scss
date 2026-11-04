@@ -1,0 +1,27 @@
+// Mirrors the chat button (40px, right-3, bottom-20 / md:bottom-6) and stacks above it with a 12px gap.
+// z-40 sits under the chat layer (z-50), so the opened inbox covers these buttons.
+:host {
+  @apply com-fixed com-right-3 com-z-40 com-flex com-flex-col com-gap-3;
+  @apply com-bottom-20 md:com-bottom-6;
+}
+
+:host(.above-chat) {
+  @apply com-bottom-[132px] md:com-bottom-[76px];
+}
+
+.diwali-control {
+  @apply com-w-10 com-h-10 com-p-2 com-shadow-Chat-box;
+
+  nb-icon {
+    @apply com-ml-0 #{!important};
+  }
+
+  &--play:not([disabled]) nb-icon {
+    color: #ff8a00;
+  }
+}
+
+// Fades away with the chat button when the mobile header hides on scroll.
+:host(.mobile-navbar-hidden) {
+  @apply com-opacity-0 com-pointer-events-none;
+}
