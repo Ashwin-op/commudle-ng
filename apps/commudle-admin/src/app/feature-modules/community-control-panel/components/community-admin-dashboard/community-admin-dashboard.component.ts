@@ -75,6 +75,7 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
   topCitiesTotal = 0;
   readonly topCitiesCount = 5;
   topCitiesLoading = false;
+  private topCitiesGlobalMax = 0;
 
   // Recent Members (paginated)
   recentMembers: ICommunityDashboardRecentMember[] = [];
@@ -459,6 +460,9 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
           next: (data) => {
             this.topCities = data.values;
             this.topCitiesTotal = data.total;
+            if (this.topCitiesPage === 1) {
+              this.topCitiesGlobalMax = Math.max(...data.values.map((c) => c.member_count || 0), 1);
+            }
             this.topCitiesLoading = false;
           },
           error: () => {
@@ -496,9 +500,9 @@ export class CommunityAdminDashboardComponent implements OnInit, OnDestroy {
     this.loadRecentMembers();
   }
 
-  /** Largest member count across top cities, for proportional bar widths. */
+  /** Largest member count across all top cities (captured from page 1, since results are sorted descending), for proportional bar widths. */
   get topCitiesMax(): number {
-    return Math.max(...this.topCities.map((c) => c.member_count || 0), 1);
+    return this.topCitiesGlobalMax || 1;
   }
 
   barShare(value: number, max: number): number {

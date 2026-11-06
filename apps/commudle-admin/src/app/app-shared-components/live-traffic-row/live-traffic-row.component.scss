@@ -138,7 +138,7 @@
     @apply com-flex com-items-center com-gap-4 com-text-xs com-text-Yankees-Blue;
 
     .top-list-name {
-      @apply com-w-28 com-shrink-0 com-truncate com-text-xs com-font-normal com-text-gray-600 com-no-underline com-transition-colors com-duration-200;
+      @apply com-flex-1 com-min-w-0 com-truncate com-text-xs com-font-normal com-text-gray-600 com-no-underline com-transition-colors com-duration-200;
 
       &:hover {
         @apply com-text-primary-600 com-underline;
@@ -146,7 +146,7 @@
     }
 
     .top-list-track {
-      @apply com-h-1 com-flex-1 com-shrink-0 com-rounded-full com-bg-gray-100 com-overflow-hidden;
+      @apply com-h-1 com-w-20 com-shrink-0 com-rounded-full com-bg-gray-100 com-overflow-hidden;
     }
 
     .top-list-bar {

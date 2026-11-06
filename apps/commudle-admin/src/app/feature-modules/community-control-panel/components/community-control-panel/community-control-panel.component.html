@@ -228,11 +228,16 @@
         <div class="menu">
           <a
             [routerLink]="['./']"
-            class="d-flex"
             class="action-button"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
           >
+            <div class="icon">
+              <nb-icon icon="grid-outline"></nb-icon>
+            </div>
+            <span class="heading">Overview</span>
+          </a>
+          <a [routerLink]="['events']" class="d-flex" class="action-button" routerLinkActive="active">
             <div class="icon">
               <nb-icon icon="calendar"></nb-icon>
             </div>
