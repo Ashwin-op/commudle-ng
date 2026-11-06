@@ -52,6 +52,7 @@ export class LiveTrafficRowComponent implements OnChanges, OnDestroy {
   readonly topPagesCount = 5;
   topPagesLoading = false;
   topPagesWindow: EDashboardTopPagesWindow = 'current';
+  private topPagesGlobalMax = 0;
 
   constructor(
     private ngZone: NgZone,
@@ -127,6 +128,7 @@ export class LiveTrafficRowComponent implements OnChanges, OnDestroy {
   onTopPagesWindowChange(window: EDashboardTopPagesWindow): void {
     this.topPagesWindow = window;
     this.topPagesPage = 1;
+    this.topPagesGlobalMax = 0;
     this.loadTopPages();
   }
 
@@ -137,6 +139,9 @@ export class LiveTrafficRowComponent implements OnChanges, OnDestroy {
         next: (data) => {
           this.topPages = data.values;
           this.topPagesTotal = data.total;
+          if (this.topPagesPage === 1) {
+            this.topPagesGlobalMax = Math.max(...data.values.map((p) => p.views || 0), 1);
+          }
           this.topPagesLoading = false;
         },
         error: () => {
@@ -156,8 +161,9 @@ export class LiveTrafficRowComponent implements OnChanges, OnDestroy {
     this.subscriptions.push(interval(30000).subscribe(() => this.loadTopPages()));
   }
 
+  /** Largest view count across all top pages (captured from page 1, since results are sorted descending), for proportional bar widths. */
   get topPagesMax(): number {
-    return Math.max(...this.topPages.map((p) => p.views || 0), 1);
+    return this.topPagesGlobalMax || 1;
   }
 
   barShare(value: number, max: number): number {
