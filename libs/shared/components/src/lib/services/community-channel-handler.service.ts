@@ -131,6 +131,15 @@ export class CommunityChannelHandlerService {
     this.CommunityChannelChatChannel.delete(message.id);
   }
 
+  /** `subject` is only honoured for top-level forum threads; replies ignore it. */
+  sendUpdate(messageId: number, content: string, subject?: string) {
+    if (!this.CommunityChannelChatChannel || this.permittedActions.value.includes('blocked')) {
+      return false;
+    }
+    this.CommunityChannelChatChannel.update(messageId, content, subject);
+    return true;
+  }
+
   pin(messageId: number) {
     this.CommunityChannelChatChannel.pin(messageId);
   }
@@ -235,6 +244,10 @@ export class CommunityChannelHandlerService {
             this.messages.next(messages);
           }
 
+          // The forums views keep their own copies, which previously kept showing
+          // threads and replies that had already been deleted.
+          this.forumsStore.removeMessage(data.user_message_id);
+
           break;
 
         case 'update':
@@ -248,6 +261,9 @@ export class CommunityChannelHandlerService {
 
             this.messages.next(messages);
           }
+
+          // Also applies to replies, which the branch above does not cover.
+          this.forumsStore.applyMessageUpdate(data.user_message);
           break;
         case 'error':
           this.toastrService.warningDialog(data.message, 2000);

@@ -13,6 +13,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SidebarComponent } from 'apps/shared-components/sidebar/sidebar.component';
 import { NewDiscussionFormComponent } from './components/new-discussion-form/new-discussion-form.component';
+import { ForumDeleteDialogComponent } from './components/forum-delete-dialog/forum-delete-dialog.component';
+import { ForumMessageDeleteDialogComponent } from './components/forum-message-delete-dialog/forum-message-delete-dialog.component';
 import { MiniUserProfileModule } from 'apps/shared-modules/mini-user-profile/mini-user-profile.module';
 import { EditorModule } from '@commudle/editor';
 import { SharedComponentsModule as NewSharedComponentsModule } from '@commudle/shared-components';
@@ -28,6 +30,8 @@ import { RouterModule } from '@angular/router';
     ForumDiscussionComponent,
     ForumMessagesComponent,
     NewDiscussionFormComponent,
+    ForumDeleteDialogComponent,
+    ForumMessageDeleteDialogComponent,
   ],
   imports: [
     CommonModule,

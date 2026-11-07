@@ -5,6 +5,7 @@ import { IForum, IChannelCategory } from '@commudle/shared-models';
 import { ForumService, ForumsStore, SeoService, ToastrService } from '@commudle/shared-services';
 import { NbDialogRef, NbDialogService } from '@commudle/theme';
 import { ForumFormComponent } from 'apps/commudle-admin/src/app/feature-modules/forums/components/forum-form/forum-form.component';
+import { ForumDeleteDialogComponent } from 'apps/commudle-admin/src/app/feature-modules/forums/components/forum-delete-dialog/forum-delete-dialog.component';
 import {
   faChevronLeft,
   faComment,
@@ -42,8 +43,6 @@ export class ForumsByCategoryComponent implements OnInit, OnDestroy {
     faXmark,
   };
 
-  @ViewChild('deleteDialog') deleteDialogTemplate: TemplateRef<unknown>;
-
   readonly forums$ = this.forumsStore.forums$;
   readonly isLoadingForums$ = this.forumsStore.isLoadingForums$;
 
@@ -52,14 +51,14 @@ export class ForumsByCategoryComponent implements OnInit, OnDestroy {
   searchQuery = '';
   isAdmin = false;
   isDeletingForum = false;
-  forumToDelete: IForum | null = null;
+
   totalForums = 0;
   currentPage = 1;
   perPage = 15;
 
   private parentContext: IForumParentContext | null = null;
   private categorySlug: string;
-  private deleteDialogRef: NbDialogRef<unknown>;
+
   private readonly destroy$ = new Subject<void>();
 
   constructor(
@@ -184,33 +183,26 @@ export class ForumsByCategoryComponent implements OnInit, OnDestroy {
   // ── Delete ────────────────────────────────────────────────────────────────
 
   confirmDeleteForum(forum: IForum): void {
-    this.forumToDelete = forum;
-    this.deleteDialogRef = this.dialogService.open(this.deleteDialogTemplate);
-  }
-
-  deleteForum(): void {
-    if (!this.forumToDelete) return;
-    this.isDeletingForum = true;
-    this.forumsStore
-      .deleteForum(this.forumToDelete.id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: () => {
-          this.isDeletingForum = false;
-          this.forumToDelete = null;
-          this.deleteDialogRef?.close();
-        },
-        error: () => {
-          this.toastrService.errorDialog('Failed to delete forum');
-          this.isDeletingForum = false;
-          this.deleteDialogRef?.close();
-        },
+    this.dialogService
+      .open(ForumDeleteDialogComponent, { context: { forum } })
+      .onClose.pipe(takeUntil(this.destroy$))
+      .subscribe((confirmed?: boolean) => {
+        if (confirmed) this.deleteForum(forum);
       });
   }
 
-  cancelDelete(): void {
-    this.forumToDelete = null;
-    this.deleteDialogRef?.close();
+  private deleteForum(forum: IForum): void {
+    this.isDeletingForum = true;
+    this.forumsStore
+      .deleteForum(forum.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => (this.isDeletingForum = false),
+        error: () => {
+          this.toastrService.errorDialog('Failed to delete forum');
+          this.isDeletingForum = false;
+        },
+      });
   }
 
   trackById(_: number, forum: IForum): number {

@@ -320,6 +320,70 @@ export class ForumsStore {
   }
 
   /**
+   * A message was deleted — drop it from every list holding a copy.
+   *
+   * Without this the forum's thread list kept showing a thread that had already been
+   * destroyed server-side, because only the community-channels chat list was being
+   * pruned when the delete broadcast arrived.
+   */
+  removeMessage(userMessageId: number | string): void {
+    const id = Number(userMessageId);
+    if (!id) return;
+
+    // A thread in the forum's list
+    const messages = this.userMessages.value;
+    if (messages.some((m) => Number(m.id) === id)) {
+      this.userMessages.next(messages.filter((m) => Number(m.id) !== id));
+      this.bumpForumCounts({ discussions: -1 });
+    }
+
+    const current = this.currentUserMessage.value;
+    if (!current) return;
+
+    if (Number(current.id) === id) {
+      // The thread being viewed was deleted; the page navigates away on its own.
+      this.currentUserMessage.next(null);
+      return;
+    }
+
+    // A reply inside the open thread
+    if (current.user_messages?.some((r) => Number(r.id) === id)) {
+      this.currentUserMessage.next({
+        ...current,
+        user_messages: current.user_messages.filter((r) => Number(r.id) !== id),
+      });
+      this.bumpForumCounts({ replies: -1 });
+    }
+  }
+
+  /** A message was edited elsewhere (or by us) — refresh every copy in place. */
+  applyMessageUpdate(userMessage: IUserMessage): void {
+    const id = Number(userMessage?.id);
+    if (!id) return;
+
+    const messages = this.userMessages.value;
+    if (messages.some((m) => Number(m.id) === id)) {
+      this.userMessages.next(messages.map((m) => (Number(m.id) === id ? { ...m, ...userMessage } : m)));
+    }
+
+    const current = this.currentUserMessage.value;
+    if (!current) return;
+
+    if (Number(current.id) === id) {
+      // Keep the loaded replies: the broadcast payload does not include them.
+      this.currentUserMessage.next({ ...current, ...userMessage, user_messages: current.user_messages });
+      return;
+    }
+
+    if (current.user_messages?.some((r) => Number(r.id) === id)) {
+      this.currentUserMessage.next({
+        ...current,
+        user_messages: current.user_messages.map((r) => (Number(r.id) === id ? { ...r, ...userMessage } : r)),
+      });
+    }
+  }
+
+  /**
    * Keeps the open forum's header stats in step with realtime activity. The counts
    * arrive with the forum payload and would otherwise stay frozen at whatever they
    * were when the page was resolved.

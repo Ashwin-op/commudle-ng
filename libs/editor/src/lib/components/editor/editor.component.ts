@@ -44,6 +44,15 @@ import { NbButtonAppearance, NbComponentStatus } from '@commudle/theme';
 })
 export class EditorComponent implements OnInit, OnDestroy, OnChanges {
   @Input() showMenu = false;
+
+  /**
+   * Whether the editor submits on its own — its send button plus Enter-to-send.
+   *
+   * Set false when the host owns submission (e.g. a dialog with its own footer
+   * button), so the send button is hidden and Enter inserts a newline instead of
+   * firing `contentChange`. Defaults true to keep chat-style composers unchanged.
+   */
+  @Input() selfSubmit = true;
   @Input() editable = true;
   @Input() clearOnSubmit = true;
   @Input() content = '';
@@ -135,7 +144,9 @@ export class EditorComponent implements OnInit, OnDestroy, OnChanges {
       editorProps: {
         handleDOMEvents: {
           keydown: (view, event) => {
-            if (event.key === 'Enter' && !event.shiftKey) {
+            // Enter only submits for editors that own their submission; otherwise it
+            // behaves as a normal newline.
+            if (this.selfSubmit && event.key === 'Enter' && !event.shiftKey) {
               this.onClick();
             }
             return false;

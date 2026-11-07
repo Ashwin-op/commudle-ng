@@ -20,7 +20,7 @@
 
     <button
       (click)="onClick()"
-      *ngIf="editable"
+      *ngIf="editable && selfSubmit"
       [disabled]="!isValid"
       class="submit-button"
       nbButton

@@ -12,6 +12,25 @@
         <h1 class="fdis-forum-title">{{ forum.name }}</h1>
         <p class="fdis-forum-desc" *ngIf="forum.description">{{ forum.description }}</p>
       </div>
+
+      <!-- Revealed on header hover; also kept visible on keyboard focus -->
+      <div class="fdis-forum-actions" *ngIf="isAdmin">
+        <button comButton ghost size="tiny" shape="round" (click)="editForum()" nbTooltip="Edit Forum">
+          <fa-icon [icon]="icons.faPen"></fa-icon>
+        </button>
+        <button
+          comButton
+          ghost
+          size="tiny"
+          shape="round"
+          class="fdis-delete-btn"
+          [disabled]="isDeletingForum"
+          (click)="confirmDeleteForum()"
+          nbTooltip="Delete Forum"
+        >
+          <fa-icon [icon]="icons.faTrash"></fa-icon>
+        </button>
+      </div>
     </div>
     <!-- Hidden while the forum has no threads; the empty state offers its own CTA -->
     <button
@@ -23,7 +42,7 @@
       (click)="startNewDiscussion()"
     >
       <fa-icon [icon]="icons.faPenToSquare"></fa-icon>
-      New Post
+      New Discussion
     </button>
   </div>
 
@@ -62,7 +81,7 @@
 
         <button comButton status="primary" shape="semi-round" size="large" (click)="startNewDiscussion()">
           <fa-icon [icon]="icons.faPenToSquare"></fa-icon>
-          Create the first post
+          Start First Discussion
         </button>
       </div>
 
@@ -112,7 +131,7 @@
             (click)="loadMoreDiscussions()"
             [disabled]="isLoading$ | async"
           >
-            Load more
+            Load More
           </button>
         </div>
       </div>

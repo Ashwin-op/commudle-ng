@@ -5,8 +5,8 @@
         <fa-icon [icon]="forumId ? icons.faPen : icons.faCirclePlus"></fa-icon>
       </div>
       <div>
-        <h4 class="ff-title">{{ forumId ? 'Edit Topic' : 'New Topic' }}</h4>
-        <p class="ff-subtitle">{{ forumId ? 'Update the topic details below' : 'Create a new discussion topic' }}</p>
+        <h4 class="ff-title">{{ forumId ? 'Edit Forum' : 'New Forum' }}</h4>
+        <p class="ff-subtitle">{{ forumId ? 'Update the forum details below' : 'Create a new forum' }}</p>
       </div>
     </div>
     <button comButton ghost size="small" shape="round" (click)="closeForm()">
@@ -16,15 +16,15 @@
 
   <com-card-body class="ff-body">
     <form [formGroup]="topicForm" class="ff-form">
-      <!-- ── Topic Name ── -->
+      <!-- ── Forum Name ── -->
       <div class="ff-field">
-        <label class="ff-label">Topic Name <span class="ff-required">*</span></label>
+        <label class="ff-label">Forum Name <span class="ff-required">*</span></label>
         <input nbInput fullWidth formControlName="name" placeholder="e.g. Getting started with Angular" type="text" />
         <span class="ff-hint">{{ topicForm.get('name')?.value?.length || 0 }} / 120</span>
         <commudle-alert
           *ngIf="topicForm.get('name')?.touched && topicForm.get('name')?.errors?.['required']"
           [error]="true"
-          errorMessage="Topic name is required"
+          errorMessage="Forum name is required"
         ></commudle-alert>
         <commudle-alert
           *ngIf="topicForm.get('name')?.touched && topicForm.get('name')?.errors?.['maxlength']"
@@ -58,7 +58,7 @@
             nbInput
             fullWidth
             formControlName="category_name"
-            placeholder="Search existing or type to create new..."
+            placeholder="Search or create a category"
             type="text"
             autocomplete="off"
             (input)="onCategoryInput($event.target['value'])"
@@ -77,7 +77,7 @@
           >
             <fa-icon [icon]="icons.faComment" class="ff-suggestion-icon"></fa-icon>
             <span>{{ cat.name }}</span>
-            <span class="ff-suggestion-count">{{ cat.channels_count }} topics</span>
+            <span class="ff-suggestion-count">{{ cat.channels_count }} forums</span>
           </button>
         </div>
 
@@ -101,7 +101,7 @@
           fullWidth
           formControlName="description"
           rows="4"
-          placeholder="Briefly describe what this topic is about..."
+          placeholder="Briefly describe this forum"
         ></textarea>
         <span class="ff-hint">{{ topicForm.get('description')?.value?.length || 0 }} / 500</span>
         <commudle-alert

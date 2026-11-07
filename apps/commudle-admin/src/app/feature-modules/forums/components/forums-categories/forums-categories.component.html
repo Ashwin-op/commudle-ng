@@ -6,14 +6,14 @@
       <input
         type="text"
         class="fcat-search-input"
-        placeholder="Search forums..."
+        placeholder="Search forums"
         [ngModel]="searchQuery"
         (ngModelChange)="onSearchChange($event)"
       />
     </div>
     <button comButton status="primary" shape="semi-round" size="small" *ngIf="isAdmin" (click)="openCreateDialog()">
       <fa-icon [icon]="icons.faPlus"></fa-icon>
-      Create Forum
+      New Forum
     </button>
   </div>
 
@@ -69,7 +69,7 @@
               (click)="openCreateDialog()"
             >
               <fa-icon [icon]="icons.faPlus"></fa-icon>
-              Create the first forum
+              Create First Forum
             </button>
           </div>
 
@@ -94,8 +94,7 @@
                 [attr.aria-pressed]="sortBy === forumSort.ACTIVITY"
                 (click)="onSortChange(forumSort.ACTIVITY)"
               >
-                <fa-icon [icon]="icons.faComment" aria-hidden="true"></fa-icon>
-                Latest reply
+                <fa-icon [icon]="icons.faComment" aria-hidden="true"></fa-icon>Latest Reply
               </button>
             </div>
           </div>

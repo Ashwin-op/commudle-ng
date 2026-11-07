@@ -38,6 +38,25 @@
 
         .ndf-hint {
           @apply com-text-xs com-text-gray-400 com-text-right;
+
+          .ndf-hint-min {
+            @apply com-ml-1;
+          }
+        }
+
+        // The editor ships without a field border, so frame it to match the nbInput
+        // subject field above it. Bright-Gray and primary-500 are theme-swapped, so
+        // this follows dark mode.
+        .ndf-editor {
+          @apply com-block com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-px-3 com-py-2;
+          @apply focus-within:com-border-primary-500;
+
+          // A discussion body runs to several paragraphs, so give it room instead of
+          // the chat-style single row. Capped with its own scroll so a long draft can't
+          // push the dialog past the viewport.
+          ::ng-deep tiptap {
+            @apply com-min-h-[9rem] com-max-h-[18rem] com-overflow-y-auto;
+          }
         }
       }
     }

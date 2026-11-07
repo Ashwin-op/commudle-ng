@@ -1,0 +1,63 @@
+<com-card class="fdd-card" role="alertdialog" aria-labelledby="fdd-title" aria-describedby="fdd-lead">
+  <com-card-header class="fdd-header">
+    <div class="fdd-header-left">
+      <span class="fdd-icon" aria-hidden="true">
+        <fa-icon [icon]="icons.faTriangleExclamation"></fa-icon>
+      </span>
+      <span id="fdd-title" class="fdd-title"> Delete Forum </span>
+    </div>
+    <button comButton ghost size="small" shape="round" (click)="cancel()" aria-label="Close">
+      <fa-icon [icon]="icons.faXmark"></fa-icon>
+    </button>
+  </com-card-header>
+
+  <com-card-body class="fdd-body">
+    <p id="fdd-lead" class="fdd-lead">
+      <strong>{{ forum?.name }}</strong> and everything in it will be permanently deleted.
+    </p>
+
+    <!-- Concrete consequences beat a vague "all data will be lost" -->
+    <ul class="fdd-impact" *ngIf="!isEmpty">
+      <li>
+        <fa-icon [icon]="icons.faCommentDots" aria-hidden="true"></fa-icon>
+        <span
+          ><strong>{{ threadCount }}</strong> {{ threadCount === 1 ? 'thread' : 'threads' }}</span
+        >
+      </li>
+      <li>
+        <fa-icon [icon]="icons.faReply" aria-hidden="true"></fa-icon>
+        <span
+          ><strong>{{ replyCount }}</strong> {{ replyCount === 1 ? 'reply' : 'replies' }}</span
+        >
+      </li>
+    </ul>
+    <p class="fdd-note" *ngIf="isEmpty">This forum has no threads yet.</p>
+
+    <div class="fdd-confirm">
+      <label class="fdd-confirm-label" for="fdd-confirm-input">
+        Type <strong>{{ forum?.name }}</strong> to confirm
+      </label>
+      <!-- nbInput so the field follows the active theme; a hand-styled input broke in
+           dark mode, where Yankees-Blue resolves to white -->
+      <input
+        id="fdd-confirm-input"
+        nbInput
+        fullWidth
+        fieldSize="small"
+        type="text"
+        autocomplete="off"
+        spellcheck="false"
+        [placeholder]="forum?.name"
+        [(ngModel)]="typedName"
+        (keyup.enter)="confirm()"
+      />
+    </div>
+  </com-card-body>
+
+  <com-card-footer class="fdd-footer">
+    <button comButton ghost size="small" (click)="cancel()">Cancel</button>
+    <button comButton status="danger" shape="semi-round" size="small" [disabled]="!canDelete" (click)="confirm()">
+      Delete Forum
+    </button>
+  </com-card-footer>
+</com-card>

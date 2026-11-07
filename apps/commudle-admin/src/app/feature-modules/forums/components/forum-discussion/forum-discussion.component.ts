@@ -3,11 +3,23 @@ import { Component, Inject, OnInit, OnDestroy, PLATFORM_ID } from '@angular/core
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
-import { IForum, IUser, IUserMessage } from '@commudle/shared-models';
-import { faChevronLeft, faComment, faCommentDots, faPenToSquare, faUser } from '@fortawesome/free-solid-svg-icons';
+import { IChannelCategory, IForum, IUser, IUserMessage } from '@commudle/shared-models';
+import {
+  faChevronLeft,
+  faComment,
+  faCommentDots,
+  faPen,
+  faPenToSquare,
+  faTrash,
+  faTriangleExclamation,
+  faUser,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { NbDialogService } from '@commudle/theme';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
-import { ForumsStore, removeHtmlTags, SeoService } from '@commudle/shared-services';
+import { ForumsStore, removeHtmlTags, SeoService, ToastrService } from '@commudle/shared-services';
+import { ForumFormComponent } from 'apps/commudle-admin/src/app/feature-modules/forums/components/forum-form/forum-form.component';
+import { ForumDeleteDialogComponent } from 'apps/commudle-admin/src/app/feature-modules/forums/components/forum-delete-dialog/forum-delete-dialog.component';
 import { environment } from '@commudle/shared-environments';
 import { NewDiscussionFormComponent } from 'apps/commudle-admin/src/app/feature-modules/forums/components/new-discussion-form/new-discussion-form.component';
 import {
@@ -29,9 +41,18 @@ export class ForumDiscussionComponent implements OnInit, OnDestroy {
     faChevronLeft,
     faComment,
     faCommentDots,
+    faPen,
     faPenToSquare,
+    faTrash,
+    faTriangleExclamation,
     faUser,
+    faXmark,
   };
+
+  // ── Forum admin actions ───────────────────────────────────────────────────
+  isAdmin = false;
+  allCategories: IChannelCategory[] = [];
+  isDeletingForum = false;
 
   readonly userMessages$ = this.forumsStore.userMessages$;
   readonly hasNextPage$ = this.forumsStore.hasNextPage$;
@@ -47,6 +68,7 @@ export class ForumDiscussionComponent implements OnInit, OnDestroy {
     private readonly forumsStore: ForumsStore,
     private readonly seoService: SeoService,
     private readonly forumsContextService: ForumsContextService,
+    private readonly toastrService: ToastrService,
     @Inject(PLATFORM_ID) private platformId: object,
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -74,6 +96,75 @@ export class ForumDiscussionComponent implements OnInit, OnDestroy {
         this.setSeoSchema(messages);
       }
     });
+
+    // Long-lived and top-level on purpose: the managed-entity lists this reads from
+    // are populated later by the global sidebar, so a subscription nested inside
+    // another subscribe would only ever see the initial empty value.
+    this.forumsContextService
+      .isAdmin$(this.parentContext)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((isAdmin) => (this.isAdmin = isAdmin));
+
+    this.forumsStore.categories$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((categories) => (this.allCategories = categories || []));
+  }
+
+  // ── Edit / delete this forum ──────────────────────────────────────────────
+
+  editForum(): void {
+    if (!this.forum) return;
+
+    this.dialogService
+      .open(ForumFormComponent, {
+        context: {
+          forumId: this.forum.id,
+          categoryName: this.forum.channel_category?.name,
+          isAdmin: this.isAdmin,
+          existingCategories: this.allCategories,
+        },
+      })
+      .onClose.pipe(takeUntil(this.destroy$))
+      .subscribe((updated?: IForum) => {
+        // updateForum only refreshes the forums list, not currentForum, so the
+        // header would keep showing the old name without this.
+        if (updated?.id) {
+          this.forum = updated;
+          this.forumsStore.setCurrentForum(updated);
+          this.setSeo();
+        }
+      });
+  }
+
+  confirmDeleteForum(): void {
+    if (!this.forum) return;
+
+    this.dialogService
+      .open(ForumDeleteDialogComponent, { context: { forum: this.forum } })
+      .onClose.pipe(takeUntil(this.destroy$))
+      .subscribe((confirmed?: boolean) => {
+        if (confirmed) this.deleteForum();
+      });
+  }
+
+  private deleteForum(): void {
+    if (!this.forum) return;
+
+    this.isDeletingForum = true;
+    this.forumsStore
+      .deleteForum(this.forum.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.isDeletingForum = false;
+          // We are viewing the forum that just went away, so leave the page.
+          this.backToCategory();
+        },
+        error: () => {
+          this.isDeletingForum = false;
+          this.toastrService.errorDialog('Failed to delete forum');
+        },
+      });
   }
 
   private setSeo(): void {

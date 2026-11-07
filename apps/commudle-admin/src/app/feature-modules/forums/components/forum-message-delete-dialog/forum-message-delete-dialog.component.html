@@ -1,0 +1,34 @@
+<com-card class="fmdd-card" role="alertdialog" aria-labelledby="fmdd-title" aria-describedby="fmdd-body">
+  <com-card-header class="fmdd-header">
+    <div class="fmdd-header-left">
+      <span class="fmdd-icon" aria-hidden="true">
+        <fa-icon [icon]="icons.faTriangleExclamation"></fa-icon>
+      </span>
+      <span id="fmdd-title" class="fmdd-title">{{ isThread ? 'Delete Discussion' : 'Delete Reply' }}</span>
+    </div>
+    <button comButton ghost size="small" shape="round" (click)="cancel()" aria-label="Close">
+      <fa-icon [icon]="icons.faXmark"></fa-icon>
+    </button>
+  </com-card-header>
+
+  <com-card-body class="fmdd-body">
+    <p id="fmdd-body" class="fmdd-lead" *ngIf="isThread">
+      <strong>{{ message?.subject }}</strong> will be permanently deleted.
+    </p>
+    <p id="fmdd-body" class="fmdd-lead" *ngIf="!isThread">This reply will be permanently deleted.</p>
+
+    <!-- Deleting a thread takes its replies with it, so say how many -->
+    <p class="fmdd-note" *ngIf="isThread && replyCount > 0">
+      Its {{ replyCount }} {{ replyCount === 1 ? 'reply' : 'replies' }} will be removed too.
+    </p>
+
+    <p class="fmdd-warning">This cannot be undone.</p>
+  </com-card-body>
+
+  <com-card-footer class="fmdd-footer">
+    <button comButton ghost size="small" (click)="cancel()">Cancel</button>
+    <button comButton status="danger" shape="semi-round" size="small" (click)="confirm()">
+      {{ isThread ? 'Delete Discussion' : 'Delete Reply' }}
+    </button>
+  </com-card-footer>
+</com-card>

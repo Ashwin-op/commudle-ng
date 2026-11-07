@@ -5,8 +5,8 @@
         <fa-icon [icon]="icons.faPenToSquare"></fa-icon>
       </div>
       <div>
-        <h4 class="ndf-title">Start a Discussion</h4>
-        <p class="ndf-subtitle">Share your question or idea with the community</p>
+        <h4 class="ndf-title">{{ title }}</h4>
+        <p class="ndf-subtitle">{{ subtitle }}</p>
       </div>
     </div>
     <button comButton ghost size="small" shape="round" (click)="closeDialog()">
@@ -16,43 +16,65 @@
 
   <com-card-body class="ndf-body">
     <form [formGroup]="discussionForm" class="ndf-form">
-      <!-- Subject -->
-      <div class="ndf-field">
+      <!-- Subject — top-level discussions only; replies don't have one -->
+      <div class="ndf-field" *ngIf="!isReply">
         <label class="ndf-label">Subject <span class="ndf-required">*</span></label>
         <input nbInput fullWidth formControlName="subject" type="text" placeholder="What's this discussion about?" />
-        <span class="ndf-hint">{{ discussionForm.get('subject')?.value?.length || 0 }} / 120</span>
+        <span class="ndf-hint">
+          {{ discussionForm.get('subject')?.value?.length || 0 }} / {{ limits.subject.max }}
+          <span class="ndf-hint-min">(min {{ limits.subject.min }})</span>
+        </span>
         <commudle-alert
           *ngIf="discussionForm.get('subject')?.touched && discussionForm.get('subject')?.errors?.['required']"
           [error]="true"
           errorMessage="Subject is required"
         ></commudle-alert>
         <commudle-alert
-          *ngIf="discussionForm.get('subject')?.touched && discussionForm.get('subject')?.errors?.['maxlength']"
+          *ngIf="discussionForm.get('subject')?.touched && discussionForm.get('subject')?.errors?.['tooShort']"
           [error]="true"
-          errorMessage="Cannot exceed 120 characters"
+          [errorMessage]="'Subject must be at least ' + limits.subject.min + ' characters'"
+        ></commudle-alert>
+        <commudle-alert
+          *ngIf="discussionForm.get('subject')?.touched && discussionForm.get('subject')?.errors?.['tooLong']"
+          [error]="true"
+          [errorMessage]="'Subject cannot exceed ' + limits.subject.max + ' characters'"
         ></commudle-alert>
       </div>
 
       <!-- Message -->
       <div class="ndf-field">
         <label class="ndf-label">Message <span class="ndf-required">*</span></label>
-        <textarea
-          nbInput
-          fullWidth
-          formControlName="message"
-          rows="6"
-          placeholder="Describe your question or share your thoughts in detail..."
-        ></textarea>
-        <span class="ndf-hint">{{ discussionForm.get('message')?.value?.length || 0 }} / 1000</span>
+        <!-- Rich editor so bold/lists/links are available, and so editing shows
+             formatted content instead of raw HTML. The dialog footer submits, so the
+             editor's own send button is not used. -->
+        <commudle-editor
+          #messageEditor
+          class="ndf-editor"
+          [content]="initialMessage"
+          [editable]="true"
+          [showMenu]="true"
+          [selfSubmit]="false"
+          [clearOnSubmit]="false"
+          placeholder="Describe your question or idea"
+        ></commudle-editor>
+        <span class="ndf-hint">
+          {{ messageLength }} / {{ limits.message.max }}
+          <span class="ndf-hint-min">(min {{ limits.message.min }})</span>
+        </span>
         <commudle-alert
           *ngIf="discussionForm.get('message')?.touched && discussionForm.get('message')?.errors?.['required']"
           [error]="true"
           errorMessage="Message is required"
         ></commudle-alert>
         <commudle-alert
-          *ngIf="discussionForm.get('message')?.touched && discussionForm.get('message')?.errors?.['maxlength']"
+          *ngIf="discussionForm.get('message')?.touched && discussionForm.get('message')?.errors?.['tooShort']"
           [error]="true"
-          errorMessage="Cannot exceed 1000 characters"
+          [errorMessage]="'Message must be at least ' + limits.message.min + ' characters'"
+        ></commudle-alert>
+        <commudle-alert
+          *ngIf="discussionForm.get('message')?.touched && discussionForm.get('message')?.errors?.['tooLong']"
+          [error]="true"
+          [errorMessage]="'Message cannot exceed ' + limits.message.max + ' characters'"
         ></commudle-alert>
       </div>
     </form>
@@ -68,8 +90,8 @@
       [disabled]="discussionForm.invalid"
       (click)="onSubmit()"
     >
-      <fa-icon [icon]="icons.faPaperPlane"></fa-icon>
-      Post Discussion
+      <fa-icon [icon]="isEdit ? icons.faPen : icons.faPaperPlane"></fa-icon>
+      {{ submitLabel }}
     </button>
   </com-card-footer>
 </com-card>

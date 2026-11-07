@@ -130,3 +130,28 @@
     }
   }
 }
+
+// ── Edit / delete controls ────────────────────────────
+.fm-actions {
+  @apply com-flex com-items-center com-gap-1 com-flex-shrink-0 com-ml-auto;
+
+  .fm-delete-btn {
+    @apply hover:com-text-Infra-Red;
+  }
+}
+
+.fm-edit {
+  @apply com-flex com-flex-col com-gap-2 com-mt-2;
+
+  .fm-edit-label {
+    @apply com-text-xs com-font-medium com-text-Cadet-Grey;
+  }
+
+  .fm-edit-actions {
+    @apply com-flex com-items-center com-gap-2;
+
+    .fm-edit-hint {
+      @apply com-text-xs com-text-Cadet-Grey;
+    }
+  }
+}

@@ -29,6 +29,31 @@
           <p class="fm-post-author">{{ userMessage.user?.name || userMessage.user?.username }}</p>
           <p class="fm-post-date">{{ userMessage.created_at | date : 'd MMM y, h:mm a' }}</p>
         </div>
+
+        <!-- Author or channel admin only -->
+        <div class="fm-actions" *ngIf="canModify(userMessage)">
+          <button
+            comButton
+            ghost
+            size="tiny"
+            shape="round"
+            (click)="startEdit(userMessage)"
+            nbTooltip="Edit Discussion"
+          >
+            <fa-icon [icon]="icons.faPen"></fa-icon>
+          </button>
+          <button
+            comButton
+            ghost
+            size="tiny"
+            shape="round"
+            class="fm-delete-btn"
+            (click)="deleteMessage(userMessage)"
+            nbTooltip="Delete Discussion"
+          >
+            <fa-icon [icon]="icons.faTrash"></fa-icon>
+          </button>
+        </div>
       </div>
 
       <h1 class="fm-post-subject">{{ userMessage.subject }}</h1>
@@ -78,8 +103,25 @@
                 [votableId]="reply.id"
                 votableType="UserMessage"
               ></commudle-vote>
+              <div class="fm-actions" *ngIf="canModify(reply)">
+                <button comButton ghost size="tiny" shape="round" (click)="startEdit(reply)" nbTooltip="Edit Reply">
+                  <fa-icon [icon]="icons.faPen"></fa-icon>
+                </button>
+                <button
+                  comButton
+                  ghost
+                  size="tiny"
+                  shape="round"
+                  class="fm-delete-btn"
+                  (click)="deleteMessage(reply)"
+                  nbTooltip="Delete Reply"
+                >
+                  <fa-icon [icon]="icons.faTrash"></fa-icon>
+                </button>
+              </div>
             </div>
           </div>
+
           <div class="fm-reply-body">
             <commudle-editor [content]="reply.content" [editable]="false"></commudle-editor>
           </div>
@@ -101,7 +143,7 @@
         [validators]="editorValidators"
         [clearOnSubmit]="false"
         [showMenu]="true"
-        placeholder="Write your reply..."
+        placeholder="Write your reply"
         status="primary"
         (contentChange)="onReplySubmit($event)"
       ></commudle-editor>
