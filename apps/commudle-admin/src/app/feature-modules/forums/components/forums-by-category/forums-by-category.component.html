@@ -1,82 +1,152 @@
-<div class="forums-by-category">
-  <div class="back-new-topic">
-    <div class="back-button" (click)="backButton()"><fa-icon [icon]="icons.faArrowLeft"></fa-icon> &nbsp;Go Back</div>
-    <button nbButton status="primary" (click)="openDialogBox()" shape="semi-round">
-      <fa-icon [icon]="icons.faPlus"></fa-icon> &nbsp; New Topic
+<div class="fbcat-wrap">
+  <!-- ── Header ── -->
+  <div class="fbcat-header">
+    <div class="fbcat-header-left">
+      <button class="fbcat-back" comButton ghost size="tiny" (click)="backButton()">
+        <fa-icon [icon]="icons.faChevronLeft"></fa-icon>
+      </button>
+      <div class="fbcat-category-info" *ngIf="forumCategory">
+        <div class="fbcat-category-icon">
+          <fa-icon [icon]="icons.faComment"></fa-icon>
+        </div>
+        <div>
+          <h1 class="fbcat-title">{{ forumCategory.name | titlecase }}</h1>
+          <p class="fbcat-meta">{{ totalForums }} {{ totalForums === 1 ? 'forum' : 'forums' }}</p>
+        </div>
+      </div>
+    </div>
+    <button comButton status="primary" shape="semi-round" size="small" *ngIf="isAdmin" (click)="openCreateDialog()">
+      <fa-icon [icon]="icons.faPlus"></fa-icon>
+      New Forum
     </button>
   </div>
 
-  <div class="forums-by-category-header">
-    <span>{{ forumCategory?.name | titlecase }}</span>
+  <!-- ── Search ── -->
+  <div class="fbcat-search">
+    <fa-icon [icon]="icons.faMagnifyingGlass" class="fbcat-search-icon"></fa-icon>
+    <input
+      type="text"
+      class="fbcat-search-input"
+      placeholder="Search this category"
+      [ngModel]="searchQuery"
+      (ngModelChange)="onSearchChange($event)"
+    />
   </div>
 
-  <commudle-loading-spinner *ngIf="isLoading"></commudle-loading-spinner>
+  <!-- ── Body ── -->
+  <div class="fbcat-body">
+    <div class="fbcat-list-col">
+      <!-- Loading -->
+      <div class="fbcat-loading" *ngIf="isLoadingForums$ | async">
+        <commudle-loading-spinner></commudle-loading-spinner>
+      </div>
 
-  <div class="forums-by-category-list" *ngIf="!isLoading">
-    <div *ngIf="forums.length === 0" class="no-forums">
-      <p>No forums found in this category.</p>
-    </div>
+      <ng-container *ngIf="!(isLoadingForums$ | async)">
+        <ng-container *ngIf="forums$ | async as forums">
+          <!-- Empty -->
+          <div class="fbcat-empty" *ngIf="forums.length === 0">
+            <div class="fbcat-empty-art" aria-hidden="true">
+              <fa-icon
+                [icon]="searchQuery ? icons.faMagnifyingGlass : icons.faCommentDots"
+                class="fbcat-empty-icon"
+              ></fa-icon>
+            </div>
 
-    <ul>
-      <li *ngFor="let forum of forums; let i = index" class="forum">
-        <div class="forum-item">
-          <a [routerLink]="[forum.slug]" class="forum-content">
-            <div class="topic-name">
-              <span>{{ forum.name }}</span>
-            </div>
-            <div class="description-last-message">
-              <span class="description" *ngIf="!forum.last_message && forum.description" [title]="forum.description">{{
-                forum.description
-              }}</span>
-              <span class="last-message" *ngIf="forum.last_message" [title]="forum.last_message">
-                {{ forum.last_message }}
-              </span>
-            </div>
-            @if (forum.total_discussions || forum.total_replies ) {
-            <div class="stats">
-              @if (forum.total_discussions ) {
-              <span class="discussions">
-                {{ forum.total_discussions }} {{ forum.total_discussions === 1 ? 'Discussion' : 'Discussions' }}
-              </span>
-              } @if (forum.total_replies) {
-              <fa-icon [icon]="icons.faCircle"></fa-icon>
-              <span class="reply">
-                {{ forum.total_replies }} {{ forum.total_replies === 1 ? 'Reply' : 'Replies' }}
-              </span>
-              }
-            </div>
-            }
-          </a>
-          <div class="action-buttons">
-            <button class="edit-button" (click)="editForum(forum)" nbButton status="basic" size="small" shape="round">
-              <fa-icon [icon]="icons.faEdit"></fa-icon>&nbsp; Edit
-            </button>
+            <h2 class="fbcat-empty-title">
+              {{ searchQuery ? 'No forums match your search' : 'No forums in this category yet' }}
+            </h2>
+            <p class="fbcat-empty-sub">
+              {{
+                searchQuery
+                  ? 'Try a different keyword, or clear the search to see everything.'
+                  : 'Nothing has been added to this category so far. Create First Forum and start the discussion.'
+              }}
+            </p>
 
             <button
-              class="delete-button"
-              (click)="deleteForum(forum, i)"
-              nbButton
-              status="basic"
-              size="small"
-              shape="round"
-              [disabled]="isDeletingForum"
+              comButton
+              status="primary"
+              shape="semi-round"
+              size="large"
+              *ngIf="isAdmin && !searchQuery"
+              (click)="openCreateDialog()"
             >
-              <fa-icon [icon]="icons.faTrash"></fa-icon>&nbsp; Delete
+              <fa-icon [icon]="icons.faPlus"></fa-icon>
+              Create First Forum
             </button>
           </div>
-        </div>
-      </li>
-    </ul>
-  </div>
 
-  <app-pagination
-    *ngIf="totalItems > itemsPerPage"
-    [current]="currentPage"
-    [count]="itemsPerPage"
-    [total]="totalItems"
-    (goTo)="onPageChange($event)"
-    (next)="onPageChange($event)"
-    (previous)="onPageChange($event)"
-  >
-  </app-pagination>
+          <!-- List -->
+          <div class="fbcat-thread-list" *ngIf="forums.length > 0">
+            <div class="fbcat-list-head">
+              <span>Forum</span>
+              <span>Activity</span>
+            </div>
+
+            <div class="fbcat-thread-row" *ngFor="let forum of forums; trackBy: trackById">
+              <a [routerLink]="[forum.slug]" class="fbcat-thread-main">
+                <div class="fbcat-thread-icon">
+                  <fa-icon [icon]="icons.faComment"></fa-icon>
+                </div>
+                <div class="fbcat-thread-content">
+                  <p class="fbcat-thread-name">{{ forum.name }}</p>
+                  <p class="fbcat-thread-desc" *ngIf="forum.description">{{ forum.description }}</p>
+                </div>
+                <div class="fbcat-thread-stats">
+                  <span class="fbcat-thread-stat">
+                    <fa-icon [icon]="icons.faCommentDots"></fa-icon>
+                    {{ forum.total_discussions || 0 }}
+                  </span>
+                  <span class="fbcat-thread-stat">
+                    <fa-icon [icon]="icons.faReply"></fa-icon>
+                    {{ forum.total_replies || 0 }}
+                  </span>
+                </div>
+              </a>
+              <div class="fbcat-thread-actions" *ngIf="isAdmin">
+                <button comButton ghost size="tiny" shape="round" (click)="editForum(forum)" nbTooltip="Edit Forum">
+                  <fa-icon [icon]="icons.faPen"></fa-icon>
+                </button>
+                <button
+                  comButton
+                  ghost
+                  size="tiny"
+                  shape="round"
+                  (click)="confirmDeleteForum(forum)"
+                  [disabled]="isDeletingForum"
+                  nbTooltip="Delete Forum"
+                  class="fbcat-delete-btn"
+                >
+                  <fa-icon [icon]="icons.faTrash"></fa-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <app-pagination
+            *ngIf="totalForums > perPage"
+            [current]="currentPage"
+            [count]="perPage"
+            [total]="totalForums"
+            (goTo)="onPageChange($event)"
+            (next)="onPageChange($event)"
+            (previous)="onPageChange($event)"
+          ></app-pagination>
+        </ng-container>
+      </ng-container>
+    </div>
+
+    <!-- Right panel -->
+    <aside class="fbcat-right-panel">
+      <div class="fbcat-panel-card">
+        <p class="fbcat-panel-title">About this category</p>
+        <p class="fbcat-panel-text">
+          {{
+            forumCategory?.featured_channel?.description || 'Browse and participate in discussions in this category.'
+          }}
+        </p>
+      </div>
+    </aside>
+  </div>
 </div>

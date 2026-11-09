@@ -21,10 +21,10 @@ interface EGroupedCommunityChannels {
 }
 
 @Component({
-    selector: 'app-community-forum-list',
-    templateUrl: './community-forum-list.component.html',
-    styleUrls: ['./community-forum-list.component.scss'],
-    standalone: false
+  selector: 'app-community-forum-list',
+  templateUrl: './community-forum-list.component.html',
+  styleUrls: ['./community-forum-list.component.scss'],
+  standalone: false,
 })
 export class CommunityForumListComponent implements OnInit, OnDestroy {
   @Input() showCommunityBadge = false;
@@ -112,10 +112,10 @@ export class CommunityForumListComponent implements OnInit, OnDestroy {
     let urlSegments = [];
     switch (this.parentType) {
       case EDbModels.KOMMUNITY:
-        urlSegments = ['communities', this.parent.slug, 'forums'];
+        urlSegments = ['communities', this.parent.slug, 'discussions'];
         break;
       case EDbModels.COMMUNITY_GROUP:
-        urlSegments = ['orgs', this.parent.slug, 'forums'];
+        urlSegments = ['orgs', this.parent.slug, 'discussions'];
         break;
       default:
         console.error('Invalid Parent Type:', this.parentType);

@@ -33,3 +33,9 @@
 - [ ] Docs updated (if needed)
 
 ## Bundle Size
+
+## Checklist
+
+- [ ] No `console.log` left in
+- [ ] No inline styles
+- [ ] All Tailwind classes use `com-` prefix

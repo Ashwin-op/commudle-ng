@@ -1,3 +1,30 @@
 :host {
   display: block;
 }
+
+.editor-menu {
+  @apply com-flex com-flex-wrap com-items-center com-gap-0.5 com-w-fit;
+  @apply com-p-1 com-rounded-md com-bg-Anti-Flash-White;
+
+  .editor-menu-group {
+    @apply com-flex com-items-center com-gap-0.5;
+  }
+
+  .editor-menu-divider {
+    @apply com-w-px com-h-4 com-mx-1 com-bg-Bright-Gray;
+  }
+
+  .editor-menu-btn {
+    @apply com-flex com-items-center com-justify-center com-cursor-pointer;
+    @apply com-w-7 com-h-7 com-p-0 com-rounded com-border-0 com-bg-transparent;
+    @apply com-text-Caption com-text-Auro-Metal-Saurus com-leading-none;
+    @apply com-transition-colors com-duration-200;
+    @apply hover:com-bg-white hover:com-text-Yankees-Blue;
+    @apply focus-visible:com-outline-none focus-visible:com-ring-2 focus-visible:com-ring-primary-500;
+  }
+
+  .editor-menu-btn-active {
+    @apply com-bg-white com-text-primary-500 com-shadow-sm;
+    @apply hover:com-text-primary-600;
+  }
+}

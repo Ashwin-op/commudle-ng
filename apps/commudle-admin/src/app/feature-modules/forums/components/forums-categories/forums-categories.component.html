@@ -1,41 +1,172 @@
-<div class="categories-page">
-  <div class="categories-header">
-    <h1 class="categories-title">Categories</h1>
-    <button
-      class="new-topic-btn"
-      nbButton
-      status="primary"
-      (click)="openDialogBox()"
-      shape="semi-round"
-      [disabled]="isLoading"
-    >
-      <fa-icon [icon]="icons.faPlus"></fa-icon> &nbsp; New Topic
+<div class="fcat-wrap">
+  <!-- ── Toolbar ── -->
+  <div class="fcat-toolbar" *ngIf="categories.length">
+    <div class="fcat-search">
+      <fa-icon [icon]="icons.faMagnifyingGlass" class="fcat-search-icon"></fa-icon>
+      <input
+        type="text"
+        class="fcat-search-input"
+        placeholder="Search forums"
+        [ngModel]="searchQuery"
+        (ngModelChange)="onSearchChange($event)"
+      />
+    </div>
+    <button comButton status="primary" shape="semi-round" size="small" *ngIf="isAdmin" (click)="openCreateDialog()">
+      <fa-icon [icon]="icons.faPlus"></fa-icon>
+      New Forum
     </button>
   </div>
 
-  <commudle-loading-spinner *ngIf="isLoading"></commudle-loading-spinner>
-
-  <div class="forums-grid" *ngIf="!isLoading && categories.length > 0">
-    <a *ngFor="let category of categories" [routerLink]="[category.slug]">
-      <nb-card class="forum-card">
-        <nb-card-body>
-          <div class="forum-card-header">
-            <span class="forum-card-title">{{ category.name }}</span>
-            <fa-icon [icon]="icons.faArrowRight"></fa-icon>
-          </div>
-          <p class="forum-card-category">{{ category.featured_channel.name }}</p>
-          <p class="forum-card-description">
-            {{ category.featured_channel.description }}
-          </p>
-        </nb-card-body>
-      </nb-card>
-    </a>
+  <!-- ── Category pills ── -->
+  <div class="fcat-pills" *ngIf="categories.length">
+    <button class="fcat-pill" [class.fcat-pill-active]="!selectedCategory" (click)="onCategorySelect(null)">All</button>
+    <button
+      *ngFor="let cat of categories"
+      class="fcat-pill"
+      [class.fcat-pill-active]="selectedCategory === cat.slug"
+      (click)="onCategorySelect(cat.slug)"
+    >
+      {{ cat.name }}
+    </button>
   </div>
 
-  <div *ngIf="!isLoading && categories.length === 0" class="empty-state">
-    <img [src]="staticAssets.folder_empty" alt="No categories" class="empty-image" />
-    <h3>No Categories Available</h3>
-    <p>You can create one by clicking the "New Topic" button</p>
-    <button nbButton status="primary" (click)="openDialogBox()">+ New Topic</button>
+  <!-- ── Body ── -->
+  <div class="fcat-body">
+    <div class="fcat-list-col">
+      <!-- Loading -->
+      <div class="fcat-loading" *ngIf="isLoadingForums$ | async">
+        <commudle-loading-spinner></commudle-loading-spinner>
+      </div>
+
+      <ng-container *ngIf="!(isLoadingForums$ | async)">
+        <ng-container *ngIf="forums$ | async as forums">
+          <!-- Empty -->
+          <div class="fcat-empty" *ngIf="forums.length === 0">
+            <div class="fcat-empty-art" aria-hidden="true">
+              <fa-icon
+                [icon]="searchQuery ? icons.faMagnifyingGlass : icons.faCommentDots"
+                class="fcat-empty-icon"
+              ></fa-icon>
+            </div>
+
+            <h2 class="fcat-empty-title">
+              {{ searchQuery ? 'No forums match your search' : 'No forums yet' }}
+            </h2>
+            <p class="fcat-empty-sub">
+              {{
+                searchQuery
+                  ? 'Try a different keyword, or clear the search to see everything.'
+                  : 'Forums are where your community asks questions and talks things through. Create the first one to get started.'
+              }}
+            </p>
+
+            <button
+              comButton
+              status="primary"
+              shape="semi-round"
+              size="large"
+              *ngIf="isAdmin && !searchQuery"
+              (click)="openCreateDialog()"
+            >
+              <fa-icon [icon]="icons.faPlus"></fa-icon>
+              Create First Forum
+            </button>
+          </div>
+
+          <!-- Sort -->
+          <div class="fcat-sort-row" *ngIf="forums.length > 0">
+            <span class="fcat-sort-label" id="fcat-sort-label">Sort by</span>
+            <div class="fcat-sort-group" role="group" aria-labelledby="fcat-sort-label">
+              <button
+                type="button"
+                class="fcat-sort-btn"
+                [class.fcat-sort-active]="sortBy === forumSort.LATEST"
+                [attr.aria-pressed]="sortBy === forumSort.LATEST"
+                (click)="onSortChange(forumSort.LATEST)"
+              >
+                <fa-icon [icon]="icons.faClock" aria-hidden="true"></fa-icon>
+                Newest
+              </button>
+              <button
+                type="button"
+                class="fcat-sort-btn"
+                [class.fcat-sort-active]="sortBy === forumSort.ACTIVITY"
+                [attr.aria-pressed]="sortBy === forumSort.ACTIVITY"
+                (click)="onSortChange(forumSort.ACTIVITY)"
+              >
+                <fa-icon [icon]="icons.faComment" aria-hidden="true"></fa-icon>Latest Reply
+              </button>
+            </div>
+          </div>
+
+          <!-- List -->
+          <div class="fcat-forum-list" *ngIf="forums.length > 0">
+            <div class="fcat-list-head">
+              <span>Forum</span>
+              <span>Activity</span>
+            </div>
+            <a
+              *ngFor="let forum of forums; trackBy: trackById"
+              [routerLink]="[forum.channel_category?.slug, forum.slug]"
+              [state]="{ fromAllForums: true }"
+              class="fcat-forum-row"
+            >
+              <div class="fcat-forum-icon">
+                <fa-icon [icon]="icons.faComment"></fa-icon>
+              </div>
+              <div class="fcat-forum-info">
+                <p class="fcat-forum-name">{{ forum.name }}</p>
+                <p class="fcat-forum-meta">
+                  <span class="fcat-forum-category">{{ forum.channel_category?.name }}</span>
+                  <span class="fcat-dot">·</span>
+                  <span *ngIf="forum.last_activity_at">
+                    Last reply {{ forum.last_activity_at | date : 'd MMM y' }}
+                  </span>
+                  <span *ngIf="!forum.last_activity_at"> Created {{ forum.created_at | date : 'd MMM y' }} </span>
+                </p>
+                <p class="fcat-forum-desc" *ngIf="forum.description">{{ forum.description }}</p>
+              </div>
+              <div class="fcat-forum-stats">
+                <span class="fcat-stat-item">
+                  <span class="fcat-stat-num">{{ forum.total_discussions || 0 }}</span>
+                  <span class="fcat-stat-lbl">Threads</span>
+                </span>
+                <span class="fcat-stat-item">
+                  <span class="fcat-stat-num">{{ forum.total_replies || 0 }}</span>
+                  <span class="fcat-stat-lbl">Replies</span>
+                </span>
+              </div>
+            </a>
+          </div>
+
+          <!-- Pagination -->
+          <app-pagination
+            *ngIf="totalForums > perPage"
+            [current]="currentPage"
+            [count]="perPage"
+            [total]="totalForums"
+            (goTo)="onPageChange($event)"
+            (next)="onPageChange($event)"
+            (previous)="onPageChange($event)"
+          ></app-pagination>
+        </ng-container>
+      </ng-container>
+    </div>
+
+    <!-- Right panel -->
+    <aside class="fcat-right-panel">
+      <div class="fcat-panel-card">
+        <p class="fcat-panel-title">Categories</p>
+        <commudle-loading-spinner *ngIf="isLoadingCategories$ | async"></commudle-loading-spinner>
+        <div class="fcat-cat-list" *ngIf="!(isLoadingCategories$ | async)">
+          <a *ngFor="let cat of categories" [routerLink]="[cat.slug]" class="fcat-cat-item">
+            <fa-icon [icon]="icons.faComment"></fa-icon>
+            <span class="fcat-cat-name">{{ cat.name }}</span>
+            <span class="fcat-cat-count">{{ cat.channels_count }}</span>
+          </a>
+          <p class="fcat-panel-empty" *ngIf="!categories.length">No categories yet</p>
+        </div>
+      </div>
+    </aside>
   </div>
 </div>

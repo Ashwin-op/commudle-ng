@@ -1,41 +1,68 @@
-nb-card {
-  @apply com-w-auto md:com-w-[40dvw] com-max-h-90dvh;
-}
-nb-card-header {
-  @apply com-flex com-justify-between com-items-center;
-  span {
-    @apply com-text-base com-font-semibold com-text-Yankees-Blue;
-  }
-}
+.ndf-dialog {
+  @apply com-w-[95vw] md:com-w-[520px] com-m-0;
 
-.form-group {
-  @apply com-mb-6;
+  .ndf-header {
+    @apply com-flex com-items-start com-justify-between com-gap-3;
 
-  label {
-    @apply com-block com-text-sm com-font-medium com-text-gray-700 com-mb-2;
+    .ndf-header-content {
+      @apply com-flex com-items-center com-gap-3;
 
-    .required {
-      @apply com-text-red-500;
+      .ndf-header-icon {
+        @apply com-w-9 com-h-9 com-rounded-lg com-flex-shrink-0 com-flex com-items-center com-justify-center com-bg-primary-100 com-text-primary-500 com-text-base;
+      }
+
+      .ndf-title {
+        @apply com-text-base com-font-bold com-text-Yankees-Blue com-m-0 com-leading-tight;
+      }
+
+      .ndf-subtitle {
+        @apply com-text-xs com-text-gray-400 com-m-0 com-mt-0.5;
+      }
     }
   }
 
-  input,
-  textarea {
-    @apply com-w-full com-px-3 com-py-2 com-border com-border-gray-300 com-rounded;
-    @apply focus:com-outline-none focus:com-ring-2 focus:com-ring-blue-500 focus:com-border-transparent;
+  .ndf-body {
+    .ndf-form {
+      @apply com-flex com-flex-col com-gap-5;
 
-    &::placeholder {
-      @apply com-text-gray-400;
+      .ndf-field {
+        @apply com-flex com-flex-col com-gap-1;
+
+        .ndf-label {
+          @apply com-text-sm com-font-medium com-text-Yankees-Blue;
+
+          .ndf-required {
+            @apply com-text-red-500 com-ml-0.5;
+          }
+        }
+
+        .ndf-hint {
+          @apply com-text-xs com-text-gray-400 com-text-right;
+
+          .ndf-hint-min {
+            @apply com-ml-1;
+          }
+        }
+
+        // The editor ships without a field border, so frame it to match the nbInput
+        // subject field above it. Bright-Gray and primary-500 are theme-swapped, so
+        // this follows dark mode.
+        .ndf-editor {
+          @apply com-block com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-px-3 com-py-2;
+          @apply focus-within:com-border-primary-500;
+
+          // A discussion body runs to several paragraphs, so give it room instead of
+          // the chat-style single row. Capped with its own scroll so a long draft can't
+          // push the dialog past the viewport.
+          ::ng-deep tiptap {
+            @apply com-min-h-[9rem] com-max-h-[18rem] com-overflow-y-auto;
+          }
+        }
+      }
     }
   }
 
-  textarea {
-    @apply com-resize-none;
-  }
-}
-
-.form-actions {
-  button {
-    @apply com-text-base com-font-medium;
+  .ndf-footer {
+    @apply com-flex com-justify-end com-gap-2;
   }
 }

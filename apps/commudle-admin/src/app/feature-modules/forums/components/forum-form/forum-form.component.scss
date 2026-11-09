@@ -1,17 +1,105 @@
-nb-card {
-  @apply com-w-auto md:com-w-[40dvw] com-h-full md:com-max-h-90dvh;
-  nb-card-header {
-    @apply com-flex com-justify-between com-items-center;
-  }
-  .form-field-container {
-    .form-field {
-      @apply com-mb-2;
+.ff-dialog {
+  @apply com-w-[95vw] md:com-w-[480px] com-m-0;
+
+  .ff-header {
+    @apply com-flex com-items-start com-justify-between com-gap-3;
+
+    .ff-header-content {
+      @apply com-flex com-items-center com-gap-3;
+
+      .ff-header-icon {
+        @apply com-w-9 com-h-9 com-rounded-lg com-flex-shrink-0 com-flex com-items-center com-justify-center com-bg-primary-100 com-text-primary-500 com-text-base;
+      }
+
+      .ff-title {
+        @apply com-text-sm com-font-bold com-text-Yankees-Blue com-m-0 com-leading-tight;
+      }
+
+      .ff-subtitle {
+        @apply com-text-xs com-text-Cadet-Grey com-m-0 com-mt-0.5;
+      }
     }
-    .required {
-      @apply com-text-red-500;
+  }
+
+  .ff-body {
+    @apply com-overflow-y-auto;
+
+    .ff-form {
+      @apply com-flex com-flex-col com-gap-4;
+
+      .ff-field {
+        @apply com-flex com-flex-col com-gap-1;
+
+        .ff-label {
+          @apply com-text-sm com-font-medium com-text-Yankees-Blue com-flex com-items-center com-gap-2;
+
+          .ff-required {
+            @apply com-text-Infra-Red com-ml-0.5;
+          }
+
+          .ff-admin-hint {
+            @apply com-text-xs com-font-normal com-text-primary-500 com-ml-auto;
+          }
+        }
+
+        .ff-hint {
+          @apply com-text-xs com-text-Cadet-Grey com-text-right;
+        }
+
+        // ── Dropdown (non-admin) ──────────────────────
+        .ff-select {
+          @apply com-w-full com-h-10 com-px-3 com-rounded-md com-border com-border-solid com-border-Bright-Gray com-text-sm com-text-Yankees-Blue com-bg-white com-cursor-pointer;
+
+          &:focus {
+            @apply com-outline-none com-border-primary-500;
+          }
+        }
+
+        // ── Autocomplete (admin) ──────────────────────
+        &.ff-autocomplete-field {
+          @apply com-relative;
+
+          .ff-autocomplete-wrap {
+            @apply com-relative;
+
+            .ff-new-badge {
+              @apply com-absolute com-right-3 com-top-1/2 -com-translate-y-1/2 com-flex com-items-center com-gap-1 com-pointer-events-none com-text-xs com-font-semibold com-text-primary-600 com-bg-primary-100 com-rounded-full com-px-2 com-py-0.5;
+            }
+          }
+
+          .ff-suggestions {
+            @apply com-absolute com-top-full com-left-0 com-right-0 com-z-50 com-bg-white com-border com-border-solid com-border-Bright-Gray com-rounded-lg com-shadow-md com-mt-1 com-overflow-hidden com-max-h-48 com-overflow-y-auto;
+
+            .ff-suggestion-item {
+              @apply com-w-full com-flex com-items-center com-gap-2 com-px-3 com-py-2.5 com-text-sm com-text-Yankees-Blue com-bg-transparent com-border-0 com-text-left com-cursor-pointer com-transition-colors com-duration-100;
+
+              &:hover {
+                @apply com-bg-primary-100 com-text-primary-600;
+              }
+
+              .ff-suggestion-icon {
+                @apply com-text-Cadet-Grey com-flex-shrink-0;
+              }
+
+              span:nth-child(2) {
+                @apply com-flex-1;
+              }
+
+              .ff-suggestion-count {
+                @apply com-text-xs com-text-Cadet-Grey com-ml-auto;
+              }
+            }
+          }
+        }
+      }
     }
   }
-  .form-field-container:not(:last-child) {
-    @apply com-mb-6;
+
+  .ff-footer {
+    @apply com-flex com-justify-end com-gap-2;
+
+    .ff-spin {
+      @apply com-animate-spin;
+    }
   }
 }

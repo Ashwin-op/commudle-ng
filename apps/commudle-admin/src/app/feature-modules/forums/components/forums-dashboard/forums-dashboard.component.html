@@ -1,35 +1,46 @@
-<nb-card class="forums-dashboard-container">
-  <nb-card-header>
-    <div class="header-content">
-      <fa-icon (click)="toggleSidebar()" [icon]="faIcons.faBars"></fa-icon>
-      <span>Forums</span>
+<div class="fd-shell">
+  <!-- ── Left sidebar ── -->
+  <aside class="fd-sidebar">
+    <div class="fd-sidebar-head">
+      <h2 class="fd-sidebar-title">Forums</h2>
     </div>
-  </nb-card-header>
-  <nb-card-body>
-    <div class="sidebar">
-      <commudle-sidebar
-        [eventName]="sidebarEventName"
-        [forWindow]="false"
-        [showExpandedButton]="false"
-        [textSize]="ESidebarHeading.MEDIUM"
+
+    <nav class="fd-sidebar-nav">
+      <a
+        class="fd-nav-link"
+        [routerLink]="['.']"
+        [routerLinkActiveOptions]="{ exact: true }"
+        routerLinkActive="fd-nav-active"
       >
-        <div class="categories-content">
-          <p class="heading">Categories</p>
-          <commudle-loading-spinner *ngIf="isLoadingCategories"></commudle-loading-spinner>
-          <div *ngIf="!isLoadingCategories">
-            @for (category of categories$ | async; track category.slug) {
-            <a [routerLink]="[category.slug]" routerLinkActive="active">
-              <div class="category-item">
-                {{ category.name }}
-              </div>
-            </a>
-            }
-          </div>
-        </div>
-      </commudle-sidebar>
-    </div>
-    <div class="router">
-      <router-outlet></router-outlet>
-    </div>
-  </nb-card-body>
-</nb-card>
+        <fa-icon [icon]="icons.faTableCells"></fa-icon>
+        <span>All</span>
+      </a>
+
+      <ng-container *ngIf="isLoadingCategories$ | async">
+        <div class="fd-nav-skeleton" *ngFor="let i of [1, 2, 3, 4, 5]"></div>
+      </ng-container>
+
+      <ng-container *ngIf="!(isLoadingCategories$ | async)">
+        <ng-container *ngIf="categories$ | async as categories">
+          <a
+            *ngFor="let cat of categories.slice(0, sidebarLimit)"
+            class="fd-nav-link"
+            [routerLink]="[cat.slug]"
+            routerLinkActive="fd-nav-active"
+          >
+            <span>{{ cat.name }}</span>
+          </a>
+
+          <a *ngIf="categories.length > sidebarLimit" class="fd-nav-link fd-nav-more" [routerLink]="['.']">
+            View all
+          </a>
+        </ng-container>
+      </ng-container>
+    </nav>
+  </aside>
+
+  <!-- ── Main ── -->
+  <main class="fd-main">
+    <router-outlet></router-outlet>
+  </main>
+</div>

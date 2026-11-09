@@ -2,11 +2,14 @@
   display: block;
 }
 
+// Stacks the optional toolbar above the input row. Collapses to just the row when
+// no toolbar is rendered, so existing usages are unaffected.
+.commudle-editor-wrapper {
+  @apply com-flex com-flex-col com-gap-2;
+}
+
 .commudle-editor {
   @apply com-flex com-relative com-items-end;
-
-  commudle-editor-menu {
-  }
 
   tiptap {
     @apply com-block com-bg-transparent com-w-full com-outline-none com-pt-1.5 com-min-h-max;
@@ -21,6 +24,29 @@
 
         a {
           @apply com-text-primary-500 com-break-all;
+        }
+
+        // Set explicitly rather than relying on prose defaults, so a global
+        // list reset cannot leave bullets and numbers invisible
+        ul,
+        ol {
+          @apply com-my-1 com-pl-5;
+        }
+
+        ul {
+          @apply com-list-disc;
+        }
+
+        ol {
+          @apply com-list-decimal;
+        }
+
+        li {
+          @apply com-my-0;
+
+          p {
+            @apply com-mb-0;
+          }
         }
 
         & p.is-editor-empty:first-child::before {

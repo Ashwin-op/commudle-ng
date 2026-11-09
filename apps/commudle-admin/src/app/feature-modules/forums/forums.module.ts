@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ForumsRoutes } from './forums.routing';
 import { ForumsDashboardComponent } from './components/forums-dashboard/forums-dashboard.component';
-import { NbButtonModule, NbCardModule, NbIconModule, NbInputModule } from '@commudle/theme';
+import { NbInputModule, NbTooltipModule } from '@commudle/theme';
+import { CommudleButtonModule, CommudleCardModule } from '@commudle/commudle-theme';
 import { ForumsCategoriesComponent } from './components/forums-categories/forums-categories.component';
 import { ForumFormComponent } from './components/forum-form/forum-form.component';
 import { ForumsByCategoryComponent } from './components/forums-by-category/forums-by-category.component';
@@ -12,10 +13,13 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SidebarComponent } from 'apps/shared-components/sidebar/sidebar.component';
 import { NewDiscussionFormComponent } from './components/new-discussion-form/new-discussion-form.component';
+import { ForumDeleteDialogComponent } from './components/forum-delete-dialog/forum-delete-dialog.component';
+import { ForumMessageDeleteDialogComponent } from './components/forum-message-delete-dialog/forum-message-delete-dialog.component';
 import { MiniUserProfileModule } from 'apps/shared-modules/mini-user-profile/mini-user-profile.module';
 import { EditorModule } from '@commudle/editor';
 import { SharedComponentsModule as NewSharedComponentsModule } from '@commudle/shared-components';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -26,6 +30,8 @@ import { SharedComponentsModule } from 'apps/shared-components/shared-components
     ForumDiscussionComponent,
     ForumMessagesComponent,
     NewDiscussionFormComponent,
+    ForumDeleteDialogComponent,
+    ForumMessageDeleteDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -33,17 +39,17 @@ import { SharedComponentsModule } from 'apps/shared-components/shared-components
     ReactiveFormsModule,
     FormsModule,
     FontAwesomeModule,
+    RouterModule,
     MiniUserProfileModule,
-    // Standalone Components
     SidebarComponent,
-    // Nebular
-    NbCardModule,
-    NbIconModule,
-    NbButtonModule,
     NbInputModule,
+    NbTooltipModule,
+    CommudleButtonModule,
+    CommudleCardModule,
     EditorModule,
     SharedComponentsModule,
     NewSharedComponentsModule,
   ],
+  providers: [],
 })
 export class ForumsModule {}

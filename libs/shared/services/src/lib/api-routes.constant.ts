@@ -120,6 +120,15 @@ export const API_ROUTES = {
     SHOW_BY_TOKEN: 'api/v2/community_channels/show_by_token',
   },
 
+  FORUMS: {
+    INDEX: 'api/v2/forums', // GET
+    SHOW: 'api/v2/forums/show', // GET
+    CREATE: 'api/v2/forums', // POST
+    UPDATE: 'api/v2/forums', // PUT
+    DELETE: 'api/v2/forums', // DELETE
+    CATEGORIES: 'api/v2/forums/categories', // GET
+  },
+
   COMMUNITY_GROUPS: {
     CREATE: 'api/v2/community_groups',
     UPDATE: 'api/v2/community_groups',

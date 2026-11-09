@@ -82,12 +82,16 @@ export class CommunityChannelChatChannel extends Channel<Params, Message> {
     });
   }
 
-  async update(messageId: number, content: string) {
+  /**
+   * `subject` only applies to top-level forum threads; the server ignores it for
+   * replies, so it is omitted rather than sent as an empty string.
+   */
+  async update(messageId: number, content: string, subject?: string) {
     return this.perform('receive', {
       perform: ACTIONS.UPDATE,
       data: {
         user_message_id: messageId,
-        user_message: { content },
+        user_message: subject ? { content, subject } : { content },
       },
     });
   }

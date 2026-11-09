@@ -1,118 +1,199 @@
-.forum-discussion {
-  @apply com-p-6;
+.fdis-wrap {
+  @apply com-p-4 com-flex com-flex-col com-gap-3 com-h-full;
 
-  .header-section {
-    @apply com-mb-8;
+  // ── Header ────────────────────────────────────────────
+  .fdis-header {
+    @apply com-flex com-items-center com-justify-between com-gap-3;
 
-    .back-new-discussion {
-      @apply com-flex com-justify-between com-items-center com-mb-6;
+    .fdis-header-left {
+      @apply com-flex com-items-center com-gap-2;
 
-      .back-button {
-        @apply com-cursor-pointer com-text-black;
-      }
-    }
-
-    .forum-header {
-      @apply com-mb-6;
-
-      h2 {
-        @apply com-text-Yankees-Blue com-text-2xl com-font-semibold com-mb-2;
+      .fdis-forum-icon {
+        @apply com-w-8 com-h-8 com-rounded-lg com-flex-shrink-0 com-flex com-items-center com-justify-center com-bg-primary-100 com-text-primary-500 com-text-base;
       }
 
-      p {
-        @apply com-text-gray-500 com-text-sm com-m-0;
+      .fdis-forum-title {
+        @apply com-text-sm com-font-bold com-text-Yankees-Blue com-m-0;
+      }
+
+      .fdis-forum-desc {
+        @apply com-text-xs com-text-Cadet-Grey com-m-0 com-mt-0.5;
       }
     }
   }
 
-  .discussions-list {
-    .discussion-item {
-      @apply com-flex com-gap-4 com-p-4 com-border-b com-border-gray-200 com-cursor-pointer;
-      @apply hover:com-bg-gray-50 com-transition-colors com-duration-200 com-no-underline com-text-inherit;
+  // ── Stats bar ─────────────────────────────────────────
+  .fdis-stats {
+    @apply com-flex com-gap-5 com-px-4 com-py-2.5 com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-white;
 
-      &:hover {
-        @apply com-no-underline com-text-inherit;
+    .fdis-stat {
+      @apply com-flex com-flex-col;
+
+      .fdis-stat-num {
+        @apply com-text-base com-font-bold com-text-Yankees-Blue com-leading-tight;
       }
 
-      .discussion-avatar {
-        img {
-          @apply com-w-10 com-h-10 com-rounded-full;
+      .fdis-stat-lbl {
+        @apply com-text-Cadet-Grey com-text-10px com-uppercase;
+      }
+    }
+  }
+
+  // ── Body ──────────────────────────────────────────────
+  .fdis-body {
+    @apply com-flex com-gap-4 com-flex-1 com-min-h-0;
+
+    .fdis-list-col {
+      @apply com-flex-1 com-min-w-0;
+
+      .fdis-thread-list {
+        @apply com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-white com-overflow-hidden;
+
+        .fdis-filter-row {
+          @apply com-flex com-items-center com-gap-3 com-px-4 com-py-2 com-bg-Anti-Flash-White com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+
+          .fdis-filter-tab {
+            @apply com-text-xs com-text-Cadet-Grey com-cursor-pointer;
+
+            &:hover,
+            &.fdis-filter-active {
+              @apply com-text-primary-500 com-font-semibold;
+            }
+          }
+        }
+
+        .fdis-thread-row {
+          @apply com-flex com-items-center com-gap-3 com-no-underline com-px-4 com-py-3 com-border-0 com-border-b com-border-solid com-border-Bright-Gray last:com-border-b-0 com-transition-colors com-duration-100;
+
+          &:hover {
+            @apply com-bg-gray-100;
+          }
+
+          .fdis-thread-avatar {
+            @apply com-flex-shrink-0;
+
+            .fdis-avatar-img {
+              @apply com-w-8 com-h-8 com-rounded-full com-object-cover;
+            }
+
+            .fdis-avatar-fallback {
+              @apply com-w-8 com-h-8 com-rounded-full com-bg-Bright-Gray com-flex com-items-center com-justify-center com-text-Cadet-Grey com-text-sm;
+            }
+          }
+
+          .fdis-thread-info {
+            @apply com-flex-1 com-min-w-0;
+
+            .fdis-thread-subject {
+              @apply com-text-sm com-font-semibold com-text-Yankees-Blue com-m-0 com-overflow-hidden com-whitespace-nowrap com-text-ellipsis;
+            }
+
+            .fdis-thread-meta {
+              @apply com-flex com-items-center com-gap-1 com-mt-0.5;
+
+              .fdis-thread-author,
+              .fdis-thread-date {
+                @apply com-text-xs com-text-Cadet-Grey;
+              }
+
+              .fdis-dot {
+                @apply com-text-xs com-text-Bright-Gray;
+              }
+            }
+          }
+
+          .fdis-thread-counts {
+            @apply com-flex com-items-center com-gap-2 com-flex-shrink-0;
+
+            .fdis-count-item {
+              @apply com-flex com-items-center com-gap-1 com-text-xs com-text-Cadet-Grey;
+
+              fa-icon {
+                @apply com-text-sm;
+              }
+            }
+          }
+        }
+
+        .fdis-load-more {
+          @apply com-flex com-justify-center com-p-3 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
         }
       }
+    }
 
-      .discussion-content {
-        @apply com-flex-1;
+    // ── Right panel ──────────────────────────────────────
+    .fdis-right-panel {
+      @apply com-flex-shrink-0;
+      width: 200px;
 
-        .discussion-title {
-          @apply com-text-base com-font-semibold com-text-Yankees-Blue com-m-0;
+      .fdis-panel-card {
+        @apply com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-white com-p-3;
+
+        .fdis-panel-title {
+          @apply com-text-xs com-font-bold com-text-Yankees-Blue com-uppercase com-tracking-wide com-m-0 com-mb-2;
         }
 
-        .discussion-description {
-          @apply com-text-gray-500 com-text-sm com-font-normal com-my-2 com-line-clamp-2;
+        .fdis-panel-text {
+          @apply com-text-xs com-text-Cadet-Grey com-m-0 com-leading-relaxed com-mb-3;
         }
 
-        .discussion-meta {
-          .posted-date {
-            @apply com-text-gray-600 com-text-sm com-font-medium;
+        .fdis-panel-stats {
+          @apply com-flex com-gap-4 com-pt-2 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+
+          .fdis-panel-stat {
+            @apply com-flex com-flex-col;
+
+            .fdis-panel-num {
+              @apply com-text-sm com-font-bold com-text-Yankees-Blue;
+            }
+
+            .fdis-panel-lbl {
+              @apply com-text-Cadet-Grey com-text-10px com-uppercase;
+            }
           }
         }
       }
+    }
+  }
 
-      .discussion-stats {
-        @apply com-flex com-gap-2 com-items-center com-ml-4;
+  // ── Empty / Loading ───────────────────────────────────
+  .fdis-empty {
+    @apply com-flex com-flex-col com-items-center com-justify-center com-text-center com-rounded-lg com-bg-white com-px-6 com-py-12 sm:com-px-10 sm:com-py-16;
 
-        .stat-item {
-          @apply com-flex com-items-center com-gap-1 com-text-gray-500 com-text-sm;
+    .fdis-empty-art {
+      @apply com-flex com-items-center com-justify-center com-flex-shrink-0 com-w-16 com-h-16 com-mb-5 com-rounded-full com-bg-Alice-Blue;
+    }
 
-          fa-icon {
-            @apply com-text-xs;
-          }
-        }
+    .fdis-empty-icon {
+      @apply com-text-3xl com-text-primary-500;
+    }
+
+    .fdis-empty-title {
+      @apply com-m-0 com-mb-2 com-text-Page-Subheading com-font-semibold com-text-Yankees-Blue;
+    }
+
+    .fdis-empty-sub {
+      @apply com-m-0 com-mb-6 com-max-w-sm com-text-Paragraph-2 com-leading-relaxed com-text-Auro-Metal-Saurus;
+
+      strong {
+        @apply com-font-semibold com-text-Yankees-Blue;
       }
     }
 
-    .discussion-item:not(:last-child) {
-      @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+    .fdis-empty-hints {
+      @apply com-flex com-flex-col com-items-start com-gap-2 com-w-full com-max-w-sm com-list-none com-m-0 com-mt-8 com-pl-0 com-pt-6 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+    }
+
+    .fdis-empty-hint {
+      @apply com-flex com-items-center com-gap-2 com-text-left com-text-Caption com-text-Cadet-Grey;
+    }
+
+    .fdis-empty-hint-icon {
+      @apply com-text-sm com-text-Caribbean-Green com-flex-shrink-0;
     }
   }
 
-  .loading-state {
-    @apply com-text-center com-py-16;
-
-    nb-spinner {
-      @apply com-mb-4;
-    }
-
-    p {
-      @apply com-text-gray-600 com-text-lg;
-    }
-  }
-
-  .empty-state {
-    @apply com-text-center com-py-16;
-
-    .empty-image {
-      @apply com-w-64 com-h-64 com-mx-auto com-mb-6;
-    }
-
-    h3 {
-      @apply com-text-xl com-font-semibold com-text-Yankees-Blue com-mb-2;
-    }
-
-    p {
-      @apply com-text-gray-600 com-mb-6;
-    }
-
-    button {
-      @apply com-px-6 com-py-3;
-    }
-  }
-
-  .load-more-section {
-    @apply com-mt-6 com-p-4;
-
-    button {
-      @apply com-py-3;
-    }
+  .fdis-loading {
+    @apply com-flex com-justify-center com-py-10;
   }
 }

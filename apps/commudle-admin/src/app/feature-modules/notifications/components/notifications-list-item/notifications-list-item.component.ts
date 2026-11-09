@@ -6,7 +6,6 @@ import {
   Input,
   OnChanges,
   OnDestroy,
-  OnInit,
   Output,
   SimpleChanges,
   ViewChild,
@@ -18,12 +17,12 @@ import { ENotificationSenderTypes } from 'apps/shared-models/enums/notification_
 import { INotification, INotificationMessage } from 'apps/shared-models/notification.model';
 
 @Component({
-    selector: 'app-notifications-list-item',
-    templateUrl: './notifications-list-item.component.html',
-    styleUrls: ['./notifications-list-item.component.scss'],
-    standalone: false
+  selector: 'app-notifications-list-item',
+  templateUrl: './notifications-list-item.component.html',
+  styleUrls: ['./notifications-list-item.component.scss'],
+  standalone: false,
 })
-export class NotificationsListItemComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+export class NotificationsListItemComponent implements OnChanges, AfterViewInit, OnDestroy {
   timeout: any;
   observer: any;
   @Input() notificationMessage: INotificationMessage[] = [];
@@ -38,8 +37,6 @@ export class NotificationsListItemComponent implements OnInit, OnChanges, AfterV
   @Output() markRead: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private router: Router, private gtm: GoogleTagManagerService) {}
-
-  ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.notificationMessage) {
@@ -102,8 +99,12 @@ export class NotificationsListItemComponent implements OnInit, OnChanges, AfterV
       notificationMessage.parent_type ||
       notificationMessage.owner_type;
     const slug = value['username'] || value['slug'] || value['id'];
+
     let addQueryParams = true;
     let url: any[] = [];
+    // Set instead of `url` when the backend hands us a ready-made path rather than
+    // segments to assemble; navigated with navigateByUrl below.
+    let fullPath: string | null = null;
     switch (type) {
       case ENotificationSenderTypes.USER:
         url = ['/users', slug];
@@ -127,8 +128,16 @@ export class NotificationsListItemComponent implements OnInit, OnChanges, AfterV
         url = ['/jobs', slug];
         break;
       case ENotificationParentTypes.COMMUNITY_CHANNEL:
-        addQueryParams = true;
-        url = ['/communities', value['kommunity_slug'], value['display_type'] + 's', slug];
+        if (value['forum_path']) {
+          // Forums sit on a nested route
+          // (/communities/:slug/discussions/:category_slug/:forum_slug/:thread_slug)
+          // that can't be derived from a single slug, so the backend supplies the
+          // whole path. Plain channels keep the slug-based URL below.
+          fullPath = value['forum_path'];
+        } else {
+          addQueryParams = true;
+          url = ['/communities', value['kommunity_slug'], value['display_type'] + 's', slug];
+        }
         break;
       case ENotificationParentTypes.HACKATHON:
         url = ['/communities', value['kommunity_slug'], 'hackathons', slug];
@@ -136,7 +145,9 @@ export class NotificationsListItemComponent implements OnInit, OnChanges, AfterV
     }
 
     this.gtmService();
-    if (addQueryParams && value['user_message_cursor']) {
+    if (fullPath) {
+      this.router.navigateByUrl(fullPath);
+    } else if (addQueryParams && value['user_message_cursor']) {
       this.router.navigate(url, {
         queryParams: { after: value['user_message_cursor'] },
       });

@@ -45,7 +45,20 @@ export class CommunityChannelHandlerService {
     private forumsStore: ForumsStore,
   ) {}
 
+  /** Discussion this service is currently subscribed to, if any */
+  get discussionId(): number | undefined {
+    return this.CommunityChannelChatChannel ? this._discussionId : undefined;
+  }
+
   init(discussionId: number, discussionParent: string, fromLastRead?: boolean, after?: string) {
+    // Always drop an existing subscription first. Overwriting it without
+    // disconnecting leaks the old socket and leaves its handlers firing, and any
+    // command sent afterwards would still be routed to the previous room.
+    if (this.CommunityChannelChatChannel) {
+      this.CommunityChannelChatChannel.disconnect();
+      this.CommunityChannelChatChannel = undefined;
+    }
+
     this._discussionId = discussionId;
     this._discussionParent = discussionParent;
 
@@ -69,6 +82,8 @@ export class CommunityChannelHandlerService {
 
   destroy() {
     this.CommunityChannelChatChannel?.disconnect();
+    // Cleared so "is the channel connected?" checks report the truth after teardown
+    this.CommunityChannelChatChannel = undefined;
     this.messages.next([]);
     this.permittedActions.next([]);
     this.pageInfo.next({
@@ -114,6 +129,15 @@ export class CommunityChannelHandlerService {
     }
     this.removePinnedMessage(message);
     this.CommunityChannelChatChannel.delete(message.id);
+  }
+
+  /** `subject` is only honoured for top-level forum threads; replies ignore it. */
+  sendUpdate(messageId: number, content: string, subject?: string) {
+    if (!this.CommunityChannelChatChannel || this.permittedActions.value.includes('blocked')) {
+      return false;
+    }
+    this.CommunityChannelChatChannel.update(messageId, content, subject);
+    return true;
   }
 
   pin(messageId: number) {
@@ -220,6 +244,10 @@ export class CommunityChannelHandlerService {
             this.messages.next(messages);
           }
 
+          // The forums views keep their own copies, which previously kept showing
+          // threads and replies that had already been deleted.
+          this.forumsStore.removeMessage(data.user_message_id);
+
           break;
 
         case 'update':
@@ -233,6 +261,9 @@ export class CommunityChannelHandlerService {
 
             this.messages.next(messages);
           }
+
+          // Also applies to replies, which the branch above does not cover.
+          this.forumsStore.applyMessageUpdate(data.user_message);
           break;
         case 'error':
           this.toastrService.warningDialog(data.message, 2000);

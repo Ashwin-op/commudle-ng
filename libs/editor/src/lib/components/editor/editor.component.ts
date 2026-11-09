@@ -15,14 +15,21 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import { minLength, noWhitespace, required } from '@commudle/shared-validators';
 import { Editor, Extensions } from '@tiptap/core';
+import { Bold } from '@tiptap/extension-bold';
+import { BulletList } from '@tiptap/extension-bullet-list';
 import { CharacterCount } from '@tiptap/extension-character-count';
 import { Document } from '@tiptap/extension-document';
 import { Gapcursor } from '@tiptap/extension-gapcursor';
 import { History } from '@tiptap/extension-history';
+import { Italic } from '@tiptap/extension-italic';
 import { Link } from '@tiptap/extension-link';
+import { ListItem } from '@tiptap/extension-list-item';
+import { OrderedList } from '@tiptap/extension-ordered-list';
 import { Paragraph } from '@tiptap/extension-paragraph';
 import { Placeholder } from '@tiptap/extension-placeholder';
+import { Strike } from '@tiptap/extension-strike';
 import { Text } from '@tiptap/extension-text';
+import { Underline } from '@tiptap/extension-underline';
 import { KeyboardHandler } from '../../extensions/keyboard-handler';
 import { CustomMention } from '../../extensions/mention';
 import { IEditorValidator } from '../../models/editor-validator.model';
@@ -37,6 +44,15 @@ import { NbButtonAppearance, NbComponentStatus } from '@commudle/theme';
 })
 export class EditorComponent implements OnInit, OnDestroy, OnChanges {
   @Input() showMenu = false;
+
+  /**
+   * Whether the editor submits on its own — its send button plus Enter-to-send.
+   *
+   * Set false when the host owns submission (e.g. a dialog with its own footer
+   * button), so the send button is hidden and Enter inserts a newline instead of
+   * firing `contentChange`. Defaults true to keep chat-style composers unchanged.
+   */
+  @Input() selfSubmit = true;
   @Input() editable = true;
   @Input() clearOnSubmit = true;
   @Input() content = '';
@@ -90,6 +106,15 @@ export class EditorComponent implements OnInit, OnDestroy, OnChanges {
     this.editor?.destroy();
   }
 
+  /**
+   * Formatting marks and list nodes. These are shared by the editor and the viewer:
+   * content saved with formatting has to render when it is read back with
+   * [editable]="false", otherwise the markup would be silently stripped on display.
+   */
+  private get formattingExtensions(): Extensions {
+    return [Bold, Italic, Underline, Strike, BulletList, OrderedList, ListItem];
+  }
+
   initExtensions(): void {
     this.extensionsCollection = {
       editor: [
@@ -102,10 +127,11 @@ export class EditorComponent implements OnInit, OnDestroy, OnChanges {
         Gapcursor,
         History,
         Link,
+        ...this.formattingExtensions,
         KeyboardHandler,
         CustomMention(this.injector),
       ],
-      viewer: [Document, Text, Paragraph, Link, CustomMention(this.injector)],
+      viewer: [Document, Text, Paragraph, Link, ...this.formattingExtensions, CustomMention(this.injector)],
     };
   }
 
@@ -118,7 +144,9 @@ export class EditorComponent implements OnInit, OnDestroy, OnChanges {
       editorProps: {
         handleDOMEvents: {
           keydown: (view, event) => {
-            if (event.key === 'Enter' && !event.shiftKey) {
+            // Enter only submits for editors that own their submission; otherwise it
+            // behaves as a normal newline.
+            if (this.selfSubmit && event.key === 'Enter' && !event.shiftKey) {
               this.onClick();
             }
             return false;

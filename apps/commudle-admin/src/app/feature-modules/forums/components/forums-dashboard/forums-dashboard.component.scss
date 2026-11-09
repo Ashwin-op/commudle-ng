@@ -1,39 +1,49 @@
-.forums-dashboard-container {
-  @apply com-m-0 com-w-full com-h-full com-mt-4;
-  nb-card-body {
-    @apply com-flex com-relative com-p-0;
-  }
+.fd-shell {
+  @apply com-flex com-h-full com-rounded-md;
 }
 
-.header-content {
-  @apply com-flex com-items-center com-gap-4;
-  fa-icon {
-    @apply com-text-lg com-cursor-pointer;
-  }
-}
+// ── Sidebar ───────────────────────────────────────────
+.fd-sidebar {
+  @apply com-flex com-flex-col com-flex-shrink-0 com-overflow-y-auto com-bg-white com-border-0 com-border-r com-border-solid com-border-Bright-Gray com-w-48 com-rounded-tl-md com-rounded-bl-md;
 
-.sidebar {
-  @apply com-border-0 com-border-r com-border-solid com-border-Bright-Gray;
-  .categories-content {
-    @apply com-p-4;
-    .heading {
-      @apply com-text-Yankees-Blue com-text-sm com-font-semibold com-m-0 com-px-2 com-py-1;
+  .fd-sidebar-head {
+    @apply com-px-4 com-pt-5 com-pb-4 com-border-0 com-border-b com-border-solid com-border-Bright-Gray;
+
+    .fd-sidebar-title {
+      @apply com-text-sm com-font-bold com-text-Yankees-Blue com-m-0;
     }
-    a {
-      @apply com-no-underline com-text-gray-500;
-      .category-item {
-        @apply com-p-2 com-cursor-pointer com-rounded com-transition-colors hover:com-bg-Bright-Gray hover:com-font-medium;
+  }
+
+  .fd-sidebar-nav {
+    @apply com-flex com-flex-col com-gap-0.5 com-p-2 com-pt-3;
+
+    .fd-nav-link {
+      @apply com-flex com-items-center com-gap-2 com-no-underline com-px-3 com-py-1.5 com-rounded-md com-text-sm com-text-Yankees-Blue com-transition-colors com-duration-150 hover:com-bg-Azureish-White hover:com-text-primary-500;
+
+      fa-icon {
+        @apply com-text-base com-text-Cadet-Grey com-flex-shrink-0;
+      }
+
+      &.fd-nav-active {
+        @apply com-bg-primary-100 com-text-primary-500 com-font-semibold;
+
+        fa-icon {
+          @apply com-text-primary-500;
+        }
+      }
+
+      &.fd-nav-more {
+        @apply com-text-xs com-text-primary-500 com-font-medium com-mt-1;
       }
     }
-    .active {
-      @apply com-text-Yankees-Blue com-font-medium;
-      .category-item {
-        @apply com-bg-Bright-Gray;
-      }
+
+    .fd-nav-skeleton {
+      @apply com-h-7 com-rounded-md com-bg-Bright-Gray com-animate-pulse;
     }
   }
 }
 
-.router {
-  @apply com-w-full;
+// ── Main ─────────────────────────────────────────────
+.fd-main {
+  @apply com-flex-1 com-overflow-y-auto com-min-w-0 com-bg-white com-rounded-r-md;
 }

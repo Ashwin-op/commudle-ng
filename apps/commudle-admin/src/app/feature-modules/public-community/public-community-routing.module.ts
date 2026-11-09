@@ -65,7 +65,7 @@ const routes = [
       //   component: CommunityChannelsListComponent,
       // },
       {
-        path: 'forums',
+        path: 'discussions',
         loadChildren: () =>
           import('apps/commudle-admin/src/app/feature-modules/forums/forums.module').then((m) => m.ForumsModule),
       },

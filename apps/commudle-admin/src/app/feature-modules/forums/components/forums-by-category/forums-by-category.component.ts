@@ -1,13 +1,27 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, combineLatest } from 'rxjs';
-import { takeUntil, switchMap, filter } from 'rxjs/operators';
-import { IForum, EDiscussionType, IChannelCategory, EDbModels } from '@commudle/shared-models';
-import { ForumService, ToastrService } from '@commudle/shared-services';
-import { faArrowLeft, faCircle, faPlus, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Subject, takeUntil } from 'rxjs';
+import { IForum, IChannelCategory } from '@commudle/shared-models';
+import { ForumService, ForumsStore, SeoService, ToastrService } from '@commudle/shared-services';
+import { NbDialogRef, NbDialogService } from '@commudle/theme';
 import { ForumFormComponent } from 'apps/commudle-admin/src/app/feature-modules/forums/components/forum-form/forum-form.component';
-import { NbDialogService } from '@commudle/theme';
-import { ForumsStore } from '@commudle/shared-services';
+import { ForumDeleteDialogComponent } from 'apps/commudle-admin/src/app/feature-modules/forums/components/forum-delete-dialog/forum-delete-dialog.component';
+import {
+  faChevronLeft,
+  faComment,
+  faCommentDots,
+  faMagnifyingGlass,
+  faPen,
+  faPlus,
+  faReply,
+  faTrash,
+  faTriangleExclamation,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  ForumsContextService,
+  IForumParentContext,
+} from 'apps/commudle-admin/src/app/feature-modules/forums/services/forums-context.service';
 
 @Component({
   standalone: false,
@@ -16,24 +30,36 @@ import { ForumsStore } from '@commudle/shared-services';
   styleUrls: ['./forums-by-category.component.scss'],
 })
 export class ForumsByCategoryComponent implements OnInit, OnDestroy {
-  forums: IForum[] = [];
-  forumCategory: IChannelCategory;
-  currentPage = 1;
-  itemsPerPage = 10;
-  totalItems = 0;
-  isLoading = true;
-  isDeletingForum = false;
-  private parentId: number | string;
-  private parentType: EDbModels;
-  private categorySlug: string;
-  private readonly destroy$ = new Subject<void>();
   readonly icons = {
+    faChevronLeft,
+    faComment,
+    faCommentDots,
+    faMagnifyingGlass,
+    faPen,
     faPlus,
-    faArrowLeft,
-    faCircle,
-    faEdit,
+    faReply,
     faTrash,
+    faTriangleExclamation,
+    faXmark,
   };
+
+  readonly forums$ = this.forumsStore.forums$;
+  readonly isLoadingForums$ = this.forumsStore.isLoadingForums$;
+
+  forumCategory: IChannelCategory;
+  allCategories: IChannelCategory[] = [];
+  searchQuery = '';
+  isAdmin = false;
+  isDeletingForum = false;
+
+  totalForums = 0;
+  currentPage = 1;
+  perPage = 15;
+
+  private parentContext: IForumParentContext | null = null;
+  private categorySlug: string;
+
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -41,101 +67,145 @@ export class ForumsByCategoryComponent implements OnInit, OnDestroy {
     private readonly forumService: ForumService,
     private readonly dialogService: NbDialogService,
     private readonly router: Router,
-    private readonly tosterService: ToastrService,
+    private readonly toastrService: ToastrService,
+    private readonly seoService: SeoService,
+    private readonly forumsContextService: ForumsContextService,
   ) {}
 
   ngOnInit(): void {
-    this.loadForums();
-  }
+    this.parentContext = this.forumsContextService.resolveParentContext(this.route);
 
-  private loadForums(): void {
-    combineLatest([this.route.params, this.forumsStore.parentId$, this.forumsStore.parentType$])
-      .pipe(
-        takeUntil(this.destroy$),
-        filter(([, parentId, parentType]) => !!parentId && !!parentType),
-      )
-      .subscribe(([params, parentId, parentType]) => {
-        this.parentId = parentId;
-        this.parentType = parentType;
-        this.categorySlug = params['category_slug'];
-        this.getForumsByCategory();
-        this.getCategoryDetails();
-      });
-  }
+    this.forumsStore.categories$.pipe(takeUntil(this.destroy$)).subscribe((c) => (this.allCategories = c || []));
+    this.forumsStore.totalForums$.pipe(takeUntil(this.destroy$)).subscribe((t) => (this.totalForums = t));
+    this.forumsStore.currentPage$.pipe(takeUntil(this.destroy$)).subscribe((p) => (this.currentPage = p));
+    this.forumsStore.perPage$.pipe(takeUntil(this.destroy$)).subscribe((p) => (this.perPage = p));
 
-  private getForumsByCategory(): void {
-    this.isLoading = true;
-    this.forumService
-      .getForumsByCategory(
-        this.parentId,
-        this.parentType,
-        this.categorySlug,
-        EDiscussionType.FORUM,
-        this.currentPage,
-        this.itemsPerPage,
-      )
+    // Route param drives the store's category filter — list reloads from backend
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      this.categorySlug = params['category_slug'];
+      this.forumsStore.setSelectedCategory(this.categorySlug);
+      this.setSeo();
+      this.loadCategoryDetails();
+    });
+
+    // Long-lived: managed-entity lists populate once the global sidebar loads them
+    this.forumsContextService
+      .isAdmin$(this.parentContext)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((forumsResponse) => {
-        this.forums = forumsResponse.values;
-        this.totalItems = forumsResponse.total;
-        this.currentPage = forumsResponse.page;
-        this.itemsPerPage = forumsResponse.count;
-        this.isLoading = false;
-      });
-  }
-
-  private getCategoryDetails(): void {
-    this.forumService
-      .showCategory(this.categorySlug)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((categoryResponse) => {
-        this.forumCategory = categoryResponse;
-      });
+      .subscribe((isAdmin) => (this.isAdmin = isAdmin));
   }
 
   ngOnDestroy(): void {
+    // The landing page clears the category filter itself, so nothing to reset here
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  openDialogBox(): void {
-    this.dialogService.open(ForumFormComponent, {
-      context: {
-        displayType: EDiscussionType.FORUM,
-        categoryName: this.forumCategory.name,
-      },
-    });
+  private loadCategoryDetails(): void {
+    this.forumService
+      .showCategory(this.categorySlug)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((cat) => {
+        this.forumCategory = cat;
+        // Re-run once the readable category name is known
+        this.setSeo();
+      });
   }
+
+  private setSeo(): void {
+    const parentName = this.parentContext?.name || 'Commudle';
+    const categoryName = this.forumCategory?.name || this.categorySlug;
+
+    this.seoService.setTags(
+      `${categoryName} Forums | ${parentName}`,
+      `Browse forums and discussions in ${categoryName} from the ${parentName} community`,
+      this.parentContext?.imageUrl,
+    );
+
+    if (this.parentContext?.isAdminRoute) {
+      this.seoService.noIndex(true);
+    }
+  }
+
+  // ── Search & pagination — delegated to store ───────────────────────────────
+
+  onSearchChange(value: string): void {
+    this.searchQuery = value;
+    this.forumsStore.setSearchQuery(value);
+  }
+
+  onPageChange(page: number): void {
+    this.forumsStore.setPage(page);
+  }
+
   backButton(): void {
     this.router.navigate(['../'], { relativeTo: this.route });
+  }
+
+  // ── Create / Edit ─────────────────────────────────────────────────────────
+
+  openCreateDialog(): void {
+    this.dialogService
+      .open(ForumFormComponent, {
+        context: {
+          categoryName: this.forumCategory?.name,
+          isAdmin: this.isAdmin,
+          existingCategories: this.allCategories,
+        },
+      })
+      .onClose.pipe(takeUntil(this.destroy$))
+      .subscribe((forum?: IForum) => this.openCreatedForum(forum));
+  }
+
+  /**
+   * Land on the forum that was just created. Routed from the forums root rather
+   * than relative to this page, because the form allows any category name and the
+   * new forum may not belong to the category currently being viewed.
+   */
+  private openCreatedForum(forum?: IForum): void {
+    const categorySlug = forum?.channel_category?.slug;
+    if (!forum?.slug || !categorySlug) return;
+
+    this.router.navigate(['../', categorySlug, forum.slug], { relativeTo: this.route });
   }
 
   editForum(forum: IForum): void {
     this.dialogService.open(ForumFormComponent, {
       context: {
-        displayType: EDiscussionType.FORUM,
-        categoryName: this.forumCategory.name,
         forumId: forum.id,
+        categoryName: forum.channel_category?.name || this.forumCategory?.name,
+        isAdmin: this.isAdmin,
+        existingCategories: this.allCategories,
       },
     });
   }
 
-  deleteForum(forum: IForum, index: number): void {
-    if (confirm(`Are you sure you want to delete "${forum.name}"? This action cannot be undone.`)) {
-      this.isDeletingForum = true;
-      this.forumService.deleteForum(forum.id).subscribe((data) => {
-        if (data) {
-          this.forums.splice(index, 1);
-          this.totalItems--;
-          this.tosterService.successDialog('Forum deleted successfully');
-        }
-        this.isDeletingForum = false;
+  // ── Delete ────────────────────────────────────────────────────────────────
+
+  confirmDeleteForum(forum: IForum): void {
+    this.dialogService
+      .open(ForumDeleteDialogComponent, { context: { forum } })
+      .onClose.pipe(takeUntil(this.destroy$))
+      .subscribe((confirmed?: boolean) => {
+        if (confirmed) this.deleteForum(forum);
       });
-    }
   }
 
-  onPageChange(page: number): void {
-    this.currentPage = page;
-    this.getForumsByCategory();
+  private deleteForum(forum: IForum): void {
+    this.isDeletingForum = true;
+    this.forumsStore
+      .deleteForum(forum.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => (this.isDeletingForum = false),
+        error: () => {
+          this.toastrService.errorDialog('Failed to delete forum');
+          this.isDeletingForum = false;
+        },
+      });
+  }
+
+  trackById(_: number, forum: IForum): number {
+    return forum.id;
   }
 }

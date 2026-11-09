@@ -60,7 +60,7 @@ const routes = [
         ],
       },
       {
-        path: 'forums',
+        path: 'discussions',
         component: CommunityGroupChannelsComponent,
         children: [
           {

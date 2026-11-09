@@ -1,0 +1,39 @@
+.fmdd-card {
+  @apply com-w-[95vw] md:com-w-[400px] com-m-0;
+
+  .fmdd-header {
+    @apply com-flex com-items-center com-justify-between com-gap-2;
+
+    .fmdd-header-left {
+      @apply com-flex com-items-center com-gap-2 com-min-w-0;
+
+      .fmdd-icon {
+        @apply com-w-8 com-h-8 com-rounded-full com-flex-shrink-0 com-flex com-items-center com-justify-center com-bg-red-100 com-text-Infra-Red com-text-sm;
+      }
+
+      .fmdd-title {
+        @apply com-text-base com-font-bold com-text-Yankees-Blue;
+      }
+    }
+  }
+
+  .fmdd-body {
+    @apply com-flex com-flex-col com-gap-2;
+
+    .fmdd-lead {
+      @apply com-text-sm com-text-Yankees-Blue com-m-0 com-leading-relaxed;
+    }
+
+    .fmdd-note {
+      @apply com-text-sm com-text-Cadet-Grey com-m-0;
+    }
+
+    .fmdd-warning {
+      @apply com-text-xs com-font-medium com-text-Infra-Red com-m-0;
+    }
+  }
+
+  .fmdd-footer {
+    @apply com-flex com-justify-end com-gap-2;
+  }
+}

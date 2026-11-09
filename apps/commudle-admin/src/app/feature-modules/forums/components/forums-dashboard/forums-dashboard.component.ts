@@ -1,15 +1,8 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { EDbModels } from '@commudle/shared-models';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ForumsStore } from '@commudle/shared-services';
-import { ESidebarHeading } from 'apps/shared-components/sidebar/enum/sidebar.enum';
-import { SidebarService } from 'apps/shared-components/sidebar/service/sidebar.service';
-
-interface ParentInfo {
-  parent_id: string;
-  parent_type: EDbModels;
-}
+import { ForumsContextService } from 'apps/commudle-admin/src/app/feature-modules/forums/services/forums-context.service';
+import { faTableCells } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   standalone: false,
@@ -17,69 +10,33 @@ interface ParentInfo {
   templateUrl: './forums-dashboard.component.html',
   styleUrls: ['./forums-dashboard.component.scss'],
 })
-export class ForumsDashboardComponent implements OnInit {
-  parentInfo: ParentInfo | null = null;
-  categories$ = this.forumStore.categories$;
-  isLoadingCategories = true;
-  sidebarEventName = 'forumCategories';
-  ESidebarHeading = ESidebarHeading;
-  faIcons = {
-    faBars,
+export class ForumsDashboardComponent implements OnInit, OnDestroy {
+  readonly icons = {
+    faTableCells,
   };
-  private readonly isBrowser: boolean;
+
+  readonly categories$ = this.forumStore.categories$;
+  readonly isLoadingCategories$ = this.forumStore.isLoadingCategories$;
+  readonly sidebarLimit = 7;
 
   constructor(
-    private forumStore: ForumsStore,
-    public sidebarService: SidebarService,
-    @Inject(PLATFORM_ID) private platformId: object,
-  ) {
-    this.isBrowser = isPlatformBrowser(this.platformId);
+    private readonly forumStore: ForumsStore,
+    private readonly route: ActivatedRoute,
+    private readonly forumsContextService: ForumsContextService,
+  ) {}
+
+  ngOnInit(): void {
+    // Resolved from the router, so this also runs during server-side rendering
+    const context = this.forumsContextService.resolveParentContext(this.route);
+    if (context) {
+      // The store's query pipeline watches the parent, so this loads the list too
+      this.forumStore.setParentContext(context.parentId, context.parentType);
+    }
   }
 
-  ngOnInit() {
-    this.parentInfo = this.getParentFromUrl();
-    if (this.parentInfo) {
-      this.forumStore.setParentContext(this.parentInfo.parent_id, this.parentInfo.parent_type);
-    }
-    this.sidebarService.setSidebarVisibility(this.sidebarEventName, false, true);
-
-    if (this.parentInfo) {
-      this.forumStore.loadCategories(this.parentInfo.parent_id, this.parentInfo.parent_type);
-    }
-
-    this.categories$.subscribe(() => {
-      this.isLoadingCategories = false;
-    });
-  }
-
-  private getParentFromUrl(): ParentInfo | null {
-    if (!this.isBrowser) {
-      return null;
-    }
-    const url = window.location.pathname;
-
-    // Match /admin/communities/{parent_id}/forums or /communities/{parent_id}/forums
-    const communityMatch = url.match(/\/(admin\/)?communities\/([^/]+)\/forums/);
-    if (communityMatch) {
-      return {
-        parent_id: communityMatch[2],
-        parent_type: EDbModels.KOMMUNITY,
-      };
-    }
-
-    // Match /admin/orgs/{parent_id}/forums or /orgs/{parent_id}/forums
-    const orgMatch = url.match(/\/(admin\/)?orgs\/([^/]+)\/forums/);
-    if (orgMatch) {
-      return {
-        parent_id: orgMatch[2],
-        parent_type: EDbModels.COMMUNITY_GROUP,
-      };
-    }
-
-    return null;
-  }
-
-  toggleSidebar(): void {
-    this.sidebarService.toggleSidebarVisibility(this.sidebarEventName);
+  ngOnDestroy(): void {
+    // The store is a root singleton, so it has to be reset or the next community's
+    // forums page briefly renders the previous community's data
+    this.forumStore.clearAllData();
   }
 }

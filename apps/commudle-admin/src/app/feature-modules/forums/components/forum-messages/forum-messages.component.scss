@@ -1,141 +1,157 @@
-.forum-messages-container {
-  @apply com-mx-auto com-p-6;
+.fm-wrap {
+  @apply com-p-4 com-flex com-flex-col com-gap-3;
+  max-width: 820px;
 
-  .loading-state {
-    @apply com-text-center com-py-16;
+  .fm-loading {
+    @apply com-flex com-justify-center com-py-10;
+  }
 
-    nb-spinner {
-      @apply com-mb-4;
-    }
+  .fm-header {
+    @apply com-flex com-items-center com-gap-2;
 
-    p {
-      @apply com-text-gray-600 com-text-lg;
+    .fm-back-label {
+      @apply com-text-xs com-text-Cadet-Grey;
     }
   }
 
-  .header-section {
-    @apply com-border-0 com-border-b com-border-solid com-border-Bright-Gray com-pb-6;
+  // ── Original post ─────────────────────────────────────
+  .fm-post {
+    @apply com-rounded-lg com-border com-border-solid com-border-Bright-Gray com-bg-white com-p-4;
 
-    .back-button {
-      @apply com-cursor-pointer com-text-Yankees-Blue com-mb-4 com-flex com-items-center com-text-sm;
-    }
+    .fm-post-top {
+      @apply com-flex com-items-center com-gap-2 com-mb-3;
 
-    .discussion-header {
-      h2 {
-        @apply com-text-2xl com-font-semibold com-text-Yankees-Blue com-mb-2;
+      .fm-post-author {
+        @apply com-text-sm com-font-semibold com-text-Yankees-Blue com-m-0;
       }
 
-      .post-meta {
-        @apply com-text-sm com-text-gray-600;
+      .fm-post-date {
+        @apply com-text-xs com-text-Cadet-Grey com-m-0;
+      }
+    }
+
+    .fm-post-subject {
+      @apply com-text-base com-font-bold com-text-Yankees-Blue com-m-0 com-mb-3;
+    }
+
+    .fm-post-body {
+      @apply com-text-sm com-text-Yankees-Blue com-leading-relaxed;
+    }
+
+    .fm-post-footer {
+      @apply com-flex com-items-center com-gap-3 com-mt-3 com-pt-3 com-border-0 com-border-t com-border-solid com-border-Bright-Gray;
+    }
+  }
+
+  // ── Shared avatar ─────────────────────────────────────
+  .fm-avatar-img {
+    @apply com-w-8 com-h-8 com-rounded-full com-object-cover com-flex-shrink-0;
+  }
+
+  .fm-avatar-fallback {
+    @apply com-w-8 com-h-8 com-rounded-full com-bg-Bright-Gray com-flex-shrink-0 com-flex com-items-center com-justify-center com-text-Cadet-Grey com-text-sm;
+  }
+
+  // ── Replies ───────────────────────────────────────────
+  .fm-replies {
+    .fm-replies-header {
+      @apply com-text-xs com-font-bold com-text-Cadet-Grey com-uppercase com-tracking-wide com-m-0 com-mb-2;
+    }
+
+    .fm-reply {
+      @apply com-flex com-gap-3 com-mb-3;
+
+      &:last-child {
+        @apply com-mb-0;
+
+        .fm-reply-line {
+          @apply com-hidden;
+        }
+      }
+
+      .fm-reply-left {
+        @apply com-flex com-flex-col com-items-center com-flex-shrink-0;
+
+        .fm-reply-line {
+          @apply com-w-px com-flex-1 com-bg-Bright-Gray com-my-1;
+        }
+      }
+
+      // Filled, not outlined: a tinted block separates the reply from the white
+      // post card without adding another border to the page.
+      .fm-reply-card {
+        @apply com-flex-1 com-min-w-0 com-p-3 com-rounded-lg com-bg-Anti-Flash-White;
+
+        .fm-reply-top {
+          @apply com-flex com-items-center com-justify-between com-gap-2 com-mb-1;
+
+          .fm-reply-author {
+            // min-w-0 so truncate can actually shrink this flex item
+            @apply com-text-Paragraph-2 com-font-semibold com-text-Yankees-Blue com-m-0 com-min-w-0 com-truncate;
+          }
+
+          // Timestamp and vote sit together at the end of the header line
+          .fm-reply-top-right {
+            @apply com-flex com-items-center com-gap-3 com-flex-shrink-0;
+          }
+
+          .fm-reply-date {
+            @apply com-text-Caption com-text-Cadet-Grey com-m-0;
+          }
+        }
+
+        .fm-reply-body {
+          @apply com-text-Paragraph-2 com-text-Yankees-Blue;
+        }
       }
     }
   }
 
-  .main-content {
-    @apply com-flex com-gap-8;
+  // ── Reply form ────────────────────────────────────────
+  // No card border here: the editor draws its own box around the input, so an outer
+  // outline would double it up.
+  .fm-reply-form {
+    @apply com-bg-white;
 
-    > div:first-child {
-      @apply com-flex-1;
+    .fm-reply-form-title {
+      @apply com-flex com-items-center com-gap-2 com-text-Paragraph-2 com-font-semibold com-text-Yankees-Blue com-m-0 com-mb-3;
 
-      .discussion-post {
-        @apply com-p-6;
-
-        .post-content {
-          @apply com-mt-4 com-mb-6;
-
-          commudle-editor {
-            ::ng-deep {
-              p {
-                @apply com-text-gray-500;
-              }
-            }
-          }
-        }
-
-        .post-actions {
-          @apply com-flex com-gap-6 com-pt-4 com-border-gray-200 com-justify-end;
-
-          .action-item {
-            @apply com-flex com-items-center com-gap-2 com-text-gray-400 com-cursor-pointer com-text-sm;
-
-            .count {
-              @apply com-font-medium;
-            }
-          }
-        }
-      }
-
-      .replies-section {
-        @apply com-mt-8;
-
-        h3 {
-          @apply com-text-xl com-font-semibold com-mb-6 com-text-Yankees-Blue;
-        }
-
-        .reply-item {
-          @apply com-rounded-lg com-p-6 com-shadow-sm com-border com-mb-4 com-border-Bright-Gray com-border-solid;
-
-          .reply-header {
-            @apply com-flex com-justify-between com-items-start com-mb-4;
-
-            .reply-date {
-              @apply com-text-sm com-text-gray-500 com-font-medium;
-            }
-          }
-
-          .reply-content {
-            @apply com-mb-4;
-
-            commudle-editor {
-              ::ng-deep {
-                p {
-                  @apply com-text-gray-700 com-leading-relaxed;
-                }
-              }
-            }
-          }
-
-          .reply-actions {
-            @apply com-flex com-justify-end;
-          }
-        }
-      }
-
-      .reply-section {
-        @apply com-mb-4;
-        .form {
-          @apply com-border com-border-solid com-border-Bright-Gray com-rounded-md com-mb-6;
-          .header {
-            @apply com-p-4 com-bg-gray-50 com-text-gray-500 com-text-sm com-font-medium com-overflow-hidden;
-          }
-        }
-
-        .reply-form {
-          @apply com-p-0;
-          .reply-textarea {
-            @apply com-w-full com-resize-none com-border-0 com-bg-transparent;
-
-            &:focus {
-              @apply com-outline-none com-border-0 com-shadow-none;
-            }
-          }
-        }
-
-        .reply-actions {
-          @apply com-flex com-gap-3 com-justify-end;
-        }
+      fa-icon {
+        @apply com-text-primary-500 com-text-base;
       }
     }
 
-    .sidebar {
-      width: 350px;
-      @apply com-rounded-lg com-p-6 com-h-fit;
+    form {
+      @apply com-flex com-flex-col com-gap-2;
+    }
 
-      .explore-section {
-        h3 {
-          @apply com-text-lg com-font-semibold com-mb-4;
-        }
-      }
+    .fm-form-actions {
+      @apply com-flex com-justify-end com-gap-2;
+    }
+  }
+}
+
+// ── Edit / delete controls ────────────────────────────
+.fm-actions {
+  @apply com-flex com-items-center com-gap-1 com-flex-shrink-0 com-ml-auto;
+
+  .fm-delete-btn {
+    @apply hover:com-text-Infra-Red;
+  }
+}
+
+.fm-edit {
+  @apply com-flex com-flex-col com-gap-2 com-mt-2;
+
+  .fm-edit-label {
+    @apply com-text-xs com-font-medium com-text-Cadet-Grey;
+  }
+
+  .fm-edit-actions {
+    @apply com-flex com-items-center com-gap-2;
+
+    .fm-edit-hint {
+      @apply com-text-xs com-text-Cadet-Grey;
     }
   }
 }
